@@ -119,7 +119,7 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
   }>();
   @Output() conditionsApplied = new EventEmitter<void>();
 
-  private allConditions$ = this.store.select(selectConditions);
+  allConditions$ = this.store.select(selectConditions);
 
   conditionConfigs$ = this.allConditions$.pipe(
     map((configs) =>
@@ -315,7 +315,7 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
   /** Condition filter helpers and methods START */
 
   // Helper to get all conditions and update store
-  private updateStore(updatedConditions: ConditionConfig[]) {
+    updateStore(updatedConditions: ConditionConfig[]) {
     this.store.dispatch(
       updateConditionsConfigs({ conditionConfigs: updatedConditions }),
     );

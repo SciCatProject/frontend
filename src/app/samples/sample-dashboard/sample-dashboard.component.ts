@@ -141,26 +141,14 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
-  addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      addCharacteristicsFilterAction({ characteristic: condition }),
-    );
-  };
-
-  removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      removeCharacteristicsFilterAction({ lhs: condition.lhs }),
-    );
-  };
-
   constructor(
     private appConfigService: AppConfigService,
     private datePipe: DatePipe,
-    public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
     private tableConfigService: TableConfigService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -227,6 +215,18 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         ),
     );
   }
+
+  addCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(
+      addCharacteristicsFilterAction({ characteristic: condition }),
+    );
+  };
+
+  removeCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(
+      removeCharacteristicsFilterAction({ lhs: condition.lhs }),
+    );
+  };
 
   formatTableData(samples: SampleClass[]): any {
     if (samples) {

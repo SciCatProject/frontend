@@ -439,7 +439,7 @@ describe("Sample Actions", () => {
       const action = fromActions.removeCharacteristicsFilterAction({ lhs });
       expect({ ...action }).toEqual({
         type: "[Sample] Remove Characteristics Filter",
-        index,
+        lhs,
       });
     });
   });

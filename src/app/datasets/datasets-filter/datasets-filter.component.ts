@@ -70,12 +70,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    public appConfigService: AppConfigService,
-    public dialog: MatDialog,
     private store: Store,
     private asyncPipe: AsyncPipe,
     private route: ActivatedRoute,
     private router: Router,
+    public appConfigService: AppConfigService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
