@@ -59,14 +59,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
-  @ViewChild('conditionFilter') conditionFilter: SharedFilterComponent;
+  @ViewChild("conditionFilter") conditionFilter: SharedFilterComponent;
 
   addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(addScientificConditionAction({ condition }))
+    this.store.dispatch(addScientificConditionAction({ condition }));
   };
 
   removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(removeScientificConditionAction({ condition }))
+    this.store.dispatch(removeScientificConditionAction({ condition }));
   };
 
   constructor(

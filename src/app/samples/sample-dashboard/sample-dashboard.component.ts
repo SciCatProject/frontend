@@ -61,16 +61,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   @ViewChild("conditionFilter") conditionFilter: SharedFilterComponent;
 
-  addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      addCharacteristicsFilterAction({ characteristic: condition }),
-    );
-  };
-
-  removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(removeCharacteristicsFilterAction({ lhs: condition.lhs }));
-  };
-
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
     settingList: [
@@ -150,6 +140,18 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   defaultPageSizeOptions = [5, 10, 25, 100];
 
   tablesSettings: object;
+
+  addCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(
+      addCharacteristicsFilterAction({ characteristic: condition }),
+    );
+  };
+
+  removeCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(
+      removeCharacteristicsFilterAction({ lhs: condition.lhs }),
+    );
+  };
 
   constructor(
     private appConfigService: AppConfigService,

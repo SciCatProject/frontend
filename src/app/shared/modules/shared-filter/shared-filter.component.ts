@@ -70,7 +70,7 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
   });
 
   @ViewChild("input", { static: true }) input!: ElementRef<HTMLInputElement>;
-  
+
   @Input() key = "";
   @Input() label = "Filter";
   @Input() tooltip = "";
@@ -109,7 +109,6 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
   @Input() addConditionAction: (condition: ScientificCondition) => void;
   @Input() removeConditionAction: (condition: ScientificCondition) => void;
 
-
   @Output() textChange = new EventEmitter<string>();
   @Output() checkBoxChange = new EventEmitter<string[]>();
   @Output() selectionChange = new EventEmitter<MultiSelectFilterValue>();
@@ -124,9 +123,7 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
 
   conditionConfigs$ = this.allConditions$.pipe(
     map((configs) =>
-      (configs || []).filter(
-        (c) => c.conditionType === this.conditionType,
-      ),
+      (configs || []).filter((c) => c.conditionType === this.conditionType),
     ),
   );
 
@@ -337,9 +334,8 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
     });
   }
 
-    applyEnabledConditions() {
+  applyEnabledConditions() {
     this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-
       const needsUpdate = (allConditions || []).some((c) => !c.conditionType);
 
       if (needsUpdate) {
@@ -519,7 +515,6 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
 
   removeCondition(condition: ConditionConfig, index: number) {
     this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-      
       const actualIndex = (allConditions || []).findIndex(
         (c) =>
           c.condition.lhs === condition.condition.lhs &&
