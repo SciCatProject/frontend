@@ -61,14 +61,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   @ViewChild("conditionFilter") conditionFilter: SharedFilterComponent;
 
-  addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(addScientificConditionAction({ condition }));
-  };
-
-  removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(removeScientificConditionAction({ condition }));
-  };
-
   constructor(
     private store: Store,
     private asyncPipe: AsyncPipe,
@@ -77,6 +69,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
   ) {}
+
+  addCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(addScientificConditionAction({ condition }));
+  };
+
+  removeCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(removeScientificConditionAction({ condition }));
+  };
 
   ngOnInit() {
     this.subscriptions.push(

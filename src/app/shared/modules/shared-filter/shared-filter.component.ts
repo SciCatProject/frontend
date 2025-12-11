@@ -315,7 +315,7 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
   /** Condition filter helpers and methods START */
 
   // Helper to get all conditions and update store
-    updateStore(updatedConditions: ConditionConfig[]) {
+  updateStore(updatedConditions: ConditionConfig[]) {
     this.store.dispatch(
       updateConditionsConfigs({ conditionConfigs: updatedConditions }),
     );
