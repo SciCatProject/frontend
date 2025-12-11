@@ -233,13 +233,21 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     );
     this.use_mat_icon = !!this.actionConfig.mat_icon;
     this.use_icon = this.actionConfig.icon !== undefined;
-    this.prepare_disabled_condition();
-    this.update_status();
+    try {
+      this.prepare_disabled_condition();
+      this.update_status();
+    } catch (error) {
+      console.error("Configurable action error on init", error);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["actionItems"]) {
-      this.update_status();
+      try {
+        this.update_status();
+      } catch (error) {
+        console.error("Configurable action error on changes", error);
+      }
     }
   }
 
@@ -265,12 +273,17 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   get disabled() {
-    this.update_status();
+    let res = false;
+    try {
+      this.update_status();
 
-    const expr = this.disabled_condition;
-    const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
-    const context = this.context;
-    const res = fn(context);
+      const expr = this.disabled_condition;
+      const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
+      const { context } = this;
+      res = fn(context);
+    } catch (error) {
+      console.error("Configurable action error on get disabled", error);
+    }
     return res;
   }
 
@@ -325,6 +338,17 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       return this.variables[definition.slice(1)];
     }
     return definition;
+  }
+
+  get_auth_headers(headers: Record<string, string>) {
+    const headerKey = "Authorization";
+    if (headerKey in headers) {
+      const currentValue = headers[headerKey];
+      const updatedValue = this.get_value_from_definition(currentValue);
+
+      headers[headerKey] = updatedValue;
+    }
+    return headers;
   }
 
   type_form() {
@@ -403,13 +427,14 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
     const method = this.actionConfig.method || "POST";
     const payload = this.get_payload();
+    const headers = this.get_auth_headers(this.actionConfig.headers || {});
     fetch(this.actionConfig.url, {
       method: method,
       headers: {
         ...{
           "Content-Type": "application/json",
         },
-        ...(this.actionConfig.headers || {}),
+        ...(headers || {}),
       },
       body: payload,
     })
@@ -450,6 +475,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       (_, variableName) =>
         encodeURIComponent(this.get_value_from_definition(variableName)),
     );
+    const headers = this.get_auth_headers(this.actionConfig.headers || {});
 
     fetch(url, {
       method: this.actionConfig.method || "POST",
@@ -457,7 +483,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         ...{
           "Content-Type": "application/json",
         },
-        ...(this.actionConfig.headers || {}),
+        ...(headers || {}),
       },
       body: this.get_payload(),
     })
