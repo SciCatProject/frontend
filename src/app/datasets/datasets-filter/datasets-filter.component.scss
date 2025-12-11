@@ -1,6 +1,8 @@
 @use "@angular/material" as mat;
 mat-card {
-
+  box-shadow: var(--theme-side-panel-shadow);
+  border: var(--theme-side-panel-border, 1px solid rgba(153, 213, 233, 0.7));
+  border-radius: 4px;
   .mat-mdc-form-field {
     width: 100%;
   }
