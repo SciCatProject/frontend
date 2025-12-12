@@ -38,7 +38,7 @@
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">
         <label class="label-cell">{{ node.key }}</label>
       </div>
-      <div class="value-cell">{{ getValueRepresentation(node) }}</div>
+      <div class="value-cell">{{ getValueRepresentation(node) | formatNumber }}</div>
     </section>
   </mat-tree-node>
   <!-- Only Key -->
