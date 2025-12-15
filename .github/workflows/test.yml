@@ -89,7 +89,7 @@ jobs:
       - name: Save PR number
         run: |
           echo ${{ github.event.number }} > ./coverage/PR
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: coverage
           path: coverage/
@@ -144,13 +144,13 @@ jobs:
         run: |
           docker compose down -v
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: cypress-screenshots
           path: cypress/screenshots
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: cypress-videos
