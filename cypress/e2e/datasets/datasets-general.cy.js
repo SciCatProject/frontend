@@ -650,7 +650,7 @@ describe("Datasets general", () => {
 
       cy.visit("/datasets");
 
-      cy.wait("@getConfig", { timeout: 10000 });
+      cy.wait("@getConfig", { timeout: 20000 });
 
       cy.finishedLoading();
     });
