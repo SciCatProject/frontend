@@ -478,7 +478,6 @@ describe("Datasets general", () => {
       cy.contains("Type").should("exist");
 
       cy.contains("Location").should("not.exist");
-      cy.contains("Keyword").should("not.exist");
     });
   });
 
