@@ -660,4 +660,67 @@ describe("Datasets general", () => {
         .should("be.visible");
     });
   });
+
+  describe("Conditions in multiple pages", () => {
+    beforeEach(() => {
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+  });
+
+    it("should preverse dataset conditions when clearing sample conditions", () => {
+
+      cy.createDataset({
+        type: "raw",
+        scientificMetadata: {
+          extra_entry_end_time: { type: "number", value: 5, unit: "" },
+        },
+      });
+      const sampleId = Math.floor(100000 + Math.random() * 900000).toString();
+      cy.createSample({...testData.sample, sampleId});
+
+      cy.visit("/datasets");
+      cy.finishedLoading();
+
+      cy.get('[data-cy="add-condition-button"]').click();
+      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").should("have.length", 1);
+
+      cy.visit("/samples");
+      cy.finishedLoading();
+
+      cy.get('[data-cy="add-condition-button"]').click();
+      cy.get('input[name="lhs"]').type("test_characteristic");
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").should("have.length", 1);
+
+      cy.get(".condition-panel").first().click();
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("10");
+        });
+      cy.get('[data-cy="samples-filters-search-button"]').click();
+
+      // Clear conditions on samples page
+      cy.get('[data-cy="samples-filters-clear-button"]').click();
+
+      cy.get(".condition-panel").should("have.length", 0);
+
+      // Navigate back to datasets and verify condition is still there
+      cy.visit("/datasets");
+      cy.finishedLoading();
+
+      cy.get(".condition-panel").should("have.length", 1);
+      cy.get(".condition-panel").should("contain.text", "extra_entry_end_time");
+
+      cy.get(".condition-panel").first().click();
+      cy.get('[data-cy="remove-condition-button"]').click();
+   });
+   afterEach(() => {
+    cy.removeSamples();
+   })
+  });
+
 });

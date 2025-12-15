@@ -262,23 +262,13 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   reset() {
     this.store.dispatch(setTextFilterAction({ text: "" }));
-    this.store.dispatch(
-      updateConditionsConfigs({
-        conditionConfigs: [],
-      }),
-    );
-    this.store.dispatch(
-      updateUserSettingsAction({
-        property: { conditions: [] },
-      }),
-    );
 
-    // Clear all characteristics
     this.vm$.pipe(take(1)).subscribe((vm) => {
       vm.characteristicsFilter?.forEach((c) => {
         this.store.dispatch(removeCharacteristicsFilterAction({ lhs: c.lhs }));
       });
     });
+    this.conditionFilter?.clearConditions();
 
     this.store.dispatch(fetchSamplesAction());
   }

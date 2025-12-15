@@ -725,6 +725,23 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
     });
   }
 
+  clearConditions() {
+    this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
+      const myConditions = (allConditions || []).filter(
+        (c) => c.conditionType === this.conditionType,
+      );
+
+      myConditions.forEach((config) =>
+        this.removeConditionAction?.(config.condition),
+      );
+
+      const updatedConditions = (allConditions || []).filter(
+        (c) => c.conditionType !== this.conditionType,
+      );
+      this.updateStore(updatedConditions);
+    });
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
