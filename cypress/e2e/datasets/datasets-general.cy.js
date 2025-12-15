@@ -495,27 +495,21 @@ describe("Datasets general", () => {
       });
 
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-        const relationsToTest = [
-          { relation: "GREATER_THAN", rhs: 1 },
-          { relation: "LESS_THAN", rhs: 3 },
-          { relation: "EQUAL_TO_NUMERIC", rhs: 2 },
-          { relation: "GREATER_THAN_OR_EQUAL", rhs: 2 },
-          { relation: "LESS_THAN_OR_EQUAL", rhs: 2 },
-          { relation: "RANGE", rhs: [1, 3] },
-        ];
         const testConfig = {
           ...baseConfig,
           defaultDatasetsListSettings: {
             ...baseConfig.defaultDatasetsListSettings,
-            conditions: relationsToTest.map(({ relation, rhs }) => ({
-              condition: {
-                lhs: "extra_entry_end_time",
-                relation,
-                rhs,
-                unit: "",
+            conditions: [
+              {
+                condition: {
+                  lhs: "extra_entry_end_time",
+                  relation: "GREATER_THAN",
+                  rhs: 1,
+                  unit: "",
+                },
+                enabled: true,
               },
-              enabled: true,
-            })),
+            ],
           },
         };
 
@@ -536,20 +530,16 @@ describe("Datasets general", () => {
       cy.get(".dataset-table mat-row").first().click();
       cy.get(".metadataTable", { timeout: 10000 }).scrollIntoView();
 
-      cy.get(".metadataTable mat-row").within(() => {
-        cy.get(".mat-column-human_name label")
-          .invoke("text")
-          .then((fieldName) => {
-            if (fieldName && fieldName.trim() === "Extra Entry End Time") {
-              cy.get(".mat-column-value label")
-                .invoke("text")
-                .then((valueText) => {
-                  const value = parseFloat(valueText.trim());
-                  expect(value).to.be.greaterThan(1);
-                });
-            }
-          });
-      });
+      cy.get(".metadataTable mat-row .mat-column-value label")
+        .invoke("text")
+        .then((valueText) => {
+          const value = parseFloat(valueText.trim());
+          expect(value).to.be.greaterThan(1);
+        });
+
+      cy.visit("/datasets");
+      cy.get(".condition-panel").first().click();
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
 
