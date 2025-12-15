@@ -15,37 +15,7 @@
 
   <mat-card-content>
     <ng-container *ngFor="let filter of filtersList">
-      <div
-        *ngIf="filter.type === 'checkbox' && filter.enabled"
-        class="collapsible-filter-wrapper"
-        [class.collapsed]="!expandedFilters[filter.key]"
-      >
-        <shared-filter
-          [key]="filter.key"
-          [label]="filter.label"
-          [clear]="clearSearchBar"
-          [tooltip]="filter.description"
-          [filterType]="filter.type"
-          [prefilled]="activeFilters[filter.key] || null"
-          [currentFilter$]="getFilterByKey$(filter.key)"
-          [facetCounts$]="getFilterFacetCounts$(filter.key)"
-          (textChange)="setFilter(filter.key, $event)"
-          (dateRangeChange)="setDateFilter(filter.key, $event)"
-          (selectionChange)="selectionChange($event)"
-          (checkBoxChange)="setFilter(filter.key, $event)"
-          (numericRangeChange)="numericRangeChange(filter.key, $event)"
-          [filterValue]="activeFilters[filter.key]"
-          [showBadge]="!expandedFilters[filter.key]"
-        ></shared-filter>
-        <button class="collapse-toggle" (click)="toggleFilter(filter.key)">
-          <mat-icon>{{
-            expandedFilters[filter.key] ? "expand_less" : "expand_more"
-          }}</mat-icon>
-        </button>
-      </div>
-
       <shared-filter
-        *ngIf="filter.type !== 'checkbox' && filter.enabled"
         [key]="filter.key"
         [label]="filter.label"
         [clear]="clearSearchBar"
@@ -59,6 +29,8 @@
         (selectionChange)="selectionChange($event)"
         (checkBoxChange)="setFilter(filter.key, $event)"
         (numericRangeChange)="numericRangeChange(filter.key, $event)"
+        [filterValue]="activeFilters[filter.key]"
+        [collapsible]="filter.type === 'checkbox'"
       ></shared-filter>
     </ng-container>
     <div
