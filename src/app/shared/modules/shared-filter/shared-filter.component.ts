@@ -78,6 +78,8 @@ export class SharedFilterComponent implements OnChanges {
     | undefined
     | null;
   @Input() showBadge = false;
+  @Input() collapsible = false;
+  collapsed = false;
 
   @Output() textChange = new EventEmitter<string>();
   @Output() checkBoxChange = new EventEmitter<string[]>();
@@ -233,7 +235,13 @@ export class SharedFilterComponent implements OnChanges {
     return Array.isArray(this.filterValue) ? this.filterValue.length : 0;
   }
   get shouldShowBadge(): boolean {
-    return this.showBadge && this.badgeCount > 0;
+    return this.collapsible && this.collapsed && this.badgeCount > 0;
+  }
+
+  toggleCollapse() {
+    if (this.collapsible && this.filterType === "checkbox") {
+      this.collapsed = !this.collapsed;
+    }
   }
 
   /** Checkbox filter helpers END*/
