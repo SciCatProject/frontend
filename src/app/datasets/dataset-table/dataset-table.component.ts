@@ -494,6 +494,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               this.metadataFormatService.valueFormat(lodashGet(row, column.name)),
             );
           };
+
+          convertedColumn.header = column.name
+            .replace(/^scientificMetadata\.(.)/, (_, c) => c.toUpperCase())
+            .replace(/\.value$/, "");
         }
 
         return convertedColumn;
