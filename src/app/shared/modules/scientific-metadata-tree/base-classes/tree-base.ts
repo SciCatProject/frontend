@@ -9,6 +9,7 @@ import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { DateTimeService } from "shared/services/date-time.service";
 import { UnitsService } from "shared/services/units.service";
+import { AppConfigService } from "app-config.service";
 
 export class TreeNode {
   children: TreeNode[];
@@ -43,10 +44,10 @@ export class TreeBaseComponent {
   prettyUnitPipe: PrettyUnitPipe;
   unitsService: UnitsService;
   dateTimeService: DateTimeService;
-  constructor() {
+  constructor(protected configService: AppConfigService) {
     this.unitsService = new UnitsService();
     this.prettyUnitPipe = new PrettyUnitPipe(this.unitsService);
-    this.formatNumberPipe = new FormatNumberPipe();
+    this.formatNumberPipe = new FormatNumberPipe(this.configService);
     this.dateTimeService = new DateTimeService();
   }
   buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
