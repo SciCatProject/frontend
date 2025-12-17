@@ -370,7 +370,8 @@ cdk-virtual-scroll-viewport {
     padding: 0 20px;
     flex: 1 1 auto;
     width: 100%;
-    max-width: 500px;
+    min-width: 500px;
+    max-width: 33%;
 
     mat-form-field {
       width: 100%;
