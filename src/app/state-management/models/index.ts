@@ -142,7 +142,7 @@ type ScientificConditionRelation =
 export interface ScientificCondition {
   lhs: string;
   relation: ScientificConditionRelation;
-  rhs: string | number | number[];
+  rhs: string | number | (string | number)[];
   unit: string;
   unitsOptions?: string[];
   type?: string;

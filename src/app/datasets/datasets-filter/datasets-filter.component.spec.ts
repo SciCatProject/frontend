@@ -224,7 +224,7 @@ describe("DatasetsFilterComponent", () => {
 
       component.reset();
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(6);
+      expect(dispatchSpy).toHaveBeenCalledTimes(5);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(fetchFacetCountsAction());

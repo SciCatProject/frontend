@@ -241,9 +241,9 @@ describe("SamplesReducer", () => {
         characteristic,
       );
 
-      const index = 0;
+      const lhs = "lhsTest";
 
-      const action = fromActions.removeCharacteristicsFilterAction({ index });
+      const action = fromActions.removeCharacteristicsFilterAction({ lhs });
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.sampleFilters.characteristics).not.toContain(characteristic);

@@ -56,7 +56,7 @@ export class SearchParametersDialogComponent {
       Validators.required,
       Validators.minLength(9),
     ]),
-    rhs: new FormControl<string | number | number[]>(
+    rhs: new FormControl<string | number | (string | number)[]>(
       this.data.condition?.rhs || "",
       [Validators.required, Validators.minLength(1)],
     ),
