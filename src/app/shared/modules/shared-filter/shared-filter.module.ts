@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 
 import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { CommonModule } from "@angular/common";
+import { CommonModule, AsyncPipe } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { SharedFilterComponent } from "./shared-filter.component";
@@ -19,6 +19,13 @@ import { MatButtonModule } from "@angular/material/button";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
 import { AppConfigService } from "app-config.service";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatCardModule } from "@angular/material/card";
+import { MatSelectModule } from "@angular/material/select";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { OverlayModule } from "@angular/cdk/overlay";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [SharedFilterComponent, MultiSelectFilterComponent],
@@ -39,11 +46,19 @@ import { AppConfigService } from "app-config.service";
     PipesModule,
     MatChipsModule,
     NgxNumericRangeFormFieldModule,
+    MatExpansionModule,
+    MatCardModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    OverlayModule,
+    MatDialogModule,
+    MatSnackBarModule,
   ],
   // Force shared-filter to use the Luxon adapter.
   // Needed because JsonFormsAngularMaterialModule brings in MatNativeDateModule,
   // which otherwise switches the DateAdapter to the native one.
   providers: [
+    AsyncPipe,
     provideLuxonDateAdapter(),
     {
       provide: MAT_DATE_FORMATS,
