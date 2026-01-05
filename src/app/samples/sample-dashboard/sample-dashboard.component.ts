@@ -43,7 +43,7 @@ import {
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import { SharedFilterComponent } from "shared/modules/shared-filter/shared-filter.component";
+import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
 import {
   addCharacteristicsFilterAction,
   removeCharacteristicsFilterAction,
@@ -59,7 +59,7 @@ import { ScientificCondition } from "state-management/models";
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
 
-  @ViewChild("conditionFilter") conditionFilter: SharedFilterComponent;
+  @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,

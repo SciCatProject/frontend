@@ -21,8 +21,8 @@
               (search)="onTextSearchChange($event)"
             ></app-search-bar>
 
-            <!-- Conditions via shared-filter -->
-            <shared-filter
+            
+            <shared-condition
               #conditionFilter
               *ngIf="appConfig.scienceSearchEnabled"
               [showConditions]="true"
@@ -32,7 +32,7 @@
               [conditionType]="'samples'"
               [addConditionAction]="addCondition"
               [removeConditionAction]="removeCondition"
-            ></shared-filter>
+            ></shared-condition>
 
             <div class="section-container">
               <button

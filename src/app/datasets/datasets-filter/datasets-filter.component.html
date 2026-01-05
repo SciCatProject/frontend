@@ -62,7 +62,7 @@
       ></shared-filter>
     </ng-container>
 
-    <shared-filter
+    <shared-condition
       #conditionFilter
       *ngIf="appConfig.scienceSearchEnabled"
       data-cy="scientific-condition-filter-list"
@@ -73,7 +73,7 @@
       [conditionType]="'datasets'"
       [addConditionAction]="addCondition"
       [removeConditionAction]="removeCondition"
-    ></shared-filter>
+    ></shared-condition>
 
     <div class="section-container">
       <button

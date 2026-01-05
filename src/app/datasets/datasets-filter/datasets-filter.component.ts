@@ -31,7 +31,7 @@ import { DateRange } from "state-management/state/proposals.store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
-import { SharedFilterComponent } from "shared/modules/shared-filter/shared-filter.component";
+import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
 import {
   addScientificConditionAction,
   removeScientificConditionAction,
@@ -59,7 +59,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
-  @ViewChild("conditionFilter") conditionFilter: SharedFilterComponent;
+  @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
 
   constructor(
     private store: Store,
