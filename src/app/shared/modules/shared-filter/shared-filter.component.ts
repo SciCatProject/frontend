@@ -49,8 +49,7 @@ type FacetItem = { _id: string; label?: string; count: number };
   styleUrls: ["./shared-filter.component.scss"],
   standalone: false,
 })
-export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
+export class SharedFilterComponent implements OnChanges, OnInit {
   private dateRange: DateRange = { begin: null, end: null };
 
   checkboxDisplaylimit = 10;
@@ -740,10 +739,6 @@ export class SharedFilterComponent implements OnChanges, OnInit, OnDestroy {
       );
       this.updateStore(updatedConditions);
     });
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   /** Condition filter helpers and methods END */
