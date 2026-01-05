@@ -78,7 +78,19 @@
       "policiesEnabled": { "type": "boolean" },
       "retrieveDestinations": {
         "type": "array",
-        "items": { "type": "string" }
+        "items": {
+          "type": "object",
+          "properties": {
+            "option": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            }
+          },
+          "required": ["option", "tooltip"],
+          "additionalProperties": false
+        }
       },
 
       "riotBaseUrl": { "type": "string" },
@@ -111,17 +123,17 @@
         "items": {
           "type": "object",
           "properties": {
+            "label": { "type": "string" },
             "id": { "type": "string" },
             "description": { "type": "string" },
             "order": { "type": "number" },
-            "label": { "type": "string" },
             "files": { "type": "string" },
             "mat_icon": { "type": "string" },
             "url": { "type": "string" },
             "target": { "type": "string" },
             "enabled": { "type": "string" },
             "authorization": { "type": "array", "items": { "type": "string" } },
-            "type": { "type": "string" },
+            "type": { "type": "string", "enum": ["form", "xhr", "link"] },
             "icon": { "type": "string" },
             "payload": { "type": "string" },
             "filename": { "type": "string" }
@@ -226,33 +238,55 @@
         "type": "object",
         "properties": {
           "enableCustomizedComponent": { "type": "boolean" },
-
           "customization": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "type": { "type": "string" },
                 "label": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "scientificMetadata",
+                    "attachments",
+                    "datasetJsonView",
+                    "regular"
+                  ]
+                },
                 "order": { "type": "number" },
                 "row": { "type": "number" },
                 "col": { "type": "number" },
-                "viewMode": { "type": "string" },
+                "viewMode": {
+                  "type": "string",
+                  "enum": ["table", "json", "tree"]
+                },
 
                 "options": {
                   "type": "object",
                   "properties": {
                     "limit": { "type": "number" },
-                    "size": { "type": "string" }
+                    "size": {
+                      "type": "string",
+                      "enum": ["small", "medium", "large"]
+                    }
                   }
                 },
-
                 "fields": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "element": { "type": "string" },
+                      "element": {
+                        "type": "string",
+                        "enum": [
+                          "text",
+                          "copy",
+                          "tag",
+                          "linky",
+                          "date",
+                          "internalLink"
+                        ]
+                      },
                       "source": { "type": "string" },
                       "order": { "type": "number" }
                     }
@@ -301,42 +335,29 @@
     "elements": [
       {
         "type": "Group",
-        "label": "Main Page",
-        "options": {
-          "expandable": true
-        },
-        "elements": [
-          {
-            "type": "Control",
-            "scope": "#/properties/defaultMainPage/properties/nonAuthenticatedUser"
-          },
-          {
-            "type": "Control",
-            "scope": "#/properties/defaultMainPage/properties/authenticatedUser"
-          }
-        ]
-      },
-      {
-        "type": "Group",
-        "label": "Ingestor Component",
-        "options": {
-          "expandable": true
-        },
-        "elements": [
-          {
-            "type": "Control",
-            "scope": "#/properties/ingestorComponent/properties/ingestorEnabled"
-          }
-        ]
-      },
-      {
-        "type": "Group",
         "label": "General Settings",
         "options": {
           "expandable": true
         },
         "elements": [
           { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
+          { "type": "Control", "scope": "#/properties/landingPage" },
+          { "type": "Control", "scope": "#/properties/metadataStructure" },
+          { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
+          { "type": "Control", "scope": "#/properties/landingPage" },
+          { "type": "Control", "scope": "#/properties/metadataStructure" },
+
+          { "type": "Control", "scope": "#/properties/riotBaseUrl" },
+          { "type": "Control", "scope": "#/properties/jupyterHubUrl" },
+          { "type": "Control", "scope": "#/properties/lbBaseURL" },
+          {
+            "type": "Control",
+            "scope": "#/properties/externalAuthEndpoint"
+          },
+          { "type": "Control", "scope": "#/properties/facility" },
+          { "type": "Control", "scope": "#/properties/siteIcon" },
+          { "type": "Control", "scope": "#/properties/siteTitle" },
+          { "type": "Control", "scope": "#/properties/siteSciCatLogo" },
           {
             "type": "Control",
             "scope": "#/properties/checkBoxFilterClickTrigger"
@@ -354,32 +375,52 @@
             "scope": "#/properties/editDatasetSampleEnabled"
           },
           { "type": "Control", "scope": "#/properties/editMetadataEnabled" },
-          { "type": "Control", "scope": "#/properties/addSampleEnabled" }
+          { "type": "Control", "scope": "#/properties/addSampleEnabled" },
+          { "type": "Control", "scope": "#/properties/fileColorEnabled" },
+          { "type": "Control", "scope": "#/properties/fileDownloadEnabled" },
+          { "type": "Control", "scope": "#/properties/jobsEnabled" },
+          { "type": "Control", "scope": "#/properties/jsonMetadataEnabled" },
+          { "type": "Control", "scope": "#/properties/logbookEnabled" },
+          { "type": "Control", "scope": "#/properties/loginFormEnabled" },
+          { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" }
         ]
       },
       {
         "type": "Group",
+        "label": "Main Page",
         "options": {
           "expandable": true
         },
-        "label": "Frontend Labels & URLs",
         "elements": [
           {
             "type": "HorizontalLayout",
             "elements": [
-              { "type": "Control", "scope": "#/properties/lbBaseURL" },
               {
                 "type": "Control",
-                "scope": "#/properties/externalAuthEndpoint"
+                "scope": "#/properties/defaultMainPage/properties/nonAuthenticatedUser"
               },
-              { "type": "Control", "scope": "#/properties/facility" },
-              { "type": "Control", "scope": "#/properties/siteIcon" },
-              { "type": "Control", "scope": "#/properties/siteTitle" },
-              { "type": "Control", "scope": "#/properties/siteSciCatLogo" }
+              {
+                "type": "Control",
+                "scope": "#/properties/defaultMainPage/properties/authenticatedUser"
+              }
             ]
           }
         ]
       },
+      {
+        "type": "Group",
+        "label": "Ingestor Component",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/ingestorComponent/properties/ingestorEnabled"
+          }
+        ]
+      },
+
       {
         "type": "Group",
         "options": {
@@ -413,31 +454,6 @@
         "options": {
           "expandable": true
         },
-        "label": "File/Display Flags",
-        "elements": [
-          {
-            "type": "HorizontalLayout",
-            "elements": [
-              { "type": "Control", "scope": "#/properties/jupyterHubUrl" },
-              { "type": "Control", "scope": "#/properties/landingPage" },
-              { "type": "Control", "scope": "#/properties/metadataStructure" }
-            ]
-          },
-
-          { "type": "Control", "scope": "#/properties/fileColorEnabled" },
-          { "type": "Control", "scope": "#/properties/fileDownloadEnabled" },
-          { "type": "Control", "scope": "#/properties/jobsEnabled" },
-          { "type": "Control", "scope": "#/properties/jsonMetadataEnabled" },
-          { "type": "Control", "scope": "#/properties/logbookEnabled" },
-          { "type": "Control", "scope": "#/properties/loginFormEnabled" },
-          { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" }
-        ]
-      },
-      {
-        "type": "Group",
-        "options": {
-          "expandable": true
-        },
         "label": "Download Settings",
         "elements": [
           { "type": "Control", "scope": "#/properties/multipleDownloadAction" },
@@ -460,32 +476,18 @@
       },
       {
         "type": "Group",
-        "label": "SciCat Feature Flags",
+        "label": "Retrieve Destinations",
         "options": {
           "expandable": true
         },
         "elements": [
           {
-            "type": "VerticalLayout",
-            "elements": [
-              {
-                "type": "Control",
-                "scope": "#/properties/retrieveDestinations"
-              },
-              { "type": "Control", "scope": "#/properties/riotBaseUrl" }
-            ]
-          },
-          { "type": "Control", "scope": "#/properties/policiesEnabled" },
-          { "type": "Control", "scope": "#/properties/scienceSearchEnabled" },
-          {
             "type": "Control",
-            "scope": "#/properties/scienceSearchUnitsEnabled"
-          },
-          {
-            "type": "Control",
-            "scope": "#/properties/searchPublicDataEnabled"
-          },
-          { "type": "Control", "scope": "#/properties/searchSamples" }
+            "scope": "#/properties/retrieveDestinations",
+            "options": {
+              "description": "Retrieve Destinations"
+            }
+          }
         ]
       },
       {
@@ -531,19 +533,19 @@
         },
         "elements": [
           {
-            "type": "Control",
+            "type": "ListWithDetail",
             "scope": "#/properties/datafilesActions",
             "options": {
               "detail": {
                 "type": "VerticalLayout",
                 "elements": [
+                  { "type": "Control", "scope": "#/properties/label" },
                   { "type": "Control", "scope": "#/properties/id" },
                   {
                     "type": "Control",
                     "scope": "#/properties/description"
                   },
                   { "type": "Control", "scope": "#/properties/order" },
-                  { "type": "Control", "scope": "#/properties/label" },
                   { "type": "Control", "scope": "#/properties/files" },
                   { "type": "Control", "scope": "#/properties/mat_icon" },
                   { "type": "Control", "scope": "#/properties/url" },
@@ -606,7 +608,7 @@
             "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
           },
           {
-            "type": "Control",
+            "type": "ListWithDetail",
             "label": "Customization Configuration",
             "scope": "#/properties/datasetDetailComponent/properties/customization",
             "options": {
@@ -616,16 +618,28 @@
                   {
                     "type": "HorizontalLayout",
                     "elements": [
-                      { "type": "Control", "scope": "#/properties/type" },
                       { "type": "Control", "scope": "#/properties/label" },
+                      { "type": "Control", "scope": "#/properties/type" },
                       { "type": "Control", "scope": "#/properties/order" },
                       { "type": "Control", "scope": "#/properties/row" },
                       { "type": "Control", "scope": "#/properties/col" },
-                      { "type": "Control", "scope": "#/properties/viewMode" }
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/viewMode",
+                        "rule": {
+                          "effect": "SHOW",
+                          "condition": {
+                            "scope": "#/properties/type",
+                            "schema": {
+                              "const": "scientificMetadata"
+                            }
+                          }
+                        }
+                      }
                     ]
                   },
                   {
-                    "type": "Group",
+                    "type": "VerticalLayout",
                     "label": "Attachments Options",
                     "elements": [
                       {
@@ -641,12 +655,30 @@
                           }
                         ]
                       }
-                    ]
+                    ],
+                    "rule": {
+                      "effect": "SHOW",
+                      "condition": {
+                        "scope": "#/properties/type",
+                        "schema": {
+                          "const": "attachments"
+                        }
+                      }
+                    }
                   },
                   {
                     "type": "Control",
                     "label": "Fields",
                     "scope": "#/properties/fields",
+                    "rule": {
+                      "effect": "SHOW",
+                      "condition": {
+                        "scope": "#/properties/type",
+                        "schema": {
+                          "const": "regular"
+                        }
+                      }
+                    },
                     "options": {
                       "detail": {
                         "type": "HorizontalLayout",
