@@ -77,7 +77,6 @@ export class SharedFilterComponent implements OnChanges {
     | DateRange
     | undefined
     | null;
-  @Input() showBadge = false;
   @Input() collapsible = false;
   collapsed = false;
 
