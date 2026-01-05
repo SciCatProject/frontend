@@ -13,7 +13,7 @@ import {
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
-import { Observable, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { DateRange } from "state-management/state/proposals.store";
 import { MultiSelectFilterValue } from "../filters/multiselect-filter.component";
