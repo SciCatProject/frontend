@@ -8,6 +8,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { AsyncPipe } from "@angular/common";
 import { UnitsService } from "shared/services/units.service";
 import { UnitsOptionsService } from "shared/services/units-options.service";
+import { of } from "rxjs";
 
 describe("SharedConditionComponent", () => {
   let component: SharedConditionComponent;
