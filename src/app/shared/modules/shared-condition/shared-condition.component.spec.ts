@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { SharedConditionComponent } from './shared-condition.component';
+import { SharedConditionComponent } from "./shared-condition.component";
 import { Store } from "@ngrx/store";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -9,11 +9,11 @@ import { AsyncPipe } from "@angular/common";
 import { UnitsService } from "shared/services/units.service";
 import { UnitsOptionsService } from "shared/services/units-options.service";
 
-describe('SharedConditionComponent', () => {
+describe("SharedConditionComponent", () => {
   let component: SharedConditionComponent;
   let fixture: ComponentFixture<SharedConditionComponent>;
 
-  let mockStore: jasmine.SpyObj<Store>; 
+  let mockStore: jasmine.SpyObj<Store>;
   let mockDialog: jasmine.SpyObj<MatDialog>;
   let mockSnackBar: jasmine.SpyObj<MatSnackBar>;
   let mockUnitsService: jasmine.SpyObj<UnitsService>;
@@ -44,15 +44,14 @@ describe('SharedConditionComponent', () => {
         { provide: UnitsService, useValue: mockUnitsService },
         { provide: UnitsOptionsService, useValue: mockUnitsOptionsService },
       ],
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SharedConditionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
