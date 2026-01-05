@@ -188,6 +188,9 @@ export const expandAnimation = trigger("detailExpand", [
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  host: {
+    "[class.disable-border]": "disableBorder",
+  },
 })
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
@@ -319,6 +322,7 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   @Input() emptyMessage = "No data available";
   @Input() emptyIcon = "info";
+  @Input() sideFilterCollapsed = false;
 
   constructor(
     public dialog: MatDialog,
@@ -867,6 +871,18 @@ export class DynamicMatTableComponent<T extends TableRow>
       this.globalTextSearch = newValue;
       this.globalTextSearchChange.emit(this.globalTextSearch);
     }
+  }
+
+  onGlobalTextSearchApply() {
+    this.globalTextSearch_onChange(this.globalTextSearch);
+    this.globalTextSearchApply.emit(this.globalTextSearch);
+  }
+
+  onGlobalTextSearchClear() {
+    this.globalTextSearch = "";
+    this.globalSearchUpdate.next("");
+    this.globalTextSearchChange.emit("");
+    this.globalTextSearchApply.emit("");
   }
 
   autoHeight() {

@@ -17,6 +17,10 @@ import {
   deselectDatasetAction,
   selectAllDatasetsAction,
   sortByColumnAction,
+  setSearchTermsAction,
+  setTextFilterAction,
+  fetchFacetCountsAction,
+  fetchDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 
@@ -63,6 +67,7 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 
 export interface SortChangeEvent {
   active: string;
@@ -103,6 +108,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   instrumentMap: Map<string, Instrument> = new Map();
 
   @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
+  @Output() textSearch = new EventEmitter<string>();
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -147,6 +153,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
+  globalTextSearch = "";
+
   constructor(
     public appConfigService: AppConfigService,
     private store: Store,
@@ -155,6 +163,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private fileSize: FileSizePipe,
     private tableConfigService: TableConfigService,
+    private formatNumberPipe: FormatNumberPipe,
   ) {}
 
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
@@ -481,6 +490,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             this.getInstrumentName(row);
         }
 
+        if (column.name.startsWith("scientificMetadata.")) {
+          convertedColumn.customRender = (col, row) => {
+            return String(
+              this.formatNumberPipe.transform(lodashGet(row, col.name)),
+            );
+          };
+          convertedColumn.toExport = (row) => {
+            return String(
+              this.formatNumberPipe.transform(lodashGet(row, column.name)),
+            );
+          };
+        }
+
         return convertedColumn;
       });
   }
@@ -556,6 +578,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         });
       }),
     );
+
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+        this.globalTextSearch = searchQuery.text || "";
+      }),
+    );
+  }
+
+  onTextSearchChange(term: string) {
+    this.globalTextSearch = term;
+    this.store.dispatch(setSearchTermsAction({ terms: term }));
+    this.store.dispatch(setTextFilterAction({ text: term }));
+  }
+
+  onTextSearchAction() {
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
   }
 
   ngOnDestroy() {

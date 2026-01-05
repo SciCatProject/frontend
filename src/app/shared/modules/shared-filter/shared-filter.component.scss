@@ -63,3 +63,14 @@ mat-divider {
   margin: 0.4em 0;
   opacity: 0.4;
 }
+
+.filter-badge {
+  background: #fff;
+  color: var(--theme-primary-default);
+  border: 1.5px solid var(--theme-primary-default);
+  border-radius: 8px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+}

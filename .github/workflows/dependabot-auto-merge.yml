@@ -20,7 +20,7 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       ## NOTE: This step is only required if the repository has been configured to Require approval
       ## Checks if update-type is patch or minor, then approve if the PR status is not approved yet.

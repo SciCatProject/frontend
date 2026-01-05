@@ -31,9 +31,9 @@ export const routes: Routes = [
       {
         path: "auth-callback",
         loadChildren: () =>
-          import(
-            "./lazy/auth-callback-routing/auth-callback.feature.module"
-          ).then((m) => m.AuthCallbackFeatureModule),
+          import("./lazy/auth-callback-routing/auth-callback.feature.module").then(
+            (m) => m.AuthCallbackFeatureModule,
+          ),
       },
       {
         path: "",
@@ -56,9 +56,9 @@ export const routes: Routes = [
           {
             path: "instruments",
             loadChildren: () =>
-              import(
-                "./lazy/instruments-routing/instruments.feature.module"
-              ).then((m) => m.InstrumentsFeatureModule),
+              import("./lazy/instruments-routing/instruments.feature.module").then(
+                (m) => m.InstrumentsFeatureModule,
+              ),
           },
           {
             path: "proposals",
@@ -70,9 +70,9 @@ export const routes: Routes = [
           {
             path: "publishedDatasets",
             loadChildren: () =>
-              import(
-                "./lazy/publisheddata-routing/publisheddata.feature.module"
-              ).then((m) => m.PublisheddataFeatureModule),
+              import("./lazy/publisheddata-routing/publisheddata.feature.module").then(
+                (m) => m.PublisheddataFeatureModule,
+              ),
           },
           {
             path: "samples",

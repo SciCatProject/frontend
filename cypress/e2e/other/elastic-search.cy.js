@@ -29,6 +29,7 @@ describe("Elastic search", () => {
 
       cy.finishedLoading();
 
+      cy.get('[data-cy="text-search"]').type(searchQuery1);
       cy.get('[data-cy="search-clear-button"]').click();
 
       cy.get('[data-cy="text-search"]').type(searchQuery1);
@@ -44,6 +45,7 @@ describe("Elastic search", () => {
 
       cy.finishedLoading();
 
+      cy.get('[data-cy="text-search"]').type(searchQuery2);
       cy.get('[data-cy="search-clear-button"]').click();
 
       cy.get('[data-cy="text-search"]').type(searchQuery2);
@@ -64,6 +66,7 @@ describe("Elastic search", () => {
 
     cy.finishedLoading();
 
+    cy.get('[data-cy="text-search"]').type(searchQueryIrrelevant);
     cy.get('[data-cy="search-clear-button"]').click();
 
     cy.get('[data-cy="text-search"]').type(searchQueryIrrelevant);

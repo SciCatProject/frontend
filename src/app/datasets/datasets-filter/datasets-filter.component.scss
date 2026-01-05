@@ -1,7 +1,8 @@
 @use "@angular/material" as mat;
 mat-card {
-  margin-top: 0.5rem;
-
+  box-shadow: var(--theme-side-panel-shadow);
+  border: var(--theme-side-panel-border, 1px solid rgba(153, 213, 233, 0.7));
+  border-radius: 4px;
   .mat-mdc-form-field {
     width: 100%;
   }
@@ -90,6 +91,39 @@ mat-card {
       display: flex;
       align-items: center;
       justify-content: end;
+    }
+  }
+}
+
+.collapsible-filter-wrapper {
+  position: relative;
+
+  .collapse-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #666;
+    height: 1.5em;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  &.collapsed ::ng-deep shared-filter {
+    .facet-search,
+    .checkbox-list,
+    .show-more-btn,
+    .empty-text {
+      display: none !important;
     }
   }
 }

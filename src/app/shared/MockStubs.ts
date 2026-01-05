@@ -6,11 +6,10 @@ import { AppConfig } from "app-config.module";
 import { SciCatDataSource } from "./services/scicat.datasource";
 import {
   ActionConfig,
-  ActionDataset,
-} from "datasets/datafiles-actions/datafiles-action.interfaces";
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
-  Attachment,
   Instrument,
   OutputJobV3Dto,
   OutputDatasetObsoleteDto,
@@ -266,8 +265,9 @@ export class MockScicatDataSource extends SciCatDataSource {
 
 export class MockDatafilesActionsComponent {
   actionsConfig: ActionConfig[];
-  dataset: ActionDataset;
+  actionItems: ActionItems;
   files: DataFiles_File[];
+  visible: boolean;
 }
 
 export class MockHtmlElement {
