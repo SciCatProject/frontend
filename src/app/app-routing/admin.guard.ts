@@ -7,13 +7,9 @@ import {
   UrlTree,
 } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { combineLatest, Observable } from "rxjs";
-import { filter, map, switchMap, take, tap } from "rxjs/operators";
-import {
-  selectIsAdmin,
-  selectIsLoggedIn,
-  selectIsLoggingIn,
-} from "state-management/selectors/user.selectors";
+import { Observable } from "rxjs";
+import { filter, map, take } from "rxjs/operators";
+import { selectAdminGuardViewModel } from "state-management/selectors/user.selectors";
 
 /**
  * Ensure that the current user is admin
@@ -38,22 +34,16 @@ export class AdminGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> {
-    return combineLatest([
-      this.store.select(selectIsLoggingIn),
-      this.store.select(selectIsLoggedIn),
-      this.store.select(selectIsAdmin),
-    ]).pipe(
-      filter(([isLoggingIn]) => {
-        return !isLoggingIn;
-      }),
+    return this.store.select(selectAdminGuardViewModel).pipe(
+      filter((vm) => !vm.isLoggingIn),
       take(1),
-      map(([, isLoggedIn, isAdmin]) => {
-        if (!isLoggedIn) {
+      map((vm) => {
+        if (!vm.isLoggedIn) {
           return this.router.createUrlTree(["/login"], {
             queryParams: { url: state.url },
           });
         }
-        return isAdmin
+        return vm.isAdmin
           ? true
           : this.router.createUrlTree(["/401"], {
               queryParams: { url: state.url },

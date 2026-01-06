@@ -11,7 +11,7 @@ import {
   accordionArrayLayoutRendererTester,
   AccordionArrayLayoutRendererComponent,
 } from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
-import { map } from "rxjs";
+import { map, Subscription, take } from "rxjs";
 import {
   expandGroupTester,
   ExpandGroupRendererComponent,
@@ -22,6 +22,8 @@ import {
 } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/array-renderer";
 import { MatDialog } from "@angular/material/dialog";
 import { JsonPreviewDialogComponent } from "shared/modules/json-preview-dialog/json-preview-dialog.component";
+import { JsonSchema, UISchemaElement } from "@jsonforms/core";
+import { AppConfigInterface } from "app-config.service";
 
 @Component({
   selector: "admin-config-edit",
@@ -30,14 +32,15 @@ import { JsonPreviewDialogComponent } from "shared/modules/json-preview-dialog/j
   standalone: false,
 })
 export class AdminConfigEditComponent implements OnInit {
+  private subscriptions: Subscription[] = [];
   config$ = this.store.select(selectConfig);
   data$ = this.config$.pipe(
     map((cfg) => (cfg.data ? this.toFormData(cfg.data) : null)),
   );
 
-  currentData: any = {};
-  schema: any = schema.schema || {};
-  uiSchema: any = schema.uiSchema || {};
+  currentData: AppConfigInterface;
+  schema: JsonSchema = schema.schema || {};
+  uiSchema: UISchemaElement = schema.uiSchema;
   renderers = [
     ...angularMaterialRenderers,
     {
@@ -60,6 +63,9 @@ export class AdminConfigEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(loadConfiguration());
+    this.subscriptions.push(
+      this.data$.pipe(take(1)).subscribe((d) => (this.currentData = d)),
+    );
   }
 
   onChange(event: any) {
@@ -100,9 +106,7 @@ export class AdminConfigEditComponent implements OnInit {
   // TODO: temp conversion functions, to be removed later
   toArray(obj: any) {
     if (!obj) return [];
-    return Array.isArray(obj)
-      ? obj
-      : Object.entries(obj).map(([key, value]) => ({ key, value }));
+    return Object.entries(obj).map(([key, value]) => ({ key, value }));
   }
   // TODO: temp conversion functions, to be removed later
   toObject(arr: any) {
@@ -116,7 +120,7 @@ export class AdminConfigEditComponent implements OnInit {
     const d = structuredClone(data);
 
     // Convert dynamic object to array with key and value properties
-    d.labelsLocalization = d.labelsLocalization ?? {};
+
     if (d.labelsLocalization.dataset) {
       d.labelsLocalization.dataset = this.toArray(d.labelsLocalization.dataset);
     }
@@ -147,7 +151,10 @@ export class AdminConfigEditComponent implements OnInit {
     const d = structuredClone(data);
 
     // Convert array with key and value properties to dynamic object
-    d.labelsLocalization = d.labelsLocalization ?? {};
+    d.labelsLocalization = d.labelsLocalization ?? {
+      dataset: {},
+      proposal: {},
+    };
     if (Array.isArray(d.labelsLocalization.dataset)) {
       d.labelsLocalization.dataset = this.toObject(
         d.labelsLocalization.dataset,
@@ -169,5 +176,10 @@ export class AdminConfigEditComponent implements OnInit {
     }
 
     return d;
+  }
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
   }
 }

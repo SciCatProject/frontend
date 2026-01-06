@@ -19,11 +19,6 @@ export interface AdminConfiguration {
 
 @Injectable()
 export class AdminEffects {
-  constructor(
-    private actions$: Actions,
-    private runtimeConfigService: RuntimeConfigService,
-  ) {}
-
   loadConfiguration$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadConfiguration),
@@ -57,4 +52,8 @@ export class AdminEffects {
       }),
     ),
   );
+  constructor(
+    private actions$: Actions,
+    private runtimeConfigService: RuntimeConfigService,
+  ) {}
 }
