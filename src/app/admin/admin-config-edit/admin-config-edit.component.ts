@@ -20,6 +20,8 @@ import {
   ArrayLayoutRendererCustom,
   arrayLayoutRendererTester,
 } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/array-renderer";
+import { MatDialog } from "@angular/material/dialog";
+import { JsonPreviewDialogComponent } from "shared/modules/json-preview-dialog/json-preview-dialog.component";
 
 @Component({
   selector: "admin-config-edit",
@@ -30,18 +32,9 @@ import {
 export class AdminConfigEditComponent implements OnInit {
   config$ = this.store.select(selectConfig);
   data$ = this.config$.pipe(
-    map((cfg) => {
-      if (!cfg?.data) return null;
-      const d = structuredClone(cfg.data);
-      d.labelsLocalization.dataset = this.toArray(d.labelsLocalization.dataset);
-      d.labelsLocalization.proposal = this.toArray(
-        d.labelsLocalization.proposal,
-      );
-      return d;
-    }),
+    map((cfg) => (cfg.data ? this.toFormData(cfg.data) : null)),
   );
 
-  showJsonPreview = false;
   currentData: any = {};
   schema: any = schema.schema || {};
   uiSchema: any = schema.uiSchema || {};
@@ -60,24 +53,13 @@ export class AdminConfigEditComponent implements OnInit {
       renderer: ArrayLayoutRendererCustom,
     },
   ];
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     this.store.dispatch(loadConfiguration());
-  }
-
-  toArray(obj: any) {
-    if (!obj) return [];
-    return Array.isArray(obj)
-      ? obj
-      : Object.entries(obj).map(([key, value]) => ({ key, value }));
-  }
-
-  toObject(arr: any) {
-    if (!arr) return {};
-    if (!Array.isArray(arr)) return arr;
-
-    return Object.fromEntries(arr.map((i) => [i.key, i.value]));
   }
 
   onChange(event: any) {
@@ -85,13 +67,107 @@ export class AdminConfigEditComponent implements OnInit {
   }
 
   save() {
-    const d = structuredClone(this.currentData);
+    const apiData = this.toApiData(this.currentData);
 
-    d.labelsLocalization = {
-      dataset: this.toObject(d.labelsLocalization.dataset),
-      proposal: this.toObject(d.labelsLocalization.proposal),
-    };
+    this.store.dispatch(updateConfiguration({ config: apiData }));
+  }
 
-    this.store.dispatch(updateConfiguration({ config: d }));
+  jsonPreview() {
+    const apiData = this.toApiData(this.currentData);
+
+    this.dialog.open(JsonPreviewDialogComponent, {
+      width: "90vw",
+      maxHeight: "90vh",
+      data: apiData,
+    });
+  }
+
+  export() {
+    const apiData = this.toApiData(this.currentData);
+    const json = JSON.stringify(apiData, null, 2);
+
+    const blob = new Blob([json], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `frontend-config-${new Date().toLocaleString("sv-SE")}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  // TODO: temp conversion functions, to be removed later
+  toArray(obj: any) {
+    if (!obj) return [];
+    return Array.isArray(obj)
+      ? obj
+      : Object.entries(obj).map(([key, value]) => ({ key, value }));
+  }
+  // TODO: temp conversion functions, to be removed later
+  toObject(arr: any) {
+    if (!arr?.length) return {};
+
+    return Object.fromEntries(arr.map((i) => [i.key, i.value]));
+  }
+
+  // TODO: temp conversion functions, to be removed later
+  private toFormData(data: any) {
+    const d = structuredClone(data);
+
+    // Convert dynamic object to array with key and value properties
+    d.labelsLocalization = d.labelsLocalization ?? {};
+    if (d.labelsLocalization.dataset) {
+      d.labelsLocalization.dataset = this.toArray(d.labelsLocalization.dataset);
+    }
+    if (d.labelsLocalization.proposal) {
+      d.labelsLocalization.proposal = this.toArray(
+        d.labelsLocalization.proposal,
+      );
+    }
+    if (d.datafilesActions) {
+      d.datafilesActions = d.datafilesActions.map((a: any) => ({
+        ...a,
+        variables:
+          a.variables && !Array.isArray(a.variables)
+            ? this.toArray(a.variables)
+            : a.variables,
+        inputs:
+          a.inputs && !Array.isArray(a.inputs)
+            ? this.toArray(a.inputs)
+            : a.inputs,
+      }));
+    }
+
+    return d;
+  }
+
+  // TODO: temp conversion functions, to be removed later
+  private toApiData(data: any) {
+    const d = structuredClone(data);
+
+    // Convert array with key and value properties to dynamic object
+    d.labelsLocalization = d.labelsLocalization ?? {};
+    if (Array.isArray(d.labelsLocalization.dataset)) {
+      d.labelsLocalization.dataset = this.toObject(
+        d.labelsLocalization.dataset,
+      );
+    }
+    if (Array.isArray(d.labelsLocalization.proposal)) {
+      d.labelsLocalization.proposal = this.toObject(
+        d.labelsLocalization.proposal,
+      );
+    }
+    if (Array.isArray(d.datafilesActions)) {
+      d.datafilesActions = d.datafilesActions.map((a: any) => ({
+        ...a,
+        variables: Array.isArray(a.variables)
+          ? this.toObject(a.variables)
+          : a.variables,
+        inputs: Array.isArray(a.inputs) ? this.toObject(a.inputs) : a.inputs,
+      }));
+    }
+
+    return d;
   }
 }
