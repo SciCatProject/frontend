@@ -101,23 +101,27 @@ export class AdminConfigEditComponent implements OnInit {
     URL.revokeObjectURL(url);
   }
 
-  // TODO: temp conversion functions, to be removed later
+  ///////////////////////////////////////////////////////
+  // NOTE: below are temporary conversion functions
+  // it converts dynamic object to array with key and value properties
+  // and vice versa for jsonforms compatibility
+  // Should be removed when config values are fixed to use only arrays
+  ///////////////////////////////////////////////////////
+
   toArray(obj: any) {
     if (!obj) return [];
     return Object.entries(obj).map(([key, value]) => ({ key, value }));
   }
-  // TODO: temp conversion functions, to be removed later
+  // TODO: to be removed
   toObject(arr: any) {
     if (!arr?.length) return {};
 
     return Object.fromEntries(arr.map((i) => [i.key, i.value]));
   }
 
-  // TODO: temp conversion functions, to be removed later
+  // TODO: to be removed
   toFormData(data: any) {
     const d = structuredClone(data);
-
-    // Convert dynamic object to array with key and value properties
 
     if (d.labelsLocalization.dataset) {
       d.labelsLocalization.dataset = this.toArray(d.labelsLocalization.dataset);
@@ -144,11 +148,10 @@ export class AdminConfigEditComponent implements OnInit {
     return d;
   }
 
-  // TODO: temp conversion functions, to be removed later
+  // TODO: to be removed
   toApiData(data: any) {
     const d = structuredClone(data);
 
-    // Convert array with key and value properties to dynamic object
     d.labelsLocalization = d.labelsLocalization ?? {
       dataset: {},
       proposal: {},
@@ -175,6 +178,7 @@ export class AdminConfigEditComponent implements OnInit {
 
     return d;
   }
+
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
