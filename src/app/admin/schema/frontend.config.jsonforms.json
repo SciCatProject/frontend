@@ -10,15 +10,14 @@
           "authenticatedUser": { "type": "string" }
         }
       },
-
       "ingestorComponent": {
         "type": "object",
         "properties": {
           "ingestorEnabled": { "type": "boolean" }
         }
       },
-
       "checkBoxFilterClickTrigger": { "type": "boolean" },
+      "dateFormat": { "type": "string" },
       "accessTokenPrefix": { "type": "string" },
       "addDatasetEnabled": { "type": "boolean" },
       "archiveWorkflowEnabled": { "type": "boolean" },
@@ -28,42 +27,32 @@
       "editDatasetSampleEnabled": { "type": "boolean" },
       "editMetadataEnabled": { "type": "boolean" },
       "addSampleEnabled": { "type": "boolean" },
-
       "externalAuthEndpoint": { "type": "string" },
       "facility": { "type": "string" },
       "siteIcon": { "type": "string" },
       "siteTitle": { "type": "string" },
       "siteSciCatLogo": { "type": "string" },
-
       "loginFacilityLabel": { "type": "string" },
       "loginLdapLabel": { "type": "string" },
       "loginLocalLabel": { "type": "string" },
-
       "loginFacilityEnabled": { "type": "boolean" },
       "loginLdapEnabled": { "type": "boolean" },
       "loginLocalEnabled": { "type": "boolean" },
-
       "fileColorEnabled": { "type": "boolean" },
       "fileDownloadEnabled": { "type": "boolean" },
-
       "gettingStarted": {},
       "ingestManual": {},
-
       "jobsEnabled": { "type": "boolean" },
       "jsonMetadataEnabled": { "type": "boolean" },
       "jupyterHubUrl": { "type": "string" },
       "landingPage": { "type": "string" },
       "lbBaseURL": { "type": "string" },
-
       "logbookEnabled": { "type": "boolean" },
       "loginFormEnabled": { "type": "boolean" },
-
       "metadataPreviewEnabled": { "type": "boolean" },
       "metadataStructure": { "type": "string" },
-
       "multipleDownloadAction": { "type": "string" },
       "multipleDownloadEnabled": { "type": "boolean" },
-
       "oAuth2Endpoints": {
         "type": "array",
         "items": {
@@ -74,7 +63,6 @@
           }
         }
       },
-
       "policiesEnabled": { "type": "boolean" },
       "retrieveDestinations": {
         "type": "array",
@@ -92,32 +80,24 @@
           "additionalProperties": false
         }
       },
-
       "riotBaseUrl": { "type": "string" },
       "scienceSearchEnabled": { "type": "boolean" },
       "scienceSearchUnitsEnabled": { "type": "boolean" },
       "searchPublicDataEnabled": { "type": "boolean" },
       "searchSamples": { "type": "boolean" },
-
       "sftpHost": { "type": "string" },
       "sourceFolder": { "type": "string" },
-
       "maxDirectDownloadSize": { "type": "number" },
       "maxFileSizeWarning": { "type": "string" },
-
       "shareEnabled": { "type": "boolean" },
       "shoppingCartEnabled": { "type": "boolean" },
       "shoppingCartOnHeader": { "type": "boolean" },
-
       "tableSciDataEnabled": { "type": "boolean" },
       "datasetDetailsShowMissingProposalId": { "type": "boolean" },
-
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
-
       "datafilesActionsEnabled": { "type": "boolean" },
-
       "datafilesActions": {
         "type": "array",
         "items": {
@@ -133,7 +113,41 @@
             "target": { "type": "string" },
             "enabled": { "type": "string" },
             "authorization": { "type": "array", "items": { "type": "string" } },
-            "type": { "type": "string", "enum": ["form", "xhr", "link"] },
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "value": { "type": "string" }
+                }
+              }
+            },
+            "variables": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "value": { "type": "string" }
+                }
+              }
+            },
+            "headers": {
+              "type": "object",
+              "properties": {
+                "content-type": { "type": "string" },
+                "Authorization": { "type": "string" }
+              }
+            },
+            "method": {
+              "type": "string",
+              "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+            },
+            "type": {
+              "type": "string",
+              "enum": ["form", "xhr", "link", "json-download"]
+            },
             "icon": { "type": "string" },
             "payload": { "type": "string" },
             "filename": { "type": "string" }
@@ -174,7 +188,6 @@
           }
         }
       },
-
       "defaultProposalsListSettings": {
         "type": "object",
         "properties": {
@@ -233,7 +246,6 @@
           }
         }
       },
-      "dateFormat": { "type": "string" },
       "datasetDetailComponent": {
         "type": "object",
         "properties": {
@@ -340,13 +352,10 @@
           "expandable": true
         },
         "elements": [
+          { "type": "Control", "scope": "#/properties/dateFormat" },
           { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
           { "type": "Control", "scope": "#/properties/landingPage" },
           { "type": "Control", "scope": "#/properties/metadataStructure" },
-          { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
-          { "type": "Control", "scope": "#/properties/landingPage" },
-          { "type": "Control", "scope": "#/properties/metadataStructure" },
-
           { "type": "Control", "scope": "#/properties/riotBaseUrl" },
           { "type": "Control", "scope": "#/properties/jupyterHubUrl" },
           { "type": "Control", "scope": "#/properties/lbBaseURL" },
@@ -553,12 +562,60 @@
                   { "type": "Control", "scope": "#/properties/enabled" },
                   {
                     "type": "Control",
-                    "scope": "#/properties/authorization"
+                    "scope": "#/properties/method"
                   },
                   { "type": "Control", "scope": "#/properties/type" },
                   { "type": "Control", "scope": "#/properties/icon" },
-                  { "type": "Control", "scope": "#/properties/payload" },
-                  { "type": "Control", "scope": "#/properties/filename" }
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/payload",
+                    "options": { "multi": true }
+                  },
+                  { "type": "Control", "scope": "#/properties/filename" },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/authorization"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/variables",
+                    "options": {
+                      "detail": {
+                        "type": "HorizontalLayout",
+                        "elements": [
+                          { "type": "Control", "scope": "#/properties/key" },
+                          { "type": "Control", "scope": "#/properties/value" }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/inputs",
+                    "options": {
+                      "detail": {
+                        "type": "HorizontalLayout",
+                        "elements": [
+                          { "type": "Control", "scope": "#/properties/key" },
+                          { "type": "Control", "scope": "#/properties/value" }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "Group",
+                    "label": "Headers",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/headers/properties/content-type"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/headers/properties/Authorization"
+                      }
+                    ]
+                  }
                 ]
               }
             }
@@ -707,6 +764,7 @@
       },
       {
         "type": "Group",
+        "label": "Main Menu",
         "options": {
           "expandable": true
         },
@@ -716,10 +774,6 @@
             "elements": [
               {
                 "type": "VerticalLayout",
-                "label": "Non Authenticated User",
-                "options": {
-                  "expandable": false
-                },
                 "elements": [
                   {
                     "type": "Control",
@@ -729,10 +783,6 @@
               },
               {
                 "type": "VerticalLayout",
-                "label": "Authenticated User",
-                "options": {
-                  "expandable": false
-                },
                 "elements": [
                   {
                     "type": "Control",
@@ -743,8 +793,7 @@
             ]
           }
         ]
-      },
-      { "type": "Control", "scope": "#/properties/dateFormat" }
+      }
     ]
   }
 }
