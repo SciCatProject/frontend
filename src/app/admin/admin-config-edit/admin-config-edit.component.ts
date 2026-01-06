@@ -1,10 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import {
-  loadConfiguration,
-  updateConfiguration,
-} from "state-management/actions/admin.action";
-import { selectConfig } from "state-management/selectors/admin.selectors";
+import { updateConfiguration } from "state-management/actions/runtime-config.action";
+import { selectConfig } from "state-management/selectors/runtime-config.selectors";
 import schema from "../schema/frontend.config.jsonforms.json";
 import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import {
@@ -62,7 +59,6 @@ export class AdminConfigEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(loadConfiguration());
     this.subscriptions.push(
       this.data$.pipe(take(1)).subscribe((d) => (this.currentData = d)),
     );
@@ -75,7 +71,9 @@ export class AdminConfigEditComponent implements OnInit {
   save() {
     const apiData = this.toApiData(this.currentData);
 
-    this.store.dispatch(updateConfiguration({ config: apiData }));
+    this.store.dispatch(
+      updateConfiguration({ id: "frontendConfig", config: apiData }),
+    );
   }
 
   jsonPreview() {

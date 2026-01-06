@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, IsActiveMatchOptions } from "@angular/router";
-import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
+import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
+import { loadConfiguration } from "state-management/actions/runtime-config.action";
 enum TAB {
   configuration = "Configuration",
   usersList = "Users List",
@@ -14,7 +15,6 @@ enum TAB {
   standalone: false,
 })
 export class AdminDashboardComponent implements OnInit {
-  showError = false;
   navLinks: {
     location: string;
     label: string;
@@ -30,15 +30,16 @@ export class AdminDashboardComponent implements OnInit {
   };
 
   fetchDataActions: { [tab: string]: { action: any; loaded: boolean } } = {
-    [TAB.configuration]: { action: "", loaded: false },
-    [TAB.usersList]: { action: "", loaded: false },
+    [TAB.configuration]: { action: loadConfiguration, loaded: false },
+    // [TAB.usersList]: { action: "", loaded: false },
   };
 
   constructor(
     public appConfigService: AppConfigService,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private userService: UsersService,
+    private store: Store,
+
     public dialog: MatDialog,
   ) {}
 
@@ -47,35 +48,43 @@ export class AdminDashboardComponent implements OnInit {
       {
         location: "./configuration",
         label: TAB.configuration,
-        icon: "menu",
+        icon: "settings",
         enabled: true,
       },
-      {
-        location: "./usersList",
-        label: TAB.usersList,
-        icon: "data_object",
-        enabled: true,
-      },
+      // {
+      //   location: "./usersList",
+      //   label: TAB.usersList,
+      //   icon: "people",
+      //   enabled: true,
+      // },
     ];
+
+    this.route.firstChild?.url
+      .subscribe((childUrl) => {
+        const tab = childUrl.length === 1 ? childUrl[0].path : "configuration";
+        this.fetchDataForTab(TAB[tab]);
+      })
+      .unsubscribe();
   }
 
   onTabSelected(tab: string) {
     this.fetchDataForTab(tab);
   }
+
   fetchDataForTab(tab: string) {
     if (tab in this.fetchDataActions) {
       switch (tab) {
         case TAB.configuration:
+          const { action, loaded } = this.fetchDataActions[tab];
+          if (!loaded) {
+            this.fetchDataActions[tab].loaded = true;
+            this.store.dispatch(action({ id: "frontendConfig" }));
+          }
           break;
         case TAB.usersList:
           break;
-        default: {
-          // const { action, loaded } = this.fetchDataActions[tab];
-          // if (!loaded) {
-          //   this.fetchDataActions[tab].loaded = true;
-          //   this.store.dispatch(action(args));
-          // }
-        }
+        default:
+          break;
       }
     }
   }

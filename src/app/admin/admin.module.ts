@@ -6,9 +6,9 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { RouterModule } from "@angular/router";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { EffectsModule } from "@ngrx/effects";
-import { AdminEffects } from "state-management/effects/admin.effects";
+import { RunTimeConfigEffects } from "state-management/effects/runtime-config.effects";
 import { StoreModule } from "@ngrx/store";
-import { adminReducer } from "state-management/reducers/admin.reducer";
+import { runtimeConfigReducer } from "state-management/reducers/runtime-config.reducer";
 import { AdminConfigEditComponent } from "./admin-config-edit/admin-config-edit.component";
 import { AdminUserlistViewComponent } from "./admin-userlist-view/admin-userlist-view.component";
 
@@ -19,8 +19,8 @@ import { AdminUserlistViewComponent } from "./admin-userlist-view/admin-userlist
     MatTabsModule,
     MatIconModule,
     SharedScicatFrontendModule,
-    EffectsModule.forFeature([AdminEffects]),
-    StoreModule.forFeature("admin", adminReducer),
+    EffectsModule.forFeature([RunTimeConfigEffects]),
+    StoreModule.forFeature("runtimeConfig", runtimeConfigReducer),
   ],
   declarations: [
     AdminDashboardComponent,

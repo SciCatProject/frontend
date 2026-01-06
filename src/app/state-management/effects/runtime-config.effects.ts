@@ -9,25 +9,24 @@ import {
   updateConfiguration,
   updateConfigurationFailure,
   updateConfigurationSuccess,
-} from "state-management/actions/admin.action";
+} from "state-management/actions/runtime-config.action";
 import { RuntimeConfigService } from "@scicatproject/scicat-sdk-ts-angular";
 
 // Types
-export interface AdminConfiguration {
+export interface Configuration {
   [key: string]: any;
 }
 
 @Injectable()
-export class AdminEffects {
+export class RunTimeConfigEffects {
   loadConfiguration$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadConfiguration),
-      switchMap(() => {
-        const configName = "frontendConfig";
+      switchMap(({ id }) => {
         return this.runtimeConfigService
-          .runtimeConfigControllerGetConfigV3(configName)
+          .runtimeConfigControllerGetConfigV3(id)
           .pipe(
-            map((config: AdminConfiguration) => {
+            map((config: Configuration) => {
               return loadConfigurationSuccess({ config });
             }),
             catchError((error) => of(loadConfigurationFailure({ error }))),
@@ -39,12 +38,11 @@ export class AdminEffects {
   updateConfiguration$ = createEffect(() =>
     this.actions$.pipe(
       ofType(updateConfiguration),
-      exhaustMap(({ config }) => {
-        const configName = "frontendConfig";
+      exhaustMap(({ id, config }) => {
         return this.runtimeConfigService
-          .runtimeConfigControllerUpdateConfigV3(configName, config)
+          .runtimeConfigControllerUpdateConfigV3(id, config)
           .pipe(
-            map((config: AdminConfiguration) =>
+            map((config: Configuration) =>
               updateConfigurationSuccess({ config }),
             ),
             catchError((error) => of(updateConfigurationFailure({ error }))),
