@@ -74,13 +74,14 @@ export class AdminDashboardComponent implements OnInit {
   fetchDataForTab(tab: string) {
     if (tab in this.fetchDataActions) {
       switch (tab) {
-        case TAB.configuration:
+        case TAB.configuration: {
           const { action, loaded } = this.fetchDataActions[tab];
           if (!loaded) {
             this.fetchDataActions[tab].loaded = true;
             this.store.dispatch(action({ id: "frontendConfig" }));
           }
           break;
+        }
         case TAB.usersList:
           break;
         default:

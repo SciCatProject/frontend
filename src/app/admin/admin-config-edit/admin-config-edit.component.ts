@@ -114,7 +114,7 @@ export class AdminConfigEditComponent implements OnInit {
   }
 
   // TODO: temp conversion functions, to be removed later
-  private toFormData(data: any) {
+  toFormData(data: any) {
     const d = structuredClone(data);
 
     // Convert dynamic object to array with key and value properties
@@ -145,7 +145,7 @@ export class AdminConfigEditComponent implements OnInit {
   }
 
   // TODO: temp conversion functions, to be removed later
-  private toApiData(data: any) {
+  toApiData(data: any) {
     const d = structuredClone(data);
 
     // Convert array with key and value properties to dynamic object

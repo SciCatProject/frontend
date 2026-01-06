@@ -14,29 +14,26 @@ import { RuntimeConfigService } from "@scicatproject/scicat-sdk-ts-angular";
 
 // Types
 export interface Configuration {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
 @Injectable()
 export class RunTimeConfigEffects {
-  loadConfiguration$ = createEffect(() =>
-    this.actions$.pipe(
+  loadConfiguration$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(loadConfiguration),
-      switchMap(({ id }) => {
-        return this.runtimeConfigService
-          .runtimeConfigControllerGetConfigV3(id)
-          .pipe(
-            map((config: Configuration) => {
-              return loadConfigurationSuccess({ config });
-            }),
-            catchError((error) => of(loadConfigurationFailure({ error }))),
-          );
-      }),
-    ),
-  );
+      switchMap(({ id }) =>
+        this.runtimeConfigService.runtimeConfigControllerGetConfigV3(id).pipe(
+          map((config: Configuration) => loadConfigurationSuccess({ config })),
+          catchError((error) => of(loadConfigurationFailure({ error }))),
+        ),
+      ),
+    );
+  });
 
-  updateConfiguration$ = createEffect(() =>
-    this.actions$.pipe(
+  updateConfiguration$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(updateConfiguration),
       exhaustMap(({ id, config }) => {
         return this.runtimeConfigService
@@ -48,8 +45,8 @@ export class RunTimeConfigEffects {
             catchError((error) => of(updateConfigurationFailure({ error }))),
           );
       }),
-    ),
-  );
+    );
+  });
   constructor(
     private actions$: Actions,
     private runtimeConfigService: RuntimeConfigService,
