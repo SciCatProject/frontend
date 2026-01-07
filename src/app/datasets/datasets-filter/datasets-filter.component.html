@@ -14,6 +14,26 @@
   </mat-card-header>
 
   <mat-card-content>
+    <ng-template [ngIf]="this.loggedIn$ | async">
+      <div class="public-toggle">
+        <button
+          mat-stroked-button
+          [class.active]="
+            currentPublicViewMode === '' || currentPublicViewMode === false
+          "
+          (click)="onViewPublicChange(false)"
+        >
+          Embargoed data
+        </button>
+        <button
+          mat-stroked-button
+          [class.active]="currentPublicViewMode === true"
+          (click)="onViewPublicChange(true)"
+        >
+          Public data
+        </button>
+      </div>
+    </ng-template>
     <ng-container *ngFor="let filter of filtersList">
       <div
         *ngIf="filter.type === 'checkbox' && filter.enabled"
@@ -121,7 +141,7 @@
                       </div>
                     </ng-container>
                     <ng-template #rawNameOnlyHeader>
-                      <div class="primary-name" style="font-style: italic;">
+                      <div class="primary-name" style="font-style: italic">
                         {{ conditionConfig.condition.lhs }}
                       </div>
                     </ng-template>
@@ -155,7 +175,10 @@
                         </ng-container>
                       </div>
                       <ng-template #rawNameOnly>
-                        <strong>Metadata key: </strong><span style="font-style: italic;">{{ conditionConfig.condition.lhs }}</span>
+                        <strong>Metadata key: </strong
+                        ><span style="font-style: italic">{{
+                          conditionConfig.condition.lhs
+                        }}</span>
                       </ng-template>
                     </mat-card>
                   </ng-template>
