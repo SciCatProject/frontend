@@ -15,6 +15,7 @@ import {
   clearFacetsAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
+  setPublicViewModeAction,
 } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
 import { SharedScicatFrontendModule } from "shared/shared.module";
@@ -248,6 +249,21 @@ describe("DatasetsFilterComponent", () => {
           restoreFocus: false,
         },
       );
+    });
+  });
+  describe("#onViewPublicChange()", () => {
+    it("should dispatch a SetPublicViewModeAction, fetchDatasetsAction, and fetchFacetCountsAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const viewPublic = false;
+      component.onViewPublicChange(viewPublic);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(3);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setPublicViewModeAction({ isPublished: viewPublic }),
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchFacetCountsAction());
     });
   });
 });
