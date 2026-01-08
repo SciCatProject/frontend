@@ -220,7 +220,7 @@ export class AppConfigService {
   async loadAppConfig(): Promise<void> {
     try {
       const res = await this.http
-        .get("/api/v3/runtime-config/data/frontendConfig")
+        .get("/api/v3/runtime-config/frontendConfig")
         .pipe(timeout(2000))
         .toPromise();
 

@@ -76,8 +76,7 @@
               "type": "string"
             }
           },
-          "required": ["option", "tooltip"],
-          "additionalProperties": false
+          "required": ["option", "tooltip"]
         }
       },
       "riotBaseUrl": { "type": "string" },
