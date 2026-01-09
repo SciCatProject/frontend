@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { OutputRuntimeConfigDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { mergeWith } from "lodash-es";
 import { firstValueFrom, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
@@ -219,12 +218,10 @@ export class AppConfigService {
 
   async loadAppConfig(): Promise<void> {
     try {
-      const res = await this.http
-        .get("/api/v3/runtime-config/frontendConfig")
-        .pipe(timeout(2000))
-        .toPromise();
+      const config = await firstValueFrom(
+        this.http.get("/api/v3/admin/config").pipe(timeout(2000)),
+      );
 
-      const config = (res as OutputRuntimeConfigDto).data;
       this.appConfig = Object.assign({}, this.appConfig, config);
     } catch (err) {
       console.log("No config available in backend, trying with local config.");

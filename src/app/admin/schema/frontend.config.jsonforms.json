@@ -401,17 +401,12 @@
         },
         "elements": [
           {
-            "type": "HorizontalLayout",
-            "elements": [
-              {
-                "type": "Control",
-                "scope": "#/properties/defaultMainPage/properties/nonAuthenticatedUser"
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/defaultMainPage/properties/authenticatedUser"
-              }
-            ]
+            "type": "Control",
+            "scope": "#/properties/defaultMainPage/properties/nonAuthenticatedUser"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/defaultMainPage/properties/authenticatedUser"
           }
         ]
       },
@@ -505,13 +500,8 @@
           "expandable": true
         },
         "elements": [
-          {
-            "type": "HorizontalLayout",
-            "elements": [
-              { "type": "Control", "scope": "#/properties/sftpHost" },
-              { "type": "Control", "scope": "#/properties/sourceFolder" }
-            ]
-          }
+          { "type": "Control", "scope": "#/properties/sftpHost" },
+          { "type": "Control", "scope": "#/properties/sourceFolder" }
         ]
       },
       {
@@ -522,15 +512,10 @@
         },
         "elements": [
           {
-            "type": "HorizontalLayout",
-            "elements": [
-              {
-                "type": "Control",
-                "scope": "#/properties/maxDirectDownloadSize"
-              },
-              { "type": "Control", "scope": "#/properties/maxFileSizeWarning" }
-            ]
-          }
+            "type": "Control",
+            "scope": "#/properties/maxDirectDownloadSize"
+          },
+          { "type": "Control", "scope": "#/properties/maxFileSizeWarning" }
         ]
       },
       {
