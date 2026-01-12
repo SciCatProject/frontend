@@ -46,7 +46,10 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'checkbox'">
-      <div class="filter-group">
+      <div
+        class="collapsible-filter-wrapper"
+        [class.collapsed]="collapsible && collapsed"
+      >
         <mat-label class="filter-title"
           >{{ label | translate: localization }}
           <span *ngIf="shouldShowBadge" class="filter-badge">{{
@@ -86,6 +89,14 @@
         <ng-template #noItems>
           <div class="empty-text">No options found</div>
         </ng-template>
+        <button
+          *ngIf="collapsible"
+          class="collapse-toggle"
+          type="button"
+          (click)="toggleCollapse()"
+        >
+          <mat-icon>{{ collapsed ? "expand_more" : "expand_less" }}</mat-icon>
+        </button>
       </div>
 
       <mat-divider />

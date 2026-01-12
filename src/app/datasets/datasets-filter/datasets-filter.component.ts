@@ -73,7 +73,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   activeFilters: Record<string, string | DateRange | string[] | INumericRange> =
     {};
   filtersList: FilterConfig[];
-  expandedFilters: { [key: string]: boolean } = {};
 
   filterConfigs$ = this.store.select(selectFilters);
 
@@ -140,12 +139,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         if (filterConfigs) {
           this.filtersList = filterConfigs;
 
-          this.filtersList.forEach((filter) => {
-            if (filter.type === "checkbox" && filter.enabled) {
-              this.expandedFilters[filter.key] = true;
-            }
-          });
-
           const { queryParams } = this.route.snapshot;
 
           const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
@@ -202,10 +195,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
-  }
-
-  toggleFilter(key: string) {
-    this.expandedFilters[key] = !this.expandedFilters[key];
   }
 
   applyEnabledConditions() {
