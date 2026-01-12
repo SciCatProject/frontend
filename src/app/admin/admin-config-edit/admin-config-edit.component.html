@@ -1,15 +1,22 @@
-<div style="display: flex; justify-content: space-between; margin-bottom: 10px">
+<div class="config-buttons-wrapper" style="margin-bottom: 16px">
   <!-- LEFT -->
   <div>
-    <button mat-button color="primary" (click)="jsonPreview()">
+    <button mat-raised-button color="primary" (click)="jsonPreview()">
       Json Preview
     </button>
   </div>
 
   <!-- RIGHT -->
   <div>
-    <button mat-button color="primary" (click)="export()">Export</button>
-    <button mat-button color="primary" (click)="save()">Save</button>
+    <button
+      mat-raised-button
+      class="config-export-button"
+      color="primary"
+      (click)="export()"
+    >
+      Export
+    </button>
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
   </div>
 </div>
 <div>
@@ -20,18 +27,25 @@
     [renderers]="renderers"
     (dataChange)="onChange($event)"
   ></jsonforms>
-  <div style="display: flex; justify-content: space-between; margin-top: 10px">
+  <div class="config-buttons-wrapper" style="margin-top: 16px">
     <!-- LEFT -->
     <div>
-      <button mat-button color="primary" (click)="jsonPreview()">
+      <button mat-raised-button color="primary" (click)="jsonPreview()">
         Json Preview
       </button>
     </div>
 
     <!-- RIGHT -->
     <div>
-      <button mat-button color="primary" (click)="export()">Export</button>
-      <button mat-button color="primary" (click)="save()">Save</button>
+      <button
+        mat-raised-button
+        class="config-export-button"
+        color="primary"
+        (click)="export()"
+      >
+        Export
+      </button>
+      <button mat-raised-button color="primary" (click)="save()">Save</button>
     </div>
   </div>
 </div>
