@@ -93,6 +93,27 @@ mat-card {
       justify-content: end;
     }
   }
+
+  .public-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    button {
+      border-radius: 18px;
+      padding: 4px 16px;
+      font-size: 0.85rem;
+      border: 1.5px solid #ccc;
+      background-color: white;
+      color: rgba(0, 0, 0, 0.87);
+
+      &.active {
+        background-color: #e3f2fd;
+        border-color: #1976d2;
+      }
+    }
+  }
 }
 
 .condition-title-section {

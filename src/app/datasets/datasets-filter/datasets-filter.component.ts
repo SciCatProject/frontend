@@ -7,6 +7,7 @@ import {
   selectFilterByKey,
   selectHasAppliedFilters,
   selectScientificConditions,
+  selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -16,6 +17,7 @@ import {
   fetchFacetCountsAction,
   removeDatasetFilterAction,
   setFiltersAction,
+  setPublicViewModeAction,
 } from "state-management/actions/datasets.actions";
 import {
   updateConditionsConfigs,
@@ -26,6 +28,7 @@ import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-sett
 import {
   selectConditions,
   selectFilters,
+  selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
 import { Subscription } from "rxjs";
@@ -86,6 +89,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
   datasets$ = this.store.select(selectDatasets);
+
+  loggedIn$ = this.store.select(selectIsLoggedIn);
+
+  currentPublicViewMode: boolean | "" = "";
 
   humanNameMap: { [key: string]: string } = {};
 
@@ -171,6 +178,23 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       setFiltersAction({ datasetFilters: this.activeFilters }),
     );
+
+    this.subscriptions.push(
+      this.store.select(selectPublicViewMode).subscribe((publicViewMode) => {
+        this.currentPublicViewMode = publicViewMode;
+      }),
+    );
+  }
+
+  onViewPublicChange(value: boolean) {
+    this.currentPublicViewMode = value;
+
+    this.store.dispatch(
+      setPublicViewModeAction({ isPublished: this.currentPublicViewMode }),
+    );
+
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
   }
 
   applyEnabledConditions() {
