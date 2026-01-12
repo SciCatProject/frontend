@@ -67,6 +67,7 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 
 export interface SortChangeEvent {
   active: string;
@@ -162,6 +163,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private fileSize: FileSizePipe,
     private tableConfigService: TableConfigService,
+    private formatNumberPipe: FormatNumberPipe,
   ) {}
 
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
@@ -486,6 +488,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             this.getInstrumentName(row);
           convertedColumn.toExport = (row, column) =>
             this.getInstrumentName(row);
+        }
+
+        if (column.name.startsWith("scientificMetadata.")) {
+          convertedColumn.customRender = (col, row) => {
+            return String(
+              this.formatNumberPipe.transform(lodashGet(row, col.name)),
+            );
+          };
+          convertedColumn.toExport = (row) => {
+            return String(
+              this.formatNumberPipe.transform(lodashGet(row, column.name)),
+            );
+          };
         }
 
         return convertedColumn;

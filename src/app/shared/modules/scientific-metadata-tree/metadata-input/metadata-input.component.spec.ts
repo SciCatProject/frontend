@@ -9,6 +9,8 @@ import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module
 import { MetadataInputComponent } from "./metadata-input.component";
 
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AppConfigService } from "app-config.service";
+import { provideHttpClient } from "@angular/common/http";
 
 describe("MetadataInputComponent", () => {
   let component: MetadataInputComponent;
@@ -18,11 +20,25 @@ describe("MetadataInputComponent", () => {
     TestBed.configureTestingModule({
       declarations: [MetadataInputComponent],
       imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
-      providers: [FormBuilder, FormatNumberPipe],
+      providers: [
+        FormBuilder,
+        FormatNumberPipe,
+        AppConfigService,
+        provideHttpClient(),
+      ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    const appConfigService = TestBed.inject(AppConfigService);
+    (appConfigService as any).appConfig = {
+      metadataFloatFormatEnabled: true,
+      metadataFloatFormat: {
+        significantDigits: 3,
+        minCutoff: 0.001,
+        maxCutoff: 1000,
+      },
+    };
     fixture = TestBed.createComponent(MetadataInputComponent);
     component = fixture.componentInstance;
     const data = new FlatNodeEdit();
@@ -76,7 +92,7 @@ describe("MetadataInputComponent", () => {
       component.addCurrentMetadata(component.data);
       expect(component.metadataForm.get("type").value).toEqual("quantity");
       expect(component.metadataForm.get("key").value).toEqual("energy");
-      expect(component.metadataForm.get("value").value).toEqual(3);
+      expect(component.metadataForm.get("value").value).toEqual("3");
       expect(component.metadataForm.get("unit").value).toEqual("joule");
     });
     it("should set values in form control (number)", () => {

@@ -3,23 +3,40 @@ import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module";
-
 import { TreeViewComponent } from "./tree-view.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AppConfigService } from "app-config.service";
+import { provideHttpClient } from "@angular/common/http";
 
 describe("TreeViewComponent", () => {
   let component: TreeViewComponent;
   let fixture: ComponentFixture<TreeViewComponent>;
 
   beforeEach(waitForAsync(() => {
+    TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       declarations: [TreeViewComponent],
       imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
-      providers: [DatePipe, PrettyUnitPipe, FormatNumberPipe],
+      providers: [
+        DatePipe,
+        PrettyUnitPipe,
+        FormatNumberPipe,
+        AppConfigService,
+        provideHttpClient(),
+      ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    const appConfigService = TestBed.inject(AppConfigService);
+    (appConfigService as any).appConfig = {
+      metadataFloatFormatEnabled: true,
+      metadataFloatFormat: {
+        significantDigits: 3,
+        minCutoff: 0.001,
+        maxCutoff: 1000,
+      },
+    };
     fixture = TestBed.createComponent(TreeViewComponent);
     component = fixture.componentInstance;
     component.metadata = {
