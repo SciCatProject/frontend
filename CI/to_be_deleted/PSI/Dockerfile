@@ -1,4 +1,4 @@
-FROM nginx 
+FROM nginx:1.29.4-trixie 
 
 ARG env=production
 # RUN ./node_modules/@angular/cli/bin/ng build --prod
