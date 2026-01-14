@@ -24,7 +24,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AppConfigService } from "app-config.service";
 import { EditableComponent } from "app-routing/pending-changes.guard";
-import { isEmpty } from "lodash-es";
+import { cloneDeep, isEmpty } from "lodash-es";
 import { fromEvent, Subscription } from "rxjs";
 import {
   AccordionArrayLayoutRendererComponent,
@@ -134,7 +134,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
             1,
           );
           this.uiSchema = publishedDataConfig.uiSchema;
-          this.metadata = publishedDataConfig.defaultValues ?? {};
+          this.metadata = cloneDeep(publishedDataConfig.defaultValues) ?? {};
         }
       },
     );
