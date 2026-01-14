@@ -6,7 +6,6 @@ import {
   selectFacetCountByKey,
   selectFilterByKey,
   selectHasAppliedFilters,
-  selectScientificConditions,
   selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import { ScientificCondition } from "state-management/models";
@@ -26,12 +25,10 @@ import {
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
 import {
-  selectConditions,
   selectFilters,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
-import { selectFilters } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FilterConfig } from "state-management/state/user.store";
@@ -67,8 +64,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
   @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
-  
-  datasets$ = this.store.select(selectDatasets);
 
   loggedIn$ = this.store.select(selectIsLoggedIn);
 
@@ -80,22 +75,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   hoverKey: string | null = null;
 
-  overlayPositions: ConnectedPosition[] = [
-    {
-      originX: "end",
-      originY: "center",
-      overlayX: "start",
-      overlayY: "center",
-      offsetX: 8,
-    },
-    {
-      originX: "center",
-      originY: "center",
-      overlayX: "end",
-      overlayY: "top",
-      offsetY: 8,
-    },
-  ];
   tempConditionValues: string[] = [];
 
   constructor(
