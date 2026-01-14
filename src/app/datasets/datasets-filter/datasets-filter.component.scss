@@ -83,35 +83,24 @@ mat-card {
   }
 }
 
-.collapsible-filter-wrapper {
-  position: relative;
-
-  .collapse-toggle {
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
+  .public-toggle {
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 10;
-    color: #666;
-    height: 1.5em;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    button {
+      border-radius: 18px;
+      padding: 4px 16px;
+      font-size: 0.85rem;
+      border: 1.5px solid #ccc;
+      background-color: white;
+      color: rgba(0, 0, 0, 0.87);
 
-    &:hover {
-      color: #333;
-    }
-  }
-
-  &.collapsed ::ng-deep shared-filter {
-    .facet-search,
-    .checkbox-list,
-    .show-more-btn,
-    .empty-text {
-      display: none !important;
+      &.active {
+        background-color: #e3f2fd;
+        border-color: #1976d2;
+      }
     }
   }
 }
