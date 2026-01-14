@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy, signal } from "@angular/core";
+import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 
-import { Store, ActionsSubject } from "@ngrx/store";
+import { ActionsSubject, Store } from "@ngrx/store";
 import { first, tap } from "rxjs/operators";
 
-import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   createPublishedDataAction,
@@ -14,23 +13,24 @@ import {
   savePublishedDataCompleteAction,
   updatePublishedDataAction,
 } from "state-management/actions/published-data.actions";
+import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 
+import { Router } from "@angular/router";
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import {
   CreatePublishedDataV4Dto,
   PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { Router } from "@angular/router";
-import { selectPublishedDataConfig } from "state-management/selectors/published-data.selectors";
-import { fromEvent, Subscription } from "rxjs";
 import { AppConfigService } from "app-config.service";
-import { angularMaterialRenderers } from "@jsonforms/angular-material";
-import { isEmpty } from "lodash-es";
 import { EditableComponent } from "app-routing/pending-changes.guard";
+import { isEmpty } from "lodash-es";
+import { fromEvent, Subscription } from "rxjs";
 import {
   AccordionArrayLayoutRendererComponent,
   accordionArrayLayoutRendererTester,
 } from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
+import { selectPublishedDataConfig } from "state-management/selectors/published-data.selectors";
 
 @Component({
   selector: "publish",
@@ -134,6 +134,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
             1,
           );
           this.uiSchema = publishedDataConfig.uiSchema;
+          this.metadata = publishedDataConfig.defaultValues ?? {};
         }
       },
     );
