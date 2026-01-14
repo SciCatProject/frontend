@@ -16,6 +16,7 @@ import {
   TreeNode,
 } from "shared/modules/scientific-metadata-tree/base-classes/tree-base";
 import { DatePipe } from "@angular/common";
+import { AppConfigService } from "app-config.service";
 @Component({
   selector: "tree-view",
   templateUrl: "./tree-view.component.html",
@@ -27,9 +28,11 @@ export class TreeViewComponent
   implements OnInit, OnChanges
 {
   @Input() metadata: any;
-  constructor(datePipe: DatePipe) {
-    super();
-    this.datePipe = datePipe;
+  constructor(
+    public datePipe: DatePipe,
+    configService: AppConfigService,
+  ) {
+    super(configService);
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,
       this.getLevel,
