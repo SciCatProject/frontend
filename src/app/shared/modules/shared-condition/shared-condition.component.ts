@@ -141,9 +141,31 @@ export class SharedConditionComponent {
       );
 
       myConditions.forEach((config) => {
+        if (config.condition.lhs) {
+          this.removeConditionAction?.(config.condition);
+        }
+      });
+
+      myConditions.forEach((config) => {
         this.applyUnitsOptions(config.condition);
         if (config.enabled && config.condition.lhs && config.condition.rhs) {
-          this.addConditionAction?.(config.condition);
+          const condition = { ...config.condition };
+          const rhsValue = condition.rhs;
+          const isNumeric = rhsValue !== "" && !isNaN(Number(rhsValue));
+
+          if (isNumeric) {
+            condition.rhs = Number(rhsValue);
+          }
+
+          if (condition.relation === "EQUAL_TO") {
+            const fieldType = this.fieldTypeMap[condition.lhs];
+            condition.relation =
+              fieldType === "string" || !isNumeric
+                ? "EQUAL_TO_STRING"
+                : "EQUAL_TO_NUMERIC";
+          }
+
+          this.addConditionAction?.(condition);
         }
       });
     });
@@ -461,40 +483,43 @@ export class SharedConditionComponent {
           human_name: this.humanNameMap[lhs],
         };
 
-        if (this.tempConditionValues[i] !== undefined) {
-          const value = this.tempConditionValues[i];
-          const fieldType = this.fieldTypeMap[config.condition.lhs];
-          const isNumeric = value !== "" && !isNaN(Number(value));
+        const value =
+          this.tempConditionValues[i] !== undefined
+            ? this.tempConditionValues[i]
+            : config.condition.rhs;
+        const fieldType = this.fieldTypeMap[lhs];
+        const isNumeric = value !== "" && !isNaN(Number(value));
 
-          if (config.condition.relation === "EQUAL_TO") {
-            return {
-              ...config,
-              condition: {
-                ...baseCondition,
-                rhs: isNumeric ? Number(value) : value,
-                relation:
-                  fieldType === "string" || !isNumeric
-                    ? ("EQUAL_TO_STRING" as ScientificCondition["relation"])
-                    : ("EQUAL_TO_NUMERIC" as ScientificCondition["relation"]),
-              },
-            };
-          } else {
-            return {
-              ...config,
-              condition: {
-                ...baseCondition,
-                rhs: isNumeric ? Number(value) : value,
-              },
-            };
-          }
+        if (
+          config.condition.relation === "EQUAL_TO" ||
+          config.condition.relation === "EQUAL_TO_NUMERIC" ||
+          config.condition.relation === "EQUAL_TO_STRING"
+        ) {
+          return {
+            ...config,
+            condition: {
+              ...baseCondition,
+              rhs: isNumeric ? Number(value) : value,
+              relation: (fieldType === "string" || !isNumeric
+                ? "EQUAL_TO_STRING"
+                : "EQUAL_TO_NUMERIC") as ScientificCondition["relation"],
+            },
+          };
+        } else if (config.condition.relation !== "RANGE") {
+          return {
+            ...config,
+            condition: {
+              ...baseCondition,
+              rhs: isNumeric ? Number(value) : value,
+            },
+          };
         }
+
         return { ...config, condition: baseCondition };
       });
 
       // Removes old conditions for this type
-      updatedMyConditions.forEach((c) =>
-        this.removeConditionAction?.(c.condition),
-      );
+      myConditions.forEach((c) => this.removeConditionAction?.(c.condition));
 
       // Adds updated conditions for this type
       updatedMyConditions.forEach((config) => {
