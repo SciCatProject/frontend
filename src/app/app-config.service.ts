@@ -218,10 +218,10 @@ export class AppConfigService {
 
   async loadAppConfig(): Promise<void> {
     try {
-      const config = await this.http
-        .get("/api/v3/admin/config")
-        .pipe(timeout(2000))
-        .toPromise();
+      const config = await firstValueFrom(
+        this.http.get("/api/v3/admin/config").pipe(timeout(2000)),
+      );
+
       this.appConfig = Object.assign({}, this.appConfig, config);
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
