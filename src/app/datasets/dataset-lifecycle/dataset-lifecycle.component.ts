@@ -78,7 +78,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
           })),
       );
       // flatten array before return
-      return [].concat(...history);
+      return [].concat(...history).reverse();
     }
     return [];
   }
