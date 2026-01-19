@@ -1,21 +1,9 @@
 <div class="config-buttons-wrapper" style="margin-bottom: 16px">
-  <!-- LEFT -->
   <div>
     <button mat-raised-button color="primary" (click)="jsonPreview()">
       Json Preview
     </button>
-  </div>
-
-  <!-- RIGHT -->
-  <div>
-    <button
-      mat-raised-button
-      class="config-export-button"
-      color="primary"
-      (click)="export()"
-    >
-      Export
-    </button>
+    <button mat-raised-button color="primary" (click)="export()">Export</button>
     <button mat-raised-button color="primary" (click)="save()">Save</button>
   </div>
 </div>
@@ -28,21 +16,11 @@
     (dataChange)="onChange($event)"
   ></jsonforms>
   <div class="config-buttons-wrapper" style="margin-top: 16px">
-    <!-- LEFT -->
     <div>
       <button mat-raised-button color="primary" (click)="jsonPreview()">
         Json Preview
       </button>
-    </div>
-
-    <!-- RIGHT -->
-    <div>
-      <button
-        mat-raised-button
-        class="config-export-button"
-        color="primary"
-        (click)="export()"
-      >
+      <button mat-raised-button color="primary" (click)="export()">
         Export
       </button>
       <button mat-raised-button color="primary" (click)="save()">Save</button>

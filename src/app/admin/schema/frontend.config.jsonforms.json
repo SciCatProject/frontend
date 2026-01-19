@@ -284,6 +284,7 @@
                 },
                 "fields": {
                   "type": "array",
+                  "default": [{ "element": "text", "source": "", "order": 0 }],
                   "items": {
                     "type": "object",
                     "properties": {
@@ -300,7 +301,8 @@
                       },
                       "source": { "type": "string" },
                       "order": { "type": "number" }
-                    }
+                    },
+                    "required": ["element", "source", "order"]
                   }
                 }
               }

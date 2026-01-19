@@ -1,7 +1,8 @@
 .config-buttons-wrapper {
   display: flex;
-  justify-content: space-between;
-}
-.config-export-button {
-  margin-right: 8px;
+  justify-content: flex-end;
+
+  button:not(:last-child) {
+    margin-right: 4px;
+  }
 }
