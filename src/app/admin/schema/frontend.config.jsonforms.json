@@ -159,6 +159,7 @@
         "properties": {
           "columns": {
             "type": "array",
+            "title": "Columns list",
             "items": {
               "type": "object",
               "properties": {
@@ -183,7 +184,45 @@
             }
           },
           "conditions": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "condition": {
+                  "type": "object",
+                  "properties": {
+                    "lhs": {
+                      "type": "string"
+                    },
+                    "relation": {
+                      "type": "string",
+                      "enum": [
+                        "GREATER_THAN",
+                        "GREATER_THAN_OR_EQUAL",
+                        "LESS_THAN",
+                        "LESS_THAN_OR_EQUAL",
+                        "EQUAL_TO",
+                        "RANGE"
+                      ]
+                    },
+                    "rhs": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "unitsOptions": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": ["lhs", "relation", "rhs"]
+                }
+              }
+            }
           }
         }
       },
@@ -745,6 +784,87 @@
                 ]
               }
             }
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "List settings",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Group",
+            "label": "Default Datasets List Settings",
+            "options": { "expandable": true },
+            "elements": [
+              {
+                "type": "Group",
+                "label": "Columns list",
+                "options": { "expandable": true },
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns"
+                  }
+                ]
+              },
+              {
+                "type": "Group",
+                "label": "Filters list",
+                "options": { "expandable": true },
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters"
+                  }
+                ]
+              },
+              {
+                "type": "Group",
+                "label": "Conditions list",
+                "options": { "expandable": true },
+                "elements": [
+                  {
+                    "type": "ListWithDetail",
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/conditions",
+                    "options": {
+                      "labelRef": "#/items/properties/condition/properties/lhs"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Group",
+            "label": "Default Proposals List Settings",
+            "options": { "expandable": true },
+            "elements": [
+              {
+                "type": "Group",
+                "options": { "expandable": true },
+                "label": "Columns list",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns"
+                  }
+                ]
+              },
+              {
+                "type": "Group",
+                "options": { "expandable": true },
+                "label": "Filters list",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
