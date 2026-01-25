@@ -4,6 +4,7 @@ import { ActivatedRoute, IsActiveMatchOptions } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import { loadConfiguration } from "state-management/actions/runtime-config.action";
+import { loadUsers } from "state-management/actions/users.actions";
 enum TAB {
   configuration = "Configuration",
   usersList = "Users List",
@@ -31,7 +32,7 @@ export class AdminDashboardComponent implements OnInit {
 
   fetchDataActions: { [tab: string]: { action: any; loaded: boolean } } = {
     [TAB.configuration]: { action: loadConfiguration, loaded: false },
-    // [TAB.usersList]: { action: "", loaded: false },
+    [TAB.usersList]: { action: loadUsers, loaded: false },
   };
 
   constructor(
@@ -51,12 +52,12 @@ export class AdminDashboardComponent implements OnInit {
         icon: "settings",
         enabled: true,
       },
-      // {
-      //   location: "./usersList",
-      //   label: TAB.usersList,
-      //   icon: "people",
-      //   enabled: true,
-      // },
+      {
+        location: "./usersList",
+        label: TAB.usersList,
+        icon: "people",
+        enabled: true,
+      },
     ];
 
     this.route.firstChild?.url
@@ -82,8 +83,14 @@ export class AdminDashboardComponent implements OnInit {
           }
           break;
         }
-        case TAB.usersList:
+        case TAB.usersList: {
+          const { action, loaded } = this.fetchDataActions[tab];
+          if (!loaded) {
+            this.fetchDataActions[tab].loaded = true;
+            this.store.dispatch(action());
+          }
           break;
+        }
         default:
           break;
       }
