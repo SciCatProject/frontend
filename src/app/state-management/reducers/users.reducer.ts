@@ -33,9 +33,5 @@ const reducer = createReducer(
   ),
 );
 
-export const usersReducer = (state: UsersState | undefined, action: Action) => {
-  if (action.type.indexOf("[Users]") !== -1) {
-    console.log("Action came in! " + action.type);
-  }
-  return reducer(state, action);
-};
+export const usersReducer = (state: UsersState | undefined, action: Action) =>
+  reducer(state, action);

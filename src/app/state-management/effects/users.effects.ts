@@ -9,10 +9,13 @@ import {
   loadUsersSuccess,
 } from "state-management/actions/users.actions";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { AppConfigService } from "app-config.service";
 import { AuthService } from "shared/services/auth/auth.service";
 
 @Injectable()
 export class UsersEffects {
+  private baseUrl = this.appConfigService.getConfig().lbBaseURL;
+
   loadUsers$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadUsers),
@@ -20,10 +23,12 @@ export class UsersEffects {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
         });
-        return this.http.get<ReturnedUserDto[]>("/api/v3/users", { headers }).pipe(
-          map((users) => loadUsersSuccess({ users })),
-          catchError((error) => of(loadUsersFailure({ error }))),
-        );
+        return this.http
+          .get<ReturnedUserDto[]>(`${this.baseUrl}/api/v3/users`, { headers })
+          .pipe(
+            map((users) => loadUsersSuccess({ users })),
+            catchError((error) => of(loadUsersFailure({ error }))),
+          );
       }),
     );
   });
@@ -31,6 +36,7 @@ export class UsersEffects {
   constructor(
     private actions$: Actions,
     private http: HttpClient,
+    private appConfigService: AppConfigService,
     private authService: AuthService,
   ) {}
 }

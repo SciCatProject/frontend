@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, take } from "rxjs";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { loadUsers } from "state-management/actions/users.actions";
 import {
@@ -132,9 +132,12 @@ export class AdminUserlistViewComponent implements OnInit, OnDestroy {
 
       if (!sortDirection) {
         // Reset to original order
-        this.store.select(selectAllUsers).subscribe((originalUsers) => {
-          this.dataSource.next(originalUsers);
-        }).unsubscribe();
+        this.store
+          .select(selectAllUsers)
+          .pipe(take(1))
+          .subscribe((originalUsers) => {
+            this.dataSource.next(originalUsers);
+          });
         return;
       }
 
