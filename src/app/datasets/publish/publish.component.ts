@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 
 import { ActionsSubject, Store } from "@ngrx/store";
-import { first, tap } from "rxjs/operators";
+import { first, map, tap } from "rxjs/operators";
 
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
@@ -22,9 +22,11 @@ import {
   PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import addFormats from 'ajv-formats';
+import Ajv2019 from "ajv/dist/2019";
 import { AppConfigService } from "app-config.service";
 import { EditableComponent } from "app-routing/pending-changes.guard";
-import { cloneDeep, isEmpty } from "lodash-es";
+import { cloneDeep, isArray, isEmpty } from "lodash-es";
 import { fromEvent, Subscription } from "rxjs";
 import {
   AccordionArrayLayoutRendererComponent,
@@ -63,6 +65,16 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   public metadataFormErrors = [];
   savedPublishedDataDoi: string | null = null;
   initialMetadata = JSON.stringify({});
+  computedMetadata = {
+    creators: [],
+    sizes: ["0"],
+    relatedItems: [],
+    subjects: []
+  }
+  ajv = new Ajv2019({
+    strict: false,
+    allErrors: true,
+  })
 
   public form = {
     title: undefined,
@@ -79,7 +91,10 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     private publishedDataApi: PublishedDataService,
     private actionsSubj: ActionsSubject,
     private router: Router,
-  ) {}
+  ) {
+    addFormats(this.ajv)
+  }
+
 
   public formIsValid() {
     if (!Object.values(this.form).includes(undefined)) {
@@ -95,13 +110,39 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
   onErrors(errors) {
     this.metadataFormErrors = errors;
+    console.log(JSON.stringify(this.metadataFormErrors[0]))
   }
 
   onMetadataChange(data: any) {
-    this.metadata = data;
+    this.setComputedProperties(data);
+    if (data.creators) {
+      for (let creator of data.creators) {
+        this.computeFullName(creator);
+      }
+    }
 
+    this.metadata = data;
+    console.log(JSON.stringify(this.metadata))
     if (JSON.stringify(data) !== this.initialMetadata) {
       this._hasUnsavedChanges = true;
+    }
+  }
+
+  private computeFullName(person: { name?: string, givenName?: string, familyName?: string }) {
+    person.name =
+      person.givenName && person.familyName
+        ? `${person.familyName}, ${person.givenName}`
+        : person.givenName || person.familyName || "";
+  }
+
+  private setComputedProperties(data: any) {
+    for (const key in this.computedMetadata) {
+      if (!data[key]) {
+        data[key] = this.computedMetadata[key];
+      }
+      if (isArray(data[key])) {
+        data[key].concat(this.computedMetadata[key])
+      }
     }
   }
 
@@ -123,16 +164,60 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
         }),
       )
       .subscribe();
+    this.datasets$.pipe(
+      map(datasets => {
+        return {
+          creators: Array.from(new Set(datasets.map(d => d.owner))).map(owner => {
+            const splitName = owner.split(' ')
+            const givenName = splitName[0]
+            const familyName = splitName.slice(1).join(' ')
+            return {
+              nameType: "Personal",
+              name: this.computeFullName({ givenName, familyName }),
+              givenName: givenName,
+              familyName: familyName,
+              affiliation: [
+                {
+                  name: "Paul Scherrer Institute",
+                  affiliationIdentifier: "https://ror.org/03eh3y714",
+                  affiliationIdentifierScheme: "ROR",
+                  schemeUri: "https://ror.org"
+                }
+              ]
+            }
+          }),
+          totalSize: datasets.reduce((totalSize, dataset) => totalSize + (dataset.size ?? 0), 0),
+          keywords: datasets.flatMap(d => d.keywords.map(k => ({ subject: k, lang: 'en' }))),
+          datasetLinks: datasets.map((d) => {
+            return {
+              relatedItemType: "Other",
+              relationType: "References",
+              relatedItemIdentifier: {
+                relatedItemIdentifierType: "URL",
+                relatedItemIdentifier: `${window.location.protocol}//${window.location.host}/datasets/${encodeURIComponent(d.pid)}`,
+              },
+            };
+          })
+        }
+      }
+      )
+    ).subscribe(computedMetadata => {
+      this.computedMetadata.creators = computedMetadata.creators;
+      this.computedMetadata.sizes = [computedMetadata.totalSize.toString()];
+      this.computedMetadata.relatedItems = computedMetadata.datasetLinks;
+      this.computedMetadata.subjects = computedMetadata.keywords;
+    });
 
     this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
           this.schema = publishedDataConfig.metadataSchema;
+          this.schema.required = this.schema.required.filter(key => !["publicationYear", "resourceType"].includes(key))
           // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
-          this.schema?.required.splice(
-            this.schema.required.indexOf("publicationYear"),
-            1,
-          );
+          // this.schema?.required.splice(
+          //   this.schema.required.indexOf("publicationYear"),
+          //   1,
+          // );
           this.uiSchema = publishedDataConfig.uiSchema;
           this.metadata = cloneDeep(publishedDataConfig.defaultValues) ?? {};
         }

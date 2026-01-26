@@ -234,7 +234,8 @@
           color="primary"
           *ngIf="
             publishedData.status === 'private' ||
-            (publishedData.status === 'public' && isAdmin$ | async)
+            (publishedData.status === 'public' && isAdmin$ | async) ||
+            (publishedData.status === 'amended' && isAdmin$ | async)
           "
           (click)="onEditClick()"
         >

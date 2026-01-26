@@ -1,31 +1,31 @@
-import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { Store } from "@ngrx/store";
+import {
+  Attachment,
+  PublishedData,
+} from "@scicatproject/scicat-sdk-ts-angular";
+import { AppConfigService } from "app-config.service";
+import { EditableComponent } from "app-routing/pending-changes.guard";
+import { isEmpty } from "lodash-es";
+import { fromEvent, Observable, Subscription } from "rxjs";
+import { tap } from "rxjs/operators";
+import {
+  AccordionArrayLayoutRendererComponent,
+  accordionArrayLayoutRendererTester,
+} from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 import {
   fetchPublishedDataAction,
   fetchPublishedDataConfigAction,
   resyncPublishedDataAction,
 } from "state-management/actions/published-data.actions";
-import { ActivatedRoute, Router } from "@angular/router";
 import {
   selectCurrentPublishedData,
   selectPublishedDataConfig,
 } from "state-management/selectors/published-data.selectors";
-import {
-  Attachment,
-  PublishedData,
-} from "@scicatproject/scicat-sdk-ts-angular";
-import { tap } from "rxjs/operators";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { fromEvent, Observable, Subscription } from "rxjs";
-import { angularMaterialRenderers } from "@jsonforms/angular-material";
-import { EditableComponent } from "app-routing/pending-changes.guard";
-import { isEmpty } from "lodash-es";
-import { AppConfigService } from "app-config.service";
-import {
-  AccordionArrayLayoutRendererComponent,
-  accordionArrayLayoutRendererTester,
-} from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 
 @Component({
   selector: "publisheddata-edit",
@@ -34,8 +34,7 @@ import {
   standalone: false,
 })
 export class PublisheddataEditComponent
-  implements OnInit, OnDestroy, EditableComponent
-{
+  implements OnInit, OnDestroy, EditableComponent {
   private _hasUnsavedChanges = false;
   private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
   renderers = [
@@ -74,7 +73,7 @@ export class PublisheddataEditComponent
     private router: Router,
     private store: Store,
     private appConfigService: AppConfigService,
-  ) {}
+  ) { }
 
   public onPublishedDataUpdate(shouldRedirect = false) {
     if (this.form.valid) {
@@ -123,10 +122,22 @@ export class PublisheddataEditComponent
   }
 
   onMetadataChange(data: any) {
+    if (data.creators) {
+      for (let creator of data.creators) {
+        this.computeFullName(creator);
+      }
+    }
     this.metadataData = data;
     if (JSON.stringify(data) !== this.initialMetadata) {
       this._hasUnsavedChanges = true;
     }
+  }
+
+  private computeFullName(person: { name?: string, givenName?: string, familyName?: string }) {
+    person.name =
+      person.givenName && person.familyName
+        ? `${person.familyName}, ${person.givenName}`
+        : person.givenName || person.familyName || person.name;
   }
 
   hasUnsavedChanges() {
@@ -161,7 +172,44 @@ export class PublisheddataEditComponent
 
         if (publishedData?.metadata) {
           this.initialMetadata = JSON.stringify(publishedData.metadata);
-          this.metadataData = publishedData.metadata;
+          let updatedMetadata = publishedData.metadata;
+          updatedMetadata["relatedItems"] = publishedData.datasetPids.map(pid => {
+            return {
+              relatedItemType: "Other",
+              relationType: "References",
+              relatedItemIdentifier: {
+                relatedItemIdentifierType: "URL",
+                relatedItemIdentifier: `${window.location.protocol}//${window.location.host}/datasets/${encodeURIComponent(pid)}`,
+              },
+            }
+          })
+          if (updatedMetadata["publicationYear"] && !updatedMetadata["dates"]) {
+            updatedMetadata["dates"] = [
+              {
+                date: `${publishedData.metadata["publicationYear"]}`,
+                dateType: "Available"
+              }
+            ]
+          }
+          updatedMetadata["language"] = "en";
+          updatedMetadata["publisher"] = {
+            name: "PSI Open Data Provider",
+            publisherIdentifierScheme: "r3data",
+            schemeUri: "https://re3data.org/",
+            publisherIdentifier: "https://www.re3data.org/repository/r3d100013504",
+            lang: "en"
+          };
+          updatedMetadata["rightsList"] = [
+            {
+              rights: "Creative Commons Attribution Share Alike 4.0 International",
+              rightsUri: "https://creativecommons.org/licenses/by-sa/4.0/",
+              schemeUri: "https://spdx.org/licenses/",
+              rightsIdentifier: "CC-BY-SA-4.0",
+              rightsIdentifierScheme: "SPDX",
+              lang: "en"
+            }
+          ]
+          this.metadataData = updatedMetadata;
         }
       }),
     );
