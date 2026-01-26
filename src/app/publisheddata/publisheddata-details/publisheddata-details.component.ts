@@ -1,7 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
-import { Store } from "@ngrx/store";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
+import { AppConfigService } from "app-config.service";
+import { Subscription } from "rxjs";
+import { pluck } from "rxjs/operators";
 import {
   amendPublishedDataAction,
   deletePublishedDataAction,
@@ -10,10 +13,7 @@ import {
   publishPublishedDataAction,
   registerPublishedDataAction,
 } from "state-management/actions/published-data.actions";
-import { Subscription } from "rxjs";
-import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
-import { AppConfigService } from "app-config.service";
 import { selectIsAdmin } from "state-management/selectors/user.selectors";
 
 @Component({
@@ -37,7 +37,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
