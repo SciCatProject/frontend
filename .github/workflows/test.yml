@@ -126,7 +126,7 @@ jobs:
           docker compose up -d
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           config-file: cypress.config.ts
           browser: chrome
