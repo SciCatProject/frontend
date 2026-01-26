@@ -39,7 +39,6 @@
 .dynamic-table {
   min-width: 100%;
   width: max-content;
-  border-bottom: 1px solid #d2d2d2;
 }
 
 .label-cell {
@@ -106,7 +105,7 @@ mat-footer-row {
 mat-header-row.header,
 mat-row.table-row {
   min-height: 40px !important;
-  height: 40px !important;
+  height: 42px !important;
 }
 
 mat-cell,
