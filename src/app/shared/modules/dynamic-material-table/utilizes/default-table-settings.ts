@@ -6,5 +6,4 @@ export const actionMenu: VisibleActionMenu = {
   print: true,
   columnSettingPin: true,
   columnSettingFilter: true,
-  clearFilter: true,
 };
