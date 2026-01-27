@@ -11,6 +11,7 @@ import {
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
+  VisibleActionMenu,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
   TablePagination,
@@ -22,13 +23,22 @@ import {
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { Sort } from "@angular/material/sort";
-import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+
+// Custom action menu without column filter functionality
+const usersActionMenu: VisibleActionMenu = {
+  json: true,
+  csv: true,
+  print: true,
+  columnSettingPin: true,
+  columnSettingFilter: false,
+  clearFilter: false,
+};
 
 const tableDefaultSettingsConfig: ITableSetting = {
-  visibleActionMenu: actionMenu,
+  visibleActionMenu: usersActionMenu,
   settingList: [
     {
-      visibleActionMenu: actionMenu,
+      visibleActionMenu: usersActionMenu,
       isDefaultSetting: true,
       isCurrentSetting: true,
       columnSetting: [
@@ -36,21 +46,25 @@ const tableDefaultSettingsConfig: ITableSetting = {
           name: "_id",
           header: "ID",
           icon: "key",
+          filter: "none",
         },
         {
           name: "username",
           header: "Username",
           icon: "person",
+          filter: "none",
         },
         {
           name: "email",
           header: "Email",
           icon: "email",
+          filter: "none",
         },
         {
           name: "authStrategy",
           header: "Auth Strategy",
           icon: "security",
+          filter: "none",
         },
       ],
     },
