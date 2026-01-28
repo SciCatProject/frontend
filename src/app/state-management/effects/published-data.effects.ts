@@ -375,7 +375,9 @@ export class PublishedDataEffects {
       ofType(fromActions.fetchRelatedDatasetsAndAddToBatchAction),
       switchMap(({ datasetPids, publishedDataDoi }) =>
         this.datasetsV4Service
-          .datasetsV4ControllerFindAllV4({ where: { pid: { $in: datasetPids } } })
+          .datasetsV4ControllerFindAllV4({
+            where: { pid: { $in: datasetPids } },
+          })
           .pipe(
             mergeMap((datasets) => [
               datasetActions.clearBatchAction(),
