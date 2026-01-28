@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable, Optional } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
 import { switchMap, map, catchError, exhaustMap } from "rxjs/operators";
@@ -11,6 +11,8 @@ import {
   updateConfigurationSuccess,
 } from "state-management/actions/runtime-config.action";
 import { RuntimeConfigService } from "@scicatproject/scicat-sdk-ts-angular";
+import { HttpClient } from "@angular/common/http";
+import { AppConfigService } from "app-config.service";
 
 // Types
 export interface Configuration {
@@ -49,6 +51,14 @@ export class RunTimeConfigEffects {
   });
   constructor(
     private actions$: Actions,
-    private runtimeConfigService: RuntimeConfigService,
-  ) {}
+    @Optional() private runtimeConfigService: RuntimeConfigService,
+    private http: HttpClient,
+    private appConfigService: AppConfigService,
+  ) {
+    // Fallback: create RuntimeConfigService manually if not injected
+    if (!this.runtimeConfigService) {
+      const basePath = this.appConfigService.getConfig().lbBaseURL;
+      this.runtimeConfigService = new RuntimeConfigService(this.http, basePath);
+    }
+  }
 }
