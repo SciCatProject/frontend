@@ -10,7 +10,7 @@ import {
   updateConfigurationFailure,
   updateConfigurationSuccess,
 } from "state-management/actions/runtime-config.action";
-import { RuntimeConfigService } from "@scicatproject/scicat-sdk-ts-angular";
+import { RuntimeConfigurationsService } from "@scicatproject/scicat-sdk-ts-angular";
 import { HttpClient } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
 
@@ -51,14 +51,17 @@ export class RunTimeConfigEffects {
   });
   constructor(
     private actions$: Actions,
-    @Optional() private runtimeConfigService: RuntimeConfigService,
+    @Optional() private runtimeConfigService: RuntimeConfigurationsService,
     private http: HttpClient,
     private appConfigService: AppConfigService,
   ) {
     // Fallback: create RuntimeConfigService manually if not injected
     if (!this.runtimeConfigService) {
       const basePath = this.appConfigService.getConfig().lbBaseURL;
-      this.runtimeConfigService = new RuntimeConfigService(this.http, basePath);
+      this.runtimeConfigService = new RuntimeConfigurationsService(
+        this.http,
+        basePath,
+      );
     }
   }
 }

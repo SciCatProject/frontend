@@ -227,7 +227,7 @@ export class DatasetEffects {
           };
         }
         return this.datasetsService
-          .datasetsControllerFindAllV3(queryFilter)
+          .datasetsControllerFindAllV3(JSON.stringify(queryFilter))
           .pipe(
             map((relatedDatasets) =>
               fromActions.fetchRelatedDatasetsCompleteAction({

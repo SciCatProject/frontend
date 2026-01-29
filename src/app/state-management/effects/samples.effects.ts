@@ -131,12 +131,14 @@ export class SampleEffects {
       concatLatestFrom(() => this.datasetsQueryParams$),
       mergeMap(([{ sampleId }, { order, skip, limit }]) =>
         this.datasetApi
-          .datasetsControllerFindAllV3({
-            where: { sampleId },
-            order,
-            skip,
-            limit,
-          })
+          .datasetsControllerFindAllV3(
+            JSON.stringify({
+              where: { sampleId },
+              order,
+              skip,
+              limit,
+            }),
+          )
           .pipe(
             mergeMap((datasets) => [
               fromActions.fetchSampleDatasetsCompleteAction({ datasets }),
@@ -153,7 +155,7 @@ export class SampleEffects {
       ofType(fromActions.fetchSampleDatasetsCountAction),
       switchMap(({ sampleId }) =>
         this.datasetApi
-          .datasetsControllerFindAllV3({ where: { sampleId } })
+          .datasetsControllerFindAllV3(JSON.stringify({ where: { sampleId } }))
           .pipe(
             map((datasets) =>
               fromActions.fetchSampleDatasetsCountCompleteAction({

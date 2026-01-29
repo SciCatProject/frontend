@@ -30,7 +30,7 @@ export class JobEffects {
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
-        this.jobsService.jobsControllerFindAllV3(params).pipe(
+        this.jobsService.jobsControllerFindAllV3(JSON.stringify(params)).pipe(
           switchMap((jobs) => [
             fromActions.fetchJobsCompleteAction({ jobs }),
             fromActions.fetchCountAction(),

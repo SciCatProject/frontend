@@ -116,16 +116,18 @@ export class ProposalEffects {
       ofType(fromActions.fetchProposalDatasetsAction),
       mergeMap(({ skip, limit, sortColumn, sortDirection, proposalId }) => {
         return this.datasetsService
-          .datasetsControllerFindAllV3({
-            where: { proposalId },
-            limits: {
-              skip: skip,
-              limit: limit,
-              order: sortDirection
-                ? `${sortColumn}:${sortDirection}`
-                : undefined,
-            },
-          })
+          .datasetsControllerFindAllV3(
+            JSON.stringify({
+              where: { proposalId },
+              limits: {
+                skip: skip,
+                limit: limit,
+                order: sortDirection
+                  ? `${sortColumn}:${sortDirection}`
+                  : undefined,
+              },
+            }),
+          )
           .pipe(
             mergeMap((datasets) => [
               fromActions.fetchProposalDatasetsCompleteAction({
