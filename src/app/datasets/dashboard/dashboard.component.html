@@ -1,11 +1,8 @@
 <div class="dashboard-main">
   <mat-sidenav-container [hasBackdrop]="false">
     <mat-sidenav-content>
-
       <div fxLayout="row" fxLayout.xs="column" class="dashboard-header">
-        <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
-          <breadcrumb></breadcrumb>
-        </div>
+        <div class="action-column" fxFlex="14" fxFlex.lt-xl="20"></div>
         <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
           <ng-template [ngIf]="this.loggedIn$ | async">
             <dataset-table-actions
