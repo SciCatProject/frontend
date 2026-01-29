@@ -36,28 +36,6 @@ export class TableDataSource<T extends TableRow> extends MatTableDataSource<T> {
     return tranList;
   }
 
-  getFilter(fieldName: string): AbstractFilter[] {
-    return this.filterMap[fieldName];
-  }
-
-  setFilter(fieldName: string, filters: AbstractFilter[]): Observable<null> {
-    this.filterMap[fieldName] = filters;
-    return new Observable((subscriber) => {
-      this.refreshFilterPredicate();
-      subscriber.next(null);
-      subscriber.complete();
-    });
-  }
-
-  clearFilter(fieldName: string = null) {
-    if (fieldName != null) {
-      delete this.filterMap[fieldName];
-    } else {
-      this.filterMap = {};
-    }
-    this.refreshFilterPredicate();
-  }
-
   public refreshFilterPredicate() {
     let conditionsString = "";
     Object.keys(this.filterMap).forEach((key) => {

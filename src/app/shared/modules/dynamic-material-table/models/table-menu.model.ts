@@ -1,5 +1,4 @@
 export enum TableMenuAction {
-  FilterClear = "FilterClear",
   TableSetting = "TableSetting",
   Download = "Download",
   SaveSetting = "SaveSetting",

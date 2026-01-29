@@ -40,7 +40,6 @@ export interface MenuLabels {
   columnSetting: string;
   saveTableSetting: string;
   fullScreen: string;
-  clearFilter: string;
   jsonFile: string;
   csvFile: string;
   printTable: string;

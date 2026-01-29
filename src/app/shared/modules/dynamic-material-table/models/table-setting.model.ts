@@ -38,7 +38,6 @@ export interface VisibleActionMenu {
   columnSettingSort?: boolean;
   columnSettingPrint?: boolean;
   saveTableSetting?: boolean;
-  clearFilter?: boolean;
 }
 
 export class TableSetting implements ITableSetting {
