@@ -376,7 +376,9 @@ export class PublishedDataEffects {
       switchMap(({ datasetPids, publishedDataDoi }) =>
         this.datasetsV4Service
           .datasetsV4ControllerFindAllV4(
-            JSON.stringify({ where: { pid: { $in: datasetPids } } }),
+            JSON.stringify({
+              where: { pid: { $in: datasetPids } },
+            }),
           )
           .pipe(
             mergeMap((datasets) => [

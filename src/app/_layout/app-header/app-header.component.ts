@@ -7,6 +7,7 @@ import {
   selectIsLoggedIn,
   selectCurrentUserName,
   selectThumbnailPhoto,
+  selectIsAdmin,
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
 import {
@@ -42,6 +43,8 @@ export class AppHeaderComponent implements OnInit {
   profileImage$ = this.store.select(selectThumbnailPhoto);
   inBatchIndicator$ = this.store.select(selectDatasetsInBatchIndicator);
   isLoggedIn$ = this.store.select(selectIsLoggedIn);
+  isAdmin$ = this.store.select(selectIsAdmin);
+
   mainMenuConfig$: Observable<MainMenuOptions>;
   defaultMainPage$: Observable<string>;
   siteHeaderLogoUrl$: Observable<string>;

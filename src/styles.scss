@@ -416,12 +416,27 @@ a:hover {
 }
 
 // Jsonforms customizations
-jsonforms .mat-mdc-form-field {
-  .mat-mdc-form-field-subscript-dynamic-size {
-    min-height: unset !important;
+jsonforms {
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-subscript-dynamic-size {
+      min-height: unset !important;
+    }
+    .mat-mdc-form-field-hint-wrapper {
+      display: none !important;
+    }
   }
-  .mat-mdc-form-field-hint-wrapper {
-    display: none !important;
+
+  .boolean-control {
+    mat-error:empty {
+      display: none !important;
+    }
+    .mdc-checkbox {
+      margin-left: -9px !important;
+    }
+  }
+
+  .mat-mdc-card-content {
+    padding: 0 !important;
   }
 }
 

@@ -8,6 +8,7 @@ import { ServiceGuard } from "./service.guard";
 import { IngestorGuard } from "./ingestor.guard";
 import { MainPageGuard } from "./main-page";
 import { RedirectingComponent } from "./redirecting.component";
+import { AdminGuard } from "./admin.guard";
 
 export const routes: Routes = [
   {
@@ -87,13 +88,20 @@ export const routes: Routes = [
                 (m) => m.PoliciesFeatureModule,
               ),
           },
-
           {
             path: "user",
             loadChildren: () =>
               import("./lazy/user-routing/user.feature.module").then(
                 (m) => m.UsersFeatureModule,
               ),
+          },
+          {
+            path: "admin",
+            loadChildren: () =>
+              import("./lazy/admin-routing/admin.feature.module").then(
+                (m) => m.AdminFeatureModule,
+              ),
+            canActivate: [AdminGuard],
           },
           {
             path: "about",

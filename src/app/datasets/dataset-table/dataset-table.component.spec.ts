@@ -54,6 +54,13 @@ import { TranslateService } from "@ngx-translate/core";
 
 const getConfig = () => ({});
 
+const auditFields = {
+  createdAt: "",
+  createdBy: "",
+  updatedAt: "",
+  updatedBy: "",
+};
+
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
   let fixture: ComponentFixture<DatasetTableComponent>;
@@ -569,8 +576,18 @@ describe("DatasetTableComponent", () => {
   describe("instruments subscription with Map optimization", () => {
     it("should update both instruments array and instrumentMap when instruments observable changes", () => {
       const mockInstruments = [
-        { pid: "inst1", uniqueName: "unique1", name: "Instrument 1" },
-        { pid: "inst2", uniqueName: "unique2", name: "Instrument 2" },
+        {
+          ...auditFields,
+          pid: "inst1",
+          uniqueName: "unique1",
+          name: "Instrument 1",
+        },
+        {
+          ...auditFields,
+          pid: "inst2",
+          uniqueName: "unique2",
+          name: "Instrument 2",
+        },
       ];
 
       component.instruments = mockInstruments;
@@ -594,7 +611,12 @@ describe("DatasetTableComponent", () => {
 
     it("should provide O(1) lookup performance for instrument retrieval", () => {
       const mockInstruments = [
-        { pid: "fast-lookup", uniqueName: "unique1", name: "Fast Instrument" },
+        {
+          ...auditFields,
+          pid: "fast-lookup",
+          uniqueName: "unique1",
+          name: "Fast Instrument",
+        },
       ];
 
       component.instrumentMap = new Map(
@@ -612,9 +634,19 @@ describe("DatasetTableComponent", () => {
   describe("#getInstrumentName() private method", () => {
     beforeEach(() => {
       const mockInstruments = [
-        { pid: "inst1", uniqueName: "unique1", name: "Test Instrument 1" },
-        { pid: "inst2", uniqueName: "unique2", name: "Test Instrument 2" },
-        { pid: "inst3", uniqueName: "unique3", name: "" },
+        {
+          ...auditFields,
+          pid: "inst1",
+          uniqueName: "unique1",
+          name: "Test Instrument 1",
+        },
+        {
+          ...auditFields,
+          pid: "inst2",
+          uniqueName: "unique2",
+          name: "Test Instrument 2",
+        },
+        { ...auditFields, pid: "inst3", uniqueName: "unique3", name: "" },
       ];
 
       component.instrumentMap = new Map(

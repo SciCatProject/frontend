@@ -6,9 +6,13 @@ import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatBadgeModule } from "@angular/material/badge";
+import { ExpandGroupRendererComponent } from "./expand-group-renderer/expand-group-renderer";
 
 @NgModule({
-  declarations: [AccordionArrayLayoutRendererComponent],
+  declarations: [
+    AccordionArrayLayoutRendererComponent,
+    ExpandGroupRendererComponent,
+  ],
   imports: [
     MatExpansionModule,
     JsonFormsModule,
@@ -16,7 +20,10 @@ import { MatBadgeModule } from "@angular/material/badge";
     MatTooltipModule,
     MatBadgeModule,
   ],
-  exports: [AccordionArrayLayoutRendererComponent],
+  exports: [
+    AccordionArrayLayoutRendererComponent,
+    ExpandGroupRendererComponent,
+  ],
   providers: [],
 })
 export class JsonFormsCustomRenderersModule {}
