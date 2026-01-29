@@ -377,7 +377,7 @@ export class PublishedDataEffects {
         this.datasetsV4Service
           .datasetsV4ControllerFindAllV4(
             JSON.stringify({
-              where: { pid: { inq: datasetPids } },
+              where: { pid: { $in: datasetPids } },
             }),
           )
           .pipe(
