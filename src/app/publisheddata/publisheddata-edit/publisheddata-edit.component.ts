@@ -203,7 +203,7 @@ export class PublisheddataEditComponent
           updatedMetadata["language"] = "en";
           updatedMetadata["publisher"] = {
             name: "PSI Open Data Provider",
-            publisherIdentifierScheme: "r3data",
+            publisherIdentifierScheme: "re3data",
             schemeUri: "https://re3data.org/",
             publisherIdentifier: "https://www.re3data.org/repository/r3d100013504",
             lang: "en"
