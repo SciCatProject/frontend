@@ -31,7 +31,6 @@ const usersActionMenu: VisibleActionMenu = {
   print: true,
   columnSettingPin: true,
   columnSettingFilter: false,
-  clearFilter: false,
 };
 
 const tableDefaultSettingsConfig: ITableSetting = {
