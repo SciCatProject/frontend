@@ -191,6 +191,15 @@ export class PublisheddataEditComponent
               }
             ]
           }
+          else {
+            updatedMetadata["dates"] = [
+              {
+                date: `${new Date().getFullYear()}`,
+                dateType: "Available"
+              }
+            ]
+          }
+
           updatedMetadata["language"] = "en";
           updatedMetadata["publisher"] = {
             name: "PSI Open Data Provider",
