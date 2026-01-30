@@ -16,6 +16,8 @@
           "ingestorEnabled": { "type": "boolean" }
         }
       },
+      "skipSciCatLoginPageEnabled": { "type": "boolean" },
+      "allowConfigOverrides": { "type": "boolean" },
       "checkBoxFilterClickTrigger": { "type": "boolean" },
       "dateFormat": { "type": "string" },
       "accessTokenPrefix": { "type": "string" },
@@ -412,6 +414,11 @@
             "scope": "#/properties/checkBoxFilterClickTrigger"
           },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/skipSciCatLoginPageEnabled"
+          },
+          { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
           {
