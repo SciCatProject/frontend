@@ -135,35 +135,30 @@
           }"
           (mousedown)="onResizeColumn($event, i, 'left')"
         ></div>
-        <header-filter
-          [field]="column"
-          (filterChanged)="filter_onChanged(column, $event)"
-          [filters]="tvsDataSource.getFilter(column.name)"
+        <mat-icon
+          class="column-icon"
+          [ngStyle]="{ color: column?.iconColor }"
+          >{{ column?.icon }}</mat-icon
         >
-          <mat-icon
-            class="column-icon"
-            [ngStyle]="{ color: column?.iconColor }"
-            >{{ column?.icon }}</mat-icon
-          >
-          <mat-icon
-            *ngIf="column?.draggable !== false"
-            class="drag-indicator"
-            cdkDragHandle
-            >drag_indicator</mat-icon
-          >
-          <div
-            mat-sort-header
-            [matTooltip]="
-              column.tooltip || column.header || column.name
-                | translate: localization
-            "
-            matTooltipClass="cell-tooltip"
-            [disabled]="column.sort === 'none'"
-            class="header-caption"
-          >
-            {{ column.header || column.name | translate: localization }}
-          </div>
-        </header-filter>
+        <mat-icon
+          *ngIf="column?.draggable !== false"
+          class="drag-indicator"
+          cdkDragHandle
+          >drag_indicator</mat-icon
+        >
+        <div
+          mat-sort-header
+          [matTooltip]="
+            column.tooltip || column.header || column.name
+              | translate: localization
+          "
+          matTooltipClass="cell-tooltip"
+          [disabled]="column.sort === 'none'"
+          class="header-caption"
+        >
+          {{ column.header || column.name | translate: localization }}
+        </div>
+
         <!-- class="right-resize-handler" -->
         <div
           class="resize-handler"
