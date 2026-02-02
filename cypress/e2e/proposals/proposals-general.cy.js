@@ -255,7 +255,7 @@ describe("Proposals general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          defaultProposalTab: "datasets",
+          defaultTab: { proposal: "datasets" },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
