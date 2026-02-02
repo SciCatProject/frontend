@@ -28,6 +28,13 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   localization = "proposal";
 
+  readonly tabIndexMap: Record<string, number> = {
+    details: 0,
+    datasets: 1,
+    relatedProposals: 2,
+    logbook: 3,
+  };
+
   constructor(
     public appConfigService: AppConfigService,
     private route: ActivatedRoute,
@@ -69,7 +76,8 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   }
 
   resetTabs(): void {
-    this.selectedTabIndex = 0;
+    const defaultTab = this.appConfig.defaultProposalTab || "details";
+    this.selectedTabIndex = this.tabIndexMap[defaultTab] || 0;
   }
 
   fetchProposalRelatedDocuments(): void {

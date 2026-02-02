@@ -162,6 +162,7 @@ export interface AppConfigInterface {
   checkBoxFilterClickTrigger?: boolean;
   hideEmptyMetadataTable?: boolean;
   ingestorComponent?: IngestorComponentConfig;
+  defaultProposalTab?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
