@@ -158,39 +158,25 @@
                 </span>
               </span>
             </mat-select-trigger>
-            <mat-option
-              *ngFor="
-                let operator of getAllowedOperators(
-                  conditionConfig.condition.lhs
-                )
-              "
-              [value]="operator"
-            >
-              <ng-container [ngSwitch]="operator">
-                <span *ngSwitchCase="'EQUAL_TO'"
-                  >is equal to <span class="operator-symbol">( = )</span></span
-                >
-                <span *ngSwitchCase="'GREATER_THAN'"
-                  >is greater than
-                  <span class="operator-symbol">( &gt; )</span></span
-                >
-                <span *ngSwitchCase="'LESS_THAN'"
-                  >is less than
-                  <span class="operator-symbol">( &lt; )</span></span
-                >
-                <span *ngSwitchCase="'GREATER_THAN_OR_EQUAL'"
-                  >is greater than or equal to
-                  <span class="operator-symbol">( ≥ )</span></span
-                >
-                <span *ngSwitchCase="'LESS_THAN_OR_EQUAL'"
-                  >is less than or equal to
-                  <span class="operator-symbol">( ≤ )</span></span
-                >
-                <span *ngSwitchCase="'RANGE'"
-                  >is in range
-                  <span class="operator-symbol">( &lt;-&gt; )</span></span
-                >
-              </ng-container>
+            <mat-option value="EQUAL_TO">
+              is equal to <span class="operator-symbol">( = )</span>
+            </mat-option>
+            <mat-option value="GREATER_THAN">
+              is greater than <span class="operator-symbol">( &gt; )</span>
+            </mat-option>
+            <mat-option value="LESS_THAN">
+              is less than <span class="operator-symbol">( &lt; )</span>
+            </mat-option>
+            <mat-option value="GREATER_THAN_OR_EQUAL">
+              is greater than or equal to
+              <span class="operator-symbol">( ≥ )</span>
+            </mat-option>
+            <mat-option value="LESS_THAN_OR_EQUAL">
+              is less than or equal to
+              <span class="operator-symbol">( ≤ )</span>
+            </mat-option>
+            <mat-option value="RANGE">
+              is in range <span class="operator-symbol">( &lt;-&gt; )</span>
             </mat-option>
           </mat-select>
         </mat-form-field>

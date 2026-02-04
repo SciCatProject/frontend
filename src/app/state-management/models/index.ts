@@ -145,7 +145,6 @@ export interface ScientificCondition {
   rhs: string | number | (string | number)[];
   unit: string;
   unitsOptions?: string[];
-  type?: string;
   human_name?: string;
 }
 

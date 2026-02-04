@@ -1,26 +1,7 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  ViewChild,
-  EventEmitter,
-  Output,
-  OnChanges,
-  SimpleChanges,
-  OnInit,
-  OnDestroy,
-} from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
-import { DateTime } from "luxon";
-import { Observable } from "rxjs";
+import { Component, Input, EventEmitter, Output } from "@angular/core";
 import { map, take } from "rxjs/operators";
-import { DateRange } from "state-management/state/proposals.store";
-import { MultiSelectFilterValue } from "../filters/multiselect-filter.component";
-import { INumericRange } from "../numeric-range/form/model/numeric-range-field.model";
-import { FilterType, ConditionConfig } from "state-management/state/user.store";
-import { toIsoUtc } from "../filters/utils";
-import { orderBy, isEqual } from "lodash-es";
+import { ConditionConfig } from "state-management/state/user.store";
+import { isEqual } from "lodash-es";
 import { ScientificCondition } from "state-management/models";
 import { ConnectedPosition } from "@angular/cdk/overlay";
 import { Store } from "@ngrx/store";
@@ -61,12 +42,11 @@ export class SharedConditionComponent {
 
   conditionConfigs$ = this.allConditions$.pipe(
     map((configs) =>
-      (configs || []).filter((c) => c.conditionType === this.conditionType),
+      configs.filter((c) => c.conditionType === this.conditionType),
     ),
   );
 
   humanNameMap: { [key: string]: string } = {};
-  fieldTypeMap: { [key: string]: string } = {};
   tempConditionValues: string[] = [];
   hoverKey: string | null = null;
   overlayPositions: ConnectedPosition[] = [
@@ -116,27 +96,27 @@ export class SharedConditionComponent {
 
   buildMetadataMaps() {
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
-      (conditionConfigs || []).forEach((config) => {
-        const { lhs, type, human_name } = config.condition;
-        if (lhs && type) this.fieldTypeMap[lhs] = type;
-        if (lhs && human_name) this.humanNameMap[lhs] = human_name;
+      conditionConfigs.forEach((config) => {
+        // Commented out human_name for now, but it will be used later
+        // const { lhs,human_name } = config.condition;
+        // if (lhs && human_name) this.humanNameMap[lhs] = human_name;
       });
     });
   }
 
   applyEnabledConditions() {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-      const needsUpdate = (allConditions || []).some((c) => !c.conditionType);
+    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+      const needsUpdate = allConditions.some((c) => !c.conditionType);
 
       if (needsUpdate) {
-        const updatedConditions = (allConditions || []).map((c) => ({
+        const updatedConditions = allConditions.map((c) => ({
           ...c,
           conditionType: c.conditionType || this.conditionType,
         }));
         this.updateStore(updatedConditions);
       }
 
-      const myConditions = (allConditions || []).filter(
+      const myConditions = allConditions.filter(
         (c) => !c.conditionType || c.conditionType === this.conditionType,
       );
 
@@ -158,11 +138,9 @@ export class SharedConditionComponent {
           }
 
           if (condition.relation === "EQUAL_TO") {
-            const fieldType = this.fieldTypeMap[condition.lhs];
-            condition.relation =
-              fieldType === "string" || !isNumeric
-                ? "EQUAL_TO_STRING"
-                : "EQUAL_TO_NUMERIC";
+            condition.relation = !isNumeric
+              ? "EQUAL_TO_STRING"
+              : "EQUAL_TO_NUMERIC";
           }
 
           this.addConditionAction?.(condition);
@@ -191,19 +169,6 @@ export class SharedConditionComponent {
     return relation === "EQUAL_TO_NUMERIC" || relation === "EQUAL_TO_STRING"
       ? "EQUAL_TO"
       : relation;
-  }
-
-  getAllowedOperators(key: string): string[] {
-    const type = this.fieldTypeMap[key];
-    if (type === "string") return ["EQUAL_TO"];
-    return [
-      "EQUAL_TO",
-      "GREATER_THAN",
-      "LESS_THAN",
-      "GREATER_THAN_OR_EQUAL",
-      "LESS_THAN_OR_EQUAL",
-      "RANGE",
-    ];
   }
 
   getUnits(parameterKey: string): string[] {
@@ -262,12 +227,12 @@ export class SharedConditionComponent {
   addCondition() {
     this.buildMetadataMaps();
 
-    this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-      const myConditions = (allConditions || []).filter(
+    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+      const myConditions = allConditions.filter(
         (c) => c.conditionType === this.conditionType,
       );
       const usedFields = myConditions.map((config) => config.condition.lhs);
-      const availableKeys = (this.metadataKeys || []).filter(
+      const availableKeys = this.metadataKeys.filter(
         (key) => !usedFields.includes(key),
       );
 
@@ -289,7 +254,7 @@ export class SharedConditionComponent {
             const { data } = res;
 
             const existingConditionIndex = myConditions.findIndex((config) =>
-              isEqual(this.humanNameMap[config.condition.lhs], data.lhs),
+              isEqual(config.condition.lhs, data.lhs),
             );
 
             if (existingConditionIndex !== -1) {
@@ -304,14 +269,13 @@ export class SharedConditionComponent {
               condition: {
                 ...data,
                 rhs: "",
-                type: this.fieldTypeMap[data.lhs],
                 human_name: this.humanNameMap[data.lhs],
               },
               enabled: true,
               conditionType: this.conditionType,
             };
 
-            this.updateStore([...(allConditions || []), newCondition]);
+            this.updateStore([...allConditions, newCondition]);
             this.store.dispatch(
               selectColumnAction({ name: data.lhs, columnType: "custom" }),
             );
@@ -326,8 +290,8 @@ export class SharedConditionComponent {
   }
 
   removeCondition(condition: ConditionConfig, index: number) {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-      const actualIndex = (allConditions || []).findIndex(
+    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+      const actualIndex = allConditions.findIndex(
         (c) =>
           c.condition.lhs === condition.condition.lhs &&
           c.conditionType === this.conditionType,
@@ -335,7 +299,7 @@ export class SharedConditionComponent {
 
       if (actualIndex === -1) return;
 
-      const updatedConditions = [...(allConditions || [])];
+      const updatedConditions = [...allConditions];
       updatedConditions.splice(actualIndex, 1);
       this.tempConditionValues.splice(index, 1);
 
@@ -358,14 +322,14 @@ export class SharedConditionComponent {
   }
 
   updateConditionField(index: number, updates: Partial<ScientificCondition>) {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-      const myConditions = (allConditions || []).filter(
+    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+      const myConditions = allConditions.filter(
         (c) => c.conditionType === this.conditionType,
       );
 
       if (!myConditions[index]) return;
 
-      const actualIndex = (allConditions || []).findIndex(
+      const actualIndex = allConditions.findIndex(
         (c) =>
           c.condition.lhs === myConditions[index].condition.lhs &&
           c.conditionType === this.conditionType,
@@ -373,7 +337,7 @@ export class SharedConditionComponent {
 
       if (actualIndex === -1) return;
 
-      const updatedConditions = [...(allConditions || [])];
+      const updatedConditions = [...allConditions];
       const conditionConfig = updatedConditions[actualIndex];
 
       updatedConditions[actualIndex] = {
@@ -381,7 +345,6 @@ export class SharedConditionComponent {
         condition: {
           ...conditionConfig.condition,
           ...updates,
-          type: this.fieldTypeMap[conditionConfig.condition.lhs],
           human_name: this.humanNameMap[conditionConfig.condition.lhs],
         },
       };
@@ -428,14 +391,14 @@ export class SharedConditionComponent {
   }
 
   toggleConditionEnabled(index: number, enabled: boolean) {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-      const myConditions = (allConditions || []).filter(
+    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+      const myConditions = allConditions.filter(
         (c) => c.conditionType === this.conditionType,
       );
 
       if (!myConditions[index]) return;
 
-      const actualIndex = (allConditions || []).findIndex(
+      const actualIndex = allConditions.findIndex(
         (c) =>
           c.condition.lhs === myConditions[index].condition.lhs &&
           c.conditionType === this.conditionType,
@@ -443,7 +406,7 @@ export class SharedConditionComponent {
 
       if (actualIndex === -1) return;
 
-      const updatedConditions = [...(allConditions || [])];
+      const updatedConditions = [...allConditions];
       updatedConditions[actualIndex] = {
         ...updatedConditions[actualIndex],
         enabled,
@@ -467,11 +430,11 @@ export class SharedConditionComponent {
   }
 
   applyConditions() {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-      const myConditions = (allConditions || []).filter(
+    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+      const myConditions = allConditions.filter(
         (c) => c.conditionType === this.conditionType,
       );
-      const otherConditions = (allConditions || []).filter(
+      const otherConditions = allConditions.filter(
         (c) => c.conditionType !== this.conditionType,
       );
 
@@ -479,7 +442,6 @@ export class SharedConditionComponent {
         const lhs = config.condition.lhs;
         const baseCondition = {
           ...config.condition,
-          type: this.fieldTypeMap[lhs],
           human_name: this.humanNameMap[lhs],
         };
 
@@ -487,7 +449,6 @@ export class SharedConditionComponent {
           this.tempConditionValues[i] !== undefined
             ? this.tempConditionValues[i]
             : config.condition.rhs;
-        const fieldType = this.fieldTypeMap[lhs];
         const isNumeric = value !== "" && !isNaN(Number(value));
 
         if (
@@ -500,7 +461,7 @@ export class SharedConditionComponent {
             condition: {
               ...baseCondition,
               rhs: isNumeric ? Number(value) : value,
-              relation: (fieldType === "string" || !isNumeric
+              relation: (!isNumeric
                 ? "EQUAL_TO_STRING"
                 : "EQUAL_TO_NUMERIC") as ScientificCondition["relation"],
             },
@@ -541,8 +502,8 @@ export class SharedConditionComponent {
   }
 
   clearConditions() {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions) => {
-      const myConditions = (allConditions || []).filter(
+    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+      const myConditions = allConditions.filter(
         (c) => c.conditionType === this.conditionType,
       );
 
@@ -550,7 +511,7 @@ export class SharedConditionComponent {
         this.removeConditionAction?.(config.condition),
       );
 
-      const updatedConditions = (allConditions || []).filter(
+      const updatedConditions = allConditions.filter(
         (c) => c.conditionType !== this.conditionType,
       );
       this.updateStore(updatedConditions);
