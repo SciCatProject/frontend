@@ -165,7 +165,7 @@ describe("Datasets general", () => {
       cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
       cy.get(".snackbar-warning")
-        .should("contain", "Please select a valid field from the list")
+        .should("contain", "Field already used")
         .contains("Close")
         .click();
     });
