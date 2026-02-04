@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>JSON Preview</h2>
+
+<mat-dialog-content>
+  <ngx-json-viewer data-cy="json-preview" [json]="data" [expanded]="false">
+  </ngx-json-viewer>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>

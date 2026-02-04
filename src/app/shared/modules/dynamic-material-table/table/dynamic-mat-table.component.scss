@@ -102,6 +102,10 @@ mat-footer-row {
   box-sizing: border-box;
 }
 
+.table-row mat-cell {
+  border-bottom-width: 0;
+}
+
 mat-header-row.header,
 mat-row.table-row {
   min-height: 40px !important;

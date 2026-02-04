@@ -1,0 +1,23 @@
+<mat-expansion-panel *ngIf="isExpandable(); else normalGroup" #panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title> {{ uischema?.['label'] || 'Group' }}</mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container *ngIf="panel.expanded">
+    <div
+      class="group-wrapper"
+      *ngFor="let el of uischema.elements; let idx = index; trackBy: trackByFn"
+    >
+      <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
+    </div>
+  </ng-container>
+</mat-expansion-panel>
+
+<ng-template #normalGroup>
+  <div class="group-wrapper">
+    <h3>{{ uischema?.['label'] || 'Group' }}</h3>
+
+    <div *ngFor="let el of uischema.elements; let idx = index">
+      <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
+    </div>
+  </div>
+</ng-template>
