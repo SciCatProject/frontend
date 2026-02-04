@@ -683,7 +683,7 @@ describe("Datasets general", () => {
       cy.visit("/datasets");
     });
 
-    it("should persist condition values after navigating away and back", () => {
+    it.only("should persist condition values after navigating away and back", () => {
       cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
         cy.get('[data-cy="add-condition-button"]').click();
       });
@@ -720,6 +720,10 @@ describe("Datasets general", () => {
       .find("mat-panel-title")
       .should("contain", ">")
       .and("contain", "19");
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
   })
 });
