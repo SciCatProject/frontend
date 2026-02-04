@@ -683,7 +683,7 @@ describe("Datasets general", () => {
       cy.visit("/datasets");
     });
 
-    it.only("should persist condition values after navigating away and back", () => {
+    it("should persist condition values after navigating away and back", () => {
       cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
         cy.get('[data-cy="add-condition-button"]').click();
       });
