@@ -240,8 +240,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   isDate(scientificMetadata: ScientificMetadataTableData): boolean {
     // NOTE: If the type is date, we expect the value to be in ISO format.
-    if (scientificMetadata.type === "date") {
-      return true;
+    if (scientificMetadata.type) {
+      return scientificMetadata.type === "date";
     }
 
     const isValidDate =
@@ -249,11 +249,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       new Date(scientificMetadata.value).toString() !== "Invalid Date" &&
       DateTime.fromISO(scientificMetadata.value).isValid;
 
-    if (isValidDate) {
-      return true;
-    }
-
-    return false;
+    return isValidDate;
   }
 
   ngOnInit() {
