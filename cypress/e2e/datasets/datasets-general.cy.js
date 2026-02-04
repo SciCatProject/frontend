@@ -265,6 +265,9 @@ describe("Datasets general", () => {
 
       cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
 
     it("should display equal sign in condition preview", () => {
