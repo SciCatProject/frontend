@@ -20,7 +20,6 @@ import {
   DynamicMatTableComponent,
 } from "./dynamic-mat-table.component";
 import { TableMenuModule } from "./extensions/table-menu/table-menu.module";
-import { HeaderFilterModule } from "./extensions/filter/header-filter.module";
 import { TableVirtualScrollModule } from "../cores/table-virtual-scroll.module";
 import { PrintTableDialogComponent } from "./extensions/print-dialog/print-dialog.component";
 import { MatMenuModule } from "@angular/material/menu";
@@ -40,7 +39,7 @@ import { EmptyContentModule } from "shared/modules/generic-empty-content/empty-c
 import { MatCardModule } from "@angular/material/card";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
+const ExtensionsModule = [RowMenuModule];
 
 @NgModule({
   imports: [

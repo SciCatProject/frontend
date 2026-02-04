@@ -14,7 +14,6 @@ import { Store, StoreModule } from "@ngrx/store";
 import { ArchViewMode } from "state-management/models";
 import {
   setArchiveViewModeAction,
-  setPublicViewModeAction,
   addToBatchAction,
   clearSelectionAction,
 } from "state-management/actions/datasets.actions";
@@ -104,20 +103,6 @@ describe("DatasetTableActionsComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setArchiveViewModeAction({ modeToggle }),
-      );
-    });
-  });
-
-  describe("#onViewPublicChange()", () => {
-    it("should dispatch a SetPublicViewModeAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const viewPublic = false;
-      component.onViewPublicChange(viewPublic);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setPublicViewModeAction({ isPublished: viewPublic }),
       );
     });
   });

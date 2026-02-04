@@ -1,6 +1,6 @@
 mat-sidenav-container {
   mat-sidenav-content {
-    padding: 0.5rem;
+    padding: 0 0 0.5rem 0.5rem;
     background-color: #ffffff;
     overflow-x: hidden;
 
@@ -21,7 +21,6 @@ mat-sidenav-container {
     }
 
     .table-column {
-      margin-top: 0.5rem;
       min-width: 0;
       overflow: visible;
     }

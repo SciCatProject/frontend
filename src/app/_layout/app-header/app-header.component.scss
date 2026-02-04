@@ -58,6 +58,13 @@
   }
 }
 
+.beta-badge {
+  height: 1.25rem;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  background-color: var(--theme-header-3-default);
+}
+
 @media only screen and (max-width: 1279px) {
   .large-screen-text {
     display: none;

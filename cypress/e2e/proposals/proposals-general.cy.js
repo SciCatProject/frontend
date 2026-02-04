@@ -356,46 +356,6 @@ describe("Proposals general", () => {
         .should("contain", newProposal.proposalId);
     });
 
-    it("should be able to filter by column", () => {
-      const newProposal = {
-        ...testData.proposal,
-        proposalId: "100100",
-      };
-
-      cy.createProposal(newProposal);
-
-      cy.visit("/proposals");
-
-      cy.get(".mat-sort-header-container").contains("Proposal ID").click();
-
-      cy.get(".mat-sort-header-container")
-        .contains("Proposal ID")
-        .closest("header-filter")
-        .find(".mat-mdc-menu-trigger")
-        .click();
-
-      cy.get(
-        ".cdk-overlay-container .mat-mdc-menu-panel .filter-panel mat-form-field.input-field input",
-      )
-        .clear()
-        .type(newProposal.proposalId);
-      cy.get(
-        ".cdk-overlay-container .mat-mdc-menu-panel .menu-action button[color='primary']",
-      ).click();
-
-      cy.get(".mat-sort-header-container")
-        .contains("Proposal ID")
-        .closest("header-filter")
-        .find(".mat-mdc-menu-trigger mat-icon")
-        .should(($el) => {
-          expect($el).to.have.css("color", "rgb(200, 25, 25)"); // warn color
-        });
-
-      cy.get("mat-table mat-row")
-        .first()
-        .should("contain", newProposal.proposalId);
-    });
-
     it("should be able to change page and page size in the proposal table", () => {
       const newProposal = {
         ...testData.proposal,

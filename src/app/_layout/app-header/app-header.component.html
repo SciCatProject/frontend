@@ -80,6 +80,16 @@
   </mat-menu>
 
   <mat-menu #userMenu="matMenu">
+    <button
+      *ngIf="isAdmin$ | async"
+      mat-menu-item
+      routerLink="/admin"
+      data-cy="admin-button"
+    >
+      <mat-icon> build</mat-icon>
+      <span> Admin Settings <mat-chip class="beta-badge">Beta</mat-chip></span>
+    </button>
+
     <button mat-menu-item routerLink="/user/" data-cy="setting-button">
       <mat-icon> settings</mat-icon>
       <span>Settings</span>

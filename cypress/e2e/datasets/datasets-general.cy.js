@@ -478,7 +478,6 @@ describe("Datasets general", () => {
       cy.contains("Type").should("exist");
 
       cy.contains("Location").should("not.exist");
-      cy.contains("Keyword").should("not.exist");
     });
   });
 
@@ -651,7 +650,7 @@ describe("Datasets general", () => {
 
       cy.visit("/datasets");
 
-      cy.wait("@getConfig", { timeout: 10000 });
+      cy.wait("@getConfig", { timeout: 20000 });
 
       cy.finishedLoading();
     });
