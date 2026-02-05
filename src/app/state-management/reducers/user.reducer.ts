@@ -273,6 +273,8 @@ const reducer = createReducer(
 export const userReducer = (state: UserState | undefined, action: Action) => {
   if (action.type.indexOf("[User]") !== -1) {
     console.log("Action came in! " + action.type);
+    console.log(JSON.stringify(state));
+    console.log(JSON.stringify(action))
   }
   return reducer(state, action);
 };

@@ -221,6 +221,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   saveTableSettings(setting: ITableSetting) {
+    //console.log("Datasets List saveTableSettings");
+    //console.log("setting",JSON.stringify(setting));
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column, index) => {
       const { name, display, width, type, format } = column;
@@ -234,6 +236,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         format,
       };
     });
+    //console.log("columns setting",JSON.stringify(columnsSetting));
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
@@ -249,9 +252,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
+    //console.log("Datasets List onSettingChange");
+    //console.log("event",JSON.stringify(event));
+
     if (
       event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
+      event.type === TableSettingEventType.create 
     ) {
       this.saveTableSettings(event.setting);
     }

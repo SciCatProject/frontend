@@ -137,16 +137,22 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
             // Otherwise use the default columns from the proposals store
             const configColumns =
               this.appConfig?.defaultProposalsListSettings?.columns;
+            console.log("Proposals ngOnInit 1",JSON.stringify(configColumns))
+
             const defaultColumns =
               Array.isArray(configColumns) && configColumns.length > 0
                 ? configColumns
                 : defaultStoreColumns;
+            console.log("Proposals ngOnInit 2",JSON.stringify(defaultColumns))
 
             const savedTableConfigColumns =
               this.convertSavedColumns(userSettingColumns);
+            console.log("Proposals ngOnInit 3",JSON.stringify(savedTableConfigColumns))
 
+            console.log("Proposals ngOnInit 4",JSON.stringify(this.tableDefaultSettingsConfig))
             this.tableDefaultSettingsConfig.settingList[0].columnSetting =
               this.convertSavedColumns(defaultColumns as TableColumn[]);
+            console.log("Proposals ngOnInit 5",JSON.stringify(this.tableDefaultSettingsConfig))
 
             const tableSort = this.getTableSort();
             const paginationConfig = this.getTablePaginationConfig(count);
@@ -157,6 +163,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
                 savedTableConfigColumns,
                 tableSort,
               );
+            console.log("Proposals ngOnInit 6",JSON.stringify(tableSettingsConfig))
 
             if (tableSettingsConfig?.settingList.length) {
               this.initTable(tableSettingsConfig, paginationConfig);
@@ -251,6 +258,9 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   }
 
   saveTableSettings(setting: ITableSetting) {
+    console.log("Proposals List saveTableSettings");
+    console.log("setting",JSON.stringify(setting));
+
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column) => {
       const { name, display, index, width, type, format } = column;
@@ -264,6 +274,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         format,
       };
     });
+    console.log("columns setting",JSON.stringify(columnsSetting));
 
     const tablesSettings = {
       ...this.tablesSettings,
@@ -287,9 +298,12 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
+    console.log("Proposals List onSettingChange");
+    console.log("event",JSON.stringify(event));
     if (
       event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
+      event.type === TableSettingEventType.create ||
+      event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);
     }
