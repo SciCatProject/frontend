@@ -178,7 +178,7 @@ export const addCharacteristicsFilterAction = createAction(
 
 export const removeCharacteristicsFilterAction = createAction(
   "[Sample] Remove Characteristics Filter",
-  props<{ index: number }>(),
+  props<{ lhs: string }>(),
 );
 
 export const clearSamplesStateAction = createAction("[Sample] Clear State");
