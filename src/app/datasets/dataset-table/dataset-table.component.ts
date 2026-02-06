@@ -221,8 +221,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   saveTableSettings(setting: ITableSetting) {
-    //console.log("Datasets List saveTableSettings");
-    //console.log("setting",JSON.stringify(setting));
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column, index) => {
       const { name, display, width, type, format } = column;
@@ -236,7 +234,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         format,
       };
     });
-    //console.log("columns setting",JSON.stringify(columnsSetting));
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
@@ -252,12 +249,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
-    //console.log("Datasets List onSettingChange");
-    //console.log("event",JSON.stringify(event));
-
     if (
       event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create 
+      event.type === TableSettingEventType.create ||
+      event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);
     }
@@ -546,7 +541,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               defaultTableColumns.hasFetchedSettings &&
               defaultTableColumns.columns.length
             ) {
-              const tableColumns = defaultTableColumns.columns;
+              const userConfigColumns = defaultTableColumns.columns;
 
               if (!currentUser) {
                 this.rowSelectionMode = "none";
@@ -554,26 +549,30 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                 this.rowSelectionMode = "multi";
               }
 
-              if (tableColumns) {
+              if (userConfigColumns) {
                 this.dataSource.next(datasets);
                 this.pending = false;
-
-                const savedTableConfigColumns =
-                  this.convertSavedColumns(tableColumns);
 
                 const tableSort = this.getTableSort();
                 const paginationConfig = this.getTablePaginationConfig(count);
 
+                const defaultConfigColumns = 
+                  this.appConfig?.defaultDatasetsListSettings?.columns;
+
+                const userTableConfigColumns =
+                  this.convertSavedColumns(userConfigColumns);
+
                 this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-                  savedTableConfigColumns;
+                  this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
 
                 const tableSettingsConfig =
                   this.tableConfigService.getTableSettingsConfig(
                     this.tableName,
                     this.tableDefaultSettingsConfig,
-                    savedTableConfigColumns,
+                    userTableConfigColumns,
                     tableSort,
                   );
+                console.log("Dataset ngOnInit", JSON.stringify(tableSettingsConfig));
 
                 if (tableSettingsConfig?.settingList.length) {
                   this.initTable(tableSettingsConfig, paginationConfig);

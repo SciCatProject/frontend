@@ -118,41 +118,26 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.proposalsWithCountAndTableSettings$
         .pipe(
-          combineLatestWith(this.defaultStoreColumns$),
-          filter(([{ hasFetchedSettings }]) => hasFetchedSettings),
+          filter(({ hasFetchedSettings }) => hasFetchedSettings),
         )
         .subscribe(
-          async ([
+          async (
             { proposals, count, tablesSettings },
-            defaultStoreColumns,
-          ]) => {
-            const userSettingColumns =
-              tablesSettings?.[this.tableName]?.columns || [];
-
+          ) => {
             this.dataSource.next(proposals);
             this.pending = false;
 
-            // Checks if there are any custom columns defined in the app config
-            // If it's defined and not empty, use it as the effective columns
-            // Otherwise use the default columns from the proposals store
-            const configColumns =
+            const defaultConfigColumns =
               this.appConfig?.defaultProposalsListSettings?.columns;
-            console.log("Proposals ngOnInit 1",JSON.stringify(configColumns))
 
-            const defaultColumns =
-              Array.isArray(configColumns) && configColumns.length > 0
-                ? configColumns
-                : defaultStoreColumns;
-            console.log("Proposals ngOnInit 2",JSON.stringify(defaultColumns))
+            const userConfigColumns =
+              tablesSettings?.[this.tableName]?.columns || [];
 
-            const savedTableConfigColumns =
-              this.convertSavedColumns(userSettingColumns);
-            console.log("Proposals ngOnInit 3",JSON.stringify(savedTableConfigColumns))
+            const userTableConfigColumns =
+              this.convertSavedColumns(userConfigColumns);
 
-            console.log("Proposals ngOnInit 4",JSON.stringify(this.tableDefaultSettingsConfig))
             this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-              this.convertSavedColumns(defaultColumns as TableColumn[]);
-            console.log("Proposals ngOnInit 5",JSON.stringify(this.tableDefaultSettingsConfig))
+              this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
 
             const tableSort = this.getTableSort();
             const paginationConfig = this.getTablePaginationConfig(count);
@@ -160,10 +145,9 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
               this.tableConfigService.getTableSettingsConfig(
                 this.tableName,
                 this.tableDefaultSettingsConfig,
-                savedTableConfigColumns,
+                userTableConfigColumns,
                 tableSort,
               );
-            console.log("Proposals ngOnInit 6",JSON.stringify(tableSettingsConfig))
 
             if (tableSettingsConfig?.settingList.length) {
               this.initTable(tableSettingsConfig, paginationConfig);
@@ -258,8 +242,6 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   }
 
   saveTableSettings(setting: ITableSetting) {
-    console.log("Proposals List saveTableSettings");
-    console.log("setting",JSON.stringify(setting));
 
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column) => {
@@ -274,7 +256,6 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         format,
       };
     });
-    console.log("columns setting",JSON.stringify(columnsSetting));
 
     const tablesSettings = {
       ...this.tablesSettings,
@@ -298,8 +279,6 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
-    console.log("Proposals List onSettingChange");
-    console.log("event",JSON.stringify(event));
     if (
       event.type === TableSettingEventType.save ||
       event.type === TableSettingEventType.create ||
