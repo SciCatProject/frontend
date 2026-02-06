@@ -118,35 +118,26 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.proposalsWithCountAndTableSettings$
         .pipe(
-          combineLatestWith(this.defaultStoreColumns$),
-          filter(([{ hasFetchedSettings }]) => hasFetchedSettings),
+          filter(({ hasFetchedSettings }) => hasFetchedSettings),
         )
         .subscribe(
-          async ([
+          async (
             { proposals, count, tablesSettings },
-            defaultStoreColumns,
-          ]) => {
-            const userSettingColumns =
-              tablesSettings?.[this.tableName]?.columns || [];
-
+          ) => {
             this.dataSource.next(proposals);
             this.pending = false;
 
-            // Checks if there are any custom columns defined in the app config
-            // If it's defined and not empty, use it as the effective columns
-            // Otherwise use the default columns from the proposals store
-            const configColumns =
+            const defaultConfigColumns =
               this.appConfig?.defaultProposalsListSettings?.columns;
-            const defaultColumns =
-              Array.isArray(configColumns) && configColumns.length > 0
-                ? configColumns
-                : defaultStoreColumns;
 
-            const savedTableConfigColumns =
-              this.convertSavedColumns(userSettingColumns);
+            const userConfigColumns =
+              tablesSettings?.[this.tableName]?.columns || [];
+
+            const userTableConfigColumns =
+              this.convertSavedColumns(userConfigColumns);
 
             this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-              this.convertSavedColumns(defaultColumns as TableColumn[]);
+              this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
 
             const tableSort = this.getTableSort();
             const paginationConfig = this.getTablePaginationConfig(count);
@@ -154,7 +145,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
               this.tableConfigService.getTableSettingsConfig(
                 this.tableName,
                 this.tableDefaultSettingsConfig,
-                savedTableConfigColumns,
+                userTableConfigColumns,
                 tableSort,
               );
 
@@ -251,6 +242,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   }
 
   saveTableSettings(setting: ITableSetting) {
+
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column) => {
       const { name, display, index, width, type, format } = column;
@@ -289,7 +281,8 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   }) {
     if (
       event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
+      event.type === TableSettingEventType.create ||
+      event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);
     }
