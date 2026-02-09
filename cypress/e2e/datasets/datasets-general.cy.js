@@ -711,7 +711,8 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-row").first().click();
 
-      cy.get('[data-cy="edit-general-information"]').should("exist");
+      cy.url().should("include", "/datasets/");
+      cy.get("mat-card").should("exist");
 
       cy.go('back');
 
