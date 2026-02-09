@@ -250,8 +250,6 @@ describe("Proposals general", () => {
       };
       cy.createProposal(newProposal);
 
-
-
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
@@ -266,7 +264,9 @@ describe("Proposals general", () => {
       cy.finishedLoading();
     });
     it("should show datasets tab if defaultProposalTab is set to datasets", () => {
-      cy.get('mat-tab-group').invoke('attr', 'ng-reflect-selected-index').should('eq', '1');
+      cy.get(".mat-mdc-tab-labels .mat-mdc-tab")
+        .eq(1)
+        .should("have.attr", "aria-selected", "true");
     });
   });
 
