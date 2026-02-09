@@ -1,0 +1,26 @@
+<div class="userlist-container">
+  <ng-container *ngIf="error">
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>Error loading users: {{ error?.message || 'Unknown error' }}</p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!error">
+    <dynamic-mat-table
+      [tableName]="tableName"
+      [columns]="columns"
+      [pending]="pending"
+      [setting]="setting"
+      [pagingMode]="paginationMode"
+      [dataSource]="dataSource"
+      [rowSelectionMode]="rowSelectionMode"
+      [showGlobalTextSearch]="showGlobalTextSearch"
+      (onTableEvent)="onTableEvent($event)"
+      class="mat-elevation-z2"
+      [emptyMessage]="'No users available'"
+      [emptyIcon]="'info'"
+    >
+    </dynamic-mat-table>
+  </ng-container>
+</div>
