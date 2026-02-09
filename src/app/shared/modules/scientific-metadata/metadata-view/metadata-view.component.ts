@@ -246,7 +246,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
     const stringValue = String(scientificMetadata.value);
 
-    const hasDateSeparators = /[-\/]/.test(stringValue);
+    const hasDateSeparators = /[-]/.test(stringValue);
 
     if (!hasDateSeparators) {
       return false;
