@@ -42,9 +42,12 @@
 }
 
 .label-cell {
-  display: flex;
-  cursor: inherit;
-  justify-content: flex-start;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  cursor: pointer;
 }
 
 mat-cell .label-cell {
@@ -100,6 +103,10 @@ mat-footer-row {
   border-style: solid;
   align-items: center;
   box-sizing: border-box;
+}
+
+.table-row mat-cell {
+  border-bottom-width: 0;
 }
 
 mat-header-row.header,
@@ -259,7 +266,6 @@ cdk-virtual-scroll-viewport {
 }
 
 ::ng-deep .cell-tooltip {
-  padding: 8px;
   font-size: 12px;
   min-width: 100px;
   text-align: center;
