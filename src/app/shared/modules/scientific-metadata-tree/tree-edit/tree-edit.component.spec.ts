@@ -10,6 +10,8 @@ import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module
 
 import { FlatNodeEdit, TreeEditComponent } from "./tree-edit.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AppConfigService } from "app-config.service";
+import { provideHttpClient } from "@angular/common/http";
 
 describe("TreeEditComponent", () => {
   let component: TreeEditComponent;
@@ -19,11 +21,26 @@ describe("TreeEditComponent", () => {
     TestBed.configureTestingModule({
       declarations: [TreeEditComponent],
       imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
-      providers: [MatDialog, MatSnackBar, DatePipe],
+      providers: [
+        MatDialog,
+        MatSnackBar,
+        DatePipe,
+        AppConfigService,
+        provideHttpClient(),
+      ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    const appConfigService = TestBed.inject(AppConfigService);
+    (appConfigService as any).appConfig = {
+      metadataFloatFormatEnabled: true,
+      metadataFloatFormat: {
+        significantDigits: 3,
+        minCutoff: 0.001,
+        maxCutoff: 1000,
+      },
+    };
     fixture = TestBed.createComponent(TreeEditComponent);
     component = fixture.componentInstance;
     component.metadata = {

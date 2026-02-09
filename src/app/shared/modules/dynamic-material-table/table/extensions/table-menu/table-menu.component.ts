@@ -192,11 +192,6 @@ export class TableMenuComponent {
     this.showNewSetting = false;
   }
 
-  /*****  Filter ********/
-  clearFilter_onClick() {
-    this.menuActionChange.emit({ type: TableMenuAction.FilterClear });
-  }
-
   /******* Save File (JSON, CSV, Print)***********/
   download_onClick(type: string) {
     this.menuActionChange.emit({ type: TableMenuAction.Download, data: type });

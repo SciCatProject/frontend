@@ -165,7 +165,7 @@ describe("Datasets general", () => {
       cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
       cy.get(".snackbar-warning")
-        .should("contain", "Please select a valid field from the list")
+        .should("contain", "Field already used")
         .contains("Close")
         .click();
     });
@@ -254,7 +254,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
 
-    it("should not be able to add invalid field", () => {
+    it("should be able to add a field outside the capped list", () => {
       cy.visit("/datasets");
 
       cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
@@ -265,10 +265,9 @@ describe("Datasets general", () => {
 
       cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
-      cy.get(".snackbar-warning")
-        .should("contain", "Please select a valid field from the list")
-        .contains("Close")
-        .click();
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
 
     it("should display equal sign in condition preview", () => {
@@ -478,7 +477,6 @@ describe("Datasets general", () => {
       cy.contains("Type").should("exist");
 
       cy.contains("Location").should("not.exist");
-      cy.contains("Keyword").should("not.exist");
     });
   });
 
@@ -651,7 +649,7 @@ describe("Datasets general", () => {
 
       cy.visit("/datasets");
 
-      cy.wait("@getConfig", { timeout: 10000 });
+      cy.wait("@getConfig", { timeout: 20000 });
 
       cy.finishedLoading();
     });

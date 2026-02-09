@@ -6,6 +6,8 @@ import { MetadataInputComponent } from "../metadata-input/metadata-input.compone
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AppConfigService } from "app-config.service";
+import { provideHttpClient } from "@angular/common/http";
 
 describe("MetadataInputBase", () => {
   let component: MetadataInputComponent;
@@ -15,11 +17,25 @@ describe("MetadataInputBase", () => {
     TestBed.configureTestingModule({
       declarations: [MetadataInputComponent],
       imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
-      providers: [FormBuilder, FormatNumberPipe],
+      providers: [
+        FormBuilder,
+        FormatNumberPipe,
+        AppConfigService,
+        provideHttpClient(),
+      ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    const appConfigService = TestBed.inject(AppConfigService);
+    (appConfigService as any).appConfig = {
+      metadataFloatFormatEnabled: true,
+      metadataFloatFormat: {
+        significantDigits: 3,
+        minCutoff: 0.001,
+        maxCutoff: 1000,
+      },
+    };
     fixture = TestBed.createComponent(MetadataInputComponent);
     component = fixture.componentInstance;
     const data = new FlatNodeEdit();

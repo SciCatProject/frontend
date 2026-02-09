@@ -74,3 +74,36 @@ mat-divider {
   display: inline-flex;
   align-items: center;
 }
+
+.collapsible-filter-wrapper {
+  position: relative;
+
+  .collapse-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #666;
+    height: 1.5em;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  &.collapsed {
+    .facet-search,
+    .checkbox-list,
+    .show-more-btn,
+    .empty-text {
+      display: none !important;
+    }
+  }
+}
