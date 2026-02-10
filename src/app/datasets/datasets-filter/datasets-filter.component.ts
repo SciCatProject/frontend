@@ -748,8 +748,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     index: number,
     newOperator: ScientificCondition["relation"],
   ) {
-    delete this.tempConditionValues[index];
-
     const updates: Partial<ScientificCondition> = {
       relation: newOperator,
       rhs: newOperator === "RANGE" ? [undefined, undefined] : "",
