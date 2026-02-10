@@ -124,7 +124,7 @@ export class TableMenuComponent {
       type: TableMenuAction.SaveSimpleSetting,
       data: setting?.settingName,
     });
-    this.showNewSetting = true
+    this.showNewSetting = true;
   }
 
   newSetting_onClick(e) {

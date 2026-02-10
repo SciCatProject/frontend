@@ -556,14 +556,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                 const tableSort = this.getTableSort();
                 const paginationConfig = this.getTablePaginationConfig(count);
 
-                const defaultConfigColumns = 
+                const defaultConfigColumns =
                   this.appConfig?.defaultDatasetsListSettings?.columns;
 
                 const userTableConfigColumns =
                   this.convertSavedColumns(userConfigColumns);
 
                 this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-                  this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
+                  this.convertSavedColumns(
+                    defaultConfigColumns as TableColumn[],
+                  );
 
                 const tableSettingsConfig =
                   this.tableConfigService.getTableSettingsConfig(
@@ -572,7 +574,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                     userTableConfigColumns,
                     tableSort,
                   );
-                console.log("Dataset ngOnInit", JSON.stringify(tableSettingsConfig));
 
                 if (tableSettingsConfig?.settingList.length) {
                   this.initTable(tableSettingsConfig, paginationConfig);
