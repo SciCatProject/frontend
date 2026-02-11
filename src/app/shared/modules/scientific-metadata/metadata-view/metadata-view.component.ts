@@ -107,7 +107,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             name: "value",
             header: "Value",
             customRender: (column, row) => {
-              if (row.type === "date" || this.isDate(row)) {
+              if (row.type === "date") {
                 return this.datePipe.transform(row[column.name]);
               }
 
@@ -123,7 +123,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               return row[column.name];
             },
             toExport: (column, row) => {
-              if (row.type === "date" || this.isDate(row)) {
+              if (row.type === "date") {
                 return this.datePipe.transform(row[column.name]);
               }
 
@@ -236,25 +236,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       metadataArray.push(metadataObject);
     });
     return metadataArray;
-  }
-
-  isDate(scientificMetadata: ScientificMetadataTableData): boolean {
-    // NOTE: If the type is date, we expect the value to be in ISO format.
-    if (scientificMetadata.type === "date") {
-      return true;
-    }
-
-    const stringValue = String(scientificMetadata.value);
-
-    const hasDateSeparators = /[-]/.test(stringValue);
-
-    if (!hasDateSeparators) {
-      return false;
-    }
-
-    const dateTime = DateTime.fromISO(stringValue);
-
-    return dateTime.isValid;
   }
 
   ngOnInit() {
