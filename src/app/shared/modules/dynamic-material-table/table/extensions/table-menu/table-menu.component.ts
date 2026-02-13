@@ -124,6 +124,7 @@ export class TableMenuComponent {
       type: TableMenuAction.SaveSimpleSetting,
       data: setting?.settingName,
     });
+    this.showNewSetting = true;
   }
 
   newSetting_onClick(e) {
@@ -157,6 +158,7 @@ export class TableMenuComponent {
       type: TableMenuAction.DefaultSimpleSetting,
       data: null,
     });
+    this.showNewSetting = true;
   }
 
   default_onClick(e, setting) {
@@ -173,7 +175,7 @@ export class TableMenuComponent {
       type: TableMenuAction.SaveSetting,
       data: this.newSettingName,
     });
-    this.showNewSetting = false;
+    this.showNewSetting = true;
   }
 
   cancelSaveSetting_onClick(e) {
