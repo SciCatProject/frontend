@@ -1,4 +1,9 @@
 {
+  "defaultMainPage": {
+    "nonAuthenticatedUser": "DATASETS",
+    "authenticatedUser": "PROPOSALS"
+  },
+  "checkBoxFilterClickTrigger": false,
   "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": false,
   "allowConfigOverrides": true,  
@@ -13,8 +18,9 @@
   "externalAuthEndpoint": "/api/v3/auth/msad",
   "facility": "SciCat Vanilla CI Test",
   "siteIcon": "site-header-logo.png",
+  "siteHeaderLogoUrl": "https://my.facility.site",
   "sitetitle": "SciCat FE CI repo",
-  "siteSciCatLogo": "",  
+  "siteSciCatLogo": "full",  
   "loginFacilityLabel": "SciCat Vanilla",
   "loginLdapLabel": "Ldap",
   "loginLocalLabel": "Local",
@@ -27,6 +33,7 @@
   "ingestManual": null,
   "jobsEnabled": true,
   "jsonMetadataEnabled": true,
+  "jupyterHubUrl": "",
   "landingPage": "doi.ess.eu/detail/",
   "lbBaseURL": "http://localhost:3000",
   "ingestorComponent": {
@@ -560,6 +567,11 @@
         "enabled": true
       },
       {
+        "name": "instrumentName",
+        "width": 130,
+        "enabled": true
+      },
+      {
         "name": "abstract",
         "type": "hoverContent",
         "width": 150,
@@ -884,11 +896,6 @@
       }
     ]
   },
-  "defaultMainPage": {
-    "nonAuthenticatedUser": "DATASETS",
-    "authenticatedUser": "PROPOSALS"
-  },
-  "siteHeaderLogoUrl": "https://my.facility.site",
   "mainMenu": {
     "nonAuthenticatedUser": {
       "datasets": true,
@@ -910,5 +917,8 @@
       "publishedData": true,
       "samples": true
     }
+  },
+  "defaultTab": {
+    "proposal": "details"
   }
 }
