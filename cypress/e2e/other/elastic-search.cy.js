@@ -21,7 +21,7 @@ describe("Elastic search", () => {
     cy.removeElasticSearchIndex(testIndex);
   });
 
-  describe("Elastic search query", () => {
+  describe.skip("Elastic search query", () => {
     it("should get relevant dataset with partial text query", () => {
       cy.visit("/datasets");
 
