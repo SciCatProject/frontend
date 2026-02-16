@@ -155,3 +155,15 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+
+      - name: Background resource monitor (30 min)
+        if: ${{ always() }}
+        run: |
+          (timeout 30m bash -c '
+            while true; do
+              echo "=== $(date) ==="
+              free -h
+              docker stats --no-stream
+              sleep 5
+            done
+          ') &
