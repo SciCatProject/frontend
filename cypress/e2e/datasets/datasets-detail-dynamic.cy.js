@@ -141,6 +141,8 @@ describe("Datasets Detail View Dynamic", () => {
 
     cy.reload();
 
+    cy.isLoading();
+
     cy.get(".mat-mdc-tab-link").contains("Details").should("exist");
     cy.get(".mat-mdc-tab-link").contains("Attachments").should("exist");
     cy.get(".mat-mdc-tab-link").contains("Logbook").should("exist");
