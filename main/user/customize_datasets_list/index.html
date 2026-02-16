@@ -6,10 +6,8 @@
       
       
       
-        <link rel="prev" href="../../theme/color-theme/">
+        <link rel="prev" href="../configurable_actions_user/">
       
-      
-        <link rel="next" href="../customize_datasets_list/">
       
       
         
@@ -20,7 +18,7 @@
     
     
       
-        <title>Configurable Actions - SciCat Documentation</title>
+        <title>Customize Datasets List - SciCat Documentation</title>
       
     
     
@@ -81,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#what-are-configurable-actions" class="md-skip">
+        <a href="#customize-datasets-list" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Configurable Actions
+              Customize Datasets List
             
           </span>
         </div>
@@ -424,10 +422,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../customize_datasets_list/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customize Datasets List
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -443,6 +468,92 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#columns-ordering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Columns Ordering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#columns-width" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Column's width
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#columns-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Columns' Selection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saving settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-default-selecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore default selecting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-story-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Story - Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -475,6 +586,80 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#columns-ordering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Columns Ordering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#columns-width" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Column's width
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#columns-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Columns' Selection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saving settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-default-selecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore default selecting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-story-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Story - Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -490,28 +675,64 @@
 
 
 
-<h1 id="what-are-configurable-actions">What Are Configurable Actions?<a class="headerlink" href="#what-are-configurable-actions" title="Permanent link">¶</a></h1>
-<p>For non-technical users at ESS, <strong>configurable actions</strong> are custom buttons or menu options that appear in multiple locations in the web interface. Currently they are used only on the dataset data file tab, but they will soon be available on the dataset details tab, datasets list, and the selection.</p>
-<p>These actions make it easy to perform specific tasks with just a click. Examples include:</p>
-<ul>
-<li><strong>Download All Files:</strong> Download every file in a dataset in one go.</li>
-<li><strong>Download Selected Files:</strong> Download only the files you have selected from a dataset.</li>
-<li><strong>Download Jupyter Notebook:</strong> Get a ready-made Jupyter notebook that’s already filled in with information about your selected dataset.</li>
-<li><strong>Publish or Unpublish a Dataset:</strong> Change whether a dataset is visible to others or kept private.</li>
-<li><strong>Quick Links:</strong> Jump directly to important resources, like the ESS homepage.</li>
-</ul>
-<p>Each action is set up behind the scenes by the IT team through the FE configuration during deployment. The system automatically fills in any technical details for you (like dataset IDs or file locations), so you don’t have to worry about them.</p>
-<p><strong>In summary:</strong><br>
-Configurable actions help you get your work done faster and more easily, without needing to worry about technical steps or complicated processes.</p>
+<h1 id="customize-datasets-list">Customize Datasets List<a class="headerlink" href="#customize-datasets-list" title="Permanent link">¶</a></h1>
+<p>The datasets list can be fully customized. Users can order the columns, adjust the witdh of each columns and select or hide specific columns to meet their needs.</p>
+<h2 id="columns-ordering">Columns Ordering<a class="headerlink" href="#columns-ordering" title="Permanent link">¶</a></h2>
+<p>Columns can be place in any arbitrary order selected by the user.
+User can set their columns order by hovering on the columns headers. When the ordering handle appears (See red rectangle in figure 1), the related column can be drag and drop in the correct place.  </p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/columns_ordering.png" data-desc-position="bottom"><img alt="Figure 1" src="../images/columns_ordering.png"></a><br>
+Figure 1</p>
+<p>Alternatively, user can order the columns directly in the column selection menu, accessible through the settings menu (three vertical dots) of the datasets list, as shown in figure 2. Once the columns list is open, hovering on the ordering handle allows the user to drag and drop the column in correct ordering place.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/columns_ordering_menu.png" data-desc-position="bottom"><img alt="Figure 2" src="../images/columns_ordering_menu.png"></a><br>
+<em>Figure 2</em></p>
+<h2 id="columns-width">Column's width<a class="headerlink" href="#columns-width" title="Permanent link">¶</a></h2>
+<p>Columns width can be adjusted buy overing the mouse above the columns headers until the columns delimitation bars are shown.
+When the column delimiters are shown, the user can hold and drag the column size as desired, as shown in Figure 3.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/columns_width.png" data-desc-position="bottom"><img alt="Figure 3" src="../images/columns_width.png"></a>
+<em>Figure 3</em></p>
+<h2 id="columns-selection">Columns' Selection<a class="headerlink" href="#columns-selection" title="Permanent link">¶</a></h2>
+<p>User can select the columns shown in the datasets list by visiting the columns selection menu. It is accessible by selecting the table settings icon (thre vertical dots), followed by Column Settings.
+As shown in Figure 4, the list presents all the configured columns available in the SciCat instance. Here the user can check the columns that are wanted and uncheck the ones that are not needed.<br>
+As highlighted in figure 4 as an example, the field <em>Contact Email</em> is not selected and not shown, while the <em>Proposal Id</em> field is clicked and shown in the list.<br>
+The changes are applied when the confirmation button is clicked. The new settings are manintained and used until the user reload the application or logs out. </p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/columns_selection.png" data-desc-position="bottom"><img alt="Figure 4" src="../images/columns_selection.png"></a><br>
+<em>Figure 4</em></p>
+<h2 id="saving-settings">Saving settings<a class="headerlink" href="#saving-settings" title="Permanent link">¶</a></h2>
+<p>If the user would like to re-use the current settings that she has configured, the table settings needs to be saved. 
+Saving the settings is achieved byt selecting the table settings (the vertical dots) and clicking on the <em>Saving settings</em>, as shown in figure 5 and figure 6.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/save_columns_settings.png" data-desc-position="bottom"><img alt="Figure 5" src="../images/save_columns_settings.png"></a><br>
+<em>Figure 5: Save columns settings, full table view.</em></p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/save_columns_settings_details.png" data-desc-position="bottom"><img alt="Figure 6" src="../images/save_columns_settings_details.png"></a><br>
+<em>Figure 6: Save columns settings, menu details</em></p>
+<h2 id="restore-default-selecting">Restore default selecting<a class="headerlink" href="#restore-default-selecting" title="Permanent link">¶</a></h2>
+<p>In case the user would like to restore the original list settings, as they are set by the site admin, she can do so by selecting the table settings menu (the vertical dots) and click on the <em>Default settings</em> option, as shown in Figure 7, and Figure 8. This action will reset the datasets list settings for the current user.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/restore_default_columns_settings.png" data-desc-position="bottom"><img alt="Figure 7" src="../images/restore_default_columns_settings.png"></a><br>
+<em>Figure 7: Restore default columns settings, full table view.</em></p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/restore_default_columns_settings_details.png" data-desc-position="bottom"><img alt="Figure 8" src="../images/restore_default_columns_settings_details.png"></a><br>
+<em>Figure 8: REstore default columns settings, menu details.</em></p>
+<h2 id="user-story-example">User Story - Example<a class="headerlink" href="#user-story-example" title="Permanent link">¶</a></h2>
+<p>When a user logs in for the first time, the default datasets columns settings are inherited and saved in the database.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/datasets_list_default_settings.png" data-desc-position="bottom"><img alt="Figure 9" src="../images/datasets_list_default_settings.png"></a>
+<em>Figure 9: Datasets list default settings</em></p>
+<p>The user decide to change the columns shown in the datasets list. Click on table settings and select <em>Column settings</em>.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/datasets_list_default_columns_selection.png" data-desc-position="bottom"><img alt="Figure 10" src="../images/datasets_list_default_columns_selection.png"></a>
+<em>Figure 10</em></p>
+<p>The user unselect <em>image</em> and select <em>isPublished</em>, <em>Start Time</em>, and <em>End Time</em>.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/datasets_list_custom_columns_selection.png" data-desc-position="bottom"><img alt="Figure 11" src="../images/datasets_list_custom_columns_selection.png"></a>
+<em>Figure 11</em></p>
+<p>Clicks the apply button. The menu will close and the table will refresh with the new columns shown.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../images/datasets_list_custom_settings.png" data-desc-position="bottom"><img alt="Figure 12" src="../images/datasets_list_custom_settings.png"></a>
+<em>Figure 12</em></p>
+<p>Now the user can save her settings for future use by opening the table settings menu and clicking on <em>Save table settings</em> as shown in figure 5 and 6.<br>
+Once the setting sare saved, they will persist across multiple logins for this user.  </p>
+<p>If the user wants to start fresh, she can restore the default settings byt opening once more the table settings menu and clicking on <em>Default settings</em>, as shown in figure 7 and 8.<br>
+This action will bring the datasets table back to the state at first login, like is shown in figure 9.  </p>
 
 
 
 
 
 
-
-  
-  
 
 
 
