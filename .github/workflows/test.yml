@@ -125,6 +125,17 @@ jobs:
           docker compose build --no-cache
           docker compose up -d
 
+      - name: Start Background Resource Monitor for Docker Containers
+        run: |
+          nohup bash -c '
+            while true; do
+              echo "=== $(date) ==="
+              free -h
+              docker stats --no-stream
+              sleep 10
+            done
+          ' > monitor.log 2>&1 &
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
@@ -143,6 +154,9 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           docker compose down -v
+
+      - name: Output Docker Container Resource Monitor Logs
+        run: cat monitor.log
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
