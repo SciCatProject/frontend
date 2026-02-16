@@ -125,6 +125,17 @@ jobs:
           docker compose build --no-cache
           docker compose up -d
 
+      - name: Start Background Resource Monitor
+        run: |
+          nohup bash -c '
+            while true; do
+              echo "=== $(date) ==="
+              free -h
+              docker stats --no-stream
+              sleep 10
+            done
+          ' > monitor.log 2>&1 &
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
@@ -156,14 +167,6 @@ jobs:
           name: cypress-videos
           path: cypress/videos
 
-      - name: Background resource monitor (30 min)
-        if: ${{ always() }}
-        run: |
-          (timeout 30m bash -c '
-            while true; do
-              echo "=== $(date) ==="
-              free -h
-              docker stats --no-stream
-              sleep 5
-            done
-          ') &
+      # Step 3: If tests fail, show the resource history
+      - name: Show Resource Usage History
+        run: cat monitor.log
