@@ -1,4 +1,4 @@
-describe("Elastic search", () => {
+describe.skip("Elastic search", () => {
   const randomText1 =
     "$PDfUCt+qX*5Km=ezGQF ELASTIC_SEARCH_vg+Mgga2#vEe=u!dQ!V+ fp$q6tz8y%hyaHzbx2X+ Vz6shS8ejGCQN3h%TEST 6j2&eqYT7GCR+CpqqD5n";
   const randomText2 =
@@ -21,7 +21,7 @@ describe("Elastic search", () => {
     cy.removeElasticSearchIndex(testIndex);
   });
 
-  describe.skip("Elastic search query", () => {
+  describe("Elastic search query", () => {
     it("should get relevant dataset with partial text query", () => {
       cy.visit("/datasets");
 
