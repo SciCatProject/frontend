@@ -46,7 +46,7 @@
     mat-menu-item
     type="button"
     *ngIf="currentTableSetting?.saveSettingMode === 'simple'"
-    (click)="saveSimpleSetting_onClick($event, null)"
+    (click)="saveSimpleSetting_onClick($event, null); menuTrigger.closeMenu()"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
     <mat-icon>grading</mat-icon>
