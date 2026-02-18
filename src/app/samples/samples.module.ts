@@ -21,6 +21,8 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatChipsModule } from "@angular/material/chips";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
 
 @NgModule({
   imports: [
@@ -41,6 +43,8 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
     ReactiveFormsModule,
     SharedScicatFrontendModule,
     StoreModule.forFeature("samples", samplesReducer),
+    MatExpansionModule,
+    SharedConditionModule,
   ],
   exports: [SampleDetailComponent, SampleDialogComponent],
   declarations: [

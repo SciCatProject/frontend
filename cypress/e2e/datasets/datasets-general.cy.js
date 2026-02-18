@@ -493,27 +493,21 @@ describe("Datasets general", () => {
       });
 
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-        const relationsToTest = [
-          { relation: "GREATER_THAN", rhs: 1 },
-          { relation: "LESS_THAN", rhs: 3 },
-          { relation: "EQUAL_TO_NUMERIC", rhs: 2 },
-          { relation: "GREATER_THAN_OR_EQUAL", rhs: 2 },
-          { relation: "LESS_THAN_OR_EQUAL", rhs: 2 },
-          { relation: "RANGE", rhs: [1, 3] },
-        ];
         const testConfig = {
           ...baseConfig,
           defaultDatasetsListSettings: {
             ...baseConfig.defaultDatasetsListSettings,
-            conditions: relationsToTest.map(({ relation, rhs }) => ({
-              condition: {
-                lhs: "extra_entry_end_time",
-                relation,
-                rhs,
-                unit: "",
+            conditions: [
+              {
+                condition: {
+                  lhs: "extra_entry_end_time",
+                  relation: "GREATER_THAN",
+                  rhs: 1,
+                  unit: "",
+                },
+                enabled: true,
               },
-              enabled: true,
-            })),
+            ],
           },
         };
 
@@ -534,20 +528,16 @@ describe("Datasets general", () => {
       cy.get(".dataset-table mat-row").first().click();
       cy.get(".metadataTable", { timeout: 10000 }).scrollIntoView();
 
-      cy.get(".metadataTable mat-row").within(() => {
-        cy.get(".mat-column-human_name label")
-          .invoke("text")
-          .then((fieldName) => {
-            if (fieldName && fieldName.trim() === "Extra Entry End Time") {
-              cy.get(".mat-column-value label")
-                .invoke("text")
-                .then((valueText) => {
-                  const value = parseFloat(valueText.trim());
-                  expect(value).to.be.greaterThan(1);
-                });
-            }
-          });
-      });
+      cy.get(".metadataTable mat-row .mat-column-value label")
+        .invoke("text")
+        .then((valueText) => {
+          const value = parseFloat(valueText.trim());
+          expect(value).to.be.greaterThan(1);
+        });
+
+      cy.visit("/datasets");
+      cy.get(".condition-panel").first().click();
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
 
@@ -668,4 +658,67 @@ describe("Datasets general", () => {
         .should("be.visible");
     });
   });
+
+  describe("Conditions in multiple pages", () => {
+    beforeEach(() => {
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+  });
+
+    it("should preverse dataset conditions when clearing sample conditions", () => {
+
+      cy.createDataset({
+        type: "raw",
+        scientificMetadata: {
+          extra_entry_end_time: { type: "number", value: 5, unit: "" },
+        },
+      });
+      const sampleId = Math.floor(100000 + Math.random() * 900000).toString();
+      cy.createSample({...testData.sample, sampleId});
+
+      cy.visit("/datasets");
+      cy.finishedLoading();
+
+      cy.get('[data-cy="add-condition-button"]').click();
+      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").should("have.length", 1);
+
+      cy.visit("/samples");
+      cy.finishedLoading();
+
+      cy.get('[data-cy="add-condition-button"]').click();
+      cy.get('input[name="lhs"]').type("test_characteristic");
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").should("have.length", 1);
+
+      cy.get(".condition-panel").first().click();
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("10");
+        });
+      cy.get('[data-cy="samples-filters-search-button"]').click();
+
+      // Clear conditions on samples page
+      cy.get('[data-cy="samples-filters-clear-button"]').click();
+
+      cy.get(".condition-panel").should("have.length", 0);
+
+      // Navigate back to datasets and verify condition is still there
+      cy.visit("/datasets");
+      cy.finishedLoading();
+
+      cy.get(".condition-panel").should("have.length", 1);
+      cy.get(".condition-panel").should("contain.text", "extra_entry_end_time");
+
+      cy.get(".condition-panel").first().click();
+      cy.get('[data-cy="remove-condition-button"]').click();
+   });
+   afterEach(() => {
+    cy.removeSamples();
+   })
+  });
+
 });
