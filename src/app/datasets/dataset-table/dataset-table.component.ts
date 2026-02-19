@@ -251,7 +251,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }) {
     if (
       event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
+      event.type === TableSettingEventType.create ||
+      event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);
     }
@@ -540,7 +541,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               defaultTableColumns.hasFetchedSettings &&
               defaultTableColumns.columns.length
             ) {
-              const tableColumns = defaultTableColumns.columns;
+              const userConfigColumns = defaultTableColumns.columns;
 
               if (!currentUser) {
                 this.rowSelectionMode = "none";
@@ -548,24 +549,29 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                 this.rowSelectionMode = "multi";
               }
 
-              if (tableColumns) {
+              if (userConfigColumns) {
                 this.dataSource.next(datasets);
                 this.pending = false;
-
-                const savedTableConfigColumns =
-                  this.convertSavedColumns(tableColumns);
 
                 const tableSort = this.getTableSort();
                 const paginationConfig = this.getTablePaginationConfig(count);
 
+                const defaultConfigColumns =
+                  this.appConfig?.defaultDatasetsListSettings?.columns;
+
+                const userTableConfigColumns =
+                  this.convertSavedColumns(userConfigColumns);
+
                 this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-                  savedTableConfigColumns;
+                  this.convertSavedColumns(
+                    defaultConfigColumns as TableColumn[],
+                  );
 
                 const tableSettingsConfig =
                   this.tableConfigService.getTableSettingsConfig(
                     this.tableName,
                     this.tableDefaultSettingsConfig,
-                    savedTableConfigColumns,
+                    userTableConfigColumns,
                     tableSort,
                   );
 

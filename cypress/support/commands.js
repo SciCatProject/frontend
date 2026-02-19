@@ -108,6 +108,9 @@ Cypress.Commands.add("isLoading", (type) => {
 
 Cypress.Commands.add("createDataset", (overwrites = {}) => {
   const { type = "raw", dataFileSize = "small", ...rest } = overwrites;
+  cy.log("Create Dataset");
+  cy.log("Type :" + type);
+  cy.log("Size :" + dataFileSize);
 
   cy.getCookie("user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
@@ -254,9 +257,11 @@ Cypress.Commands.add("deleteProposal", (id) => {
 });
 
 Cypress.Commands.add("removeDatasets", () => {
+  cy.log("Removing datasets");
+  cy.log("Loggin in as " + Cypress.env("secondaryUsername"));
   cy.login(Cypress.env("secondaryUsername"), Cypress.env("secondaryPassword"));
   cy.getToken().then((token) => {
-    const filter = { where: { datasetName: "Cypress Dataset" } };
+    const filter = { where: { } };
 
     cy.request({
       method: "GET",
