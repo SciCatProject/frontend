@@ -42,9 +42,12 @@
 }
 
 .label-cell {
-  display: flex;
-  cursor: inherit;
-  justify-content: flex-start;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  cursor: pointer;
 }
 
 mat-cell .label-cell {
@@ -100,6 +103,16 @@ mat-footer-row {
   border-style: solid;
   align-items: center;
   box-sizing: border-box;
+}
+
+.table-row mat-cell {
+  border-bottom-width: 0;
+}
+
+mat-header-row.header,
+mat-row.table-row {
+  min-height: 40px !important;
+  height: 42px !important;
 }
 
 mat-cell,
@@ -238,10 +251,6 @@ cdk-virtual-scroll-viewport {
   background: #efefef;
 }
 
-.table-row mat-cell {
-  border-bottom-width: 0;
-}
-
 .expanded-detail {
   overflow: hidden;
   display: flex;
@@ -257,7 +266,6 @@ cdk-virtual-scroll-viewport {
 }
 
 ::ng-deep .cell-tooltip {
-  padding: 8px;
   font-size: 12px;
   min-width: 100px;
   text-align: center;
@@ -360,7 +368,7 @@ cdk-virtual-scroll-viewport {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 
   &.with-side-filter {
     margin-left: 3rem;
@@ -370,7 +378,8 @@ cdk-virtual-scroll-viewport {
     padding: 0 20px;
     flex: 1 1 auto;
     width: 100%;
-    max-width: 500px;
+    min-width: 500px;
+    max-width: 33%;
 
     mat-form-field {
       width: 100%;

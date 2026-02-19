@@ -106,6 +106,7 @@ const reducer = createReducer(
         columns = [],
         externalSettings,
         filters,
+        conditions,
       } = userSettings as any;
       const settings = { ...state.settings, datasetCount, jobCount };
 
@@ -116,6 +117,7 @@ const reducer = createReducer(
           columns,
           tablesSettings: externalSettings?.tablesSettings,
           filters: filters || state.filters,
+          conditions: conditions || state.conditions,
         };
       } else {
         return {
@@ -123,6 +125,7 @@ const reducer = createReducer(
           settings,
           tablesSettings: externalSettings?.tablesSettings,
           filters: filters || state.filters,
+          conditions: conditions || state.conditions,
         };
       }
     },

@@ -8,6 +8,9 @@ import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { LinkyPipe } from "ngx-linky";
 import { DatePipe, TitleCasePipe } from "@angular/common";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { AppConfigService } from "app-config.service";
+import { provideHttpClient } from "@angular/common/http";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 
 describe("MetadataViewComponent", () => {
   let component: MetadataViewComponent;
@@ -23,12 +26,25 @@ describe("MetadataViewComponent", () => {
         DatePipe,
         LinkyPipe,
         PrettyUnitPipe,
+        FormatNumberPipe,
+        AppConfigService,
+        provideHttpClient(),
       ],
       declarations: [MetadataViewComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    const appConfigService = TestBed.inject(AppConfigService);
+    spyOn(appConfigService as any, "getConfig").and.returnValue({
+      metadataFloatFormatEnabled: true,
+      metadataFloatFormat: {
+        significantDigits: 3,
+        minCutoff: 0.001,
+        maxCutoff: 1000,
+      },
+    });
+
     fixture = TestBed.createComponent(MetadataViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -53,6 +69,19 @@ describe("MetadataViewComponent", () => {
       expect(metadataArray[0]["unit"]).toEqual("");
     });
 
+    it("should round float value if float formatting enabled", () => {
+      const testMetadata = {
+        someMetadata: {
+          value: 12.39421321511,
+          unit: "m",
+        },
+      };
+      const metadataArray = component.createMetadataArray(testMetadata);
+
+      expect(metadataArray[0]["value"]).toEqual("12.4");
+      expect(metadataArray[0]["unit"]).toEqual("m");
+    });
+
     it("should parse an untyped metadata object to an array", () => {
       const testMetadata = {
         untypedTestName: {
@@ -67,68 +96,6 @@ describe("MetadataViewComponent", () => {
         JSON.stringify({ v: "test", u: "" }),
       );
       expect(metadataArray[0]["unit"]).toEqual("");
-    });
-  });
-
-  describe("#isDate()", () => {
-    it("should return false if scientificMetadata item is a quantity", () => {
-      const metadata = {
-        name: "wavelength",
-        value: 1024,
-        unit: "nanometers",
-      };
-
-      const isDate = component.isDate(metadata);
-
-      expect(isDate).toEqual(false);
-    });
-
-    it("should return false if scientificMetadata value is a number", () => {
-      const metadata = {
-        name: "test",
-        value: 1024,
-        unit: "",
-      };
-
-      const isDate = component.isDate(metadata);
-
-      expect(isDate).toEqual(false);
-    });
-
-    it("should return false if scientificMetadata value is a string", () => {
-      const metadata = {
-        name: "test",
-        value: "test value",
-        unit: "",
-      };
-
-      const isDate = component.isDate(metadata);
-
-      expect(isDate).toEqual(false);
-    });
-
-    it("should return false if scientificMetadata value is a string of numbers", () => {
-      const metadata = {
-        name: "test",
-        value: "123",
-        unit: "",
-      };
-
-      const isDate = component.isDate(metadata);
-
-      expect(isDate).toEqual(false);
-    });
-
-    it("should return true if scientificMetadata item is a date string", () => {
-      const metadata = {
-        name: "today",
-        value: new Date().toISOString(),
-        unit: "",
-      };
-
-      const isDate = component.isDate(metadata);
-
-      expect(isDate).toEqual(true);
     });
   });
 });

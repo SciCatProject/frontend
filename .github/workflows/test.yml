@@ -23,7 +23,7 @@ jobs:
 
       - name: Cache node_modules
         id: cached-node-modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}-${{ env.NODE_VERSION }}
@@ -48,7 +48,7 @@ jobs:
 
       - name: Cache node_modules
         id: cached-node-modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}-${{ env.NODE_VERSION }}
@@ -71,7 +71,7 @@ jobs:
 
       - name: Cache node_modules
         id: cached-node-modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}-${{ env.NODE_VERSION }}
@@ -89,7 +89,7 @@ jobs:
       - name: Save PR number
         run: |
           echo ${{ github.event.number }} > ./coverage/PR
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: coverage
           path: coverage/
@@ -125,6 +125,17 @@ jobs:
           docker compose build --no-cache
           docker compose up -d
 
+      - name: Start Background Resource Monitor for Docker Containers
+        run: |
+          nohup bash -c '
+            while true; do
+              echo "=== $(date) ==="
+              free -h
+              docker stats --no-stream
+              sleep 10
+            done
+          ' > monitor.log 2>&1 &
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
@@ -144,13 +155,16 @@ jobs:
         run: |
           docker compose down -v
 
-      - uses: actions/upload-artifact@v5
+      - name: Output Docker Container Resource Monitor Logs
+        run: cat monitor.log
+
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: cypress-screenshots
           path: cypress/screenshots
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: cypress-videos

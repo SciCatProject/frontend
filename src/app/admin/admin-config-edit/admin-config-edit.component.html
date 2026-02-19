@@ -1,0 +1,29 @@
+<div class="config-buttons-wrapper" style="margin-bottom: 16px">
+  <div>
+    <button mat-raised-button color="primary" (click)="jsonPreview()">
+      Json Preview
+    </button>
+    <button mat-raised-button color="primary" (click)="export()">Export</button>
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
+  </div>
+</div>
+<div>
+  <jsonforms
+    [data]="data$ | async"
+    [schema]="schema"
+    [uischema]="uiSchema"
+    [renderers]="renderers"
+    (dataChange)="onChange($event)"
+  ></jsonforms>
+  <div class="config-buttons-wrapper" style="margin-top: 16px">
+    <div>
+      <button mat-raised-button color="primary" (click)="jsonPreview()">
+        Json Preview
+      </button>
+      <button mat-raised-button color="primary" (click)="export()">
+        Export
+      </button>
+      <button mat-raised-button color="primary" (click)="save()">Save</button>
+    </div>
+  </div>
+</div>
