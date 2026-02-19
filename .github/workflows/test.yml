@@ -137,7 +137,7 @@ jobs:
           ' > monitor.log 2>&1 &
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           config-file: cypress.config.ts
           browser: chrome
