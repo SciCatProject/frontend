@@ -668,4 +668,62 @@ describe("Datasets general", () => {
         .should("be.visible");
     });
   });
+
+  describe("Condition value persistence after navigation", () => {
+    beforeEach(() => {
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        scientificMetadata: {
+          run_number: { type: "number", value: 76129, unit: "" },
+        },
+      });
+      cy.visit("/datasets");
+    });
+
+    it("should persist condition values after navigating away and back", () => {
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("run_number");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("mat-select").click();
+        });
+      cy.get("mat-option").contains(">").click();
+
+      cy.get(".condition-panel")
+      .first()
+      .within(() => {
+        cy.get("input[matInput]").eq(0).clear().type("19");
+      });
+
+      cy.get('[data-cy="filter-search-button"]').click();
+
+      cy.get(".dataset-table mat-row").first().click();
+
+      cy.url().should("include", "/datasets/");
+      cy.get("mat-card").should("exist");
+
+      cy.go('back');
+
+      cy.get(".condition-panel")
+      .first()
+      .find("mat-panel-title")
+      .should("contain", ">")
+      .and("contain", "19");
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+  })
 });
