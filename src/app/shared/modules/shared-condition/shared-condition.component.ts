@@ -35,6 +35,7 @@ import { selectConditions } from "state-management/selectors/user.selectors";
   standalone: false,
 })
 export class SharedConditionComponent implements OnDestroy {
+  private subscriptions: Subscription[] = [];
   // Condition filter inputs
   @Input() showConditions = false;
   @Input() metadataKeys: string[] = [];
@@ -44,8 +45,6 @@ export class SharedConditionComponent implements OnDestroy {
   @Input() addConditionAction: (condition: ScientificCondition) => void;
   @Input() removeConditionAction: (condition: ScientificCondition) => void;
   @Output() conditionsApplied = new EventEmitter<void>();
-
-  private subscriptions: Subscription[] = [];
 
   allConditions$ = this.store.select(selectConditions);
 
