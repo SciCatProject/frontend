@@ -218,6 +218,28 @@ Cypress.Commands.add("createInstrument", (instrument) => {
   });
 });
 
+Cypress.Commands.add("createSample", (sample) => {
+  return cy.getCookie("user").then((userCookie) => {
+    const user = JSON.parse(decodeURIComponent(userCookie.value));
+
+    cy.getToken().then((token) => {
+      cy.log("Sample: " + JSON.stringify(sample, null, 2));
+      cy.log("User: " + JSON.stringify(user, null, 2));
+
+      cy.request({
+        method: "POST",
+        url: lbBaseUrl + "/Samples",
+        headers: {
+          Authorization: token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: sample,
+      });
+    });
+  });
+});
+
 Cypress.Commands.add("updateProposal", (proposalId, updateProposalDto) => {
   return cy.getCookie("user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));

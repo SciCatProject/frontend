@@ -70,6 +70,21 @@ export const testData = {
       main_user: "ESS",
     },
   },
+  sample: {
+    ownerGroup: "ess",
+    accessGroups: ["string"],
+    instrumentGroup: "string",
+    sampleId: "string",
+    owner: "string",
+    description: "Cypress Sample",
+    type: "string",
+    proposalId: "cypress",
+    parentSampleId: "string",
+    sampleCharacteristics: {
+      test_characteristic: { type: "number", value: 10, unit: "" },
+    },
+    isPublished: false,
+  },
   rawDataset: {
     principalInvestigator: "string",
     endTime: "2019-10-31T14:44:46.143Z",
