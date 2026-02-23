@@ -1,4 +1,10 @@
-import { Component, Input, EventEmitter, Output } from "@angular/core";
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  OnDestroy,
+} from "@angular/core";
 import { map, take } from "rxjs/operators";
 import { ConditionConfig } from "state-management/state/user.store";
 import { isEqual } from "lodash-es";
@@ -10,6 +16,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { AsyncPipe } from "@angular/common";
 import { UnitsService } from "shared/services/units.service";
 import { UnitsOptionsService } from "shared/services/units-options.service";
+import { Subscription } from "rxjs";
 import {
   SearchParametersDialogComponent,
   SearchParametersDialogData,
@@ -27,7 +34,7 @@ import { selectConditions } from "state-management/selectors/user.selectors";
   styleUrl: "./shared-condition.component.scss",
   standalone: false,
 })
-export class SharedConditionComponent {
+export class SharedConditionComponent implements OnDestroy {
   // Condition filter inputs
   @Input() showConditions = false;
   @Input() metadataKeys: string[] = [];
@@ -37,6 +44,8 @@ export class SharedConditionComponent {
   @Input() addConditionAction: (condition: ScientificCondition) => void;
   @Input() removeConditionAction: (condition: ScientificCondition) => void;
   @Output() conditionsApplied = new EventEmitter<void>();
+
+  private subscriptions: Subscription[] = [];
 
   allConditions$ = this.store.select(selectConditions);
 
@@ -95,58 +104,62 @@ export class SharedConditionComponent {
   }
 
   buildMetadataMaps() {
-    this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
-      conditionConfigs.forEach((config) => {
-        // Commented out human_name for now, but it will be used later
-        // const { lhs,human_name } = config.condition;
-        // if (lhs && human_name) this.humanNameMap[lhs] = human_name;
-      });
-    });
+    this.subscriptions.push(
+      this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
+        conditionConfigs.forEach((config) => {
+          // Commented out human_name for now, but it will be used later
+          // const { lhs,human_name } = config.condition;
+          // if (lhs && human_name) this.humanNameMap[lhs] = human_name;
+        });
+      }),
+    );
   }
 
   applyEnabledConditions() {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-      const needsUpdate = allConditions.some((c) => !c.conditionType);
+    this.subscriptions.push(
+      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+        const needsUpdate = allConditions.some((c) => !c.conditionType);
 
-      if (needsUpdate) {
-        const updatedConditions = allConditions.map((c) => ({
-          ...c,
-          conditionType: c.conditionType || this.conditionType,
-        }));
-        this.updateStore(updatedConditions);
-      }
-
-      const myConditions = allConditions.filter(
-        (c) => !c.conditionType || c.conditionType === this.conditionType,
-      );
-
-      myConditions.forEach((config) => {
-        if (config.condition.lhs) {
-          this.removeConditionAction?.(config.condition);
+        if (needsUpdate) {
+          const updatedConditions = allConditions.map((c) => ({
+            ...c,
+            conditionType: c.conditionType || this.conditionType,
+          }));
+          this.updateStore(updatedConditions);
         }
-      });
 
-      myConditions.forEach((config) => {
-        this.applyUnitsOptions(config.condition);
-        if (config.enabled && config.condition.lhs && config.condition.rhs) {
-          const condition = { ...config.condition };
-          const rhsValue = condition.rhs;
-          const isNumeric = rhsValue !== "" && !isNaN(Number(rhsValue));
+        const myConditions = allConditions.filter(
+          (c) => !c.conditionType || c.conditionType === this.conditionType,
+        );
 
-          if (isNumeric) {
-            condition.rhs = Number(rhsValue);
+        myConditions.forEach((config) => {
+          if (config.condition.lhs) {
+            this.removeConditionAction?.(config.condition);
           }
+        });
 
-          if (condition.relation === "EQUAL_TO") {
-            condition.relation = !isNumeric
-              ? "EQUAL_TO_STRING"
-              : "EQUAL_TO_NUMERIC";
+        myConditions.forEach((config) => {
+          this.applyUnitsOptions(config.condition);
+          if (config.enabled && config.condition.lhs && config.condition.rhs) {
+            const condition = { ...config.condition };
+            const rhsValue = condition.rhs;
+            const isNumeric = rhsValue !== "" && !isNaN(Number(rhsValue));
+
+            if (isNumeric) {
+              condition.rhs = Number(rhsValue);
+            }
+
+            if (condition.relation === "EQUAL_TO") {
+              condition.relation = !isNumeric
+                ? "EQUAL_TO_STRING"
+                : "EQUAL_TO_NUMERIC";
+            }
+
+            this.addConditionAction?.(condition);
           }
-
-          this.addConditionAction?.(condition);
-        }
-      });
-    });
+        });
+      }),
+    );
   }
 
   applyUnitsOptions(condition: ScientificCondition): void {
@@ -227,139 +240,146 @@ export class SharedConditionComponent {
   addCondition() {
     this.buildMetadataMaps();
 
-    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-      const myConditions = allConditions.filter(
-        (c) => c.conditionType === this.conditionType,
-      );
-      const usedFields = myConditions.map((config) => config.condition.lhs);
-      const availableKeys = this.metadataKeys.filter(
-        (key) => !usedFields.includes(key),
-      );
+    this.subscriptions.push(
+      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+        const myConditions = allConditions.filter(
+          (c) => c.conditionType === this.conditionType,
+        );
+        const usedFields = myConditions.map((config) => config.condition.lhs);
+        const availableKeys = this.metadataKeys.filter(
+          (key) => !usedFields.includes(key),
+        );
 
-      this.dialog
-        .open<SearchParametersDialogComponent, SearchParametersDialogData>(
-          SearchParametersDialogComponent,
-          {
-            data: {
-              usedFields: usedFields,
-              parameterKeys: availableKeys,
-              humanNameMap: this.humanNameMap,
-            },
-            restoreFocus: false,
-          },
-        )
-        .afterClosed()
-        .subscribe((res) => {
-          if (res) {
-            const { data } = res;
-
-            const existingConditionIndex = myConditions.findIndex((config) =>
-              isEqual(config.condition.lhs, data.lhs),
-            );
-
-            if (existingConditionIndex !== -1) {
-              this.snackBar.open("Condition already exists", "Close", {
-                duration: 2000,
-                panelClass: ["snackbar-warning"],
-              });
-              return;
-            }
-
-            const newCondition: ConditionConfig = {
-              condition: {
-                ...data,
-                rhs: "",
-                human_name: this.humanNameMap[data.lhs],
+        this.subscriptions.push(
+          this.dialog
+            .open<SearchParametersDialogComponent, SearchParametersDialogData>(
+              SearchParametersDialogComponent,
+              {
+                data: {
+                  usedFields: usedFields,
+                  parameterKeys: availableKeys,
+                  humanNameMap: this.humanNameMap,
+                },
+                restoreFocus: false,
               },
-              enabled: true,
-              conditionType: this.conditionType,
-            };
+            )
+            .afterClosed()
+            .subscribe((res) => {
+              if (res) {
+                const { data } = res;
 
-            this.updateStore([...allConditions, newCondition]);
-            this.store.dispatch(
-              selectColumnAction({ name: data.lhs, columnType: "custom" }),
-            );
+                const existingConditionIndex = myConditions.findIndex(
+                  (config) => isEqual(config.condition.lhs, data.lhs),
+                );
 
-            this.snackBar.open("Condition added successfully", "Close", {
-              duration: 2000,
-              panelClass: ["snackbar-success"],
-            });
-          }
-        });
-    });
+                if (existingConditionIndex !== -1) {
+                  this.snackBar.open("Condition already exists", "Close", {
+                    duration: 2000,
+                    panelClass: ["snackbar-warning"],
+                  });
+                  return;
+                }
+
+                const newCondition: ConditionConfig = {
+                  condition: {
+                    ...data,
+                    rhs: "",
+                    human_name: this.humanNameMap[data.lhs],
+                  },
+                  enabled: true,
+                  conditionType: this.conditionType,
+                };
+
+                this.updateStore([...allConditions, newCondition]);
+                this.store.dispatch(
+                  selectColumnAction({ name: data.lhs, columnType: "custom" }),
+                );
+
+                this.snackBar.open("Condition added successfully", "Close", {
+                  duration: 2000,
+                  panelClass: ["snackbar-success"],
+                });
+              }
+            }),
+        );
+      }),
+    );
   }
 
   removeCondition(condition: ConditionConfig, index: number) {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-      const actualIndex = allConditions.findIndex(
-        (c) =>
-          c.condition.lhs === condition.condition.lhs &&
-          c.conditionType === this.conditionType,
-      );
-
-      if (actualIndex === -1) return;
-
-      const updatedConditions = [...allConditions];
-      updatedConditions.splice(actualIndex, 1);
-      this.tempConditionValues.splice(index, 1);
-
-      if (condition.enabled) {
-        this.removeConditionAction?.(condition.condition);
-        this.store.dispatch(
-          deselectColumnAction({
-            name: condition.condition.lhs,
-            columnType: "custom",
-          }),
+    this.subscriptions.push(
+      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+        const actualIndex = allConditions.findIndex(
+          (c) =>
+            c.condition.lhs === condition.condition.lhs &&
+            c.conditionType === this.conditionType,
         );
-      }
 
-      if (condition.condition.lhs) {
-        this.unitsOptionsService.clearUnitsOptions(condition.condition.lhs);
-      }
+        if (actualIndex === -1) return;
 
-      this.updateStore(updatedConditions);
-    });
+        const updatedConditions = [...allConditions];
+        updatedConditions.splice(actualIndex, 1);
+        this.tempConditionValues.splice(index, 1);
+
+        if (condition.enabled) {
+          this.removeConditionAction?.(condition.condition);
+          this.store.dispatch(
+            deselectColumnAction({
+              name: condition.condition.lhs,
+              columnType: "custom",
+            }),
+          );
+        }
+
+        if (condition.condition.lhs) {
+          this.unitsOptionsService.clearUnitsOptions(condition.condition.lhs);
+        }
+
+        this.updateStore(updatedConditions);
+      }),
+    );
   }
 
   updateConditionField(index: number, updates: Partial<ScientificCondition>) {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-      const myConditions = allConditions.filter(
-        (c) => c.conditionType === this.conditionType,
-      );
+    this.subscriptions.push(
+      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+        const myConditions = allConditions.filter(
+          (c) => c.conditionType === this.conditionType,
+        );
 
-      if (!myConditions[index]) return;
+        if (!myConditions[index]) return;
 
-      const actualIndex = allConditions.findIndex(
-        (c) =>
-          c.condition.lhs === myConditions[index].condition.lhs &&
-          c.conditionType === this.conditionType,
-      );
+        const actualIndex = allConditions.findIndex(
+          (c) =>
+            c.condition.lhs === myConditions[index].condition.lhs &&
+            c.conditionType === this.conditionType,
+        );
 
-      if (actualIndex === -1) return;
+        if (actualIndex === -1) return;
 
-      const updatedConditions = [...allConditions];
-      const conditionConfig = updatedConditions[actualIndex];
+        const updatedConditions = [...allConditions];
+        const conditionConfig = updatedConditions[actualIndex];
 
-      updatedConditions[actualIndex] = {
-        ...conditionConfig,
-        condition: {
-          ...conditionConfig.condition,
-          ...updates,
-          human_name: this.humanNameMap[conditionConfig.condition.lhs],
-        },
-      };
+        updatedConditions[actualIndex] = {
+          ...conditionConfig,
+          condition: {
+            ...conditionConfig.condition,
+            ...updates,
+            human_name: this.humanNameMap[conditionConfig.condition.lhs],
+          },
+        };
 
-      this.store.dispatch(
-        updateConditionsConfigs({ conditionConfigs: updatedConditions }),
-      );
-    });
+        this.store.dispatch(
+          updateConditionsConfigs({ conditionConfigs: updatedConditions }),
+        );
+      }),
+    );
   }
 
   updateConditionOperator(
     index: number,
     newOperator: ScientificCondition["relation"],
   ) {
-    delete this.tempConditionValues[index];
     this.updateConditionField(index, {
       relation: newOperator,
       rhs: newOperator === "RANGE" ? [undefined, undefined] : "",
@@ -391,132 +411,142 @@ export class SharedConditionComponent {
   }
 
   toggleConditionEnabled(index: number, enabled: boolean) {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-      const myConditions = allConditions.filter(
-        (c) => c.conditionType === this.conditionType,
-      );
-
-      if (!myConditions[index]) return;
-
-      const actualIndex = allConditions.findIndex(
-        (c) =>
-          c.condition.lhs === myConditions[index].condition.lhs &&
-          c.conditionType === this.conditionType,
-      );
-
-      if (actualIndex === -1) return;
-
-      const updatedConditions = [...allConditions];
-      updatedConditions[actualIndex] = {
-        ...updatedConditions[actualIndex],
-        enabled,
-      };
-      const condition = updatedConditions[actualIndex].condition;
-
-      if (enabled && condition.lhs && condition.rhs) {
-        this.addConditionAction?.(condition);
-        this.store.dispatch(
-          selectColumnAction({ name: condition.lhs, columnType: "custom" }),
+    this.subscriptions.push(
+      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+        const myConditions = allConditions.filter(
+          (c) => c.conditionType === this.conditionType,
         );
-      } else {
-        this.removeConditionAction?.(condition);
-        this.store.dispatch(
-          deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
-        );
-      }
 
-      this.updateStore(updatedConditions);
-    });
+        if (!myConditions[index]) return;
+
+        const actualIndex = allConditions.findIndex(
+          (c) =>
+            c.condition.lhs === myConditions[index].condition.lhs &&
+            c.conditionType === this.conditionType,
+        );
+
+        if (actualIndex === -1) return;
+
+        const updatedConditions = [...allConditions];
+        updatedConditions[actualIndex] = {
+          ...updatedConditions[actualIndex],
+          enabled,
+        };
+        const condition = updatedConditions[actualIndex].condition;
+
+        if (enabled && condition.lhs && condition.rhs) {
+          this.addConditionAction?.(condition);
+          this.store.dispatch(
+            selectColumnAction({ name: condition.lhs, columnType: "custom" }),
+          );
+        } else {
+          this.removeConditionAction?.(condition);
+          this.store.dispatch(
+            deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
+          );
+        }
+
+        this.updateStore(updatedConditions);
+      }),
+    );
   }
 
   applyConditions() {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-      const myConditions = allConditions.filter(
-        (c) => c.conditionType === this.conditionType,
-      );
-      const otherConditions = allConditions.filter(
-        (c) => c.conditionType !== this.conditionType,
-      );
+    this.subscriptions.push(
+      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+        const myConditions = allConditions.filter(
+          (c) => c.conditionType === this.conditionType,
+        );
+        const otherConditions = allConditions.filter(
+          (c) => c.conditionType !== this.conditionType,
+        );
 
-      const updatedMyConditions = myConditions.map((config, i) => {
-        const lhs = config.condition.lhs;
-        const baseCondition = {
-          ...config.condition,
-          human_name: this.humanNameMap[lhs],
-        };
-
-        const value =
-          this.tempConditionValues[i] !== undefined
-            ? this.tempConditionValues[i]
-            : config.condition.rhs;
-        const isNumeric = value !== "" && !isNaN(Number(value));
-
-        if (
-          config.condition.relation === "EQUAL_TO" ||
-          config.condition.relation === "EQUAL_TO_NUMERIC" ||
-          config.condition.relation === "EQUAL_TO_STRING"
-        ) {
-          return {
-            ...config,
-            condition: {
-              ...baseCondition,
-              rhs: isNumeric ? Number(value) : value,
-              relation: (!isNumeric
-                ? "EQUAL_TO_STRING"
-                : "EQUAL_TO_NUMERIC") as ScientificCondition["relation"],
-            },
+        const updatedMyConditions = myConditions.map((config, i) => {
+          const lhs = config.condition.lhs;
+          const baseCondition = {
+            ...config.condition,
+            human_name: this.humanNameMap[lhs],
           };
-        } else if (config.condition.relation !== "RANGE") {
-          return {
-            ...config,
-            condition: {
-              ...baseCondition,
-              rhs: isNumeric ? Number(value) : value,
-            },
-          };
-        }
 
-        return { ...config, condition: baseCondition };
-      });
+          const value =
+            this.tempConditionValues[i] !== undefined
+              ? this.tempConditionValues[i]
+              : config.condition.rhs;
+          const isNumeric = value !== "" && !isNaN(Number(value));
 
-      // Removes old conditions for this type
-      myConditions.forEach((c) => this.removeConditionAction?.(c.condition));
+          if (
+            config.condition.relation === "EQUAL_TO" ||
+            config.condition.relation === "EQUAL_TO_NUMERIC" ||
+            config.condition.relation === "EQUAL_TO_STRING"
+          ) {
+            return {
+              ...config,
+              condition: {
+                ...baseCondition,
+                rhs: isNumeric ? Number(value) : value,
+                relation: (!isNumeric
+                  ? "EQUAL_TO_STRING"
+                  : "EQUAL_TO_NUMERIC") as ScientificCondition["relation"],
+              },
+            };
+          } else if (config.condition.relation !== "RANGE") {
+            return {
+              ...config,
+              condition: {
+                ...baseCondition,
+                rhs: isNumeric ? Number(value) : value,
+              },
+            };
+          }
 
-      // Adds updated conditions for this type
-      updatedMyConditions.forEach((config) => {
-        if (
-          config.enabled &&
-          config.condition.lhs &&
-          config.condition.rhs != null &&
-          config.condition.rhs !== ""
-        ) {
-          this.addConditionAction?.(config.condition);
-        }
-      });
+          return { ...config, condition: baseCondition };
+        });
 
-      // Merges other conditions with updated conditions for this type
-      this.updateStore([...otherConditions, ...updatedMyConditions]);
-      this.tempConditionValues = [];
-      this.conditionsApplied.emit();
-    });
+        // Removes old conditions for this type
+        myConditions.forEach((c) => this.removeConditionAction?.(c.condition));
+
+        // Adds updated conditions for this type
+        updatedMyConditions.forEach((config) => {
+          if (
+            config.enabled &&
+            config.condition.lhs &&
+            config.condition.rhs != null &&
+            config.condition.rhs !== ""
+          ) {
+            this.addConditionAction?.(config.condition);
+          }
+        });
+
+        // Merges other conditions with updated conditions for this type
+        this.updateStore([...otherConditions, ...updatedMyConditions]);
+        this.tempConditionValues = [];
+        this.conditionsApplied.emit();
+      }),
+    );
   }
 
   clearConditions() {
-    this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-      const myConditions = allConditions.filter(
-        (c) => c.conditionType === this.conditionType,
-      );
+    this.subscriptions.push(
+      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
+        const myConditions = allConditions.filter(
+          (c) => c.conditionType === this.conditionType,
+        );
 
-      myConditions.forEach((config) =>
-        this.removeConditionAction?.(config.condition),
-      );
+        myConditions.forEach((config) =>
+          this.removeConditionAction?.(config.condition),
+        );
 
-      const updatedConditions = allConditions.filter(
-        (c) => c.conditionType !== this.conditionType,
-      );
-      this.updateStore(updatedConditions);
-    });
+        const updatedConditions = allConditions.filter(
+          (c) => c.conditionType !== this.conditionType,
+        );
+        this.updateStore(updatedConditions);
+      }),
+    );
   }
 
   /** Condition filter helpers and methods END */
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
 }
