@@ -515,6 +515,7 @@ describe("Datasets general", () => {
       });
       cy.visit("/datasets");
       cy.wait("@getConfig");
+      cy.finishedLoading();
     });
 
     it("should check if pre-configured conditions are applied", () => {
