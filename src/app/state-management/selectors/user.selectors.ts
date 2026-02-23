@@ -134,6 +134,17 @@ export const selectUserSettingsPageViewModel = createSelector(
   }),
 );
 
+export const selectAdminGuardViewModel = createSelector(
+  selectIsLoggingIn,
+  selectIsLoggedIn,
+  selectIsAdmin,
+  (isLoggingIn, isLoggedIn, isAdmin) => ({
+    isLoggingIn,
+    isLoggedIn,
+    isAdmin,
+  }),
+);
+
 export const selectHasFetchedSettings = createSelector(
   selectUserState,
   (state) => state.hasFetchedSettings,

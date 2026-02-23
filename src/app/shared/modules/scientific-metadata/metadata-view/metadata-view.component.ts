@@ -23,6 +23,7 @@ import { DateTime } from "luxon";
 import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TablePaginationMode } from "shared/modules/dynamic-material-table/models/table-pagination.model";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 
 @Component({
   selector: "metadata-view",
@@ -106,7 +107,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             name: "value",
             header: "Value",
             customRender: (column, row) => {
-              if (row.type === "date" || this.isDate(row)) {
+              if (row.type === "date") {
                 return this.datePipe.transform(row[column.name]);
               }
 
@@ -122,7 +123,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               return row[column.name];
             },
             toExport: (column, row) => {
-              if (row.type === "date" || this.isDate(row)) {
+              if (row.type === "date") {
                 return this.datePipe.transform(row[column.name]);
               }
 
@@ -179,6 +180,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   constructor(
     private unitsService: UnitsService,
     private datePipe: DatePipe,
+    private formatNumberPipe: FormatNumberPipe,
     public linkyPipe: LinkyPipe,
     public prettyUnit: PrettyUnitPipe,
   ) {}
@@ -195,9 +197,13 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         typeof metadata[key] === "object" &&
         "value" in (metadata[key] as ScientificMetadata)
       ) {
+        const formattedValue = this.formatNumberPipe.transform(
+          metadata[key]["value"],
+        );
+
         metadataObject = {
           name: key,
-          value: metadata[key]["value"],
+          value: formattedValue,
           unit: metadata[key]["unit"],
           human_name: humanReadableName,
           type: metadata[key]["type"],
@@ -216,9 +222,11 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             ? metadata[key]
             : JSON.stringify(metadata[key]);
 
+        const formattedValue = this.formatNumberPipe.transform(metadataValue);
+
         metadataObject = {
           name: key,
-          value: metadataValue,
+          value: formattedValue,
           unit: "",
           human_name: humanReadableName,
           type: metadata[key]["type"],
@@ -228,24 +236,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       metadataArray.push(metadataObject);
     });
     return metadataArray;
-  }
-
-  isDate(scientificMetadata: ScientificMetadataTableData): boolean {
-    // NOTE: If the type is date, we expect the value to be in ISO format.
-    if (scientificMetadata.type === "date") {
-      return true;
-    }
-
-    const isValidDate =
-      typeof scientificMetadata.value !== "number" &&
-      new Date(scientificMetadata.value).toString() !== "Invalid Date" &&
-      DateTime.fromISO(scientificMetadata.value).isValid;
-
-    if (isValidDate) {
-      return true;
-    }
-
-    return false;
   }
 
   ngOnInit() {

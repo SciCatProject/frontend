@@ -341,3 +341,24 @@ export const testConfig = {
     },
   },
 };
+
+export const defaultDatasetsColumnsList = [
+  "PID",
+  "Dataset Name",
+  "Run Number",
+  "Size",
+  "Creation Time",
+  "Image",
+  "Proposal Id"
+];
+
+export const personalizedDatasetsColumnsList = [
+  "PID",
+  "Dataset Name",
+  "Run Number",
+  "Size",
+  "Creation Time",
+  "Proposal Id",
+  "Start Time",
+  "End Time"
+];

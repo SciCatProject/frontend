@@ -2,16 +2,12 @@ import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { ArchViewMode, MessageType } from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
-  setPublicViewModeAction,
   setArchiveViewModeAction,
   clearSelectionAction,
   addToBatchAction,
 } from "state-management/actions/datasets.actions";
 import { Subscription } from "rxjs";
-import {
-  selectArchiveViewMode,
-  selectPublicViewMode,
-} from "state-management/selectors/datasets.selectors";
+import { selectArchiveViewMode } from "state-management/selectors/datasets.selectors";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
 import { ArchivingService } from "datasets/archiving.service";
 import { MatDialog } from "@angular/material/dialog";
@@ -45,7 +41,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   ];
 
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
-  currentPublicViewMode: boolean | "" = "";
 
   subscriptions: Subscription[] = [];
 
@@ -62,13 +57,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
    */
   onModeChange(mode: ArchViewMode): void {
     this.store.dispatch(setArchiveViewModeAction({ modeToggle: mode }));
-  }
-
-  onViewPublicChange(value: boolean): void {
-    this.currentPublicViewMode = value;
-    this.store.dispatch(
-      setPublicViewModeAction({ isPublished: this.currentPublicViewMode }),
-    );
   }
 
   isEmptySelection(): boolean {
@@ -151,12 +139,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
         .subscribe((mode: ArchViewMode) => {
           this.currentArchViewMode = mode;
         }),
-    );
-
-    this.subscriptions.push(
-      this.store.select(selectPublicViewMode).subscribe((publicViewMode) => {
-        this.currentPublicViewMode = publicViewMode;
-      }),
     );
 
     this.subscriptions.push(

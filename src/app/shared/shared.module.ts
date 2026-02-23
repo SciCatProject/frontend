@@ -28,6 +28,7 @@ import { NgxNumericRangeFormFieldModule } from "./modules/numeric-range/ngx-nume
 import { EmptyContentModule } from "./modules/generic-empty-content/empty-content.module";
 import { JsonformsAccordionRendererService } from "./services/jsonforms-accordion-renderer.service";
 import { TranslateModule } from "@ngx-translate/core";
+import { JsonPreviewDialogModule } from "./modules/json-preview-dialog/json-preview-dialog.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -54,6 +55,7 @@ import { TranslateModule } from "@ngx-translate/core";
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,
+    JsonPreviewDialogModule,
     SharedFilterModule,
   ],
   providers: [

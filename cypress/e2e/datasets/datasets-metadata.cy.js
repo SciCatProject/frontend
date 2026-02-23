@@ -769,6 +769,224 @@ describe("Datasets", () => {
         cy.contains(`unitSI: "${metadata.unitSI}"`).should("exist");
       });
     });
+
+    it("should be able to add a metadata entry with type 'number'", () => {
+      const newMetadataName = "Cypress dataset number metadata";
+      const metadata = {
+        value: "2010",
+        name: "number_metadata",
+        human_name: "Number test",
+        type: "number",
+      };
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        datasetName: newMetadataName,
+      });
+
+      cy.visit("/datasets");
+
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="text-search"]').clear().type(newMetadataName);
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.isLoading();
+
+      cy.get("mat-row").contains(newMetadataName).first().click();
+
+      cy.wait("@fetch");
+
+      cy.finishedLoading();
+
+      cy.scrollTo("bottom");
+
+      cy.get('[role="tab"]').contains("Edit").click();
+
+      cy.get('[data-cy="add-new-row"]').click();
+
+      cy.get("mat-select[data-cy=field-type-input]").last().click();
+      cy.get("mat-option")
+        .contains(metadata.type)
+        .then((option) => {
+          option[0].click();
+        });
+      
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .focus()
+        .type(`${metadata.name}{enter}`);
+
+      cy.get("[data-cy=metadata-human-name-input]")
+        .last()
+        .focus()
+        .type(`${metadata.human_name}{enter}`);
+
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .focus()
+        .type(`${metadata.value}{enter}`);
+
+      cy.get("button[data-cy=save-changes-button]").click();
+
+      cy.finishedLoading();
+
+      cy.contains("[role='tab']", "View").click();
+
+      cy.contains("dynamic-mat-table mat-row", metadata.human_name);
+      cy.contains("dynamic-mat-table mat-row", metadata.value);
+    });
+
+    it("should be able to add a metadata entry with type 'quantity'", () => {
+      const newMetadataName = "Cypress dataset quantity metadata";
+      const metadata = {
+        value: "2010",
+        name: "quantity_metadata",
+        human_name: "Quantity test",
+        type: "quantity",
+        unit: "cm",
+        valueSI: "20.1",
+        unitSI: "m",
+      };
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        datasetName: newMetadataName,
+      });
+
+      cy.visit("/datasets");
+
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="text-search"]').clear().type(newMetadataName);
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.isLoading();
+
+      cy.get("mat-row").contains(newMetadataName).first().click();
+
+      cy.wait("@fetch");
+
+      cy.finishedLoading();
+
+      cy.scrollTo("bottom");
+
+      cy.get('[role="tab"]').contains("Edit").click();
+
+      cy.get('[data-cy="add-new-row"]').click();
+
+      cy.get("mat-select[data-cy=field-type-input]").last().click();
+
+      cy.get("mat-option")
+        .contains(metadata.type)
+        .then((option) => {
+          option[0].click();
+        });
+      
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .focus()
+        .type(`${metadata.name}{enter}`);
+
+      cy.get("[data-cy=metadata-human-name-input]")
+        .last()
+        .focus()
+        .type(`${metadata.human_name}{enter}`);
+      
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .focus()
+        .type(`${metadata.value}{enter}`);
+      
+      cy.get("[data-cy=metadata-unit-input]")
+        .last()
+        .focus()
+        .type(`${metadata.unit}{enter}`);
+      
+      cy.get("button[data-cy=save-changes-button]").click();
+
+      cy.finishedLoading();
+
+      cy.contains("[role='tab']", "View").click();
+
+      cy.contains("dynamic-mat-table mat-row", metadata.human_name);
+      cy.contains("dynamic-mat-table mat-row", metadata.value);
+      cy.contains("dynamic-mat-table mat-row", metadata.unit);
+    });
+
+    it("should be able to add a metadata entry with type 'string'", () => {
+      const newMetadataName = "Cypress dataset string metadata";
+      const metadata = {
+        value: "2010",
+        name: "string_metadata",
+        human_name: "String test",
+        type: "string",
+      };
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        datasetName: newMetadataName,
+      });
+
+      cy.visit("/datasets");
+
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="text-search"]').clear().type(newMetadataName);
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.isLoading();
+
+      cy.get("mat-row").contains(newMetadataName).first().click();
+
+      cy.wait("@fetch");
+
+      cy.finishedLoading();
+
+      cy.scrollTo("bottom");
+
+      cy.get('[role="tab"]').contains("Edit").click();
+
+      cy.get('[data-cy="add-new-row"]').click();
+
+      cy.get("mat-select[data-cy=field-type-input]").last().click();
+
+      cy.get("mat-option")
+        .contains(metadata.type)
+        .then((option) => {
+          option[0].click();
+        });
+
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .focus()
+        .type(`${metadata.name}{enter}`);
+
+      cy.get("[data-cy=metadata-human-name-input]")
+        .last()
+        .focus()
+        .type(`${metadata.human_name}{enter}`);
+      
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .focus()
+        .type(`${metadata.value}{enter}`);
+      
+      cy.get("button[data-cy=save-changes-button]").click();
+
+      cy.finishedLoading();
+
+      cy.contains("[role='tab']", "View").click();
+
+      cy.contains("dynamic-mat-table mat-row", metadata.human_name);
+      cy.contains("dynamic-mat-table mat-row", metadata.value);
+    });
   });
 
   describe("Remove metadata item", () => {

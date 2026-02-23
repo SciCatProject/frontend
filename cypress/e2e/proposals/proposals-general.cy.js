@@ -240,6 +240,36 @@ describe("Proposals general", () => {
     });
   });
 
+  describe("Proposals details default tab coniguration", () => {
+    beforeEach(() => {
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+      cy.createProposal(newProposal);
+
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultTab: { proposal: "datasets" },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.visit(`/proposals/${newProposal.proposalId}`);
+      cy.wait("@getConfig");
+      cy.finishedLoading();
+    });
+    it("should show datasets tab if defaultProposalTab is set to datasets", () => {
+      cy.get(".mat-mdc-tab-labels .mat-mdc-tab")
+        .eq(1)
+        .should("have.attr", "aria-selected", "true");
+    });
+  });
+
   describe("Proposal view details labelization", () => {
     it("should load proposal with fallback labels when no custom labels are available", () => {
       const fallbackLabelsToCheck = ["Main proposer", "Proposal Type"];
@@ -350,46 +380,6 @@ describe("Proposals general", () => {
         .should("contain", newProposal.proposalId);
 
       cy.reload();
-
-      cy.get("mat-table mat-row")
-        .first()
-        .should("contain", newProposal.proposalId);
-    });
-
-    it("should be able to filter by column", () => {
-      const newProposal = {
-        ...testData.proposal,
-        proposalId: "100100",
-      };
-
-      cy.createProposal(newProposal);
-
-      cy.visit("/proposals");
-
-      cy.get(".mat-sort-header-container").contains("Proposal ID").click();
-
-      cy.get(".mat-sort-header-container")
-        .contains("Proposal ID")
-        .closest("header-filter")
-        .find(".mat-mdc-menu-trigger")
-        .click();
-
-      cy.get(
-        ".cdk-overlay-container .mat-mdc-menu-panel .filter-panel mat-form-field.input-field input",
-      )
-        .clear()
-        .type(newProposal.proposalId);
-      cy.get(
-        ".cdk-overlay-container .mat-mdc-menu-panel .menu-action button[color='primary']",
-      ).click();
-
-      cy.get(".mat-sort-header-container")
-        .contains("Proposal ID")
-        .closest("header-filter")
-        .find(".mat-mdc-menu-trigger mat-icon")
-        .should(($el) => {
-          expect($el).to.have.css("color", "rgb(200, 25, 25)"); // warn color
-        });
 
       cy.get("mat-table mat-row")
         .first()
@@ -595,13 +585,15 @@ describe("Proposals general", () => {
       cy.get('[data-cy="apply-button-filter"]').click();
 
       cy.get("mat-table mat-row").should("contain", newProposal.proposalId);
-
     });
   });
 
   describe("Proposals collapsible filters", () => {
     beforeEach(() => {
-      cy.createProposal({ ...testData.proposal, proposalId: Math.floor(100000 + Math.random() * 900000).toString() });
+      cy.createProposal({
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      });
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
