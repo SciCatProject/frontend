@@ -537,6 +537,9 @@ describe("Datasets general", () => {
         });
 
       cy.visit("/datasets");
+
+      cy.finishedLoading();
+
       cy.get(".condition-panel").first().click();
       cy.get('[data-cy="remove-condition-button"]').click();
     });
