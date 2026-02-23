@@ -152,8 +152,13 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.route.queryParams.subscribe((queryParams) => {
-        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
-        this.globalTextSearch = searchQuery.text || "";
+        try {
+          const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+          this.globalTextSearch = searchQuery.text || "";
+        } catch (e) {
+          console.error("Failed to parse searchQuery: ", e);
+          this.globalTextSearch = "";
+        }
       }),
     );
   }
