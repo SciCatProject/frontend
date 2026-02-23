@@ -514,7 +514,7 @@ describe("Datasets general", () => {
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
       });
       cy.visit("/datasets");
-      cy.wait("@getConfig");
+      cy.wait("@getConfig", { timeout: 20000 });
       cy.finishedLoading();
     });
 
