@@ -240,6 +240,36 @@ describe("Proposals general", () => {
     });
   });
 
+  describe("Proposals details default tab coniguration", () => {
+    beforeEach(() => {
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+      cy.createProposal(newProposal);
+
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultTab: { proposal: "datasets" },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.visit(`/proposals/${newProposal.proposalId}`);
+      cy.wait("@getConfig");
+      cy.finishedLoading();
+    });
+    it("should show datasets tab if defaultProposalTab is set to datasets", () => {
+      cy.get(".mat-mdc-tab-labels .mat-mdc-tab")
+        .eq(1)
+        .should("have.attr", "aria-selected", "true");
+    });
+  });
+
   describe("Proposal view details labelization", () => {
     it("should load proposal with fallback labels when no custom labels are available", () => {
       const fallbackLabelsToCheck = ["Main proposer", "Proposal Type"];
@@ -555,13 +585,15 @@ describe("Proposals general", () => {
       cy.get('[data-cy="apply-button-filter"]').click();
 
       cy.get("mat-table mat-row").should("contain", newProposal.proposalId);
-
     });
   });
 
   describe("Proposals collapsible filters", () => {
     beforeEach(() => {
-      cy.createProposal({ ...testData.proposal, proposalId: Math.floor(100000 + Math.random() * 900000).toString() });
+      cy.createProposal({
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      });
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,

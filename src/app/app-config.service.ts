@@ -72,6 +72,10 @@ export class MetadataFloatFormat {
   maxCutoff: number; // using scientific notation above this cutoff
 }
 
+export class DefaultTab {
+  proposal: string;
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   skipSciCatLoginPageEnabled?: boolean;
@@ -162,6 +166,7 @@ export interface AppConfigInterface {
   checkBoxFilterClickTrigger?: boolean;
   hideEmptyMetadataTable?: boolean;
   ingestorComponent?: IngestorComponentConfig;
+  defaultTab?: DefaultTab;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
