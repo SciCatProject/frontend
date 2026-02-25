@@ -19,7 +19,6 @@ import { TableSelectionMode } from "shared/modules/dynamic-material-table/models
 import { DatePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
-import { DateTime } from "luxon";
 import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TablePaginationMode } from "shared/modules/dynamic-material-table/models/table-pagination.model";
