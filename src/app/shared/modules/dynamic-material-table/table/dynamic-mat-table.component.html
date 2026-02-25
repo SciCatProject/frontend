@@ -204,6 +204,11 @@
               [class.ltr-cell]="direction === 'ltr'"
               [ngStyle]="ellipsis(column)"
               class="label-cell"
+              [matTooltip]="
+                column.name === 'human_name' ? row.human_name || row.name : ''
+              "
+              matTooltipPosition="right"
+              matTooltipShowDelay="500"
             >
               <ng-container *ngIf="column.hoverOnCell; else noHoverCell">
                 <span class="cell-with-icon">
@@ -256,6 +261,9 @@
               [class.ltr-cell]="direction === 'ltr'"
               [ngStyle]="ellipsis(column)"
               class="label-cell"
+              [matTooltip]="column.name === 'title' ? row.title : ''"
+              matTooltipPosition="right"
+              matTooltipShowDelay="500"
             >
               {{ getColumnValue(row, column) }}
             </label>
