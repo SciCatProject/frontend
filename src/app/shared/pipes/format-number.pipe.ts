@@ -23,7 +23,11 @@ export class FormatNumberPipe implements PipeTransform {
     }
   }
 
-  transform(value: unknown): string | number {
+  transform(
+    value: string | number | null | undefined,
+  ): string | number | null | undefined {
+    if (value == null) return value;
+
     // use old way if not enabled
     if (!this.enabled) {
       if (typeof value === "number" && (value >= 1e5 || value <= 1e-5)) {
