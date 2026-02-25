@@ -528,6 +528,9 @@ export class DynamicMatTableComponent<T extends TableRow>
         if (this.standardDataSource) {
           this.standardDataSource.data = data;
         }
+        if (this.tvsDataSource) {
+          this.tvsDataSource.data = data;
+        }
       });
     }
   }
