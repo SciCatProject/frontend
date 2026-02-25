@@ -86,7 +86,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           {
             name: "human_name",
             header: "Name",
-            width: 250,
+            width: 300,
             hoverContent: true,
             hoverOnCell: true,
             customRender: (column, row) => {
@@ -106,6 +106,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           {
             name: "value",
             header: "Value",
+            width: 250,
             customRender: (column, row) => {
               if (row.type === "date") {
                 return this.datePipe.transform(row[column.name]);
@@ -144,7 +145,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             contentIconLink: (column, row) => {
               return row.ontology_reference;
             },
-            width: 500,
           },
           {
             name: "unit",

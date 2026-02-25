@@ -241,7 +241,13 @@
                 </ng-template>
               </ng-container>
               <ng-template #noHoverCell>
-                <span [innerHTML]="columnName(row, column)"></span>
+                <span
+                  class="tooltip-anchor"
+                  [innerHTML]="columnName(row, column)"
+                  matTooltip="{{ columnName(row, column) }}"
+                  matTooltipPosition="above"
+                  matTooltipPositionAtOrigin="true"
+                ></span>
               </ng-template>
             </label>
           </ng-container>
@@ -257,7 +263,13 @@
               [ngStyle]="ellipsis(column)"
               class="label-cell"
             >
-              {{ getColumnValue(row, column) }}
+              <span
+                matTooltip="{{ getColumnValue(row, column) }}"
+                matTooltipPosition="above"
+                matTooltipPositionAtOrigin="true"
+              >
+                {{ getColumnValue(row, column) }}
+              </span>
             </label>
           </ng-template>
         </ng-template>
