@@ -26,7 +26,7 @@ export class FormatNumberPipe implements PipeTransform {
   transform(
     value: string | number | null | undefined,
   ): string | number | null | undefined {
-    if (value == null) return value;
+    if (value === null || value === undefined) return value;
 
     // use old way if not enabled
     if (!this.enabled) {
