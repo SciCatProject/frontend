@@ -246,7 +246,8 @@
                   [innerHTML]="columnName(row, column)"
                   matTooltip="{{ columnName(row, column) }}"
                   matTooltipPosition="above"
-                  matTooltipPositionAtOrigin="true"
+                  matTooltipPositionAtOrigin
+                  matTooltipShowDelay="500"
                 ></span>
               </ng-template>
             </label>
@@ -266,7 +267,8 @@
               <span
                 matTooltip="{{ getColumnValue(row, column) }}"
                 matTooltipPosition="above"
-                matTooltipPositionAtOrigin="true"
+                matTooltipPositionAtOrigin
+                matTooltipShowDelay="500"
               >
                 {{ getColumnValue(row, column) }}
               </span>
