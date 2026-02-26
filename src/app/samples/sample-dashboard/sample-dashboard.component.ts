@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -8,6 +8,8 @@ import {
   setTextFilterAction,
   prefillFiltersAction,
   fetchMetadataKeysAction,
+  addCharacteristicsFilterAction,
+  removeCharacteristicsFilterAction,
 } from "state-management/actions/samples.actions";
 import { BehaviorSubject, combineLatest, Subscription } from "rxjs";
 import { selectSampleDashboardPageViewModel } from "state-management/selectors/samples.selectors";
@@ -19,6 +21,7 @@ import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.compo
 import deepEqual from "deep-equal";
 import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
+import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AppConfigService } from "app-config.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -36,19 +39,10 @@ import {
   TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import {
-  updateConditionsConfigs,
-  updateUserSettingsAction,
-} from "state-management/actions/user.actions";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
-import {
-  addCharacteristicsFilterAction,
-  removeCharacteristicsFilterAction,
-} from "state-management/actions/samples.actions";
-import { ScientificCondition } from "state-management/models";
 
 @Component({
   selector: "sample-dashboard",
@@ -58,8 +52,6 @@ import { ScientificCondition } from "state-management/models";
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
-
-  @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -144,11 +136,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private appConfigService: AppConfigService,
     private datePipe: DatePipe,
+    public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
     private tableConfigService: TableConfigService,
-    public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -216,18 +208,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      addCharacteristicsFilterAction({ characteristic: condition }),
-    );
-  };
-
-  removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      removeCharacteristicsFilterAction({ lhs: condition.lhs }),
-    );
-  };
-
   formatTableData(samples: SampleClass[]): any {
     if (samples) {
       return samples.map((sample) => ({
@@ -253,24 +233,24 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  applyFilters() {
-    if (this.conditionFilter) {
-      this.conditionFilter.applyConditions();
-    }
-    this.store.dispatch(fetchSamplesAction());
+  openSearchParametersDialog() {
+    this.dialog
+      .open(SearchParametersDialogComponent, {
+        data: { parameterKeys: this.metadataKeys },
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const { data } = res;
+          this.store.dispatch(
+            addCharacteristicsFilterAction({ characteristic: data }),
+          );
+        }
+      });
   }
 
-  reset() {
-    this.store.dispatch(setTextFilterAction({ text: "" }));
-
-    this.vm$.pipe(take(1)).subscribe((vm) => {
-      vm.characteristicsFilter?.forEach((c) => {
-        this.store.dispatch(removeCharacteristicsFilterAction({ lhs: c.lhs }));
-      });
-    });
-    this.conditionFilter?.clearConditions();
-
-    this.store.dispatch(fetchSamplesAction());
+  removeCharacteristic(index: number) {
+    this.store.dispatch(removeCharacteristicsFilterAction({ index }));
   }
 
   getTableSort(): ITableSetting["tableSort"] {

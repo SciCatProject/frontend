@@ -90,7 +90,6 @@ import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
 import { OverlayModule } from "@angular/cdk/overlay";
-import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
 
 @NgModule({
   imports: [
@@ -159,7 +158,6 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     MatBadgeModule,
     OverlayModule,
     IngestorModule,
-    SharedConditionModule,
   ],
   declarations: [
     BatchViewComponent,

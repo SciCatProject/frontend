@@ -206,7 +206,6 @@ describe("Sample Selectors", () => {
           initialSampleState.sampleFilters.characteristics,
           initialUserState.tablesSettings,
           initialSampleState.samplesCount,
-          false, //hasAppliedFilters
         ),
       ).toEqual({
         samples: [],
@@ -222,7 +221,6 @@ describe("Sample Selectors", () => {
         characteristicsFilter: [],
         tableSettings: {},
         count: 0,
-        hasAppliedFilters: false,
       });
     });
   });

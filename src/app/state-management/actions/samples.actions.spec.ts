@@ -435,11 +435,11 @@ describe("Sample Actions", () => {
 
   describe("removeCharacteristicsFilterAction", () => {
     it("should create an action", () => {
-      const lhs = "lhsTest";
-      const action = fromActions.removeCharacteristicsFilterAction({ lhs });
+      const index = 0;
+      const action = fromActions.removeCharacteristicsFilterAction({ index });
       expect({ ...action }).toEqual({
         type: "[Sample] Remove Characteristics Filter",
-        lhs,
+        index,
       });
     });
   });

@@ -20,42 +20,51 @@
               [prefilledValue]="vm.textFilter"
               (search)="onTextSearchChange($event)"
             ></app-search-bar>
-
-            
-            <shared-condition
-              #conditionFilter
-              *ngIf="appConfig.scienceSearchEnabled"
-              [showConditions]="true"
-              [metadataKeys]="vm.metadataKeys"
-              [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
-              [showConditionToggle]="false"
-              [conditionType]="'samples'"
-              [addConditionAction]="addCondition"
-              [removeConditionAction]="removeCondition"
-            ></shared-condition>
-
-            <div class="section-container">
+            <div *ngIf="appConfig.scienceSearchEnabled">
               <button
-                [disabled]="!vm.hasAppliedFilters"
-                mat-raised-button
-                color="secondary"
-                class="samples-filters-clear-button"
-                data-cy="samples-filters-clear-button"
-                (click)="reset()"
-              >
-                <mat-icon>undo</mat-icon>
-                Clear
-              </button>
-              <button
-                mat-raised-button
+                mat-button
                 color="primary"
-                class="samples-filters-search-button"
-                data-cy="samples-filters-search-button"
-                (click)="applyFilters()"
+                (click)="openSearchParametersDialog()"
               >
-                <mat-icon>search</mat-icon>
-                Apply
+                <mat-icon>add</mat-icon> Add Characteristic
               </button>
+
+              <mat-chip-listbox
+                class="characteristic-chips"
+                aria-orientation="vertical"
+              >
+                <mat-chip-option
+                  *ngFor="
+                    let characteristic of vm.characteristicsFilter;
+                    index as i
+                  "
+                >
+                  {{ characteristic.lhs }}
+                  <ng-container [ngSwitch]="characteristic.relation">
+                    <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
+                      &nbsp;=&nbsp;
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
+                      &nbsp;=&nbsp;
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'LESS_THAN'">
+                      &nbsp;&lt;&nbsp;
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'GREATER_THAN'">
+                      &nbsp;&gt;&nbsp;
+                    </ng-container>
+                  </ng-container>
+                  {{
+                    characteristic.relation === "EQUAL_TO_STRING"
+                      ? '"' + characteristic.rhs + '"'
+                      : characteristic.rhs
+                  }}
+                  {{ characteristic.unit | prettyUnit }}
+                  <mat-icon matChipRemove (click)="removeCharacteristic(i)">
+                    cancel
+                  </mat-icon>
+                </mat-chip-option>
+              </mat-chip-listbox>
             </div>
           </mat-card-content>
         </mat-card>

@@ -164,11 +164,10 @@ const reducer = createReducer(
 
   on(
     fromActions.removeCharacteristicsFilterAction,
-    (state, { lhs }): SampleState => {
+    (state, { index }): SampleState => {
       const currentFilters = state.sampleFilters;
-      const characteristics = currentFilters.characteristics.filter(
-        (c) => c.lhs !== lhs,
-      );
+      const characteristics = [...currentFilters.characteristics];
+      characteristics.splice(index, 1);
       const sampleFilters = { ...currentFilters, characteristics };
       return { ...state, sampleFilters };
     },

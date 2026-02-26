@@ -24,7 +24,6 @@ export interface FilterConfig {
 export interface ConditionConfig {
   condition: ScientificCondition;
   enabled: boolean;
-  conditionType?: "datasets" | "samples";
 }
 
 // NOTE It IS ok to make up a state of other sub states
