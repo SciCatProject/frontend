@@ -66,20 +66,20 @@ describe("FormatNumberPipe", () => {
       expect(formatted).toEqual(String(nbr));
     });
 
-    it("returns 'null' when number is null", () => {
+    it("returns null when number is null", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
       const nbr = null;
       const formatted = pipe.transform(nbr);
-      expect(formatted).toEqual("null");
+      expect(formatted).toBeNull();
     });
 
-    it("returns 'undefined' when number is undefined", () => {
+    it("returns undefined when number is undefined", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
       const nbr = undefined;
       const formatted = pipe.transform(nbr);
-      expect(formatted).toEqual("undefined");
+      expect(formatted).toBeUndefined();
     });
 
     it("returns string when number is a string", () => {
