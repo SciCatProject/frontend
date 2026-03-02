@@ -118,13 +118,19 @@ export class SharedConditionComponent implements OnDestroy {
     this.subscriptions.push(
       this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
         const needsUpdate = allConditions.some((c) => !c.conditionType);
-
-        if (needsUpdate) {
+        if (needsUpdate && allConditions.length > 0) {
           const updatedConditions = allConditions.map((c) => ({
             ...c,
             conditionType: c.conditionType || this.conditionType,
           }));
           this.updateStore(updatedConditions);
+
+          updatedConditions
+            .filter((c) => c.conditionType === this.conditionType)
+            .forEach((config) => {
+              this.applyUnitsOptions(config.condition);
+            });
+          return;
         }
 
         const myConditions = allConditions.filter(

@@ -481,7 +481,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe.only("Pre-configured conditions test", () => {
+  describe("Pre-configured conditions test", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
@@ -538,6 +538,9 @@ describe("Datasets general", () => {
         });
 
       cy.visit("/datasets");
+
+      cy.finishedLoading();
+
       cy.get(".condition-panel").first().click();
       cy.get('[data-cy="remove-condition-button"]').click();
     });
