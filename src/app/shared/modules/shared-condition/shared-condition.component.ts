@@ -124,6 +124,12 @@ export class SharedConditionComponent implements OnDestroy {
             conditionType: c.conditionType || this.conditionType,
           }));
           this.updateStore(updatedConditions);
+
+          updatedConditions
+            .filter((c) => c.conditionType === this.conditionType)
+            .forEach((config) => {
+              this.applyUnitsOptions(config.condition);
+            });
           return;
         }
 
