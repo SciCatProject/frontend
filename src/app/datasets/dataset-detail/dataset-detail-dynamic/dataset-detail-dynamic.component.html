@@ -225,8 +225,9 @@
               {{ section.label | translate: localization }}
             </mat-card-header>
             <mat-card-content>
-              <div class="attachments-wrapper">
-                <ng-container *ngIf="attachments$ | async as attachments">
+              <ng-container *ngIf="attachments$ | async as attachments">
+                <!-- TOP: thumbnails -->
+                <div class="attachments-wrapper">
                   <ng-container
                     *ngIf="attachments.length > 0; else noAttachments"
                   >
@@ -251,11 +252,24 @@
                       />
                     </ng-container>
                   </ng-container>
-                </ng-container>
-                <ng-template #noAttachments>
-                  <p class="no-attachments-message">No attachments found</p>
-                </ng-template>
-              </div>
+                </div>
+
+                <!-- BOTTOM: footer -->
+                <div class="attachments-footer">
+                  <button
+                    mat-icon-button
+                    (click)="navigateToAttachmentsTab()"
+                    matTooltip="Upload or manage attachments"
+                    matTooltipPosition="above"
+                  >
+                    <mat-icon>add_photo_alternate</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+
+              <ng-template #noAttachments>
+                <p class="no-attachments-message">No attachments found</p>
+              </ng-template>
             </mat-card-content>
           </mat-card>
         </div>

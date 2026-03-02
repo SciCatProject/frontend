@@ -9,6 +9,8 @@ import { StoreModule } from "@ngrx/store";
 import { TranslateService } from "@ngx-translate/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { LinkyPipe } from "ngx-linky";
+import { ActivatedRoute } from "@angular/router";
+import { MockActivatedRoute } from "shared/MockStubs";
 
 describe("DatasetDetailWrapperComponent", () => {
   let component: DatasetDetailWrapperComponent;
@@ -35,6 +37,7 @@ describe("DatasetDetailWrapperComponent", () => {
       providers: [
         { provide: AppConfigService, useValue: appConfigServiceSpy },
         { provide: TranslateService, useValue: { instant: (k: string) => k } },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
