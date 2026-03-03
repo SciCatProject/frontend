@@ -1,4 +1,3 @@
-
 import { TableColumn } from "state-management/models";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import { get as lodashGet } from "lodash-es";
@@ -7,28 +6,29 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { DatePipe } from "@angular/common";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
-import { DatasetClass, Instrument, OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  DatasetClass,
+  Instrument,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 
-
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DatasetsListService implements OnDestroy {
   private subscriptions: Subscription[] = [];
   instruments$ = this.store.select(selectInstruments);
   instruments: Instrument[] = [];
   instrumentMap: Map<string, Instrument> = new Map();
-  
 
   constructor(
-    private store: Store,    
+    private store: Store,
     private datePipe: DatePipe,
     private fileSizePipe: FileSizePipe,
     private jsonHeadPipe: JsonHeadPipe,
     private formatNumberPipe: FormatNumberPipe,
   ) {
-
     this.subscriptions.push(
       this.instruments$.subscribe((instruments) => {
         this.instruments = instruments;
@@ -37,10 +37,6 @@ export class DatasetsListService implements OnDestroy {
         );
       }),
     );
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
@@ -52,6 +48,10 @@ export class DatasetsListService implements OnDestroy {
       return row.instrumentId === "" ? "-" : row.instrumentId;
     }
     return "-";
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   // conditional to asses dataset status and assign correct icon ArchViewMode.work_in_progress
@@ -111,7 +111,7 @@ export class DatasetsListService implements OnDestroy {
     }
     return false;
   }
-  
+
   convertSavedDatasetColumns(columns: TableColumn[]): TableField<any>[] {
     return columns
       .filter((column) => column.name !== "select")
