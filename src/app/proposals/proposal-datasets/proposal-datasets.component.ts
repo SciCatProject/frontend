@@ -5,6 +5,7 @@ import { Sort } from "@angular/material/sort";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { AppConfigService } from "app-config.service";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
@@ -21,7 +22,9 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TableColumn } from "state-management/models";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { DatasetsListService } from "shared/services/datasets-list.service";
 import { TableConfigService } from "shared/services/table-config.service";
 import { fetchProposalDatasetsAction } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
@@ -36,47 +39,6 @@ export interface TableData {
   location: string;
 }
 
-const tableDefaultSettingsConfig: ITableSetting = {
-  visibleActionMenu: actionMenu,
-  saveSettingMode: "none",
-  settingList: [
-    {
-      visibleActionMenu: actionMenu,
-      saveSettingMode: "none",
-      isDefaultSetting: true,
-      isCurrentSetting: true,
-      columnSetting: [
-        {
-          name: "name",
-          header: "Name",
-          icon: "portrait",
-        },
-        {
-          name: "sourceFolder",
-          icon: "explore",
-          header: "Source folder",
-        },
-        {
-          name: "size",
-          icon: "save",
-        },
-        {
-          name: "creationTime",
-          header: "Creation time",
-          icon: "calendar_today",
-        },
-        {
-          name: "owner",
-          icon: "face",
-        },
-        { name: "location", icon: "explore" },
-      ],
-    },
-  ],
-  rowStyle: {
-    "border-bottom": "1px solid #d2d2d2",
-  },
-};
 
 @Component({
   selector: "app-proposal-datasets",
@@ -89,6 +51,8 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
   @Input() proposalId: string;
+
+  appConfig = this.appConfigService.getConfig();
 
   tableName = "proposalDatasetsTable";
 
@@ -128,7 +92,51 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   showGlobalTextSearch = false;
 
+  tableDefaultSettingsConfig: ITableSetting = {
+    visibleActionMenu: actionMenu,
+    saveSettingMode: "none",
+    settingList: [
+      {
+        visibleActionMenu: actionMenu,
+        saveSettingMode: "none",
+        isDefaultSetting: true,
+        isCurrentSetting: true,
+        columnSetting: [],
+      //   columnSetting: [
+      //     {
+      //       name: "name",
+      //       header: "Name",
+      //       icon: "portrait",
+      //     },
+      //     {
+      //       name: "sourceFolder",
+      //       icon: "explore",
+      //       header: "Source folder",
+      //     },
+      //     {
+      //       name: "size",
+      //       icon: "save",
+      //     },
+      //     {
+      //       name: "creationTime",
+      //       header: "Creation time",
+      //       icon: "calendar_today",
+      //     },
+      //     {
+      //       name: "owner",
+      //       icon: "face",
+      //     },
+      //     { name: "location", icon: "explore" },
+      //   ],
+      },
+    ],
+    rowStyle: {
+      "border-bottom": "1px solid #d2d2d2",
+    },
+  };
+
   constructor(
+    public appConfigService: AppConfigService,
     private datePipe: DatePipe,
     private filesizePipe: FileSizePipe,
     private slicePipe: SlicePipe,
@@ -136,6 +144,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store,
     private tableConfigService: TableConfigService,
+    private datasetsListService: DatasetsListService,    
   ) {}
 
   ngOnInit(): void {
@@ -151,10 +160,19 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       this.dataSource.next(this.formatTableData(data.datasets));
       this.pending = false;
 
+      const defaultConfigColumns =
+        this.appConfig?.defaultDatasetsListSettings?.columns;      
+
+      this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+        this.datasetsListService.convertSavedDatasetColumns(
+          defaultConfigColumns as TableColumn[],
+        );
+
+
       const tableSettingsConfig =
         this.tableConfigService.getTableSettingsConfig(
           this.tableName,
-          tableDefaultSettingsConfig,
+          this.tableDefaultSettingsConfig,
         );
       const paginationConfig = {
         pageSizeOptions: [5, 10, 25, 100],
