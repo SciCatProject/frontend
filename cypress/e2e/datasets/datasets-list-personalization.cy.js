@@ -9,15 +9,42 @@ describe("1000 - Datasets list personalization", () => {
     cy.removeDatasets();
   });
 
-  it("1010 - should be able to list datasets with default columns", () => {
+  it("1010 - should be able to visit main datasets list with default columns", () => {
     const username = Cypress.env("username");
     const password = Cypress.env("password");
 
     cy.createDataset({ type: "raw" });
+    cy.createProposal();
 
     cy.visit("/datasets");
 
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+    cy.finishedLoading();
+
+    cy.get('mat-table')
+      .find('mat-header-row.header')
+      .find('mat-header-cell')
+      .not('.cdk-column-row-checkbox')
+      .not('.cdk-column-table-menu')
+      .find('.mat-sort-header-content')
+      .each(($el, index) => {
+        cy.wrap($el)
+          .invoke('text')
+          .invoke('trim')
+          .should('eq', defaultDatasetsColumnsList[index]);
+      });
+  });
+
+  it("1015 - should be able to visit proposals datasets list with default columns", () => {
+
+    cy.visit("/proposals/20170266");
+
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+    cy.finishedLoading();
+
+    cy.get(".mat-mdc-tab").contains("Datasets").click();
 
     cy.finishedLoading();
 
@@ -208,6 +235,32 @@ describe("1000 - Datasets list personalization", () => {
       });
   });
 
+  it("1045 - should be able to visit proposals datasets list with personalized columns", () => {
+
+    cy.visit("/proposals/20170266");
+
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+    cy.finishedLoading();
+
+    cy.get(".mat-mdc-tab").contains("Datasets").click();
+
+    cy.finishedLoading();
+
+    cy.get('mat-table')
+      .find('mat-header-row.header')
+      .find('mat-header-cell')
+      .not('.cdk-column-row-checkbox')
+      .not('.cdk-column-table-menu')
+      .find('.mat-sort-header-content')
+      .each(($el, index) => {
+        cy.wrap($el)
+          .invoke('text')
+          .invoke('trim')
+          .should('eq', personalizedDatasetsColumnsList[index]);
+      });
+  });
+
   it("1050 - should be able to restore default columns settings", () => {
     //const username = Cypress.env("username");
     //const password = Cypress.env("password");
@@ -300,4 +353,30 @@ describe("1000 - Datasets list personalization", () => {
       });
   });
 
+  it("1065 - should be able to visit proposals datasets list with default columns", () => {
+
+    cy.visit("/proposals/20170266");
+
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+    cy.finishedLoading();
+
+    cy.get(".mat-mdc-tab").contains("Datasets").click();
+
+    cy.finishedLoading();
+
+    cy.get('mat-table')
+      .find('mat-header-row.header')
+      .find('mat-header-cell')
+      .not('.cdk-column-row-checkbox')
+      .not('.cdk-column-table-menu')
+      .find('.mat-sort-header-content')
+      .each(($el, index) => {
+        cy.wrap($el)
+          .invoke('text')
+          .invoke('trim')
+          .should('eq', defaultDatasetsColumnsList[index]);
+      });
+  });
+  
 });
