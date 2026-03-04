@@ -782,4 +782,59 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
+
+  describe("Sorting datasets by a column from config", () => {
+    beforeEach(() => {
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+      cy.createDataset({
+        type: "raw",
+        datasetName: "Cypress Dataset 1",
+        startTime: "2026-03-04T15:00:00.000Z",
+      });
+      cy.createDataset({
+        type: "raw",
+        datasetName: "Cypress Dataset 2",
+        startTime: "2026-03-03T15:00:00.000Z",
+      });
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            columns: [
+              {
+                name: "select",
+                type: "standard",
+                width: 120,
+                enabled: true,
+              },
+              {
+                name: "datasetName",
+                type: "standard",
+                width: 200,
+                enabled: true,
+              },
+              {
+                name: "startTime",
+                type: "date",
+                width: 200,
+                enabled: true,
+                sort: "desc",
+              },
+            ],
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+        cy.visit("/datasets");
+        cy.wait("@getConfig");
+        cy.finishedLoading();
+      });
+    });
+
+    it("should sort datasets by start time in desc order from config", () => {
+      cy.finishedLoading();
+      cy.get("mat-table mat-row").first().should("contain", "2026-03-04");
+    });
+  });
 });
