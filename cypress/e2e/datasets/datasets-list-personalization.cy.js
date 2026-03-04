@@ -40,7 +40,7 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.visit("/proposals/20170266");
 
-    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
 
@@ -239,7 +239,7 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.visit("/proposals/20170266");
 
-    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
 
@@ -357,7 +357,7 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.visit("/proposals/20170266");
 
-    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
 
