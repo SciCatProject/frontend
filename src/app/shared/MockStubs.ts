@@ -156,6 +156,10 @@ export class MockActivatedRoute {
   children = [];
 }
 
+export class MockDatasetsListService {
+  destroy() {};
+}
+
 export class MockRouter {
   events = new Observable((observer) => {
     observer.next(null);
