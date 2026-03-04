@@ -21,6 +21,7 @@ export interface TableColumn {
   format?: string;
   tooltip?: string;
   width?: number;
+  sort?: "asc" | "desc";
 }
 
 export interface LabelsLocalization {
