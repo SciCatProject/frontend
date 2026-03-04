@@ -29,6 +29,7 @@ import {
   mockAttachment as attachment,
   mockDataset,
 } from "shared/MockStubs";
+import { AppConfigService } from "app-config.service";
 
 const derivedData = createMock<OutputDatasetObsoleteDto>({
   investigator: "",
@@ -56,6 +57,8 @@ describe("DatasetEffects", () => {
   let actions: TestObservable;
   let effects: DatasetEffects;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
+
+  const getConfig = () => ({});
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -96,6 +99,7 @@ describe("DatasetEffects", () => {
             "datasetsControllerCountV3",
           ]),
         },
+        { provide: AppConfigService, useValue: { getConfig } },
       ],
     });
 
