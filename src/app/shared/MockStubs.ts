@@ -157,7 +157,7 @@ export class MockActivatedRoute {
 }
 
 export class MockDatasetsListService {
-  destroy() {};
+  destroy() {}
 }
 
 export class MockRouter {
