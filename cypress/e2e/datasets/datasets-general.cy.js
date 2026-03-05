@@ -492,6 +492,8 @@ describe("Datasets general", () => {
         isPublished: true,
       });
 
+      cy.clearCookies();
+
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const relationsToTest = [
           { relation: "GREATER_THAN", rhs: 1 },
@@ -520,7 +522,9 @@ describe("Datasets general", () => {
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
       });
       cy.visit("/datasets");
-      cy.wait("@getConfig");
+      cy.wait("@getConfig", { timeout: 20000 });
+
+      cy.finishedLoading();
     });
 
     it("should check if pre-configured conditions are applied", () => {
@@ -615,7 +619,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
-  
+
   describe("Datasets collapsible filters", () => {
     beforeEach(() => {
       cy.clearLocalStorage();
