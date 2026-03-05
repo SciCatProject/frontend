@@ -171,7 +171,7 @@ describe("SharedFilterComponent", () => {
       label: `Label${i}`,
       count: i + 1,
     }));
-    component.checkboxDisplaylimit = 1;
+    component.currentCheckboxDisplayLimit = 1;
     component.filterForm.get("textField")!.setValue("");
     const visibleBefore = component.visibleFacetCounts;
     expect(visibleBefore.length).toBe(1);
@@ -179,7 +179,7 @@ describe("SharedFilterComponent", () => {
 
     component.onShowMore();
     const visibleAfter = component.visibleFacetCounts;
-    expect(component.checkboxDisplaylimit).toBe(11);
+    expect(component.currentCheckboxDisplayLimit).toBe(11);
     expect(visibleAfter.length).toBe(3);
     expect(component.hasMore).toBeFalse();
   });
@@ -198,11 +198,12 @@ describe("SharedFilterComponent", () => {
   });
 
   it("ngOnInit should subscribe to textField valueChanges and reset checkboxDisplaylimit on change", () => {
-    component.checkboxDisplaylimit = 50;
+    component.currentCheckboxDisplayLimit = 50;
+
     component.ngOnInit();
     // change the textField value to trigger subscription
     component.filterForm.get("textField")!.setValue("new value");
-    expect(component.checkboxDisplaylimit).toBe(10);
+    expect(component.currentCheckboxDisplayLimit).toBe(10);
   });
 
   it("onSelectionChange should emit selectionChange", () => {
@@ -224,25 +225,25 @@ describe("SharedFilterComponent", () => {
     expect(component.trackById(0, item)).toBe("myid");
   });
 
-  it("should set showCheckboxSearch = true when checkboxFacetCounts.length > checkboxDisplaylimit", () => {
+  it("should set showCheckboxSearch = true when checkboxFacetCounts.length > currentCheckboxDisplayLimit", () => {
     component.checkboxFacetCounts = Array.from({ length: 12 }, (_, i) => ({
       _id: `id${i}`,
       label: `Label${i}`,
       count: i,
     }));
-    component.checkboxDisplaylimit = 10;
+    component.currentCheckboxDisplayLimit = 10;
     // pass empty changes to trigger the length check branch
     component.ngOnChanges({} as any);
     expect(component.showCheckboxSearch).toBeTrue();
   });
 
-  it("should set showCheckboxSearch = false when checkboxFacetCounts.length <= checkboxDisplaylimit", () => {
+  it("should set showCheckboxSearch = false when checkboxFacetCounts.length <= currentCheckboxDisplayLimit", () => {
     component.checkboxFacetCounts = Array.from({ length: 5 }, (_, i) => ({
       _id: `id${i}`,
       label: `Label${i}`,
       count: i,
     }));
-    component.checkboxDisplaylimit = 10;
+    component.currentCheckboxDisplayLimit = 10;
     component.ngOnChanges({} as any);
     expect(component.showCheckboxSearch).toBeFalse();
   });
@@ -273,7 +274,7 @@ describe("SharedFilterComponent", () => {
       { _id: "b", label: "B", count: 3 },
       { _id: "c", label: "C", count: 2 },
     ];
-    component.checkboxDisplaylimit = 2;
+    component.currentCheckboxDisplayLimit = 2;
     component.filterForm.get("textField")!.setValue("");
     const visible = component.visibleFacetCounts;
     expect(visible.length).toBe(2);

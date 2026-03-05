@@ -367,7 +367,6 @@ describe("Datasets general", () => {
 
   describe("Units options in condition panel units dropdown", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
         datasetName: testData.rawDataset.datasetName,
@@ -441,7 +440,6 @@ describe("Datasets general", () => {
   describe("Pre-configured filters test", () => {
     beforeEach(() => {
       cy.clearCookies();
-      cy.clearLocalStorage();
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
@@ -483,7 +481,6 @@ describe("Datasets general", () => {
 
   describe("Pre-configured conditions test", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
         dataFileSize: "small",
@@ -492,6 +489,8 @@ describe("Datasets general", () => {
         },
         isPublished: true,
       });
+
+      cy.clearCookies();
 
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
@@ -514,8 +513,10 @@ describe("Datasets general", () => {
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
       });
+
       cy.visit("/datasets");
       cy.wait("@getConfig", { timeout: 20000 });
+
       cy.finishedLoading();
     });
 
@@ -566,7 +567,6 @@ describe("Datasets general", () => {
 
   describe("Scientific notation in condition panel test", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
         dataFileSize: "small",
@@ -665,10 +665,6 @@ describe("Datasets general", () => {
   });
 
   describe("Conditions in multiple pages", () => {
-    beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
-    });
-
     it("should preverse dataset conditions when clearing sample conditions", () => {
       cy.createDataset({
         type: "raw",
@@ -727,7 +723,6 @@ describe("Datasets general", () => {
 
   describe("Condition value persistence after navigation", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
         dataFileSize: "small",
