@@ -35,15 +35,42 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalsAction),
       switchMap(({ skip, limit, search, sortColumn, sortDirection }) => {
+        const config = this.appConfigService.getConfig();
+
+        const defaultConfigColumns =
+          config?.defaultProposalsListSettings?.columns;
+
+        let defaultColumn = "createdAt";
+        let defaultDirection = "desc";
+
+        if (defaultConfigColumns) {
+          const sortCol = defaultConfigColumns.find((col) => col.sort);
+
+          // The split has been added to extract first field name if column has multiple names (e.g "pi_lastname, pi_firstname")
+          if (sortCol) {
+            defaultColumn = sortCol.name
+              ? sortCol.name.includes(",")
+                ? sortCol.name.split(",")[0]
+                : sortCol.name
+              : defaultColumn;
+            defaultDirection = sortCol.sort;
+          }
+        }
         const limitsParam = {
           skip: skip,
           limit: limit,
           order: undefined,
         };
 
-        if (sortColumn && sortDirection) {
-          limitsParam.order = `${sortColumn}:${sortDirection}`;
-        }
+        const column = sortColumn
+          ? sortColumn.includes(",")
+            ? sortColumn.split(",")[0]
+            : sortColumn
+          : defaultColumn;
+
+        const direction = sortDirection || defaultDirection;
+
+        limitsParam.order = `${column}:${direction}`;
 
         const queryParam = search || {};
 

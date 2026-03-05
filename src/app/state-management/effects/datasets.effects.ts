@@ -35,6 +35,7 @@ import {
   loadingCompleteAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
+import { AppConfigService } from "app-config.service";
 
 @Injectable()
 export class DatasetEffects {
@@ -54,7 +55,28 @@ export class DatasetEffects {
         fromActions.setArchiveViewModeAction,
       ),
       concatLatestFrom(() => this.fullqueryParams$),
-      map(([, params]) => params),
+      map(([, params]) => {
+        const config = this.appConfigService.getConfig();
+
+        const defaultConfigColumns =
+          config?.defaultDatasetsListSettings?.columns;
+        let defaultColumn = "createdAt";
+        let defaultDirection = "desc";
+
+        if (defaultConfigColumns) {
+          const sortCol = defaultConfigColumns.find((col) => col.sort);
+
+          if (sortCol) {
+            defaultColumn = sortCol.name;
+            defaultDirection = sortCol.sort;
+          }
+        }
+
+        if (!params.limits.order) {
+          params.limits.order = `${defaultColumn}:${defaultDirection}`;
+        }
+        return params;
+      }),
       mergeMap(({ query, limits }) =>
         this.datasetsService
           .datasetsControllerFullqueryV3(
@@ -488,6 +510,7 @@ export class DatasetEffects {
     private actions$: Actions,
     private datasetsService: DatasetsService,
     private store: Store,
+    private appConfigService: AppConfigService,
   ) {}
 
   private storeBatch(batch: OutputDatasetObsoleteDto[], userId: string) {
