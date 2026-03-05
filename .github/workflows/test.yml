@@ -106,15 +106,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      # These settings optimize memory and file handling for Elasticsearch,
-      # preventing common issues related to system limits running on github workflow
-      - name: Configure sysctl limits
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-
       - name: Run docker-compose
         env:
           DOI_USERNAME: ${{ secrets.DOI_TEST_USERNAME }}
@@ -146,7 +137,6 @@ jobs:
       - name: docker logs
         if: ${{ failure() }}
         run: |
-          docker compose logs es01
           docker compose logs backend
           docker compose logs frontend
 
