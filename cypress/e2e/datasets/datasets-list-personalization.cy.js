@@ -1,4 +1,7 @@
-import { testData, defaultDatasetsColumnsList, personalizedDatasetsColumnsList } from "../../fixtures/testData";
+import {
+  defaultDatasetsColumnsList,
+  personalizedDatasetsColumnsList,
+} from "../../fixtures/testData";
 
 describe("1000 - Datasets list personalization", () => {
   beforeEach(() => {
@@ -10,9 +13,6 @@ describe("1000 - Datasets list personalization", () => {
   });
 
   it("1010 - should be able to visit main datasets list with default columns", () => {
-    const username = Cypress.env("username");
-    const password = Cypress.env("password");
-
     cy.createDataset({ type: "raw" });
     cy.createProposal();
 
@@ -22,22 +22,21 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.finishedLoading();
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get(".dataset-table mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', defaultDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", defaultDatasetsColumnsList[index]);
       });
   });
 
   it("1015 - should be able to visit proposals datasets list with default columns", () => {
-
     cy.visit("/proposals/20170266");
 
     cy.finishedLoading();
@@ -48,136 +47,117 @@ describe("1000 - Datasets list personalization", () => {
     cy.finishedLoading();
     cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get(".proposal-dataset-table mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', defaultDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", defaultDatasetsColumnsList[index]);
       });
   });
 
   it("1020 - should be able to personalize the list datasets with selected columns", () => {
-    //const username = Cypress.env("username");
-    //const password = Cypress.env("password");
-
     cy.visit("/datasets");
 
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
 
-    cy.contains('mat-icon', 'more_vert')
-      .closest('button')
-      .click()
+    cy.contains("mat-icon", "more_vert").closest("button").click();
 
-    cy.contains('button.mat-mdc-menu-item', 'Column setting')
-      .click()
+    cy.contains("button.mat-mdc-menu-item", "Column setting").click();
 
     // Open column settings menu (already done earlier)
     // Enable columns
-    cy.contains('label', 'Start Time')
-      .closest('mat-checkbox')
-      .find('input')
-      .check({ force: true })
+    cy.contains("label", "Start Time")
+      .closest("mat-checkbox")
+      .find("input")
+      .check({ force: true });
 
-    cy.contains('label', 'End Time')
-      .closest('mat-checkbox')
-      .find('input')
-      .check({ force: true })
+    cy.contains("label", "End Time")
+      .closest("mat-checkbox")
+      .find("input")
+      .check({ force: true });
 
     // Disable Image column
-    cy.contains('label', 'Image')
-      .closest('mat-checkbox')
-      .find('input')
-      .uncheck({ force: true })
+    cy.contains("label", "Image")
+      .closest("mat-checkbox")
+      .find("input")
+      .uncheck({ force: true });
 
     // Apply
-    cy.contains('mat-icon', 'done')
-      .closest('button')
-      .click()
+    cy.contains("mat-icon", "done").closest("button").click();
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get("mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', personalizedDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", personalizedDatasetsColumnsList[index]);
       });
   });
 
   it("1030 - should be able to save the personalized columns settings", () => {
-    //const username = Cypress.env("username");
-    //const password = Cypress.env("password");
-
     cy.visit("/datasets");
 
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
 
-    cy.contains('mat-icon', 'more_vert')
-      .closest('button')
-      .click()
+    cy.contains("mat-icon", "more_vert").closest("button").click();
 
-    cy.contains('button.mat-mdc-menu-item', 'Column setting')
-      .click()
+    cy.contains("button.mat-mdc-menu-item", "Column setting").click();
 
     // Open column settings menu (already done earlier)
     // Enable columns
-    cy.contains('label', 'Start Time')
-      .closest('mat-checkbox')
-      .find('input')
-      .check({ force: true })
+    cy.contains("label", "Start Time")
+      .closest("mat-checkbox")
+      .find("input")
+      .check({ force: true });
 
-    cy.contains('label', 'End Time')
-      .closest('mat-checkbox')
-      .find('input')
-      .check({ force: true })
+    cy.contains("label", "End Time")
+      .closest("mat-checkbox")
+      .find("input")
+      .check({ force: true });
 
     // Disable Image column
-    cy.contains('label', 'Image')
-      .closest('mat-checkbox')
-      .find('input')
-      .uncheck({ force: true })
+    cy.contains("label", "Image")
+      .closest("mat-checkbox")
+      .find("input")
+      .uncheck({ force: true });
 
     // Apply
-    cy.contains('mat-icon', 'done')
-      .closest('button')
-      .click()
+    cy.contains("mat-icon", "done").closest("button").click();
 
     cy.finishedLoading();
 
-    cy.contains('mat-icon', 'more_vert')
-      .closest('button')
-      .click()
+    cy.contains("mat-icon", "more_vert").closest("button").click();
 
-    cy.contains('button.mat-mdc-menu-item', 'Save table setting')
-      .click()
+    cy.contains("button.mat-mdc-menu-item", "Save table setting").click();
 
     cy.visit("/datasets");
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get("mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', personalizedDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", personalizedDatasetsColumnsList[index]);
       });
   });
 
@@ -190,7 +170,7 @@ describe("1000 - Datasets list personalization", () => {
     cy.finishedLoading();
 
     // log user out
-  
+
     cy.get(".user-button").should("contain.text", username).click();
 
     cy.get("[data-cy=logout-button]").click();
@@ -221,23 +201,22 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.finishedLoading();
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get("mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', personalizedDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", personalizedDatasetsColumnsList[index]);
       });
   });
 
   it("1045 - should be able to visit proposals datasets list with personalized columns", () => {
-
-      cy.visit("/proposals/20170266");
+    cy.visit("/proposals/20170266");
 
     cy.finishedLoading();
     cy.get("proposal-detail .general-header").should("exist");
@@ -247,17 +226,17 @@ describe("1000 - Datasets list personalization", () => {
     cy.finishedLoading();
     cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get(".proposal-dataset-table mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', personalizedDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", personalizedDatasetsColumnsList[index]);
       });
   });
 
@@ -271,26 +250,23 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.finishedLoading();
 
-    cy.contains('mat-icon', 'more_vert')
-      .closest('button')
-      .click()
+    cy.contains("mat-icon", "more_vert").closest("button").click();
 
-    cy.contains('button.mat-mdc-menu-item', 'Default setting')
-      .click()
+    cy.contains("button.mat-mdc-menu-item", "Default setting").click();
 
     cy.finishedLoading();
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get("mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', defaultDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", defaultDatasetsColumnsList[index]);
       });
   });
 
@@ -332,29 +308,25 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.finishedLoading();
 
-    cy.contains('mat-icon', 'more_vert')
-      .closest('button')
-      .click()
+    cy.contains("mat-icon", "more_vert").closest("button").click();
 
-    cy.contains('button.mat-mdc-menu-item', 'Save table setting')
-      .click()
+    cy.contains("button.mat-mdc-menu-item", "Save table setting").click();
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get("mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', defaultDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", defaultDatasetsColumnsList[index]);
       });
   });
 
   it("1065 - should be able to visit proposals datasets list with default columns", () => {
-
     cy.visit("/proposals/20170266");
 
     cy.finishedLoading();
@@ -365,18 +337,17 @@ describe("1000 - Datasets list personalization", () => {
     cy.finishedLoading();
     cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
-    cy.get('mat-table')
-      .find('mat-header-row.header')
-      .find('mat-header-cell')
-      .not('.cdk-column-row-checkbox')
-      .not('.cdk-column-table-menu')
-      .find('.mat-sort-header-content')
+    cy.get(".proposal-dataset-table mat-table")
+      .find("mat-header-row.header")
+      .find("mat-header-cell")
+      .not(".cdk-column-row-checkbox")
+      .not(".cdk-column-table-menu")
+      .find(".mat-sort-header-content")
       .each(($el, index) => {
         cy.wrap($el)
-          .invoke('text')
-          .invoke('trim')
-          .should('eq', defaultDatasetsColumnsList[index]);
+          .invoke("text")
+          .invoke("trim")
+          .should("eq", defaultDatasetsColumnsList[index]);
       });
   });
-  
 });
