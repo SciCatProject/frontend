@@ -39,8 +39,6 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
-      es01:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/v3/health"]
       interval: 30s
