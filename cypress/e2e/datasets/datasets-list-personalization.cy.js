@@ -40,13 +40,13 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.visit("/proposals/20170266");
 
-    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
-
     cy.finishedLoading();
+    cy.get("proposal-detail .general-header").should("exist");
 
     cy.get(".mat-mdc-tab").contains("Datasets").click();
 
     cy.finishedLoading();
+    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
     cy.get('mat-table')
       .find('mat-header-row.header')
@@ -237,15 +237,15 @@ describe("1000 - Datasets list personalization", () => {
 
   it("1045 - should be able to visit proposals datasets list with personalized columns", () => {
 
-    cy.visit("/proposals/20170266");
-
-    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
+      cy.visit("/proposals/20170266");
 
     cy.finishedLoading();
+    cy.get("proposal-detail .general-header").should("exist");
 
     cy.get(".mat-mdc-tab").contains("Datasets").click();
 
     cy.finishedLoading();
+    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
     cy.get('mat-table')
       .find('mat-header-row.header')
@@ -357,13 +357,13 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.visit("/proposals/20170266");
 
-    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
-
     cy.finishedLoading();
+    cy.get("proposal-detail .general-header").should("exist");
 
     cy.get(".mat-mdc-tab").contains("Datasets").click();
 
     cy.finishedLoading();
+    cy.get(".proposal-dataset-table mat-table mat-header-row").should("exist");
 
     cy.get('mat-table')
       .find('mat-header-row.header')
