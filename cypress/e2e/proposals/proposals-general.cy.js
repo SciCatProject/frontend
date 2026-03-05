@@ -566,6 +566,20 @@ describe("Proposals general", () => {
         expect(actualExport).to.contain(newProposal.proposalId);
       });
     });
+
+    it("should persist search text in input field after page reload", () => {
+      cy.visit("/proposals");
+
+      cy.get('[data-cy="text-search"]').type("test search text");
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.reload();
+
+      cy.get('[data-cy="text-search"]').should(
+        "have.value",
+        "test search text",
+      );
+    });
   });
 
   describe("Proposals filter end date auto-set", () => {

@@ -19,7 +19,6 @@ import { TableSelectionMode } from "shared/modules/dynamic-material-table/models
 import { DatePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
-import { DateTime } from "luxon";
 import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TablePaginationMode } from "shared/modules/dynamic-material-table/models/table-pagination.model";
@@ -86,7 +85,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           {
             name: "human_name",
             header: "Name",
-            width: 250,
+            width: 300,
             hoverContent: true,
             hoverOnCell: true,
             customRender: (column, row) => {
@@ -106,8 +105,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           {
             name: "value",
             header: "Value",
+            width: 250,
             customRender: (column, row) => {
-              if (row.type === "date" || this.isDate(row)) {
+              if (row.type === "date") {
                 return this.datePipe.transform(row[column.name]);
               }
 
@@ -123,7 +123,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               return row[column.name];
             },
             toExport: (column, row) => {
-              if (row.type === "date" || this.isDate(row)) {
+              if (row.type === "date") {
                 return this.datePipe.transform(row[column.name]);
               }
 
@@ -144,7 +144,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             contentIconLink: (column, row) => {
               return row.ontology_reference;
             },
-            width: 500,
           },
           {
             name: "unit",
@@ -236,24 +235,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       metadataArray.push(metadataObject);
     });
     return metadataArray;
-  }
-
-  isDate(scientificMetadata: ScientificMetadataTableData): boolean {
-    // NOTE: If the type is date, we expect the value to be in ISO format.
-    if (scientificMetadata.type === "date") {
-      return true;
-    }
-
-    const isValidDate =
-      typeof scientificMetadata.value !== "number" &&
-      new Date(scientificMetadata.value).toString() !== "Invalid Date" &&
-      DateTime.fromISO(scientificMetadata.value).isValid;
-
-    if (isValidDate) {
-      return true;
-    }
-
-    return false;
   }
 
   ngOnInit() {
