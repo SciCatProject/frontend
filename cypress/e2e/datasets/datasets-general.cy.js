@@ -493,6 +493,8 @@ describe("Datasets general", () => {
         isPublished: true,
       });
 
+      cy.clearCookies();
+
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
@@ -516,6 +518,7 @@ describe("Datasets general", () => {
       });
       cy.visit("/datasets");
       cy.wait("@getConfig", { timeout: 20000 });
+
       cy.finishedLoading();
     });
 

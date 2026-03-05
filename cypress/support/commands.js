@@ -174,11 +174,15 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
     });
   });
 });
-Cypress.Commands.add("createProposal", (proposal) => {
+Cypress.Commands.add("createProposal", (overwrites = {}) => {
   return cy.getCookie("user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
 
     cy.getToken().then((token) => {
+      const proposal = {
+        ...testData.proposal,
+        ...overwrites,
+      };
       cy.log("Proposal: " + JSON.stringify(proposal, null, 2));
       cy.log("User: " + JSON.stringify(user, null, 2));
 

@@ -55,11 +55,13 @@ export const testData = {
   },
   proposal: {
     proposalId: "20170266",
+    pi_email: "pi@uni.edu",
     email: "proposer@uni.edu",
     title: "Cypress minimal test proposal",
     abstract: "Abstract of test proposal",
     ownerGroup: "20170251-group",
     accessGroups: [],
+    type: "Default Proposal",
   },
   instrument: {
     uniqueName: "ESS1-1",
