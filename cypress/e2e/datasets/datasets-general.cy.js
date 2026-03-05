@@ -440,7 +440,6 @@ describe("Datasets general", () => {
   describe("Pre-configured filters test", () => {
     beforeEach(() => {
       cy.clearCookies();
-      cy.clearLocalStorage();
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
