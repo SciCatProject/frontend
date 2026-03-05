@@ -491,6 +491,8 @@ describe("Datasets general", () => {
         isPublished: true,
       });
 
+      cy.clearCookies();
+
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
@@ -514,16 +516,14 @@ describe("Datasets general", () => {
       });
 
       cy.visit("/datasets");
-      cy.wait("@getConfig", { timeout: 30000 });
+      cy.wait("@getConfig", { timeout: 20000 });
 
       cy.finishedLoading();
     });
 
     it("should check if pre-configured conditions are applied", () => {
       cy.scrollTo("bottom");
-      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel', {
-        timeout: 15000,
-      })
+      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel')
         .should("contain.text", "extra_entry_end_time")
         .and("contain.text", ">")
         .and("contain.text", "1");
