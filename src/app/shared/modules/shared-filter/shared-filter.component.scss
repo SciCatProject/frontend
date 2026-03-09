@@ -37,6 +37,7 @@
 .checkbox-list {
   display: flex;
   flex-direction: column;
+  word-break: break-word;
 
   .mat-mdc-checkbox {
     --mdc-checkbox-state-layer-size: 1.8em;
