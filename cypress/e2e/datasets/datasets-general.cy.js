@@ -780,16 +780,13 @@ describe("Datasets general", () => {
 
   describe("Sorting datasets by a column from config", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
-        datasetName: "Cypress Dataset 1",
-        startTime: "2026-03-04T15:00:00.000Z",
+        datasetName: "B DatasetName",
       });
       cy.createDataset({
         type: "raw",
-        datasetName: "Cypress Dataset 2",
-        startTime: "2026-03-03T15:00:00.000Z",
+        datasetName: "A DatasetName",
       });
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
@@ -808,13 +805,7 @@ describe("Datasets general", () => {
                 type: "standard",
                 width: 200,
                 enabled: true,
-              },
-              {
-                name: "startTime",
-                type: "date",
-                width: 200,
-                enabled: true,
-                sort: "desc",
+                sort: "asc",
               },
             ],
           },
@@ -823,13 +814,12 @@ describe("Datasets general", () => {
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
         cy.visit("/datasets");
         cy.wait("@getConfig", { timeout: 20000 });
+        cy.finishedLoading();
       });
     });
 
-    it("should sort datasets by start time in desc order from config", () => {
-      cy.finishedLoading();
-      cy.get(".dataset-table mat-table").should("exist");
-      cy.get(".dataset-table mat-row").first().should("contain", "2026-03-04");
+    it("should sort datasets by datasetName in asc order from config", () => {
+      cy.get(".dataset-table mat-row").first().should("contain", "A DatasetName");
     });
   });
 });
