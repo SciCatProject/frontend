@@ -823,12 +823,12 @@ describe("Datasets general", () => {
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
         cy.visit("/datasets");
         cy.wait("@getConfig", { timeout: 20000 });
-        cy.finishedLoading();
       });
     });
 
     it("should sort datasets by start time in desc order from config", () => {
       cy.finishedLoading();
+      cy.get(".dataset-table mat-table").should("exist");
       cy.get(".dataset-table mat-row").first().should("contain", "2026-03-04");
     });
   });

@@ -358,6 +358,8 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
+      cy.finishedLoading();
+
       cy.get("mat-table mat-row")
         .first()
         .should("not.contain", newProposal.proposalId);
