@@ -50,7 +50,7 @@ jobs:
       ## The setup-qemu-action simplifies the setup of QEMU for cross-platform builds
       ## https://github.com/docker/setup-qemu-action
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
