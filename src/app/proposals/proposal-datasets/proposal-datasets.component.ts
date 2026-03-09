@@ -139,8 +139,6 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     );
 
     this.subscription = this.proposalDatasets$.subscribe(async (data) => {
-      console.log("ngOnInit data", data);
-      //this.dataSource.next(this.formatTableData(data.datasets));
       this.dataSource.next(data.datasets);
       this.pending = false;
 
