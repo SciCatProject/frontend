@@ -174,7 +174,8 @@
                 "name": { "type": "string" },
                 "order": { "type": "number" },
                 "type": { "type": "string" },
-                "enabled": { "type": "boolean" }
+                "enabled": { "type": "boolean" },
+                "sort": { "type": "string" }
               }
             }
           },
@@ -246,7 +247,8 @@
                 "enabled": { "type": "boolean" },
                 "width": { "type": "number" },
                 "type": { "type": "string" },
-                "format": { "type": "string" }
+                "format": { "type": "string" },
+                "sort": { "type": "string" }
               }
             }
           },
@@ -385,6 +387,16 @@
               "publishedData": { "type": "boolean" },
               "samples": { "type": "boolean" }
             }
+          }
+        }
+      },
+      "defaultTab": {
+        "type": "object",
+        "properties": {
+          "proposal": {
+            "type": "string",
+            "enum": ["details", "datasets", "relatedProposals", "logbook"],
+            "default": "details"
           }
         }
       }
@@ -912,6 +924,20 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Default Tab Settings",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/defaultTab/properties/proposal",
+            "label": "Default Proposal Tab"
           }
         ]
       }
