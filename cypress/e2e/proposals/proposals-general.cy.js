@@ -346,11 +346,13 @@ describe("Proposals general", () => {
       const newProposal = {
         ...testData.proposal,
         proposalId: "000000",
+        startTime: "2026-03-09T15:00:00.000Z",
       };
 
       const newProposal2 = {
         ...testData.proposal,
         proposalId: "000001",
+        startTime: "2026-03-07T15:00:00.000Z",
       };
 
       cy.createProposal(newProposal2);
@@ -360,14 +362,10 @@ describe("Proposals general", () => {
 
       cy.finishedLoading();
 
-      cy.get("mat-table mat-row")
-        .first()
-        .should("not.contain", newProposal.proposalId);
-
-      cy.get(".mat-sort-header-container").contains("Proposal ID").click();
+      cy.get(".mat-sort-header-container").contains("Start Date").click();
 
       cy.get(".mat-sort-header-container")
-        .contains("Proposal ID")
+        .contains("Start Date")
         .closest("mat-header-cell")
         .should("have.class", "active-sort");
 
