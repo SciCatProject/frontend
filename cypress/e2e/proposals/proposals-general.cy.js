@@ -364,6 +364,8 @@ describe("Proposals general", () => {
 
       cy.get(".mat-sort-header-container").contains("Start Date").click();
 
+      cy.get(".mat-sort-header-container").contains("Start Date").click();
+
       cy.get(".mat-sort-header-container")
         .contains("Start Date")
         .closest("mat-header-cell")
