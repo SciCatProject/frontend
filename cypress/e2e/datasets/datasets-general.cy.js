@@ -829,7 +829,7 @@ describe("Datasets general", () => {
 
     it("should sort datasets by start time in desc order from config", () => {
       cy.finishedLoading();
-      cy.get("mat-table mat-row").first().should("contain", "2026-03-04");
+      cy.get(".dataset-table mat-row").first().should("contain", "2026-03-04");
     });
   });
 });
