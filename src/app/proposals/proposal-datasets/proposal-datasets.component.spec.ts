@@ -10,6 +10,7 @@ import {
   MockActivatedRoute,
   createMock,
   mockDataset,
+  MockDatasetsListService,
 } from "shared/MockStubs";
 import { Router, ActivatedRoute } from "@angular/router";
 import { StoreModule, Store } from "@ngrx/store";
@@ -24,6 +25,7 @@ import { AppConfigService } from "app-config.service";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { ProposalDatasetsComponent } from "./proposal-datasets.component";
 import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { DatasetsListService } from "shared/services/datasets-list.service";
 
 const getConfig = () => ({
   logbookEnabled: true,
@@ -58,6 +60,7 @@ describe("ViewProposalPageComponent", () => {
           { provide: Router, useValue: router },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: AppConfigService, useValue: { getConfig } },
+          { provide: DatasetsListService, useClass: MockDatasetsListService },
         ],
       },
     });
