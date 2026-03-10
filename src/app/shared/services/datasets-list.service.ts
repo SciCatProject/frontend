@@ -237,6 +237,12 @@ export class DatasetsListService implements OnDestroy {
           };
         }
 
+        if (column.type === "editable") {
+          convertedColumn.toExport =
+            convertedColumn.toExport ??
+            ((row) => lodashGet(row, column.path || column.name) ?? "");
+        }
+
         return convertedColumn;
       });
   }

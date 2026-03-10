@@ -69,6 +69,7 @@ import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { DatasetsListService } from "shared/services/datasets-list.service";
+import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.component";
 
 export interface SortChangeEvent {
   active: string;
@@ -164,6 +165,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private datasetsListService: DatasetsListService,
   ) {}
 
+  private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
+    return columns.map((column) => {
+      if (column.type !== "editable") {
+        return column;
+      }
+
+      return {
+        ...column,
+        dynamicCellComponent: DatasetInlineEditCellComponent,
+      };
+    });
+  }
+
   getTableSort(): ITableSetting["tableSort"] {
     const { queryParams } = this.route.snapshot;
 
@@ -202,7 +216,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       currentColumnSetting = settingConfig.settingList[0].columnSetting;
     }
 
-    this.columns = currentColumnSetting;
+    this.columns = this.decorateColumns(currentColumnSetting);
     this.setting = settingConfig;
     this.pagination = paginationConfig;
   }
