@@ -21,7 +21,8 @@ export declare type FieldType =
   | "category"
   | "hoverContent"
   | "custom" // It's from old code, remove it in the future if possible
-  | "standard"; // It's from old code, remove it in the future if possible
+  | "standard" // It's from old code, remove it in the future if possible
+  | "editable";
 export declare type FieldDisplay = "visible" | "hidden" | "prevent-hidden";
 export declare type FieldSticky = "start" | "end" | "none";
 export declare type FieldFilter = "client-side" | "server-side" | "none";
@@ -42,6 +43,7 @@ export interface TableField<R extends TableRow> extends AbstractField {
 export interface AbstractField {
   index?: number;
   name: string /* The key of the data */;
+  path?: string;
   type?: FieldType /* Type of data in the field */;
   minWidth?: number /* min width of column */;
   width?: number /* width of column */;

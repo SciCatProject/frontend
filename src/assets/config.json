@@ -441,7 +441,7 @@
       },
       {
         "name": "comment",
-        "type": "standard",
+        "type": "editable",
 	      "width": 200,
         "enabled": false
       },

@@ -16,7 +16,7 @@ export interface TableColumn {
   header?: string;
   path?: string;
   order: number;
-  type: "standard" | "custom" | "date" | "hoverContent";
+  type: "standard" | "custom" | "date" | "hoverContent" | "editable";
   enabled: boolean;
   format?: string;
   tooltip?: string;
