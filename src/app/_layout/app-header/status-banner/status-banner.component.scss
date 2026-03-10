@@ -1,0 +1,36 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.toolbar {
+  min-height: 32px;
+  height: fit-content;
+}
+
+.status-message {
+  text-align: center;
+  text-wrap: wrap;
+  width: 100%;
+}
+
+.toolbar-WARN {
+  background-color: #FEEFB3;
+  color: #9F6000;
+}
+
+.toolbar-INFO {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+
+
+@media (max-width: 800px) {
+  .status-message {
+    font-size: 16px;
+  }
+}
+
+:host ::ng-deep a {
+  text-decoration: underline;
+  color: inherit;
+}

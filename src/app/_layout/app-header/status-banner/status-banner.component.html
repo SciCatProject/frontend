@@ -1,0 +1,7 @@
+<mat-toolbar [class]='["toolbar", "toolbar-" + code]'>
+  <span [innerHTML]="message" class="status-message"></span>
+  <span class="spacer"></span>
+  <button mat-icon-button aria-label="Dismiss" (click)="onDismiss()">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
