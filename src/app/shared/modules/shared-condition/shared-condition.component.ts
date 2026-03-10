@@ -24,8 +24,6 @@ import {
 import {
   updateConditionsConfigs,
   updateUserSettingsAction,
-  selectColumnAction,
-  deselectColumnAction,
 } from "state-management/actions/user.actions";
 import { selectConditions } from "state-management/selectors/user.selectors";
 @Component({
@@ -118,13 +116,19 @@ export class SharedConditionComponent implements OnDestroy {
     this.subscriptions.push(
       this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
         const needsUpdate = allConditions.some((c) => !c.conditionType);
-
-        if (needsUpdate) {
+        if (needsUpdate && allConditions.length > 0) {
           const updatedConditions = allConditions.map((c) => ({
             ...c,
             conditionType: c.conditionType || this.conditionType,
           }));
           this.updateStore(updatedConditions);
+
+          updatedConditions
+            .filter((c) => c.conditionType === this.conditionType)
+            .forEach((config) => {
+              this.applyUnitsOptions(config.condition);
+            });
+          return;
         }
 
         const myConditions = allConditions.filter(
@@ -290,9 +294,6 @@ export class SharedConditionComponent implements OnDestroy {
                 };
 
                 this.updateStore([...allConditions, newCondition]);
-                this.store.dispatch(
-                  selectColumnAction({ name: data.lhs, columnType: "custom" }),
-                );
 
                 this.snackBar.open("Condition added successfully", "Close", {
                   duration: 2000,
@@ -322,12 +323,6 @@ export class SharedConditionComponent implements OnDestroy {
 
         if (condition.enabled) {
           this.removeConditionAction?.(condition.condition);
-          this.store.dispatch(
-            deselectColumnAction({
-              name: condition.condition.lhs,
-              columnType: "custom",
-            }),
-          );
         }
 
         if (condition.condition.lhs) {
@@ -435,14 +430,8 @@ export class SharedConditionComponent implements OnDestroy {
 
         if (enabled && condition.lhs && condition.rhs) {
           this.addConditionAction?.(condition);
-          this.store.dispatch(
-            selectColumnAction({ name: condition.lhs, columnType: "custom" }),
-          );
         } else {
           this.removeConditionAction?.(condition);
-          this.store.dispatch(
-            deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
-          );
         }
 
         this.updateStore(updatedConditions);

@@ -367,7 +367,6 @@ describe("Datasets general", () => {
 
   describe("Units options in condition panel units dropdown", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
         datasetName: testData.rawDataset.datasetName,
@@ -441,7 +440,6 @@ describe("Datasets general", () => {
   describe("Pre-configured filters test", () => {
     beforeEach(() => {
       cy.clearCookies();
-      cy.clearLocalStorage();
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
@@ -467,10 +465,11 @@ describe("Datasets general", () => {
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-        cy.visit("/datasets");
-        cy.wait("@getConfig");
-        cy.finishedLoading();
       });
+
+      cy.visit("/datasets");
+      cy.wait("@getConfig");
+      cy.finishedLoading();
     });
 
     it("should automatically apply pre-configured filters from config", () => {
@@ -482,7 +481,6 @@ describe("Datasets general", () => {
 
   describe("Pre-configured conditions test", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
         dataFileSize: "small",
@@ -491,6 +489,8 @@ describe("Datasets general", () => {
         },
         isPublished: true,
       });
+
+      cy.clearCookies();
 
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
@@ -513,8 +513,10 @@ describe("Datasets general", () => {
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
       });
+
       cy.visit("/datasets");
       cy.wait("@getConfig", { timeout: 20000 });
+
       cy.finishedLoading();
     });
 
@@ -537,6 +539,9 @@ describe("Datasets general", () => {
         });
 
       cy.visit("/datasets");
+
+      cy.finishedLoading();
+
       cy.get(".condition-panel").first().click();
       cy.get('[data-cy="remove-condition-button"]').click();
     });
@@ -562,7 +567,6 @@ describe("Datasets general", () => {
 
   describe("Scientific notation in condition panel test", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
         dataFileSize: "small",
@@ -606,7 +610,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
-  
+
   describe("Datasets collapsible filters", () => {
     beforeEach(() => {
       cy.clearLocalStorage();
@@ -661,12 +665,7 @@ describe("Datasets general", () => {
   });
 
   describe("Conditions in multiple pages", () => {
-    beforeEach(() => {
-    cy.login(Cypress.env("username"), Cypress.env("password"));
-  });
-
     it("should preverse dataset conditions when clearing sample conditions", () => {
-
       cy.createDataset({
         type: "raw",
         scientificMetadata: {
@@ -674,7 +673,7 @@ describe("Datasets general", () => {
         },
       });
       const sampleId = Math.floor(100000 + Math.random() * 900000).toString();
-      cy.createSample({...testData.sample, sampleId});
+      cy.createSample({ ...testData.sample, sampleId });
 
       cy.visit("/datasets");
       cy.finishedLoading();
@@ -716,15 +715,14 @@ describe("Datasets general", () => {
 
       cy.get(".condition-panel").first().click();
       cy.get('[data-cy="remove-condition-button"]').click();
-   });
-   afterEach(() => {
-    cy.removeSamples();
-   })
+    });
+    afterEach(() => {
+      cy.removeSamples();
+    });
   });
 
   describe("Condition value persistence after navigation", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset({
         type: "raw",
         dataFileSize: "small",
@@ -754,10 +752,10 @@ describe("Datasets general", () => {
       cy.get("mat-option").contains(">").click();
 
       cy.get(".condition-panel")
-      .first()
-      .within(() => {
-        cy.get("input[matInput]").eq(0).clear().type("19");
-      });
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("19");
+        });
 
       cy.get('[data-cy="filter-search-button"]').click();
 
@@ -766,17 +764,17 @@ describe("Datasets general", () => {
       cy.url().should("include", "/datasets/");
       cy.get("mat-card").should("exist");
 
-      cy.go('back');
+      cy.go("back");
 
       cy.get(".condition-panel")
-      .first()
-      .find("mat-panel-title")
-      .should("contain", ">")
-      .and("contain", "19");
+        .first()
+        .find("mat-panel-title")
+        .should("contain", ">")
+        .and("contain", "19");
 
       cy.get(".condition-panel").first().click();
 
       cy.get('[data-cy="remove-condition-button"]').click();
     });
-  })
+  });
 });

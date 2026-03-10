@@ -1,9 +1,10 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Injectable, Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
   name: "jsonHead",
   standalone: false,
 })
+@Injectable()
 export class JsonHeadPipe implements PipeTransform {
   transform(value: Record<string, any>, args?: any): any {
     if (!value) {

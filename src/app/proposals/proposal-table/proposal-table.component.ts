@@ -149,6 +149,13 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
           }
         }),
     );
+
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+        this.globalTextSearch = searchQuery.text || "";
+      }),
+    );
   }
 
   getTableSort(): ITableSetting["tableSort"] {

@@ -89,7 +89,7 @@ jobs:
       - name: Save PR number
         run: |
           echo ${{ github.event.number }} > ./coverage/PR
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: coverage
           path: coverage/
@@ -105,15 +105,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-
-      # These settings optimize memory and file handling for Elasticsearch,
-      # preventing common issues related to system limits running on github workflow
-      - name: Configure sysctl limits
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
 
       - name: Run docker-compose
         env:
@@ -146,7 +137,6 @@ jobs:
       - name: docker logs
         if: ${{ failure() }}
         run: |
-          docker compose logs es01
           docker compose logs backend
           docker compose logs frontend
 
@@ -158,13 +148,13 @@ jobs:
       - name: Output Docker Container Resource Monitor Logs
         run: cat monitor.log
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ failure() }}
         with:
           name: cypress-screenshots
           path: cypress/screenshots
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ failure() }}
         with:
           name: cypress-videos
