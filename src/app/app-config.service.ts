@@ -168,7 +168,7 @@ export interface AppConfigInterface {
   ingestorComponent?: IngestorComponentConfig;
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
-  statusBannerCode?: "INFO" | "WARN"
+  statusBannerCode?: "INFO" | "WARN";
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
