@@ -50,7 +50,7 @@ export class ProposalEffects {
           if (sortCol) {
             defaultColumn = sortCol.name
               ? sortCol.name.includes(",")
-                ? sortCol.name.split(",")[0]
+                ? sortCol.name.split(",")[0].trim()
                 : sortCol.name
               : defaultColumn;
             defaultDirection = sortCol.sort;
@@ -64,7 +64,7 @@ export class ProposalEffects {
 
         const column = sortColumn
           ? sortColumn.includes(",")
-            ? sortColumn.split(",")[0]
+            ? sortColumn.split(",")[0].trim()
             : sortColumn
           : defaultColumn;
 
