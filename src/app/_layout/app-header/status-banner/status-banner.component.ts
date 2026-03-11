@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from "@angular/core";
-import { AppConfigInterface, AppConfigService } from "app-config.service";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-status-banner",
