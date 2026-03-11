@@ -9,9 +9,8 @@ import { AppConfigInterface, AppConfigService } from "app-config.service";
 })
 export class StatusBannerComponent {
   @Output() dismiss = new EventEmitter<void>();
-  appConfig: AppConfigInterface;
   message: string;
-  code: string;
+  code: "INFO" | "WARN";
 
   constructor(private appConfigService: AppConfigService) {
     const appConfig = this.appConfigService.getConfig();

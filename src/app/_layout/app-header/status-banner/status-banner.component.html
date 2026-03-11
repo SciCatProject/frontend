@@ -1,4 +1,4 @@
-<mat-toolbar [class]='["toolbar", "toolbar-" + code]'>
+<mat-toolbar [ngClass]='["toolbar", "toolbar-" + code]'>
   <span [innerHTML]="message" class="status-message"></span>
   <span class="spacer"></span>
   <button mat-icon-button aria-label="Dismiss" (click)="onDismiss()">
