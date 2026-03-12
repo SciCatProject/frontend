@@ -102,13 +102,14 @@
   </mat-menu>
 
   <mat-toolbar class="mat-elevation-z1" color="primary">
-    <button mat-icon-button class="main-menu" [matMenuTriggerFor]="mainMenu">
-      <mat-icon
-        color="primary"
-        [matTooltip]="'Main menu'"
-        [matTooltipShowDelay]="500"
-        >menu</mat-icon
-      >
+    <button
+      mat-icon-button
+      class="main-menu"
+      [matMenuTriggerFor]="mainMenu"
+      [matTooltip]="'Main menu'"
+      [matTooltipShowDelay]="500"
+    >
+      <mat-icon color="primary">menu</mat-icon>
     </button>
     <a [routerLink]="[defaultMainPage$ | async]">
       <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
