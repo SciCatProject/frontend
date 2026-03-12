@@ -13,6 +13,7 @@ import { BatchCardModule } from "datasets/batch-card/batch-card.module";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { UsersModule } from "../users/users.module";
 import { MatChipsModule } from "@angular/material/chips";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MatChipsModule } from "@angular/material/chips";
     BatchCardModule,
     MatBadgeModule,
     MatButtonModule,
+    MatTooltipModule,
     MatIconModule,
     MatMenuModule,
     MatChipsModule,

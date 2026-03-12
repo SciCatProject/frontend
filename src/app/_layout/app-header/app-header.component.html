@@ -102,9 +102,14 @@
   </mat-menu>
 
   <mat-toolbar class="mat-elevation-z1" color="primary">
-    <div class="main-menu" [matMenuTriggerFor]="mainMenu">
-      <mat-icon [inline]="true">menu</mat-icon>
-    </div>
+    <button mat-icon-button class="main-menu" [matMenuTriggerFor]="mainMenu">
+      <mat-icon
+        color="primary"
+        [matTooltip]="'Main menu'"
+        [matTooltipShowDelay]="500"
+        >menu</mat-icon
+      >
+    </button>
     <a [routerLink]="[defaultMainPage$ | async]">
       <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </a>
@@ -128,30 +133,43 @@
     </span>
     <span>
       <h6>
-        <a class="toplink" [routerLink]="['/help']">
-          <mat-icon> help </mat-icon>
-          <span class="large-screen-text">Help</span></a
+        <button
+          mat-icon-button
+          [matTooltip]="'Help'"
+          [matTooltipShowDelay]="500"
+          [routerLink]="['/help']"
         >
+          <mat-icon color="primary"> help </mat-icon>
+          <span class="large-screen-text">Help</span>
+        </button>
       </h6>
     </span>
     <span>
       <h6>
-        <a class="toplink" [routerLink]="['/about']">
-          <mat-icon> info </mat-icon>
-          <span class="large-screen-text">About</span></a
+        <button
+          mat-icon-button
+          [matTooltip]="'Info'"
+          [matTooltipShowDelay]="500"
+          [routerLink]="['/about']"
         >
+          <mat-icon color="primary"> info </mat-icon>
+        </button>
       </h6>
     </span>
-    <!--<span *ngIf="(this.isLoggedIn | async) === false; else userButton">-->
     <span *ngIf="isLoggedIn$ | async; else loginButton">
       <span *ngIf="config.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
-        <button id="cartOnHeaderButton" mat-icon-button>
+        <button
+          mat-icon-button
+          id="cartOnHeaderButton"
+          [matTooltip]="'Dataset Selection List'"
+          [matTooltipShowDelay]="500"
+        >
           <mat-icon
             color="primary"
             matBadge="{{ inBatchIndicator$ | async }}"
             matBadgeColor="accent"
             matBadgeSize="medium"
-            >filter_none</mat-icon
+            >ballot</mat-icon
           >
         </button>
       </span>
@@ -161,7 +179,13 @@
       </mat-menu>
 
       <span>
-        <button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
+        <button
+          [matTooltip]="'User menu'"
+          [matTooltipShowDelay]="500"
+          mat-button
+          class="user-button"
+          [matMenuTriggerFor]="userMenu"
+        >
           <img class="user-image" src="{{ profileImage$ | async }}" />
           <div color="primary" class="large-screen-text">
             {{ username$ | async }}
@@ -171,10 +195,16 @@
     </span>
     <ng-template #loginButton>
       <h6>
-        <a class="toplink" (click)="login()" data-cy="login-button">
-          <mat-icon> account_circle </mat-icon>
+        <button
+          mat-icon-button
+          (click)="login()"
+          [matTooltip]="'Sign in to your account'"
+          [matTooltipShowDelay]="500"
+          data-cy="login-button"
+        >
+          <mat-icon color="primary"> account_circle </mat-icon>
           <span class="large-screen-text">Sign in</span>
-        </a>
+        </button>
       </h6>
     </ng-template>
   </mat-toolbar>
