@@ -101,7 +101,6 @@
     </button>
   </mat-menu>
 
-  <app-status-banner (dismiss)="showStatusBanner = false" *ngIf="showStatusBanner"></app-status-banner>
   <mat-toolbar class="mat-elevation-z1" color="primary">
     <div class="main-menu" [matMenuTriggerFor]="mainMenu">
       <mat-icon [inline]="true">menu</mat-icon>
@@ -179,4 +178,8 @@
       </h6>
     </ng-template>
   </mat-toolbar>
+  <app-status-banner
+    (dismiss)="showStatusBanner = false"
+    *ngIf="showStatusBanner"
+  ></app-status-banner>
 </div>

@@ -100,7 +100,11 @@
       "hideEmptyMetadataTable": { "type": "boolean" },
       "datafilesActionsEnabled": { "type": "boolean" },
       "statusBannerMessage": { "type": "string" },
-      "statusBannerCode": { "type": "string" },
+      "statusBannerCode": {
+        "type": "string",
+        "enum": ["INFO", "WARN"],
+        "default": "INFO"
+      },
       "datafilesActions": {
         "type": "array",
         "items": {

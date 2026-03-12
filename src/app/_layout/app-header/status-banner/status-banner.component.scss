@@ -3,31 +3,32 @@
 }
 
 .toolbar {
-  min-height: 32px;
   height: fit-content;
+  border: none;
+  box-shadow: none;
 }
 
 .status-message {
   text-align: center;
   text-wrap: wrap;
   width: 100%;
+  font-size: 16px;
+  line-height: 20px;
+  padding: 10px 0;
 }
-
+.status-icon {
+  margin-right: 6px;
+  font-size: 20px;
+  vertical-align: middle;
+}
 .toolbar-WARN {
-  background-color: #FEEFB3;
-  color: #9F6000;
+  background-color: #feefb3;
+  color: #9f6000;
 }
 
 .toolbar-INFO {
-  color: #4F8A10;
-  background-color: #DFF2BF;
-}
-
-
-@media (max-width: 800px) {
-  .status-message {
-    font-size: 16px;
-  }
+  color: #4f8a10;
+  background-color: #dff2bf;
 }
 
 :host ::ng-deep a {
