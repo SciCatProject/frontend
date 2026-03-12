@@ -99,6 +99,8 @@
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
       "datafilesActionsEnabled": { "type": "boolean" },
+      "statusBannerMessage": { "type": "string" },
+      "statusBannerCode": { "type": "string" },
       "datafilesActions": {
         "type": "array",
         "items": {
@@ -409,6 +411,8 @@
           { "type": "Control", "scope": "#/properties/siteIcon" },
           { "type": "Control", "scope": "#/properties/siteTitle" },
           { "type": "Control", "scope": "#/properties/siteSciCatLogo" },
+          { "type": "Control", "scope": "#/properties/statusBannerMessage" },
+          { "type": "Control", "scope": "#/properties/statusBannerCode" },
           {
             "type": "Control",
             "scope": "#/properties/checkBoxFilterClickTrigger"

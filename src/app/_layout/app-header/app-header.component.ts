@@ -91,9 +91,7 @@ export class AppHeaderComponent implements OnInit {
       map((siteHeaderLogoUrl) => this.isFullUrl(siteHeaderLogoUrl)),
     );
 
-    this.showStatusBanner = !!(
-      this.config.statusBannerCode && this.config.statusBannerMessage
-    );
+    this.showStatusBanner = !!this.config.statusBannerMessage;
   }
 
   logout(): void {
