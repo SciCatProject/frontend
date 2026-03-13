@@ -167,6 +167,8 @@ export interface AppConfigInterface {
   hideEmptyMetadataTable?: boolean;
   ingestorComponent?: IngestorComponentConfig;
   defaultTab?: DefaultTab;
+  statusBannerMessage?: string;
+  statusBannerCode?: "INFO" | "WARN";
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -275,7 +277,6 @@ export class AppConfigService {
     if (!this.appConfig) {
       console.error("AppConfigService: Configuration not loaded!");
     }
-
     return this.appConfig as AppConfigInterface;
   }
 }

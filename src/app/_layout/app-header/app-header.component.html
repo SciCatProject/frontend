@@ -209,4 +209,8 @@
       </h6>
     </ng-template>
   </mat-toolbar>
+  <app-status-banner
+    (dismiss)="showStatusBanner = false"
+    *ngIf="showStatusBanner"
+  ></app-status-banner>
 </div>
