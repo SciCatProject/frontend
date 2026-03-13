@@ -11,9 +11,8 @@ mat-table {
 }
 
 .empty-batch-message {
-  text-align: center;
-
-  mat-icon {
-    vertical-align: middle;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
 }

@@ -52,7 +52,7 @@ describe("Main Page", () => {
         .eq(1)
         .should("have.attr", "href", "https://my.facility.site");
 
-      cy.get("div.main-menu").click();
+      cy.get("button.main-menu").click();
 
       cy.get(
         "button.mat-mdc-menu-item:nth-child(1) > span:nth-child(2) > span:nth-child(1)",
@@ -85,7 +85,7 @@ describe("Main Page", () => {
         .eq(1)
         .should("have.attr", "href", "https://my.facility.site");
 
-      cy.get("div.main-menu").click();
+      cy.get("button.main-menu").click();
 
       cy.get(
         "button.mat-mdc-menu-item:nth-child(2) > span:nth-child(2) > span:nth-child(1)",

@@ -14,6 +14,7 @@ import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { UsersModule } from "../users/users.module";
 import { MatChipsModule } from "@angular/material/chips";
 import { StatusBannerComponent } from "./app-header/status-banner/status-banner.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { StatusBannerComponent } from "./app-header/status-banner/status-banner.
     BatchCardModule,
     MatBadgeModule,
     MatButtonModule,
+    MatTooltipModule,
     MatIconModule,
     MatMenuModule,
     MatChipsModule,
