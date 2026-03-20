@@ -70,7 +70,7 @@ jobs:
       ## https://github.com/docker/metadata-action
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/scicatproject/frontend
           tags: |
