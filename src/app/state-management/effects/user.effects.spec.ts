@@ -606,9 +606,24 @@ describe("UserEffects", () => {
         userId: "testId",
         id: "testId",
       } as unknown as UserSettings;
+
+      const normalizedUserSettings = {
+        ...userSettings,
+        externalSettings: {
+          fe_dataset_table_columns: [],
+          fe_dataset_table_conditions: [],
+          fe_dataset_table_filters: [],
+          fe_proposal_table_columns: [],
+          fe_proposal_table_filters: [],
+          fe_sample_table_columns: [],
+          fe_sample_table_conditions: [],
+          fe_instrument_table_columns: [],
+          fe_file_table_columns: [],
+        },
+      } as unknown as UserSettings;
       const action = fromActions.fetchUserSettingsAction({ id });
       const outcome = fromActions.fetchUserSettingsCompleteAction({
-        userSettings,
+        userSettings: normalizedUserSettings,
       });
 
       actions = hot("-a", { a: action });
