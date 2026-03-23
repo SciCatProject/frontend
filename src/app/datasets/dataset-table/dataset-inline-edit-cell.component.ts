@@ -11,13 +11,11 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import {
-  DatasetsService,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
-import { Subject, takeUntil } from "rxjs";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { Subscription } from "rxjs";
 import { get as lodashGet, set as lodashSet } from "lodash-es";
 import { AppConfigService } from "app-config.service";
+import { updatePropertyInlineAction } from "state-management/actions/datasets.actions";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 import {
@@ -40,7 +38,7 @@ import {
 export class DatasetInlineEditCellComponent
   implements IDynamicCell, OnInit, OnChanges, OnDestroy
 {
-  private destroy$ = new Subject<void>();
+  private subscriptions: Subscription[] = [];
   private accessGroups: string[] = [];
   private isAdmin = false;
   private appConfig = this.appConfigService.getConfig();
@@ -84,27 +82,24 @@ export class DatasetInlineEditCellComponent
 
   constructor(
     private appConfigService: AppConfigService,
-    private datasetsService: DatasetsService,
     private store: Store,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    this.store
-      .select(selectProfile)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((profile) => {
+    this.subscriptions.push(
+      this.store.select(selectProfile).subscribe((profile) => {
         this.accessGroups = profile?.accessGroups ?? [];
         this.cdr.markForCheck();
-      });
+      }),
+    );
 
-    this.store
-      .select(selectIsAdmin)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((isAdmin) => {
+    this.subscriptions.push(
+      this.store.select(selectIsAdmin).subscribe((isAdmin) => {
         this.isAdmin = !!isAdmin;
         this.cdr.markForCheck();
-      });
+      }),
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -150,32 +145,29 @@ export class DatasetInlineEditCellComponent
     this.isSaving = true;
     this.cdr.markForCheck();
 
-    this.datasetsService
-      .datasetsControllerFindByIdAndUpdateV3(this.row.pid, {
-        ...lodashSet({}, this.fieldPath, nextValue),
-      })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          lodashSet(this.row, this.fieldPath, nextValue);
-          this.isEditing = false;
-          this.isSaving = false;
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.isSaving = false;
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                content: `Failed to update dataset ${this.column?.header || this.fieldPath}.`,
-                type: MessageType.Error,
-                duration: 5000,
-              },
-            }),
-          );
-          this.cdr.markForCheck();
-        },
-      });
+    try {
+      this.store.dispatch(
+        updatePropertyInlineAction({
+          pid: this.row.pid,
+          property: { ...lodashSet({}, this.fieldPath, nextValue) },
+        }),
+      );
+      lodashSet(this.row, this.fieldPath, nextValue);
+      this.isEditing = false;
+    } catch {
+      this.store.dispatch(
+        showMessageAction({
+          message: {
+            content: `Failed to update dataset ${this.column?.header || this.fieldPath}.`,
+            type: MessageType.Error,
+            duration: 5000,
+          },
+        }),
+      );
+    } finally {
+      this.isSaving = false;
+      this.cdr.markForCheck();
+    }
   }
 
   cancelEdit(event?: Event): void {
@@ -211,8 +203,7 @@ export class DatasetInlineEditCellComponent
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   private get rawValue(): string {

@@ -312,6 +312,20 @@ export class DatasetEffects {
     );
   });
 
+  updatePropertyInline$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.updatePropertyInlineAction),
+      switchMap(({ pid, property }) =>
+        this.datasetsService
+          .datasetsControllerFindByIdAndUpdateV3(pid, property)
+          .pipe(
+            map(() => fromActions.updatePropertyCompleteAction()),
+            catchError(() => of(fromActions.updatePropertyFailedAction())),
+          ),
+      ),
+    );
+  });
+
   addAttachment$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
@@ -402,6 +416,7 @@ export class DatasetEffects {
         fromActions.fetchAttachmentsAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
+        fromActions.updatePropertyInlineAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
         fromActions.removeAttachmentAction,
