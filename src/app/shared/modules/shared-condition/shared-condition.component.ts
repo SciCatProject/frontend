@@ -27,8 +27,6 @@ import {
 import {
   updateConditionsConfigs,
   updateUserSettingsAction,
-  selectColumnAction,
-  deselectColumnAction,
   updateSampleConditionsConfigs,
 } from "state-management/actions/user.actions";
 import {
@@ -292,9 +290,7 @@ export class SharedConditionComponent implements OnDestroy {
                 };
 
                 this.updateStore([...conditions, newCondition]);
-                this.store.dispatch(
-                  selectColumnAction({ name: data.lhs, columnType: "custom" }),
-                );
+
 
                 this.snackBar.open("Condition added successfully", "Close", {
                   duration: 2000,
@@ -322,12 +318,6 @@ export class SharedConditionComponent implements OnDestroy {
 
         if (condition.enabled) {
           this.removeConditionAction?.(condition.condition);
-          this.store.dispatch(
-            deselectColumnAction({
-              name: condition.condition.lhs,
-              columnType: "custom",
-            }),
-          );
         }
 
         if (condition.condition.lhs) {
@@ -431,14 +421,8 @@ export class SharedConditionComponent implements OnDestroy {
 
         if (enabled && condition.lhs && condition.rhs) {
           this.addConditionAction?.(condition);
-          this.store.dispatch(
-            selectColumnAction({ name: condition.lhs, columnType: "custom" }),
-          );
         } else {
           this.removeConditionAction?.(condition);
-          this.store.dispatch(
-            deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
-          );
         }
 
         this.updateStore(updatedConditions);

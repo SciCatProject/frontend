@@ -1,7 +1,7 @@
 import { ViewProposalPageComponent } from "./view-proposal-page.component";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { MockActivatedRoute } from "shared/MockStubs";
+import { MockActivatedRoute, MockDatasetsListService } from "shared/MockStubs";
 import { Router, ActivatedRoute } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
 import { DatePipe, SlicePipe } from "@angular/common";
@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
 import { TranslateService } from "@ngx-translate/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
+import { DatasetsListService } from "shared/services/datasets-list.service";
 
 const getConfig = () => ({
   logbookEnabled: true,
@@ -49,6 +50,7 @@ describe("ViewProposalPageComponent", () => {
           { provide: Router, useValue: router },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: AppConfigService, useValue: { getConfig } },
+          { provide: DatasetsListService, useClass: MockDatasetsListService },
         ],
       },
     });
