@@ -237,7 +237,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
-          columns: columnsSetting,
+          fe_dataset_table_columns: columnsSetting,
         },
       }),
     );

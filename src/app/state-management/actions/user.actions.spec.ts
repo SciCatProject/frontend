@@ -226,7 +226,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const userSettings: UserSettings = {
         externalSettings: {
-          columns: [],
+          fe_dataset_table_columns: [],
         },
         datasetCount: 25,
         jobCount: 25,
@@ -254,7 +254,7 @@ describe("User Actions", () => {
 
   describe("updateUserSettingsAction", () => {
     it("should create an action", () => {
-      const property = { columns: [] };
+      const property = { fe_dataset_table_columns: [] };
       const action = fromActions.updateUserSettingsAction({ property });
       expect({ ...action }).toEqual({
         type: "[User] Update User Settings",
@@ -267,7 +267,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const userSettings: UserSettings = {
         externalSettings: {
-          columns: [],
+          fe_dataset_table_columns: [],
         },
         datasetCount: 25,
         jobCount: 25,

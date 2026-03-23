@@ -91,22 +91,22 @@ export const selectIsLoading = createSelector(
 
 export const selectColumns = createSelector(
   selectUserState,
-  (state) => state.columns,
-);
-
-export const selectTablesSettings = createSelector(
-  selectUserState,
-  (state) => state.tablesSettings,
+  (state) => state.settings.fe_dataset_table_columns,
 );
 
 export const selectFilters = createSelector(
   selectUserState,
-  (state) => state.filters,
+  (state) => state.settings.fe_dataset_table_filters,
 );
 
 export const selectConditions = createSelector(
   selectUserState,
-  (state) => state.conditions,
+  (state) => state.settings.fe_dataset_table_conditions || [],
+);
+
+export const selectSampleConditions = createSelector(
+  selectUserState,
+  (state) => state.settings.fe_sample_table_conditions || [],
 );
 
 export const selectSampleDialogPageViewModel = createSelector(
@@ -153,7 +153,7 @@ export const selectHasFetchedSettings = createSelector(
 export const selectColumnsWithHasFetchedSettings = createSelector(
   selectUserState,
   (state) => ({
-    columns: state.columns,
+    columns: state.settings.fe_dataset_table_columns,
     hasFetchedSettings: state.hasFetchedSettings,
   }),
 );

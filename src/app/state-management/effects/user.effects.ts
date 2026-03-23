@@ -325,28 +325,52 @@ export class UserEffects {
         this.usersService.usersControllerGetSettingsV3(id, null).pipe(
           map((userSettings: UserSettings) => {
             const config = this.configService.getConfig();
-            const externalSettings = userSettings.externalSettings || {};
+            const externalSettings = {
+              ...(userSettings.externalSettings || {}),
+            };
 
-            const settingsToCheck = ["columns", "conditions", "filters"];
+            const settingsToCheck = [
+              "fe_dataset_table_columns",
+              "fe_dataset_table_conditions",
+              "fe_dataset_table_filters",
+              "fe_proposal_table_columns",
+              "fe_proposal_table_filters",
+              "fe_sample_table_columns",
+              "fe_sample_table_conditions",
+              "fe_instrument_table_columns",
+              "fe_file_table_columns",
+            ];
 
             for (const setting of settingsToCheck) {
-              let items = [];
+              let items = externalSettings[setting];
 
-              if (Array.isArray(externalSettings[setting])) {
-                items = externalSettings[setting];
+              if (!Array.isArray(items) || items.length < 1) {
+                if (setting.startsWith("fe_dataset_table_")) {
+                  const key = setting.replace("fe_dataset_table_", "");
+                  items =
+                    config.defaultDatasetsListSettings?.[key] ||
+                    initialUserState.settings[setting] ||
+                    [];
+                } else if (setting.startsWith("fe_proposal_table_")) {
+                  const key = setting.replace("fe_proposal_table_", "");
+                  items =
+                    config.defaultProposalsListSettings?.[key] ||
+                    initialUserState.settings[setting] ||
+                    [];
+                } else {
+                  items = initialUserState.settings[setting] || [];
+                }
               }
-
-              if (items.length < 1) {
-                items =
-                  config.defaultDatasetsListSettings[setting] ||
-                  initialUserState[setting];
-              }
-
-              userSettings[setting] = items;
+              externalSettings[setting] = items;
             }
 
+            const normalizedUserSettings = {
+              ...userSettings,
+              externalSettings,
+            };
+
             return fromActions.fetchUserSettingsCompleteAction({
-              userSettings,
+              userSettings: normalizedUserSettings,
             });
           }),
           catchError(() => of(fromActions.fetchUserSettingsFailedAction())),
@@ -370,7 +394,9 @@ export class UserEffects {
       ofType(fromActions.fetchUserSettingsCompleteAction),
       mergeMap(({ userSettings }) => [
         fromActions.updateFilterConfigs({
-          filterConfigs: (userSettings as any).filters,
+          filterConfigs:
+            (userSettings as any).externalSettings?.fe_dataset_table_filters ||
+            [],
         }),
       ]),
     );
@@ -379,27 +405,31 @@ export class UserEffects {
   setConditions$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsCompleteAction),
-      mergeMap(({ userSettings }) => {
+      concatLatestFrom(() => this.store.select(selectConditions)),
+      mergeMap(([{ userSettings }, existingConditions]) => {
         const actions = [];
 
+        const incomingConditions =
+          (userSettings as any).externalSettings?.fe_dataset_table_conditions ||
+          [];
+
+        const conditions =
+          incomingConditions.length > 0
+            ? incomingConditions
+            : existingConditions || [];
+
         // TODO: Check with the types here. This is working better as it is now with the conditions and filters. We are leaving it for now as it was from before.
-        (userSettings as any).conditions
+        conditions
           .filter((condition) => condition.enabled)
           .forEach((condition) => {
             actions.push(
               addScientificConditionAction({ condition: condition.condition }),
             );
-            actions.push(
-              selectColumnAction({
-                name: condition.condition.lhs,
-                columnType: "custom",
-              }),
-            );
           });
 
         actions.push(
           fromActions.updateConditionsConfigs({
-            conditionConfigs: (userSettings as any).conditions,
+            conditionConfigs: conditions,
           }),
         );
 
@@ -428,7 +458,7 @@ export class UserEffects {
       ),
       map((columns) =>
         fromActions.updateUserSettingsAction({
-          property: { columns },
+          property: { fe_dataset_table_columns: columns },
         }),
       ),
     );
@@ -441,10 +471,15 @@ export class UserEffects {
       takeWhile(([action, user]) => !!user),
       switchMap(([{ property }, user]) => {
         const settingsToNest = [
-          "columns",
-          "conditions",
-          "filters",
-          "tablesSettings",
+          "fe_dataset_table_columns",
+          "fe_dataset_table_conditions",
+          "fe_dataset_table_filters",
+          "fe_proposal_table_columns",
+          "fe_proposal_table_filters",
+          "fe_sample_table_columns",
+          "fe_sample_table_conditions",
+          "fe_instrument_table_columns",
+          "fe_file_table_columns",
         ];
         const propertyKeys = Object.keys(property);
         const newProperty = {};
@@ -473,20 +508,12 @@ export class UserEffects {
               JSON.stringify(newProperty) as any,
             );
         return apiCall$.pipe(
-          map((userSettings: UserSettings) => {
-            userSettings["conditions"] = (
-              userSettings.externalSettings as any
-            ).conditions;
-            userSettings["filters"] = (
-              userSettings.externalSettings as any
-            ).filters;
-            userSettings["columns"] = (
-              userSettings.externalSettings as any
-            ).columns;
-            return fromActions.updateUserSettingsCompleteAction({
+          map((userSettings: UserSettings) =>
+            fromActions.updateUserSettingsCompleteAction({
               userSettings,
-            });
-          }),
+            }),
+          ),
+
           catchError(() => of(fromActions.updateUserSettingsFailedAction())),
         );
       }),
@@ -512,17 +539,17 @@ export class UserEffects {
       map(([{ config }, existingConditions]) => {
         const defaultFilters =
           config.defaultDatasetsListSettings.filters ||
-          initialUserState.filters;
+          initialUserState.settings.fe_dataset_table_filters;
         const defaultConditions =
           config.defaultDatasetsListSettings.conditions ||
-          initialUserState.conditions;
+          initialUserState.settings.fe_dataset_table_conditions;
 
         // NOTE: config.localColumns is for backward compatibility.
         //       it should be removed once no longer needed
         const columns =
           config.defaultDatasetsListSettings.columns ||
           config.localColumns ||
-          initialUserState.columns;
+          initialUserState.settings.fe_dataset_table_columns;
         const isAuthenticated = this.authService.isAuthenticated();
 
         const actions = [];

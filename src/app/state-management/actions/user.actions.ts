@@ -188,6 +188,11 @@ export const updateConditionsConfigs = createAction(
   props<{ conditionConfigs: ConditionConfig[] }>(),
 );
 
+export const updateSampleConditionsConfigs = createAction(
+  "[User] Update Sample Conditions Configs",
+  props<{ conditionConfigs: ConditionConfig[] }>(),
+);
+
 export const loadDefaultSettings = createAction(
   "[User] Load Default Settings",
   props<{ config: AppConfigInterface }>(),

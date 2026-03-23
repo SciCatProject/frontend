@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "state-management/state/samples.store";
-import { selectCurrentUser, selectTablesSettings } from "./user.selectors";
+import { selectCurrentUser, selectSettings } from "./user.selectors";
 
 const selectSampleState = createFeatureSelector<SampleState>("samples");
 
@@ -113,7 +113,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
   selectTextFilter,
   selectMetadataKeys,
   selectCharacteristicsFilter,
-  selectTablesSettings,
+  selectSettings,
   selectSamplesCount,
   selectHasAppliedFilters,
   (
@@ -124,7 +124,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     textFilter,
     metadataKeys,
     characteristicsFilter,
-    tableSettings,
+    settings,
     count,
     hasAppliedFilters,
   ) => ({
@@ -135,7 +135,11 @@ export const selectSampleDashboardPageViewModel = createSelector(
     textFilter,
     metadataKeys,
     characteristicsFilter,
-    tableSettings,
+    tableSettings: {
+      samplesTable: {
+        columns: settings.fe_sample_table_columns,
+      },
+    },
     count,
     hasAppliedFilters,
   }),

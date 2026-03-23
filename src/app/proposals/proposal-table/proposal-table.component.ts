@@ -257,17 +257,10 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
       };
     });
 
-    const tablesSettings = {
-      ...this.tablesSettings,
-      [setting.settingName || this.tableName]: {
-        columns: columnsSetting,
-      },
-    };
-
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
-          tablesSettings,
+          fe_proposal_table_columns: columnsSetting,
         },
       }),
     );

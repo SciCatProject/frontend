@@ -204,7 +204,7 @@ describe("Sample Selectors", () => {
           initialSampleState.sampleFilters.text,
           initialSampleState.metadataKeys,
           initialSampleState.sampleFilters.characteristics,
-          initialUserState.tablesSettings,
+          initialUserState.settings,
           initialSampleState.samplesCount,
           false, //hasAppliedFilters
         ),
@@ -220,7 +220,11 @@ describe("Sample Selectors", () => {
         textFilter: "test",
         metadataKeys: [],
         characteristicsFilter: [],
-        tableSettings: {},
+        tableSettings: {
+          samplesTable: {
+            columns: initialUserState.settings.fe_sample_table_columns,
+          },
+        },
         count: 0,
         hasAppliedFilters: false,
       });

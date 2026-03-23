@@ -52,6 +52,54 @@ const settings: Settings = {
   datasetCount: 25,
   jobCount: 25,
   darkTheme: false,
+  fe_dataset_table_columns: [
+    { name: "datasetName", order: 1, type: "standard", enabled: true },
+  ],
+  fe_dataset_table_filters: [
+    {
+      key: "creationLocation",
+      label: "Location",
+      type: "multiSelect",
+      description: "Filter by creation location on the dataset",
+      enabled: true,
+    },
+    {
+      key: "pid",
+      label: "Pid",
+      type: "text",
+      description: "Filter by dataset pid",
+      enabled: true,
+    },
+    {
+      key: "ownerGroup",
+      label: "Group",
+      type: "multiSelect",
+      description: "Filter by owner group of the dataset",
+      enabled: true,
+    },
+    {
+      key: "type",
+      label: "Type",
+      type: "multiSelect",
+      description: "Filter by dataset type",
+      enabled: true,
+    },
+    {
+      key: "keywords",
+      label: "Keyword",
+      type: "multiSelect",
+      description: "Filter by keywords in the dataset",
+      enabled: true,
+    },
+    {
+      key: "creationTime",
+      label: "Creation Time",
+      type: "dateRange",
+      description: "Filter by creation time of the dataset",
+      enabled: true,
+    },
+  ],
+  fe_dataset_table_conditions: [],
 };
 
 export const initialUserState: UserState = {
@@ -118,7 +166,6 @@ export const initialUserState: UserState = {
   ],
 
   conditions: [],
-  tablesSettings: {},
   hasFetchedSettings: false,
 };
 
@@ -243,9 +290,9 @@ describe("User Selectors", () => {
 
   describe("selectColumns", () => {
     it("should select columns", () => {
-      expect(fromSelectors.selectColumns.projector(initialUserState)).toEqual([
-        { name: "datasetName", order: 1, type: "standard", enabled: true },
-      ]);
+      expect(fromSelectors.selectColumns.projector(initialUserState)).toEqual(
+        initialUserState.settings.fe_dataset_table_columns,
+      );
     });
   });
 

@@ -1,9 +1,6 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
-import {
-  selectHasFetchedSettings,
-  selectTablesSettings,
-} from "./user.selectors";
+import { selectHasFetchedSettings, selectSettings } from "./user.selectors";
 import { selectInstrumentWithIdAndLabel } from "./instruments.selectors";
 
 const selectProposalsState = createFeatureSelector<ProposalsState>("proposals");
@@ -197,9 +194,15 @@ export const selectDatasetsQueryParams = createSelector(
 export const selectProposalsWithCountAndTableSettings = createSelector(
   selectEnrichedProposals,
   selectProposalsCount,
-  selectTablesSettings,
   selectHasFetchedSettings,
-  (proposals, count, tablesSettings, hasFetchedSettings) => {
+  selectSettings,
+  (proposals, count, hasFetchedSettings, settings) => {
+    const tablesSettings = {
+      proposalsTable: {
+        columns: settings.fe_proposal_table_columns,
+      },
+    };
+
     return {
       proposals,
       count,

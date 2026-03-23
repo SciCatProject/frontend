@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { InstrumentState } from "state-management/state/instruments.store";
-import { selectTablesSettings } from "./user.selectors";
+import { selectSettings } from "./user.selectors";
 
 const selectInstrumentState =
   createFeatureSelector<InstrumentState>("instruments");
@@ -38,12 +38,16 @@ export const selectInstrumentsPerPage = createSelector(
 export const selectInstrumentsWithCountAndTableSettings = createSelector(
   selectInstruments,
   selectInstrumentsCount,
-  selectTablesSettings,
-  (instruments, count, tablesSettings) => {
+  selectSettings,
+  (instruments, count, settings) => {
     return {
       instruments,
       count,
-      tablesSettings,
+      tablesSettings: {
+        instrumentsTable: {
+          columns: settings.fe_instrument_table_columns,
+        },
+      },
     };
   },
 );

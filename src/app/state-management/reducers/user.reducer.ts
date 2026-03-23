@@ -9,7 +9,10 @@ const reducer = createReducer(
     fromActions.setDatasetTableColumnsAction,
     (state, { columns }): UserState => ({
       ...state,
-      columns,
+      settings: {
+        ...state.settings,
+        fe_dataset_table_columns: columns,
+      },
     }),
   ),
 
@@ -71,63 +74,34 @@ const reducer = createReducer(
   on(
     fromActions.fetchUserSettingsCompleteAction,
     (state, { userSettings }): UserState => {
-      const { datasetCount, jobCount, columns, externalSettings } =
-        userSettings as any;
-      const settings = {
-        ...state.settings,
-        datasetCount,
-        jobCount,
+      const { datasetCount, jobCount, externalSettings } = userSettings as any;
+
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          datasetCount,
+          jobCount,
+          ...externalSettings,
+        },
+        hasFetchedSettings: true,
       };
-      if (columns.length > 0) {
-        return {
-          ...state,
-          settings,
-          columns,
-          tablesSettings: externalSettings?.tablesSettings,
-          hasFetchedSettings: true,
-        };
-      } else {
-        return {
-          ...state,
-          settings,
-          tablesSettings: externalSettings?.tablesSettings,
-          hasFetchedSettings: true,
-        };
-      }
     },
   ),
 
   on(
     fromActions.updateUserSettingsCompleteAction,
     (state, { userSettings }): UserState => {
-      const {
-        datasetCount,
-        jobCount,
-        columns = [],
-        externalSettings,
-        filters,
-        conditions,
-      } = userSettings as any;
-      const settings = { ...state.settings, datasetCount, jobCount };
-
-      if (columns.length > 0) {
-        return {
-          ...state,
-          settings,
-          columns,
-          tablesSettings: externalSettings?.tablesSettings,
-          filters: filters || state.filters,
-          conditions: conditions || state.conditions,
-        };
-      } else {
-        return {
-          ...state,
-          settings,
-          tablesSettings: externalSettings?.tablesSettings,
-          filters: filters || state.filters,
-          conditions: conditions || state.conditions,
-        };
-      }
+      const { datasetCount, jobCount, externalSettings } = userSettings as any;
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          datasetCount,
+          jobCount,
+          ...externalSettings,
+        },
+      };
     },
   ),
 
@@ -154,7 +128,7 @@ const reducer = createReducer(
   ),
 
   on(fromActions.addCustomColumnsAction, (state, { names }): UserState => {
-    const existingColumns = [...state.columns];
+    const existingColumns = [...state.settings.fe_dataset_table_columns];
 
     const standardColumns = existingColumns.filter(
       (column) => column.type === "standard",
@@ -192,31 +166,40 @@ const reducer = createReducer(
       .concat(enabledCustomColumns)
       .concat(newColumns);
 
-    return { ...state, columns };
+    return {
+      ...state,
+      settings: { ...state.settings, fe_dataset_table_columns: columns },
+    };
   }),
 
   on(
     fromActions.selectColumnAction,
     (state, { name, columnType }): UserState => {
-      const columns = [...state.columns];
+      const columns = [...state.settings.fe_dataset_table_columns];
       columns.forEach((item) => {
         if (item.name === name && item.type === columnType) {
           item.enabled = true;
         }
       });
-      return { ...state, columns };
+      return {
+        ...state,
+        settings: { ...state.settings, fe_dataset_table_columns: columns },
+      };
     },
   ),
   on(
     fromActions.deselectColumnAction,
     (state, { name, columnType }): UserState => {
-      const columns = [...state.columns];
+      const columns = [...state.settings.fe_dataset_table_columns];
       columns.forEach((item) => {
         if (item.name === name && item.type === columnType) {
           item.enabled = false;
         }
       });
-      return { ...state, columns };
+      return {
+        ...state,
+        settings: { ...state.settings, fe_dataset_table_columns: columns },
+      };
     },
   ),
 
@@ -262,13 +245,30 @@ const reducer = createReducer(
     (state, { filterConfigs }): UserState => ({
       ...state,
       filters: filterConfigs,
+      settings: {
+        ...state.settings,
+        fe_dataset_table_filters: filterConfigs,
+      },
     }),
   ),
   on(
     fromActions.updateConditionsConfigs,
     (state, { conditionConfigs }): UserState => ({
       ...state,
-      conditions: conditionConfigs,
+      settings: {
+        ...state.settings,
+        fe_dataset_table_conditions: conditionConfigs,
+      },
+    }),
+  ),
+  on(
+    fromActions.updateSampleConditionsConfigs,
+    (state, { conditionConfigs }): UserState => ({
+      ...state,
+      settings: {
+        ...state.settings,
+        fe_sample_table_conditions: conditionConfigs,
+      },
     }),
   ),
 );

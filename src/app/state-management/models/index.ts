@@ -9,6 +9,15 @@ export interface Settings {
   datasetCount: number;
   jobCount: number;
   darkTheme: false;
+  fe_dataset_table_columns?: TableColumn[];
+  fe_dataset_table_filters?: FilterConfig[];
+  fe_dataset_table_conditions?: ConditionConfig[];
+  fe_proposal_table_columns?: TableColumn[];
+  fe_proposal_table_filters?: FilterConfig[];
+  fe_sample_table_columns?: TableColumn[];
+  fe_sample_table_conditions?: ConditionConfig[];
+  fe_instrument_table_columns?: TableColumn[];
+  fe_file_table_columns?: TableColumn[];
 }
 
 export interface TableColumn {
@@ -183,3 +192,7 @@ export interface LogbookFilters extends GenericFilters {
 export interface JobFilters extends GenericFilters {
   mode: Record<string, string> | undefined;
 }
+
+export type ConditionSettingsKey =
+  | "fe_dataset_table_conditions"
+  | "fe_sample_table_conditions";

@@ -2,6 +2,7 @@ import * as fromSelectors from "./proposals.selectors";
 import { ProposalsState } from "state-management/state/proposals.store";
 import { createMock } from "shared/MockStubs";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { TableColumn, Settings } from "state-management/models";
 
 const proposal = createMock<ProposalClass>({
   proposalId: "testId",
@@ -320,20 +321,36 @@ describe("Proposal Selectors", () => {
         { proposalId: "p1", instrumentIds: ["i1"] } as any,
       ];
       const count = 1;
-      const tablesSettings = { col: "v" };
+
+      const proposalColumns: TableColumn[] = [
+        { name: "proposalId", enabled: true, order: 0, type: "standard" },
+      ];
+
+      const settings: Settings = {
+        tapeCopies: "",
+        datasetCount: 25,
+        jobCount: 25,
+        darkTheme: false,
+        fe_proposal_table_columns: proposalColumns,
+      };
+
       const hasFetchedSettings = true;
 
       expect(
         fromSelectors.selectProposalsWithCountAndTableSettings.projector(
           proposalsSample,
           count,
-          tablesSettings,
           hasFetchedSettings,
+          settings,
         ),
       ).toEqual({
         proposals: proposalsSample,
         count,
-        tablesSettings,
+        tablesSettings: {
+          proposalsTable: {
+            columns: settings.fe_proposal_table_columns,
+          },
+        },
         hasFetchedSettings,
       });
     });

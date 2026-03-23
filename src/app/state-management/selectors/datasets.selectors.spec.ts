@@ -290,7 +290,7 @@ describe("test dataset selectors", () => {
     it("should return the fullfacet params", () => {
       const fullfacet = fromDatasetSelectors.selectFullfacetParams.projector(
         initialDatasetState,
-        initialUserState.filters,
+        initialUserState.settings.fe_dataset_table_filters,
       );
       const fullfacetKeys = Object.keys(fullfacet);
       expect(fullfacet.facets).toEqual([

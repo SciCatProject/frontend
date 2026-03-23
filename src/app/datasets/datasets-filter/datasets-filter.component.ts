@@ -169,7 +169,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     );
     this.store.dispatch(
       updateUserSettingsAction({
-        property: { conditions: [] },
+        property: { fe_dataset_table_conditions: [] },
       }),
     );
 
@@ -208,7 +208,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         if (filtersChanged) {
           this.store.dispatch(
             updateUserSettingsAction({
-              property: { filters: result.filterConfigs },
+              property: { fe_dataset_table_filters: result.filterConfigs },
             }),
           );
 

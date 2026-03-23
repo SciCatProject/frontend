@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { FilesState } from "state-management/state/files.store";
-import { selectTablesSettings } from "./user.selectors";
+import { selectSettings } from "./user.selectors";
 
 const selectFilesState = createFeatureSelector<FilesState>("files");
 
@@ -22,10 +22,14 @@ export const selectOrigDatablocksCount = createSelector(
 export const selectFilesWithCountAndTableSettings = createSelector(
   selectAllOrigDatablocks,
   selectOrigDatablocksCount,
-  selectTablesSettings,
-  (origDatablocks, count, tablesSettings) => ({
+  selectSettings,
+  (origDatablocks, count, settings) => ({
     origDatablocks,
     count,
-    tablesSettings,
+    tablesSettings: {
+      filesTable: {
+        columns: settings.fe_file_table_columns,
+      },
+    },
   }),
 );
