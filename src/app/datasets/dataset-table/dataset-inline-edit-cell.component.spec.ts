@@ -3,10 +3,10 @@ import { FormsModule } from "@angular/forms";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { Store } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
-import { of } from "rxjs";
 import { AppConfigService } from "app-config.service";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
+import { updatePropertyInlineAction } from "state-management/actions/datasets.actions";
 import {
   selectIsAdmin,
   selectProfile,
@@ -16,7 +16,7 @@ import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.compo
 describe("DatasetInlineEditCellComponent", () => {
   let component: DatasetInlineEditCellComponent;
   let fixture: ComponentFixture<DatasetInlineEditCellComponent>;
-  let datasetsService: jasmine.SpyObj<DatasetsService>;
+  let store: Store;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -43,12 +43,6 @@ describe("DatasetInlineEditCellComponent", () => {
             getConfig: () => ({ editDatasetEnabled: true }),
           },
         },
-        {
-          provide: DatasetsService,
-          useValue: jasmine.createSpyObj("DatasetsService", [
-            "datasetsControllerFindByIdAndUpdateV3",
-          ]),
-        },
       ],
     }).compileComponents();
   }));
@@ -56,9 +50,7 @@ describe("DatasetInlineEditCellComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetInlineEditCellComponent);
     component = fixture.componentInstance;
-    datasetsService = TestBed.inject(
-      DatasetsService,
-    ) as jasmine.SpyObj<DatasetsService>;
+    store = TestBed.inject(Store);
     component.row = {
       pid: "dataset-1",
       ownerGroup: "owner-group",
@@ -72,18 +64,19 @@ describe("DatasetInlineEditCellComponent", () => {
     expect(component.canEdit).toBeTrue();
   });
 
-  it("should persist the updated field and update the row locally", () => {
-    datasetsService.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
-      of(null),
-    );
+  it("should dispatch an inline update action and update the row locally", () => {
+    spyOn(store, "dispatch");
 
     component.beginEdit(new MouseEvent("click"));
     component.draftValue = "updated";
     component.saveValue();
 
-    expect(
-      datasetsService.datasetsControllerFindByIdAndUpdateV3,
-    ).toHaveBeenCalledWith("dataset-1", { comment: "updated" });
+    expect(store.dispatch).toHaveBeenCalledWith(
+      updatePropertyInlineAction({
+        pid: "dataset-1",
+        property: { comment: "updated" },
+      }),
+    );
     expect(component.row.comment).toBe("updated");
     expect(component.isEditing).toBeFalse();
   });

@@ -439,6 +439,45 @@ describe("DatasetEffects", () => {
     });
   });
 
+  describe("updatePropertyInline$", () => {
+    const pid = "testPid";
+    const property = { isPublished: true };
+
+    it("should result in an updatePropertyCompleteAction", () => {
+      const action = fromActions.updatePropertyInlineAction({
+        pid,
+        property,
+      });
+      const outcome = fromActions.updatePropertyCompleteAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: dataset });
+      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+        response,
+      );
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.updatePropertyInline$).toBeObservable(expected);
+    });
+
+    it("should result in an updatePropertyFailedAction", () => {
+      const action = fromActions.updatePropertyInlineAction({
+        pid,
+        property,
+      });
+      const outcome = fromActions.updatePropertyFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+        response,
+      );
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.updatePropertyInline$).toBeObservable(expected);
+    });
+  });
+
   describe("addAttachment$", () => {
     it("should result in a addAttachmentCompleteAction", () => {
       const action = fromActions.addAttachmentAction({ attachment });
