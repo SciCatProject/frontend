@@ -112,7 +112,7 @@ export class SharedConditionComponent implements OnDestroy {
         updateSampleConditionsConfigs({ conditionConfigs: updatedConditions }),
       );
     }
-    
+
     this.store.dispatch(
       updateUserSettingsAction({
         property: { [this.conditionSettingsKey]: updatedConditions },
@@ -290,7 +290,6 @@ export class SharedConditionComponent implements OnDestroy {
                 };
 
                 this.updateStore([...conditions, newCondition]);
-
 
                 this.snackBar.open("Condition added successfully", "Close", {
                   duration: 2000,
