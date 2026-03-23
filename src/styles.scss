@@ -443,3 +443,12 @@ jsonforms {
 .mat-mdc-tab-body-content {
   overflow: hidden !important;
 }
+
+/* Global readable Material tooltip */
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  font-size: 16px;
+  line-height: 1.4;
+  max-width: 400px;
+  border-radius: 8px;
+  white-space: normal;
+}
