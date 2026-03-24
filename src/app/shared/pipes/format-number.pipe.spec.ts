@@ -102,6 +102,16 @@ describe("FormatNumberPipe", () => {
       expect(formatted).toEqual("1,2,3");
     });
 
+    it("returns string when value is bigint", () => {
+      setConfig({ enabled: false });
+      const pipe = new FormatNumberPipe(mockConfigService);
+      const value = BigInt(123);
+      const formatted = pipe.transform(
+        value as unknown as string | number | null | undefined,
+      );
+      expect(formatted).toEqual("123");
+    });
+
     it("returns empty string when value is a boolean", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);

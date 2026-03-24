@@ -23,10 +23,19 @@ export class FormatNumberPipe implements PipeTransform {
     }
   }
 
-  transform(value: string | number | null | undefined): string {
+  transform(
+    value:
+      | string
+      | number
+      | null
+      | undefined
+      | bigint
+      | (string | number | bigint)[],
+  ): string {
     if (
       typeof value !== "string" &&
       typeof value !== "number" &&
+      typeof value !== "bigint" &&
       !Array.isArray(value)
     )
       return "";
