@@ -243,10 +243,6 @@ export class DatasetsListService implements OnDestroy {
             ((row) => lodashGet(row, column.path || column.name) ?? "");
         }
 
-        if (column.type === "hoverContent") {
-          convertedColumn.hoverContent = true;
-        }
-
         return convertedColumn;
       });
   }
