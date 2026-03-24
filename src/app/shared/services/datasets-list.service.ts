@@ -237,6 +237,9 @@ export class DatasetsListService implements OnDestroy {
           };
         }
 
+        if (column.type === "hoverContent") {
+          convertedColumn.hoverContent = true;
+        }
         return convertedColumn;
       });
   }
