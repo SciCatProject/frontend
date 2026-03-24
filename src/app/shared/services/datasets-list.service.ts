@@ -240,7 +240,7 @@ export class DatasetsListService implements OnDestroy {
         if (column.type === "hoverContent") {
           convertedColumn.hoverContent = true;
         }
-      
+
         if (column.type === "editable") {
           convertedColumn.toExport =
             convertedColumn.toExport ??
