@@ -868,7 +868,7 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns",
+                    "scope": "#/properties/defaultProposalsListSettings/properties/columns",
                     "options": { "showSortButtons": true }
                   }
                 ]
@@ -880,7 +880,7 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters",
+                    "scope": "#/properties/defaultProposalsListSettings/properties/filters",
                     "options": { "showSortButtons": true }
                   }
                 ]
