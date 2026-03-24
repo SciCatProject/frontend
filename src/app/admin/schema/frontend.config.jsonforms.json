@@ -170,7 +170,7 @@
                 "width": { "type": "number" },
                 "type": {
                   "type": "string",
-                  "enum": ["standard", "hoverContent", "editable", "date"]
+                  "enum": ["standard", "hovercontent", "editable", "date"]
                 },
                 "format": {
                   "type": "string"
@@ -248,7 +248,7 @@
                 "width": { "type": "number" },
                 "type": {
                   "type": "string",
-                  "enum": ["standard", "hoverContent", "editable", "date"]
+                  "enum": ["standard", "hovercontent", "editable", "date"]
                 },
                 "format": { "type": "string" }
               }
