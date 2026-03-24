@@ -314,6 +314,19 @@ describe("Dataset Actions", () => {
     });
   });
 
+  describe("updatePropertyInlineAction", () => {
+    it("should create an action", () => {
+      const pid = "testPid";
+      const property = { isPublished: true };
+      const action = fromActions.updatePropertyInlineAction({ pid, property });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Update Property Inline",
+        pid,
+        property,
+      });
+    });
+  });
+
   describe("updatePropertyCompleteAction", () => {
     it("should create an action", () => {
       const action = fromActions.updatePropertyCompleteAction();
