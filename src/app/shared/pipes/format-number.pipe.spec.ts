@@ -66,20 +66,49 @@ describe("FormatNumberPipe", () => {
       expect(formatted).toEqual(String(nbr));
     });
 
-    it("returns null when number is null", () => {
+    it("returns empty string when value is null", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
       const nbr = null;
       const formatted = pipe.transform(nbr);
-      expect(formatted).toBeNull();
+      expect(formatted).toEqual("");
     });
 
-    it("returns undefined when number is undefined", () => {
+    it("returns empty string when value is undefined", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
       const nbr = undefined;
       const formatted = pipe.transform(nbr);
-      expect(formatted).toBeUndefined();
+      expect(formatted).toEqual("");
+    });
+
+    it("returns empty string when value is an object", () => {
+      setConfig({ enabled: false });
+      const pipe = new FormatNumberPipe(mockConfigService);
+      const value = { some: "object" };
+      const formatted = pipe.transform(
+        value as unknown as string | number | null | undefined,
+      );
+      expect(formatted).toEqual("");
+    });
+
+    it("returns concatenated string when value is an array", () => {
+      setConfig({ enabled: false });
+      const pipe = new FormatNumberPipe(mockConfigService);
+      const value = [1, 2, 3];
+      const formatted = pipe.transform(
+        value as unknown as string | number | null | undefined,
+      );
+      expect(formatted).toEqual("1,2,3");
+    });
+
+    it("returns empty string when value is a boolean", () => {
+      setConfig({ enabled: false });
+      const pipe = new FormatNumberPipe(mockConfigService);
+      const formatted = pipe.transform(
+        true as unknown as string | number | null | undefined,
+      );
+      expect(formatted).toEqual("");
     });
 
     it("returns string when number is a string", () => {
@@ -92,6 +121,21 @@ describe("FormatNumberPipe", () => {
   });
 
   describe("metadataFloatFormatEnabled is true", () => {
+    it("should return empty string for null, undefined, and object values", () => {
+      setConfig();
+      const pipe = new FormatNumberPipe(mockConfigService);
+
+      expect(pipe.transform(null)).toBe("");
+      expect(pipe.transform(undefined)).toBe("");
+      expect(
+        pipe.transform({ x: 1 } as unknown as
+          | string
+          | number
+          | null
+          | undefined),
+      ).toBe("");
+    });
+
     it("should return string as-is for non-number values", () => {
       setConfig();
       const pipe = new FormatNumberPipe(mockConfigService);

@@ -23,10 +23,13 @@ export class FormatNumberPipe implements PipeTransform {
     }
   }
 
-  transform(
-    value: string | number | null | undefined,
-  ): string | number | null | undefined {
-    if (value === null || value === undefined) return value;
+  transform(value: string | number | null | undefined): string {
+    if (
+      typeof value !== "string" &&
+      typeof value !== "number" &&
+      !Array.isArray(value)
+    )
+      return "";
 
     // use old way if not enabled
     if (!this.enabled) {
