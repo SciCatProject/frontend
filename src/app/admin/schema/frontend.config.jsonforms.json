@@ -173,7 +173,14 @@
               "properties": {
                 "name": { "type": "string" },
                 "order": { "type": "number" },
-                "type": { "type": "string" },
+                "width": { "type": "number" },
+                "type": {
+                  "type": "string",
+                  "enum": ["standard", "hoverContent", "editable", "date"]
+                },
+                "format": {
+                  "type": "string"
+                },
                 "enabled": { "type": "boolean" }
               }
             }
@@ -245,7 +252,10 @@
                 "name": { "type": "string" },
                 "enabled": { "type": "boolean" },
                 "width": { "type": "number" },
-                "type": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["standard", "hoverContent", "editable", "date"]
+                },
                 "format": { "type": "string" }
               }
             }
@@ -817,11 +827,12 @@
               {
                 "type": "Group",
                 "label": "Columns list",
-                "options": { "expandable": true },
+                "options": { "expandable": true, "showSortButtons": true },
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns"
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns",
+                    "options": { "showSortButtons": true }
                   }
                 ]
               },
@@ -832,7 +843,8 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters"
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters",
+                    "options": { "showSortButtons": true }
                   }
                 ]
               },
@@ -864,7 +876,8 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns"
+                    "scope": "#/properties/defaultProposalsListSettings/properties/columns",
+                    "options": { "showSortButtons": true }
                   }
                 ]
               },
@@ -875,7 +888,8 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters"
+                    "scope": "#/properties/defaultProposalsListSettings/properties/filters",
+                    "options": { "showSortButtons": true }
                   }
                 ]
               }
