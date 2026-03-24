@@ -438,6 +438,23 @@ jsonforms {
   .mat-mdc-card-content {
     padding: 0 !important;
   }
+
+  .mdc-card.array-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+
+    .mat-mdc-card-content {
+      flex: 1;
+      padding-bottom: 0 !important;
+    }
+
+    .mdc-card__actions {
+      padding: 0 !important;
+      margin: 0 !important;
+      min-height: unset !important;
+    }
+  }
 }
 
 .mat-mdc-tab-body-content {
