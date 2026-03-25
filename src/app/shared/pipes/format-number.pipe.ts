@@ -23,7 +23,31 @@ export class FormatNumberPipe implements PipeTransform {
     }
   }
 
-  transform(value: unknown): string | number {
+  transform(
+    value:
+      | string
+      | number
+      | null
+      | undefined
+      | bigint
+      | (string | number | bigint)[],
+  ): string {
+    if (Array.isArray(value))
+      return String(
+        value.filter(
+          (v) =>
+            typeof v === "number" ||
+            typeof v === "bigint" ||
+            typeof v === "string",
+        ),
+      );
+    if (
+      typeof value !== "string" &&
+      typeof value !== "number" &&
+      typeof value !== "bigint"
+    )
+      return "";
+
     // use old way if not enabled
     if (!this.enabled) {
       if (typeof value === "number" && (value >= 1e5 || value <= 1e-5)) {
