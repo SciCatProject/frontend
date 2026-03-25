@@ -19,6 +19,7 @@ const appConfig: AppConfigInterface = {
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
   datasetJsonScientificMetadata: true,
+  datasetPageSizeOptions: [5, 10, 25, 100],
   editDatasetEnabled: true,
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
@@ -248,6 +249,22 @@ describe("AppConfigService", () => {
 
       expect(service["appConfig"]).toEqual(appConfig);
     });
+
+    it("should default datasetPageSizeOptions when missing", async () => {
+      const configWithoutDatasetPageSizeOptions = {
+        ...appConfig,
+        datasetPageSizeOptions: undefined,
+      };
+      spyOn(service["http"], "get").and.returnValue(
+        of(configWithoutDatasetPageSizeOptions),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().datasetPageSizeOptions).toEqual([
+        5, 10, 25, 100,
+      ]);
+    });
   });
 
   describe("#getConfig()", () => {
@@ -256,6 +273,7 @@ describe("AppConfigService", () => {
         accessTokenPrefix: "",
         lbBaseURL: "http://127.0.0.1:3000",
         gettingStarted: null,
+        datasetPageSizeOptions: [5, 10, 25, 100],
         defaultMainPage: {
           nonAuthenticatedUser: "DATASETS",
           authenticatedUser: "DATASETS",
@@ -281,6 +299,7 @@ describe("AppConfigService", () => {
       accessTokenPrefix: "Bearer ",
       lbBaseURL: "http://127.0.0.1:3000",
       gettingStarted: "aGettingStarted",
+      datasetPageSizeOptions: [5, 10, 25, 100],
       addDatasetEnabled: true,
       defaultMainPage: {
         nonAuthenticatedUser: "DATASETS",

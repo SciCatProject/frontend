@@ -25,6 +25,10 @@
       "archiveWorkflowEnabled": { "type": "boolean" },
       "datasetReduceEnabled": { "type": "boolean" },
       "datasetJsonScientificMetadata": { "type": "boolean" },
+      "datasetPageSizeOptions": {
+        "type": "array",
+        "items": { "type": "number" }
+      },
       "editDatasetEnabled": { "type": "boolean" },
       "editDatasetSampleEnabled": { "type": "boolean" },
       "editMetadataEnabled": { "type": "boolean" },
@@ -443,6 +447,7 @@
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"
           },
+          { "type": "Control", "scope": "#/properties/datasetPageSizeOptions" },
           { "type": "Control", "scope": "#/properties/editDatasetEnabled" },
           {
             "type": "Control",
