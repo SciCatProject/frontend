@@ -6,7 +6,6 @@
   "checkBoxFilterClickTrigger": false,
   "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": false,
-  "allowConfigOverrides": true,  
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "datasetJsonScientificMetadata": true,
@@ -19,8 +18,8 @@
   "facility": "SciCat Vanilla CI Test",
   "siteIcon": "site-header-logo.png",
   "siteHeaderLogoUrl": "https://my.facility.site",
-  "sitetitle": "SciCat FE CI repo",
-  "siteSciCatLogo": "full",  
+  "siteTitle": "SciCat FE CI repo",
+  "siteSciCatLogo": "full",
   "loginFacilityLabel": "SciCat Vanilla",
   "loginLdapLabel": "Ldap",
   "loginLocalLabel": "Local",
@@ -77,7 +76,7 @@
   "datasetDetailsShowMissingProposalId": false,
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,
-  "hideEmptyMetadataTable": false,  
+  "hideEmptyMetadataTable": false,
   "datafilesActionsEnabled": true,
   "datafilesActions": [
     {
@@ -154,7 +153,7 @@
         "item[]" : "@pid",
         "directory[]" : "@folder",
         "files[]": "@files"
-      },      
+      },
       "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
@@ -221,7 +220,7 @@
       },
       "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ @pid }}\",\"directory\":\"{{ @folder }}\",\"files\": {{ @files[] }},\"jwt\":\"{{ #jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
       "filename": "{{ #uuid }}.ipynb"
-    },    
+    },
     {
       "id": "9c6a11b6-a526-11f0-8795-6f025b320cc3",
       "description": "This action let users make a call an arbitrary URL and store the reply in the store",
@@ -279,8 +278,8 @@
   ],
   "datasetDetailsActionsEnabled": false,
   "datasetDetailsActions": [],
-  "selectionActionsEnabled": true,
-  "selectionActions": [],
+  "datasetSelectionActionsEnabled": true,
+  "datasetSelectionActions": [],
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",

@@ -10,6 +10,7 @@ import {
   ListSettings,
   TableColumn,
 } from "state-management/models";
+import { DEFAULT_CONFIG } from "./app-config.defaults";
 
 export interface OAuth2Endpoint {
   authURL: string;
@@ -77,7 +78,6 @@ export class DefaultTab {
 }
 
 export interface AppConfigInterface {
-  allowConfigOverrides?: boolean;
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
@@ -141,6 +141,7 @@ export interface AppConfigInterface {
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
   siteTitle: string | null;
+  siteIcon: string | null;
   siteSciCatLogo: string | null;
   siteHeaderLogo: string | null;
   siteLoginBackground: string | null;
@@ -169,6 +170,10 @@ export interface AppConfigInterface {
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
+  labelMaps?: {
+    filters?: Record<string, string>;
+  };
+  additionalConfigs?: string[];
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -186,56 +191,65 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
 })
 export class AppConfigService {
   private appConfig: object = {};
+  private mergedConfigUrls = new Set<string>(); // Processed config URLs to prevent circular references
 
   constructor(private http: HttpClient) {}
 
-  private async mergeConfig(): Promise<object> {
-    const config = await firstValueFrom(
-      this.http.get<Partial<AppConfigInterface>>("/assets/config.json").pipe(
-        catchError(() => {
-          console.error("No config provided.");
-          return of({} as Partial<AppConfigInterface>);
-        }),
-      ),
-    );
-    let configOverrideRequest: Partial<AppConfigInterface> = {};
-    if (config?.allowConfigOverrides) {
-      configOverrideRequest = await firstValueFrom(
-        this.http
-          .get<Partial<AppConfigInterface>>("/assets/config.override.json")
-          .pipe(
-            catchError(() => {
-              console.error(
-                "allowConfigOverrides set to true but no config.override provided.",
-              );
-              return of({} as Partial<AppConfigInterface>);
-            }),
-          ),
-      );
-    }
-    // Custom merge to replace arrays instead of merging them
+  /**
+   * Custom merge to replace arrays instead of merging them
+   */
+  private mergeObjects(config: AppConfigInterface, overrides: Partial<AppConfigInterface>): AppConfigInterface {
     return mergeWith(
-      {},
-      config ?? {},
-      configOverrideRequest ?? {},
+      config,
+      overrides,
       (objVal, srcVal) =>
         Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
     );
   }
 
-  async loadAppConfig(): Promise<void> {
-    try {
-      const config = await firstValueFrom(
-        this.http.get("/api/v3/admin/config").pipe(timeout(2000)),
-      );
+  private loadConfigFromUrl(url: string): Promise<Partial<AppConfigInterface>> {
+    return firstValueFrom(
+      this.http.get<Partial<AppConfigInterface>>(url)
+        .pipe(timeout(2000))
+        .pipe(catchError(() => {
+          console.error(`Error loading config from ${url}`);
+          return of({} as Partial<AppConfigInterface>);
+        }),
+      ),
+    );
+  }
 
-      this.appConfig = Object.assign({}, this.appConfig, config);
-    } catch (err) {
-      console.log("No config available in backend, trying with local config.");
-      const config = await this.mergeConfig();
-      this.appConfig = Object.assign({}, this.appConfig, config);
+  /**
+   * Depth-first merging of config files
+   *
+   * Only the first occurrence of each additional config URL will be merged to prevent
+   * circular references.
+   */
+  private async loadAdditionalConfigs(config: AppConfigInterface): Promise<AppConfigInterface> {
+    if (!config.additionalConfigs) {
+      return config;
     }
+    for (const url of config.additionalConfigs) {
+      if (this.mergedConfigUrls.has(url)) {
+        continue;
+      }
+      const additionalConfig = await this.loadConfigFromUrl(url);
+      config = this.mergeObjects(config, additionalConfig);
+      this.mergedConfigUrls.add(url);
+      config = await this.loadAdditionalConfigs(config);
+    }
+    return config;
+  }
 
+  async loadAppConfig(): Promise<void> {
+    // Load config from the frontend
+    // This is done first to provide lbBaseURL
+    let configObject = DEFAULT_CONFIG;
+    configObject = await this.loadAdditionalConfigs(configObject);
+
+    this.appConfig = Object.assign({}, this.appConfig, configObject);
+
+    // Set some defaults
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
     if (
       "defaultMainPage" in config &&
