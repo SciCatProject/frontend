@@ -44,7 +44,6 @@ describe("Samples general", () => {
         cy.log("First apply - Fields:", fields);
       });
 
-
       cy.reload();
       cy.finishedLoading();
 
@@ -67,6 +66,50 @@ describe("Samples general", () => {
       cy.get(".condition-panel").first().click();
 
       cy.get('[data-cy="remove-condition-button"]').click();
+    });
+  });
+
+  describe("Metadata Table", () => {
+    it("should update sample metadata view right after adding a metadata key", () => {
+      const sampleId = Math.floor(100000 + Math.random() * 900000).toString();
+      const metadataName = "some name";
+      const metadataValue = "some value";
+
+      cy.createSample({ ...testData.sample, sampleId });
+
+      cy.visit(`/samples/${sampleId}`);
+      cy.finishedLoading();
+
+      cy.scrollTo("bottom");
+
+      cy.get('[role="tab"]').contains("Edit").click();
+
+      cy.get('[data-cy="add-new-row"]').click();
+
+      cy.get("mat-select[data-cy=field-type-input]").last().click();
+
+      cy.get("mat-option")
+        .contains("string")
+        .then((option) => {
+          option[0].click();
+        });
+
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .focus()
+        .type(`${metadataName}{enter}`);
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .focus()
+        .type(`${metadataValue}{enter}`);
+
+      cy.get("button[data-cy=save-changes-button]").click();
+
+      cy.finishedLoading();
+
+      cy.get('[role="tab"]').contains("View").click();
+      cy.contains("dynamic-mat-table mat-row", metadataName).should("exist");
+      cy.contains("dynamic-mat-table mat-row", metadataValue).should("exist");
     });
   });
 });
