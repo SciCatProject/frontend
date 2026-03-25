@@ -102,6 +102,16 @@ describe("FormatNumberPipe", () => {
       expect(formatted).toEqual("1,2,3");
     });
 
+    it("returns concatenated string when value is an array, removing non-number elements", () => {
+      setConfig({ enabled: false });
+      const pipe = new FormatNumberPipe(mockConfigService);
+      const value = [1, 2, "4", null, 3];
+      const formatted = pipe.transform(
+        value as unknown as string | number | null | undefined,
+      );
+      expect(formatted).toEqual("1,2,4,3");
+    });
+
     it("returns string when value is bigint", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);

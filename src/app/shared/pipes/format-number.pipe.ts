@@ -32,11 +32,19 @@ export class FormatNumberPipe implements PipeTransform {
       | bigint
       | (string | number | bigint)[],
   ): string {
+    if (Array.isArray(value))
+      return String(
+        value.filter(
+          (v) =>
+            typeof v === "number" ||
+            typeof v === "bigint" ||
+            typeof v === "string",
+        ),
+      );
     if (
       typeof value !== "string" &&
       typeof value !== "number" &&
-      typeof value !== "bigint" &&
-      !Array.isArray(value)
+      typeof value !== "bigint"
     )
       return "";
 
