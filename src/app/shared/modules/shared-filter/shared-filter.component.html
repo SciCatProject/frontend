@@ -50,7 +50,10 @@
         class="collapsible-filter-wrapper"
         [class.collapsed]="collapsible && collapsed"
       >
-        <mat-label class="filter-title"
+        <mat-label
+          class="filter-title"
+          [class.clickable]="collapsible"
+          (click)="toggleCollapse()"
           >{{ label | translate: localization }}
           <span *ngIf="shouldShowBadge" class="filter-badge">{{
             badgeCount

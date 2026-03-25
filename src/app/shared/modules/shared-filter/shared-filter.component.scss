@@ -32,6 +32,14 @@
   font-weight: 700;
   font-size: 1em;
   color: rgba($color: #000000, $alpha: 0.7);
+
+  &:hover {
+    color: var(--theme-primary-default);
+  }
+}
+
+.filter-title.clickable {
+  cursor: pointer;
 }
 
 .checkbox-list {
@@ -61,7 +69,7 @@
 }
 
 mat-divider {
-  margin: 0.4em 0;
+  margin: 0.8em 0;
   opacity: 0.4;
 }
 
@@ -74,6 +82,7 @@ mat-divider {
   font-size: 0.75rem;
   display: inline-flex;
   align-items: center;
+  line-height: 1;
 }
 
 .collapsible-filter-wrapper {
