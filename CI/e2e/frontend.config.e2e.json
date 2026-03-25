@@ -6,7 +6,6 @@
   "autoApplyFilters": false,
   "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": false,
-  "allowConfigOverrides": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "datasetRelationshipsEnabled": true,
@@ -20,7 +19,7 @@
   "facility": "SciCat Vanilla CI Test",
   "siteIcon": "site-header-logo.png",
   "siteHeaderLogoUrl": "https://my.facility.site",
-  "sitetitle": "SciCat FE CI repo",
+  "siteTitle": "SciCat FE CI repo",
   "siteSciCatLogo": "full",
   "loginFacilityLabel": "SciCat Vanilla",
   "loginLdapLabel": "Ldap",
@@ -298,8 +297,8 @@
   ],
   "datasetDetailsActionsEnabled": false,
   "datasetDetailsActions": [],
-  "selectionActionsEnabled": true,
-  "selectionActions": [],
+  "datasetSelectionActionsEnabled": true,
+  "datasetSelectionActions": [],
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",

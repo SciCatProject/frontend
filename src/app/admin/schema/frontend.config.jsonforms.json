@@ -18,7 +18,7 @@
       },
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
       "addScientificMetadataKeysAsColumn": { "type": "boolean" },
-      "allowConfigOverrides": { "type": "boolean" },
+      "checkBoxFilterClickTrigger": { "type": "boolean" },
       "dateFormat": { "type": "string" },
       "timezone": { "type": "string" },
       "accessTokenPrefix": { "type": "string" },
@@ -497,7 +497,6 @@
             "type": "Control",
             "scope": "#/properties/skipSciCatLoginPageEnabled"
           },
-          { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
           { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },

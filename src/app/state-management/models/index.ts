@@ -88,7 +88,7 @@ export interface CustomizationItem {
 }
 
 export interface Field {
-  element: FieldType;
+  element: `${DatasetViewFieldType}`;
   source: string;
   order: number;
   path?: string;
@@ -101,9 +101,6 @@ type CustomizationType =
   | "datasetJsonView"
   | "attachments"
   | "statusBanner";
-
-// Type alias for allowed field types
-type FieldType = "text" | "copy" | "linky" | "tag" | "date";
 
 export interface ListSettings {
   columns?: TableColumn[];
