@@ -122,11 +122,10 @@ export class PublisheddataEditComponent
   }
 
   onMetadataChange(data: any) {
-    if (data.creators) {
-      for (let creator of data.creators) {
-        this.computeFullName(creator);
-      }
-    }
+    ['creators', 'contributors'].forEach(key => {
+      data[key]?.forEach(person => this.computeFullName(person));
+    });
+    data.publicationYear ??= new Date().getFullYear();
     this.metadataData = data;
     if (JSON.stringify(data) !== this.initialMetadata) {
       this._hasUnsavedChanges = true;
@@ -183,7 +182,10 @@ export class PublisheddataEditComponent
               },
             }
           })
-          if (updatedMetadata["publicationYear"] && !updatedMetadata["dates"]) {
+          if (!updatedMetadata["publicationYear"]) {
+            updatedMetadata["publicationYear"] = new Date().getFullYear();
+          }
+          if (!updatedMetadata["dates"]) {
             updatedMetadata["dates"] = [
               {
                 date: `${publishedData.metadata["publicationYear"]}`,
@@ -191,15 +193,6 @@ export class PublisheddataEditComponent
               }
             ]
           }
-          else {
-            updatedMetadata["dates"] = [
-              {
-                date: `${new Date().getFullYear()}`,
-                dateType: "Available"
-              }
-            ]
-          }
-
           updatedMetadata["language"] = "en";
           updatedMetadata["publisher"] = {
             name: "PSI Open Data Provider",

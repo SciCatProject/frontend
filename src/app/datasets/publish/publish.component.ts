@@ -115,14 +115,11 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
   onMetadataChange(data: any) {
     this.setComputedProperties(data);
-    if (data.creators) {
-      for (let creator of data.creators) {
-        this.computeFullName(creator);
-      }
-    }
-
+    ['creators', 'contributors'].forEach(key => {
+      data[key]?.forEach(person => this.computeFullName(person));
+    });
+    data.publicationYear ??= new Date().getFullYear();
     this.metadata = data;
-    console.log(JSON.stringify(this.metadata))
     if (JSON.stringify(data) !== this.initialMetadata) {
       this._hasUnsavedChanges = true;
     }
