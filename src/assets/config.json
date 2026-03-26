@@ -5,6 +5,7 @@
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "datasetJsonScientificMetadata": true,
+  "datasetPageSizeOptions": [5, 10, 25, 100],
   "editDatasetEnabled": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,

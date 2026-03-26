@@ -40,7 +40,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { AppConfigService } from "app-config.service";
+import { AppConfigInterface, AppConfigService } from "app-config.service";
 import {
   DatasetClass,
   DatasetsService,
@@ -53,8 +53,6 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { TranslateService } from "@ngx-translate/core";
 import { DatasetsListService } from "shared/services/datasets-list.service";
-
-const getConfig = () => ({});
 
 const auditFields = {
   createdAt: "",
@@ -69,8 +67,14 @@ describe("DatasetTableComponent", () => {
 
   let store: MockStore;
   let dispatchSpy;
+  let appConfigService: jasmine.SpyObj<AppConfigService>;
 
   beforeEach(waitForAsync(() => {
+    appConfigService = jasmine.createSpyObj("AppConfigService", ["getConfig"]);
+    appConfigService.getConfig.and.returnValue({
+      datasetPageSizeOptions: [5, 10, 25, 100],
+    } as AppConfigInterface);
+
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
@@ -104,7 +108,7 @@ describe("DatasetTableComponent", () => {
         providers: [
           {
             provide: AppConfigService,
-            useValue: { getConfig },
+            useValue: appConfigService,
           },
           { provide: DatasetsService, useClass: MockDatasetApi },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
@@ -131,6 +135,21 @@ describe("DatasetTableComponent", () => {
 
   it("should be created", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#getTablePaginationConfig()", () => {
+    it("should use datasetPageSizeOptions from app config", () => {
+      appConfigService.getConfig.and.returnValue({
+        datasetPageSizeOptions: [10, 20, 50],
+      } as AppConfigInterface);
+
+      fixture = TestBed.createComponent(DatasetTableComponent);
+      component = fixture.componentInstance;
+
+      expect(component.getTablePaginationConfig().pageSizeOptions).toEqual([
+        10, 20, 50,
+      ]);
+    });
   });
 
   describe("#doRowClick()", () => {

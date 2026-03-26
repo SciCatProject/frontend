@@ -151,7 +151,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   defaultPageSize = 10;
 
-  defaultPageSizeOptions = [5, 10, 25, 100];
+  defaultPageSizeOptions = this.appConfig.datasetPageSizeOptions;
 
   tablesSettings: object;
 
