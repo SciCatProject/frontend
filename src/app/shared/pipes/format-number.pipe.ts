@@ -30,49 +30,65 @@ export class FormatNumberPipe implements PipeTransform {
       | null
       | undefined
       | bigint
-      | (string | number | bigint)[],
+      | { value: number | string | bigint; unit?: string }
+      | (
+          | string
+          | number
+          | bigint
+          | { value: number | string | bigint; unit?: string }
+        )[],
   ): string {
     if (Array.isArray(value))
       return String(
-        value.filter(
-          (v) =>
-            typeof v === "number" ||
-            typeof v === "bigint" ||
-            typeof v === "string",
-        ),
+        value
+          .filter(
+            (v) =>
+              typeof v === "number" ||
+              typeof v === "bigint" ||
+              typeof v === "string" ||
+              (typeof v === "object" && v !== null && "value" in v && !v.unit),
+          )
+          .map((v) => (typeof v === "object" ? v.value : v)),
       );
+    const innerValue =
+      typeof value === "object" && value !== null && "value" in value
+        ? value.value
+        : value;
     if (
-      typeof value !== "string" &&
-      typeof value !== "number" &&
-      typeof value !== "bigint"
+      typeof innerValue !== "string" &&
+      typeof innerValue !== "number" &&
+      typeof innerValue !== "bigint"
     )
       return "";
 
     // use old way if not enabled
     if (!this.enabled) {
-      if (typeof value === "number" && (value >= 1e5 || value <= 1e-5)) {
-        return value.toExponential();
+      if (
+        typeof innerValue === "number" &&
+        (innerValue >= 1e5 || innerValue <= 1e-5)
+      ) {
+        return innerValue.toExponential();
       }
-      return String(value);
+      return String(innerValue);
     }
 
-    if (typeof value !== "number" || !Number.isFinite(value)) {
+    if (typeof innerValue !== "number" || !Number.isFinite(innerValue)) {
       // value is not a finite number
-      return String(value);
+      return String(innerValue);
     }
 
     // Do not format integers
-    if (Number.isInteger(value)) {
-      return String(value);
+    if (Number.isInteger(innerValue)) {
+      return String(innerValue);
     }
 
     // use scientific notation if float value is large or small
-    const absoluteValue = Math.abs(value);
+    const absoluteValue = Math.abs(innerValue);
     if (absoluteValue < this.minCutoff || absoluteValue > this.maxCutoff) {
       // use scientific notation with (significantDigits - 1) decimals
-      return value.toExponential(this.significantDigits - 1);
+      return innerValue.toExponential(this.significantDigits - 1);
     }
 
-    return value.toPrecision(this.significantDigits);
+    return innerValue.toPrecision(this.significantDigits);
   }
 }
