@@ -1,5 +1,8 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { AppConfigService } from "app-config.service";
+
+type ValueWithUnit = { value: number | string | bigint; unit?: string };
+
 @Pipe({
   name: "formatNumber",
   standalone: false,
@@ -23,6 +26,17 @@ export class FormatNumberPipe implements PipeTransform {
     }
   }
 
+  private isValueWithUnit(value: unknown): value is ValueWithUnit {
+    return (
+      typeof value === "object" &&
+      value !== null &&
+      "value" in value &&
+      (typeof value.value === "number" ||
+        typeof value.value === "string" ||
+        typeof value.value === "bigint")
+    );
+  }
+
   transform(
     value:
       | string
@@ -30,13 +44,8 @@ export class FormatNumberPipe implements PipeTransform {
       | null
       | undefined
       | bigint
-      | { value: number | string | bigint; unit?: string }
-      | (
-          | string
-          | number
-          | bigint
-          | { value: number | string | bigint; unit?: string }
-        )[],
+      | ValueWithUnit
+      | (string | number | bigint | ValueWithUnit)[],
   ): string {
     if (Array.isArray(value))
       return String(
@@ -46,14 +55,15 @@ export class FormatNumberPipe implements PipeTransform {
               typeof v === "number" ||
               typeof v === "bigint" ||
               typeof v === "string" ||
-              (typeof v === "object" && v !== null && "value" in v && !v.unit),
+              this.isValueWithUnit(v),
           )
-          .map((v) => (typeof v === "object" ? v.value : v)),
+          .map((v) =>
+            this.isValueWithUnit(v) ? `${v.value} ${v.unit ?? ""}` : v,
+          ),
       );
-    const innerValue =
-      typeof value === "object" && value !== null && "value" in value
-        ? value.value
-        : value;
+    const innerValue = this.isValueWithUnit(value)
+      ? `${value.value} ${value.unit ?? ""}`
+      : value;
     if (
       typeof innerValue !== "string" &&
       typeof innerValue !== "number" &&

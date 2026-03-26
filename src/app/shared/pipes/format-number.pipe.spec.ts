@@ -142,19 +142,19 @@ describe("FormatNumberPipe", () => {
     it("returns .value when value is an object with a value property", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
-      const nbr = { value: "test" };
+      const nbr = { value: "test", unit: "unit" };
       const formatted = pipe.transform(nbr);
-      expect(formatted).toEqual("test");
+      expect(formatted).toEqual("test unit");
     });
 
     it("returns concatenated string when value is an array, taking .value from objects", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
-      const value = [1, 2, { value: "4" }, 3];
+      const value = [1, 2, { value: "4", unit: "unit" }, 3];
       const formatted = pipe.transform(
         value as unknown as string | number | null | undefined,
       );
-      expect(formatted).toEqual("1,2,4,3");
+      expect(formatted).toEqual("1,2,4 unit,3");
     });
   });
 
