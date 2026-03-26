@@ -74,7 +74,7 @@ export interface CustomizationItem {
 }
 
 export interface Field {
-  element: FieldType;
+  element: `${DatasetViewFieldType}`;
   source: string;
   order: number;
   path?: string;
@@ -86,9 +86,6 @@ type CustomizationType =
   | "scientificMetadata"
   | "datasetJsonView"
   | "attachments";
-
-// Type alias for allowed field types
-type FieldType = "text" | "copy" | "linky" | "tag" | "date";
 
 export interface ListSettings {
   columns?: TableColumn[];
