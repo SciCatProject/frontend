@@ -37,6 +37,14 @@ export class FormatNumberPipe implements PipeTransform {
     );
   }
 
+  private unwrapValueWithUnit(
+    value: string | number | bigint | ValueWithUnit,
+  ): string | number | bigint {
+    return this.isValueWithUnit(value)
+      ? `${value.value} ${value.unit ?? ""}`
+      : value;
+  }
+
   transform(
     value:
       | string
@@ -57,13 +65,9 @@ export class FormatNumberPipe implements PipeTransform {
               typeof v === "string" ||
               this.isValueWithUnit(v),
           )
-          .map((v) =>
-            this.isValueWithUnit(v) ? `${v.value} ${v.unit ?? ""}` : v,
-          ),
+          .map((v) => this.unwrapValueWithUnit(v)),
       );
-    const innerValue = this.isValueWithUnit(value)
-      ? `${value.value} ${value.unit ?? ""}`
-      : value;
+    const innerValue = this.unwrapValueWithUnit(value);
     if (
       typeof innerValue !== "string" &&
       typeof innerValue !== "number" &&
