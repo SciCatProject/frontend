@@ -44,6 +44,7 @@ export interface AbstractField {
   index?: number;
   name: string /* The key of the data */;
   path?: string;
+  source?: "default" | "user";
   type?: FieldType /* Type of data in the field */;
   minWidth?: number /* min width of column */;
   width?: number /* width of column */;
