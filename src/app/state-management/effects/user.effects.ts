@@ -25,7 +25,7 @@ import {
   concatMap,
 } from "rxjs/operators";
 import { of } from "rxjs";
-import { MessageType } from "state-management/models";
+import { MessageType, SETTINGS_CONFIG } from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
   selectColumns,
@@ -49,7 +49,6 @@ import { clearPublishedDataStateAction } from "state-management/actions/publishe
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
-import { selectColumnAction } from "state-management/actions/user.actions";
 import { initialUserState } from "state-management/state/user.store";
 
 @Injectable()
@@ -329,34 +328,26 @@ export class UserEffects {
               ...(userSettings.externalSettings || {}),
             };
 
-            const settingsToCheck = [
-              "fe_dataset_table_columns",
-              "fe_dataset_table_conditions",
-              "fe_dataset_table_filters",
-              "fe_proposal_table_columns",
-              "fe_proposal_table_filters",
-              "fe_sample_table_columns",
-              "fe_sample_table_conditions",
-              "fe_instrument_table_columns",
-              "fe_file_table_columns",
-            ];
+            const settingsToCheck = SETTINGS_CONFIG.map((s) => s.key);
 
             for (const setting of settingsToCheck) {
               let items = externalSettings[setting];
 
               if (!Array.isArray(items) || items.length < 1) {
-                if (setting.startsWith("fe_dataset_table_")) {
-                  const key = setting.replace("fe_dataset_table_", "");
+                const settingConfig = SETTINGS_CONFIG.find(
+                  (s) => s.key === setting,
+                );
+
+                if (settingConfig?.scope === "dataset") {
                   items =
-                    config.defaultDatasetsListSettings?.[key] ||
-                    initialUserState.settings[setting] ||
-                    [];
-                } else if (setting.startsWith("fe_proposal_table_")) {
-                  const key = setting.replace("fe_proposal_table_", "");
+                    config.defaultDatasetsListSettings?.[
+                      settingConfig.configKey
+                    ] || initialUserState.settings[setting];
+                } else if (settingConfig?.scope === "proposal") {
                   items =
-                    config.defaultProposalsListSettings?.[key] ||
-                    initialUserState.settings[setting] ||
-                    [];
+                    config.defaultProposalsListSettings?.[
+                      settingConfig.configKey
+                    ] || initialUserState.settings[setting];
                 } else {
                   items = initialUserState.settings[setting] || [];
                 }
@@ -395,8 +386,7 @@ export class UserEffects {
       mergeMap(({ userSettings }) => [
         fromActions.updateFilterConfigs({
           filterConfigs:
-            (userSettings as any).externalSettings?.fe_dataset_table_filters ||
-            [],
+            userSettings.externalSettings?.fe_dataset_table_filters || [],
         }),
       ]),
     );
@@ -410,8 +400,7 @@ export class UserEffects {
         const actions = [];
 
         const incomingConditions =
-          (userSettings as any).externalSettings?.fe_dataset_table_conditions ||
-          [];
+          userSettings.externalSettings?.fe_dataset_table_conditions || [];
 
         const conditions =
           incomingConditions.length > 0
@@ -470,17 +459,7 @@ export class UserEffects {
       concatLatestFrom(() => [this.user$]),
       takeWhile(([action, user]) => !!user),
       switchMap(([{ property }, user]) => {
-        const settingsToNest = [
-          "fe_dataset_table_columns",
-          "fe_dataset_table_conditions",
-          "fe_dataset_table_filters",
-          "fe_proposal_table_columns",
-          "fe_proposal_table_filters",
-          "fe_sample_table_columns",
-          "fe_sample_table_conditions",
-          "fe_instrument_table_columns",
-          "fe_file_table_columns",
-        ];
+        const settingsToNest = SETTINGS_CONFIG.map((s) => s.key);
         const propertyKeys = Object.keys(property);
         const newProperty = {};
         let useExternalSettings = false;
