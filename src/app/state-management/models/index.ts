@@ -198,13 +198,25 @@ export type ConditionSettingsKey =
   | "fe_sample_table_conditions";
 
 export const SETTINGS_CONFIG = [
-{ key: "fe_dataset_table_columns", scope: "dataset", configKey: "columns" },
-{ key: "fe_dataset_table_conditions", scope: "dataset", configKey: "conditions" },
-{ key: "fe_dataset_table_filters", scope: "dataset", configKey: "filters" },
-{ key: "fe_proposal_table_columns", scope: "proposal", configKey: "columns" },
-{ key: "fe_proposal_table_filters", scope: "proposal", configKey: "filters" },
-{ key: "fe_sample_table_columns", scope: "sample", configKey: "columns" },
-{ key: "fe_sample_table_conditions", scope: "sample", configKey: "conditions" },
-{ key: "fe_instrument_table_columns", scope: "instrument", configKey: "columns" },
-{ key: "fe_file_table_columns", scope: "file", configKey: "columns" },
+  { key: "fe_dataset_table_columns", scope: "dataset", configKey: "columns" },
+  {
+    key: "fe_dataset_table_conditions",
+    scope: "dataset",
+    configKey: "conditions",
+  },
+  { key: "fe_dataset_table_filters", scope: "dataset", configKey: "filters" },
+  { key: "fe_proposal_table_columns", scope: "proposal", configKey: "columns" },
+  { key: "fe_proposal_table_filters", scope: "proposal", configKey: "filters" },
+  { key: "fe_sample_table_columns", scope: "sample", configKey: "columns" },
+  {
+    key: "fe_sample_table_conditions",
+    scope: "sample",
+    configKey: "conditions",
+  },
+  {
+    key: "fe_instrument_table_columns",
+    scope: "instrument",
+    configKey: "columns",
+  },
+  { key: "fe_file_table_columns", scope: "file", configKey: "columns" },
 ];
