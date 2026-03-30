@@ -182,3 +182,10 @@
     </mat-tab>
   </mat-tab-group>
 </ng-container>
+<ng-template [ngIf]="!sample">
+  <error-page
+    [errorTitle]="'Sample not found'"
+    [message]="'The sample you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
+  >
+  </error-page>
+</ng-template>
