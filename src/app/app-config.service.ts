@@ -83,6 +83,7 @@ export interface AppConfigInterface {
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
   datasetJsonScientificMetadata: boolean;
+  datasetPageSizeOptions?: number[];
   datasetReduceEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetActionsEnabled: boolean;
@@ -268,6 +269,10 @@ export class AppConfigService {
         minCutoff: 0.001,
         maxCutoff: 1000,
       };
+    }
+
+    if (!config.datasetPageSizeOptions?.length) {
+      config.datasetPageSizeOptions = [5, 10, 25, 100];
     }
 
     this.appConfig = config;
