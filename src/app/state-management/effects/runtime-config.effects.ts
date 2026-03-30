@@ -50,15 +50,16 @@ export class RunTimeConfigEffects {
     );
   });
   saveAndReload$ = createEffect(
-    () =>
-      this.actions$.pipe(
+    () => {
+      return this.actions$.pipe(
         ofType(updateConfigurationSuccess),
         tap(() => {
           if (!(window as any).__karma__) {
             window.location.reload();
           }
         }),
-      ),
+      );
+    },
     { dispatch: false },
   );
   constructor(
