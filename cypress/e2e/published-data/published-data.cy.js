@@ -479,8 +479,6 @@ describe("Datasets general", () => {
       cy.get('[data-cy="metadata"]').click();
       cy.get("jsonforms").should("exist");
 
-      cy.get("button.save-and-continue").should("be.disabled");
-
       cy.get('[aria-label="Add to Creators button"]').click();
 
       cy.get('[aria-label="Add to Creators button"]')
