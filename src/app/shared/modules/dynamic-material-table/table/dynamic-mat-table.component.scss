@@ -330,10 +330,19 @@ cdk-virtual-scroll-viewport {
 .hover-card {
   min-width: 300px;
   max-width: 620px;
+  max-height: min(70vh, 640px);
+  display: flex;
+  flex-direction: column;
+}
+
+.metadata-hover-card {
+  width: min(75vw, 960px);
+  max-width: calc(100vw - 32px);
 }
 
 .hover-icon {
   color: var(--theme-primary-default);
+  cursor: pointer;
 }
 
 .hover-card-title {
@@ -351,6 +360,22 @@ cdk-virtual-scroll-viewport {
   border-radius: 0 0 4px 4px;
   white-space: pre-line;
   word-wrap: break-word;
+  overflow: auto;
+  flex: 1 1 auto;
+  max-height: min(60vh, 560px);
+}
+
+.scientific-metadata-hover-content {
+  width: 100%;
+  min-width: min(60vw, 720px);
+}
+
+.hover-card-empty {
+  padding: 4px 0;
+}
+
+.icon-wrapper {
+  display: inline-flex;
 }
 
 /* zebra stripes */

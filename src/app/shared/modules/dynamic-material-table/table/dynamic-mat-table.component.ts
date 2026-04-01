@@ -20,6 +20,7 @@ import {
   OnChanges,
   ViewContainerRef,
   SimpleChanges,
+  HostListener,
 } from "@angular/core";
 import { TableCoreDirective } from "../cores/table.core.directive";
 import { TableService } from "./dynamic-mat-table.service";
@@ -204,6 +205,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   globalSearchUpdate = new Subject<string>();
   init = false;
   hoverKey: string | null = null;
+  pinnedHoverKey: string | null = null;
   currentContextMenuSender: any = {};
 
   @HostBinding("style.height.px") height = null;
@@ -390,6 +392,86 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   makeKey = (row: any, col: any) => (row?.id ?? row) + "::" + col?.name;
 
+  @HostListener("document:click")
+  onDocumentClick() {
+    if (this.pinnedHoverKey) {
+      this.closePinnedHoverCard();
+    }
+  }
+
+  isHoverCardOpen(row: any, column: TableField<T>) {
+    const key = this.makeKey(row, column);
+    return this.hoverKey === key || this.pinnedHoverKey === key;
+  }
+
+  isHoverCardPinned(row: any, column: TableField<T>) {
+    return this.pinnedHoverKey === this.makeKey(row, column);
+  }
+
+  onHoverCardTriggerEnter(row: any, column: TableField<T>) {
+    const key = this.makeKey(row, column);
+    if (this.pinnedHoverKey && this.pinnedHoverKey !== key) {
+      return;
+    }
+
+    this.hoverKey = key;
+  }
+
+  onHoverCardTriggerLeave(row: any, column: TableField<T>) {
+    const key = this.makeKey(row, column);
+    if (this.pinnedHoverKey === key) {
+      return;
+    }
+
+    if (this.hoverKey === key) {
+      this.hoverKey = null;
+    }
+  }
+
+  onHoverCardContentEnter(row: any, column: TableField<T>) {
+    this.hoverKey = this.makeKey(row, column);
+  }
+
+  onHoverCardContentLeave(row: any, column: TableField<T>) {
+    this.onHoverCardTriggerLeave(row, column);
+  }
+
+  togglePinnedHoverCard(event: MouseEvent, row: any, column: TableField<T>) {
+    event.preventDefault();
+    this.stopEventPropagation(event);
+
+    const key = this.makeKey(row, column);
+    if (this.pinnedHoverKey === key) {
+      this.closePinnedHoverCard();
+      return;
+    }
+
+    this.pinnedHoverKey = key;
+    this.hoverKey = key;
+  }
+
+  closePinnedHoverCard() {
+    this.pinnedHoverKey = null;
+    this.hoverKey = null;
+  }
+
+  stopEventPropagation(event: Event) {
+    event.stopPropagation();
+  }
+
+  isScientificMetadataColumn(column: TableField<T>) {
+    return column?.name === "scientificMetadata";
+  }
+
+  getScientificMetadata(row: Record<string, unknown>) {
+    return row?.scientificMetadata as Record<string, unknown>;
+  }
+
+  hasScientificMetadata(row: Record<string, unknown>) {
+    const metadata = this.getScientificMetadata(row);
+    return !!metadata && Object.keys(metadata).length > 0;
+  }
+
   ngAfterViewInit(): void {
     this.standardDataSource.paginator = this.paginator;
     if (this.tableSetting.tableSort) {
@@ -507,6 +589,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
     }
+    this.closePinnedHoverCard();
+    this.closeTooltip();
   }
 
   public refreshUI() {

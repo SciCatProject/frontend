@@ -219,8 +219,9 @@
                     fontIcon="description"
                     #hoverOriginSpan="cdkOverlayOrigin"
                     cdkOverlayOrigin
-                    (mouseenter)="hoverKey = makeKey(row, column)"
-                    (mouseleave)="hoverKey = null"
+                    (mouseenter)="onHoverCardTriggerEnter(row, column)"
+                    (mouseleave)="onHoverCardTriggerLeave(row, column)"
+                    (click)="togglePinnedHoverCard($event, row, column)"
                   ></mat-icon>
                   <span
                     class="cell-text"
@@ -230,20 +231,50 @@
                 <ng-template
                   cdkConnectedOverlay
                   [cdkConnectedOverlayOrigin]="hoverOriginSpan"
-                  [cdkConnectedOverlayOpen]="hoverKey === makeKey(row, column)"
+                  [cdkConnectedOverlayOpen]="isHoverCardOpen(row, column)"
                   [cdkConnectedOverlayPositions]="metadataOverlayPositions"
+                  [cdkConnectedOverlayHasBackdrop]="isHoverCardPinned(row, column)"
+                  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                  (backdropClick)="closePinnedHoverCard()"
                 >
-                  <mat-card class="hover-card">
+                  <mat-card
+                    class="hover-card"
+                    [class.metadata-hover-card]="
+                      isScientificMetadataColumn(column)
+                    "
+                    (mouseenter)="onHoverCardContentEnter(row, column)"
+                    (mouseleave)="onHoverCardContentLeave(row, column)"
+                    (click)="stopEventPropagation($event)"
+                  >
                     <mat-card-title class="hover-card-title">
                       {{
                         column.header || column.name | translate: localization
                       }}
                     </mat-card-title>
-                    <div
-                      mat-card-content
-                      class="hover-card-content"
-                      [innerHTML]="metadataNameHoverContent(row)"
-                    ></div>
+                    <ng-container
+                      *ngIf="
+                        isScientificMetadataColumn(column);
+                        else metadataNameHoverContentCard
+                      "
+                    >
+                      <div mat-card-content class="hover-card-content">
+                        <div
+                          *ngIf="hasScientificMetadata(row); else emptyScientificMetadata"
+                          class="scientific-metadata-hover-content"
+                        >
+                          <tree-view
+                            [metadata]="getScientificMetadata(row)"
+                          ></tree-view>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-template #metadataNameHoverContentCard>
+                      <div
+                        mat-card-content
+                        class="hover-card-content"
+                        [innerHTML]="metadataNameHoverContent(row)"
+                      ></div>
+                    </ng-template>
                   </mat-card>
                 </ng-template>
               </ng-container>
@@ -322,23 +353,50 @@
             class="icon-wrapper"
             #hoverOrigin="cdkOverlayOrigin"
             cdkOverlayOrigin
-            (mouseenter)="hoverKey = makeKey(row, column)"
-            (mouseleave)="hoverKey = null"
+            (mouseenter)="onHoverCardTriggerEnter(row, column)"
+            (mouseleave)="onHoverCardTriggerLeave(row, column)"
+            (click)="togglePinnedHoverCard($event, row, column)"
           >
             <mat-icon class="hover-icon" fontIcon="description"></mat-icon>
             <ng-template
               cdkConnectedOverlay
               [cdkConnectedOverlayOrigin]="hoverOrigin"
-              [cdkConnectedOverlayOpen]="hoverKey === makeKey(row, column)"
+              [cdkConnectedOverlayOpen]="isHoverCardOpen(row, column)"
               [cdkConnectedOverlayPositions]="overlayPositions"
+              [cdkConnectedOverlayHasBackdrop]="isHoverCardPinned(row, column)"
+              cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+              (backdropClick)="closePinnedHoverCard()"
             >
-              <mat-card class="hover-card">
+              <mat-card
+                class="hover-card"
+                [class.metadata-hover-card]="isScientificMetadataColumn(column)"
+                (mouseenter)="onHoverCardContentEnter(row, column)"
+                (mouseleave)="onHoverCardContentLeave(row, column)"
+                (click)="stopEventPropagation($event)"
+              >
                 <mat-card-title class="hover-card-title">
                   {{ column.header || column.name | translate: localization }}
                 </mat-card-title>
-                <div mat-card-content class="hover-card-content">
-                  {{ getColumnValue(row, column) || "No content" }}
-                </div>
+                <ng-container
+                  *ngIf="
+                    isScientificMetadataColumn(column);
+                    else standardHoverContentCard
+                  "
+                >
+                  <div mat-card-content class="hover-card-content">
+                    <div
+                      *ngIf="hasScientificMetadata(row); else emptyScientificMetadata"
+                      class="scientific-metadata-hover-content"
+                    >
+                      <tree-view [metadata]="getScientificMetadata(row)"></tree-view>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #standardHoverContentCard>
+                  <div mat-card-content class="hover-card-content">
+                    {{ getColumnValue(row, column) || "No content" }}
+                  </div>
+                </ng-template>
               </mat-card>
             </ng-template>
           </span>
@@ -353,6 +411,10 @@
         </div>
       </mat-footer-cell>
     </ng-container>
+
+    <ng-template #emptyScientificMetadata>
+      <div class="hover-card-empty">No content</div>
+    </ng-template>
 
     <ng-container matColumnDef="progress">
       <mat-header-cell
