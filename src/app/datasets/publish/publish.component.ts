@@ -81,6 +81,10 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     private router: Router,
   ) {}
 
+  isSchemaEmpty(): boolean {
+    return isEmpty(this.schema);
+  }
+
   public formIsValid() {
     if (!Object.values(this.form).includes(undefined)) {
       return this.form.title.length > 0 && this.form.abstract.length > 0;
