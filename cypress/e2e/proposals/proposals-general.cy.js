@@ -639,7 +639,7 @@ describe("Proposals general", () => {
       });
     });
 
-    it.only("should collapse and expand checkbox filters", () => {
+    it("should collapse and expand checkbox filters", () => {
       cy.get(".collapsible-filter-wrapper .icon-collapse").first().click();
 
       cy.get(".collapsible-filter-wrapper .checkbox-list")
