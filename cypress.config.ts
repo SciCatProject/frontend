@@ -1,6 +1,9 @@
 import { defineConfig } from "cypress";
+import fs from 'fs';
 
 export default defineConfig({
+  video: true,
+  videoCompression: true,
   env: {
     baseUrl: "http://localhost:3000/api/v3",
     loginEndpoint: "/auth/login",
@@ -18,5 +21,18 @@ export default defineConfig({
     viewportWidth: 1280,
     defaultCommandTimeout: 10000,
     retries: 1,
+    setupNodeEvents(on, config) {
+      // see: https://docs.cypress.io/app/guides/screenshots-and-videos#Delete-videos-for-specs-without-failing-or-retried-tests
+      on("after:spec", (spec, results) => {
+        if (results && results.video) {
+          const failures = results.tests.some((test) => {
+            return test.attempts.some((attempt) => attempt.state === "failed");
+          });
+          if (!failures && fs.existsSync(results.video)) {
+            return fs.unlinkSync(results.video);
+          }
+        }
+      });
+    }
   },
 });
