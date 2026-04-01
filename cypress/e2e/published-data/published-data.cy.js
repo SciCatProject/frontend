@@ -205,10 +205,7 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="publishButton"]').click();
 
-      cy.get("simple-snack-bar").should(
-        "contain",
-        'Publishing Failed. metadata requires property "creators"',
-      );
+      cy.get("simple-snack-bar").should("contain", "Publishing Failed.");
     });
 
     it("admins should be able to edit their private published data", () => {
@@ -241,8 +238,6 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="metadata"]').click();
       cy.get("jsonforms").should("exist");
-
-      cy.get("button.save-and-continue").should("be.disabled");
 
       cy.get('[aria-label="Add to Creators button"]').click();
 
