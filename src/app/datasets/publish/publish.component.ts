@@ -81,6 +81,10 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     private router: Router,
   ) {}
 
+  isSchemaEmpty(): boolean {
+    return isEmpty(this.schema);
+  }
+
   public formIsValid() {
     if (!Object.values(this.form).includes(undefined)) {
       return this.form.title.length > 0 && this.form.abstract.length > 0;
@@ -128,11 +132,6 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
           this.schema = publishedDataConfig.metadataSchema;
-          // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
-          this.schema?.required.splice(
-            this.schema.required.indexOf("publicationYear"),
-            1,
-          );
           this.uiSchema = publishedDataConfig.uiSchema;
           this.metadata = cloneDeep(publishedDataConfig.defaultValues) ?? {};
         }
