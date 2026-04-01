@@ -49,6 +49,7 @@ export class RunTimeConfigEffects {
       }),
     );
   });
+  // NOTE: This is a temporary workaround and should be replaced with a proper solution in the future.
   saveAndReload$ = createEffect(
     () => {
       return this.actions$.pipe(
