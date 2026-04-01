@@ -332,7 +332,7 @@ describe("PublishedDataEffects", () => {
         duration: 5000,
       };
       const action = fromActions.registerPublishedDataFailedAction({
-        error: [error.message],
+        error: [{ message: error.message }],
       });
       const outcome = showMessageAction({ message });
 
