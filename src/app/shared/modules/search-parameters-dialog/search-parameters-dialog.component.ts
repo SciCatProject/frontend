@@ -149,7 +149,7 @@ export class SearchParametersDialogComponent {
   }
 
   onEnterToApply(event: Event) {
-    if (this.appConfig.enterToApply === false) {
+    if (!this.appConfig.enterToApply) {
       return;
     }
     event.preventDefault();
