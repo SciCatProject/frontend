@@ -77,6 +77,7 @@ import {
 } from "../models/table-menu.model";
 import { TableDataSource } from "../cores/table-data-source";
 import { DatePipe } from "@angular/common";
+import { AppConfigService } from "app-config.service";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -319,6 +320,8 @@ export class DynamicMatTableComponent<T extends TableRow>
   @Input() emptyIcon = "info";
   @Input() sideFilterCollapsed = false;
 
+  appConfig = this.appConfigService.getConfig();
+
   constructor(
     public dialog: MatDialog,
     private renderer: Renderer2,
@@ -329,6 +332,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     private overlayPositionBuilder: OverlayPositionBuilder,
     public readonly config: TableSetting,
     private datePipe: DatePipe,
+    public appConfigService: AppConfigService,
   ) {
     super(tableService, cdr, config);
 
@@ -872,6 +876,19 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.globalSearchUpdate.next("");
     this.globalTextSearchChange.emit("");
     this.globalTextSearchApply.emit("");
+  }
+
+  globalSearchPlaceholderWithHint() {
+    const base = this.globalTextSearchPlaceholder || "";
+    return this.appConfig.enterToApply ? `${base} ↵ Enter to apply` : base;
+  }
+
+  onGlobalTextSearchEnter(event: Event) {
+    if (this.appConfig.enterToApply === false) {
+      return;
+    }
+    event.preventDefault();
+    this.onGlobalTextSearchApply();
   }
 
   autoHeight() {

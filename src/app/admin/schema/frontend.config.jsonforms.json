@@ -56,6 +56,7 @@
       "logbookEnabled": { "type": "boolean" },
       "loginFormEnabled": { "type": "boolean" },
       "metadataPreviewEnabled": { "type": "boolean" },
+      "enterToApply": { "type": "boolean" },
       "metadataStructure": { "type": "string" },
       "multipleDownloadAction": { "type": "string" },
       "multipleDownloadEnabled": { "type": "boolean" },
@@ -461,7 +462,8 @@
           { "type": "Control", "scope": "#/properties/jsonMetadataEnabled" },
           { "type": "Control", "scope": "#/properties/logbookEnabled" },
           { "type": "Control", "scope": "#/properties/loginFormEnabled" },
-          { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" }
+          { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" },
+          { "type": "Control", "scope": "#/properties/enterToApply" }
         ]
       },
       {

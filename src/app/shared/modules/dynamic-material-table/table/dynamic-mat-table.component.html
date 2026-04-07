@@ -11,9 +11,9 @@
         [(ngModel)]="globalTextSearch"
         type="text"
         matInput
-        [placeholder]="globalTextSearchPlaceholder"
+        [placeholder]="globalSearchPlaceholderWithHint()"
         (ngModelChange)="this.globalSearchUpdate.next($event)"
-        (keydown.enter)="onGlobalTextSearchApply()"
+        (keydown.enter)="onGlobalTextSearchEnter($event)"
         (keydown.escape)="onGlobalTextSearchClear()"
         data-cy="text-search"
       />

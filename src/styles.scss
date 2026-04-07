@@ -452,3 +452,24 @@ jsonforms {
   border-radius: 8px;
   white-space: normal;
 }
+
+// Enter hint for input fields
+
+.enter-hint {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 1em;
+}
+
+.enter-hint::before {
+  content: "↵";
+}
+
+.mat-mdc-form-field.mat-focused .enter-hint {
+  display: inline-flex;
+}

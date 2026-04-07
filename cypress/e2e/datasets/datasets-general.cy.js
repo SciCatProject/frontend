@@ -138,7 +138,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("extra_entry_end_time");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
 
@@ -162,7 +162,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("extra_entry_end_time");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".snackbar-warning")
         .should("contain", "Field already used")
@@ -187,7 +187,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("extra_entry_end_time");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       // expand the condition
       cy.get(".condition-panel").first().click();
@@ -231,7 +231,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("Temperature Human Name");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
 
@@ -247,7 +247,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("temperature");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
 
@@ -263,7 +263,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("invalid_field_name");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
 
@@ -279,7 +279,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("test_number");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
 
@@ -315,7 +315,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("test_number");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
 
@@ -362,6 +362,26 @@ describe("Datasets general", () => {
       cy.get(".dataset-table mat-table").should("exist");
 
       cy.get('[data-cy="remove-condition-button"]').click();
+    });
+
+    it.only("should add a condition when pressing Enter", () => {
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          enterToApply: true,
+        };
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.visit("/datasets");
+      cy.wait("@getConfig", { timeout: 20000 });
+      cy.finishedLoading();
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("extra_entry_end_time{enter}");
     });
   });
 
@@ -585,7 +605,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("extra_entry_end_time");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
 
@@ -680,7 +700,7 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="add-condition-button"]').click();
       cy.get('input[name="lhs"]').type("extra_entry_end_time");
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").should("have.length", 1);
 
@@ -689,7 +709,7 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="add-condition-button"]').click();
       cy.get('input[name="lhs"]').type("test_characteristic");
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").should("have.length", 1);
 
@@ -740,7 +760,7 @@ describe("Datasets general", () => {
 
       cy.get('input[name="lhs"]').type("run_number");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
 

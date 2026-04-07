@@ -18,6 +18,7 @@ import { INumericRange } from "../numeric-range/form/model/numeric-range-field.m
 import { FilterType } from "state-management/state/user.store";
 import { toIsoUtc } from "../filters/utils";
 import { orderBy } from "lodash-es";
+import { AppConfigService } from "app-config.service";
 
 type FacetItem = { _id: string; label?: string; count: number };
 @Component({
@@ -90,7 +91,10 @@ export class SharedFilterComponent implements OnChanges {
     end?: string;
   }>();
 
-  constructor() {}
+  @Output() applyEnterKey = new EventEmitter<void>();
+  appConfig = this.appConfigService.getConfig();
+
+  constructor(public appConfigService: AppConfigService) {}
   ngOnInit() {
     // Reset display limit whenever the text search changes
     this.filterForm.get("textField")!.valueChanges.subscribe(() => {
@@ -245,6 +249,14 @@ export class SharedFilterComponent implements OnChanges {
     if (this.collapsible && this.filterType === "checkbox") {
       this.collapsed = !this.collapsed;
     }
+  }
+
+  onApplyEnter(event?: Event) {
+    if (this.appConfig.enterToApply === false) {
+      return;
+    }
+    event?.preventDefault();
+    this.applyEnterKey.emit();
   }
 
   /** Checkbox filter helpers END*/

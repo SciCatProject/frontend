@@ -19,7 +19,7 @@ describe("Samples general", () => {
 
       cy.get('[data-cy="add-condition-button"]').click();
       cy.get('input[name="lhs"]').type("test_characteristic");
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").contains("button", "Apply").click();
 
       cy.get(".condition-panel").first().click();
       cy.get(".condition-panel")

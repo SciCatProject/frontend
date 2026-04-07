@@ -1,5 +1,10 @@
 <mat-form-field [id]="key">
-  <mat-label>{{ label }}</mat-label>
+  <mat-label
+    >{{ label }}
+    <span *ngIf="appConfig.enterToApply" class="enter-hint"
+      >Enter to apply</span
+    >
+  </mat-label>
   <mat-chip-grid #chipList>
     <mat-chip-row
       *ngFor="let item of currentFilter$ | async"

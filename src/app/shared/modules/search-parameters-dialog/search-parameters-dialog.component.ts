@@ -147,4 +147,12 @@ export class SearchParametersDialogComponent {
   getHumanName(key: string): string {
     return this.humanNameMap[key] || "";
   }
+
+  onEnterToApply(event: Event) {
+    if (this.appConfig.enterToApply === false) {
+      return;
+    }
+    event.preventDefault();
+    this.add();
+  }
 }

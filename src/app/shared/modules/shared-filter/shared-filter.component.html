@@ -3,12 +3,16 @@
   <ng-container [ngSwitch]="filterType">
     <ng-container *ngSwitchDefault>
       <mat-form-field [id]="key">
-        <mat-label>{{ label }}</mat-label>
+        <mat-label
+          >{{ label }}
+          <span *ngIf="appConfig.enterToApply" class="enter-hint">Enter to apply</span>
+        </mat-label>
         <input
           matInput
           #input
           type="text"
           (input)="onInput($event)"
+          (keydown.enter)="onApplyEnter($event)"
           [matTooltip]="tooltip"
           matTooltipPosition="after"
           formControlName="textField"
@@ -18,11 +22,15 @@
 
     <ng-container *ngSwitchCase="'dateRange'">
       <mat-form-field
+        class="date-range-field"
         [matTooltip]="tooltip"
         matTooltipPosition="after"
         [id]="key"
       >
-        <mat-label>{{ label }}</mat-label>
+        <mat-label
+          >{{ label }}
+          <span *ngIf="appConfig.enterToApply" class="enter-hint">Enter to apply</span>
+        </mat-label>
         <mat-date-range-input
           formGroupName="dateRangeField"
           [rangePicker]="picker"
@@ -32,12 +40,14 @@
             (dateChange)="dateChanged($event, 'begin')"
             formControlName="start"
             data-cy="creation-time-begin"
+            (keydown.enter)="onApplyEnter($event)"
           />
           <input
             matEndDate
             (dateChange)="dateChanged($event, 'end')"
             formControlName="end"
             data-cy="creation-time-end"
+            (keydown.enter)="onApplyEnter($event)"
           />
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -110,6 +120,7 @@
         (selectionChange)="onSelectionChange($event)"
         [facetCounts$]="facetCounts$"
         [currentFilter$]="currentFilter$"
+        (keydown.enter)="onApplyEnter($event)"
       ></multiselect-filter>
     </ng-container>
     <ng-container *ngSwitchCase="'number'">
