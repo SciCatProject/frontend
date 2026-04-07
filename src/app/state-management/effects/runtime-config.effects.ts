@@ -1,7 +1,7 @@
 import { Inject, Injectable, Optional } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
-import { switchMap, map, catchError, exhaustMap } from "rxjs/operators";
+import { switchMap, map, catchError, exhaustMap, tap } from "rxjs/operators";
 import {
   loadConfiguration,
   loadConfigurationFailure,
@@ -49,6 +49,20 @@ export class RunTimeConfigEffects {
       }),
     );
   });
+  // NOTE: This is a temporary workaround and should be replaced with a proper solution in the future.
+  saveAndReload$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(updateConfigurationSuccess),
+        tap(() => {
+          if (!(window as any).__karma__) {
+            window.location.reload();
+          }
+        }),
+      );
+    },
+    { dispatch: false },
+  );
   constructor(
     private actions$: Actions,
     @Optional() private runtimeConfigService: RuntimeConfigurationsService,

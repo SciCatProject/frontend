@@ -88,7 +88,7 @@ export const registerPublishedDataCompleteAction = createAction(
 );
 export const registerPublishedDataFailedAction = createAction(
   "[PublishedData] Register Published Data Failed",
-  props<{ error: string[] }>(),
+  props<{ error: { message: string }[] }>(),
 );
 
 export const amendPublishedDataAction = createAction(
@@ -127,7 +127,7 @@ export const publishPublishedDataCompleteAction = createAction(
 );
 export const publishPublishedDataFailedAction = createAction(
   "[PublishedData] Publish Published Data Failed",
-  props<{ error: string[] }>(),
+  props<{ error: { message: string }[] }>(),
 );
 
 export const resyncPublishedDataAction = createAction(

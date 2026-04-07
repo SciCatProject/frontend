@@ -197,7 +197,10 @@
               "properties": {
                 "key": { "type": "string" },
                 "label": { "type": "string" },
-                "type": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["text", "multiSelect", "dateRange", "checkbox"]
+                },
                 "description": { "type": "string" },
                 "enabled": { "type": "boolean" }
               }
@@ -272,7 +275,10 @@
               "properties": {
                 "key": { "type": "string" },
                 "label": { "type": "string" },
-                "type": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["text", "multiSelect", "dateRange", "checkbox"]
+                },
                 "description": { "type": "string" },
                 "enabled": { "type": "boolean" }
               }

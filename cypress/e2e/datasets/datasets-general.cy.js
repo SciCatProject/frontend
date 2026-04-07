@@ -670,13 +670,13 @@ describe("Datasets general", () => {
     });
 
     it("should collapse and expand checkbox filters", () => {
-      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+      cy.get(".collapsible-filter-wrapper .icon-collapse").first().click();
 
       cy.get(".collapsible-filter-wrapper .checkbox-list")
         .first()
         .should("not.be.visible");
 
-      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+      cy.get(".collapsible-filter-wrapper .icon-collapse").first().click();
 
       cy.get(".collapsible-filter-wrapper .checkbox-list")
         .first()
