@@ -364,7 +364,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
 
-    it.only("should add a condition when pressing Enter", () => {
+    it("should add a condition when pressing Enter", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
