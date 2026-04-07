@@ -234,7 +234,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         order: index,
         width,
         path,
-        source: column.source ?? "default",
+        userAdded: column.userAdded || undefined,
         type,
         format,
         tooltip,

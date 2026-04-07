@@ -300,7 +300,7 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#saveTableSettings()", () => {
-    it("should persist user-added dataset columns with source and path", () => {
+    it("should persist user-added dataset columns with userAdded and path", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const setting: ITableSetting = {
@@ -319,7 +319,7 @@ describe("DatasetTableComponent", () => {
             type: "custom",
             width: 180,
             tooltip: "User-added custom column",
-            source: "user",
+            userAdded: true,
           },
         ],
       };
@@ -337,7 +337,7 @@ describe("DatasetTableComponent", () => {
                 order: 0,
                 width: 250,
                 path: undefined,
-                source: "default",
+                userAdded: undefined,
                 type: "standard",
                 format: undefined,
                 tooltip: undefined,
@@ -349,7 +349,7 @@ describe("DatasetTableComponent", () => {
                 order: 1,
                 width: 180,
                 path: "scientificMetadata.sample.temperature",
-                source: "user",
+                userAdded: true,
                 type: "custom",
                 format: undefined,
                 tooltip: "User-added custom column",
@@ -360,7 +360,7 @@ describe("DatasetTableComponent", () => {
       );
     });
 
-    it("should default missing source metadata to default", () => {
+    it("should leave missing userAdded metadata undefined", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const setting: ITableSetting = {
@@ -384,7 +384,7 @@ describe("DatasetTableComponent", () => {
             columns: [
               jasmine.objectContaining({
                 name: "scientificMetadata.sample.temperature",
-                source: "default",
+                userAdded: undefined,
                 type: "custom",
               }),
             ],

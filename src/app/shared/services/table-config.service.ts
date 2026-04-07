@@ -42,7 +42,7 @@ export class TableConfigService {
     const defaultMap = new Map(defaultColumnSetting.map((c) => [c.name, c]));
 
     // Merge saved columns that still exist in defaults and preserve
-    // user-added columns that intentionally do not exist in defaults.
+    // explicitly user-added columns that intentionally do not exist in defaults.
     const mergedColumns = savedColumnSetting
       .map((saved) => {
         const defCol = defaultMap.get(saved.name);
@@ -53,7 +53,7 @@ export class TableConfigService {
           };
         }
 
-        return saved.source === "user" ? saved : null;
+        return saved.userAdded ? saved : null;
       })
       .filter(Boolean);
 

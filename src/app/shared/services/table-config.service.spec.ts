@@ -53,7 +53,7 @@ describe("TableConfigService", () => {
         display: "visible" as const,
         index: 1,
         type: "custom" as const,
-        source: "user" as const,
+        userAdded: true,
       };
 
       const merged = service.mergeColumnSettings(defaultColumns, [

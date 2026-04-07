@@ -15,7 +15,7 @@ export interface TableColumn {
   name: string;
   header?: string;
   path?: string;
-  source?: "default" | "user";
+  userAdded?: boolean;
   order: number;
   type: "standard" | "custom" | "date" | "hoverContent" | "editable";
   enabled: boolean;
