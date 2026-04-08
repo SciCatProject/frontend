@@ -12,12 +12,10 @@ const routes: Routes = [
   {
     path: "",
     component: PublisheddataDashboardComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: ":id",
     component: PublisheddataDetailsComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: ":id/edit",
