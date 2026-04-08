@@ -122,6 +122,8 @@ export class DatasetsListService implements OnDestroy {
           index: column.order,
           display: column.enabled ? "visible" : "hidden",
           width: column.width,
+          path: column.path,
+          userAdded: column.userAdded,
           type: column.type,
           format: column.format,
           tooltip: column.tooltip,

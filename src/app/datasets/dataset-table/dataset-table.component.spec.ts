@@ -28,6 +28,7 @@ import {
   clearSelectionAction,
   sortByColumnAction,
 } from "state-management/actions/datasets.actions";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectDatasets } from "state-management/selectors/datasets.selectors";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
@@ -53,6 +54,7 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { TranslateService } from "@ngx-translate/core";
 import { DatasetsListService } from "shared/services/datasets-list.service";
+import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 
 const auditFields = {
   createdAt: "",
@@ -294,6 +296,101 @@ describe("DatasetTableComponent", () => {
 
       const notFoundInstrument = component.instrumentMap.get("nonexistent");
       expect(notFoundInstrument).toBeUndefined();
+    });
+  });
+
+  describe("#saveTableSettings()", () => {
+    it("should persist user-added dataset columns with userAdded and path", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const setting: ITableSetting = {
+        columnSetting: [
+          {
+            name: "datasetName",
+            display: "visible",
+            type: "standard",
+            width: 250,
+          },
+          {
+            name: "scientificMetadata.sample.temperature",
+            header: "Temperature",
+            path: "scientificMetadata.sample.temperature",
+            display: "visible",
+            type: "custom",
+            width: 180,
+            tooltip: "User-added custom column",
+            userAdded: true,
+          },
+        ],
+      };
+
+      component.saveTableSettings(setting);
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateUserSettingsAction({
+          property: {
+            columns: [
+              {
+                name: "datasetName",
+                header: undefined,
+                enabled: true,
+                order: 0,
+                width: 250,
+                path: undefined,
+                userAdded: undefined,
+                type: "standard",
+                format: undefined,
+                tooltip: undefined,
+              },
+              {
+                name: "scientificMetadata.sample.temperature",
+                header: "Temperature",
+                enabled: true,
+                order: 1,
+                width: 180,
+                path: "scientificMetadata.sample.temperature",
+                userAdded: true,
+                type: "custom",
+                format: undefined,
+                tooltip: "User-added custom column",
+              },
+            ],
+          },
+        }),
+      );
+    });
+
+    it("should leave missing userAdded metadata undefined", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const setting: ITableSetting = {
+        columnSetting: [
+          {
+            name: "scientificMetadata.sample.temperature",
+            header: "Temperature",
+            path: "scientificMetadata.sample.temperature",
+            display: "visible",
+            type: "custom",
+            width: 180,
+          },
+        ],
+      };
+
+      component.saveTableSettings(setting);
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateUserSettingsAction({
+          property: {
+            columns: [
+              jasmine.objectContaining({
+                name: "scientificMetadata.sample.temperature",
+                userAdded: undefined,
+                type: "custom",
+              }),
+            ],
+          },
+        }),
+      );
     });
   });
 });

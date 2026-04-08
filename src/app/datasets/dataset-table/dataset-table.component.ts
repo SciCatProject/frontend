@@ -224,15 +224,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width, type, format } = column;
+      const { name, header, display, width, type, format, path, tooltip } =
+        column;
 
       return {
         name,
+        header,
         enabled: !!(display === "visible"),
         order: index,
         width,
+        path,
+        userAdded: column.userAdded || undefined,
         type,
         format,
+        tooltip,
       };
     });
     this.store.dispatch(
