@@ -884,7 +884,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   onGlobalTextSearchEnter(event: Event) {
-    if (this.appConfig.enterToApply === false) {
+    if (!this.appConfig.enterToApply) {
       return;
     }
     event.preventDefault();

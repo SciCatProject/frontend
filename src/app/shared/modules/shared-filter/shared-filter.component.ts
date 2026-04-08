@@ -252,7 +252,7 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   onApplyEnter(event?: Event) {
-    if (this.appConfig.enterToApply === false) {
+    if (!this.appConfig.enterToApply) {
       return;
     }
     event?.preventDefault();

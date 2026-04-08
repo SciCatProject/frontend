@@ -382,6 +382,10 @@ describe("Datasets general", () => {
       });
 
       cy.get('input[name="lhs"]').type("extra_entry_end_time{enter}");
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
 
