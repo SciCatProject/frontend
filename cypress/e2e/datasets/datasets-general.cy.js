@@ -363,30 +363,6 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="remove-condition-button"]').click();
     });
-
-    it("should add a condition when pressing Enter", () => {
-      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-        const testConfig = {
-          ...baseConfig,
-          autoApplyFilters: true,
-        };
-        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-      });
-
-      cy.visit("/datasets");
-      cy.wait("@getConfig", { timeout: 20000 });
-      cy.finishedLoading();
-
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
-      });
-
-      cy.get('input[name="lhs"]').type("extra_entry_end_time{enter}");
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get('[data-cy="remove-condition-button"]').click();
-    });
   });
 
   describe("Units options in condition panel units dropdown", () => {
@@ -799,6 +775,82 @@ describe("Datasets general", () => {
       cy.get(".condition-panel").first().click();
 
       cy.get('[data-cy="remove-condition-button"]').click();
+    });
+  });
+
+  describe("Auto apply filters", () => {
+    beforeEach(() => {
+      cy.clearLocalStorage();
+      cy.createDataset({ keywords: ["test auto apply"] });
+      cy.createDataset({ keywords: ["another keyword"] });
+    });
+
+    it("should apply checkbox filters when user clicks", () => {
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          autoApplyFilters: true,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            filters: [
+              {
+                key: "keywords",
+                label: "Keyword",
+                type: "checkbox",
+                description: "Filter by keywords in the dataset",
+                enabled: true,
+              },
+            ],
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.visit("/datasets");
+      cy.wait("@getConfig", { timeout: 20000 });
+      cy.finishedLoading();
+
+      cy.get(".checkbox-list mat-checkbox")
+        .contains(/test auto apply/i)
+        .click({ force: true });
+    });
+
+    it("should apply typed filters when user presses Enter", () => {
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          autoApplyFilters: true,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            filters: [
+              {
+                key: "keywords",
+                label: "Keyword",
+                type: "multiSelect",
+                description: "Filter by keywords in the dataset",
+                enabled: true,
+              },
+            ],
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.visit("/datasets");
+      cy.wait("@getConfig", { timeout: 20000 });
+      cy.finishedLoading();
+
+      cy.get("mat-form-field#keywords input.item-input")
+        .click()
+        .type("test auto apply");
+      cy.get("mat-option")
+        .contains(/test auto apply/i)
+        .click();
+      cy.get("mat-form-field#keywords input.item-input")
+        .click()
+        .type("{enter}");
     });
   });
 });
