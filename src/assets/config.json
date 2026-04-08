@@ -890,8 +890,7 @@
     "nonAuthenticatedUser": "DATASETS",
     "authenticatedUser": "DATASETS"
   },
-  "checkBoxFilterClickTrigger": false,
-  "enterToApply": false,
+  "autoApplyFilters": false,
   "mainMenu": {
     "nonAuthenticatedUser": {
       "datasets": true,

@@ -368,7 +368,7 @@ describe("Datasets general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          enterToApply: true,
+          autoApplyFilters: true,
         };
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
       });

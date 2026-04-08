@@ -164,13 +164,12 @@ export interface AppConfigInterface {
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
-  checkBoxFilterClickTrigger?: boolean;
   hideEmptyMetadataTable?: boolean;
   ingestorComponent?: IngestorComponentConfig;
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
-  enterToApply?: boolean;
+  autoApplyFilters?: boolean;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

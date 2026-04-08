@@ -11,12 +11,20 @@
         [(ngModel)]="globalTextSearch"
         type="text"
         matInput
-        [placeholder]="globalSearchPlaceholderWithHint()"
+        [placeholder]="globalTextSearchPlaceholder"
         (ngModelChange)="this.globalSearchUpdate.next($event)"
-        (keydown.enter)="onGlobalTextSearchEnter($event)"
+        (keydown.enter)="onGlobalTextSearchApply()"
         (keydown.escape)="onGlobalTextSearchClear()"
         data-cy="text-search"
       />
+      <span
+        matSuffix
+        class="enter-hint"
+        matTooltip="Press Enter to apply"
+        matTooltipPosition="below"
+        matTooltipShowDelay="500"
+        >↵</span
+      >
       <button
         mat-icon-button
         matSuffix

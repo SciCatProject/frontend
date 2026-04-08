@@ -18,7 +18,6 @@
       },
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
       "allowConfigOverrides": { "type": "boolean" },
-      "checkBoxFilterClickTrigger": { "type": "boolean" },
       "dateFormat": { "type": "string" },
       "accessTokenPrefix": { "type": "string" },
       "addDatasetEnabled": { "type": "boolean" },
@@ -56,7 +55,7 @@
       "logbookEnabled": { "type": "boolean" },
       "loginFormEnabled": { "type": "boolean" },
       "metadataPreviewEnabled": { "type": "boolean" },
-      "enterToApply": { "type": "boolean" },
+      "autoApplyFilters": { "type": "boolean" },
       "metadataStructure": { "type": "string" },
       "multipleDownloadAction": { "type": "string" },
       "multipleDownloadEnabled": { "type": "boolean" },
@@ -438,10 +437,6 @@
           { "type": "Control", "scope": "#/properties/siteSciCatLogo" },
           { "type": "Control", "scope": "#/properties/statusBannerMessage" },
           { "type": "Control", "scope": "#/properties/statusBannerCode" },
-          {
-            "type": "Control",
-            "scope": "#/properties/checkBoxFilterClickTrigger"
-          },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
           {
             "type": "Control",
@@ -469,7 +464,7 @@
           { "type": "Control", "scope": "#/properties/logbookEnabled" },
           { "type": "Control", "scope": "#/properties/loginFormEnabled" },
           { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" },
-          { "type": "Control", "scope": "#/properties/enterToApply" }
+          { "type": "Control", "scope": "#/properties/autoApplyFilters" }
         ]
       },
       {

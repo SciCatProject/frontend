@@ -1,10 +1,9 @@
 <h2 mat-dialog-title>Add Characteristic</h2>
 <form [formGroup]="parametersForm" class="search-parameters-form">
-  <mat-dialog-content (keydown.enter)="onEnterToApply($event)">
-    <mat-form-field class="search-field" [hideRequiredMarker]="true">
+  <mat-dialog-content>
+    <mat-form-field class="search-field">
       <mat-label
-        >Field*
-        <span *ngIf="appConfig.enterToApply" class="enter-hint">Enter to apply</span>
+        >Field
       </mat-label>
       <input
         matInput
@@ -100,8 +99,8 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions [attr.align]="'end'">
-    <button mat-button type="button" (click)="cancel()">Cancel</button>
-    <button mat-button type="button" (click)="add()" color="primary">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-button type="submit" (click)="add()" color="primary">
       Apply
     </button>
   </mat-dialog-actions>

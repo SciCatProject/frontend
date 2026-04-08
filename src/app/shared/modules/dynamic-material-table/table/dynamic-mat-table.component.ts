@@ -878,15 +878,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.globalTextSearchApply.emit("");
   }
 
-  globalSearchPlaceholderWithHint() {
-    const base = this.globalTextSearchPlaceholder || "";
-    return this.appConfig.enterToApply ? `${base} ↵ Enter to apply` : base;
-  }
-
   onGlobalTextSearchEnter(event: Event) {
-    if (!this.appConfig.enterToApply) {
-      return;
-    }
     event.preventDefault();
     this.onGlobalTextSearchApply();
   }
