@@ -25,6 +25,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
 import { PublishedDataService } from "@scicatproject/scicat-sdk-ts-angular";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 const getConfig = () => ({
   facility: "test",
@@ -49,6 +50,7 @@ describe("PublishComponent", () => {
         MatInputModule,
         MatSelectModule,
         ReactiveFormsModule,
+        SharedScicatFrontendModule,
       ],
       providers: [
         provideMockStore({

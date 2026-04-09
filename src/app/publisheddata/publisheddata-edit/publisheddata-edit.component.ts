@@ -26,6 +26,8 @@ import {
   selectCurrentPublishedData,
   selectPublishedDataConfig,
 } from "state-management/selectors/published-data.selectors";
+import Ajv2019 from "ajv/dist/2019";
+import { AjvService } from "shared/services/ajv.service";
 
 @Component({
   selector: "publisheddata-edit",
@@ -67,6 +69,7 @@ export class PublisheddataEditComponent
   formValueChangesSubscription: Subscription;
   initialMetadata: string;
   appConfig = this.appConfigService.getConfig();
+  ajv: Ajv2019;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -74,7 +77,10 @@ export class PublisheddataEditComponent
     private router: Router,
     private store: Store,
     private appConfigService: AppConfigService,
-  ) {}
+    private ajvService: AjvService,
+  ) {
+    this.ajv = this.ajvService.newInstance();
+  }
 
   isSchemaEmpty(): boolean {
     return isEmpty(this.schema);
@@ -139,7 +145,9 @@ export class PublisheddataEditComponent
     this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
-          this.schema = publishedDataConfig.metadataSchema;
+          this.schema = this.ajvService.cleanupSchema(
+            publishedDataConfig.metadataSchema,
+          );
           this.uiSchema = publishedDataConfig.uiSchema;
         }
       },
