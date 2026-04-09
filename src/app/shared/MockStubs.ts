@@ -15,7 +15,7 @@ import {
   OutputDatasetObsoleteDto,
   ProposalClass,
   PublishedData,
-  SampleClass,
+  OutputSampleDto,
   Logbook,
   Policy,
   ReturnedUserDto,
@@ -339,7 +339,7 @@ export function createMock<T>(data?: Partial<T>): T {
 
 export const mockDataset = createMock<OutputDatasetObsoleteDto>({});
 export const mockAttachment = createMock<OutputAttachmentV3Dto>({});
-export const mockSample = createMock<SampleClass>({});
+export const mockSample = createMock<OutputSampleDto>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});
 export const mockOrigDatablock = createMock<OrigDatablock>({});
