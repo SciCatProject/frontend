@@ -343,6 +343,11 @@ const reducer = createReducer(
             ],
           };
           break;
+        case ArchViewMode.deleted:
+          mode = {
+            "datasetlifecycle.archiveStatusMessage": "deleted",
+          };
+          break;
         default: {
           break;
         }
