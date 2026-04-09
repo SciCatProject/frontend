@@ -1101,12 +1101,18 @@ export class DynamicMatTableComponent<T extends TableRow>
   dragStarted(event: Event) {}
 
   dropListDropped(event: CdkDragDrop<string[]>) {
-    const columnPreviousIndex = event.item.data.columnIndex;
+    const displayedColumnIndexMap = this.columns
+      .map((column, index) => ({ column, index }))
+      .filter(({ column }) => column.display !== "hidden");
+    const from = displayedColumnIndexMap[event.previousIndex];
+    const to = displayedColumnIndexMap[event.currentIndex];
 
-    if (event) {
-      this.dragDropData.dropColumnIndex = event.currentIndex;
-      this.moveColumn(columnPreviousIndex, event.currentIndex);
+    if (!from || !to || from.index === to.index) {
+      return;
     }
+
+    this.dragDropData.dropColumnIndex = to.index;
+    this.moveColumn(from.index, to.index);
   }
 
   drop(event: CdkDragDrop<string[]>) {
