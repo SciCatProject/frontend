@@ -350,6 +350,19 @@ describe("DatasetsReducer", () => {
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
     });
+
+    it("should set deleted mode filter", () => {
+      const modeToggle = ArchViewMode.deleted;
+
+      const action = fromActions.setArchiveViewModeAction({ modeToggle });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.filters.mode).toEqual({
+        "datasetlifecycle.archiveStatusMessage": "deleted",
+      });
+      expect(state.filters.modeToggle).toEqual(modeToggle);
+      expect(state.filters.skip).toEqual(0);
+    });
   });
 
   describe("on setPublicViewMode", () => {
