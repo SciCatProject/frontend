@@ -55,7 +55,7 @@
               [schema]="schema"
               [uischema]="uiSchema"
               [renderers]="renderers"
-              [ajv]="ajv"
+              [ajv]="ajvService.getAjv()"
               (errors)="onErrors($event)"
               (dataChange)="onMetadataChange($event)"
             ></jsonforms>

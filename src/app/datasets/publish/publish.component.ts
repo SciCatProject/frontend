@@ -49,7 +49,6 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   private beforeUnloadSubscription: Subscription;
   readonly panelOpenState = signal(false);
 
-  ajv: Ajv2019;
   appConfig = this.appConfigService.getConfig();
   renderers = [
     ...angularMaterialRenderers,
@@ -82,10 +81,8 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     private publishedDataApi: PublishedDataService,
     private actionsSubj: ActionsSubject,
     private router: Router,
-    private ajvService: AjvService,
-  ) {
-    this.ajv = this.ajvService.newInstance();
-  }
+    protected ajvService: AjvService,
+  ) {}
 
   isSchemaEmpty(): boolean {
     return isEmpty(this.schema);

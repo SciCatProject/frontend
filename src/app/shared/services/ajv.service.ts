@@ -6,7 +6,7 @@ import { cloneDeep } from "lodash-es";
 
 @Injectable()
 export class AjvService {
-  private static deleteDynamicDefaults(schema: any): void {
+  private static deleteDynamicDefaults(schema: object): void {
     if (Array.isArray(schema)) {
       schema.forEach((entry) => AjvService.deleteDynamicDefaults(entry));
     } else if (typeof schema === "object" && schema !== null) {
@@ -22,21 +22,23 @@ export class AjvService {
     }
   }
 
-  constructor() {}
+  private readonly ajv: Ajv2019;
 
-  newInstance() {
-    const ajv = new Ajv2019({
+  constructor() {
+    this.ajv = new Ajv2019({
       strict: false,
       useDefaults: "empty",
       allErrors: true,
     });
-    addFormats(ajv);
-    addKeywords(ajv);
-
-    return ajv;
+    addFormats(this.ajv);
+    addKeywords(this.ajv);
   }
 
-  cleanupSchema(schema: any) {
+  getAjv() {
+    return this.ajv;
+  }
+
+  cleanupSchema(schema: object) {
     const cleanSchema = cloneDeep(schema);
     AjvService.deleteDynamicDefaults(cleanSchema);
     return cleanSchema;

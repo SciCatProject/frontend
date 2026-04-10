@@ -69,7 +69,6 @@ export class PublisheddataEditComponent
   formValueChangesSubscription: Subscription;
   initialMetadata: string;
   appConfig = this.appConfigService.getConfig();
-  ajv: Ajv2019;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -77,10 +76,8 @@ export class PublisheddataEditComponent
     private router: Router,
     private store: Store,
     private appConfigService: AppConfigService,
-    private ajvService: AjvService,
-  ) {
-    this.ajv = this.ajvService.newInstance();
-  }
+    protected ajvService: AjvService,
+  ) {}
 
   isSchemaEmpty(): boolean {
     return isEmpty(this.schema);
