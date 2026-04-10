@@ -10,8 +10,8 @@ import { Store } from "@ngrx/store";
 import { provideRouter, Router } from "@angular/router";
 import { ArchViewMode } from "state-management/models";
 import {
-  prefillFiltersAction,
   setArchiveViewModeAction,
+  setFiltersAction,
 } from "state-management/actions/datasets.actions";
 
 describe("BreadcrumbComponent", () => {
@@ -48,10 +48,10 @@ describe("BreadcrumbComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should dispatch prefillFiltersAction and setArchiveViewModeAction for datasets breadcrumb", () => {
+  it("should dispatch setFiltersAction and setArchiveViewModeAction for datasets breadcrumb", () => {
     const dispatchSpy = spyOn(store as any, "dispatch");
     const selectSpy = spyOn(store as any, "select").and.returnValues(
-      of({ text: "abc" }) as any,
+      of({ text: "abc", skip: 7 }) as any,
       of(ArchViewMode.deleted) as any,
     );
     const backSpy = spyOn((component as any).location, "back");
@@ -68,7 +68,12 @@ describe("BreadcrumbComponent", () => {
     expect(selectSpy).toHaveBeenCalledTimes(2);
     expect(dispatchSpy).toHaveBeenCalledTimes(2);
     expect((dispatchSpy.calls.argsFor(0) as any[])[0]).toEqual(
-      prefillFiltersAction({ values: { text: "abc" } }),
+      setFiltersAction({
+        datasetFilters: {
+          text: "abc",
+          skip: 7,
+        },
+      }),
     );
     expect((dispatchSpy.calls.argsFor(1) as any[])[0]).toEqual(
       setArchiveViewModeAction({ modeToggle: ArchViewMode.deleted }),

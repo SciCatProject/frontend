@@ -11,7 +11,7 @@ import { take, filter } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { Location } from "@angular/common";
 import {
-  prefillFiltersAction,
+  setFiltersAction,
   setArchiveViewModeAction,
 } from "state-management/actions/datasets.actions";
 
@@ -123,7 +123,7 @@ export class BreadcrumbComponent implements OnInit {
         this.store.select(selectFilters).pipe(take(1)),
         this.store.select(selectArchiveViewMode).pipe(take(1)),
       ]).subscribe(([filters, modeToggle]) => {
-        this.store.dispatch(prefillFiltersAction({ values: { ...filters } }));
+        this.store.dispatch(setFiltersAction({ datasetFilters: { ...filters } }));
         this.store.dispatch(setArchiveViewModeAction({ modeToggle }));
         this.location.back();
       });

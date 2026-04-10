@@ -390,6 +390,36 @@ describe("DatasetsReducer", () => {
     });
   });
 
+  describe("on setFiltersAction", () => {
+    it("should restore filters without updating searchTerms or hasPrefilledFilters", () => {
+      const stateIn = {
+        ...initialDatasetState,
+        searchTerms: "keep-me",
+        hasPrefilledFilters: false,
+      };
+      const datasetFilters = {
+        text: "restored",
+        skip: 12,
+        modeToggle: ArchViewMode.deleted,
+        mode: {
+          "datasetlifecycle.archiveStatusMessage": "deleted",
+        },
+      };
+
+      const action = fromActions.setFiltersAction({ datasetFilters });
+      const state = fromDatasets.datasetsReducer(stateIn, action);
+
+      expect(state.filters.text).toEqual("restored");
+      expect(state.filters.skip).toEqual(12);
+      expect(state.filters.modeToggle).toEqual(ArchViewMode.deleted);
+      expect(state.filters.mode).toEqual({
+        "datasetlifecycle.archiveStatusMessage": "deleted",
+      });
+      expect(state.searchTerms).toEqual("keep-me");
+      expect(state.hasPrefilledFilters).toEqual(false);
+    });
+  });
+
   describe("on clearFacetsAction", () => {
     it("should clear filters while saving the filters limit and set searchTerms to an empty string", () => {
       const limit = 10;
