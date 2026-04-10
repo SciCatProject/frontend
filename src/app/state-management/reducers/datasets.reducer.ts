@@ -352,7 +352,7 @@ const reducer = createReducer(
           break;
         }
       }
-      const filters = { ...state.filters, skip: 0, mode, modeToggle };
+      const filters = { skip: 0, ...state.filters, mode, modeToggle };
       return { ...state, filters };
     },
   ),

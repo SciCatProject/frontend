@@ -363,6 +363,27 @@ describe("DatasetsReducer", () => {
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
     });
+
+    it("should preserve existing skip when mode changes", () => {
+      const modeToggle = ArchViewMode.archivable;
+      const stateIn = {
+        ...initialDatasetState,
+        filters: {
+          ...initialDatasetState.filters,
+          skip: 42,
+        },
+      };
+
+      const action = fromActions.setArchiveViewModeAction({ modeToggle });
+      const state = fromDatasets.datasetsReducer(stateIn, action);
+
+      expect(state.filters.skip).toEqual(42);
+      expect(state.filters.modeToggle).toEqual(modeToggle);
+      expect(state.filters.mode).toEqual({
+        "datasetlifecycle.archivable": true,
+        "datasetlifecycle.retrievable": false,
+      });
+    });
   });
 
   describe("on setPublicViewMode", () => {
