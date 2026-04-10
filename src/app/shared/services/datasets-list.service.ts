@@ -113,10 +113,7 @@ export class DatasetsListService implements OnDestroy {
   }
 
   deletedCondition(dataset: DatasetClass): boolean {
-    if (dataset.datasetlifecycle.archiveStatusMessage === "deleted") {
-      return true;
-    }
-    return false;
+    return dataset.datasetlifecycle.archiveStatusMessage === "deleted";
   }
 
   convertSavedDatasetColumns(columns: TableColumn[]): TableField<any>[] {
