@@ -53,7 +53,7 @@ export class BreadcrumbComponent implements OnInit {
     // Update breadcrumb when navigating to child routes
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
+      .subscribe(() => {
         this.setBreadcrumbs();
       });
   }
@@ -123,14 +123,16 @@ export class BreadcrumbComponent implements OnInit {
         this.store.select(selectFilters).pipe(take(1)),
         this.store.select(selectArchiveViewMode).pipe(take(1)),
       ]).subscribe(([filters, modeToggle]) => {
-        this.store.dispatch(setFiltersAction({ datasetFilters: { ...filters } }));
+        this.store.dispatch(
+          setFiltersAction({ datasetFilters: { ...filters } }),
+        );
         this.store.dispatch(setArchiveViewModeAction({ modeToggle }));
         this.location.back();
       });
     } else {
       this.router
         .navigateByUrl(url + crumb.url)
-        .catch((error) => this.router.navigateByUrl(url + crumb.fallback));
+        .catch(() => this.router.navigateByUrl(url + crumb.fallback));
     }
   }
 }

@@ -119,7 +119,6 @@ export class DatasetsListService implements OnDestroy {
     return false;
   }
 
-
   convertSavedDatasetColumns(columns: TableColumn[]): TableField<any>[] {
     return columns
       .filter((column) => column.name !== "select")
