@@ -520,6 +520,25 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   type_link() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+    const url = this.actionConfig.url.replace(
+      /\{\{\s*([@#]\w+(?:\[\d+\])?)\s*\}\}/g,
+      (_, variableName) => {
+        // Handle array indexing like @files[0]
+        const arrayMatch = variableName.match(/^([@#]\w+)\[(\d+)\]$/);
+        if (arrayMatch) {
+          const baseVariable = arrayMatch[1];
+          const index = parseInt(arrayMatch[2], 10);
+          const value = this.get_value_from_definition(baseVariable);
+
+          if (Array.isArray(value) && index < value.length) {
+            return encodeURIComponent(value[index]);
+          }
+          return "";
+        }
+
+        return encodeURIComponent(this.get_value_from_definition(variableName));
+      },
+    );
+    window.open(url, this.actionConfig.target || "_self");
   }
 }
