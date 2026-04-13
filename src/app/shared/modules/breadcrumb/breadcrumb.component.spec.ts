@@ -3,6 +3,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
+import { Location } from "@angular/common";
 import { of } from "rxjs";
 import { MockStore } from "shared/MockStubs";
 import { BreadcrumbComponent } from "./breadcrumb.component";
@@ -49,12 +50,14 @@ describe("BreadcrumbComponent", () => {
   });
 
   it("should dispatch setFiltersAction and setArchiveViewModeAction for datasets breadcrumb", () => {
-    const dispatchSpy = spyOn(store as any, "dispatch");
-    const selectSpy = spyOn(store as any, "select").and.returnValues(
-      of({ text: "abc", skip: 7 }) as any,
-      of(ArchViewMode.deleted) as any,
+    const dispatchSpy = spyOn(store, "dispatch");
+    const selectSpy = spyOn(store, "select").and.returnValues(
+      of({ text: "abc", skip: 7 }) as unknown as ReturnType<
+        MockStore["select"]
+      >,
+      of(ArchViewMode.deleted) as unknown as ReturnType<MockStore["select"]>,
     );
-    const backSpy = spyOn((component as any).location, "back");
+    const backSpy = spyOn(TestBed.inject(Location), "back");
     const crumb = {
       label: "datasets",
       path: "datasets",
@@ -67,7 +70,7 @@ describe("BreadcrumbComponent", () => {
 
     expect(selectSpy).toHaveBeenCalledTimes(2);
     expect(dispatchSpy).toHaveBeenCalledTimes(2);
-    expect((dispatchSpy.calls.argsFor(0) as any[])[0]).toEqual(
+    expect((dispatchSpy.calls.argsFor(0) as object)[0]).toEqual(
       setFiltersAction({
         datasetFilters: {
           text: "abc",
@@ -75,7 +78,7 @@ describe("BreadcrumbComponent", () => {
         },
       }),
     );
-    expect((dispatchSpy.calls.argsFor(1) as any[])[0]).toEqual(
+    expect((dispatchSpy.calls.argsFor(1) as object)[0]).toEqual(
       setArchiveViewModeAction({ modeToggle: ArchViewMode.deleted }),
     );
     expect(backSpy).toHaveBeenCalled();
