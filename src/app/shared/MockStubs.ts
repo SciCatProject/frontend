@@ -129,6 +129,13 @@ export class MockDatasetApi {
     return of([]);
   }
 
+  datasetsControllerFindByIdAndUpdateV3(
+    pid: string,
+    body: Record<string, unknown>,
+  ) {
+    return of(null);
+  }
+
   datasetsControllerCountV3(data?: any) {
     return of(0);
   }

@@ -1,31 +1,31 @@
-import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { Store } from "@ngrx/store";
+import {
+  Attachment,
+  PublishedData,
+} from "@scicatproject/scicat-sdk-ts-angular";
+import { AppConfigService } from "app-config.service";
+import { EditableComponent } from "app-routing/pending-changes.guard";
+import { isEmpty } from "lodash-es";
+import { fromEvent, Observable, Subscription } from "rxjs";
+import { tap } from "rxjs/operators";
+import {
+  AccordionArrayLayoutRendererComponent,
+  accordionArrayLayoutRendererTester,
+} from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 import {
   fetchPublishedDataAction,
   fetchPublishedDataConfigAction,
   resyncPublishedDataAction,
 } from "state-management/actions/published-data.actions";
-import { ActivatedRoute, Router } from "@angular/router";
 import {
   selectCurrentPublishedData,
   selectPublishedDataConfig,
 } from "state-management/selectors/published-data.selectors";
-import {
-  Attachment,
-  PublishedData,
-} from "@scicatproject/scicat-sdk-ts-angular";
-import { tap } from "rxjs/operators";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { fromEvent, Observable, Subscription } from "rxjs";
-import { angularMaterialRenderers } from "@jsonforms/angular-material";
-import { EditableComponent } from "app-routing/pending-changes.guard";
-import { isEmpty } from "lodash-es";
-import { AppConfigService } from "app-config.service";
-import {
-  AccordionArrayLayoutRendererComponent,
-  accordionArrayLayoutRendererTester,
-} from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 
 @Component({
   selector: "publisheddata-edit",
@@ -76,6 +76,10 @@ export class PublisheddataEditComponent
     private appConfigService: AppConfigService,
   ) {}
 
+  isSchemaEmpty(): boolean {
+    return isEmpty(this.schema);
+  }
+
   public onPublishedDataUpdate(shouldRedirect = false) {
     if (this.form.valid) {
       const { doi, ...rest } = this.form.value;
@@ -83,14 +87,6 @@ export class PublisheddataEditComponent
         ...this.metadataData,
         landingPage: this.appConfig.landingPage,
       };
-
-      if (
-        shouldRedirect &&
-        this.panelOpenState() &&
-        !this.metadataDataIsValid()
-      ) {
-        return;
-      }
 
       if (doi) {
         this.store.dispatch(
@@ -144,11 +140,6 @@ export class PublisheddataEditComponent
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
           this.schema = publishedDataConfig.metadataSchema;
-          // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
-          this.schema?.required.splice(
-            this.schema.required.indexOf("publicationYear"),
-            1,
-          );
           this.uiSchema = publishedDataConfig.uiSchema;
         }
       },

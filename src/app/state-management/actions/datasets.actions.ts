@@ -154,6 +154,10 @@ export const updatePropertyAction = createAction(
   "[Dataset] Update Property",
   props<{ pid: string; property: Record<string, unknown> }>(),
 );
+export const updatePropertyInlineAction = createAction(
+  "[Dataset] Update Property Inline",
+  props<{ pid: string; property: Record<string, unknown> }>(),
+);
 export const updateScientificMetadataCompleteAction = createAction(
   "[Dataset] Update Property Complete",
   props<{ pid: string }>(),

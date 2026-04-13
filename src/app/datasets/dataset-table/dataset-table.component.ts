@@ -69,6 +69,7 @@ import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { DatasetsListService } from "shared/services/datasets-list.service";
+import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.component";
 
 export interface SortChangeEvent {
   active: string;
@@ -150,7 +151,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   defaultPageSize = 10;
 
-  defaultPageSizeOptions = [5, 10, 25, 100];
+  defaultPageSizeOptions = this.appConfig.datasetPageSizeOptions;
 
   tablesSettings: object;
 
@@ -163,6 +164,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
   ) {}
+
+  private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
+    return columns.map((column) => {
+      if (column.type !== "editable") {
+        return column;
+      }
+
+      return {
+        ...column,
+        dynamicCellComponent: DatasetInlineEditCellComponent,
+      };
+    });
+  }
 
   getTableSort(): ITableSetting["tableSort"] {
     const { queryParams } = this.route.snapshot;
@@ -202,7 +216,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       currentColumnSetting = settingConfig.settingList[0].columnSetting;
     }
 
-    this.columns = currentColumnSetting;
+    this.columns = this.decorateColumns(currentColumnSetting);
     this.setting = settingConfig;
     this.pagination = paginationConfig;
   }
@@ -210,15 +224,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width, type, format } = column;
+      const { name, header, display, width, type, format, path, tooltip } =
+        column;
 
       return {
         name,
+        header,
         enabled: !!(display === "visible"),
         order: index,
         width,
+        path,
+        userAdded: column.userAdded || undefined,
         type,
         format,
+        tooltip,
       };
     });
     this.store.dispatch(
