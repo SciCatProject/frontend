@@ -38,6 +38,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     ArchViewMode.work_in_progress,
     ArchViewMode.system_error,
     ArchViewMode.user_error,
+    ArchViewMode.marked_for_deletion,
     ArchViewMode.deleted,
   ];
 

@@ -124,6 +124,7 @@ export enum ArchViewMode {
   work_in_progress = "work in progress",
   system_error = "system error",
   user_error = "user error",
+  marked_for_deletion = "marked for deletion",
   deleted = "deleted",
 }
 export enum JobViewMode {

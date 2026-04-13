@@ -112,6 +112,12 @@ export class DatasetsListService implements OnDestroy {
     return false;
   }
 
+  markedForDeletionCondition(dataset: DatasetClass): boolean {
+    return (
+      dataset.datasetlifecycle.archiveStatusMessage === "markedForDeletion"
+    );
+  }
+
   deletedCondition(dataset: DatasetClass): boolean {
     return dataset.datasetlifecycle.archiveStatusMessage === "deleted";
   }
@@ -192,6 +198,8 @@ export class DatasetsListService implements OnDestroy {
               return "Archivable";
             } else if (this.retrievableCondition(row)) {
               return "Retrievable";
+            } else if (this.markedForDeletionCondition(row)) {
+              return "Marked for deletion";
             } else if (this.deletedCondition(row)) {
               return "Deleted";
             } else if (this.systemErrorCondition(row)) {
@@ -210,6 +218,8 @@ export class DatasetsListService implements OnDestroy {
               return "Archivable";
             } else if (this.retrievableCondition(row)) {
               return "Retrievable";
+            } else if (this.markedForDeletionCondition(row)) {
+              return "Marked for deletion";
             } else if (this.deletedCondition(row)) {
               return "Deleted";
             } else if (this.systemErrorCondition(row)) {
