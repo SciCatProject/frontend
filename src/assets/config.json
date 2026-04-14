@@ -274,6 +274,28 @@
   ],
   "datasetDetailsActionsEnabled": false,
   "datasetDetailsActions": [],
+  "publishedDataActionsEnabled": true,
+  "publishedDataActions": [
+    {
+      "id": "publish",
+      "description": "This published the record",
+      "order": 1,
+      "label": "publish",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method" : "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/publish",
+      "authorization": "#datasetOwner && !@isPublished",
+      "variables" : {
+        "doi": "#PublishedDataDoi",
+        "isPublished" : "#Dataset[0]Field[isPublished]"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      }
+    }
+    ],
   "selectionActionsEnabled": true,
   "selectionActions": [],  
   "labelMaps": {

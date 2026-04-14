@@ -16,6 +16,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
 import { PublishedDataService } from "@scicatproject/scicat-sdk-ts-angular";
+import { ConfigurableActionsComponent } from "shared/modules/configurable-actions/configurable-actions.component";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -42,6 +43,7 @@ describe("PublisheddataDetailsComponent", () => {
     TestBed.overrideComponent(PublisheddataDetailsComponent, {
       set: {
         providers: [
+          { provide: ConfigurableActionsComponent },
           { provide: Store, useClass: MockStore },
           { provide: Router, useClass: MockRouter },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },

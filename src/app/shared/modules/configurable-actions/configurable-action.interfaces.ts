@@ -37,6 +37,11 @@ export interface ActionItemDataset {
   files?: DataFiles_File[];
 }
 
+export interface ActionItemPublishedData {
+  doi: string;
+}
+
 export interface ActionItems {
   datasets: ActionItemDataset[];
+  publisheddata: ActionItemPublishedData[];
 }

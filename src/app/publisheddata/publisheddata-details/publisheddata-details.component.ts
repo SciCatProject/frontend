@@ -15,6 +15,9 @@ import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
 import { selectIsAdmin } from "state-management/selectors/user.selectors";
+import {
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "publisheddata-details",
@@ -31,6 +34,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   show = false;
   landingPageUrl = "";
   doi = "";
+  actions$ = this.configurableActionService.actions$;
 
   constructor(
     private appConfigService: AppConfigService,
@@ -51,6 +55,10 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       this.currentData$.subscribe((data) => {
         if (data) {
           this.publishedData = data;
+
+          this.configurableActionsService.createActions(
+            actionItem
+          )
 
           if (this.appConfig.landingPage) {
             this.landingPageUrl =

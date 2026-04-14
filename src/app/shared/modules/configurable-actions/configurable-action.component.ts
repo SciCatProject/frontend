@@ -96,6 +96,7 @@ function processSelector(
     // eslint-disable-next-line no-useless-escape
     "#DatasetsField\\[(\\w+)\\]": (m) =>
       jsonObject.datasets.map((i) => i[m[1]]),
+    "#PublishedDataDoi": (m) => jsonObject.publisheddata[0]?.doi,
   };
 
   // Check for direct pattern matches
