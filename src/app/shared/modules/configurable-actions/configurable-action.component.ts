@@ -21,7 +21,6 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
-import { result } from "lodash-es";
 
 type JSONValue =
   | string
@@ -531,12 +530,21 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
           const value = this.get_value_from_definition(baseVariable);
 
           if (Array.isArray(value) && index < value.length) {
-            return encodeURIComponent(value[index]);
+            return value[index];
           }
+          console.error(
+            `Could not resolve array ${variableName} at index ${index}`,
+          );
           return "";
         }
 
-        return encodeURIComponent(this.get_value_from_definition(variableName));
+        // Handle normal variables
+        const value = this.get_value_from_definition(variableName);
+        if (!value) {
+          console.error(`Could not find variable ${variableName}`);
+          return "";
+        }
+        return value;
       },
     );
     window.open(url, this.actionConfig.target || "_self");
