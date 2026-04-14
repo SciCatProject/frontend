@@ -15,7 +15,7 @@ import { ArchivingService } from "../archiving.service";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
-import { MatDialogModule } from "@angular/material/dialog";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
@@ -27,6 +27,10 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { AppConfigService } from "app-config.service";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
+import { of, throwError } from "rxjs";
+import { showMessageAction } from "state-management/actions/user.actions";
+import { MessageType } from "state-management/models";
+import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 describe("BatchViewComponent", () => {
   let component: BatchViewComponent;
@@ -137,5 +141,85 @@ describe("BatchViewComponent", () => {
 
   describe("#onRetrieve()", () => {
     xit("should ...", () => {});
+  });
+
+  describe("#onMarkForDeletion()", () => {
+    it("should submit a mark-for-deletion job and clear the batch", () => {
+      const archivingService = component["archivingSrv"];
+      const dialog = component["dialog"];
+      const dialogOptions = { width: "auto", data: { title: "test" } };
+      const dialogResult = {
+        selectedOption: "MARKED_FOR_DELETION",
+        explanation: "Reason provided",
+      };
+      const dialogRefStub = {
+        afterClosed: () => of(dialogResult),
+      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
+      const clearBatchSpy = spyOn(
+        component as unknown as { clearBatch: () => void },
+        "clearBatch",
+      );
+      const openSpy = spyOn(dialog, "open").and.returnValue(dialogRefStub);
+
+      component.datasetList = [dataset];
+      spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue(
+        dialogOptions,
+      );
+      spyOn(archivingService, "markForDeletion").and.returnValue(of(void 0));
+
+      component.onMarkForDeletion();
+
+      expect(
+        archivingService.markForDeletionDialogOptions,
+      ).toHaveBeenCalledOnceWith([
+        "RETRIEVAL_FAILURE",
+        "ARCHIVING_FAILURE",
+        "MARKED_FOR_DELETION",
+      ]);
+      expect(openSpy).toHaveBeenCalledOnceWith(DialogComponent, dialogOptions);
+      expect(archivingService.markForDeletion).toHaveBeenCalledOnceWith(
+        [dataset],
+        {
+          deletionCode: "MARKED_FOR_DELETION",
+          explanation: "Reason provided",
+        },
+      );
+      expect(clearBatchSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("should dispatch an error message if mark-for-deletion fails", () => {
+      const archivingService = component["archivingSrv"];
+      const dialog = component["dialog"];
+      const dialogResult = {
+        selectedOption: "MARKED_FOR_DELETION",
+        explanation: "Reason provided",
+      };
+      const dialogRefStub = {
+        afterClosed: () => of(dialogResult),
+      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
+
+      dispatchSpy = spyOn(store, "dispatch");
+      component.datasetList = [dataset];
+      spyOn(dialog, "open").and.returnValue(dialogRefStub);
+      spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue({
+        width: "auto",
+        data: { title: "test" },
+      });
+      spyOn(archivingService, "markForDeletion").and.returnValue(
+        throwError(() => new Error("mark failed")),
+      );
+
+      component.onMarkForDeletion();
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(
+        showMessageAction({
+          message: {
+            type: MessageType.Error,
+            content: "mark failed",
+            duration: 5000,
+          },
+        }),
+      );
+    });
   });
 });

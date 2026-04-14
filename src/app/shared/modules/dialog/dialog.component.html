@@ -1,32 +1,52 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
+
 <div mat-dialog-content>
-  <p>{{ data.question }}</p>
-  <mat-form-field *ngIf="data.input">
-    <input matInput tabindex="1" [(ngModel)]="data.input" />
-  </mat-form-field>
-</div>
+  <p *ngIf="data.question">{{ data.question }}</p>
 
-<div *ngIf="data.choice?.options?.length > 0">
-  <mat-form-field>
-    <mat-select [(ngModel)]="data.option">
-      <mat-option
-        *ngFor="let choice of data.choice.options"
-        [value]="choice.option"
-        [matTooltip]="choice.tooltip"
-        >{{ choice.option }}</mat-option
-      >
-    </mat-select>
-  </mat-form-field>
-
-  <span *ngFor="let choice of data.choice.options">
-    <mat-form-field *ngIf="choice.option === data.option && choice.location">
-      <span matPrefix>{{ choice.location }}&nbsp;</span>
-      <input [(ngModel)]="data.location" matInput placeholder="Relative path" />
+  <form #dynamicForm="ngForm">
+    <mat-form-field appearance="outline" class="full-width" *ngIf="data.choice">
+      <mat-label>Reason Code</mat-label>
+      <mat-select [(ngModel)]="data.selectedOption" name="primaryReason"
+        required>
+        <mat-option *ngFor="let opt of data.choice.options"
+          [value]="opt.option">
+          {{ opt.option }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
-  </span>
+
+    <div *ngFor="let field of data.additionalFields | keyvalue">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ $any(field.value).label }}</mat-label>
+
+        <textarea *ngIf="$any(field.value).type === 'textarea'" matInput
+          [(ngModel)]="data[field.key]" [name]="field.key"
+          [required]="$any(field.value).required">
+        </textarea>
+
+        <mat-select *ngIf="$any(field.value).type === 'select'"
+          [(ngModel)]="data[field.key]" [name]="field.key"
+          [required]="$any(field.value).required">
+          <mat-option *ngFor="let opt of $any(field.value).options"
+            [value]="opt.value">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+
+        <input *ngIf="$any(field.value).type === 'text'" matInput
+          [(ngModel)]="data[field.key]" [name]="field.key"
+          [required]="$any(field.value).required">
+
+        <mat-error>This field is required</mat-error>
+      </mat-form-field>
+    </div>
+  </form>
 </div>
 
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data" tabindex="2">Ok</button>
-  <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data"
+    [disabled]="dynamicForm.invalid">
+    Ok
+  </button>
 </div>

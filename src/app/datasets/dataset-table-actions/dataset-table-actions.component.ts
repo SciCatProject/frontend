@@ -6,7 +6,7 @@ import {
   clearSelectionAction,
   addToBatchAction,
 } from "state-management/actions/datasets.actions";
-import { Subscription } from "rxjs";
+import { filter, Subscription, switchMap } from "rxjs";
 import { selectArchiveViewMode } from "state-management/selectors/datasets.selectors";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
 import { ArchivingService } from "datasets/archiving.service";
@@ -125,6 +125,40 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  markForDeletionClickHandle(): void {
+    const dialogOptions = this.archivingSrv.markForDeletionDialogOptions([
+      "RETRIEVAL_FAILURE",
+      "ARCHIVING_FAILURE",
+      "MARKED_FOR_DELETION",
+    ]);
+    this.dialog
+      .open(DialogComponent, dialogOptions)
+      .afterClosed()
+      .pipe(
+        filter((result) => !!result && !!this.selectedSets),
+        switchMap((result) => {
+          const extra = {
+            deletionCode: result.selectedOption,
+            explanation: result.explanation,
+          };
+          return this.archivingSrv.markForDeletion(this.selectedSets, extra);
+        }),
+      )
+      .subscribe({
+        next: () => this.store.dispatch(clearSelectionAction()),
+        error: (err) =>
+          this.store.dispatch(
+            showMessageAction({
+              message: {
+                type: MessageType.Error,
+                content: err.message,
+                duration: 5000,
+              },
+            }),
+          ),
+      });
   }
 
   onAddToBatch(): void {

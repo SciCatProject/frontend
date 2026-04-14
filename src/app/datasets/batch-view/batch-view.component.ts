@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { first, switchMap } from "rxjs/operators";
+import { filter, first, switchMap } from "rxjs/operators";
 
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -256,6 +256,40 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearBatchAction());
     localStorage.removeItem("editingPublishedDataDoi");
     localStorage.removeItem("editingDatasetList");
+  }
+
+  onMarkForDeletion() {
+    const dialogOptions = this.archivingSrv.markForDeletionDialogOptions([
+      "RETRIEVAL_FAILURE",
+      "ARCHIVING_FAILURE",
+      "MARKED_FOR_DELETION",
+    ]);
+    this.dialog
+      .open(DialogComponent, dialogOptions)
+      .afterClosed()
+      .pipe(
+        filter((result) => !!result && !!this.datasetList),
+        switchMap((result) => {
+          const extra = {
+            deletionCode: result.selectedOption,
+            explanation: result.explanation,
+          };
+          return this.archivingSrv.markForDeletion(this.datasetList, extra);
+        }),
+      )
+      .subscribe({
+        next: () => this.clearBatch(),
+        error: (err) =>
+          this.store.dispatch(
+            showMessageAction({
+              message: {
+                type: MessageType.Error,
+                content: err.message,
+                duration: 5000,
+              },
+            }),
+          ),
+      });
   }
 
   getPublishingDataUrl(): string {

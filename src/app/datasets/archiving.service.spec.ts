@@ -63,19 +63,20 @@ describe("ArchivingService", () => {
         pid: dataset.pid,
         files: [],
       }));
-      const archive = true;
-      const destinationPath = { destinationPath: "/test/path/" };
+      const jobType = "archive";
+      const additionalJobParams = { destinationPath: "/test/path/" };
 
       const job = service["createJob"](
         user,
         datasets,
-        archive,
-        destinationPath,
+        jobType,
+        additionalJobParams,
       );
 
       expect(job).toBeDefined();
       expect(job["emailJobInitiator"]).toEqual("test@email.com");
       expect(job["jobParams"]["username"]).toEqual("testName");
+      expect(job["jobParams"]["destinationPath"]).toEqual("/test/path/");
       expect(job["datasetList"]).toEqual(datasetList);
       expect(job["type"]).toEqual("archive");
     });
@@ -84,9 +85,9 @@ describe("ArchivingService", () => {
   describe("#archiveOrRetrieve()", () => {
     xit("should throw an error if no datasets are selected", () => {
       const datasets = [];
-      const archive = true;
+      const jobType = "archive";
 
-      service["archiveOrRetrieve"](datasets, archive).subscribe((res) => {
+      service["archiveOrRetrieve"](datasets, jobType).subscribe((res) => {
         expect(res).toThrowError("No datasets selected");
       });
     });
@@ -121,12 +122,12 @@ describe("ArchivingService", () => {
         "createJob",
       ).and.returnValue(job);
 
-      service["archiveOrRetrieve"](datasets, archive).subscribe(() => {
+      service["archiveOrRetrieve"](datasets, "archive").subscribe(() => {
         expect(createJobSpy).toHaveBeenCalledWith(
           user,
           datasets,
-          archive,
-          undefined,
+          "archive",
+          {},
         );
         expect(dispatchSpy).toHaveBeenCalledOnceWith(submitJobAction({ job }));
       });
@@ -134,7 +135,7 @@ describe("ArchivingService", () => {
   });
 
   describe("#archive()", () => {
-    it("should call #archiveOrRetrieve() with archive set to `true`", () => {
+    it("should call #archiveOrRetrieve() with the archive job type", () => {
       const archiveOrRetrieveSpy = spyOn<any, string>(
         service,
         "archiveOrRetrieve",
@@ -143,12 +144,15 @@ describe("ArchivingService", () => {
 
       service.archive(datasets);
 
-      expect(archiveOrRetrieveSpy).toHaveBeenCalledOnceWith(datasets, true);
+      expect(archiveOrRetrieveSpy).toHaveBeenCalledOnceWith(
+        datasets,
+        "archive",
+      );
     });
   });
 
   describe("#retrieve()", () => {
-    it("should call #archiveOrRetrieve() with archive set to `false`", () => {
+    it("should call #archiveOrRetrieve() with the retrieve job type", () => {
       const archiveOrRetrieveSpy = spyOn<any, string>(
         service,
         "archiveOrRetrieve",
@@ -160,8 +164,30 @@ describe("ArchivingService", () => {
 
       expect(archiveOrRetrieveSpy).toHaveBeenCalledOnceWith(
         datasets,
-        false,
+        "retrieve",
         destinationPath,
+      );
+    });
+  });
+
+  describe("#markForDeletion()", () => {
+    it("should call #archiveOrRetrieve() with the markForDeletion job type", () => {
+      const archiveOrRetrieveSpy = spyOn<any, string>(
+        service,
+        "archiveOrRetrieve",
+      );
+      const datasets = [mockDataset];
+      const additionalJobParams = {
+        deletionCode: "MARKED_FOR_DELETION",
+        explanation: "Requested by data manager",
+      };
+
+      service.markForDeletion(datasets, additionalJobParams);
+
+      expect(archiveOrRetrieveSpy).toHaveBeenCalledOnceWith(
+        datasets,
+        "markForDeletion",
+        additionalJobParams,
       );
     });
   });
@@ -195,6 +221,41 @@ describe("ArchivingService", () => {
             options: destinations,
           },
           option: destinations[0].option,
+        },
+      });
+    });
+  });
+
+  describe("#markForDeletionDialogOptions()", () => {
+    it("should return required fields for the mark-for-deletion dialog", () => {
+      const deletionCodes = ["RETRIEVAL_FAILURE", "MARKED_FOR_DELETION"];
+
+      expect(service.markForDeletionDialogOptions(deletionCodes)).toEqual({
+        width: "auto",
+        data: {
+          title: "Mark for deletion reason",
+          additionalFields: {
+            deletiionCode: {
+              label: "Deletion code",
+              type: "select",
+              required: true,
+              options: [
+                {
+                  label: "RETRIEVAL_FAILURE",
+                  value: "RETRIEVAL_FAILURE",
+                },
+                {
+                  label: "MARKED_FOR_DELETION",
+                  value: "MARKED_FOR_DELETION",
+                },
+              ],
+            },
+            explanation: {
+              label: "Explanation for deletion",
+              type: "textarea",
+              required: true,
+            },
+          },
         },
       });
     });

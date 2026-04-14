@@ -13,6 +13,9 @@ import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { DynamicDialogData } from "shared/modules/dialog/dialog.component";
+
+type JobType = "archive" | "retrieve" | "markForDeletion";
 
 @Injectable()
 export class ArchivingService {
@@ -24,14 +27,13 @@ export class ArchivingService {
   private createJob(
     user: ReturnedUserDto,
     datasets: OutputDatasetObsoleteDto[],
-    archive: boolean,
-    destinationPath?: Record<string, string>,
+    jobType: JobType,
+    additionalJobParams: Record<string, string> = {},
     // Do not specify tape copies here
   ) {
-    const extra = archive ? {} : destinationPath;
     const jobParams = {
       username: user.username,
-      ...extra,
+      ...additionalJobParams,
     };
 
     this.store.select(selectProfile).subscribe((profile) => {
@@ -46,7 +48,7 @@ export class ArchivingService {
         pid: dataset.pid,
         files: [],
       })),
-      type: archive ? "archive" : "retrieve",
+      type: jobType,
     };
 
     return data;
@@ -54,8 +56,8 @@ export class ArchivingService {
 
   private archiveOrRetrieve(
     datasets: OutputDatasetObsoleteDto[],
-    archive: boolean,
-    destPath?: Record<string, string>,
+    jobType: JobType,
+    additionalJobParams: Record<string, string> = {},
   ): Observable<void> {
     return combineLatest([this.currentUser$, this.tapeCopies$]).pipe(
       first(),
@@ -72,7 +74,12 @@ export class ArchivingService {
             throw new Error("No datasets selected");
           }
 
-          const job = this.createJob(user, datasets, archive, destPath);
+          const job = this.createJob(
+            user,
+            datasets,
+            jobType,
+            additionalJobParams,
+          );
 
           this.store.dispatch(submitJobAction({ job: job as any }));
         }
@@ -81,14 +88,25 @@ export class ArchivingService {
   }
 
   public archive(datasets: OutputDatasetObsoleteDto[]): Observable<void> {
-    return this.archiveOrRetrieve(datasets, true);
+    return this.archiveOrRetrieve(datasets, "archive");
   }
 
   public retrieve(
     datasets: OutputDatasetObsoleteDto[],
-    destinationPath: Record<string, string>,
+    additionalJobParams: Record<string, string>,
   ): Observable<void> {
-    return this.archiveOrRetrieve(datasets, false, destinationPath);
+    return this.archiveOrRetrieve(datasets, "retrieve", additionalJobParams);
+  }
+
+  public markForDeletion(
+    datasets: OutputDatasetObsoleteDto[],
+    additionalJobParams: Record<string, string>,
+  ): Observable<void> {
+    return this.archiveOrRetrieve(
+      datasets,
+      "markForDeletion",
+      additionalJobParams,
+    );
   }
 
   public generateOptionLocation(
@@ -128,6 +146,34 @@ export class ArchivingService {
           options: retrieveDestinations,
         },
         option: retrieveDestinations?.[0]?.option,
+      },
+    };
+  }
+
+  public markForDeletionDialogOptions(deletiionCodes: string[] = []): {
+    data: DynamicDialogData;
+    width: string;
+  } {
+    return {
+      width: "auto",
+      data: {
+        title: "Mark for deletion reason",
+        additionalFields: {
+          deletiionCode: {
+            label: "Deletion code",
+            type: "select",
+            required: true,
+            options: deletiionCodes.map((code) => ({
+              label: code,
+              value: code,
+            })),
+          },
+          explanation: {
+            label: "Explanation for deletion",
+            type: "textarea",
+            required: true,
+          },
+        },
       },
     };
   }

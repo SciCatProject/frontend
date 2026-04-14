@@ -223,6 +223,45 @@ export class MockArchivingService {
   public select() {
     return of([]);
   }
+
+  archive() {
+    return of(void 0);
+  }
+
+  retrieve() {
+    return of(void 0);
+  }
+
+  markForDeletion() {
+    return of(void 0);
+  }
+
+  generateOptionLocation() {
+    return { option: "option", location: "/archive/retrieve" };
+  }
+
+  retriveDialogOptions() {
+    return {
+      width: "auto",
+      data: {
+        title: "Retrieve to",
+        question: "",
+        choice: {
+          options: [],
+        },
+      },
+    };
+  }
+
+  markForDeletionDialogOptions() {
+    return {
+      width: "auto",
+      data: {
+        title: "Mark for deletion reason",
+        additionalFields: {},
+      },
+    };
+  }
 }
 
 export class MockPublishedDataApi {
