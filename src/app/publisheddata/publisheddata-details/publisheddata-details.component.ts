@@ -18,6 +18,9 @@ import {
   selectIsAdmin,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
+import {
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "publisheddata-details",
@@ -36,6 +39,10 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   landingPageUrl = "";
   doi = "";
 
+  actionItems: ActionItems = {
+    datasets: [],
+    publisheddata: []
+  };
   constructor(
     private appConfigService: AppConfigService,
     private route: ActivatedRoute,
@@ -55,6 +62,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       this.currentData$.subscribe((data) => {
         if (data) {
           this.publishedData = data;
+          this.actionItems.publisheddata[0] = data;
 
           if (this.appConfig.landingPage) {
             this.landingPageUrl =
