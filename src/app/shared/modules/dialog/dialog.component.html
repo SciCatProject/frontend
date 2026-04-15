@@ -5,10 +5,11 @@
 
   <form #dynamicForm="ngForm">
     <mat-form-field appearance="outline" class="full-width" *ngIf="data.choice">
-      <mat-label>Reason Code</mat-label>
+      <mat-label>{{ data.label ?? data.title }}</mat-label>
       <mat-select [(ngModel)]="data.selectedOption" name="primaryReason"
         required>
         <mat-option *ngFor="let opt of data.choice.options"
+          [matTooltip]="opt.tooltip" 
           [value]="opt.option">
           {{ opt.option }}
         </mat-option>
@@ -28,8 +29,9 @@
           [(ngModel)]="data[field.key]" [name]="field.key"
           [required]="field.value.required">
           <mat-option *ngFor="let opt of field.value.options"
-            [value]="opt.value">
-            {{ opt.label }}
+            [matTooltip]="opt.tooltip" 
+            [value]="opt.option">
+            {{ opt.option }}
           </mat-option>
         </mat-select>
 

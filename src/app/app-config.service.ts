@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { mergeWith } from "lodash-es";
 import { firstValueFrom, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
+import { DialogOptionData } from "shared/modules/dialog/dialog.component";
 import {
   DatasetDetailComponentConfig,
   IngestorComponentConfig,
@@ -129,7 +130,7 @@ export interface AppConfigInterface {
   multipleDownloadUseAuthToken: boolean;
   oAuth2Endpoints: OAuth2Endpoint[];
   policiesEnabled: boolean;
-  retrieveDestinations?: RetrieveDestinations[];
+  retrieveDestinations?: DialogOptionData[];
   riotBaseUrl: string | null;
   scienceSearchEnabled: boolean;
   scienceSearchUnitsEnabled: boolean;
@@ -170,7 +171,7 @@ export interface AppConfigInterface {
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
-  markForDeletionCodes?: string[];
+  markForDeletionCodes?: DialogOptionData[];
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

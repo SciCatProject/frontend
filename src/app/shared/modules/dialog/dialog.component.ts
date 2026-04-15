@@ -1,19 +1,25 @@
 import { Component, Inject } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+
+export interface DialogOptionData {
+  option: string;
+  tooltip?: string;
+}
 
 export interface DynamicField {
   label: string;
   type: "text" | "textarea" | "select";
   required: boolean;
-  options?: { label: string; value: string }[];
+  options?: DialogOptionData[];
 }
 
 export interface DynamicDialogData {
   title: string;
+  label?: string;
   question?: string;
   choice?: {
-    options: Array<{ option: string }>;
+    options: DialogOptionData[];
   };
   additionalFields?: { [key: string]: DynamicField };
   [key: string]: any;

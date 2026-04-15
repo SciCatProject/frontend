@@ -13,7 +13,10 @@ import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { DynamicDialogData } from "shared/modules/dialog/dialog.component";
+import {
+  DynamicDialogData,
+  DialogOptionData,
+} from "shared/modules/dialog/dialog.component";
 
 @Injectable()
 export class ArchivingService {
@@ -133,7 +136,7 @@ export class ArchivingService {
   }
 
   public retriveDialogOptions(
-    retrieveDestinations: RetrieveDestinations[] = [],
+    retrieveDestinations: DialogOptionData[] = [],
   ): object {
     return {
       width: "auto",
@@ -148,7 +151,7 @@ export class ArchivingService {
     };
   }
 
-  public markForDeletionDialogOptions(deletiionCodes: string[] = []): {
+  public markForDeletionDialogOptions(deletionCodes: DialogOptionData[] = []): {
     data: DynamicDialogData;
     width: string;
   } {
@@ -156,16 +159,11 @@ export class ArchivingService {
       width: "auto",
       data: {
         title: "Mark for deletion reason",
+        label: "Deletion code",
+        choice: {
+          options: deletionCodes,
+        },
         additionalFields: {
-          deletiionCode: {
-            label: "Deletion code",
-            type: "select",
-            required: true,
-            options: deletiionCodes.map((code) => ({
-              label: code,
-              value: code,
-            })),
-          },
           explanation: {
             label: "Explanation for deletion",
             type: "textarea",
