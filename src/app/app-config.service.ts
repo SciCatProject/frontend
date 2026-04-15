@@ -170,6 +170,7 @@ export interface AppConfigInterface {
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
+  markForDeletionWorkflowEnabled?: boolean;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

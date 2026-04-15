@@ -117,6 +117,18 @@ describe("DatasetTableActionsComponent", () => {
         setArchiveViewModeAction({ modeToggle }),
       );
     });
+
+    it("should dispatch selected marked_for_deletion archive mode", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      const modeToggle = ArchViewMode.marked_for_deletion;
+
+      component.onModeChange(modeToggle);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({ modeToggle }),
+      );
+    });
   });
 
   describe("#isEmptySelection()", () => {

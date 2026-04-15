@@ -38,8 +38,14 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     ArchViewMode.work_in_progress,
     ArchViewMode.system_error,
     ArchViewMode.user_error,
+    ArchViewMode.marked_for_deletion,
     ArchViewMode.deleted,
-  ];
+  ].filter(
+    (mode) =>
+      this.appConfig.archiveWorkflowEnabled &&
+      (mode !== ArchViewMode.marked_for_deletion ||
+        this.appConfig.markForDeletionWorkflowEnabled),
+  );
 
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
 
