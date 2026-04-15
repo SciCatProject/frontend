@@ -650,13 +650,13 @@ describe("Datasets general", () => {
     });
 
     it("should collapse and expand checkbox filters", () => {
-      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+      cy.get(".collapsible-filter-wrapper .icon-collapse").first().click();
 
       cy.get(".collapsible-filter-wrapper .checkbox-list")
         .first()
         .should("not.be.visible");
 
-      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+      cy.get(".collapsible-filter-wrapper .icon-collapse").first().click();
 
       cy.get(".collapsible-filter-wrapper .checkbox-list")
         .first()
@@ -775,6 +775,51 @@ describe("Datasets general", () => {
       cy.get(".condition-panel").first().click();
 
       cy.get('[data-cy="remove-condition-button"]').click();
+    });
+  });
+
+  describe("Sorting datasets by a column from config", () => {
+    beforeEach(() => {
+      cy.createDataset({
+        type: "raw",
+        datasetName: "B DatasetName",
+      });
+      cy.createDataset({
+        type: "raw",
+        datasetName: "A DatasetName",
+      });
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            columns: [
+              {
+                name: "select",
+                type: "standard",
+                width: 120,
+                enabled: true,
+              },
+              {
+                name: "datasetName",
+                type: "standard",
+                width: 200,
+                enabled: true,
+                sort: "asc",
+              },
+            ],
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+        cy.visit("/datasets");
+        cy.wait("@getConfig", { timeout: 20000 });
+        cy.finishedLoading();
+      });
+    });
+
+    it("should sort datasets by datasetName in asc order from config", () => {
+      cy.get(".dataset-table mat-row").first().should("contain", "A DatasetName");
     });
   });
 });

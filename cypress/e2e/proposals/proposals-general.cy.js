@@ -346,11 +346,13 @@ describe("Proposals general", () => {
       const newProposal = {
         ...testData.proposal,
         proposalId: "000000",
+        startTime: "2026-03-09T15:00:00.000Z",
       };
 
       const newProposal2 = {
         ...testData.proposal,
         proposalId: "000001",
+        startTime: "2026-03-07T15:00:00.000Z",
       };
 
       cy.createProposal(newProposal2);
@@ -358,14 +360,14 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-table mat-row")
-        .first()
-        .should("not.contain", newProposal.proposalId);
+      cy.finishedLoading();
 
-      cy.get(".mat-sort-header-container").contains("Proposal ID").click();
+      cy.get(".mat-sort-header-container").contains("Start Date").click();
+
+      cy.get(".mat-sort-header-container").contains("Start Date").click();
 
       cy.get(".mat-sort-header-container")
-        .contains("Proposal ID")
+        .contains("Start Date")
         .closest("mat-header-cell")
         .should("have.class", "active-sort");
 
@@ -640,17 +642,81 @@ describe("Proposals general", () => {
     });
 
     it("should collapse and expand checkbox filters", () => {
-      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+      cy.get(".collapsible-filter-wrapper .icon-collapse").first().click();
 
       cy.get(".collapsible-filter-wrapper .checkbox-list")
         .first()
         .should("not.be.visible");
 
-      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+      cy.get(".collapsible-filter-wrapper .icon-collapse").first().click();
 
       cy.get(".collapsible-filter-wrapper .checkbox-list")
         .first()
         .should("be.visible");
+    });
+  });
+
+  describe("Proposals default sorting from config", () => {
+    beforeEach(() => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+        startTime: "2026-03-03T15:00:00.000Z",
+        pi_firstname: "Afirstname",
+        pi_lastname: "Zlastname",
+      };
+      const newProposal2 = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+        startTime: "2026-03-04T15:00:00.000Z",
+        pi_firstname: "Bfirstname",
+        pi_lastname: "Alastname",
+      };
+      cy.createProposal(newProposal);
+      cy.createProposal(newProposal2);
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultProposalsListSettings: {
+            ...baseConfig.defaultProposalsListSettings,
+            columns: [
+              {
+                name: "proposalId",
+                width: 120,
+                enabled: true,
+              },
+              {
+                name: "title",
+                width: 210,
+                enabled: true,
+              },
+              {
+                name: "startTime",
+                type: "date",
+                format: "yyyy-MM-dd",
+                width: 130,
+                enabled: true,
+              },
+              {
+                name: "pi_lastname, pi_firstname",
+                enabled: true,
+                width: 150,
+                sort: "desc",
+              },
+            ],
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+        cy.visit("/proposals");
+        cy.wait("@getConfig", { timeout: 20000 });
+        cy.finishedLoading();
+      });
+    });
+
+    it("should sort proposals by last name in desc order from config", () => {
+      cy.finishedLoading();
+      cy.get("mat-table mat-row").first().should("contain", "Zlastname");
     });
   });
 });

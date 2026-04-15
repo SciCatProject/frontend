@@ -31,7 +31,7 @@ import {
 } from "state-management/actions/samples.actions";
 
 import { SampleEditComponent } from "./sample-edit.component";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputSampleDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("SampleEditComponent", () => {
   let component: SampleEditComponent;
@@ -162,7 +162,7 @@ describe("SampleEditComponent", () => {
     it("should return false if sample in form has same id as current sample", () => {
       const sampleId = "abc123";
 
-      const sample = createMock<SampleClass>({
+      const sample = createMock<OutputSampleDto>({
         sampleId,
         owner: "test",
         description: "test",
@@ -187,7 +187,7 @@ describe("SampleEditComponent", () => {
     it("should return true if form is valid", () => {
       const sampleId = "abc123";
 
-      const sample = createMock<SampleClass>({
+      const sample = createMock<OutputSampleDto>({
         sampleId: "123abc",
         owner: "test",
         description: "test",
@@ -224,7 +224,7 @@ describe("SampleEditComponent", () => {
     it("should close the dialog and emit data", () => {
       const dialogCloseSpy = spyOn(component.dialogRef, "close");
 
-      const sample = createMock<SampleClass>({
+      const sample = createMock<OutputSampleDto>({
         sampleId: "123abc",
         owner: "test",
         description: "test",

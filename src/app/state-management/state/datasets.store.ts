@@ -68,7 +68,7 @@ export const initialDatasetState: DatasetState = {
     ownerGroup: [],
     skip: 0,
     limit: 25,
-    sortField: "creationTime:desc",
+    sortField: "",
     keywords: [],
     scientific: [],
     isPublished: "",

@@ -1,0 +1,85 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.inline-edit-cell {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  justify-content: space-between;
+  min-height: 36px;
+  width: 100%;
+}
+
+.inline-edit-text,
+.inline-edit-input {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inline-edit-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inline-edit-editor {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.edit-icon {
+  color: rgba(0, 0, 0, 0.54);
+  flex: 0 0 auto;
+  font-size: 18px;
+  height: 18px;
+  line-height: 18px;
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  width: 18px;
+}
+
+.inline-edit-cell.can-edit:hover .edit-icon {
+  opacity: 1;
+}
+
+.inline-edit-cell.is-editing {
+  cursor: text;
+}
+
+.inline-edit-input {
+  min-width: 0;
+  width: 100%;
+}
+
+.save-button {
+  align-self: stretch;
+  background: transparent;
+  border-radius: 0;
+  color: inherit;
+  display: flex;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: auto;
+  line-height: normal;
+  padding: 0;
+  width: 36px;
+}
+
+.save-button .mat-icon {
+  margin: 0;
+  vertical-align: middle;
+}
+
+.save-button:hover,
+.save-button:focus,
+.save-button:active {
+  background: transparent;
+}

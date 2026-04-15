@@ -16,7 +16,7 @@ import {
 import { Type } from "@angular/core";
 import {
   DatasetsService,
-  SampleClass,
+  OutputSampleDto,
   SamplesService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
@@ -26,7 +26,7 @@ import {
   mockAttachment as attachment,
 } from "shared/MockStubs";
 
-const sample = createMock<SampleClass>({
+const sample = createMock<OutputSampleDto>({
   sampleId: "testId",
   ownerGroup: "testGroup",
   createdBy: "",

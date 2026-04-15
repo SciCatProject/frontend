@@ -7,9 +7,9 @@ import {
   mockDataset as dataset,
   mockAttachment as attachment,
 } from "shared/MockStubs";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputSampleDto } from "@scicatproject/scicat-sdk-ts-angular";
 
-const sample = createMock<SampleClass>({
+const sample = createMock<OutputSampleDto>({
   sampleId: "testId",
   ownerGroup: "testGroup",
   createdBy: "",

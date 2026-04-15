@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputSampleDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changePageAction,
   fetchSamplesAction,
@@ -125,8 +125,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   paginationMode: TablePaginationMode = "server-side";
 
-  dataSource: BehaviorSubject<SampleClass[]> = new BehaviorSubject<
-    SampleClass[]
+  dataSource: BehaviorSubject<OutputSampleDto[]> = new BehaviorSubject<
+    OutputSampleDto[]
   >([]);
 
   pagination: TablePagination = {};
@@ -228,7 +228,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
   };
 
-  formatTableData(samples: SampleClass[]): any {
+  formatTableData(samples: OutputSampleDto[]): any {
     if (samples) {
       return samples.map((sample) => ({
         sampleId: sample.sampleId,
@@ -356,7 +356,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(event: IRowEvent<SampleClass>) {
+  onRowClick(event: IRowEvent<OutputSampleDto>) {
     if (event.event === RowEventType.RowClick) {
       const id = encodeURIComponent(event.sender.row.sampleId);
       this.router.navigateByUrl("/samples/" + id);

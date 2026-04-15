@@ -24,12 +24,14 @@ export interface TableColumn {
   name: string;
   header?: string;
   path?: string;
+  userAdded?: boolean;
   order: number;
-  type: "standard" | "custom" | "date" | "hoverContent";
+  type: "standard" | "custom" | "date" | "hoverContent" | "editable";
   enabled: boolean;
   format?: string;
   tooltip?: string;
   width?: number;
+  sort?: "asc" | "desc";
 }
 
 export interface LabelsLocalization {
