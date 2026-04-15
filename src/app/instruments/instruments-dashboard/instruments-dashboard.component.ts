@@ -106,8 +106,7 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
           this.dataSource.next(instruments);
           this.pending = false;
 
-          const savedTableConfigColumns =
-            tablesSettings?.columns;
+          const savedTableConfigColumns = tablesSettings?.columns;
           const tableSort = this.getTableSort();
           const paginationConfig = this.getTablePaginationConfig(count);
 

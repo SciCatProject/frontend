@@ -15,7 +15,10 @@ import {
 
 export const setTableColumnsAction = createAction(
   "[User] Set Table Columns",
-  props<{ columns: TableColumn[], scope: "dataset" | "proposal" | "sample" | "instrument" | "file"}>(),
+  props<{
+    columns: TableColumn[];
+    scope: "dataset" | "proposal" | "sample" | "instrument" | "file";
+  }>(),
 );
 
 export const loginOIDCAction = createAction(
@@ -147,11 +150,19 @@ export const addCustomColumnsCompleteAction = createAction(
 
 export const selectColumnAction = createAction(
   "[User] Select Column",
-  props<{ name: string; columnType: "standard" | "custom", scope: "dataset" | "proposal" | "sample" | "instrument" | "file" }>(),
+  props<{
+    name: string;
+    columnType: "standard" | "custom";
+    scope: "dataset" | "proposal" | "sample" | "instrument" | "file";
+  }>(),
 );
 export const deselectColumnAction = createAction(
   "[User] Deselect Column",
-  props<{ name: string; columnType: "standard" | "custom"; scope: "dataset" | "proposal" | "sample" | "instrument" | "file" }>(),
+  props<{
+    name: string;
+    columnType: "standard" | "custom";
+    scope: "dataset" | "proposal" | "sample" | "instrument" | "file";
+  }>(),
 );
 
 export const showMessageAction = createAction(
