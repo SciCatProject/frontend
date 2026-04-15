@@ -228,25 +228,26 @@ describe("ArchivingService", () => {
 
   describe("#markForDeletionDialogOptions()", () => {
     it("should return required fields for the mark-for-deletion dialog", () => {
-      const deletionCodes = ["RETRIEVAL_FAILURE", "MARKED_FOR_DELETION"];
+      const deletionCodes = [
+        { option: "RETRIEVAL_FAILURE" },
+        { option: "MARKED_FOR_DELETION" },
+      ];
 
       expect(service.markForDeletionDialogOptions(deletionCodes)).toEqual({
         width: "auto",
         data: {
           title: "Mark for deletion reason",
           additionalFields: {
-            deletiionCode: {
+            deletionCode: {
               label: "Deletion code",
               type: "select",
               required: true,
               options: [
                 {
-                  label: "RETRIEVAL_FAILURE",
-                  value: "RETRIEVAL_FAILURE",
+                  option: "RETRIEVAL_FAILURE",
                 },
                 {
-                  label: "MARKED_FOR_DELETION",
-                  value: "MARKED_FOR_DELETION",
+                  option: "MARKED_FOR_DELETION",
                 },
               ],
             },

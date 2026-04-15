@@ -48,9 +48,7 @@ describe("DialogComponent", () => {
           label: "Deletion code",
           type: "select",
           required: true,
-          options: [
-            { label: "MARKED_FOR_DELETION", value: "MARKED_FOR_DELETION" },
-          ],
+          options: [{ option: "MARKED_FOR_DELETION" }],
         },
         explanation: {
           label: "Explanation for deletion",

@@ -159,11 +159,13 @@ export class ArchivingService {
       width: "auto",
       data: {
         title: "Mark for deletion reason",
-        label: "Deletion code",
-        choice: {
-          options: deletionCodes,
-        },
         additionalFields: {
+          deletionCode: {
+            label: "Deletion code",
+            type: "select",
+            required: true,
+            options: deletionCodes,
+          },
           explanation: {
             label: "Explanation for deletion",
             type: "textarea",

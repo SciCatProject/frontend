@@ -32,9 +32,9 @@ class MockAppConfigService {
   getConfig = () => ({
     archiveWorkflowEnabled: true,
     markForDeletionCodes: [
-      "RETRIEVAL_FAILURE",
-      "ARCHIVING_FAILURE",
-      "MARKED_FOR_DELETION",
+      { option: "RETRIEVAL_FAILURE" },
+      { option: "ARCHIVING_FAILURE" },
+      { option: "MARKED_FOR_DELETION" },
     ],
   });
 }
