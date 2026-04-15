@@ -122,6 +122,8 @@ export class DatasetsListService implements OnDestroy {
           index: column.order,
           display: column.enabled ? "visible" : "hidden",
           width: column.width,
+          path: column.path,
+          userAdded: column.userAdded,
           type: column.type,
           format: column.format,
           tooltip: column.tooltip,
@@ -235,6 +237,16 @@ export class DatasetsListService implements OnDestroy {
               this.formatNumberPipe.transform(lodashGet(row, column.name)),
             );
           };
+        }
+
+        if (column.type === "hoverContent") {
+          convertedColumn.hoverContent = true;
+        }
+
+        if (column.type === "editable") {
+          convertedColumn.toExport =
+            convertedColumn.toExport ??
+            ((row) => lodashGet(row, column.path || column.name) ?? "");
         }
 
         return convertedColumn;

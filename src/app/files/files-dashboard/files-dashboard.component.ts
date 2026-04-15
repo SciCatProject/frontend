@@ -147,8 +147,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
           this.dataSource.next(origDatablocks);
           this.pending = false;
 
-          const savedTableConfigColumns =
-            tablesSettings?.[this.tableName]?.columns;
+          const savedTableConfigColumns = tablesSettings?.columns;
           const tableSort = this.getTableSort();
           const paginationConfig = this.getTablePaginationConfig(count);
 

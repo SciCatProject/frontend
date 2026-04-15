@@ -3,6 +3,7 @@ import {
   ConditionConfig,
 } from "state-management/state/user.store";
 import { IngestorAutodiscovery } from "ingestor/ingestor-page/helper/ingestor.component-helper";
+import { FieldSort } from "shared/modules/dynamic-material-table/models/table-field.model";
 
 export interface Settings {
   tapeCopies: string;
@@ -24,12 +25,14 @@ export interface TableColumn {
   name: string;
   header?: string;
   path?: string;
+  userAdded?: boolean;
   order: number;
-  type: "standard" | "custom" | "date" | "hoverContent";
+  type: "standard" | "custom" | "date" | "hoverContent" | "editable";
   enabled: boolean;
   format?: string;
   tooltip?: string;
   width?: number;
+  sort?: FieldSort;
 }
 
 export interface LabelsLocalization {

@@ -21,7 +21,7 @@ import {
   PageChangeEvent,
   SortChangeEvent,
 } from "shared/modules/table/table.component";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputSampleDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changePageAction,
   fetchSamplesAction,
@@ -58,7 +58,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
     );
 
   samplesSubscription: Subscription = new Subscription();
-  samples: SampleClass[] = [];
+  samples: OutputSampleDto[] = [];
 
   selectedSampleId = "";
   displayedColumns = [
@@ -70,7 +70,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
   ];
 
   form = new FormGroup({
-    sample: new FormControl<SampleClass>(null, [
+    sample: new FormControl<OutputSampleDto>(null, [
       Validators.required,
       this.sampleValidator(),
     ]),
@@ -129,7 +129,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
       sortByColumnAction({ column: event.active, direction: event.direction }),
     );
 
-  onRowClick = (sample: SampleClass): void => {
+  onRowClick = (sample: OutputSampleDto): void => {
     this.selectedSampleId = sample.sampleId;
     this.sample?.setValue(sample);
   };
