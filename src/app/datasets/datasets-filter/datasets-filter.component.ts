@@ -165,6 +165,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       updateConditionsConfigs({
         conditionConfigs: [],
+        scope: "dataset",
       }),
     );
     this.store.dispatch(

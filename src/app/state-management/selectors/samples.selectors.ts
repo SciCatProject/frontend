@@ -136,9 +136,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     metadataKeys,
     characteristicsFilter,
     tableSettings: {
-      samplesTable: {
-        columns: settings.fe_sample_table_columns,
-      },
+      columns: settings.fe_sample_table_columns,
     },
     count,
     hasAppliedFilters,

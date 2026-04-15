@@ -56,9 +56,7 @@ describe("Files Selectors", () => {
         origDatablocks: [],
         count: 0,
         tablesSettings: {
-          filesTable: {
-            columns: initialUserState.settings.fe_file_table_columns,
-          },
+          columns: initialUserState.settings.fe_file_table_columns,
         },
       });
     });

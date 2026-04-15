@@ -87,9 +87,7 @@ describe("Instrument Selectors", () => {
         instruments: [],
         count: 0,
         tablesSettings: {
-          instrumentsTable: {
-            columns: initialUserState.settings.fe_instrument_table_columns,
-          },
+          columns: initialUserState.settings.fe_instrument_table_columns,
         },
       });
     });

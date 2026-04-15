@@ -44,9 +44,7 @@ export const selectInstrumentsWithCountAndTableSettings = createSelector(
       instruments,
       count,
       tablesSettings: {
-        instrumentsTable: {
-          columns: settings.fe_instrument_table_columns,
-        },
+        columns: settings.fe_instrument_table_columns,
       },
     };
   },

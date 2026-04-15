@@ -347,9 +347,7 @@ describe("Proposal Selectors", () => {
         proposals: proposalsSample,
         count,
         tablesSettings: {
-          proposalsTable: {
-            columns: settings.fe_proposal_table_columns,
-          },
+          columns: settings.fe_proposal_table_columns,
         },
         hasFetchedSettings,
       });

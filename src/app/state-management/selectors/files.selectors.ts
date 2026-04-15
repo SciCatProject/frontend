@@ -27,9 +27,7 @@ export const selectFilesWithCountAndTableSettings = createSelector(
     origDatablocks,
     count,
     tablesSettings: {
-      filesTable: {
-        columns: settings.fe_file_table_columns,
-      },
+      columns: settings.fe_file_table_columns,
     },
   }),
 );

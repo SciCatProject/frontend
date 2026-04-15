@@ -36,10 +36,7 @@ import {
   TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import {
-  updateConditionsConfigs,
-  updateUserSettingsAction,
-} from "state-management/actions/user.actions";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
@@ -160,8 +157,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         this.dataSource.next(samples);
         this.pending = false;
 
-        const savedTableConfigColumns =
-          tableSettings?.[this.tableName]?.columns;
+        const savedTableConfigColumns = tableSettings?.columns;
         const tableSort = this.getTableSort();
         const paginationConfig = this.getTablePaginationConfig(count);
 

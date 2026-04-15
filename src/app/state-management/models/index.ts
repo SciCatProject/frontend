@@ -193,9 +193,7 @@ export interface JobFilters extends GenericFilters {
   mode: Record<string, string> | undefined;
 }
 
-export type ConditionSettingsKey =
-  | "fe_dataset_table_conditions"
-  | "fe_sample_table_conditions";
+export type ConditionSettingScope = "dataset" | "sample";
 
 export const SETTINGS_CONFIG = [
   { key: "fe_dataset_table_columns", scope: "dataset", configKey: "columns" },
@@ -220,3 +218,26 @@ export const SETTINGS_CONFIG = [
   },
   { key: "fe_file_table_columns", scope: "file", configKey: "columns" },
 ];
+
+export type SettingScope =
+  | "dataset"
+  | "proposal"
+  | "sample"
+  | "instrument"
+  | "file";
+export type SettingKind = "columns" | "filters" | "conditions";
+
+export const getSettingKey = (
+  scope: SettingScope,
+  kind: SettingKind,
+): string => {
+  const settingKey = SETTINGS_CONFIG.find(
+    (s) => s.scope === scope && s.configKey === kind,
+  );
+
+  if (!settingKey) {
+    throw new Error("Missing setting key in SETTINGS_CONFIG");
+  }
+
+  return settingKey.key;
+};

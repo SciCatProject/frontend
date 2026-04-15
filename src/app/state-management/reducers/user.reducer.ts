@@ -1,17 +1,17 @@
 import { UserState, initialUserState } from "state-management/state/user.store";
 import { Action, createReducer, on } from "@ngrx/store";
 import * as fromActions from "state-management/actions/user.actions";
-import { TableColumn } from "state-management/models";
+import { getSettingKey, TableColumn } from "state-management/models";
 
 const reducer = createReducer(
   initialUserState,
   on(
-    fromActions.setDatasetTableColumnsAction,
-    (state, { columns }): UserState => ({
+    fromActions.setTableColumnsAction,
+    (state, { columns, scope }): UserState => ({
       ...state,
       settings: {
         ...state.settings,
-        fe_dataset_table_columns: columns,
+        [getSettingKey(scope, "columns")]: columns,
       },
     }),
   ),
@@ -127,55 +127,60 @@ const reducer = createReducer(
     }),
   ),
 
-  on(fromActions.addCustomColumnsAction, (state, { names }): UserState => {
-    const existingColumns = [...state.settings.fe_dataset_table_columns];
+  on(
+    fromActions.addCustomColumnsAction,
+    (state, { names, scope }): UserState => {
+      const key = getSettingKey(scope, "columns");
+      const existingColumns = [...state.settings[key]];
 
-    const standardColumns = existingColumns.filter(
-      (column) => column.type === "standard",
-    );
+      const standardColumns = existingColumns.filter(
+        (column) => column.type === "standard",
+      );
 
-    let order = standardColumns.length;
+      let order = standardColumns.length;
 
-    const enabledCustomColumns = existingColumns.filter(
-      (column) => column.type === "custom" && column.enabled,
-    );
+      const enabledCustomColumns = existingColumns.filter(
+        (column) => column.type === "custom" && column.enabled,
+      );
 
-    enabledCustomColumns.forEach((column) => {
-      column.order = order;
-      order++;
-    });
-
-    const enabledCustomColumnNames = enabledCustomColumns.map(
-      (column) => column.name,
-    );
-
-    const newColumns = names
-      .filter((name) => !enabledCustomColumnNames.includes(name))
-      .map((name) => {
-        const column: TableColumn = {
-          name,
-          order,
-          type: "custom",
-          enabled: false,
-        };
+      enabledCustomColumns.forEach((column) => {
+        column.order = order;
         order++;
-        return column;
       });
 
-    const columns = standardColumns
-      .concat(enabledCustomColumns)
-      .concat(newColumns);
+      const enabledCustomColumnNames = enabledCustomColumns.map(
+        (column) => column.name,
+      );
 
-    return {
-      ...state,
-      settings: { ...state.settings, fe_dataset_table_columns: columns },
-    };
-  }),
+      const newColumns = names
+        .filter((name) => !enabledCustomColumnNames.includes(name))
+        .map((name) => {
+          const column: TableColumn = {
+            name,
+            order,
+            type: "custom",
+            enabled: false,
+          };
+          order++;
+          return column;
+        });
+
+      const columns = standardColumns
+        .concat(enabledCustomColumns)
+        .concat(newColumns);
+
+      return {
+        ...state,
+        settings: { ...state.settings, [key]: columns },
+      };
+    },
+  ),
 
   on(
     fromActions.selectColumnAction,
-    (state, { name, columnType }): UserState => {
-      const columns = [...state.settings.fe_dataset_table_columns];
+    (state, { name, columnType, scope }): UserState => {
+      const key = getSettingKey(scope, "columns");
+      const columns = [...state.settings[key]];
       columns.forEach((item) => {
         if (item.name === name && item.type === columnType) {
           item.enabled = true;
@@ -183,14 +188,15 @@ const reducer = createReducer(
       });
       return {
         ...state,
-        settings: { ...state.settings, fe_dataset_table_columns: columns },
+        settings: { ...state.settings, [key]: columns },
       };
     },
   ),
   on(
     fromActions.deselectColumnAction,
-    (state, { name, columnType }): UserState => {
-      const columns = [...state.settings.fe_dataset_table_columns];
+    (state, { name, columnType, scope }): UserState => {
+      const key = getSettingKey(scope, "columns");
+      const columns = [...state.settings[key]];
       columns.forEach((item) => {
         if (item.name === name && item.type === columnType) {
           item.enabled = false;
@@ -198,7 +204,7 @@ const reducer = createReducer(
       });
       return {
         ...state,
-        settings: { ...state.settings, fe_dataset_table_columns: columns },
+        settings: { ...state.settings, [key]: columns },
       };
     },
   ),
@@ -242,32 +248,22 @@ const reducer = createReducer(
   ),
   on(
     fromActions.updateFilterConfigs,
-    (state, { filterConfigs }): UserState => ({
+    (state, { filterConfigs, scope }): UserState => ({
       ...state,
       filters: filterConfigs,
       settings: {
         ...state.settings,
-        fe_dataset_table_filters: filterConfigs,
+        [getSettingKey(scope, "filters")]: filterConfigs,
       },
     }),
   ),
   on(
     fromActions.updateConditionsConfigs,
-    (state, { conditionConfigs }): UserState => ({
+    (state, { conditionConfigs, scope }): UserState => ({
       ...state,
       settings: {
         ...state.settings,
-        fe_dataset_table_conditions: conditionConfigs,
-      },
-    }),
-  ),
-  on(
-    fromActions.updateSampleConditionsConfigs,
-    (state, { conditionConfigs }): UserState => ({
-      ...state,
-      settings: {
-        ...state.settings,
-        fe_sample_table_conditions: conditionConfigs,
+        [getSettingKey(scope, "conditions")]: conditionConfigs,
       },
     }),
   ),

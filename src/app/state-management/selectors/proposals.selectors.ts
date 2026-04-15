@@ -198,9 +198,7 @@ export const selectProposalsWithCountAndTableSettings = createSelector(
   selectSettings,
   (proposals, count, hasFetchedSettings, settings) => {
     const tablesSettings = {
-      proposalsTable: {
-        columns: settings.fe_proposal_table_columns,
-      },
+      columns: settings.fe_proposal_table_columns,
     };
 
     return {

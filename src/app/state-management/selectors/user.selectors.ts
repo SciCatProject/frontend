@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { getSettingKey } from "state-management/models";
 import { UserState } from "state-management/state/user.store";
 
 const selectUserState = createFeatureSelector<UserState>("users");
@@ -99,15 +100,10 @@ export const selectFilters = createSelector(
   (state) => state.settings.fe_dataset_table_filters,
 );
 
-export const selectConditions = createSelector(
-  selectUserState,
-  (state) => state.settings.fe_dataset_table_conditions || [],
-);
-
-export const selectSampleConditions = createSelector(
-  selectUserState,
-  (state) => state.settings.fe_sample_table_conditions || [],
-);
+export const selectConditions = (scope: "dataset" | "sample") =>
+  createSelector(selectUserState, (state) => {
+    return state.settings[getSettingKey(scope, "conditions")] || [];
+  });
 
 export const selectSampleDialogPageViewModel = createSelector(
   selectCurrentUser,

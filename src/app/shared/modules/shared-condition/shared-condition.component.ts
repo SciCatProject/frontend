@@ -10,7 +10,8 @@ import { ConditionConfig } from "state-management/state/user.store";
 import { isEqual } from "lodash-es";
 import {
   ScientificCondition,
-  ConditionSettingsKey,
+  ConditionSettingScope,
+  getSettingKey,
 } from "state-management/models";
 import { ConnectedPosition } from "@angular/cdk/overlay";
 import { Store } from "@ngrx/store";
@@ -27,12 +28,8 @@ import {
 import {
   updateConditionsConfigs,
   updateUserSettingsAction,
-  updateSampleConditionsConfigs,
 } from "state-management/actions/user.actions";
-import {
-  selectConditions,
-  selectSampleConditions,
-} from "state-management/selectors/user.selectors";
+import { selectConditions } from "state-management/selectors/user.selectors";
 @Component({
   selector: "shared-condition",
   templateUrl: "./shared-condition.component.html",
@@ -46,12 +43,12 @@ export class SharedConditionComponent implements OnDestroy {
   @Input() metadataKeys: string[] = [];
   @Input() unitsEnabled = false;
   @Input() showConditionToggle = false;
-  @Input() conditionSettingsKey: ConditionSettingsKey;
+  @Input() conditionSettingScope: ConditionSettingScope;
   @Input() addConditionAction: (condition: ScientificCondition) => void;
   @Input() removeConditionAction: (condition: ScientificCondition) => void;
   @Output() conditionsApplied = new EventEmitter<void>();
 
-  conditionConfigs$ = this.store.select(selectConditions);
+  conditionConfigs$ = this.store.select(selectConditions("dataset"));
 
   humanNameMap: { [key: string]: string } = {};
   tempConditionValues: string[] = [];
@@ -83,16 +80,10 @@ export class SharedConditionComponent implements OnDestroy {
   ) {}
 
   ngOnInit() {
-    switch (this.conditionSettingsKey) {
-      case "fe_dataset_table_conditions":
-        this.conditionConfigs$ = this.store.select(selectConditions);
-        break;
-      case "fe_sample_table_conditions":
-        this.conditionConfigs$ = this.store.select(selectSampleConditions);
-        break;
-      default:
-        throw new Error("Invalid conditionSettingsKey");
-    }
+    this.conditionConfigs$ = this.store.select(
+      selectConditions(this.conditionSettingScope),
+    );
+
     if (this.showConditions) {
       this.buildMetadataMaps();
       this.applyEnabledConditions();
@@ -103,19 +94,17 @@ export class SharedConditionComponent implements OnDestroy {
 
   // Helper to get all conditions and update store
   updateStore(updatedConditions: ConditionConfig[]) {
-    if (this.conditionSettingsKey === "fe_dataset_table_conditions") {
-      this.store.dispatch(
-        updateConditionsConfigs({ conditionConfigs: updatedConditions }),
-      );
-    } else if (this.conditionSettingsKey === "fe_sample_table_conditions") {
-      this.store.dispatch(
-        updateSampleConditionsConfigs({ conditionConfigs: updatedConditions }),
-      );
-    }
+    this.store.dispatch(
+      updateConditionsConfigs({
+        conditionConfigs: updatedConditions,
+        scope: this.conditionSettingScope,
+      }),
+    );
 
+    const key = getSettingKey(this.conditionSettingScope, "conditions");
     this.store.dispatch(
       updateUserSettingsAction({
-        property: { [this.conditionSettingsKey]: updatedConditions },
+        property: { [key]: updatedConditions },
       }),
     );
   }
@@ -351,17 +340,12 @@ export class SharedConditionComponent implements OnDestroy {
           },
         };
 
-        if (this.conditionSettingsKey === "fe_dataset_table_conditions") {
-          this.store.dispatch(
-            updateConditionsConfigs({ conditionConfigs: updatedConditions }),
-          );
-        } else if (this.conditionSettingsKey === "fe_sample_table_conditions") {
-          this.store.dispatch(
-            updateSampleConditionsConfigs({
-              conditionConfigs: updatedConditions,
-            }),
-          );
-        }
+        this.store.dispatch(
+          updateConditionsConfigs({
+            conditionConfigs: updatedConditions,
+            scope: this.conditionSettingScope,
+          }),
+        );
       }),
     );
   }
