@@ -1,62 +1,24 @@
 <div class="mode-container">
-  <mat-button-toggle-group
-    [value]="currentArchViewMode"
-    *ngIf="appConfig.archiveWorkflowEnabled"
-  >
-    <mat-button-toggle
-      *ngFor="let mode of modes"
-      (click)="onModeChange(mode)"
-      [value]="mode"
-      [ngClass]="mode"
-    >
+  <mat-button-toggle-group [value]="currentArchViewMode"
+    *ngIf="appConfig.archiveWorkflowEnabled">
+    <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange(mode)"
+      [value]="mode" [ngClass]="mode">
       {{ mode | titlecase }}
     </mat-button-toggle>
   </mat-button-toggle-group>
 </div>
 
 <div class="action-container" [class.hidden]="loading$ | async">
-  <button
-    mat-button
-    [disabled]="isEmptySelection()"
-    *ngIf="currentArchViewMode === viewModes.archivable"
-    class="archive-action-btn"
-    (click)="archiveClickHandle()"
-    color="primary"
-  >
-    <mat-icon> archive </mat-icon> Archive
-  </button>
+  <ng-container
+    *ngIf="selectionActionsEnabled && appConfig.archiveWorkflowEnabled">
+    <configurable-action *ngFor="let actionConfig of filteredSelectionActions"
+      [actionConfig]="actionConfig" [actionItems]="actionItems">
+    </configurable-action>
+  </ng-container>
 
-  <button
-    mat-button
-    [disabled]="isEmptySelection()"
-    *ngIf="currentArchViewMode === viewModes.retrievable && markForDeletion"
-    class="retrieve-action-btn"
-    (click)="markForDeletionClickHandle()"
-    color="primary"
-  >
-    <mat-icon> delete </mat-icon> Mark for Deletion
-  </button>
-
-  <button
-    mat-button
-    [disabled]="isEmptySelection()"
-    *ngIf="currentArchViewMode === viewModes.retrievable"
-    class="retrieve-action-btn"
-    (click)="retrieveClickHandle()"
-    color="primary"
-  >
-    <mat-icon> cloud_upload </mat-icon> Retrieve
-  </button>
-
-  <button
-    id="addToBatchButton"
-    mat-button
-    [disabled]="isEmptySelection()"
-    *ngIf="appConfig.shoppingCartEnabled"
-    class="add-batch"
-    (click)="onAddToBatch()"
-    color="primary"
-  >
+  <button id="addToBatchButton" mat-button [disabled]="isEmptySelection()"
+    *ngIf="appConfig.shoppingCartEnabled" class="add-batch"
+    (click)="onAddToBatch()" color="primary">
     <mat-icon>library_add</mat-icon>
     Add to Selection
   </button>

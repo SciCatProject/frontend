@@ -10,6 +10,7 @@ import {
   ListSettings,
   TableColumn,
 } from "state-management/models";
+import { ActionConfig } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 export interface OAuth2Endpoint {
   authURL: string;
@@ -87,13 +88,15 @@ export interface AppConfigInterface {
   datasetReduceEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetActionsEnabled: boolean;
-  datasetActions: any[];
+  datasetActions: ActionConfig[];
   datafilesActionsEnabled: boolean;
-  datafilesActions: any[];
+  datafilesActions: ActionConfig[];
   datasetDetailsActionsEnabled: boolean;
-  datasetDetailsActions: any[];
+  datasetDetailsActions: ActionConfig[];
   datasetSelectionActionsEnabled: boolean;
-  datasetSelectionActions: any[];
+  datasetSelectionActions: ActionConfig[];
+  batchActionsEnabled: boolean;
+  batchActions: ActionConfig[];
   editDatasetEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;

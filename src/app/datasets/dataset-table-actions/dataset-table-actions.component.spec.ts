@@ -8,8 +8,8 @@ import {
 } from "@angular/core/testing";
 
 import { DatasetTableActionsComponent } from "./dataset-table-actions.component";
-import { MockStore, MockArchivingService, mockDataset } from "shared/MockStubs";
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { MockStore, mockDataset } from "shared/MockStubs";
+import { NO_ERRORS_SCHEMA, SimpleChange } from "@angular/core";
 import { Store, StoreModule } from "@ngrx/store";
 import { ArchViewMode } from "state-management/models";
 import {
@@ -17,20 +17,53 @@ import {
   addToBatchAction,
   clearSelectionAction,
 } from "state-management/actions/datasets.actions";
-import { ArchivingService } from "datasets/archiving.service";
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
-import { of, throwError } from "rxjs";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
-import { showMessageAction } from "state-management/actions/user.actions";
-import { MessageType } from "state-management/models";
+import { ActionConfig } from "shared/modules/configurable-actions/configurable-action.interfaces";
+
+const selectionActions: ActionConfig[] = [
+  {
+    id: "archive-action",
+    order: 1,
+    label: "Archive",
+    mat_icon: "archive",
+    type: "form",
+    url: "/api/v3/jobs/archive",
+    target: "_blank",
+    archiveViewMode: "archivable",
+  },
+  {
+    id: "retrieve-action",
+    order: 2,
+    label: "Retrieve",
+    mat_icon: "cloud_upload",
+    type: "form",
+    url: "/api/v3/jobs/retrieve",
+    target: "_blank",
+    archiveViewMode: "retrievable",
+  },
+  {
+    id: "mark-for-deletion-action",
+    order: 3,
+    label: "Mark for Deletion",
+    mat_icon: "delete",
+    type: "form",
+    url: "/api/v3/jobs/mark-for-deletion",
+    target: "_blank",
+    archiveViewMode: "retrievable",
+    requiresMarkForDeletionCodes: true,
+  },
+];
 
 class MockAppConfigService {
   getConfig = () => ({
     archiveWorkflowEnabled: true,
+    datasetSelectionActionsEnabled: true,
+    datasetSelectionActions: selectionActions,
+    shoppingCartEnabled: true,
     markForDeletionCodes: [
       "RETRIEVAL_FAILURE",
       "ARCHIVING_FAILURE",
@@ -65,7 +98,6 @@ describe("DatasetTableActionsComponent", () => {
             provide: AppConfigService,
             useClass: MockAppConfigService,
           },
-          { provide: ArchivingService, useClass: MockArchivingService },
         ],
       },
     });
@@ -134,89 +166,43 @@ describe("DatasetTableActionsComponent", () => {
     });
   });
 
-  describe("#archiveClickHandle()", () => {
-    xit("should...", () => {});
-  });
+  describe("#filteredSelectionActions", () => {
+    it("should expose archivable actions in archivable mode", () => {
+      component.currentArchViewMode = ArchViewMode.archivable;
 
-  describe("#retrieveClickHandle()", () => {
-    xit("should...", () => {});
-  });
-
-  describe("#markForDeletionClickHandle()", () => {
-    it("should submit a mark-for-deletion job and clear the selection", () => {
-      const archivingService = component["archivingSrv"];
-      const dialogOptions = { width: "auto", data: { title: "test" } };
-      const dialogResult = {
-        selectedOption: "ARCHIVING_FAILURE",
-        explanation: "Marked from table actions",
-      };
-      const dialogRefStub = {
-        afterClosed: () => of(dialogResult),
-      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
-
-      dispatchSpy = spyOn(store, "dispatch");
-      component.selectedSets = [mockDataset];
-      spyOn(component.dialog, "open").and.returnValue(dialogRefStub);
-      spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue(
-        dialogOptions,
-      );
-      spyOn(archivingService, "markForDeletion").and.returnValue(of(void 0));
-
-      component.markForDeletionClickHandle();
-
-      expect(
-        archivingService.markForDeletionDialogOptions,
-      ).toHaveBeenCalledOnceWith(component.appConfig.markForDeletionCodes);
-      expect(component.dialog.open).toHaveBeenCalledOnceWith(
-        DialogComponent,
-        dialogOptions,
-      );
-      expect(archivingService.markForDeletion).toHaveBeenCalledOnceWith(
-        [mockDataset],
-        {
-          deletionCode: "ARCHIVING_FAILURE",
-          explanation: "Marked from table actions",
-        },
-      );
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(clearSelectionAction());
+      expect(component.filteredSelectionActions.map((a) => a.id)).toEqual([
+        "archive-action",
+      ]);
     });
 
-    it("should dispatch an error message if mark-for-deletion fails", () => {
-      const archivingService = component["archivingSrv"];
-      const dialogResult = {
-        selectedOption: "ARCHIVING_FAILURE",
-        explanation: "Marked from table actions",
-      };
-      const dialogRefStub = {
-        afterClosed: () => of(dialogResult),
-      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
+    it("should expose retrievable actions in retrievable mode", () => {
+      component.currentArchViewMode = ArchViewMode.retrievable;
 
-      dispatchSpy = spyOn(store, "dispatch");
+      expect(component.filteredSelectionActions.map((a) => a.id)).toEqual([
+        "retrieve-action",
+        "mark-for-deletion-action",
+      ]);
+    });
+
+    it("should hide deletion action when codes are not configured", () => {
+      component.markForDeletion = false;
+      component.currentArchViewMode = ArchViewMode.retrievable;
+
+      expect(component.filteredSelectionActions.map((a) => a.id)).toEqual([
+        "retrieve-action",
+      ]);
+    });
+  });
+
+  describe("#ngOnChanges()", () => {
+    it("should sync configurable action datasets from selected sets", () => {
       component.selectedSets = [mockDataset];
-      spyOn(component.dialog, "open").and.returnValue(dialogRefStub);
-      spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue({
-        width: "auto",
-        data: { title: "test" },
+
+      component.ngOnChanges({
+        selectedSets: new SimpleChange([], component.selectedSets, false),
       });
-      spyOn(archivingService, "markForDeletion").and.returnValue(
-        throwError(() => new Error("mark failed")),
-      );
 
-      component.markForDeletionClickHandle();
-
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        showMessageAction({
-          message: {
-            type: MessageType.Error,
-            content: "mark failed",
-            duration: 5000,
-          },
-        }),
-      );
-    });
-
-    it("should set mark-for-deletion visibility from config", () => {
-      expect(component.markForDeletion).toBeTrue();
+      expect(component.actionItems.datasets).toEqual([mockDataset]);
     });
   });
 

@@ -6,6 +6,7 @@ import {
 
 export const mockAppConfigService = {
   appConfig: {
+    lbBaseURL: "http://127.0.0.1:3000",
     maxDirectDownloadSize: 0,
     datafilesActionsEnabled: true,
   },

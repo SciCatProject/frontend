@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { filter, first, switchMap } from "rxjs/operators";
 
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -15,17 +14,24 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 import { ActivatedRoute, Router } from "@angular/router";
-import { ArchivingService } from "../archiving.service";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
 import { AppConfigService } from "app-config.service";
+import { ArchivingService } from "datasets/archiving.service";
 import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
+import {
+  ActionConfig,
+  ActionExecutionContext,
+  ActionItemDataset,
+  ActionItems,
+  ActionValue,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "batch-view",
@@ -48,6 +54,16 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   shareEnabled = this.appConfig.shareEnabled;
   markForDeletion = this.appConfig.markForDeletionCodes?.length > 0;
+  batchActionsEnabled = this.appConfig.batchActionsEnabled;
+  batchActionsConfig: ActionConfig[] = this.appConfig.batchActions ?? [];
+  actionItems: ActionItems = {
+    datasets: [],
+    handlers: {
+      openRetrieveForm: () => this.openRetrieveForm(),
+      clearBatch: () => this.clearBatch(),
+      showRetrieveError: (context) => this.showRetrieveError(context),
+    },
+  };
 
   datasetList: OutputDatasetObsoleteDto[] = [];
   public hasBatch = false;
@@ -61,6 +77,12 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
   ) {}
+
+  get filteredBatchActions(): ActionConfig[] {
+    return this.batchActionsConfig.filter(
+      (action) => !action.requiresMarkForDeletionCodes || this.markForDeletion,
+    );
+  }
 
   private clearBatch() {
     this.store.dispatch(clearBatchAction());
@@ -175,25 +197,56 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  onArchive() {
-    this.batch$
-      .pipe(
-        first(),
-        switchMap((datasets) => this.archivingSrv.archive(datasets)),
-      )
-      .subscribe(
-        () => this.clearBatch(),
-        (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000,
-              },
-            }),
-          ),
+  private openRetrieveForm(): Promise<Record<string, ActionValue> | false> {
+    return new Promise((resolve) => {
+      const dialogOptions = this.archivingSrv.retriveDialogOptions(
+        this.appConfig.retrieveDestinations,
       );
+      const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
+      const destPath = { destinationPath: "/archive/retrieve" };
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (!result || !this.datasetList?.length) {
+          resolve(false);
+          return;
+        }
+
+        const locationOption = this.archivingSrv.generateOptionLocation(
+          result,
+          this.appConfig.retrieveDestinations,
+        );
+        const jobParams = {
+          username: this.userProfile.username,
+          ...destPath,
+          ...(locationOption as Record<string, string>),
+        };
+        const retrieveJobPayload = JSON.stringify({
+          jobParams,
+          emailJobInitiator: this.userProfile.email,
+          datasetList: this.datasetList.map((dataset) => ({
+            pid: dataset.pid,
+            files: [],
+          })),
+          type: "retrieve",
+        });
+
+        resolve({ retrieveJobPayload });
+      });
+    });
+  }
+
+  private showRetrieveError(context?: ActionExecutionContext): void {
+    const message =
+      (context?.variables?.lastErrorMessage as string) || "Retrieve failed";
+    this.store.dispatch(
+      showMessageAction({
+        message: {
+          type: MessageType.Error,
+          content: message,
+          duration: 5000,
+        },
+      }),
+    );
   }
 
   onRetrieve() {
@@ -223,11 +276,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
             ),
         );
       }
-
-      this.router.navigate([], {
-        queryParams: { retrieve: null },
-        queryParamsHandling: "merge",
-      });
     });
   }
 
@@ -259,38 +307,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     localStorage.removeItem("editingDatasetList");
   }
 
-  onMarkForDeletion() {
-    const dialogOptions = this.archivingSrv.markForDeletionDialogOptions(
-      this.appConfig.markForDeletionCodes,
-    );
-    this.dialog
-      .open(DialogComponent, dialogOptions)
-      .afterClosed()
-      .pipe(
-        filter((result) => !!result && !!this.datasetList),
-        switchMap((result) => {
-          const extra = {
-            deletionCode: result.selectedOption,
-            explanation: result.explanation,
-          };
-          return this.archivingSrv.markForDeletion(this.datasetList, extra);
-        }),
-      )
-      .subscribe({
-        next: () => this.clearBatch(),
-        error: (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000,
-              },
-            }),
-          ),
-      });
-  }
-
   getPublishingDataUrl(): string {
     const isEditingDatasetList =
       localStorage.getItem("editingDatasetList") === "true";
@@ -315,6 +331,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       this.batch$.subscribe((result) => {
         if (result) {
           this.datasetList = result;
+          this.actionItems.datasets = result as ActionItemDataset[];
           this.hasBatch = result.length > 0;
         }
       }),
@@ -324,9 +341,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       combineLatest([this.params$]).subscribe(([queryParams]) => {
         if (queryParams["share"] === "true") {
           this.onShare();
-        }
-        if (queryParams["retrieve"] === "true") {
-          this.onRetrieve();
         }
       }),
     );

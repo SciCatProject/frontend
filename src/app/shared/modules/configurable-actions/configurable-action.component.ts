@@ -1,13 +1,18 @@
 import {
-  Component,
   Input,
+  Component,
   OnChanges,
   OnInit,
   SimpleChanges,
 } from "@angular/core";
 
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
-import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
+import {
+  ActionConfig,
+  ActionExecutionContext,
+  ActionItems,
+  ActionValue,
+} from "./configurable-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
@@ -21,15 +26,6 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
-import { result } from "lodash-es";
-
-type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: JSONValue }
-  | JSONValue[];
 
 function processSelector(
   jsonObject: ActionItems,
@@ -130,7 +126,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   use_mat_icon = false;
   use_icon = false;
   disabled_condition = "false";
-  variables: Record<string, any> = {};
+  variables: Record<string, ActionValue> = {};
 
   form: HTMLFormElement = null;
 
@@ -251,12 +247,16 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     }
   }
 
-  update_status() {
-    Object.entries(this.actionConfig.variables ?? {}).forEach(
-      ([key, selector]) => {
-        this.variables[key] = processSelector(this.actionItems, selector);
-      },
-    );
+  update_status(
+    actionConfig: ActionConfig = this.actionConfig,
+    runtimeVariables: Record<string, ActionValue> = this.variables,
+  ) {
+    Object.entries(actionConfig.variables ?? {}).forEach(([key, selector]) => {
+      runtimeVariables[key] = this.get_value_from_definition(
+        selector,
+        runtimeVariables,
+      ) as ActionValue;
+    });
   }
 
   get context() {
@@ -313,6 +313,22 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   perform_action() {
     const action_type = this.actionConfig.type || "form";
     switch (action_type) {
+      case "workflow": {
+        const runtimeVariables: Record<string, ActionValue> = {
+          ...this.variables,
+        };
+        return this.type_workflow(this.actionConfig, runtimeVariables).then(
+          (success) => {
+            this.variables = {
+              ...this.variables,
+              ...runtimeVariables,
+            };
+            return success;
+          },
+        );
+      }
+      case "local":
+        return this.type_local();
       case "json-download":
         return this.type_json_to_download();
       case "xhr":
@@ -325,19 +341,44 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     }
   }
 
-  get_value_from_definition(definition: string) {
+  get_value_from_definition(
+    definition: string,
+    runtimeVariables: Record<string, ActionValue> = this.variables,
+  ) {
+    if (
+      definition?.startsWith("#Dataset") ||
+      definition?.startsWith("#Datasets")
+    ) {
+      return processSelector(this.actionItems, definition);
+    }
+
     if (definition == "#token" || definition == "#tokenSimple") {
       return this.authService.getToken().id;
     } else if (definition == "#tokenBearer") {
       return `Bearer ${this.authService.getToken().id}`;
     } else if (definition == "#jwt") {
       return this.jwt;
+    } else if (definition == "#lbBaseURL") {
+      return this.configService.getConfig().lbBaseURL;
     } else if (definition == "#uuid") {
       return v4();
     } else if (definition.startsWith("@")) {
-      return this.variables[definition.slice(1)];
+      return runtimeVariables[definition.slice(1)];
     }
     return definition;
+  }
+
+  private resolve_template(
+    template: string,
+    runtimeVariables: Record<string, ActionValue> = this.variables,
+  ): string {
+    return (template || "").replace(
+      /\{\{\s*([@#]\w+)\s*\}\}/g,
+      (_, variableName) =>
+        String(
+          this.get_value_from_definition(variableName, runtimeVariables) ?? "",
+        ),
+    );
   }
 
   get_auth_headers(headers: Record<string, string>) {
@@ -351,20 +392,29 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return headers;
   }
 
-  type_form() {
+  type_form(
+    actionConfig: ActionConfig = this.actionConfig,
+    runtimeVariables: Record<string, ActionValue> = this.variables,
+  ) {
     if (this.form !== null) {
       document.body.removeChild(this.form);
     }
 
     this.form = document.createElement("form");
-    this.form.target = this.actionConfig.target || "_self";
-    this.form.method = this.actionConfig.method || "POST";
-    this.form.action = this.actionConfig.url;
+    this.form.target = actionConfig.target || "_self";
+    this.form.method = actionConfig.method || "POST";
+    this.form.action = this.resolve_template(
+      actionConfig.url || "",
+      runtimeVariables,
+    );
     this.form.style.display = "none";
 
     // use the configuration under inputs to create the form
-    Object.entries(this.actionConfig.inputs).forEach(([input, definition]) => {
-      const value = this.get_value_from_definition(definition);
+    Object.entries(actionConfig.inputs || {}).forEach(([input, definition]) => {
+      const value = this.get_value_from_definition(
+        definition,
+        runtimeVariables,
+      );
 
       if (input.endsWith("[]")) {
         const itemInput = input.slice(0, -2);
@@ -372,11 +422,14 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         const iteratable = Array.isArray(value) ? value : [value];
         iteratable.forEach((itemValue, itemIndex) => {
           this.form.appendChild(
-            this.add_input(`${itemInput}[${itemIndex}]`, itemValue),
+            this.add_input(
+              `${itemInput}[${itemIndex}]`,
+              String(itemValue ?? ""),
+            ),
           );
         });
       } else {
-        this.form.appendChild(this.add_input(input, value));
+        this.form.appendChild(this.add_input(input, String(value ?? "")));
       }
     });
 
@@ -386,15 +439,15 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return true;
   }
 
-  get_payload() {
+  get_payload(
+    actionConfig: ActionConfig = this.actionConfig,
+    runtimeVariables: Record<string, ActionValue> = this.variables,
+  ) {
     let payload = "";
-    if (this.actionConfig.payload == "#dump") {
-      payload = JSON.stringify(this.variables);
-    } else if (
-      this.actionConfig.payload != "#empty" &&
-      this.actionConfig.payload
-    ) {
-      payload = this.actionConfig.payload;
+    if (actionConfig.payload == "#dump") {
+      payload = JSON.stringify(runtimeVariables);
+    } else if (actionConfig.payload != "#empty" && actionConfig.payload) {
+      payload = actionConfig.payload;
     }
 
     const readyPayload = payload.replace(
@@ -402,7 +455,10 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       (_, variableName) => {
         if (variableName.endsWith("[]")) {
           const variableNameClean = variableName.slice(0, -2);
-          const value = this.get_value_from_definition(variableNameClean);
+          const value = this.get_value_from_definition(
+            variableNameClean,
+            runtimeVariables,
+          );
 
           const iteratable = !value
             ? []
@@ -411,7 +467,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
               : [value];
           return JSON.stringify(iteratable);
         } else {
-          return this.get_value_from_definition(variableName);
+          return this.get_value_from_definition(variableName, runtimeVariables);
         }
       },
     );
@@ -419,16 +475,22 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return readyPayload;
   }
 
-  type_json_to_download() {
-    const filename = this.actionConfig.filename.replace(
+  type_json_to_download(
+    actionConfig: ActionConfig = this.actionConfig,
+    runtimeVariables: Record<string, ActionValue> = this.variables,
+  ) {
+    const filename = (actionConfig.filename || "download").replace(
       /\{\{\s*([@#]\w+)\s*\}\}/g,
-      (_, variableName) => this.get_value_from_definition(variableName),
+      (_, variableName) =>
+        String(
+          this.get_value_from_definition(variableName, runtimeVariables) ?? "",
+        ),
     );
 
-    const method = this.actionConfig.method || "POST";
-    const payload = this.get_payload();
-    const headers = this.get_auth_headers(this.actionConfig.headers || {});
-    fetch(this.actionConfig.url, {
+    const method = actionConfig.method || "POST";
+    const payload = this.get_payload(actionConfig, runtimeVariables);
+    const headers = this.get_auth_headers(actionConfig.headers || {});
+    fetch(this.resolve_template(actionConfig.url || "", runtimeVariables), {
       method: method,
       headers: {
         ...{
@@ -470,43 +532,38 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   type_xhr() {
-    const url = this.actionConfig.url.replace(
-      /{{\s*(\w+)\s*}}/g,
-      (_, variableName) =>
-        encodeURIComponent(this.get_value_from_definition(variableName)),
-    );
-    const headers = this.get_auth_headers(this.actionConfig.headers || {});
+    void this.type_xhr_async(this.actionConfig, this.variables);
+    return true;
+  }
 
-    fetch(url, {
-      method: this.actionConfig.method || "POST",
-      headers: {
-        ...{
-          "Content-Type": "application/json",
+  private async type_xhr_async(
+    actionConfig: ActionConfig,
+    runtimeVariables: Record<string, ActionValue>,
+  ): Promise<boolean> {
+    const url = this.resolve_template(actionConfig.url || "", runtimeVariables);
+    const headers = this.get_auth_headers(actionConfig.headers || {});
+
+    try {
+      const response = await fetch(url, {
+        method: actionConfig.method || "POST",
+        headers: {
+          ...{
+            "Content-Type": "application/json",
+          },
+          ...(headers || {}),
         },
-        ...(headers || {}),
-      },
-      body: this.get_payload(),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return Promise.reject(
-            new Error(`HTTP Error code: ${response.status}`),
-          );
-        }
+        body: this.get_payload(actionConfig, runtimeVariables),
+      });
 
-        // specific only for datasets
-        // cannot be used
-        // this.store.dispatch(
-        //   updatePropertyAction({
-        //     method: this.actionConfig.method,
-        //     pid: element.pid,
-        //     property: JSON.parse(this.actionConfig.payload),
-        //   }),
-        // );
+      if (!response.ok) {
+        throw new Error(`HTTP Error code: ${response.status}`);
+      }
 
-        return response;
-      })
-      .catch((error) => {
+      return true;
+    } catch (error) {
+      runtimeVariables.lastErrorMessage =
+        error instanceof Error ? error.message : "HTTP request failed";
+      if (!actionConfig.onError?.length) {
         this.snackBar.open(
           "There has been an error performing the action",
           "Close",
@@ -514,12 +571,177 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
             duration: 2000,
           },
         );
-      });
+      }
+      return false;
+    }
+  }
+
+  type_link(
+    actionConfig: ActionConfig = this.actionConfig,
+    runtimeVariables: Record<string, ActionValue> = this.variables,
+  ) {
+    window.open(
+      this.resolve_template(actionConfig.url || "", runtimeVariables),
+      actionConfig.target || "_self",
+    );
+    return true;
+  }
+
+  private is_variable_map(
+    value: unknown,
+  ): value is Record<string, ActionValue> {
+    return !!value && typeof value === "object" && !Array.isArray(value);
+  }
+
+  private merge_handler_result(
+    handlerResult: unknown,
+    runtimeVariables: Record<string, ActionValue>,
+  ): void {
+    if (this.is_variable_map(handlerResult)) {
+      Object.assign(runtimeVariables, handlerResult);
+    }
+  }
+
+  private create_execution_context(
+    actionConfig: ActionConfig,
+    runtimeVariables: Record<string, ActionValue>,
+    result?: unknown,
+    error?: unknown,
+  ): ActionExecutionContext {
+    return {
+      variables: { ...runtimeVariables },
+      actionItems: this.actionItems,
+      actionConfig,
+      result,
+      error,
+    };
+  }
+
+  private async type_local_async(
+    actionConfig: ActionConfig,
+    runtimeVariables: Record<string, ActionValue>,
+  ): Promise<boolean> {
+    const handlerName = actionConfig.handler;
+    if (!handlerName) {
+      return false;
+    }
+
+    const handler = this.actionItems.handlers?.[handlerName];
+    if (!handler) {
+      return false;
+    }
+
+    const context = this.create_execution_context(
+      actionConfig,
+      runtimeVariables,
+    );
+    try {
+      const handlerResult = await handler(context);
+      if (handlerResult === false) {
+        return false;
+      }
+      this.merge_handler_result(handlerResult, runtimeVariables);
+      return true;
+    } catch (error) {
+      runtimeVariables.lastErrorMessage =
+        error instanceof Error ? error.message : "Action failed";
+      return false;
+    }
+  }
+
+  type_local() {
+    const handlerName = this.actionConfig.handler;
+    if (!handlerName) {
+      return false;
+    }
+
+    const handler = this.actionItems.handlers?.[handlerName];
+    if (!handler) {
+      return false;
+    }
+
+    const context = this.create_execution_context(
+      this.actionConfig,
+      this.variables,
+    );
+    try {
+      const handlerResult = handler(context);
+      if (handlerResult instanceof Promise) {
+        void handlerResult.then((resolvedResult) => {
+          this.merge_handler_result(resolvedResult, this.variables);
+        });
+      } else {
+        this.merge_handler_result(handlerResult, this.variables);
+      }
+    } catch (error) {
+      return false;
+    }
 
     return true;
   }
 
-  type_link() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+  private async execute_actions(
+    actions: ActionConfig[],
+    runtimeVariables: Record<string, ActionValue>,
+  ): Promise<boolean> {
+    for (const action of actions) {
+      const success = await this.execute_action(action, runtimeVariables);
+      if (!success) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private async execute_action(
+    actionConfig: ActionConfig,
+    runtimeVariables: Record<string, ActionValue>,
+  ): Promise<boolean> {
+    this.update_status(actionConfig, runtimeVariables);
+
+    let success = true;
+    const actionType = actionConfig.type || "form";
+    switch (actionType) {
+      case "workflow":
+        success = await this.type_workflow(actionConfig, runtimeVariables);
+        break;
+      case "local":
+        success = await this.type_local_async(actionConfig, runtimeVariables);
+        break;
+      case "xhr":
+        success = await this.type_xhr_async(actionConfig, runtimeVariables);
+        break;
+      case "json-download":
+        success = this.type_json_to_download(actionConfig, runtimeVariables);
+        break;
+      case "link":
+        success = this.type_link(actionConfig, runtimeVariables);
+        break;
+      case "form":
+      default:
+        success = this.type_form(actionConfig, runtimeVariables);
+        break;
+    }
+
+    if (success && actionConfig.onSuccess?.length) {
+      await this.execute_actions(actionConfig.onSuccess, runtimeVariables);
+    }
+
+    if (!success && actionConfig.onError?.length) {
+      await this.execute_actions(actionConfig.onError, runtimeVariables);
+    }
+
+    return success;
+  }
+
+  private async type_workflow(
+    actionConfig: ActionConfig = this.actionConfig,
+    runtimeVariables: Record<string, ActionValue> = this.variables,
+  ): Promise<boolean> {
+    if (!actionConfig.actions?.length) {
+      return false;
+    }
+
+    return this.execute_actions(actionConfig.actions, runtimeVariables);
   }
 }

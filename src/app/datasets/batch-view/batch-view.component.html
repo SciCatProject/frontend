@@ -6,106 +6,49 @@
         <a (click)="onCancelEdit()">{{ editingPublishedDataDoi }}</a>
         dataset list.
       </div>
-      <button
-        *ngIf="editingPublishedDataDoi"
-        mat-button
-        id="changeSelectionButton"
-        (click)="onChangeSelection()"
-        class="button"
-        color="primary"
-      >
+      <button *ngIf="editingPublishedDataDoi" mat-button
+        id="changeSelectionButton" (click)="onChangeSelection()" class="button"
+        color="primary">
         <mat-icon> edit </mat-icon>
         Select new datasets
       </button>
-      <button
-        *ngIf="editingPublishedDataDoi"
-        mat-button
-        id="saveChangesButton"
-        (click)="onSaveChanges()"
-        class="button"
-        color="primary"
-      >
+      <button *ngIf="editingPublishedDataDoi" mat-button id="saveChangesButton"
+        (click)="onSaveChanges()" class="button" color="primary">
         <mat-icon> save </mat-icon>
         Save Changes
       </button>
-      <button
-        *ngIf="editingPublishedDataDoi"
-        mat-button
-        id="cancelButton"
-        (click)="onCancelEdit()"
-        class="button"
-        color="warn"
-      >
+      <button *ngIf="editingPublishedDataDoi" mat-button id="cancelButton"
+        (click)="onCancelEdit()" class="button" color="warn">
         <mat-icon> close </mat-icon>
         Cancel
       </button>
-      <button
-        *ngIf="!editingPublishedDataDoi"
-        (click)="onEmpty()"
-        mat-button
-        class="button"
-        color="primary"
-      >
+      <button *ngIf="!editingPublishedDataDoi" (click)="onEmpty()" mat-button
+        class="button" color="primary">
         <mat-icon> remove_circle_outline </mat-icon>
         Empty Selection
       </button>
-      <button
-        *ngIf="!editingPublishedDataDoi"
-        mat-button
-        id="publishButton"
-        (click)="onPublish()"
-        class="button"
-        color="primary"
-      >
+      <button *ngIf="!editingPublishedDataDoi" mat-button id="publishButton"
+        (click)="onPublish()" class="button" color="primary">
         <mat-icon> school </mat-icon>
         Publish
       </button>
       <ng-container *ngIf="shareEnabled">
-        <button
-          *ngIf="!editingPublishedDataDoi"
-          mat-button
-          (click)="onShare()"
-          id="shareButton"
-          class="button"
-          color="primary"
-        >
+        <button *ngIf="!editingPublishedDataDoi" mat-button (click)="onShare()"
+          id="shareButton" class="button" color="primary">
           <mat-icon> share </mat-icon>
           Share
         </button>
       </ng-container>
-      <ng-container *ngIf="appConfig.archiveWorkflowEnabled">
-        <button mat-button (click)="onArchive()" class="button" color="primary">
-          <mat-icon> archive </mat-icon>
-          Archive
-        </button>
-        <button
-          mat-button
-          (click)="onRetrieve()"
-          class="button"
-          color="primary"
-        >
-          <mat-icon> cloud_download </mat-icon>
-          Retrieve
-        </button>
-        <button
-        mat-button
-        *ngIf="markForDeletion"
-        (click)="onMarkForDeletion()"
-        class="button"
-        color="primary"
-      >
-        <mat-icon> delete </mat-icon>
-        Mark for Deletion
-      </button>
+      <ng-container
+        *ngIf="appConfig.archiveWorkflowEnabled && batchActionsEnabled">
+        <configurable-action *ngFor="let actionConfig of filteredBatchActions"
+          [actionConfig]="actionConfig" [actionItems]="actionItems">
+        </configurable-action>
       </ng-container>
     </div>
 
-    <mat-table
-      [dataSource]="batch$"
-      class="mat-elevation-z2"
-      style="margin-left: 1em"
-      data-cy="batch-table"
-    >
+    <mat-table [dataSource]="batch$" class="mat-elevation-z2"
+      style="margin-left: 1em" data-cy="batch-table">
       <ng-container matColumnDef="remove">
         <mat-header-cell *matHeaderCellDef>
           <div fxLayout="column" style="align-items: center">
@@ -146,7 +89,7 @@
         </mat-header-cell>
         <mat-cell *matCellDef="let dataset">{{
           dataset.sourceFolder
-        }}</mat-cell>
+          }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="size">
@@ -177,10 +120,8 @@
         </mat-cell>
       </ng-container>
 
-      <mat-header-row
-        class="datasets-header first-header-row"
-        *matHeaderRowDef="visibleColumns"
-      >
+      <mat-header-row class="datasets-header first-header-row"
+        *matHeaderRowDef="visibleColumns">
       </mat-header-row>
 
       <mat-row *matRowDef="let dataset; columns: visibleColumns"> </mat-row>

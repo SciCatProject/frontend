@@ -983,4 +983,127 @@ describe("1000: ConfigurableActionComponent", () => {
       current_action.target,
     );
   });
+
+  it("1140: local action should invoke the configured handler", () => {
+    const handlerSpy = jasmine.createSpy("handlerSpy");
+    component.actionConfig = {
+      id: "local-action",
+      order: 1,
+      label: "Local Action",
+      type: "local",
+      handler: "archive",
+    };
+    component.actionItems = {
+      datasets: [],
+      handlers: {
+        archive: handlerSpy,
+      },
+    };
+
+    const result = component.perform_action();
+
+    expect(result).toBeTrue();
+    expect(handlerSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("1150: local action without a matching handler should return false", () => {
+    component.actionConfig = {
+      id: "local-action",
+      order: 1,
+      label: "Local Action",
+      type: "local",
+      handler: "archive",
+    };
+    component.actionItems = {
+      datasets: [],
+    };
+
+    const result = component.perform_action();
+
+    expect(result).toBeFalse();
+  });
+
+  it("1160: form action URL should resolve #lbBaseURL placeholder", () => {
+    component.actionConfig = {
+      id: "batch-archive",
+      order: 1,
+      label: "Archive",
+      type: "form",
+      url: "{{ #lbBaseURL }}/api/v3/jobs",
+      target: "_blank",
+      variables: {
+        pids: "#DatasetsPid",
+      },
+      inputs: {
+        type: "archive",
+        "datasetList[]": "@pids",
+      },
+    };
+    component.actionItems = mockActionItems;
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.perform_action();
+
+    expect(component.form.action.replace(/\/$/, "")).toEqual(
+      "http://127.0.0.1:3000/api/v3/jobs",
+    );
+  });
+
+  it("1170: workflow action should execute local input step, xhr post and success handler", async () => {
+    const openFormSpy = jasmine
+      .createSpy("openFormSpy")
+      .and.returnValue({ retrieveLocation: "/archive/retrieve" });
+    const clearBatchSpy = jasmine.createSpy("clearBatchSpy");
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve({ ok: true, status: 200 } as Response),
+    );
+
+    component.actionItems = {
+      datasets: mockActionItems.datasets,
+      handlers: {
+        openRetrieveForm: openFormSpy,
+        clearBatch: clearBatchSpy,
+      },
+    };
+    component.actionConfig = {
+      id: "workflow-action",
+      order: 1,
+      label: "Retrieve",
+      type: "workflow",
+      actions: [
+        {
+          id: "open-step",
+          order: 1,
+          label: "Open Retrieve Form",
+          type: "local",
+          handler: "openRetrieveForm",
+        },
+        {
+          id: "post-step",
+          order: 2,
+          label: "Submit Retrieve",
+          type: "xhr",
+          method: "POST",
+          url: "{{ #lbBaseURL }}/api/v3/jobs",
+          payload: '{"destinationPath":"{{ @retrieveLocation }}"}',
+          onSuccess: [
+            {
+              id: "clear-step",
+              order: 1,
+              label: "Clear Batch",
+              type: "local",
+              handler: "clearBatch",
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = await Promise.resolve(component.perform_action());
+
+    expect(result).toBeTrue();
+    expect(openFormSpy).toHaveBeenCalledTimes(1);
+    expect(window.fetch).toHaveBeenCalledTimes(1);
+    expect(clearBatchSpy).toHaveBeenCalledTimes(1);
+  });
 });

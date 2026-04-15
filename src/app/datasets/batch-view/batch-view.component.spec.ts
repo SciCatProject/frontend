@@ -11,11 +11,11 @@ import {
   MockDatasetApi,
   mockDataset as dataset,
 } from "shared/MockStubs";
-import { ArchivingService } from "../archiving.service";
+import { ArchivingService } from "datasets/archiving.service";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatDialogModule } from "@angular/material/dialog";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
@@ -27,10 +27,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { AppConfigService } from "app-config.service";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
-import { of, throwError } from "rxjs";
-import { showMessageAction } from "state-management/actions/user.actions";
-import { MessageType } from "state-management/models";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
+import { ActionConfig } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 describe("BatchViewComponent", () => {
   let component: BatchViewComponent;
@@ -49,8 +46,46 @@ describe("BatchViewComponent", () => {
     "MARKED_FOR_DELETION",
   ];
 
+  const batchActions: ActionConfig[] = [
+    {
+      id: "batch-archive",
+      order: 1,
+      label: "Archive",
+      mat_icon: "archive",
+      type: "form",
+      url: "/api/v3/jobs",
+    },
+    {
+      id: "batch-retrieve",
+      order: 2,
+      label: "Retrieve",
+      mat_icon: "cloud_download",
+      type: "workflow",
+      actions: [
+        {
+          id: "batch-retrieve-open-form",
+          order: 1,
+          label: "Retrieve Form",
+          type: "local",
+          handler: "openRetrieveForm",
+        },
+      ],
+    },
+    {
+      id: "batch-mark-for-deletion",
+      order: 3,
+      label: "Mark for Deletion",
+      mat_icon: "delete",
+      type: "form",
+      url: "/api/v3/jobs",
+      requiresMarkForDeletionCodes: true,
+    },
+  ];
+
   const getConfig = () => ({
     archiveWorkflowEnabled: true,
+    batchActionsEnabled: true,
+    batchActions,
     markForDeletionCodes,
   });
 
@@ -142,91 +177,42 @@ describe("BatchViewComponent", () => {
     xit("should ...", () => {});
   });
 
-  describe("#onArchive()", () => {
-    xit("should ...", () => {});
-  });
-
-  describe("#onRetrieve()", () => {
-    xit("should ...", () => {});
-  });
-
-  describe("#onMarkForDeletion()", () => {
-    it("should submit a mark-for-deletion job and clear the batch", () => {
-      const archivingService = component["archivingSrv"];
-      const dialog = component["dialog"];
-      const dialogOptions = { width: "auto", data: { title: "test" } };
-      const dialogResult = {
-        selectedOption: "MARKED_FOR_DELETION",
-        explanation: "Reason provided",
-      };
-      const dialogRefStub = {
-        afterClosed: () => of(dialogResult),
-      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
-      const clearBatchSpy = spyOn(
-        component as unknown as { clearBatch: () => void },
-        "clearBatch",
-      );
-      const openSpy = spyOn(dialog, "open").and.returnValue(dialogRefStub);
-
-      component.datasetList = [dataset];
-      spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue(
-        dialogOptions,
-      );
-      spyOn(archivingService, "markForDeletion").and.returnValue(of(void 0));
-
-      component.onMarkForDeletion();
-
-      expect(
-        archivingService.markForDeletionDialogOptions,
-      ).toHaveBeenCalledOnceWith(markForDeletionCodes);
-      expect(openSpy).toHaveBeenCalledOnceWith(DialogComponent, dialogOptions);
-      expect(archivingService.markForDeletion).toHaveBeenCalledOnceWith(
-        [dataset],
-        {
-          deletionCode: "MARKED_FOR_DELETION",
-          explanation: "Reason provided",
-        },
-      );
-      expect(clearBatchSpy).toHaveBeenCalledTimes(1);
+  describe("#filteredBatchActions", () => {
+    it("should include all actions when markForDeletion codes are configured", () => {
+      expect(component.filteredBatchActions.map((a) => a.id)).toEqual([
+        "batch-archive",
+        "batch-retrieve",
+        "batch-mark-for-deletion",
+      ]);
     });
 
-    it("should dispatch an error message if mark-for-deletion fails", () => {
-      const archivingService = component["archivingSrv"];
-      const dialog = component["dialog"];
-      const dialogResult = {
-        selectedOption: "MARKED_FOR_DELETION",
-        explanation: "Reason provided",
-      };
-      const dialogRefStub = {
-        afterClosed: () => of(dialogResult),
-      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
+    it("should exclude requiresMarkForDeletionCodes actions when no deletion codes are configured", () => {
+      component.markForDeletion = false;
 
-      dispatchSpy = spyOn(store, "dispatch");
-      component.datasetList = [dataset];
-      spyOn(dialog, "open").and.returnValue(dialogRefStub);
-      spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue({
-        width: "auto",
-        data: { title: "test" },
-      });
-      spyOn(archivingService, "markForDeletion").and.returnValue(
-        throwError(() => new Error("mark failed")),
-      );
-
-      component.onMarkForDeletion();
-
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        showMessageAction({
-          message: {
-            type: MessageType.Error,
-            content: "mark failed",
-            duration: 5000,
-          },
-        }),
-      );
+      expect(component.filteredBatchActions.map((a) => a.id)).toEqual([
+        "batch-archive",
+        "batch-retrieve",
+      ]);
     });
 
-    it("should set mark-for-deletion visibility from config", () => {
-      expect(component.markForDeletion).toBeTrue();
+    it("should expose retrieve workflow handlers for batch actions", () => {
+      expect(component.actionItems.handlers?.openRetrieveForm).toEqual(
+        jasmine.any(Function),
+      );
+      expect(component.actionItems.handlers?.clearBatch).toEqual(
+        jasmine.any(Function),
+      );
+      expect(component.actionItems.handlers?.showRetrieveError).toEqual(
+        jasmine.any(Function),
+      );
+    });
+  });
+
+  describe("actionItems dataset sync", () => {
+    it("should sync actionItems.datasets from the batch subscription", () => {
+      store.overrideSelector(selectDatasetsInBatch, [dataset]);
+      store.refreshState();
+      expect(component.actionItems.datasets).toEqual([dataset]);
     });
   });
 });
