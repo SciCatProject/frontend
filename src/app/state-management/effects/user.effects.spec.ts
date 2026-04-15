@@ -674,7 +674,10 @@ describe("UserEffects", () => {
   describe("addCustomColumns$", () => {
     it("should result in an addCustomColumnsCompleteAction", () => {
       const names = ["test"];
-      const action = fromActions.addCustomColumnsAction({ names });
+      const action = fromActions.addCustomColumnsAction({
+        names,
+        scope: "dataset",
+      });
       const outcome = fromActions.addCustomColumnsCompleteAction();
 
       actions = hot("-a", { a: action });
@@ -690,7 +693,11 @@ describe("UserEffects", () => {
       it("should dispatch an updateUserSettingsAction", () => {
         const name = "test";
         const columnType = "standard";
-        const action = fromActions.selectColumnAction({ name, columnType });
+        const action = fromActions.selectColumnAction({
+          name,
+          columnType,
+          scope: "dataset",
+        });
         const outcome = fromActions.updateUserSettingsAction({ property });
 
         actions = hot("-a", { a: action });
@@ -704,7 +711,11 @@ describe("UserEffects", () => {
       it("should dispatch an updateUserSettingsAction", () => {
         const name = "test";
         const columnType = "standard";
-        const action = fromActions.deselectColumnAction({ name, columnType });
+        const action = fromActions.deselectColumnAction({
+          name,
+          columnType,
+          scope: "dataset",
+        });
         const outcome = fromActions.updateUserSettingsAction({ property });
 
         actions = hot("-a", { a: action });

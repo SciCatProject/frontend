@@ -10,13 +10,14 @@ import {
 import { SDKToken } from "shared/services/auth/auth.service";
 
 describe("UserReducer", () => {
-  describe("on setDatasetTableColumnsAction", () => {
+  describe("on setTableColumnsAction", () => {
     it("should set the columns", () => {
       const columns: TableColumn[] = [
         { name: "testColumn", order: 0, type: "standard", enabled: true },
       ];
-      const action = fromActions.setDatasetTableColumnsAction({
+      const action = fromActions.setTableColumnsAction({
         columns,
+        scope: "dataset",
       });
       const state = userReducer(initialUserState, action);
 
@@ -248,7 +249,10 @@ describe("UserReducer", () => {
   describe("on addColumnAction", () => {
     it("should append a new column to the columns property", () => {
       const names = ["test"];
-      const action = fromActions.addCustomColumnsAction({ names });
+      const action = fromActions.addCustomColumnsAction({
+        names,
+        scope: "dataset",
+      });
       const state = userReducer(initialUserState, action);
 
       expect(
@@ -274,7 +278,11 @@ describe("UserReducer", () => {
       const name = "dataStatus";
       const columnType = "standard";
 
-      const action = fromActions.selectColumnAction({ name, columnType });
+      const action = fromActions.selectColumnAction({
+        name,
+        columnType,
+        scope: "dataset",
+      });
       const state = userReducer(initialUserState, action);
 
       state.settings.fe_dataset_table_columns.forEach((column) => {
@@ -290,7 +298,11 @@ describe("UserReducer", () => {
       const name = "datasetName";
       const columnType = "standard";
 
-      const action = fromActions.deselectColumnAction({ name, columnType });
+      const action = fromActions.deselectColumnAction({
+        name,
+        columnType,
+        scope: "dataset",
+      });
       const state = userReducer(initialUserState, action);
 
       state.settings.fe_dataset_table_columns.forEach((column) => {
