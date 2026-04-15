@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { filter, first, switchMap } from "rxjs/operators";
+import { first, switchMap } from "rxjs/operators";
 
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -12,7 +12,6 @@ import {
 } from "state-management/actions/datasets.actions";
 import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 import { ActivatedRoute, Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
@@ -26,6 +25,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
+import { DatasetJobDialogService } from "../dataset-job-dialog.service";
 
 @Component({
   selector: "batch-view",
@@ -58,9 +58,10 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private store: Store,
     private archivingSrv: ArchivingService,
+    private datasetJobDialogService: DatasetJobDialogService,
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   private clearBatch() {
     this.store.dispatch(clearBatchAction());
@@ -176,59 +177,35 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onArchive() {
-    this.batch$
-      .pipe(
-        first(),
-        switchMap((datasets) => this.archivingSrv.archive(datasets)),
-      )
-      .subscribe(
-        () => this.clearBatch(),
-        (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000,
-              },
-            }),
-          ),
-      );
+    const dialogOptions = {
+      width: "auto",
+      data: { title: "Really archive?", question: "" },
+    };
+    this.datasetJobDialogService.submitJobWithDialog(
+      dialogOptions,
+      this.datasetList,
+      "archive",
+      undefined,
+    );
   }
 
   onRetrieve() {
     const dialogOptions = this.archivingSrv.retriveDialogOptions(
       this.appConfig.retrieveDestinations,
     );
-    const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
-    const destPath = { destinationPath: "/archive/retrieve" };
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && this.datasetList) {
+    this.datasetJobDialogService.submitJobWithDialog(
+      dialogOptions,
+      this.datasetList,
+      "retrieve",
+      (result) => {
+        const destPath = { destinationPath: "/archive/retrieve" };
         const locationOption = this.archivingSrv.generateOptionLocation(
           result,
           this.appConfig.retrieveDestinations,
         );
-        const extra = { ...destPath, ...locationOption };
-        this.archivingSrv.retrieve(this.datasetList, extra).subscribe(
-          () => this.clearBatch(),
-          (err) =>
-            this.store.dispatch(
-              showMessageAction({
-                message: {
-                  type: MessageType.Error,
-                  content: err.message,
-                  duration: 5000,
-                },
-              }),
-            ),
-        );
-      }
-
-      this.router.navigate([], {
-        queryParams: { retrieve: null },
-        queryParamsHandling: "merge",
-      });
-    });
+        return { ...destPath, ...locationOption };
+      },
+    );
   }
 
   onSaveChanges() {
@@ -263,32 +240,15 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     const dialogOptions = this.archivingSrv.markForDeletionDialogOptions(
       this.appConfig.markForDeletionCodes,
     );
-    this.dialog
-      .open(DialogComponent, dialogOptions)
-      .afterClosed()
-      .pipe(
-        filter((result) => !!result && !!this.datasetList),
-        switchMap((result) => {
-          const extra = {
-            deletionCode: result.selectedOption,
-            explanation: result.explanation,
-          };
-          return this.archivingSrv.markForDeletion(this.datasetList, extra);
-        }),
-      )
-      .subscribe({
-        next: () => this.clearBatch(),
-        error: (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000,
-              },
-            }),
-          ),
-      });
+    this.datasetJobDialogService.submitJobWithDialog(
+      dialogOptions,
+      this.datasetList,
+      "markForDeletion",
+      (result) => ({
+        deletionCode: result.selectedOption,
+        explanation: result.explanation,
+      }),
+    );
   }
 
   getPublishingDataUrl(): string {
@@ -310,6 +270,11 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         this.userProfile = userProfile;
       })
       .unsubscribe();
+
+    // Register success callbacks for dataset operations
+    this.datasetJobDialogService.registerSuccessCallback(() =>
+      this.clearBatch(),
+    );
     this.store.dispatch(prefillBatchAction());
     this.subscriptions.push(
       this.batch$.subscribe((result) => {

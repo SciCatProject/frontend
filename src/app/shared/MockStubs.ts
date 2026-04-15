@@ -61,11 +61,11 @@ export class MockAuthService {
     prop: string,
     value: string | number | Date | boolean,
     expires?: Date,
-  ): void {}
+  ): void { }
 
-  public clear(): void {}
+  public clear(): void { }
 
-  public setRememberMe(value: boolean): void {}
+  public setRememberMe(value: boolean): void { }
 
   public setUser(user: ReturnedUserDto) {
     this.save();
@@ -141,13 +141,13 @@ export class MockDatasetApi {
   }
 }
 
-export class MockAttachmentApi {}
+export class MockAttachmentApi { }
 
 export class MockMatDialogRef {
-  close() {}
+  close() { }
 }
 
-export class MockMatDialogData {}
+export class MockMatDialogData { }
 
 export class MockActivatedRoute {
   // stub detail goes here
@@ -164,7 +164,7 @@ export class MockActivatedRoute {
 }
 
 export class MockDatasetsListService {
-  destroy() {}
+  destroy() { }
 }
 
 export class MockRouter {
@@ -172,14 +172,14 @@ export class MockRouter {
     observer.next(null);
     observer.complete();
   });
-  navigate = () => {};
+  navigate = () => { };
 
   // jasmine.createSpy('navigate');
   navigateByUrl(url: string) {
     return url;
   }
 
-  createUrlTree = () => {};
+  createUrlTree = () => { };
   serializeUrl = (url: UrlTree) => "";
 }
 
@@ -197,16 +197,16 @@ export class MockConfigService {
 
 export class MockAppConfigService {
   private appConfig: object = {};
-  constructor(private http: null) {}
+  constructor(private http: null) { }
 
-  async loadAppConfig(): Promise<void> {}
+  async loadAppConfig(): Promise<void> { }
   getConfig(): AppConfig {
     return this.appConfig as AppConfig;
   }
 }
 
 export class MockStore {
-  public dispatch() {}
+  public dispatch() { }
 
   public select(selector) {
     return of([]);
@@ -218,7 +218,7 @@ export class MockStore {
 }
 
 export class MockArchivingService {
-  public dispatch() {}
+  public dispatch() { }
 
   public select() {
     return of([]);
@@ -233,6 +233,10 @@ export class MockArchivingService {
   }
 
   markForDeletion() {
+    return of(void 0);
+  }
+
+  submitJob() {
     return of(void 0);
   }
 
@@ -369,7 +373,7 @@ export class MockHtmlElement {
   getElementsByTagName(tag: string): any[] {
     return this.children.filter((x: any) => x.tag == tag.toUpperCase());
   }
-  submit() {}
+  submit() { }
 }
 
 export function createMock<T>(data?: Partial<T>): T {

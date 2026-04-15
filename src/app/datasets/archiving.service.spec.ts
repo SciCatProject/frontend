@@ -9,6 +9,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
+import { of } from "rxjs";
 import { createMock, mockDataset } from "shared/MockStubs";
 import {
   ReturnedUserDto,
@@ -135,34 +136,29 @@ describe("ArchivingService", () => {
   });
 
   describe("#archive()", () => {
-    it("should call #archiveOrRetrieve() with the archive job type", () => {
-      const archiveOrRetrieveSpy = spyOn<any, string>(
-        service,
-        "archiveOrRetrieve",
+    it("should call #submitJob() with the archive job type", () => {
+      const submitJobSpy = spyOn(service, "submitJob").and.returnValue(
+        of(void 0),
       );
       const datasets = [mockDataset];
 
-      service.archive(datasets);
+      service.archive(datasets).subscribe();
 
-      expect(archiveOrRetrieveSpy).toHaveBeenCalledOnceWith(
-        datasets,
-        "archive",
-      );
+      expect(submitJobSpy).toHaveBeenCalledOnceWith(datasets, "archive");
     });
   });
 
   describe("#retrieve()", () => {
-    it("should call #archiveOrRetrieve() with the retrieve job type", () => {
-      const archiveOrRetrieveSpy = spyOn<any, string>(
-        service,
-        "archiveOrRetrieve",
+    it("should call #submitJob() with the retrieve job type", () => {
+      const submitJobSpy = spyOn(service, "submitJob").and.returnValue(
+        of(void 0),
       );
       const datasets = [mockDataset];
       const destinationPath = { location: "/test/path/" };
 
-      service.retrieve(datasets, destinationPath);
+      service.retrieve(datasets, destinationPath).subscribe();
 
-      expect(archiveOrRetrieveSpy).toHaveBeenCalledOnceWith(
+      expect(submitJobSpy).toHaveBeenCalledOnceWith(
         datasets,
         "retrieve",
         destinationPath,
@@ -171,10 +167,9 @@ describe("ArchivingService", () => {
   });
 
   describe("#markForDeletion()", () => {
-    it("should call #archiveOrRetrieve() with the markForDeletion job type", () => {
-      const archiveOrRetrieveSpy = spyOn<any, string>(
-        service,
-        "archiveOrRetrieve",
+    it("should call #submitJob() with the markForDeletion job type", () => {
+      const submitJobSpy = spyOn(service, "submitJob").and.returnValue(
+        of(void 0),
       );
       const datasets = [mockDataset];
       const additionalJobParams = {
@@ -182,9 +177,9 @@ describe("ArchivingService", () => {
         explanation: "Requested by data manager",
       };
 
-      service.markForDeletion(datasets, additionalJobParams);
+      service.markForDeletion(datasets, additionalJobParams).subscribe();
 
-      expect(archiveOrRetrieveSpy).toHaveBeenCalledOnceWith(
+      expect(submitJobSpy).toHaveBeenCalledOnceWith(
         datasets,
         "markForDeletion",
         additionalJobParams,

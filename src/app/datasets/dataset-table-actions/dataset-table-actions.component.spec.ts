@@ -18,15 +18,13 @@ import {
   clearSelectionAction,
 } from "state-management/actions/datasets.actions";
 import { ArchivingService } from "datasets/archiving.service";
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
-import { of, throwError } from "rxjs";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
-import { showMessageAction } from "state-management/actions/user.actions";
-import { MessageType } from "state-management/models";
+import { of, Subscription } from "rxjs";
+import { DatasetJobDialogService } from "datasets/dataset-job-dialog.service";
 
 class MockAppConfigService {
   getConfig = () => ({
@@ -45,6 +43,10 @@ describe("DatasetTableActionsComponent", () => {
 
   let store: MockStore;
   let dispatchSpy;
+  const datasetJobDialogServiceSpy = jasmine.createSpyObj(
+    "DatasetJobDialogService",
+    ["submitWithDialog", "registerSuccessCallback"],
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -66,6 +68,10 @@ describe("DatasetTableActionsComponent", () => {
             useClass: MockAppConfigService,
           },
           { provide: ArchivingService, useClass: MockArchivingService },
+          {
+            provide: DatasetJobDialogService,
+            useValue: datasetJobDialogServiceSpy,
+          },
         ],
       },
     });
@@ -73,6 +79,15 @@ describe("DatasetTableActionsComponent", () => {
   }));
 
   beforeEach(() => {
+    datasetJobDialogServiceSpy.submitWithDialog.calls.reset();
+    datasetJobDialogServiceSpy.registerSuccessCallback.calls.reset();
+    datasetJobDialogServiceSpy.registerSuccessCallback.and.returnValue(
+      undefined,
+    );
+    datasetJobDialogServiceSpy.submitWithDialog.and.returnValue(
+      new Subscription(),
+    );
+
     fixture = TestBed.createComponent(DatasetTableActionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -134,85 +149,123 @@ describe("DatasetTableActionsComponent", () => {
     });
   });
 
+  describe("#ngOnInit()", () => {
+    it("should register success callbacks for archive, retrieve and markForDeletion", () => {
+      // The component is created and detectChanges is called in beforeEach
+      // which triggers ngOnInit
+
+      expect(
+        datasetJobDialogServiceSpy.registerSuccessCallback,
+      ).toHaveBeenCalledWith("archive", jasmine.any(Function));
+      expect(
+        datasetJobDialogServiceSpy.registerSuccessCallback,
+      ).toHaveBeenCalledWith("retrieve", jasmine.any(Function));
+      expect(
+        datasetJobDialogServiceSpy.registerSuccessCallback,
+      ).toHaveBeenCalledWith("markForDeletion", jasmine.any(Function));
+    });
+  });
+
   describe("#archiveClickHandle()", () => {
-    xit("should...", () => {});
+    it("should submit archive through DatasetJobDialogService", () => {
+      component.selectedSets = [mockDataset];
+
+      component.archiveClickHandle();
+
+      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledOnceWith(
+        jasmine.objectContaining({ width: "auto" }),
+        [mockDataset],
+        "archive",
+        undefined,
+      );
+    });
   });
 
   describe("#retrieveClickHandle()", () => {
-    xit("should...", () => {});
+    it("should submit retrieve through DatasetJobDialogService with new API", () => {
+      const archivingService = component["archivingSrv"];
+      const dialogOptions = { width: "auto", data: { title: "retrieve" } };
+      const retrieveDestinations = [
+        { option: "my-option", location: "/archive/base" },
+      ];
+
+      component.selectedSets = [mockDataset];
+      component.appConfig.retrieveDestinations = retrieveDestinations;
+      spyOn(archivingService, "retriveDialogOptions").and.returnValue(
+        dialogOptions,
+      );
+      spyOn(archivingService, "generateOptionLocation").and.returnValue({
+        option: "my-option",
+        location: "/archive/base/path",
+      });
+
+      component.retrieveClickHandle();
+
+      expect(archivingService.retriveDialogOptions).toHaveBeenCalledOnceWith(
+        retrieveDestinations,
+      );
+      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledTimes(
+        1,
+      );
+
+      const [
+        passedDialogOptions,
+        passedDatasets,
+        jobType,
+        paramsExtractor,
+      ] = datasetJobDialogServiceSpy.submitWithDialog.calls.mostRecent().args;
+
+      expect(passedDialogOptions).toEqual(dialogOptions);
+      expect(passedDatasets).toEqual([mockDataset]);
+      expect(jobType).toEqual("retrieve");
+      expect(
+        paramsExtractor({ option: "my-option", location: "/path" }),
+      ).toEqual({
+        destinationPath: "/archive/retrieve",
+        option: "my-option",
+        location: "/archive/base/path",
+      });
+    });
   });
 
   describe("#markForDeletionClickHandle()", () => {
-    it("should submit a mark-for-deletion job and clear the selection", () => {
+    it("should submit mark-for-deletion through DatasetJobDialogService with new API", () => {
       const archivingService = component["archivingSrv"];
       const dialogOptions = { width: "auto", data: { title: "test" } };
-      const dialogResult = {
-        selectedOption: "ARCHIVING_FAILURE",
-        explanation: "Marked from table actions",
-      };
-      const dialogRefStub = {
-        afterClosed: () => of(dialogResult),
-      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
 
-      dispatchSpy = spyOn(store, "dispatch");
       component.selectedSets = [mockDataset];
-      spyOn(component.dialog, "open").and.returnValue(dialogRefStub);
       spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue(
         dialogOptions,
       );
-      spyOn(archivingService, "markForDeletion").and.returnValue(of(void 0));
 
       component.markForDeletionClickHandle();
 
       expect(
         archivingService.markForDeletionDialogOptions,
       ).toHaveBeenCalledOnceWith(component.appConfig.markForDeletionCodes);
-      expect(component.dialog.open).toHaveBeenCalledOnceWith(
-        DialogComponent,
-        dialogOptions,
+      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledTimes(
+        1,
       );
-      expect(archivingService.markForDeletion).toHaveBeenCalledOnceWith(
-        [mockDataset],
-        {
-          deletionCode: "ARCHIVING_FAILURE",
+
+      const [
+        passedDialogOptions,
+        passedDatasets,
+        jobType,
+        paramsExtractor,
+      ] = datasetJobDialogServiceSpy.submitWithDialog.calls.mostRecent().args;
+
+      expect(passedDialogOptions).toEqual(dialogOptions);
+      expect(passedDatasets).toEqual([mockDataset]);
+      expect(jobType).toEqual("markForDeletion");
+      expect(
+        paramsExtractor({
+          selectedOption: "ARCHIVING_FAILURE",
           explanation: "Marked from table actions",
-        },
-      );
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(clearSelectionAction());
-    });
-
-    it("should dispatch an error message if mark-for-deletion fails", () => {
-      const archivingService = component["archivingSrv"];
-      const dialogResult = {
-        selectedOption: "ARCHIVING_FAILURE",
-        explanation: "Marked from table actions",
-      };
-      const dialogRefStub = {
-        afterClosed: () => of(dialogResult),
-      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
-
-      dispatchSpy = spyOn(store, "dispatch");
-      component.selectedSets = [mockDataset];
-      spyOn(component.dialog, "open").and.returnValue(dialogRefStub);
-      spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue({
-        width: "auto",
-        data: { title: "test" },
-      });
-      spyOn(archivingService, "markForDeletion").and.returnValue(
-        throwError(() => new Error("mark failed")),
-      );
-
-      component.markForDeletionClickHandle();
-
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        showMessageAction({
-          message: {
-            type: MessageType.Error,
-            content: "mark failed",
-            duration: 5000,
-          },
         }),
-      );
+      ).toEqual({
+        deletionCode: "ARCHIVING_FAILURE",
+        explanation: "Marked from table actions",
+      });
     });
 
     it("should set mark-for-deletion visibility from config", () => {

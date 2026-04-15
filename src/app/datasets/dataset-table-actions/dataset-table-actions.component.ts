@@ -6,7 +6,7 @@ import {
   clearSelectionAction,
   addToBatchAction,
 } from "state-management/actions/datasets.actions";
-import { filter, Subscription, switchMap } from "rxjs";
+import { Subscription } from "rxjs";
 import { selectArchiveViewMode } from "state-management/selectors/datasets.selectors";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
 import { ArchivingService } from "datasets/archiving.service";
@@ -16,6 +16,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 import { AppConfigService } from "app-config.service";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { DatasetJobDialogService } from "datasets/dataset-job-dialog.service";
 
 @Component({
   selector: "dataset-table-actions",
@@ -49,8 +50,9 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     private appConfigService: AppConfigService,
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
+    private datasetJobDialogService: DatasetJobDialogService,
     private store: Store,
-  ) {}
+  ) { }
 
   /**
    * Handle changing of view mode and disabling selected rows
@@ -70,28 +72,16 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   archiveClickHandle(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
+    const dialogOptions = {
       width: "auto",
       data: { title: "Really archive?", question: "" },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && this.selectedSets) {
-        this.archivingSrv.archive(this.selectedSets).subscribe(
-          () => this.store.dispatch(clearSelectionAction()),
-          (err) =>
-            this.store.dispatch(
-              showMessageAction({
-                message: {
-                  type: MessageType.Error,
-                  content: err.message,
-                  duration: 5000,
-                },
-              }),
-            ),
-        );
-      }
-    });
+    };
+    this.datasetJobDialogService.submitJobWithDialog(
+      dialogOptions,
+      this.selectedSets,
+      "archive",
+      undefined,
+    );
   }
 
   /**
@@ -99,65 +89,37 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   retrieveClickHandle(): void {
-    const destPath = { destinationPath: "/archive/retrieve" };
     const dialogOptions = this.archivingSrv.retriveDialogOptions(
       this.appConfig.retrieveDestinations,
     );
-    const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && this.selectedSets) {
+    this.datasetJobDialogService.submitJobWithDialog(
+      dialogOptions,
+      this.selectedSets,
+      "retrieve",
+      (result) => {
+        const destPath = { destinationPath: "/archive/retrieve" };
         const locationOption = this.archivingSrv.generateOptionLocation(
           result,
           this.appConfig.retrieveDestinations,
         );
-        const extra = { ...destPath, ...locationOption };
-        this.archivingSrv.retrieve(this.selectedSets, extra).subscribe(
-          () => this.store.dispatch(clearSelectionAction()),
-          (err) =>
-            this.store.dispatch(
-              showMessageAction({
-                message: {
-                  type: MessageType.Error,
-                  content: err.message,
-                  duration: 5000,
-                },
-              }),
-            ),
-        );
-      }
-    });
+        return { ...destPath, ...locationOption };
+      },
+    );
   }
 
   markForDeletionClickHandle(): void {
     const dialogOptions = this.archivingSrv.markForDeletionDialogOptions(
       this.appConfig.markForDeletionCodes,
     );
-    this.dialog
-      .open(DialogComponent, dialogOptions)
-      .afterClosed()
-      .pipe(
-        filter((result) => !!result && !!this.selectedSets),
-        switchMap((result) => {
-          const extra = {
-            deletionCode: result.selectedOption,
-            explanation: result.explanation,
-          };
-          return this.archivingSrv.markForDeletion(this.selectedSets, extra);
-        }),
-      )
-      .subscribe({
-        next: () => this.store.dispatch(clearSelectionAction()),
-        error: (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000,
-              },
-            }),
-          ),
-      });
+    this.datasetJobDialogService.submitJobWithDialog(
+      dialogOptions,
+      this.selectedSets,
+      "markForDeletion",
+      (result) => ({
+        deletionCode: result.selectedOption,
+        explanation: result.explanation,
+      }),
+    );
   }
 
   onAddToBatch(): void {
@@ -166,6 +128,10 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Register success callbacks for dataset operations
+    this.datasetJobDialogService.registerSuccessCallback(
+      () => this.store.dispatch(clearSelectionAction()),
+    );
     this.subscriptions.push(
       this.store
         .select(selectArchiveViewMode)

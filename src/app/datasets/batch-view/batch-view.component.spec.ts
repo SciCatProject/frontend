@@ -15,7 +15,7 @@ import { ArchivingService } from "../archiving.service";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatDialogModule } from "@angular/material/dialog";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
@@ -27,10 +27,10 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { AppConfigService } from "app-config.service";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
-import { of, throwError } from "rxjs";
+import { of, Subscription, throwError } from "rxjs";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
+import { DatasetJobDialogService } from "../dataset-job-dialog.service";
 
 describe("BatchViewComponent", () => {
   let component: BatchViewComponent;
@@ -38,6 +38,10 @@ describe("BatchViewComponent", () => {
 
   let dispatchSpy;
   let store: MockStore<DatasetState>;
+  const datasetJobDialogServiceSpy = jasmine.createSpyObj(
+    "DatasetJobDialogService",
+    ["submitWithDialog", "registerSuccessCallback"],
+  );
 
   const router = {
     navigate: jasmine.createSpy("navigate"),
@@ -83,6 +87,10 @@ describe("BatchViewComponent", () => {
           { provide: DatasetsService, useClass: MockDatasetApi },
           { provide: AppConfigService, useValue: { getConfig } },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          {
+            provide: DatasetJobDialogService,
+            useValue: datasetJobDialogServiceSpy,
+          },
         ],
       },
     });
@@ -92,6 +100,15 @@ describe("BatchViewComponent", () => {
   }));
 
   beforeEach(() => {
+    datasetJobDialogServiceSpy.submitWithDialog.calls.reset();
+    datasetJobDialogServiceSpy.registerSuccessCallback.calls.reset();
+    datasetJobDialogServiceSpy.registerSuccessCallback.and.returnValue(
+      undefined,
+    );
+    datasetJobDialogServiceSpy.submitWithDialog.and.returnValue(
+      new Subscription(),
+    );
+
     fixture = TestBed.createComponent(BatchViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -112,7 +129,7 @@ describe("BatchViewComponent", () => {
   });
 
   describe("#onEmpty()", () => {
-    xit("should ...", () => {});
+    xit("should ...", () => { });
   });
 
   describe("#onRemove()", () => {
@@ -139,90 +156,144 @@ describe("BatchViewComponent", () => {
   });
 
   describe("#onShare()", () => {
-    xit("should ...", () => {});
+    xit("should ...", () => { });
   });
 
   describe("#onArchive()", () => {
-    xit("should ...", () => {});
-  });
-
-  describe("#onRetrieve()", () => {
-    xit("should ...", () => {});
-  });
-
-  describe("#onMarkForDeletion()", () => {
-    it("should submit a mark-for-deletion job and clear the batch", () => {
+    it("should archive datasets and clear the batch", () => {
       const archivingService = component["archivingSrv"];
-      const dialog = component["dialog"];
-      const dialogOptions = { width: "auto", data: { title: "test" } };
-      const dialogResult = {
-        selectedOption: "MARKED_FOR_DELETION",
-        explanation: "Reason provided",
-      };
-      const dialogRefStub = {
-        afterClosed: () => of(dialogResult),
-      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
       const clearBatchSpy = spyOn(
         component as unknown as { clearBatch: () => void },
         "clearBatch",
       );
-      const openSpy = spyOn(dialog, "open").and.returnValue(dialogRefStub);
+      component.batch$ = of([dataset]);
+      spyOn(archivingService, "archive").and.returnValue(of(void 0));
+
+      component.onArchive();
+
+      expect(archivingService.archive).toHaveBeenCalledOnceWith([dataset]);
+      expect(clearBatchSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("should dispatch an error message when archive fails", () => {
+      const archivingService = component["archivingSrv"];
+      dispatchSpy = spyOn(store, "dispatch");
+      component.batch$ = of([dataset]);
+      spyOn(archivingService, "archive").and.returnValue(
+        throwError(() => new Error("archive failed")),
+      );
+
+      component.onArchive();
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(
+        showMessageAction({
+          message: {
+            type: MessageType.Error,
+            content: "archive failed",
+            duration: 5000,
+          },
+        }),
+      );
+    });
+  });
+
+  describe("#ngOnInit()", () => {
+    it("should register success callbacks for retrieve and markForDeletion", () => {
+      // The component is created and detectChanges is called in beforeEach
+      // which triggers ngOnInit
+
+      expect(
+        datasetJobDialogServiceSpy.registerSuccessCallback,
+      ).toHaveBeenCalledWith("retrieve", jasmine.any(Function));
+      expect(
+        datasetJobDialogServiceSpy.registerSuccessCallback,
+      ).toHaveBeenCalledWith("markForDeletion", jasmine.any(Function));
+    });
+  });
+
+  describe("#onRetrieve()", () => {
+    it("should submit retrieve through DatasetJobDialogService with dialog", () => {
+      const archivingService = component["archivingSrv"];
+      const dialogOptions = { width: "auto", data: { title: "retrieve" } };
+      const retrieveDestinations = [{ option: "my-option", location: "/base" }];
+
+      component.datasetList = [dataset];
+      component.appConfig.retrieveDestinations = retrieveDestinations;
+      spyOn(archivingService, "retriveDialogOptions").and.returnValue(
+        dialogOptions,
+      );
+      spyOn(archivingService, "generateOptionLocation").and.returnValue({
+        option: "my-option",
+        location: "/base/path",
+      });
+
+      component.onRetrieve();
+
+      expect(archivingService.retriveDialogOptions).toHaveBeenCalledOnceWith(
+        retrieveDestinations,
+      );
+      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledTimes(
+        1,
+      );
+
+      const [
+        passedDialogOptions,
+        passedDatasets,
+        jobType,
+        paramsExtractor,
+      ] = datasetJobDialogServiceSpy.submitWithDialog.calls.mostRecent().args;
+
+      expect(passedDialogOptions).toEqual(dialogOptions);
+      expect(passedDatasets).toEqual([dataset]);
+      expect(jobType).toEqual("retrieve");
+      expect(
+        paramsExtractor({ option: "my-option", location: "/path" }),
+      ).toEqual({
+        destinationPath: "/archive/retrieve",
+        option: "my-option",
+        location: "/base/path",
+      });
+    });
+  });
+
+  describe("#onMarkForDeletion()", () => {
+    it("should submit mark-for-deletion through DatasetJobDialogService with dialog", () => {
+      const archivingService = component["archivingSrv"];
+      const dialogOptions = { width: "auto", data: { title: "test" } };
 
       component.datasetList = [dataset];
       spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue(
         dialogOptions,
       );
-      spyOn(archivingService, "markForDeletion").and.returnValue(of(void 0));
 
       component.onMarkForDeletion();
 
       expect(
         archivingService.markForDeletionDialogOptions,
       ).toHaveBeenCalledOnceWith(markForDeletionCodes);
-      expect(openSpy).toHaveBeenCalledOnceWith(DialogComponent, dialogOptions);
-      expect(archivingService.markForDeletion).toHaveBeenCalledOnceWith(
-        [dataset],
-        {
-          deletionCode: "MARKED_FOR_DELETION",
+      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledTimes(
+        1,
+      );
+
+      const [
+        passedDialogOptions,
+        passedDatasets,
+        jobType,
+        paramsExtractor,
+      ] = datasetJobDialogServiceSpy.submitWithDialog.calls.mostRecent().args;
+
+      expect(passedDialogOptions).toEqual(dialogOptions);
+      expect(passedDatasets).toEqual([dataset]);
+      expect(jobType).toEqual("markForDeletion");
+      expect(
+        paramsExtractor({
+          selectedOption: "MARKED_FOR_DELETION",
           explanation: "Reason provided",
-        },
-      );
-      expect(clearBatchSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it("should dispatch an error message if mark-for-deletion fails", () => {
-      const archivingService = component["archivingSrv"];
-      const dialog = component["dialog"];
-      const dialogResult = {
-        selectedOption: "MARKED_FOR_DELETION",
-        explanation: "Reason provided",
-      };
-      const dialogRefStub = {
-        afterClosed: () => of(dialogResult),
-      } as unknown as MatDialogRef<DialogComponent, typeof dialogResult>;
-
-      dispatchSpy = spyOn(store, "dispatch");
-      component.datasetList = [dataset];
-      spyOn(dialog, "open").and.returnValue(dialogRefStub);
-      spyOn(archivingService, "markForDeletionDialogOptions").and.returnValue({
-        width: "auto",
-        data: { title: "test" },
-      });
-      spyOn(archivingService, "markForDeletion").and.returnValue(
-        throwError(() => new Error("mark failed")),
-      );
-
-      component.onMarkForDeletion();
-
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        showMessageAction({
-          message: {
-            type: MessageType.Error,
-            content: "mark failed",
-            duration: 5000,
-          },
         }),
-      );
+      ).toEqual({
+        deletionCode: "MARKED_FOR_DELETION",
+        explanation: "Reason provided",
+      });
     });
 
     it("should set mark-for-deletion visibility from config", () => {

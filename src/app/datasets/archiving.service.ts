@@ -18,12 +18,17 @@ import {
   DialogOptionData,
 } from "shared/modules/dialog/dialog.component";
 
+export type DialogOptions = {
+  data: DynamicDialogData;
+  width: string;
+};
+
 @Injectable()
 export class ArchivingService {
   private currentUser$ = this.store.select(selectCurrentUser);
   private tapeCopies$ = this.store.select(selectTapeCopies);
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   private createJob(
     user: ReturnedUserDto,
@@ -55,7 +60,7 @@ export class ArchivingService {
     return data;
   }
 
-  private archiveOrRetrieve(
+  submitJob(
     datasets: OutputDatasetObsoleteDto[],
     jobType: string,
     additionalJobParams: Record<string, string> = {},
@@ -89,25 +94,7 @@ export class ArchivingService {
   }
 
   public archive(datasets: OutputDatasetObsoleteDto[]): Observable<void> {
-    return this.archiveOrRetrieve(datasets, "archive");
-  }
-
-  public retrieve(
-    datasets: OutputDatasetObsoleteDto[],
-    additionalJobParams: Record<string, string>,
-  ): Observable<void> {
-    return this.archiveOrRetrieve(datasets, "retrieve", additionalJobParams);
-  }
-
-  public markForDeletion(
-    datasets: OutputDatasetObsoleteDto[],
-    additionalJobParams: Record<string, string>,
-  ): Observable<void> {
-    return this.archiveOrRetrieve(
-      datasets,
-      "markForDeletion",
-      additionalJobParams,
-    );
+    return this.submitJob(datasets, "archive");
   }
 
   public generateOptionLocation(
@@ -137,7 +124,7 @@ export class ArchivingService {
 
   public retriveDialogOptions(
     retrieveDestinations: DialogOptionData[] = [],
-  ): object {
+  ): DialogOptions {
     return {
       width: "auto",
       data: {
@@ -151,10 +138,7 @@ export class ArchivingService {
     };
   }
 
-  public markForDeletionDialogOptions(deletionCodes: DialogOptionData[] = []): {
-    data: DynamicDialogData;
-    width: string;
-  } {
+  public markForDeletionDialogOptions(deletionCodes: DialogOptionData[] = []): DialogOptions {
     return {
       width: "auto",
       data: {
