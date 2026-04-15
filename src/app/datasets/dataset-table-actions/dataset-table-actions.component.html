@@ -29,7 +29,7 @@
   <button
     mat-button
     [disabled]="isEmptySelection()"
-    *ngIf="currentArchViewMode === viewModes.retrievable"
+    *ngIf="currentArchViewMode === viewModes.retrievable && markForDeletion"
     class="retrieve-action-btn"
     (click)="markForDeletionClickHandle()"
     color="primary"

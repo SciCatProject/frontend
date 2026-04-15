@@ -29,7 +29,14 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 
 class MockAppConfigService {
-  getConfig = () => ({ archiveWorkflowEnabled: true });
+  getConfig = () => ({
+    archiveWorkflowEnabled: true,
+    markForDeletionCodes: [
+      "RETRIEVAL_FAILURE",
+      "ARCHIVING_FAILURE",
+      "MARKED_FOR_DELETION",
+    ],
+  });
 }
 
 describe("DatasetTableActionsComponent", () => {
@@ -159,11 +166,7 @@ describe("DatasetTableActionsComponent", () => {
 
       expect(
         archivingService.markForDeletionDialogOptions,
-      ).toHaveBeenCalledOnceWith([
-        "RETRIEVAL_FAILURE",
-        "ARCHIVING_FAILURE",
-        "MARKED_FOR_DELETION",
-      ]);
+      ).toHaveBeenCalledOnceWith(component.appConfig.markForDeletionCodes);
       expect(component.dialog.open).toHaveBeenCalledOnceWith(
         DialogComponent,
         dialogOptions,
@@ -210,6 +213,10 @@ describe("DatasetTableActionsComponent", () => {
           },
         }),
       );
+    });
+
+    it("should set mark-for-deletion visibility from config", () => {
+      expect(component.markForDeletion).toBeTrue();
     });
   });
 

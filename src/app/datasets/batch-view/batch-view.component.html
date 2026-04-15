@@ -89,6 +89,7 @@
         </button>
         <button
         mat-button
+        *ngIf="markForDeletion"
         (click)="onMarkForDeletion()"
         class="button"
         color="primary"

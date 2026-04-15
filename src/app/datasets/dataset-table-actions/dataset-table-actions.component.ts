@@ -43,6 +43,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
 
   subscriptions: Subscription[] = [];
+  markForDeletion = this.appConfig.markForDeletionCodes?.length > 0;
 
   constructor(
     private appConfigService: AppConfigService,
@@ -128,11 +129,9 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   }
 
   markForDeletionClickHandle(): void {
-    const dialogOptions = this.archivingSrv.markForDeletionDialogOptions([
-      "RETRIEVAL_FAILURE",
-      "ARCHIVING_FAILURE",
-      "MARKED_FOR_DELETION",
-    ]);
+    const dialogOptions = this.archivingSrv.markForDeletionDialogOptions(
+      this.appConfig.markForDeletionCodes,
+    );
     this.dialog
       .open(DialogComponent, dialogOptions)
       .afterClosed()

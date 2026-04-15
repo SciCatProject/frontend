@@ -15,8 +15,6 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { DynamicDialogData } from "shared/modules/dialog/dialog.component";
 
-type JobType = "archive" | "retrieve" | "markForDeletion";
-
 @Injectable()
 export class ArchivingService {
   private currentUser$ = this.store.select(selectCurrentUser);
@@ -27,7 +25,7 @@ export class ArchivingService {
   private createJob(
     user: ReturnedUserDto,
     datasets: OutputDatasetObsoleteDto[],
-    jobType: JobType,
+    jobType: string,
     additionalJobParams: Record<string, string> = {},
     // Do not specify tape copies here
   ) {
@@ -56,7 +54,7 @@ export class ArchivingService {
 
   private archiveOrRetrieve(
     datasets: OutputDatasetObsoleteDto[],
-    jobType: JobType,
+    jobType: string,
     additionalJobParams: Record<string, string> = {},
   ): Observable<void> {
     return combineLatest([this.currentUser$, this.tapeCopies$]).pipe(

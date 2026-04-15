@@ -43,8 +43,15 @@ describe("BatchViewComponent", () => {
     navigate: jasmine.createSpy("navigate"),
   };
 
+  const markForDeletionCodes = [
+    "RETRIEVAL_FAILURE",
+    "ARCHIVING_FAILURE",
+    "MARKED_FOR_DELETION",
+  ];
+
   const getConfig = () => ({
     archiveWorkflowEnabled: true,
+    markForDeletionCodes,
   });
 
   beforeEach(waitForAsync(() => {
@@ -171,11 +178,7 @@ describe("BatchViewComponent", () => {
 
       expect(
         archivingService.markForDeletionDialogOptions,
-      ).toHaveBeenCalledOnceWith([
-        "RETRIEVAL_FAILURE",
-        "ARCHIVING_FAILURE",
-        "MARKED_FOR_DELETION",
-      ]);
+      ).toHaveBeenCalledOnceWith(markForDeletionCodes);
       expect(openSpy).toHaveBeenCalledOnceWith(DialogComponent, dialogOptions);
       expect(archivingService.markForDeletion).toHaveBeenCalledOnceWith(
         [dataset],
@@ -220,6 +223,10 @@ describe("BatchViewComponent", () => {
           },
         }),
       );
+    });
+
+    it("should set mark-for-deletion visibility from config", () => {
+      expect(component.markForDeletion).toBeTrue();
     });
   });
 });

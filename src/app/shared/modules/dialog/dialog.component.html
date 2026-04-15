@@ -17,25 +17,25 @@
 
     <div *ngFor="let field of data.additionalFields | keyvalue">
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ $any(field.value).label }}</mat-label>
+        <mat-label>{{ field.value.label }}</mat-label>
 
-        <textarea *ngIf="$any(field.value).type === 'textarea'" matInput
+        <textarea *ngIf="field.value.type === 'textarea'" matInput
           [(ngModel)]="data[field.key]" [name]="field.key"
-          [required]="$any(field.value).required">
+          [required]="field.value.required">
         </textarea>
 
-        <mat-select *ngIf="$any(field.value).type === 'select'"
+        <mat-select *ngIf="field.value.type === 'select'"
           [(ngModel)]="data[field.key]" [name]="field.key"
-          [required]="$any(field.value).required">
-          <mat-option *ngFor="let opt of $any(field.value).options"
+          [required]="field.value.required">
+          <mat-option *ngFor="let opt of field.value.options"
             [value]="opt.value">
             {{ opt.label }}
           </mat-option>
         </mat-select>
 
-        <input *ngIf="$any(field.value).type === 'text'" matInput
+        <input *ngIf="field.value.type === 'text'" matInput
           [(ngModel)]="data[field.key]" [name]="field.key"
-          [required]="$any(field.value).required">
+          [required]="field.value.required">
 
         <mat-error>This field is required</mat-error>
       </mat-form-field>

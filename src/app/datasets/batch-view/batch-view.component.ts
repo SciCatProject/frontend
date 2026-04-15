@@ -47,6 +47,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
   shareEnabled = this.appConfig.shareEnabled;
+  markForDeletion = this.appConfig.markForDeletionCodes?.length > 0;
 
   datasetList: OutputDatasetObsoleteDto[] = [];
   public hasBatch = false;
@@ -259,11 +260,9 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onMarkForDeletion() {
-    const dialogOptions = this.archivingSrv.markForDeletionDialogOptions([
-      "RETRIEVAL_FAILURE",
-      "ARCHIVING_FAILURE",
-      "MARKED_FOR_DELETION",
-    ]);
+    const dialogOptions = this.archivingSrv.markForDeletionDialogOptions(
+      this.appConfig.markForDeletionCodes,
+    );
     this.dialog
       .open(DialogComponent, dialogOptions)
       .afterClosed()
