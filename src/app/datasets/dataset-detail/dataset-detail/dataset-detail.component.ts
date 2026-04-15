@@ -45,7 +45,7 @@ import {
   OutputDatasetObsoleteDto,
   ProposalClass,
   ReturnedUserDto,
-  SampleClass,
+  OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 
@@ -80,7 +80,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   loading$ = this.store.select(selectIsLoading);
   instrument: Instrument | undefined;
   proposal: ProposalClass | undefined;
-  sample: SampleClass | undefined;
+  sample: OutputSampleDto | undefined;
   user: ReturnedUserDto | undefined;
   editingAllowed = false;
   editEnabled = false;
