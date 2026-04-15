@@ -463,7 +463,8 @@
         "type": "date",
 	      "width": 200,
         "enabled": false,
-	      "format": "yyyy-mm-dd HH:MM"
+	      "format": "yyyy-mm-dd HH:MM",
+        "sort": "desc"
       },
       {
         "name": "endTime",
@@ -572,7 +573,8 @@
         "type": "date",
         "format": "yyyy-MM-dd",
         "width": 200,
-        "enabled": true
+        "enabled": true,
+        "sort": "desc"
       },
       {
         "name": "pi_lastname",
