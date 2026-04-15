@@ -31,6 +31,8 @@ import {
   accordionArrayLayoutRendererTester,
 } from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 import { selectPublishedDataConfig } from "state-management/selectors/published-data.selectors";
+import Ajv2019 from "ajv/dist/2019";
+import { AjvService } from "shared/services/ajv.service";
 
 @Component({
   selector: "publish",
@@ -79,6 +81,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     private publishedDataApi: PublishedDataService,
     private actionsSubj: ActionsSubject,
     private router: Router,
+    protected ajvService: AjvService,
   ) {}
 
   isSchemaEmpty(): boolean {
@@ -131,9 +134,10 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
-          this.schema = publishedDataConfig.metadataSchema;
+          this.schema = this.ajvService.cleanupSchema(
+            publishedDataConfig.metadataSchema,
+          );
           this.uiSchema = publishedDataConfig.uiSchema;
-          this.metadata = cloneDeep(publishedDataConfig.defaultValues) ?? {};
         }
       },
     );
