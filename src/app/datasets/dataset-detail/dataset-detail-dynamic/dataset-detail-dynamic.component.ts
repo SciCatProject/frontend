@@ -70,6 +70,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   actionItems: ActionItems = {
     datasets: [],
+    publisheddata: []
   };
 
   constructor(

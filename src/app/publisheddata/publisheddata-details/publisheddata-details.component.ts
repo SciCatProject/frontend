@@ -34,8 +34,11 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   show = false;
   landingPageUrl = "";
   doi = "";
-  actions$ = this.configurableActionService.actions$;
-
+  
+  actionItems: ActionItems = {
+    datasets: [],
+    publisheddata: []
+  };
   constructor(
     private appConfigService: AppConfigService,
     private route: ActivatedRoute,
@@ -55,10 +58,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       this.currentData$.subscribe((data) => {
         if (data) {
           this.publishedData = data;
-
-          this.configurableActionsService.createActions(
-            actionItem
-          )
+          this.actionItems.publisheddata[0] = data;
 
           if (this.appConfig.landingPage) {
             this.landingPageUrl =
