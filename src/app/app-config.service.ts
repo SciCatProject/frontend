@@ -160,6 +160,7 @@ export interface AppConfigInterface {
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
+  timezone?: string;
   defaultMainPage?: MainPageConfiguration;
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
