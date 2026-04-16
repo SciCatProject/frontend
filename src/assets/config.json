@@ -278,7 +278,7 @@
   "publishedDataActions": [
     {
       "id": "publish",
-      "description": "This published the record",
+      "description": "This publishes the record locally.",
       "order": 1,
       "label": "publish",
       "type": "xhr",
@@ -293,6 +293,25 @@
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
+      }
+    },
+    {
+      "id": "register",
+      "description": "This registers the record locally.",
+      "order": 2,
+      "label": "Register",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method" : "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/register",
+      "enabled": "(#datasetOwner || #userIsAdmin) && !@isPublished",
+      "authorization": "@isPublished",
+      "variables" : {
+        "doi": "#PublishedDataDoi",
+        "isPublished" : "#Dataset[0]Field[isPublished]"
+      },
+      "headers": {
+        "Content-Type": "application/json"
       }
     }
     ],
