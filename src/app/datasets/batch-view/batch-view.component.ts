@@ -61,7 +61,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     private datasetJobDialogService: DatasetJobDialogService,
     private router: Router,
     private route: ActivatedRoute,
-  ) { }
+  ) {}
 
   private clearBatch() {
     this.store.dispatch(clearBatchAction());

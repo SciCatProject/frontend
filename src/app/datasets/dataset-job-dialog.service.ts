@@ -16,7 +16,7 @@ export class DatasetJobDialogService {
     private dialog: MatDialog,
     private store: Store,
     private archivingService: ArchivingService,
-  ) { }
+  ) {}
 
   /**
    * Register a success callback for a specific job type.
@@ -59,7 +59,7 @@ export class DatasetJobDialogService {
             extra,
           );
         }),
-      )
+      );
     return this.subscribeWithHandlers(dialogSubscription);
   }
 
@@ -72,7 +72,7 @@ export class DatasetJobDialogService {
     handler: () => void = undefined,
   ): void {
     observable.subscribe({
-      next: () => handler ? handler() : this.callSuccessHandler(),
+      next: () => (handler ? handler() : this.callSuccessHandler()),
       error: (err) => this.handleError(err),
     });
   }

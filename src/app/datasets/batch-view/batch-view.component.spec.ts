@@ -27,9 +27,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { AppConfigService } from "app-config.service";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
-import { of, Subscription, throwError } from "rxjs";
-import { showMessageAction } from "state-management/actions/user.actions";
-import { MessageType } from "state-management/models";
+import { Subscription } from "rxjs";
 import { DatasetJobDialogService } from "../dataset-job-dialog.service";
 
 describe("BatchViewComponent", () => {
@@ -40,7 +38,7 @@ describe("BatchViewComponent", () => {
   let store: MockStore<DatasetState>;
   const datasetJobDialogServiceSpy = jasmine.createSpyObj(
     "DatasetJobDialogService",
-    ["submitWithDialog", "registerSuccessCallback"],
+    ["submitJobWithDialog", "registerSuccessCallback"],
   );
 
   const router = {
@@ -100,12 +98,12 @@ describe("BatchViewComponent", () => {
   }));
 
   beforeEach(() => {
-    datasetJobDialogServiceSpy.submitWithDialog.calls.reset();
+    datasetJobDialogServiceSpy.submitJobWithDialog.calls.reset();
     datasetJobDialogServiceSpy.registerSuccessCallback.calls.reset();
     datasetJobDialogServiceSpy.registerSuccessCallback.and.returnValue(
       undefined,
     );
-    datasetJobDialogServiceSpy.submitWithDialog.and.returnValue(
+    datasetJobDialogServiceSpy.submitJobWithDialog.and.returnValue(
       new Subscription(),
     );
 
@@ -129,7 +127,7 @@ describe("BatchViewComponent", () => {
   });
 
   describe("#onEmpty()", () => {
-    xit("should ...", () => { });
+    xit("should ...", () => {});
   });
 
   describe("#onRemove()", () => {
@@ -156,58 +154,34 @@ describe("BatchViewComponent", () => {
   });
 
   describe("#onShare()", () => {
-    xit("should ...", () => { });
+    xit("should ...", () => {});
   });
 
   describe("#onArchive()", () => {
-    it("should archive datasets and clear the batch", () => {
-      const archivingService = component["archivingSrv"];
-      const clearBatchSpy = spyOn(
-        component as unknown as { clearBatch: () => void },
-        "clearBatch",
-      );
-      component.batch$ = of([dataset]);
-      spyOn(archivingService, "archive").and.returnValue(of(void 0));
+    it("should submit archive through DatasetJobDialogService with dialog", () => {
+      component.datasetList = [dataset];
 
       component.onArchive();
 
-      expect(archivingService.archive).toHaveBeenCalledOnceWith([dataset]);
-      expect(clearBatchSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it("should dispatch an error message when archive fails", () => {
-      const archivingService = component["archivingSrv"];
-      dispatchSpy = spyOn(store, "dispatch");
-      component.batch$ = of([dataset]);
-      spyOn(archivingService, "archive").and.returnValue(
-        throwError(() => new Error("archive failed")),
-      );
-
-      component.onArchive();
-
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        showMessageAction({
-          message: {
-            type: MessageType.Error,
-            content: "archive failed",
-            duration: 5000,
-          },
-        }),
+      expect(
+        datasetJobDialogServiceSpy.submitJobWithDialog,
+      ).toHaveBeenCalledOnceWith(
+        jasmine.objectContaining({ width: "auto" }),
+        [dataset],
+        "archive",
+        undefined,
       );
     });
   });
 
   describe("#ngOnInit()", () => {
-    it("should register success callbacks for retrieve and markForDeletion", () => {
+    it("should register success callback", () => {
       // The component is created and detectChanges is called in beforeEach
       // which triggers ngOnInit
 
       expect(
         datasetJobDialogServiceSpy.registerSuccessCallback,
-      ).toHaveBeenCalledWith("retrieve", jasmine.any(Function));
-      expect(
-        datasetJobDialogServiceSpy.registerSuccessCallback,
-      ).toHaveBeenCalledWith("markForDeletion", jasmine.any(Function));
+      ).toHaveBeenCalledWith(jasmine.any(Function));
     });
   });
 
@@ -232,16 +206,12 @@ describe("BatchViewComponent", () => {
       expect(archivingService.retriveDialogOptions).toHaveBeenCalledOnceWith(
         retrieveDestinations,
       );
-      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledTimes(
-        1,
-      );
+      expect(
+        datasetJobDialogServiceSpy.submitJobWithDialog,
+      ).toHaveBeenCalledTimes(1);
 
-      const [
-        passedDialogOptions,
-        passedDatasets,
-        jobType,
-        paramsExtractor,
-      ] = datasetJobDialogServiceSpy.submitWithDialog.calls.mostRecent().args;
+      const [passedDialogOptions, passedDatasets, jobType, paramsExtractor] =
+        datasetJobDialogServiceSpy.submitJobWithDialog.calls.mostRecent().args;
 
       expect(passedDialogOptions).toEqual(dialogOptions);
       expect(passedDatasets).toEqual([dataset]);
@@ -271,16 +241,12 @@ describe("BatchViewComponent", () => {
       expect(
         archivingService.markForDeletionDialogOptions,
       ).toHaveBeenCalledOnceWith(markForDeletionCodes);
-      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledTimes(
-        1,
-      );
+      expect(
+        datasetJobDialogServiceSpy.submitJobWithDialog,
+      ).toHaveBeenCalledTimes(1);
 
-      const [
-        passedDialogOptions,
-        passedDatasets,
-        jobType,
-        paramsExtractor,
-      ] = datasetJobDialogServiceSpy.submitWithDialog.calls.mostRecent().args;
+      const [passedDialogOptions, passedDatasets, jobType, paramsExtractor] =
+        datasetJobDialogServiceSpy.submitJobWithDialog.calls.mostRecent().args;
 
       expect(passedDialogOptions).toEqual(dialogOptions);
       expect(passedDatasets).toEqual([dataset]);

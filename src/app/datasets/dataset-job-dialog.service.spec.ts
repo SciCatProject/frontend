@@ -1,5 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { of, throwError } from "rxjs";
 import { mockDataset } from "shared/MockStubs";
@@ -13,9 +13,7 @@ describe("DatasetJobDialogService", () => {
   let store: MockStore;
   const dialogSpy = jasmine.createSpyObj("MatDialog", ["open"]);
   const archivingServiceSpy = jasmine.createSpyObj("ArchivingService", [
-    "archive",
-    "retrieve",
-    "markForDeletion",
+    "submitJob",
   ]);
 
   beforeEach(() => {
@@ -34,42 +32,40 @@ describe("DatasetJobDialogService", () => {
 
   beforeEach(() => {
     dialogSpy.open.calls.reset();
-    archivingServiceSpy.archive.calls.reset();
-    archivingServiceSpy.retrieve.calls.reset();
-    archivingServiceSpy.markForDeletion.calls.reset();
+    archivingServiceSpy.submitJob.calls.reset();
   });
 
   describe("registerSuccessCallback", () => {
-    it("should register success callback for a job type", () => {
+    it("should register success callback", () => {
       const callback = jasmine.createSpy("callback");
 
-      service.registerSuccessCallback("archive", callback);
+      service.registerSuccessCallback(callback);
 
-      expect(service["successCallbacks"].get("archive")).toEqual(callback);
+      expect(service["successCallback"].has(callback)).toBeTrue();
     });
 
-    it("should allow overwriting existing callback", () => {
+    it("should keep multiple callbacks", () => {
       const callback1 = jasmine.createSpy("callback1");
       const callback2 = jasmine.createSpy("callback2");
 
-      service.registerSuccessCallback("archive", callback1);
-      service.registerSuccessCallback("archive", callback2);
+      service.registerSuccessCallback(callback1);
+      service.registerSuccessCallback(callback2);
 
-      expect(service["successCallbacks"].get("archive")).toEqual(callback2);
+      expect(service["successCallback"].size).toEqual(2);
     });
   });
 
-  describe("submitWithDialog", () => {
+  describe("submitJobWithDialog", () => {
     it("should submit the job and execute success callback for archive", () => {
-      const afterClosedSpy = jasmine.createSpy("afterClosed").and.returnValue(
-        of({}),
-      );
+      const afterClosedSpy = jasmine
+        .createSpy("afterClosed")
+        .and.returnValue(of({}));
       const successCallback = jasmine.createSpy("successCallback");
       const dialogOptions = { width: "auto", data: { title: "test" } };
 
       dialogSpy.open.and.returnValue({ afterClosed: afterClosedSpy });
-      archivingServiceSpy.archive.and.returnValue(of(void 0));
-      service.registerSuccessCallback("archive", successCallback);
+      archivingServiceSpy.submitJob.and.returnValue(of(void 0));
+      service.registerSuccessCallback(successCallback);
 
       service.submitJobWithDialog(
         dialogOptions,
@@ -79,16 +75,18 @@ describe("DatasetJobDialogService", () => {
       );
 
       expect(dialogSpy.open).toHaveBeenCalledTimes(1);
-      expect(archivingServiceSpy.archive).toHaveBeenCalledOnceWith([
-        mockDataset,
-      ]);
+      expect(archivingServiceSpy.submitJob).toHaveBeenCalledOnceWith(
+        [mockDataset],
+        "archive",
+        {},
+      );
       expect(successCallback).toHaveBeenCalledTimes(1);
     });
 
     it("should submit with paramExtractor for retrieve", () => {
-      const afterClosedSpy = jasmine.createSpy("afterClosed").and.returnValue(
-        of({ option: "my-option", location: "/path" }),
-      );
+      const afterClosedSpy = jasmine
+        .createSpy("afterClosed")
+        .and.returnValue(of({ option: "my-option", location: "/path" }));
       const successCallback = jasmine.createSpy("successCallback");
       const paramExtractor = jasmine
         .createSpy("paramExtractor")
@@ -99,8 +97,8 @@ describe("DatasetJobDialogService", () => {
       const dialogOptions = { width: "auto", data: { title: "retrieve" } };
 
       dialogSpy.open.and.returnValue({ afterClosed: afterClosedSpy });
-      archivingServiceSpy.retrieve.and.returnValue(of(void 0));
-      service.registerSuccessCallback("retrieve", successCallback);
+      archivingServiceSpy.submitJob.and.returnValue(of(void 0));
+      service.registerSuccessCallback(successCallback);
 
       service.submitJobWithDialog(
         dialogOptions,
@@ -114,8 +112,9 @@ describe("DatasetJobDialogService", () => {
         option: "my-option",
         location: "/path",
       });
-      expect(archivingServiceSpy.retrieve).toHaveBeenCalledOnceWith(
+      expect(archivingServiceSpy.submitJob).toHaveBeenCalledOnceWith(
         [mockDataset],
+        "retrieve",
         {
           destinationPath: "/archive/retrieve",
           option: "my-option",
@@ -125,13 +124,13 @@ describe("DatasetJobDialogService", () => {
     });
 
     it("should not submit when the dialog is cancelled", () => {
-      const afterClosedSpy = jasmine.createSpy("afterClosed").and.returnValue(
-        of(null),
-      );
+      const afterClosedSpy = jasmine
+        .createSpy("afterClosed")
+        .and.returnValue(of(null));
       const successCallback = jasmine.createSpy("successCallback");
 
       dialogSpy.open.and.returnValue({ afterClosed: afterClosedSpy });
-      service.registerSuccessCallback("archive", successCallback);
+      service.registerSuccessCallback(successCallback);
 
       service.submitJobWithDialog(
         { width: "auto", data: { title: "test" } },
@@ -140,22 +139,22 @@ describe("DatasetJobDialogService", () => {
         undefined,
       );
 
-      expect(archivingServiceSpy.archive).not.toHaveBeenCalled();
+      expect(archivingServiceSpy.submitJob).not.toHaveBeenCalled();
       expect(successCallback).not.toHaveBeenCalled();
     });
 
     it("should dispatch an error message when submission fails", () => {
-      const afterClosedSpy = jasmine.createSpy("afterClosed").and.returnValue(
-        of({}),
-      );
+      const afterClosedSpy = jasmine
+        .createSpy("afterClosed")
+        .and.returnValue(of({}));
       const successCallback = jasmine.createSpy("successCallback");
       const dispatchSpy = spyOn(store, "dispatch");
 
       dialogSpy.open.and.returnValue({ afterClosed: afterClosedSpy });
-      archivingServiceSpy.archive.and.returnValue(
+      archivingServiceSpy.submitJob.and.returnValue(
         throwError(() => new Error("archive failed")),
       );
-      service.registerSuccessCallback("archive", successCallback);
+      service.registerSuccessCallback(successCallback);
 
       service.submitJobWithDialog(
         { width: "auto", data: { title: "test" } },
@@ -174,80 +173,6 @@ describe("DatasetJobDialogService", () => {
         }),
       );
       expect(successCallback).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("convenience methods", () => {
-    it("should archive without dialog", () => {
-      const successCallback = jasmine.createSpy("successCallback");
-      service.registerSuccessCallback("archive", successCallback);
-
-      archivingServiceSpy.archive.and.returnValue(of(void 0));
-
-      service.archive([mockDataset]);
-
-      expect(archivingServiceSpy.archive).toHaveBeenCalledOnceWith([
-        mockDataset,
-      ]);
-      expect(successCallback).toHaveBeenCalledTimes(1);
-    });
-
-    it("should retrieve with additional params", () => {
-      const successCallback = jasmine.createSpy("successCallback");
-      const params = {
-        destinationPath: "/archive/retrieve",
-        option: "my-option",
-      };
-      service.registerSuccessCallback("retrieve", successCallback);
-
-      archivingServiceSpy.retrieve.and.returnValue(of(void 0));
-
-      service.retrieve([mockDataset], params);
-
-      expect(archivingServiceSpy.retrieve).toHaveBeenCalledOnceWith(
-        [mockDataset],
-        params,
-      );
-      expect(successCallback).toHaveBeenCalledTimes(1);
-    });
-
-    it("should markForDeletion with additional params", () => {
-      const successCallback = jasmine.createSpy("successCallback");
-      const params = {
-        deletionCode: "MARKED_FOR_DELETION",
-        explanation: "reason",
-      };
-      service.registerSuccessCallback("markForDeletion", successCallback);
-
-      archivingServiceSpy.markForDeletion.and.returnValue(of(void 0));
-
-      service.markForDeletion([mockDataset], params);
-
-      expect(archivingServiceSpy.markForDeletion).toHaveBeenCalledOnceWith(
-        [mockDataset],
-        params,
-      );
-      expect(successCallback).toHaveBeenCalledTimes(1);
-    });
-
-    it("should dispatch error for failed archive", () => {
-      const dispatchSpy = spyOn(store, "dispatch");
-
-      archivingServiceSpy.archive.and.returnValue(
-        throwError(() => new Error("archive error")),
-      );
-
-      service.archive([mockDataset]);
-
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        showMessageAction({
-          message: {
-            type: MessageType.Error,
-            content: "archive error",
-            duration: 5000,
-          },
-        }),
-      );
     });
   });
 });

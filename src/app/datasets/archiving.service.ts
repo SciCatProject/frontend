@@ -28,7 +28,7 @@ export class ArchivingService {
   private currentUser$ = this.store.select(selectCurrentUser);
   private tapeCopies$ = this.store.select(selectTapeCopies);
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   private createJob(
     user: ReturnedUserDto,
@@ -138,7 +138,9 @@ export class ArchivingService {
     };
   }
 
-  public markForDeletionDialogOptions(deletionCodes: DialogOptionData[] = []): DialogOptions {
+  public markForDeletionDialogOptions(
+    deletionCodes: DialogOptionData[] = [],
+  ): DialogOptions {
     return {
       width: "auto",
       data: {

@@ -148,45 +148,6 @@ describe("ArchivingService", () => {
     });
   });
 
-  describe("#retrieve()", () => {
-    it("should call #submitJob() with the retrieve job type", () => {
-      const submitJobSpy = spyOn(service, "submitJob").and.returnValue(
-        of(void 0),
-      );
-      const datasets = [mockDataset];
-      const destinationPath = { location: "/test/path/" };
-
-      service.retrieve(datasets, destinationPath).subscribe();
-
-      expect(submitJobSpy).toHaveBeenCalledOnceWith(
-        datasets,
-        "retrieve",
-        destinationPath,
-      );
-    });
-  });
-
-  describe("#markForDeletion()", () => {
-    it("should call #submitJob() with the markForDeletion job type", () => {
-      const submitJobSpy = spyOn(service, "submitJob").and.returnValue(
-        of(void 0),
-      );
-      const datasets = [mockDataset];
-      const additionalJobParams = {
-        deletionCode: "MARKED_FOR_DELETION",
-        explanation: "Requested by data manager",
-      };
-
-      service.markForDeletion(datasets, additionalJobParams).subscribe();
-
-      expect(submitJobSpy).toHaveBeenCalledOnceWith(
-        datasets,
-        "markForDeletion",
-        additionalJobParams,
-      );
-    });
-  });
-
   describe("#generateOptionLocation()", () => {
     it("should return the generated path", () => {
       const result = { option: "option", location: "relative" };

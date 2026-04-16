@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from "@angular/core";
-import { ArchViewMode, MessageType } from "state-management/models";
+import { ArchViewMode } from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
   setArchiveViewModeAction,
@@ -11,8 +11,6 @@ import { selectArchiveViewMode } from "state-management/selectors/datasets.selec
 import { selectIsLoading } from "state-management/selectors/user.selectors";
 import { ArchivingService } from "datasets/archiving.service";
 import { MatDialog } from "@angular/material/dialog";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
-import { showMessageAction } from "state-management/actions/user.actions";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 import { AppConfigService } from "app-config.service";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
@@ -52,7 +50,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private datasetJobDialogService: DatasetJobDialogService,
     private store: Store,
-  ) { }
+  ) {}
 
   /**
    * Handle changing of view mode and disabling selected rows
@@ -129,8 +127,8 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Register success callbacks for dataset operations
-    this.datasetJobDialogService.registerSuccessCallback(
-      () => this.store.dispatch(clearSelectionAction()),
+    this.datasetJobDialogService.registerSuccessCallback(() =>
+      this.store.dispatch(clearSelectionAction()),
     );
     this.subscriptions.push(
       this.store

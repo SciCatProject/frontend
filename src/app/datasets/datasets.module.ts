@@ -210,4 +210,4 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     DatasetsFilterComponent,
   ],
 })
-export class DatasetsModule { }
+export class DatasetsModule {}

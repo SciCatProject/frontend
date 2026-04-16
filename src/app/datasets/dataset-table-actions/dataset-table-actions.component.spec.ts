@@ -23,7 +23,7 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
-import { of, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { DatasetJobDialogService } from "datasets/dataset-job-dialog.service";
 
 class MockAppConfigService {
@@ -45,7 +45,7 @@ describe("DatasetTableActionsComponent", () => {
   let dispatchSpy;
   const datasetJobDialogServiceSpy = jasmine.createSpyObj(
     "DatasetJobDialogService",
-    ["submitWithDialog", "registerSuccessCallback"],
+    ["submitJobWithDialog", "registerSuccessCallback"],
   );
 
   beforeEach(waitForAsync(() => {
@@ -79,12 +79,12 @@ describe("DatasetTableActionsComponent", () => {
   }));
 
   beforeEach(() => {
-    datasetJobDialogServiceSpy.submitWithDialog.calls.reset();
+    datasetJobDialogServiceSpy.submitJobWithDialog.calls.reset();
     datasetJobDialogServiceSpy.registerSuccessCallback.calls.reset();
     datasetJobDialogServiceSpy.registerSuccessCallback.and.returnValue(
       undefined,
     );
-    datasetJobDialogServiceSpy.submitWithDialog.and.returnValue(
+    datasetJobDialogServiceSpy.submitJobWithDialog.and.returnValue(
       new Subscription(),
     );
 
@@ -150,19 +150,13 @@ describe("DatasetTableActionsComponent", () => {
   });
 
   describe("#ngOnInit()", () => {
-    it("should register success callbacks for archive, retrieve and markForDeletion", () => {
+    it("should register success callback", () => {
       // The component is created and detectChanges is called in beforeEach
       // which triggers ngOnInit
 
       expect(
         datasetJobDialogServiceSpy.registerSuccessCallback,
-      ).toHaveBeenCalledWith("archive", jasmine.any(Function));
-      expect(
-        datasetJobDialogServiceSpy.registerSuccessCallback,
-      ).toHaveBeenCalledWith("retrieve", jasmine.any(Function));
-      expect(
-        datasetJobDialogServiceSpy.registerSuccessCallback,
-      ).toHaveBeenCalledWith("markForDeletion", jasmine.any(Function));
+      ).toHaveBeenCalledWith(jasmine.any(Function));
     });
   });
 
@@ -172,7 +166,9 @@ describe("DatasetTableActionsComponent", () => {
 
       component.archiveClickHandle();
 
-      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledOnceWith(
+      expect(
+        datasetJobDialogServiceSpy.submitJobWithDialog,
+      ).toHaveBeenCalledOnceWith(
         jasmine.objectContaining({ width: "auto" }),
         [mockDataset],
         "archive",
@@ -204,16 +200,12 @@ describe("DatasetTableActionsComponent", () => {
       expect(archivingService.retriveDialogOptions).toHaveBeenCalledOnceWith(
         retrieveDestinations,
       );
-      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledTimes(
-        1,
-      );
+      expect(
+        datasetJobDialogServiceSpy.submitJobWithDialog,
+      ).toHaveBeenCalledTimes(1);
 
-      const [
-        passedDialogOptions,
-        passedDatasets,
-        jobType,
-        paramsExtractor,
-      ] = datasetJobDialogServiceSpy.submitWithDialog.calls.mostRecent().args;
+      const [passedDialogOptions, passedDatasets, jobType, paramsExtractor] =
+        datasetJobDialogServiceSpy.submitJobWithDialog.calls.mostRecent().args;
 
       expect(passedDialogOptions).toEqual(dialogOptions);
       expect(passedDatasets).toEqual([mockDataset]);
@@ -243,16 +235,12 @@ describe("DatasetTableActionsComponent", () => {
       expect(
         archivingService.markForDeletionDialogOptions,
       ).toHaveBeenCalledOnceWith(component.appConfig.markForDeletionCodes);
-      expect(datasetJobDialogServiceSpy.submitWithDialog).toHaveBeenCalledTimes(
-        1,
-      );
+      expect(
+        datasetJobDialogServiceSpy.submitJobWithDialog,
+      ).toHaveBeenCalledTimes(1);
 
-      const [
-        passedDialogOptions,
-        passedDatasets,
-        jobType,
-        paramsExtractor,
-      ] = datasetJobDialogServiceSpy.submitWithDialog.calls.mostRecent().args;
+      const [passedDialogOptions, passedDatasets, jobType, paramsExtractor] =
+        datasetJobDialogServiceSpy.submitJobWithDialog.calls.mostRecent().args;
 
       expect(passedDialogOptions).toEqual(dialogOptions);
       expect(passedDatasets).toEqual([mockDataset]);
