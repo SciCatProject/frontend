@@ -264,6 +264,10 @@ export class AppConfigService {
       config.dateFormat = "yyyy-MM-dd HH:mm";
     }
 
+    if (!config.timezone) {
+      config.timezone = "UTC";
+    }
+
     if (config.metadataFloatFormatEnabled && !config.metadataFloatFormat) {
       config.metadataFloatFormat = {
         significantDigits: 3,

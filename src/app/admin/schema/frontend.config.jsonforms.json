@@ -20,6 +20,7 @@
       "allowConfigOverrides": { "type": "boolean" },
       "checkBoxFilterClickTrigger": { "type": "boolean" },
       "dateFormat": { "type": "string" },
+      "timezone": { "type": "string" },
       "accessTokenPrefix": { "type": "string" },
       "addDatasetEnabled": { "type": "boolean" },
       "archiveWorkflowEnabled": { "type": "boolean" },
@@ -433,6 +434,7 @@
         },
         "elements": [
           { "type": "Control", "scope": "#/properties/dateFormat" },
+          { "type": "Control", "scope": "#/properties/timezone" },
           { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
           { "type": "Control", "scope": "#/properties/landingPage" },
           { "type": "Control", "scope": "#/properties/metadataStructure" },
