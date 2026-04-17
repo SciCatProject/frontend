@@ -26,7 +26,6 @@ import {
   selectCurrentPublishedData,
   selectPublishedDataConfig,
 } from "state-management/selectors/published-data.selectors";
-import Ajv2019 from "ajv/dist/2019";
 import { AjvService } from "shared/services/ajv.service";
 
 @Component({
