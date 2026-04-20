@@ -403,16 +403,13 @@ export class UserEffects {
   setConditions$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsCompleteAction),
-      concatLatestFrom(() => this.store.select(selectConditions("dataset"))),
-      mergeMap(([{ userSettings }, existingDatasetConditions]) =>
+      mergeMap(({ userSettings }) =>
         SETTINGS_CONFIG.filter((s) => s.configKey === "conditions").flatMap(
           (s) => {
             const scope = s.scope as ConditionSettingScope;
             const incoming = userSettings.externalSettings?.[s.key];
-            const conditions =
-              scope === "dataset" && incoming.length === 0
-                ? existingDatasetConditions
-                : incoming;
+
+            const conditions = incoming.length > 0 ? incoming : [];
 
             const actions = [];
 
