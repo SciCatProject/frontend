@@ -124,6 +124,7 @@ const apiConfigurationFn = (
         return {
           dateFormat:
             appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm",
+          timezone: appConfigService.getConfig().timezone || "UTC",
         };
       },
       deps: [AppConfigService],

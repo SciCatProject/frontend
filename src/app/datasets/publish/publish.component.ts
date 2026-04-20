@@ -20,18 +20,17 @@ import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import {
   CreatePublishedDataV4Dto,
   PublishedData,
-  PublishedDataService,
+  PublishedDataV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AppConfigService } from "app-config.service";
 import { EditableComponent } from "app-routing/pending-changes.guard";
-import { cloneDeep, isEmpty } from "lodash-es";
+import { isEmpty } from "lodash-es";
 import { fromEvent, Subscription } from "rxjs";
 import {
   AccordionArrayLayoutRendererComponent,
   accordionArrayLayoutRendererTester,
 } from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 import { selectPublishedDataConfig } from "state-management/selectors/published-data.selectors";
-import Ajv2019 from "ajv/dist/2019";
 import { AjvService } from "shared/services/ajv.service";
 
 @Component({
@@ -78,7 +77,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   constructor(
     private appConfigService: AppConfigService,
     private store: Store,
-    private publishedDataApi: PublishedDataService,
+    private publishedDataApi: PublishedDataV4Service,
     private actionsSubj: ActionsSubject,
     private router: Router,
     protected ajvService: AjvService,
@@ -149,10 +148,11 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     });
 
     this.publishedDataApi
-      .publishedDataControllerFormPopulateV3(this.form.datasetPids[0])
+      .publishedDataV4ControllerFormPopulateV4(this.form.datasetPids)
       .subscribe((result) => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
+        this.metadata = result.metadata;
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
