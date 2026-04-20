@@ -19,4 +19,6 @@ export default defineConfig({
     defaultCommandTimeout: 10000,
     retries: 1,
   },
+  video: true,
+  videosFolder: "cypress/videos",
 });
