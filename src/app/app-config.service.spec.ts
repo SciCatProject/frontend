@@ -5,6 +5,7 @@ import {
   AppConfigService,
   HelpMessages,
 } from "app-config.service";
+import { time } from "node:console";
 import { Observable, of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
@@ -42,6 +43,7 @@ const appConfig: AppConfigInterface = {
   ingestManual: null,
   jobsEnabled: true,
   dateFormat: "yyyy-MM-dd HH:mm",
+  timezone: "UTC",
   jsonMetadataEnabled: true,
   jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
   landingPage: "doi2.psi.ch/detail/",
@@ -280,6 +282,7 @@ describe("AppConfigService", () => {
         },
         mainMenu: { nonAuthenticatedUser: { datasets: true } },
         dateFormat: "yyyy-MM-dd HH:mm",
+        timezone: "UTC",
         oAuth2Endpoints: [
           {
             authURL: "abcd",
@@ -308,6 +311,7 @@ describe("AppConfigService", () => {
       mainMenu: { nonAuthenticatedUser: { datasets: true, files: true } },
       oAuth2Endpoints: [],
       dateFormat: "yyyy-MM-dd HH:mm",
+      timezone: "UTC",
     };
 
     const mockHttpGet = (
