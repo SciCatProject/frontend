@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputSampleDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
   addSampleAction,
@@ -23,7 +23,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
   private vm$ = this.store.select(selectSampleDialogPageViewModel);
   public form: FormGroup;
   description: string;
-  sample: SampleClass;
+  sample: OutputSampleDto;
 
   username = "";
   userGroups: string[] | undefined;
@@ -34,7 +34,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    { description, sampleCharacteristics, ownerGroup }: SampleClass,
+    { description, sampleCharacteristics, ownerGroup }: OutputSampleDto,
   ) {
     this.description = description;
 
