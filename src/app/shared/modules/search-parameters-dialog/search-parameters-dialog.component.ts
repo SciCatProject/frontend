@@ -13,6 +13,7 @@ export interface SearchParametersDialogData {
   usedFields: string[];
   condition?: ScientificCondition;
   humanNameMap?: { [key: string]: string };
+  dialogTitle?: string;
 }
 
 @Component({
