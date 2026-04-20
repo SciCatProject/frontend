@@ -125,8 +125,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
           const defaultConfigColumns =
             this.appConfig?.defaultProposalsListSettings?.columns;
 
-          const userConfigColumns =
-            tablesSettings?.[this.tableName]?.columns || [];
+          const userConfigColumns = tablesSettings?.columns || [];
 
           const userTableConfigColumns =
             this.convertSavedColumns(userConfigColumns);
