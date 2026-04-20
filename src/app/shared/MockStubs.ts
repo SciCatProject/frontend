@@ -250,7 +250,7 @@ export class MockPublishedDataApi {
     ]);
   }
 
-  publishedDataControllerFormPopulateV3() {
+  publishedDataV4ControllerFormPopulateV4() {
     return of({});
   }
 }
