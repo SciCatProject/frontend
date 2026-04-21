@@ -1,4 +1,10 @@
-<div class="metadataTable" *ngIf="metadata">
+<div
+  class="metadataTable"
+  [class.metadataTable-add-column-enabled]="
+    canAddScientificMetadataKeysAsColumn
+  "
+  *ngIf="metadata"
+>
   <dynamic-mat-table
     [tableName]="tableName"
     [showReload]="showReloadData"
@@ -16,10 +22,12 @@
     [printConfig]="printConfig"
     [showProgress]="showProgress"
     [showGlobalTextSearch]="showGlobalTextSearch"
+    [rowContextMenuItems]="rowContextMenuItems"
     style="height: 100%"
     [emptyMessage]="'No metadata available'"
     [emptyIcon]="'folder'"
     [disableBorder]="true"
+    (onRowEvent)="onRowEvent($event)"
   >
   </dynamic-mat-table>
 </div>
