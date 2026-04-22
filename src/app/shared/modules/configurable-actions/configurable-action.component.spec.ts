@@ -1293,6 +1293,28 @@ describe("1000: ConfigurableActionComponent", () => {
       selector: "#prop1",
       expected: "prop1Value",
     },
+    {
+      name: "DatasetsPidEmptyFilesMap",
+      selector: "#DatasetsPidEmptyFilesMap",
+      expected: JSON.stringify(
+        mockActionItems.datasets.map((d) => ({ pid: d.pid, files: [] })),
+      ),
+    },
+    {
+      name: "DatasetsField",
+      selector: "#DatasetsField[sourceFolder]",
+      expected: mockActionItems.datasets.map((d) => d.sourceFolder),
+    },
+    {
+      name: "DatasetsTotalSize",
+      selector: "#DatasetsTotalSize",
+      expected: 0,
+    },
+    {
+      name: "DatasetsTotalPackedSize",
+      selector: "#DatasetsTotalPackedSize",
+      expected: 0,
+    },
   ];
 
   allKeywordMapSelectors.forEach((testCase) => {

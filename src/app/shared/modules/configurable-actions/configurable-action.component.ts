@@ -169,6 +169,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
           .flatMap("files")
           .filter("selected")
           .sumBy((f) => Number(f.size || 0)),
+      "#DatasetsPidEmptyFilesMap": () =>
+        JSON.stringify(_.map(datasets, (d) => ({ pid: d.pid, files: [] }))),
+      "#DatasetsTotalSize": () => _(datasets).sumBy((d) => d.size || 0),
+      "#DatasetsTotalPackedSize": () =>
+        _(datasets).sumBy((d) => d.packedSize || 0),
     };
     return staticMap;
   }
