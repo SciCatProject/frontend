@@ -8,7 +8,8 @@ mat-icon {
 
 .datafiles-header {
   margin-top: 1em;
-  height: 40px;
+  min-height: 40px;
+  display: flow-root;
 
   .nbr-of-files {
     font-size: larger;
