@@ -38,7 +38,10 @@ import {
 } from "./configurable-actions.test.data";
 import { of } from "rxjs";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
-import { selectProfile } from "state-management/selectors/user.selectors";
+import {
+  selectIsAdmin,
+  selectProfile,
+} from "state-management/selectors/user.selectors";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 
 describe("1000: ConfigurableActionComponent", () => {
@@ -1043,5 +1046,271 @@ describe("1000: ConfigurableActionComponent", () => {
     const body = JSON.parse(String(requestOptions.body));
     expect(body.dataset).toBe(mockActionItemsDatafilesNofiles.datasets[0].pid);
     expect(body.reason).toBe("integration-test");
+  });
+
+  it("1152: #datasetOwner token should enable action for owner", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[1]);
+    store.overrideSelector(selectIsAdmin, false);
+    store.refreshState();
+
+    const ownerConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "owner-enabled-test",
+      enabled: "#datasetOwner",
+      variables: {},
+    };
+
+    createComponent(ownerConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1153: #userIsAdmin token should enable action for admin", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[2]);
+    store.overrideSelector(selectIsAdmin, true);
+    store.refreshState();
+
+    const adminConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "admin-enabled-test",
+      enabled: "#userIsAdmin",
+      variables: {},
+    };
+
+    createComponent(adminConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1154: #isPublished token should follow dataset publish status", () => {
+    const publishedItems: ActionItems = {
+      datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
+    };
+    publishedItems.datasets[0].isPublished = true;
+
+    const publishedConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "published-enabled-test",
+      enabled: "#isPublished",
+      variables: {},
+    };
+
+    createComponent(publishedConfig, publishedItems);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1155: #!isPublished token should follow dataset publish status", () => {
+    const unpublishedItems: ActionItems = {
+      datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
+    };
+    unpublishedItems.datasets[0].isPublished = false;
+
+    const unpublishedConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "unpublished-enabled-test",
+      enabled: "#!isPublished",
+      variables: {},
+    };
+
+    createComponent(unpublishedConfig, unpublishedItems);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1156: #Length should evaluate selected file list length", () => {
+    const lengthConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "length-enabled-test",
+      enabled: "#Length(@files) > 0",
+      variables: {
+        files: "#Dataset0SelectedFilesPath",
+      },
+    };
+
+    createComponent(lengthConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeTrue();
+
+    createComponent(lengthConfig, mockActionItemsDatafilesFile1);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1157: #MaxDownloadableSize should compare against configured max size", () => {
+    mockAppConfigService.appConfig.maxDirectDownloadSize =
+      lowerMaxFileSizeLimit;
+
+    const sizeConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "max-download-enabled-test",
+      enabled: "#MaxDownloadableSize(@totalSize)",
+      variables: {
+        totalSize: "#Dataset0FilesTotalSize",
+      },
+    };
+
+    createComponent(sizeConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeTrue();
+
+    mockAppConfigService.appConfig.maxDirectDownloadSize =
+      higherMaxFileSizeLimit;
+    createComponent(sizeConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1158: hidden expression should hide action when condition is true", () => {
+    const hiddenConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "hidden-test",
+      hidden: "#Length(@files) === 0",
+      variables: {
+        files: "#Dataset0SelectedFilesPath",
+      },
+    };
+
+    createComponent(hiddenConfig, mockActionItemsDatafilesNofiles);
+    expect(component.visible).toBeFalse();
+
+    createComponent(hiddenConfig, mockActionItemsDatafilesFile1);
+    expect(component.visible).toBeTrue();
+  });
+
+  interface SelectorCoverageCase {
+    name: string;
+    selector: string;
+    expected: unknown;
+  }
+
+  const allKeywordMapSelectors: SelectorCoverageCase[] = [
+    {
+      name: "Dataset0Pid",
+      selector: "#Dataset0Pid",
+      expected: mockActionItems.datasets[0].pid,
+    },
+    {
+      name: "Dataset0FilesPath",
+      selector: "#Dataset0FilesPath",
+      expected: (mockActionItems.datasets[0].files || []).map((f) => f.path),
+    },
+    {
+      name: "Dataset0FilesTotalSize",
+      selector: "#Dataset0FilesTotalSize",
+      expected: (mockActionItems.datasets[0].files || []).reduce(
+        (sum, f) => sum + Number(f.size || 0),
+        0,
+      ),
+    },
+    {
+      name: "Dataset0SourceFolder",
+      selector: "#Dataset0SourceFolder",
+      expected: mockActionItems.datasets[0].sourceFolder,
+    },
+    {
+      name: "Dataset0SelectedFilesPath",
+      selector: "#Dataset0SelectedFilesPath",
+      expected: (mockActionItems.datasets[0].files || [])
+        .filter((f) => f.selected)
+        .map((f) => f.path),
+    },
+    {
+      name: "Dataset0SelectedFilesCount",
+      selector: "#Dataset0SelectedFilesCount",
+      expected: (mockActionItems.datasets[0].files || []).filter(
+        (f) => f.selected,
+      ).length,
+    },
+    {
+      name: "Dataset0SelectedFilesTotalSize",
+      selector: "#Dataset0SelectedFilesTotalSize",
+      expected: (mockActionItems.datasets[0].files || [])
+        .filter((f) => f.selected)
+        .reduce((sum, f) => sum + Number(f.size || 0), 0),
+    },
+    {
+      name: "DatasetIndexedField",
+      selector: "#Dataset[0]Field[isPublished]",
+      expected: mockActionItems.datasets[0].isPublished,
+    },
+    {
+      name: "DatasetsPid",
+      selector: "#DatasetsPid",
+      expected: mockActionItems.datasets.map((d) => d.pid),
+    },
+    {
+      name: "DatasetsSourceFolder",
+      selector: "#DatasetsSourceFolder",
+      expected: mockActionItems.datasets.map((d) => d.sourceFolder),
+    },
+    {
+      name: "DatasetsFilesPath",
+      selector: "#DatasetsFilesPath",
+      expected: mockActionItems.datasets.flatMap((d) =>
+        (d.files || []).map((f) => f.path),
+      ),
+    },
+    {
+      name: "DatasetsFilesTotalSize",
+      selector: "#DatasetsFilesTotalSize",
+      expected: mockActionItems.datasets
+        .flatMap((d) => d.files || [])
+        .reduce((sum, f) => sum + Number(f.size || 0), 0),
+    },
+    {
+      name: "DatasetsSelectedFilesPath",
+      selector: "#DatasetsSelectedFilesPath",
+      expected: mockActionItems.datasets
+        .flatMap((d) => d.files || [])
+        .filter((f) => f.selected)
+        .map((f) => f.path),
+    },
+    {
+      name: "DatasetsSelectedFilesCount",
+      selector: "#DatasetsSelectedFilesCount",
+      expected: mockActionItems.datasets
+        .flatMap((d) => d.files || [])
+        .filter((f) => f.selected).length,
+    },
+    {
+      name: "DatasetsSelectedFilesTotalSize",
+      selector: "#DatasetsSelectedFilesTotalSize",
+      expected: mockActionItems.datasets
+        .flatMap((d) => d.files || [])
+        .filter((f) => f.selected)
+        .reduce((sum, f) => sum + Number(f.size || 0), 0),
+    },
+    {
+      name: "DatasetsField",
+      selector: "#DatasetsField[sourceFolder]",
+      expected: mockActionItems.datasets.map((d) => d.sourceFolder),
+    },
+    {
+      name: "Dataset[0]Field[size]",
+      selector: "#Dataset[0]Field[size]",
+      expected: mockActionItems.datasets[0].size,
+    },
+    {
+      name: "#user.username",
+      selector: "#user.username",
+      expected: "abc",
+    },
+    {
+      name: "#prop1",
+      selector: "#prop1",
+      expected: "prop1Value",
+    },
+  ];
+
+  allKeywordMapSelectors.forEach((testCase) => {
+    it(`1160: ${testCase.name} selector should resolve`, () => {
+      const selectorConfig: ActionConfig = {
+        ...mockActionsConfig[0],
+        id: `selector-${testCase.name}`,
+        type: "link",
+        variables: {
+          value: testCase.selector,
+        },
+      };
+      createComponent(selectorConfig, {
+        ...mockActionItems,
+        user: { username: "abc" },
+        prop1: "prop1Value",
+      });
+      expect(component.variables["value"]).toEqual(testCase.expected);
+    });
   });
 });
