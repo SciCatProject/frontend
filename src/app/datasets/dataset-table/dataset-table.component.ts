@@ -4,8 +4,8 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  Input,
   ViewEncapsulation,
+  ViewChild,
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -32,6 +32,7 @@ import {
   selectDatasetsInBatch,
   selectDatasetsFacetCountsIsLoading,
   selectTextFilter,
+  selectSelectedDatasets,
 } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
 import {
@@ -67,6 +68,7 @@ import { selectInstruments } from "state-management/selectors/instruments.select
 import { DatasetsListService } from "shared/services/datasets-list.service";
 import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.component";
 import { Router } from "@angular/router";
+import { DynamicMatTableComponent } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.component";
 
 export interface SortChangeEvent {
   active: string;
@@ -82,8 +84,11 @@ export interface SortChangeEvent {
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  selectionIds: string[] = [];
 
+  @ViewChild("datasetTable")
+  datasetTable: DynamicMatTableComponent<OutputDatasetObsoleteDto>;
+
+  selectionIds: string[] = [];
   appConfig = this.appConfigService.getConfig();
   currentPage$ = this.store.select(selectPage);
   datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
@@ -97,7 +102,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   isFacetCountsLoading$ = this.store.select(selectDatasetsFacetCountsIsLoading);
   instruments$ = this.store.select(selectInstruments);
 
-  @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
     pageIndex: number;
     pageSize: number;
@@ -325,6 +329,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
+
+    this.subscriptions.push(
+      this.store.select(selectSelectedDatasets).subscribe((datasets) => {
+        if (datasets.length === 0) {
+          this.selectionIds = [];
+          this.datasetTable?.clearSelection();
+        }
+      }),
+    );
 
     this.subscriptions.push(
       this.selectedDatasets$.subscribe((datasets) => {

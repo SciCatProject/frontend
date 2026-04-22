@@ -8,7 +8,7 @@ import {
 } from "@angular/core/testing";
 
 import { DatasetTableActionsComponent } from "./dataset-table-actions.component";
-import { MockStore, MockArchivingService, mockDataset } from "shared/MockStubs";
+import { MockStore, mockDataset } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Store, StoreModule } from "@ngrx/store";
 import { ArchViewMode } from "state-management/models";
@@ -17,7 +17,6 @@ import {
   addToBatchAction,
   clearSelectionAction,
 } from "state-management/actions/datasets.actions";
-import { ArchivingService } from "datasets/archiving.service";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatButtonModule } from "@angular/material/button";
@@ -54,7 +53,6 @@ describe("DatasetTableActionsComponent", () => {
             provide: AppConfigService,
             useClass: MockAppConfigService,
           },
-          { provide: ArchivingService, useClass: MockArchivingService },
         ],
       },
     });
@@ -94,16 +92,17 @@ describe("DatasetTableActionsComponent", () => {
   });
 
   describe("#onModeChange()", () => {
-    it("should dispatch a SetViewModeAction", () => {
+    it("should dispatch a SetViewModeAction and a clearSelectionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
       const modeToggle = ArchViewMode.all;
 
       component.onModeChange(modeToggle);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setArchiveViewModeAction({ modeToggle }),
       );
+      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
     });
   });
 
@@ -140,6 +139,24 @@ describe("DatasetTableActionsComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(addToBatchAction());
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+    });
+  });
+
+  describe("#onActionFinished()", () => {
+    it("should clear selection when action succeeded", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onActionFinished({ success: true });
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(clearSelectionAction());
+    });
+
+    it("should not dispatch when action failed", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onActionFinished({ success: false });
+
+      expect(dispatchSpy).not.toHaveBeenCalled();
     });
   });
 });
