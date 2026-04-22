@@ -30,7 +30,10 @@ import {
 } from "state-management/actions/datasets.actions";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { provideMockStore } from "@ngrx/store/testing";
-import { selectDatasets } from "state-management/selectors/datasets.selectors";
+import {
+  selectDatasets,
+  selectSelectedDatasets,
+} from "state-management/selectors/datasets.selectors";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { MatTableModule } from "@angular/material/table";
 import {
@@ -93,6 +96,7 @@ describe("DatasetTableComponent", () => {
         provideMockStore({
           selectors: [
             { selector: selectDatasets, value: [] },
+            { selector: selectSelectedDatasets, value: [] },
             { selector: selectInstruments, value: [] },
           ],
         }),

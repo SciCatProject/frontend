@@ -1,8 +1,6 @@
 import { DatasetEffects } from "./../state-management/effects/datasets.effects";
 import { EffectsModule } from "@ngrx/effects";
 import { LinkyModule } from "ngx-linky";
-import { ArchivingService } from "./archiving.service";
-import { DatasetJobDialogService } from "./dataset-job-dialog.service";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
@@ -190,8 +188,6 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     DatasetsFilterSettingsComponent,
   ],
   providers: [
-    ArchivingService,
-    DatasetJobDialogService,
     AsyncPipe,
     JsonHeadPipe,
     ThumbnailPipe,

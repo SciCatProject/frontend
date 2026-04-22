@@ -73,31 +73,11 @@
           Share
         </button>
       </ng-container>
-      <ng-container *ngIf="appConfig.archiveWorkflowEnabled">
-        <button mat-button (click)="onArchive()" class="button" color="primary">
-          <mat-icon> archive </mat-icon>
-          Archive
-        </button>
-        <button
-          mat-button
-          (click)="onRetrieve()"
-          class="button"
-          color="primary"
-        >
-          <mat-icon> cloud_download </mat-icon>
-          Retrieve
-        </button>
-        <button
-        mat-button
-        *ngIf="markForDeletion"
-        (click)="onMarkForDeletion()"
-        class="button"
-        color="primary"
-      >
-        <mat-icon> delete </mat-icon>
-        Mark for Deletion
-      </button>
-      </ng-container>
+      <configurable-actions *ngIf="appConfig.batchActionsEnabled"
+        [actionsConfig]="appConfig.batchActions" [actionItems]="actionItems"
+        [buttonsStyle]="actionButtonsStyle"
+        (actionFinished)="onActionFinished($event)">
+      </configurable-actions>
     </div>
 
     <mat-table

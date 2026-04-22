@@ -10,7 +10,7 @@ export interface DialogOptionData {
 export interface DynamicField {
   label: string;
   type: "text" | "textarea" | "select";
-  required: boolean;
+  required?: boolean;
   options?: DialogOptionData[];
 }
 
