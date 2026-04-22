@@ -5,9 +5,7 @@
         <div class="action-column" fxFlex="14" fxFlex.lt-xl="20"></div>
         <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
           <ng-template [ngIf]="this.loggedIn$ | async">
-            <dataset-table-actions
-              [selectedSets]="selectedSets$ | async"
-            ></dataset-table-actions>
+            <dataset-table-actions></dataset-table-actions>
           </ng-template>
         </div>
       </div>
@@ -37,7 +35,6 @@
         </div>
         <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
           <dataset-table
-            [selectedSets]="selectedSets$ | async"
             (rowClick)="onRowClick($event)"
             (pageChange)="onPageChange($event)"
           ></dataset-table>
