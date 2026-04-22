@@ -32,12 +32,13 @@ Below are supported configuration properties, their types, and descriptions.
 
 ### 5. `type`
 - **Type:** `string`
-- **Accepted values:** `form`, `link`, `json-download`, `xhr`
+- **Accepted values:** `form`, `link`, `json-download`, `xhr`, `dialog`
 - **Description:** Action execution mode:
     - `form`: Submits a hidden HTML form to `url`.
     - `link`: Opens URL in new tab/window.
     - `json-download`: Fetches data and starts file download.
     - `xhr`: Makes an XHR/fetch API call, optionally updating local state.
+    - `dialog`: Opens a configurable dialog before running a follow-up action.
 
 ### 6. `method`
 - **Type:** `string`
@@ -114,6 +115,21 @@ Below are supported configuration properties, their types, and descriptions.
 - **Type:** `string`
 - **Description:** *(json-download only)*. Name for downloaded file (can use template, eg: `{{ #uuid }}.ipynb`).
 
+### 21. `onSuccess`
+- **Type:** `string`
+- **Accepted values:** `xhr`, `form`, `json-download`
+- **Description:** *(dialog only)*. Action to execute after the dialog closes with valid user input.
+
+### 22. `dialog`
+- **Type:** `object`
+- **Description:** *(dialog only)* Defines dialog UI.
+
+  Typical shape:
+  - `title`: dialog title
+  - `description`: helper text/question
+  - `width`: dialog width (e.g. `"450px"`)
+  - `fields`: array of field definitions (`key`, `label`, `type`, `required`, `options`)
+
 ---
 
 ## Supported Selectors in `variables`
@@ -139,6 +155,14 @@ Below are supported configuration properties, their types, and descriptions.
 **Other runtime keywords:**
 - `#token`, `#tokenBearer`, `#jwt`, `#uuid`: Various tokens and a random UUID.
 - `@<variable>`: Variable defined in `variables` mapping.
+
+**Expression helper keywords (enabled/disabled/hidden):**
+- `#datasetOwner`: True if user belongs to owner group of at least one dataset
+- `#userIsAdmin`: True if user has admin role
+- `#isPublished`: True if first dataset is published
+- `#!isPublished`: True if first dataset is not published
+- `#Length(<expr>)`: Resolves to expression length (`0` if null/undefined)
+- `#MaxDownloadableSize(<expr>)`: Compares value against configured max direct download size
 
 ---
 
