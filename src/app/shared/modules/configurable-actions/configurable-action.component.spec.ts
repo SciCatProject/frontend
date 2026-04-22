@@ -633,7 +633,7 @@ describe("1000: ConfigurableActionComponent", () => {
 
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -661,7 +661,7 @@ describe("1000: ConfigurableActionComponent", () => {
       .url.replace(/\/$/, "");
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     expect(component.form.action.replace(/\/$/, "")).toEqual(action_url);
   });
@@ -676,7 +676,7 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -701,7 +701,7 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -728,7 +728,7 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -752,7 +752,7 @@ describe("1000: ConfigurableActionComponent", () => {
       .url.replace(/\/$/, "");
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     expect(component.form.action.replace(/\/$/, "")).toEqual(action_url);
   });
@@ -767,7 +767,7 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -877,7 +877,7 @@ describe("1000: ConfigurableActionComponent", () => {
       ),
     );
 
-    component.perform_action();
+    component.performAction();
 
     const spy = window.fetch as jasmine.Spy;
     expect(spy.calls.any()).toBeTrue();
@@ -930,7 +930,7 @@ describe("1000: ConfigurableActionComponent", () => {
       ),
     );
 
-    component.perform_action();
+    component.performAction();
 
     const spy = window.fetch as jasmine.Spy;
 
@@ -974,7 +974,7 @@ describe("1000: ConfigurableActionComponent", () => {
       result: false,
     } as TestCase);
     spyOn(window, "open");
-    component.perform_action();
+    component.performAction();
 
     const current_action = mockActionsConfig.filter(
       (a) => a.id == actionSelectorType.link,

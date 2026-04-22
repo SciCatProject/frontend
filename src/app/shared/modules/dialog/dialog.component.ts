@@ -1,5 +1,4 @@
 import { Component, Inject } from "@angular/core";
-import { FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 export interface DialogOptionData {
@@ -32,9 +31,6 @@ export interface DynamicDialogData {
   standalone: false,
 })
 export class DialogComponent {
-  form: FormGroup = new FormGroup({});
-  fieldKeys: string[] = [];
-
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DynamicDialogData,
