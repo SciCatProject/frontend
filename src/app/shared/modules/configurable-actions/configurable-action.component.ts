@@ -472,7 +472,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
   type_xhr() {
     const url = this.actionConfig.url.replace(
-      /{{\s*(\w+)\s*}}/g,
+      /{{\s*([@#]?\w+)\s*}}/g,
       (_, variableName) =>
         encodeURIComponent(this.get_value_from_definition(variableName)),
     );
