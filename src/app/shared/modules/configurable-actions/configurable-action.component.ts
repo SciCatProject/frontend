@@ -1,117 +1,37 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from "@angular/core";
-
-import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
-import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
-import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import {
+  DatasetClass,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  ActionButtonStyle,
+  ActionConfig,
+  ActionItemDataset,
+  ActionItems,
+  ActionType,
+  DialogField,
+} from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
-import { updatePropertyAction } from "state-management/actions/datasets.actions";
-import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
-import { result } from "lodash-es";
-
-type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: JSONValue }
-  | JSONValue[];
-
-function processSelector(
-  jsonObject: ActionItems,
-  selector: string,
-): string | string[] | number | number[] {
-  let match: RegExpMatchArray | null;
-
-  // Map of static patterns to processing functions
-  const keywordMap: { [pattern: string]: (RegExpMatchArray) => any } = {
-    "#Dataset0Pid": (m) => jsonObject.datasets[0]?.pid,
-    "#Dataset0FilesPath": (m) =>
-      jsonObject.datasets[0]?.files?.map((i) => i.path),
-    "#Dataset0FilesTotalSize": (m) =>
-      jsonObject.datasets[0]?.files
-        ?.map((i) => Number(i.size))
-        .reduce((acc, val) => acc + val, 0),
-    "#Dataset0SourceFolder": (m) => jsonObject.datasets[0]?.sourceFolder,
-    "#Dataset0SelectedFilesPath": (m) =>
-      jsonObject.datasets[0]?.files
-        ?.filter((i) => i.selected)
-        .map((i) => i.path),
-    "#Dataset0SelectedFilesCount": (m) =>
-      jsonObject.datasets[0]?.files?.filter((i) => i.selected).length,
-    "#Dataset0SelectedFilesTotalSize": (m) =>
-      jsonObject.datasets[0]?.files
-        ?.filter((i) => i.selected)
-        .map((i) => Number(i.size))
-        .reduce((acc, val) => acc + val, 0),
-    // eslint-disable-next-line no-useless-escape
-    "#Dataset\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) =>
-      jsonObject.datasets[Number(m[1])][m[2]],
-    "#DatasetsPid": (m) => jsonObject.datasets?.map((i) => i.pid),
-    "#DatasetsFilesPath": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .map((i) => i.path),
-    "#DatasetsFilesTotalSize": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .map((i) => Number(i.size))
-        .reduce((acc, val) => acc + val, 0),
-    "#DatasetsSourceFolder": (m) =>
-      jsonObject.datasets?.map((i) => i.sourceFolder),
-    "#DatasetsSelectedFilesPath": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .filter((i) => i.selected)
-        .map((i) => i.path),
-    "#DatasetsSelectedFilesCount": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .filter((i) => i.selected).length,
-    "#DatasetsSelectedFilesTotalSize": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .filter((i) => i.selected)
-        .map((i) => Number(i.size))
-        .reduce((acc, val) => acc + val, 0),
-    // eslint-disable-next-line no-useless-escape
-    "#DatasetsField\\[(\\w+)\\]": (m) =>
-      jsonObject.datasets.map((i) => i[m[1]]),
-  };
-
-  // Check for direct pattern matches
-  for (const [pattern, fn] of Object.entries(keywordMap)) {
-    const match = selector.match(new RegExp(pattern));
-
-    if (match) {
-      const res = fn(match);
-
-      return res;
-    }
-  }
-
-  // No pattern matched, return selector itself
-  return selector;
-}
+import { DialogComponent, DynamicDialogData } from "../dialog/dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+import _ from "lodash";
 
 @Component({
   selector: "configurable-action",
@@ -120,24 +40,38 @@ function processSelector(
   standalone: false,
 })
 export class ConfigurableActionComponent implements OnInit, OnChanges {
+  private authorizationTokens = {
+    "#jwt": () => this.jwt,
+    "#token": () => this.authService.getToken()?.id,
+    "#tokenSimple": () => this.authService.getToken()?.id,
+    "#tokenBearer": () => `Bearer ${this.authService.getToken()?.id}`,
+    "#uuid": () => uuidv4(),
+  };
+
   @Input({ required: true }) actionConfig: ActionConfig;
   @Input({ required: true }) actionItems: ActionItems;
-  //@Input() files?: DataFiles_File[];
+  @Input({ required: false }) buttonStyle: ActionButtonStyle = {
+    raised: true,
+    color: "accent",
+  };
+  @Output() actionFinished = new EventEmitter<{
+    success: boolean;
+    result?: unknown;
+    error?: Error;
+  }>();
+
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
 
   jwt = "";
-  use_mat_icon = false;
-  use_icon = false;
-  disabled_condition = "false";
-  variables: Record<string, any> = {};
+  useMatIcon = false;
+  useIcon = false;
 
-  form: HTMLFormElement = null;
-
-  subscriptions: Subscription[] = [];
-
+  variables: Record<string, unknown> = {};
   userProfile: any = {};
   isAdmin = false;
+  subscriptions: Subscription[] = [];
+  form: HTMLFormElement | null = null;
 
   constructor(
     private usersService: UsersService,
@@ -145,164 +79,309 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     private configService: AppConfigService,
     private snackBar: MatSnackBar,
     private store: Store,
-    private router: Router,
+    public dialog: MatDialog,
   ) {
     this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
       this.jwt = jwt.jwt;
     });
   }
 
-  private evaluate_hidden_condition(condition: string) {
-    return condition
-      .replaceAll(
-        "#isPublished",
-        String(this.actionItems[0].isPublished === true),
-      )
-      .replaceAll(
-        "#!isPublished",
-        String(this.actionItems[0].isPublished === false),
-      );
-  }
-
-  private prepare_action_condition(condition: string) {
-    // Define replacements for specific functions and variables
-    return (
-      condition
-        // Handle #Length({{ files }})
-        .replace(
-          // eslint-disable-next-line no-useless-escape
-          /\#Length\(\s*\@(\w+)\s*\)/g,
-          (_, variableName) => `(variables.${variableName}?.length ?? 0)`,
-        )
-        // Handle #MaxDownloadableSize({{ totalSize }})
-        .replace(
-          ///#MaxDownloadableSize\(\{\{\s(\w+)\s\}\}\)/g,
-          // eslint-disable-next-line no-useless-escape
-          /\#MaxDownloadableSize\(@*(\w+)\)/g,
-          (_, variableName) =>
-            `variables.${variableName} <= maxDownloadableSize`,
-        )
-        // eslint-disable-next-line no-useless-escape
-        .replace(/\#datasetOwner/g, (_) => `datasetOwner`)
-        // eslint-disable-next-line no-useless-escape
-        .replace(/\#userIsAdmin/g, (_) => `isAdmin`)
-        // eslint-disable-next-line no-useless-escape
-        .replace(/\#uuid/g, (_) => v4())
-        // eslint-disable-next-line no-useless-escape
-        .replace(/\@(\w+)/g, (_, variableName) => `variables.${variableName}`)
+  private variableHandler(selector: string): unknown {
+    const dynamicKey = Object.keys(this.actionItems).find((key) =>
+      selector.startsWith(`#${key}`),
     );
+
+    if (dynamicKey) return this.dynamicVariableHandler(selector, dynamicKey);
+
+    const staticMap = this.buildDatasetStaticMap();
+
+    if (selector in staticMap) return staticMap[selector]();
+
+    if (selector.includes("Field[")) return this.fieldMatch(selector);
+
+    return undefined;
   }
 
-  private prepare_disabled_condition() {
-    if (this.actionConfig.enabled) {
-      this.disabled_condition =
-        "!(" + this.prepare_action_condition(this.actionConfig.enabled) + ")";
-    } else if (this.actionConfig.disabled) {
-      this.disabled_condition = this.prepare_action_condition(
-        this.actionConfig.disabled,
-      );
-    } else {
-      this.disabled_condition = "false";
-    }
+  private dynamicVariableHandler(
+    selector: string,
+    dynamicKey: string,
+  ): unknown {
+    if (selector === `#${dynamicKey}`) return this.actionItems[dynamicKey];
+    const path = selector.slice(dynamicKey.length + 2);
+    return _.get(this.actionItems[dynamicKey], path);
   }
 
-  private prepare_hidden_condition() {
-    if (this.actionConfig.hidden) {
-      return (
-        "!(" + this.evaluate_hidden_condition(this.actionConfig.hidden) + ")"
-      );
-    } else {
-      return "false";
-    }
-  }
-
-  ngOnInit() {
-    this.subscriptions.push(
-      this.userProfile$.subscribe((userProfile) => {
-        if (userProfile) {
-          this.userProfile = userProfile;
-        }
-      }),
+  private fieldMatch(selector: string): unknown {
+    const datasets = _.get(
+      this.actionItems,
+      "datasets",
+      [],
+    ) as ActionItemDataset[];
+    const allFieldMatch = selector.match(/^#DatasetsField\[(\w+)\]$/);
+    if (allFieldMatch) return _.map(datasets, allFieldMatch[1]);
+    const datasetFieldMatch = selector.match(
+      /^#Dataset\[(\d+)\]Field\[(\w+)\]$/,
     );
-    this.subscriptions.push(
-      this.isAdmin$.subscribe((isAdmin) => {
-        if (isAdmin) {
-          this.isAdmin = isAdmin;
-        }
-      }),
+    if (datasetFieldMatch) {
+      const index = Number(datasetFieldMatch[1]);
+      const field = datasetFieldMatch[2];
+      return _.get(datasets, `[${index}].${field}`);
+    }
+    return undefined;
+  }
+
+  private buildDatasetStaticMap() {
+    const datasets = _.get(
+      this.actionItems,
+      "datasets",
+      [],
+    ) as ActionItemDataset[];
+    const ds0 = _.get(datasets, "[0]");
+
+    const staticMap: Record<string, () => unknown> = {
+      "#Dataset0Pid": () => ds0?.pid,
+      "#Dataset0SourceFolder": () => ds0?.sourceFolder,
+      "#Dataset0FilesPath": () => _.map(ds0?.files, "path"),
+      "#Dataset0FilesTotalSize": () =>
+        _.sumBy(ds0?.files, (f) => Number(f.size || 0)),
+      "#Dataset0SelectedFilesPath": () =>
+        _(ds0?.files).filter("selected").map("path").value(),
+      "#Dataset0SelectedFilesCount": () =>
+        _(ds0?.files).filter("selected").size(),
+      "#Dataset0SelectedFilesTotalSize": () =>
+        _(ds0?.files)
+          .filter("selected")
+          .sumBy((f) => Number(f.size || 0)),
+      "#DatasetsPid": () => _.map(datasets, "pid"),
+      "#DatasetsSourceFolder": () => _.map(datasets, "sourceFolder"),
+      "#DatasetsFilesPath": () =>
+        _(datasets).flatMap("files").map("path").value(),
+      "#DatasetsFilesTotalSize": () =>
+        _(datasets)
+          .flatMap("files")
+          .sumBy((f) => Number(f.size || 0)),
+      "#DatasetsSelectedFilesPath": () =>
+        _(datasets).flatMap("files").filter("selected").map("path").value(),
+      "#DatasetsSelectedFilesCount": () =>
+        _(datasets).flatMap("files").filter("selected").size(),
+      "#DatasetsSelectedFilesTotalSize": () =>
+        _(datasets)
+          .flatMap("files")
+          .filter("selected")
+          .sumBy((f) => Number(f.size || 0)),
+    };
+    return staticMap;
+  }
+
+  private viewHandlers(condition: string): string {
+    let expr = condition;
+    const symbols: Record<string, string> = {
+      "#datasetOwner": "context.isOwner",
+      "#userIsAdmin": "context.isAdmin",
+      "#isPublished": String(
+        this.actionItems.datasets?.[0]?.isPublished === true,
+      ),
+      "#!isPublished": String(
+        this.actionItems.datasets?.[0]?.isPublished === false,
+      ),
+    };
+
+    Object.entries(symbols).forEach(([k, v]) => (expr = expr.replaceAll(k, v)));
+    expr = expr.replace(/@([\w.]+)/g, "variables.$1");
+    expr = expr.replace(/#Length\((.*?)\)/g, "($1?.length ?? 0)");
+    expr = expr.replace(
+      /#MaxDownloadableSize\((.*?)\)/g,
+      "$1 <= context.maxSize",
     );
-    this.use_mat_icon = !!this.actionConfig.mat_icon;
-    this.use_icon = this.actionConfig.icon !== undefined;
-    try {
-      this.prepare_disabled_condition();
-      this.update_status();
-    } catch (error) {
-      console.error("Configurable action error on init", error);
-    }
+
+    return expr;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes["actionItems"]) {
-      try {
-        this.update_status();
-      } catch (error) {
-        console.error("Configurable action error on changes", error);
-      }
-    }
+  private authorizationHandlers(definition: string): string {
+    return this.authorizationTokens[definition]?.() ?? definition;
   }
 
-  update_status() {
-    Object.entries(this.actionConfig.variables ?? {}).forEach(
-      ([key, selector]) => {
-        this.variables[key] = processSelector(this.actionItems, selector);
+  private resolve(definition: string): unknown {
+    if (definition.startsWith("@"))
+      return _.get(this.variables, definition.slice(1));
+    if (definition in this.authorizationTokens)
+      return this.authorizationHandlers(definition);
+    return definition;
+  }
+
+  private interpolate(template: string): string {
+    if (!template) return "";
+    return template.replace(
+      /\{\{\s*([@#][\w.]+(\[\])?)\s*\}\}/g,
+      (fullMatch, match) => {
+        const isArray = match.endsWith("[]");
+        const clean = match.replace("[]", "");
+
+        const value = this.resolve(clean);
+        return isArray
+          ? JSON.stringify(_.castArray(value ?? []))
+          : String(value ?? "");
       },
     );
   }
 
-  get context() {
-    return {
-      variables: this.variables,
-      maxDownloadableSize: this.configService.getConfig().maxDirectDownloadSize,
-      datasetOwner: (
-        this.actionItems.datasets.map((d): boolean => {
-          return this.userProfile.accessGroups?.includes(d.ownerGroup) || false;
-        }) as Array<boolean>
-      ).some(Boolean),
-      isAdmin: this.isAdmin,
-    };
-  }
-
-  get disabled() {
-    let res = false;
+  private evaluate(expr: string): boolean {
     try {
-      this.update_status();
-
-      const expr = this.disabled_condition;
-      const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
-      const { context } = this;
-      res = fn(context);
-    } catch (error) {
-      console.error("Configurable action error on get disabled", error);
-    }
-    return res;
-  }
-
-  get visible() {
-    if (!this.actionConfig.hidden) {
-      return true;
-    } else {
-      const expr = this.prepare_hidden_condition();
-      const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
-
-      return fn({
+      const context = {
         variables: this.variables,
-        maxDownloadableSize:
-          this.configService.getConfig().maxDirectDownloadSize,
-      });
+        context: {
+          isAdmin: this.isAdmin,
+          isOwner: this.isDatasetOwner,
+          maxSize: this.configService.getConfig().maxDirectDownloadSize,
+        },
+      };
+      const fn = new Function("ctx", `with(ctx){ return ${expr}; }`);
+      return fn(context);
+    } catch (e) {
+      console.error("Evaluation error:", expr, e);
+      return false;
     }
   }
 
-  add_input(name: string, value: string) {
+  private get isDatasetOwner(): boolean {
+    const datasets = _.get(this.actionItems, "datasets", []) as DatasetClass[];
+    const userGroups = _.get(this.userProfile, "accessGroups", []) as string[];
+    return _.some(datasets, (d) => userGroups.includes(d.ownerGroup));
+  }
+
+  private resolveVariableContext() {
+    Object.entries(this.actionConfig.variables ?? {}).forEach(
+      ([key, selector]) => {
+        this.variables[key] = this.variableHandler(selector);
+      },
+    );
+  }
+  private typeXhr() {
+    const url = this.interpolate(this.actionConfig.url);
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    Object.entries(this.actionConfig.headers || {}).forEach(([k, v]) => {
+      headers[k] = String(this.resolve(v));
+    });
+
+    fetch(url, {
+      method: this.actionConfig.method || "POST",
+      headers,
+      body: this.preparePayload(),
+    })
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const data = await r.json().catch(() => ({}));
+
+        this.actionFinishedEmit(true, data);
+      })
+      .catch((err: Error) => {
+        this.snackBar.open("Action failed", "Close", { duration: 2000 });
+        this.actionFinishedEmit(false, err);
+      });
+    return true;
+  }
+
+  private typeForm() {
+    if (this.form) document.body.removeChild(this.form);
+    this.form = document.createElement("form");
+    this.form.target = this.actionConfig.target || "_self";
+    this.form.method = this.actionConfig.method || "POST";
+    this.form.action = this.actionConfig.url;
+    this.form.style.display = "none";
+
+    Object.entries(this.actionConfig.inputs || {}).forEach(([input, def]) => {
+      const value = this.resolve(def);
+
+      if (input.endsWith("[]")) {
+        const name = input.slice(0, -2);
+        _.castArray(value).forEach((v, i) =>
+          this.form!.appendChild(
+            this.addInputElement(`${name}[${i}]`, String(v)),
+          ),
+        );
+      } else {
+        this.form!.appendChild(this.addInputElement(input, String(value)));
+      }
+    });
+
+    document.body.appendChild(this.form);
+    this.form.submit();
+    return true;
+  }
+
+  private preparePayload(): string {
+    const { payload } = this.actionConfig;
+    if (payload === "#dump") return JSON.stringify(this.variables);
+    if (!payload || payload === "#empty") return "{}";
+    return this.interpolate(payload);
+  }
+
+  private typeJsonToDownload() {
+    const filename = this.interpolate(
+      this.actionConfig.filename || "download.json",
+    );
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    Object.entries(this.actionConfig.headers || {}).forEach(([k, v]) => {
+      headers[k] = String(this.resolve(v));
+    });
+
+    fetch(this.actionConfig.url, {
+      method: this.actionConfig.method || "POST",
+      headers,
+      body: this.preparePayload(),
+    })
+      .then((r) => (r.ok ? r.blob() : Promise.reject()))
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+      .catch(() =>
+        this.snackBar.open("Download failed", "Close", { duration: 2000 }),
+      );
+    return true;
+  }
+
+  private typeLink() {
+    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+  }
+
+  private typeDialog() {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: this.actionConfig.dialog?.width || "450px",
+      data: this.prepareDialogData(),
+    });
+
+    dialogRef.afterClosed().subscribe((result: Record<string, any>) => {
+      if (!result) return;
+      const dialogRes: Record<string, any> = {};
+      this.actionConfig.dialog?.fields?.forEach((f) => {
+        const v = result[f.key];
+        dialogRes[f.key] =
+          v && typeof v === "object" && "option" in v ? v.option : v;
+      });
+      this.variables["dialog"] = dialogRes;
+      if (this.actionConfig.onSuccess)
+        this.executeNextStep(this.actionConfig.onSuccess);
+    });
+  }
+
+  private executeNextStep(nextStep: ActionType) {
+    if (nextStep === "xhr") this.typeXhr();
+    if (nextStep === "form") this.typeForm();
+    if (nextStep === "json-download") this.typeJsonToDownload();
+  }
+
+  private addInputElement(name: string, value: string): HTMLInputElement {
     const input = document.createElement("input");
     input.type = "hidden";
     input.name = name;
@@ -310,216 +389,85 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return input;
   }
 
-  perform_action() {
-    const action_type = this.actionConfig.type || "form";
-    switch (action_type) {
-      case "json-download":
-        return this.type_json_to_download();
-      case "xhr":
-        return this.type_xhr();
-      case "link":
-        return this.type_link();
-      case "form":
-      default:
-        return this.type_form();
-    }
-  }
+  private prepareDialogData(): DynamicDialogData {
+    const conf = this.actionConfig.dialog!;
+    const data: DynamicDialogData = {
+      title: conf.title || "Confirm",
+      question: conf.description || "",
+      additionalFields: {},
+    };
 
-  get_value_from_definition(definition: string) {
-    if (definition == "#token" || definition == "#tokenSimple") {
-      return this.authService.getToken().id;
-    } else if (definition == "#tokenBearer") {
-      return `Bearer ${this.authService.getToken().id}`;
-    } else if (definition == "#jwt") {
-      return this.jwt;
-    } else if (definition == "#uuid") {
-      return v4();
-    } else if (definition.startsWith("@")) {
-      return this.variables[definition.slice(1)];
-    }
-    return definition;
-  }
-
-  get_auth_headers(headers: Record<string, string>) {
-    const headerKey = "Authorization";
-    if (headerKey in headers) {
-      const currentValue = headers[headerKey];
-      const updatedValue = this.get_value_from_definition(currentValue);
-
-      headers[headerKey] = updatedValue;
-    }
-    return headers;
-  }
-
-  type_form() {
-    if (this.form !== null) {
-      document.body.removeChild(this.form);
-    }
-
-    this.form = document.createElement("form");
-    this.form.target = this.actionConfig.target || "_self";
-    this.form.method = this.actionConfig.method || "POST";
-    this.form.action = this.actionConfig.url;
-    this.form.style.display = "none";
-
-    // use the configuration under inputs to create the form
-    Object.entries(this.actionConfig.inputs).forEach(([input, definition]) => {
-      const value = this.get_value_from_definition(definition);
-
-      if (input.endsWith("[]")) {
-        const itemInput = input.slice(0, -2);
-
-        const iteratable = Array.isArray(value) ? value : [value];
-        iteratable.forEach((itemValue, itemIndex) => {
-          this.form.appendChild(
-            this.add_input(`${itemInput}[${itemIndex}]`, itemValue),
-          );
-        });
-      } else {
-        this.form.appendChild(this.add_input(input, value));
-      }
+    conf.fields?.forEach((f: DialogField) => {
+      data.additionalFields![f.key] = {
+        label: f.label,
+        type: f.type,
+        required: f.required,
+        options: f.options?.map((opt) => {
+          if (typeof opt === "string") return { option: opt };
+          return {
+            option: opt.option,
+            tooltip: opt.tooltip,
+            thumbnail: (opt as any).thumbnail || null,
+          };
+        }),
+      };
     });
 
-    document.body.appendChild(this.form);
-    this.form.submit();
-
-    return true;
+    return data;
   }
 
-  get_payload() {
-    let payload = "";
-    if (this.actionConfig.payload == "#dump") {
-      payload = JSON.stringify(this.variables);
-    } else if (
-      this.actionConfig.payload != "#empty" &&
-      this.actionConfig.payload
-    ) {
-      payload = this.actionConfig.payload;
+  private actionFinishedEmit(success: boolean, payload?: unknown) {
+    this.actionFinished.emit({
+      success,
+      result: success ? payload : undefined,
+      error: !success ? (payload as Error) : undefined,
+    });
+  }
+  get visible(): boolean {
+    this.resolveVariableContext();
+    if (!this.actionConfig.hidden) return true;
+    return !this.evaluate(this.viewHandlers(this.actionConfig.hidden));
+  }
+
+  get disabled(): boolean {
+    this.resolveVariableContext();
+    const raw = this.actionConfig.enabled
+      ? `!(${this.actionConfig.enabled})`
+      : this.actionConfig.disabled || "false";
+    return this.evaluate(this.viewHandlers(raw));
+  }
+
+  ngOnInit() {
+    this.subscriptions.push(
+      this.userProfile$.subscribe((up) => up && (this.userProfile = up)),
+    );
+    this.subscriptions.push(
+      this.isAdmin$.subscribe((ia) => (this.isAdmin = ia)),
+    );
+    this.useMatIcon = !!this.actionConfig.mat_icon;
+    this.useIcon = this.actionConfig.icon !== undefined;
+    this.resolveVariableContext();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["actionItems"]) this.resolveVariableContext();
+  }
+
+  performAction() {
+    this.resolveVariableContext();
+    const type = this.actionConfig.type || "form";
+    switch (type) {
+      case "json-download":
+        return this.typeJsonToDownload();
+      case "xhr":
+        return this.typeXhr();
+      case "link":
+        return this.typeLink();
+      case "dialog":
+        return this.typeDialog();
+      case "form":
+      default:
+        return this.typeForm();
     }
-
-    const readyPayload = payload.replace(
-      /\{\{\s*([@#]\w+(\[\])?)\s*\}\}/g,
-      (_, variableName) => {
-        if (variableName.endsWith("[]")) {
-          const variableNameClean = variableName.slice(0, -2);
-          const value = this.get_value_from_definition(variableNameClean);
-
-          const iteratable = !value
-            ? []
-            : Array.isArray(value)
-              ? value
-              : [value];
-          return JSON.stringify(iteratable);
-        } else {
-          return this.get_value_from_definition(variableName);
-        }
-      },
-    );
-
-    return readyPayload;
-  }
-
-  type_json_to_download() {
-    const filename = this.actionConfig.filename.replace(
-      /\{\{\s*([@#]\w+)\s*\}\}/g,
-      (_, variableName) => this.get_value_from_definition(variableName),
-    );
-
-    const method = this.actionConfig.method || "POST";
-    const payload = this.get_payload();
-    const headers = this.get_auth_headers(this.actionConfig.headers || {});
-    fetch(this.actionConfig.url, {
-      method: method,
-      headers: {
-        ...{
-          "Content-Type": "application/json",
-        },
-        ...(headers || {}),
-      },
-      body: payload,
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.blob();
-        } else {
-          // http error
-          return Promise.reject(
-            new Error(`HTTP Error code: ${response.status}`),
-          );
-        }
-      })
-      .then((blob) => URL.createObjectURL(blob))
-      .then((url) => {
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(url);
-      })
-      .catch((error) => {
-        this.snackBar.open(
-          "There has been an error performing the action",
-          "Close",
-          {
-            duration: 2000,
-          },
-        );
-      });
-
-    return true;
-  }
-
-  type_xhr() {
-    const url = this.actionConfig.url.replace(
-      /{{\s*(\w+)\s*}}/g,
-      (_, variableName) =>
-        encodeURIComponent(this.get_value_from_definition(variableName)),
-    );
-    const headers = this.get_auth_headers(this.actionConfig.headers || {});
-
-    fetch(url, {
-      method: this.actionConfig.method || "POST",
-      headers: {
-        ...{
-          "Content-Type": "application/json",
-        },
-        ...(headers || {}),
-      },
-      body: this.get_payload(),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return Promise.reject(
-            new Error(`HTTP Error code: ${response.status}`),
-          );
-        }
-
-        // specific only for datasets
-        // cannot be used
-        // this.store.dispatch(
-        //   updatePropertyAction({
-        //     method: this.actionConfig.method,
-        //     pid: element.pid,
-        //     property: JSON.parse(this.actionConfig.payload),
-        //   }),
-        // );
-
-        return response;
-      })
-      .catch((error) => {
-        this.snackBar.open(
-          "There has been an error performing the action",
-          "Close",
-          {
-            duration: 2000,
-          },
-        );
-      });
-
-    return true;
-  }
-
-  type_link() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
   }
 }

@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import { mergeWith } from "lodash-es";
 import { firstValueFrom, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
+import { ActionConfig } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { DialogOptionData } from "shared/modules/dialog/dialog.component";
 import {
   DatasetDetailComponentConfig,
   IngestorComponentConfig,
@@ -88,13 +90,13 @@ export interface AppConfigInterface {
   datasetReduceEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetActionsEnabled: boolean;
-  datasetActions: any[];
+  datasetActions: ActionConfig[];
   datafilesActionsEnabled: boolean;
-  datafilesActions: any[];
+  datafilesActions: ActionConfig[];
   datasetDetailsActionsEnabled: boolean;
-  datasetDetailsActions: any[];
+  datasetDetailsActions: ActionConfig[];
   datasetSelectionActionsEnabled: boolean;
-  datasetSelectionActions: any[];
+  datasetSelectionActions: ActionConfig[];
   editDatasetEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
@@ -172,6 +174,8 @@ export interface AppConfigInterface {
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
+  batchActionsEnabled?: boolean;
+  batchActions?: ActionConfig[];
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
