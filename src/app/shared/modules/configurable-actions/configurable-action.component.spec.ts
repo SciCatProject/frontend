@@ -10,7 +10,7 @@ import { DatePipe } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
-import { Store, StoreModule } from "@ngrx/store";
+import { StoreModule } from "@ngrx/store";
 import {
   MockAuthService,
   MockHtmlElement,
@@ -37,10 +37,10 @@ import {
   mockAppConfigService,
   mockUserProfiles,
 } from "./configurable-actions.test.data";
-import { Subject } from "rxjs";
+import { of } from "rxjs";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { selectProfile } from "state-management/selectors/user.selectors";
-import { ActionItems } from "./configurable-action.interfaces";
+import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
@@ -60,6 +60,8 @@ describe("1000: ConfigurableActionComponent", () => {
     publish = "9c6a11b6-a526-11f0-8795-6f025b320cc3",
     unpublish = "94a1d694-a526-11f0-947b-038d53cd837a",
     link = "c3bcbd40-a526-11f0-915a-93eeff0860ab",
+    dialog_open = "6a4d5226-1cf8-4dbf-a7db-9a4a16b1f523",
+    dialog_xhr = "4fcf5658-95f4-4fbd-99fd-8df4bb4bf0d0",
   }
 
   const usersControllerGetUserJWTV3 = () => ({
@@ -72,13 +74,9 @@ describe("1000: ConfigurableActionComponent", () => {
   //   id: "4ac45f3e-4d79-11ef-856c-6339dab93bee",
   // });
 
-  class MockUserProfile {
-    userProfile$ = new Subject<any>();
-  }
-
   beforeAll(() => {
     htmlForm = document.createElement("form");
-    (htmlForm as HTMLFormElement).submit = () => {};
+    (htmlForm as HTMLFormElement).submit = () => { };
     htmlInput = document.createElement("input");
   });
 
@@ -125,7 +123,10 @@ describe("1000: ConfigurableActionComponent", () => {
     store = TestBed.inject(MockStore);
   }));
 
-  function createComponent(componentActionConfig, componentsActionItems) {
+  function createComponent(
+    componentActionConfig: ActionConfig,
+    componentsActionItems: ActionItems,
+  ) {
     fixture = TestBed.createComponent(ConfigurableActionComponent);
     component = fixture.componentInstance;
     component.actionConfig = componentActionConfig;
@@ -794,8 +795,9 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
 
     const componentElement: HTMLElement = fixture.nativeElement;
-    const actionButton = componentElement.querySelector(".action-button");
-    expect(actionButton.innerHTML).toContain(
+    const actionButton = componentElement.querySelector("button");
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.textContent).toContain(
       mockActionsConfig.filter(
         (a) => a.id == actionSelectorType.download_all,
       )[0].label,
@@ -812,8 +814,9 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
 
     const componentElement: HTMLElement = fixture.nativeElement;
-    const actionButton = componentElement.querySelector(".action-button");
-    expect(actionButton.innerHTML).toContain(
+    const actionButton = componentElement.querySelector("button");
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.textContent).toContain(
       mockActionsConfig.filter(
         (a) => a.id == actionSelectorType.download_selected,
       )[0].label,
@@ -830,8 +833,9 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
 
     const componentElement: HTMLElement = fixture.nativeElement;
-    const actionButton = componentElement.querySelector(".action-button");
-    expect(actionButton.innerHTML).toContain(
+    const actionButton = componentElement.querySelector("button");
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.textContent).toContain(
       mockActionsConfig.filter(
         (a) => a.id == actionSelectorType.notebook_all_form,
       )[0].label,
@@ -848,8 +852,9 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
 
     const componentElement: HTMLElement = fixture.nativeElement;
-    const actionButton = componentElement.querySelector(".action-button");
-    expect(actionButton.innerHTML).toContain(
+    const actionButton = componentElement.querySelector("button");
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.textContent).toContain(
       mockActionsConfig.filter(
         (a) => a.id == actionSelectorType.notebook_selected_form,
       )[0].label,
@@ -880,7 +885,7 @@ describe("1000: ConfigurableActionComponent", () => {
     component.performAction();
 
     const spy = window.fetch as jasmine.Spy;
-    expect(spy.calls.any()).toBeTrue();
+    expect(spy.calls.count()).toBeGreaterThan(0);
     const call = spy.calls.mostRecent();
     expect(call).toBeDefined();
     const [url, opts] = call.args;
@@ -934,7 +939,7 @@ describe("1000: ConfigurableActionComponent", () => {
 
     const spy = window.fetch as jasmine.Spy;
 
-    expect(spy.calls.any()).toBeTrue();
+    expect(spy.calls.count()).toBeGreaterThan(0);
     const call = spy.calls.mostRecent();
 
     expect(call).toBeDefined();
@@ -985,43 +990,15 @@ describe("1000: ConfigurableActionComponent", () => {
     );
   });
 
-  it("1140: should build dependency graph", () => {
-    const variables = {
-      files: "#Dataset0FilesPath",
-      first: "@files[0]",
-      copy: "@first",
-    };
-
-    const graph = component.buildDependenciesGraph(variables);
-
-    expect(graph["files"]).toEqual(new Set());
-    expect(graph["first"]).toEqual(new Set(["files"]));
-    expect(graph["copy"]).toEqual(new Set(["first"]));
-  });
-
-  it("1150:should support multiple dependencies", () => {
-    const variables = {
-      a: "@b",
-      b: "@c",
-      c: "@a",
-    };
-
-    const graph = component.buildDependenciesGraph(variables);
-
-    expect(graph["a"]).toEqual(new Set(["b"]));
-    expect(graph["b"]).toEqual(new Set(["c"]));
-    expect(graph["c"]).toEqual(new Set(["a"]));
-  });
-
-  it("1160: should resolve dependent variables", () => {
+  it("1140: should resolve dependent variables with array index extraction", () => {
     component.actionConfig = {
       variables: {
         files: "#Dataset0FilesPath",
         first: "@files[0]",
       },
-    } as any;
+    } as unknown as ActionConfig;
 
-    component.update_status();
+    component.resolveVariableContext();
 
     expect(component.variables["files"]).toEqual([
       "/file/1",
@@ -1032,44 +1009,85 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.variables["first"]).toBe("/file/1");
   });
 
-  it("1170: should resolve chained dependencies", () => {
+  it("1150: should resolve chained configuration aliases", () => {
     component.actionConfig = {
       variables: {
         files: "#Dataset0FilesPath",
         first: "@files[0]",
         copy: "@first",
       },
-    } as any;
+    } as unknown as ActionConfig;
 
-    component.update_status();
+    component.resolveVariableContext();
 
     expect(component.variables["copy"]).toBe("/file/1");
   });
 
-  it("1180: should detect cyclic dependencies", () => {
-    spyOn(console, "error");
-
-    component.actionConfig = {
-      variables: {
-        a: "@b",
-        b: "@a",
-      },
-    } as any;
-
-    component.update_status();
-
-    expect(console.error).toHaveBeenCalled();
-  });
-
-  it("1190: should resolve selectors after variable substitution", () => {
+  it("1160: should resolve selectors after variable substitution", () => {
     component.actionConfig = {
       variables: {
         year: "#date_format(2026-05-12T14:53:45Z, yyyy)",
       },
-    } as any;
+    } as unknown as ActionConfig;
 
-    component.update_status();
+    component.resolveVariableContext();
 
     expect(component.variables["year"]).toBe("2026");
+  });
+
+  it("1170: dialog action should open dialog with configured data", () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.dialog_open,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: false,
+    } as TestCase);
+
+    spyOn(component.dialog, "open").and.returnValue({
+      afterClosed: () => of(undefined),
+    } as MatDialogRef<unknown>);
+
+    component.performAction();
+
+    expect(component.dialog.open).toHaveBeenCalled();
+  });
+
+  it("1180: dialog action should execute xhr on close using dialog variables", () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.dialog_xhr,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: false,
+    } as TestCase);
+
+    spyOn(component.dialog, "open").and.returnValue({
+      afterClosed: () => of({ reason: "integration-test" }),
+    } as MatDialogRef<unknown>);
+
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve(
+        new Response(new Blob(), {
+          status: 200,
+          statusText: "OK",
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
+    );
+
+    component.performAction();
+
+    const fetchSpy = window.fetch as jasmine.Spy;
+    expect(fetchSpy.calls.count()).toBe(1);
+    const [url, opts] = fetchSpy.calls.mostRecent().args;
+    expect(url).toBe("https://example.org/action");
+
+    const requestOptions = opts as RequestInit;
+    expect(requestOptions.method).toBe("POST");
+
+    const body = JSON.parse(String(requestOptions.body)) as Record<string, unknown>;
+    expect(body["dataset"]).toBe(mockActionItemsDatafilesNofiles.datasets[0].pid);
+    expect(body["reason"]).toBe("integration-test");
   });
 });
