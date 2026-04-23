@@ -43,7 +43,7 @@
   },
   "logbookEnabled": true,
   "loginFormEnabled": true,
-  "thumbnailFetchLimitPerPage": 100,  
+  "thumbnailFetchLimitPerPage": 100,
   "metadataPreviewEnabled": true,
   "metadataStructure": "",
   "multipleDownloadAction": "http://localhost:3012/zip",
@@ -149,7 +149,7 @@
         "item[]" : "@pid",
         "directory[]" : "@folder",
         "files[]": "@files"
-      },      
+      },
       "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
@@ -216,7 +216,7 @@
       },
       "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ @pid }}\",\"directory\":\"{{ @folder }}\",\"files\": {{ @files[] }},\"jwt\":\"{{ #jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
       "filename": "{{ #uuid }}.ipynb"
-    },    
+    },
     {
       "id": "9c6a11b6-a526-11f0-8795-6f025b320cc3",
       "description": "This action let users make a call an arbitrary URL and store the reply in the store",
@@ -275,9 +275,88 @@
   "datasetDetailsActionsEnabled": false,
   "datasetDetailsActions": [],
   "publishedDataActionsEnabled": true,
- 
+  "publishedDataActions": [
+    {
+      "id": "private",
+      "description": "This action makes a published data record private.",
+      "order": 1,
+      "label": "Private",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method" : "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/private",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"published\")",
+      "authorization": "#datasetOwner || #userIsAdmin",
+      "variables" : {
+        "doi": "#PublishedData0Doi",
+        "status" : "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      }
+    },
+    {
+      "id": "publish",
+      "description": "This action published the published data record.",
+      "order": 1,
+      "label": "publish",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method" : "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/publish",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"private\")",
+      "authorization": "#datasetOwner || #userIsAdmin",
+      "variables" : {
+        "doi": "#PublishedData0Doi",
+        "status" : "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      }
+    },
+    {
+      "id": "register",
+      "description": "This action register the published data record with datacite.",
+      "order": 2,
+      "label": "Register",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method" : "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/register",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"published\")",
+      "authorization": "#datasetOwner && #userIsAdmin",
+      "variables" : {
+        "doi": "#PublishedData0Doi",
+        "status" : "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "id": "amend",
+      "description": "This action amend the published data record.",
+      "order": 3,
+      "label": "Amend",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method" : "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/amend",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"registered\")",
+      "authorization": "true",
+      "variables" : {
+        "doi": "#PublishedData0Doi",
+        "status" : "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  ],
   "selectionActionsEnabled": true,
-  "selectionActions": [],  
+  "selectionActions": [],
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",

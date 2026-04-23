@@ -96,7 +96,9 @@ function processSelector(
     // eslint-disable-next-line no-useless-escape
     "#DatasetsField\\[(\\w+)\\]": (m) =>
       jsonObject.datasets.map((i) => i[m[1]]),
-    "#PublishedDataDoi": (m) => jsonObject.publisheddata[0]?.doi,
+    "#PublishedData0Doi": (m) => jsonObject.publisheddata[0]?.doi,
+    "#PublishedData\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) =>
+      jsonObject.publisheddata[Number(m[1])][m[2]],
   };
 
   // Check for direct pattern matches
@@ -253,6 +255,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   update_status() {
+    console.log("update_status : ", this.actionConfig);
     Object.entries(this.actionConfig.variables ?? {}).forEach(
       ([key, selector]) => {
         this.variables[key] = processSelector(this.actionItems, selector);
