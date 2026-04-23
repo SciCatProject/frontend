@@ -26,7 +26,7 @@
         </table>
       </mat-card-content>
 
-      <mat-card-actions>
+      <mat-card-actions *ngIf="isLoggedIn$ | async">
         <button
           mat-raised-button
           color="primary"
