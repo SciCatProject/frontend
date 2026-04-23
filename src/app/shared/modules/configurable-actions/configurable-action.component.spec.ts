@@ -9,7 +9,7 @@ import { PipesModule } from "shared/pipes/pipes.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
-import { Store, StoreModule } from "@ngrx/store";
+import { StoreModule } from "@ngrx/store";
 import {
   MockAuthService,
   MockHtmlElement,
@@ -36,10 +36,13 @@ import {
   mockAppConfigService,
   mockUserProfiles,
 } from "./configurable-actions.test.data";
-import { Subject } from "rxjs";
+import { of } from "rxjs";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
-import { selectProfile } from "state-management/selectors/user.selectors";
-import { ActionItems } from "./configurable-action.interfaces";
+import {
+  selectIsAdmin,
+  selectProfile,
+} from "state-management/selectors/user.selectors";
+import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
@@ -59,6 +62,8 @@ describe("1000: ConfigurableActionComponent", () => {
     publish = "9c6a11b6-a526-11f0-8795-6f025b320cc3",
     unpublish = "94a1d694-a526-11f0-947b-038d53cd837a",
     link = "c3bcbd40-a526-11f0-915a-93eeff0860ab",
+    dialog_open = "6a4d5226-1cf8-4dbf-a7db-9a4a16b1f523",
+    dialog_xhr = "4fcf5658-95f4-4fbd-99fd-8df4bb4bf0d0",
   }
 
   const usersControllerGetUserJWTV3 = () => ({
@@ -70,10 +75,6 @@ describe("1000: ConfigurableActionComponent", () => {
   // const getCurrentToken = () => ({
   //   id: "4ac45f3e-4d79-11ef-856c-6339dab93bee",
   // });
-
-  class MockUserProfile {
-    userProfile$ = new Subject<any>();
-  }
 
   beforeAll(() => {
     htmlForm = document.createElement("form");
@@ -124,7 +125,10 @@ describe("1000: ConfigurableActionComponent", () => {
     store = TestBed.inject(MockStore);
   }));
 
-  function createComponent(componentActionConfig, componentsActionItems) {
+  function createComponent(
+    componentActionConfig: ActionConfig,
+    componentsActionItems: ActionItems,
+  ) {
     fixture = TestBed.createComponent(ConfigurableActionComponent);
     component = fixture.componentInstance;
     component.actionConfig = componentActionConfig;
@@ -632,7 +636,7 @@ describe("1000: ConfigurableActionComponent", () => {
 
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -660,7 +664,7 @@ describe("1000: ConfigurableActionComponent", () => {
       .url.replace(/\/$/, "");
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     expect(component.form.action.replace(/\/$/, "")).toEqual(action_url);
   });
@@ -675,7 +679,7 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -700,7 +704,7 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -727,7 +731,7 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -751,7 +755,7 @@ describe("1000: ConfigurableActionComponent", () => {
       .url.replace(/\/$/, "");
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     expect(component.form.action.replace(/\/$/, "")).toEqual(action_url);
   });
@@ -766,7 +770,7 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
 
-    component.perform_action();
+    component.performAction();
 
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
@@ -793,8 +797,9 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
 
     const componentElement: HTMLElement = fixture.nativeElement;
-    const actionButton = componentElement.querySelector(".action-button");
-    expect(actionButton.innerHTML).toContain(
+    const actionButton = componentElement.querySelector("button");
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.textContent).toContain(
       mockActionsConfig.filter(
         (a) => a.id == actionSelectorType.download_all,
       )[0].label,
@@ -811,8 +816,9 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
 
     const componentElement: HTMLElement = fixture.nativeElement;
-    const actionButton = componentElement.querySelector(".action-button");
-    expect(actionButton.innerHTML).toContain(
+    const actionButton = componentElement.querySelector("button");
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.textContent).toContain(
       mockActionsConfig.filter(
         (a) => a.id == actionSelectorType.download_selected,
       )[0].label,
@@ -829,8 +835,9 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
 
     const componentElement: HTMLElement = fixture.nativeElement;
-    const actionButton = componentElement.querySelector(".action-button");
-    expect(actionButton.innerHTML).toContain(
+    const actionButton = componentElement.querySelector("button");
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.textContent).toContain(
       mockActionsConfig.filter(
         (a) => a.id == actionSelectorType.notebook_all_form,
       )[0].label,
@@ -847,8 +854,9 @@ describe("1000: ConfigurableActionComponent", () => {
     } as TestCase);
 
     const componentElement: HTMLElement = fixture.nativeElement;
-    const actionButton = componentElement.querySelector(".action-button");
-    expect(actionButton.innerHTML).toContain(
+    const actionButton = componentElement.querySelector("button");
+    expect(actionButton).not.toBeNull();
+    expect(actionButton?.textContent).toContain(
       mockActionsConfig.filter(
         (a) => a.id == actionSelectorType.notebook_selected_form,
       )[0].label,
@@ -876,10 +884,10 @@ describe("1000: ConfigurableActionComponent", () => {
       ),
     );
 
-    component.perform_action();
+    component.performAction();
 
     const spy = window.fetch as jasmine.Spy;
-    expect(spy.calls.any()).toBeTrue();
+    expect(spy.calls.count()).toBeGreaterThan(0);
     const call = spy.calls.mostRecent();
     expect(call).toBeDefined();
     const [url, opts] = call.args;
@@ -929,11 +937,11 @@ describe("1000: ConfigurableActionComponent", () => {
       ),
     );
 
-    component.perform_action();
+    component.performAction();
 
     const spy = window.fetch as jasmine.Spy;
 
-    expect(spy.calls.any()).toBeTrue();
+    expect(spy.calls.count()).toBeGreaterThan(0);
     const call = spy.calls.mostRecent();
 
     expect(call).toBeDefined();
@@ -973,7 +981,7 @@ describe("1000: ConfigurableActionComponent", () => {
       result: false,
     } as TestCase);
     spyOn(window, "open");
-    component.perform_action();
+    component.performAction();
 
     const current_action = mockActionsConfig.filter(
       (a) => a.id == actionSelectorType.link,
@@ -982,5 +990,327 @@ describe("1000: ConfigurableActionComponent", () => {
       current_action.url,
       current_action.target,
     );
+  });
+
+  it("1140: dialog action should open dialog with configured data", () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.dialog_open,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: false,
+    } as TestCase);
+
+    spyOn(component.dialog, "open").and.returnValue({
+      afterClosed: () => of(undefined),
+    } as MatDialogRef<unknown>);
+
+    component.performAction();
+
+    expect(component.dialog.open).toHaveBeenCalled();
+  });
+
+  it("1150: dialog action should execute xhr on close using dialog variables", () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.dialog_xhr,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: false,
+    } as TestCase);
+
+    spyOn(component.dialog, "open").and.returnValue({
+      afterClosed: () => of({ reason: "integration-test" }),
+    } as MatDialogRef<unknown>);
+
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve(
+        new Response(new Blob(), {
+          status: 200,
+          statusText: "OK",
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
+    );
+
+    component.performAction();
+
+    const fetchSpy = window.fetch as jasmine.Spy;
+    expect(fetchSpy.calls.count()).toBe(1);
+    const [url, opts] = fetchSpy.calls.mostRecent().args;
+    expect(url).toBe("https://example.org/action");
+
+    const requestOptions = opts as RequestInit;
+    expect(requestOptions.method).toBe("POST");
+
+    const body = JSON.parse(String(requestOptions.body));
+    expect(body.dataset).toBe(mockActionItemsDatafilesNofiles.datasets[0].pid);
+    expect(body.reason).toBe("integration-test");
+  });
+
+  it("1152: #datasetOwner token should enable action for owner", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[1]);
+    store.overrideSelector(selectIsAdmin, false);
+    store.refreshState();
+
+    const ownerConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "owner-enabled-test",
+      enabled: "#datasetOwner",
+      variables: {},
+    };
+
+    createComponent(ownerConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1153: #userIsAdmin token should enable action for admin", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[2]);
+    store.overrideSelector(selectIsAdmin, true);
+    store.refreshState();
+
+    const adminConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "admin-enabled-test",
+      enabled: "#userIsAdmin",
+      variables: {},
+    };
+
+    createComponent(adminConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1154: #isPublished token should follow dataset publish status", () => {
+    const publishedItems: ActionItems = {
+      datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
+    };
+    publishedItems.datasets[0].isPublished = true;
+
+    const publishedConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "published-enabled-test",
+      enabled: "#isPublished",
+      variables: {},
+    };
+
+    createComponent(publishedConfig, publishedItems);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1155: #!isPublished token should follow dataset publish status", () => {
+    const unpublishedItems: ActionItems = {
+      datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
+    };
+    unpublishedItems.datasets[0].isPublished = false;
+
+    const unpublishedConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "unpublished-enabled-test",
+      enabled: "#!isPublished",
+      variables: {},
+    };
+
+    createComponent(unpublishedConfig, unpublishedItems);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1156: #Length should evaluate selected file list length", () => {
+    const lengthConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "length-enabled-test",
+      enabled: "#Length(@files) > 0",
+      variables: {
+        files: "#Dataset0SelectedFilesPath",
+      },
+    };
+
+    createComponent(lengthConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeTrue();
+
+    createComponent(lengthConfig, mockActionItemsDatafilesFile1);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1157: #MaxDownloadableSize should compare against configured max size", () => {
+    mockAppConfigService.appConfig.maxDirectDownloadSize =
+      lowerMaxFileSizeLimit;
+
+    const sizeConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "max-download-enabled-test",
+      enabled: "#MaxDownloadableSize(@totalSize)",
+      variables: {
+        totalSize: "#Dataset0FilesTotalSize",
+      },
+    };
+
+    createComponent(sizeConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeTrue();
+
+    mockAppConfigService.appConfig.maxDirectDownloadSize =
+      higherMaxFileSizeLimit;
+    createComponent(sizeConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1158: hidden expression should hide action when condition is true", () => {
+    const hiddenConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "hidden-test",
+      hidden: "#Length(@files) === 0",
+      variables: {
+        files: "#Dataset0SelectedFilesPath",
+      },
+    };
+
+    createComponent(hiddenConfig, mockActionItemsDatafilesNofiles);
+    expect(component.visible).toBeFalse();
+
+    createComponent(hiddenConfig, mockActionItemsDatafilesFile1);
+    expect(component.visible).toBeTrue();
+  });
+
+  interface SelectorCoverageCase {
+    name: string;
+    selector: string;
+    expected: unknown;
+  }
+
+  const allKeywordMapSelectors: SelectorCoverageCase[] = [
+    {
+      name: "Dataset0Pid",
+      selector: "#Dataset0Pid",
+      expected: mockActionItems.datasets[0].pid,
+    },
+    {
+      name: "Dataset0FilesPath",
+      selector: "#Dataset0FilesPath",
+      expected: (mockActionItems.datasets[0].files || []).map((f) => f.path),
+    },
+    {
+      name: "Dataset0FilesTotalSize",
+      selector: "#Dataset0FilesTotalSize",
+      expected: (mockActionItems.datasets[0].files || []).reduce(
+        (sum, f) => sum + Number(f.size || 0),
+        0,
+      ),
+    },
+    {
+      name: "Dataset0SourceFolder",
+      selector: "#Dataset0SourceFolder",
+      expected: mockActionItems.datasets[0].sourceFolder,
+    },
+    {
+      name: "Dataset0SelectedFilesPath",
+      selector: "#Dataset0SelectedFilesPath",
+      expected: (mockActionItems.datasets[0].files || [])
+        .filter((f) => f.selected)
+        .map((f) => f.path),
+    },
+    {
+      name: "Dataset0SelectedFilesCount",
+      selector: "#Dataset0SelectedFilesCount",
+      expected: (mockActionItems.datasets[0].files || []).filter(
+        (f) => f.selected,
+      ).length,
+    },
+    {
+      name: "Dataset0SelectedFilesTotalSize",
+      selector: "#Dataset0SelectedFilesTotalSize",
+      expected: (mockActionItems.datasets[0].files || [])
+        .filter((f) => f.selected)
+        .reduce((sum, f) => sum + Number(f.size || 0), 0),
+    },
+    {
+      name: "DatasetIndexedField",
+      selector: "#Dataset[0]Field[isPublished]",
+      expected: mockActionItems.datasets[0].isPublished,
+    },
+    {
+      name: "DatasetsPid",
+      selector: "#DatasetsPid",
+      expected: mockActionItems.datasets.map((d) => d.pid),
+    },
+    {
+      name: "DatasetsSourceFolder",
+      selector: "#DatasetsSourceFolder",
+      expected: mockActionItems.datasets.map((d) => d.sourceFolder),
+    },
+    {
+      name: "DatasetsFilesPath",
+      selector: "#DatasetsFilesPath",
+      expected: mockActionItems.datasets.flatMap((d) =>
+        (d.files || []).map((f) => f.path),
+      ),
+    },
+    {
+      name: "DatasetsFilesTotalSize",
+      selector: "#DatasetsFilesTotalSize",
+      expected: mockActionItems.datasets
+        .flatMap((d) => d.files || [])
+        .reduce((sum, f) => sum + Number(f.size || 0), 0),
+    },
+    {
+      name: "DatasetsSelectedFilesPath",
+      selector: "#DatasetsSelectedFilesPath",
+      expected: mockActionItems.datasets
+        .flatMap((d) => d.files || [])
+        .filter((f) => f.selected)
+        .map((f) => f.path),
+    },
+    {
+      name: "DatasetsSelectedFilesCount",
+      selector: "#DatasetsSelectedFilesCount",
+      expected: mockActionItems.datasets
+        .flatMap((d) => d.files || [])
+        .filter((f) => f.selected).length,
+    },
+    {
+      name: "DatasetsSelectedFilesTotalSize",
+      selector: "#DatasetsSelectedFilesTotalSize",
+      expected: mockActionItems.datasets
+        .flatMap((d) => d.files || [])
+        .filter((f) => f.selected)
+        .reduce((sum, f) => sum + Number(f.size || 0), 0),
+    },
+    {
+      name: "DatasetsField",
+      selector: "#DatasetsField[sourceFolder]",
+      expected: mockActionItems.datasets.map((d) => d.sourceFolder),
+    },
+    {
+      name: "Dataset[0]Field[size]",
+      selector: "#Dataset[0]Field[size]",
+      expected: mockActionItems.datasets[0].size,
+    },
+    {
+      name: "#user.username",
+      selector: "#user.username",
+      expected: "abc",
+    },
+    {
+      name: "#prop1",
+      selector: "#prop1",
+      expected: "prop1Value",
+    },
+  ];
+
+  allKeywordMapSelectors.forEach((testCase) => {
+    it(`1160: ${testCase.name} selector should resolve`, () => {
+      const selectorConfig: ActionConfig = {
+        ...mockActionsConfig[0],
+        id: `selector-${testCase.name}`,
+        type: "link",
+        variables: {
+          value: testCase.selector,
+        },
+      };
+      createComponent(selectorConfig, {
+        ...mockActionItems,
+        user: { username: "abc" },
+        prop1: "prop1Value",
+      });
+      expect(component.variables["value"]).toEqual(testCase.expected);
+    });
   });
 });

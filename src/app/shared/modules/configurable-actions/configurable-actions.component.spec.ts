@@ -107,6 +107,16 @@ describe("1010: ConfigurableActionsComponent", () => {
     expect(component.maxFileSize).toEqual(lowerMaxFileSizeLimit);
   });
 
+  it("0055: max file size should fallback to zero when not configured", () => {
+    const config = mockAppConfigService.appConfig as {
+      maxDirectDownloadSize?: number;
+      datafilesActionsEnabled: boolean;
+    };
+    config.maxDirectDownloadSize = undefined;
+
+    expect(component.maxFileSize).toEqual(0);
+  });
+
   it("0060: there should be as many actions as defined in default configuration", async () => {
     component.actionsConfig = mockActionsConfig;
 
