@@ -97,6 +97,7 @@ function processSelector(
     "#DatasetsField\\[(\\w+)\\]": (m) =>
       jsonObject.datasets.map((i) => i[m[1]]),
     "#PublishedDataDoi": (m) => jsonObject.publisheddata[0]?.doi,
+    "#PublishedDataStatus": (m) => jsonObject.publisheddata[0]?.status,
   };
 
   // Check for direct pattern matches
