@@ -1,4 +1,10 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  flushMicrotasks,
+  waitForAsync,
+} from "@angular/core/testing";
 
 import { ConfigurableActionComponent } from "./configurable-action.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -9,7 +15,7 @@ import { PipesModule } from "shared/pipes/pipes.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
-import { StoreModule } from "@ngrx/store";
+import { Store, StoreModule } from "@ngrx/store";
 import {
   MockAuthService,
   MockHtmlElement,
@@ -43,6 +49,7 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
+import { actionFailureAction } from "state-management/actions/actions.actions";
 
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
@@ -1047,6 +1054,40 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(body.dataset).toBe(mockActionItemsDatafilesNofiles.datasets[0].pid);
     expect(body.reason).toBe("integration-test");
   });
+
+  it("1151b: xhr action should dispatch actionFailureAction when request fails", fakeAsync(() => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    } as TestCase);
+
+    component.actionConfig = {
+      ...mockActionsConfig[0],
+      id: "xhr-failure-test",
+      label: "XHR",
+      type: "xhr",
+      url: "https://example.org/action",
+      method: "POST",
+      payload: "#empty",
+      variables: {},
+      enabled: "true",
+    };
+
+    const error = new Error("Network failure");
+    const componentStore = component["store"] as Store;
+    const storeDispatchSpy = spyOn(componentStore, "dispatch");
+    spyOn(window, "fetch").and.returnValue(Promise.reject(error));
+
+    component["typeXhr"]();
+    flushMicrotasks();
+
+    expect(storeDispatchSpy).toHaveBeenCalledWith(
+      actionFailureAction("Network failure"),
+    );
+  }));
 
   it("1152: #datasetOwner token should enable action for owner", () => {
     store.overrideSelector(selectProfile, mockUserProfiles[1]);

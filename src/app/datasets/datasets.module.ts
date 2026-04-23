@@ -88,9 +88,9 @@ import { IngestorModule } from "../ingestor/ingestor.module";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
-import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
+import { ActionEffects } from "state-management/effects/actions.effect";
 
 @NgModule({
   imports: [
@@ -139,6 +139,7 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
+      ActionEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
