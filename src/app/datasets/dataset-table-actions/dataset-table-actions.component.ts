@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ArchViewMode, MessageType } from "state-management/models";
+import { ArchViewMode } from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
   setArchiveViewModeAction,
   clearSelectionAction,
   addToBatchAction,
-  clearBatchAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, Subscription } from "rxjs";
 import {
@@ -120,32 +119,8 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     );
   }
 
-  onActionFinished(event: {
-    success: boolean;
-    result?: unknown;
-    error?: Error;
-  }) {
-    if (event.success) {
-      this.store.dispatch(clearSelectionAction());
-      this.store.dispatch(clearBatchAction());
-    } else {
-      const errorMessage =
-        typeof event.error === "string"
-          ? event.error
-          : event.error?.message || "Action failed";
-
-      if (errorMessage !== "Cancelled by user") {
-        this.store.dispatch(
-          showMessageAction({
-            message: {
-              type: MessageType.Error,
-              content: errorMessage,
-              duration: 5000,
-            },
-          }),
-        );
-      }
-    }
+  onActionFinished(event: { success: boolean }) {
+    if (event.success) this.store.dispatch(clearSelectionAction());
   }
 
   ngOnDestroy() {

@@ -21,7 +21,6 @@ import {
 } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 as uuidv4 } from "uuid";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import {
@@ -32,6 +31,10 @@ import { Subscription } from "rxjs";
 import { DialogComponent, DynamicDialogData } from "../dialog/dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import _ from "lodash";
+import {
+  actionFailureAction,
+  actionSuccessAction,
+} from "state-management/actions/actions.actions";
 
 @Component({
   selector: "configurable-action",
@@ -77,7 +80,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     private usersService: UsersService,
     private authService: AuthService,
     private configService: AppConfigService,
-    private snackBar: MatSnackBar,
     private store: Store,
     public dialog: MatDialog,
   ) {
@@ -280,10 +282,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const data = await r.json().catch(() => ({}));
 
+        this.store.dispatch(actionSuccessAction());
         this.actionFinishedEmit(true, data);
       })
       .catch((err: Error) => {
-        this.snackBar.open("Action failed", "Close", { duration: 2000 });
+        this.store.dispatch(actionFailureAction(err.message));
         this.actionFinishedEmit(false, err);
       });
     return true;
@@ -350,8 +353,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         a.click();
         URL.revokeObjectURL(url);
       })
-      .catch(() =>
-        this.snackBar.open("Download failed", "Close", { duration: 2000 }),
+      .catch((err: Error) =>
+        this.store.dispatch(actionFailureAction(err.message)),
       );
     return true;
   }
@@ -428,6 +431,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       error: !success ? (payload as Error) : undefined,
     });
   }
+
   get visible(): boolean {
     this.resolveVariableContext();
     if (!this.actionConfig.hidden) return true;
