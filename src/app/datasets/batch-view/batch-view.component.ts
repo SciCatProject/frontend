@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { first, switchMap } from "rxjs/operators";
 
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -12,11 +11,9 @@ import {
 } from "state-management/actions/datasets.actions";
 import { Message, MessageType, TableColumn } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 import { ActivatedRoute, Router } from "@angular/router";
-import { ArchivingService } from "../archiving.service";
-import { Observable, Subscription, combineLatest } from "rxjs";
+import { Observable, Subscription, combineLatest, first } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
 import { AppConfigService } from "app-config.service";
@@ -33,6 +30,11 @@ import { DatasetsListService } from "shared/services/datasets-list.service";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 import { TranslateService } from "@ngx-translate/core";
 import { translateComponentLabel } from "shared/pipes/component-translate.pipe";
+import {
+  ActionButtonStyle,
+  ActionItemDataset,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "batch-view",
@@ -58,12 +60,13 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   datasetList: OutputDatasetObsoleteDto[] = [];
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
+  actionItems: ActionItems;
+  actionButtonsStyle: ActionButtonStyle = { raised: false, color: "primary" };
 
   constructor(
     public appConfigService: AppConfigService,
     private dialog: MatDialog,
     private store: Store,
-    private archivingSrv: ArchivingService,
     private router: Router,
     private route: ActivatedRoute,
     private tableService: TableService,
@@ -240,62 +243,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  onArchive() {
-    this.batch$
-      .pipe(
-        first(),
-        switchMap((datasets) => this.archivingSrv.archive(datasets)),
-      )
-      .subscribe(
-        () => this.clearBatch(),
-        (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000,
-              },
-            }),
-          ),
-      );
-  }
-
-  onRetrieve() {
-    const dialogOptions = this.archivingSrv.retriveDialogOptions(
-      this.appConfig.retrieveDestinations,
-    );
-    const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
-    const destPath = { destinationPath: "/archive/retrieve" };
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && this.datasetList) {
-        const locationOption = this.archivingSrv.generateOptionLocation(
-          result,
-          this.appConfig.retrieveDestinations,
-        );
-        const extra = { ...destPath, ...locationOption };
-        this.archivingSrv.retrieve(this.datasetList, extra).subscribe(
-          () => this.clearBatch(),
-          (err) =>
-            this.store.dispatch(
-              showMessageAction({
-                message: {
-                  type: MessageType.Error,
-                  content: err.message,
-                  duration: 5000,
-                },
-              }),
-            ),
-        );
-      }
-
-      this.router.navigate([], {
-        queryParams: { retrieve: null },
-        queryParamsHandling: "merge",
-      });
-    });
-  }
-
   onSaveChanges() {
     this.store.dispatch(
       resyncPublishedDataAction({
@@ -344,12 +291,17 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       })
       .unsubscribe();
     this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
+
     this.store.dispatch(prefillBatchAction());
     this.subscriptions.push(
       this.batch$.subscribe((result) => {
         if (result) {
           this.datasetList = result;
           this.hasBatch = result.length > 0;
+          this.actionItems = {
+            datasets: result,
+            user: this.userProfile,
+          };
         }
       }),
     );
@@ -359,11 +311,12 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         if (queryParams["share"] === "true") {
           this.onShare();
         }
-        if (queryParams["retrieve"] === "true") {
-          this.onRetrieve();
-        }
       }),
     );
+  }
+
+  onActionFinished(event: { success: boolean }) {
+    if (event.success) return this.clearBatch();
   }
 
   ngOnDestroy() {

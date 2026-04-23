@@ -4,8 +4,8 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  Input,
   ViewEncapsulation,
+  ViewChild,
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -30,15 +30,14 @@ import {
   selectPage,
   selectTotalSets,
   selectDatasetsInBatch,
+  selectSelectedDatasets,
 } from "state-management/selectors/datasets.selectors";
-import { get as lodashGet } from "lodash-es";
 import { AppConfigService } from "app-config.service";
 import {
   selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
 } from "state-management/selectors/user.selectors";
 import {
-  DatasetClass,
   OutputDatasetObsoleteDto,
   Instrument,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -61,15 +60,12 @@ import {
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { ActivatedRoute } from "@angular/router";
-import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
-import { DatePipe } from "@angular/common";
-import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
-import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { DatasetsListService } from "shared/services/datasets-list.service";
 import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.component";
+import { DynamicMatTableComponent } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.component";
 
 export interface SortChangeEvent {
   active: string;
@@ -85,8 +81,11 @@ export interface SortChangeEvent {
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  selectionIds: string[] = [];
 
+  @ViewChild("datasetTable")
+  datasetTable: DynamicMatTableComponent<OutputDatasetObsoleteDto>;
+
+  selectionIds: string[] = [];
   appConfig = this.appConfigService.getConfig();
   currentPage$ = this.store.select(selectPage);
   datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
@@ -99,7 +98,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   );
   instruments$ = this.store.select(selectInstruments);
 
-  @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
     pageIndex: number;
     pageSize: number;
@@ -325,6 +323,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
+
+    this.subscriptions.push(
+      this.store.select(selectSelectedDatasets).subscribe((datasets) => {
+        if (datasets.length === 0) {
+          this.selectionIds = [];
+          this.datasetTable?.clearSelection();
+        }
+      }),
+    );
 
     this.subscriptions.push(
       this.selectedDatasets$.subscribe((datasets) => {

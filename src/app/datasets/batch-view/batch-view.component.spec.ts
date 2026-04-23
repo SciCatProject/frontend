@@ -7,11 +7,9 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   MockActivatedRoute,
-  MockArchivingService,
   MockDatasetApi,
   mockDataset as dataset,
 } from "shared/MockStubs";
-import { ArchivingService } from "../archiving.service";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
@@ -160,7 +158,6 @@ describe("BatchViewComponent", () => {
     TestBed.overrideComponent(BatchViewComponent, {
       set: {
         providers: [
-          { provide: ArchivingService, useClass: MockArchivingService },
           { provide: Router, useValue: router },
           { provide: DatasetsService, useClass: MockDatasetApi },
           { provide: AppConfigService, useValue: { getConfig } },

@@ -21,7 +21,6 @@ import {
 } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 as uuidv4 } from "uuid";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import {
@@ -32,6 +31,10 @@ import { Subscription } from "rxjs";
 import { DialogComponent, DynamicDialogData } from "../dialog/dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import _ from "lodash";
+import {
+  actionFailureAction,
+  actionSuccessAction,
+} from "state-management/actions/actions.actions";
 
 @Component({
   selector: "configurable-action",
@@ -77,7 +80,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     private usersService: UsersService,
     private authService: AuthService,
     private configService: AppConfigService,
-    private snackBar: MatSnackBar,
     private store: Store,
     public dialog: MatDialog,
   ) {
@@ -112,11 +114,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   private fieldMatch(selector: string): unknown {
-    const datasets = _.get(
-      this.actionItems,
-      "datasets",
-      [],
-    ) as ActionItemDataset[];
+    const datasets = _.get(this.actionItems, "datasets", []);
     const allFieldMatch = selector.match(/^#DatasetsField\[(\w+)\]$/);
     if (allFieldMatch) return _.map(datasets, allFieldMatch[1]);
     const datasetFieldMatch = selector.match(
@@ -131,11 +129,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   private buildDatasetStaticMap() {
-    const datasets = _.get(
+    const datasets: ActionItemDataset[] = _.get(
       this.actionItems,
       "datasets",
       [],
-    ) as ActionItemDataset[];
+    );
     const ds0 = _.get(datasets, "[0]");
 
     const staticMap: Record<string, () => unknown> = {
@@ -169,6 +167,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
           .flatMap("files")
           .filter("selected")
           .sumBy((f) => Number(f.size || 0)),
+      "#DatasetsPidEmptyFilesMap": () =>
+        JSON.stringify(_.map(datasets, (d) => ({ pid: d.pid, files: [] }))),
+      "#DatasetsTotalSize": () => _(datasets).sumBy((d) => d.size || 0),
+      "#DatasetsTotalPackedSize": () =>
+        _(datasets).sumBy((d) => d.packedSize || 0),
     };
     return staticMap;
   }
@@ -275,10 +278,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const data = await r.json().catch(() => ({}));
 
+        this.store.dispatch(actionSuccessAction());
         this.actionFinishedEmit(true, data);
       })
       .catch((err: Error) => {
-        this.snackBar.open("Action failed", "Close", { duration: 2000 });
+        this.store.dispatch(actionFailureAction(err.message));
         this.actionFinishedEmit(false, err);
       });
     return true;
@@ -345,8 +349,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         a.click();
         URL.revokeObjectURL(url);
       })
-      .catch(() =>
-        this.snackBar.open("Download failed", "Close", { duration: 2000 }),
+      .catch((err: Error) =>
+        this.store.dispatch(actionFailureAction(err.message)),
       );
     return true;
   }
@@ -423,6 +427,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       error: !success ? (payload as Error) : undefined,
     });
   }
+
   get visible(): boolean {
     this.resolveVariableContext();
     if (!this.actionConfig.hidden) return true;

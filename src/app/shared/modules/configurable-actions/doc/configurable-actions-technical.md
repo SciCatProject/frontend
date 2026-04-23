@@ -151,6 +151,9 @@ Below are supported configuration properties, their types, and descriptions.
 - `#DatasetsSelectedFilesCount`: Total number selected files
 - `#DatasetsSelectedFilesTotalSize`: Total selected files size
 - `#DatasetsField[fieldName]`: Array; `fieldName` in all datasets
+- `#DatasetsPidEmptyFilesMap`: JSON string with all dataset PIDs and empty files arrays
+- `#DatasetsTotalSize`: Sum of `size` across all datasets
+- `#DatasetsTotalPackedSize`: Sum of `packedSize` across all datasets
 
 **Other runtime keywords:**
 - `#token`, `#tokenBearer`, `#jwt`, `#uuid`: Various tokens and a random UUID.
