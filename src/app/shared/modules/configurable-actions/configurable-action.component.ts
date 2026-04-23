@@ -147,11 +147,7 @@ export class ConfigurableActionComponent
   }
 
   private fieldMatch(selector: string): unknown {
-    const datasets = _.get(
-      this.actionItems,
-      "datasets",
-      [],
-    ) as ActionItemDataset[];
+    const datasets = _.get(this.actionItems, "datasets", []);
     const allFieldMatch = selector.match(/^#DatasetsField\[(\w+)\]$/);
     if (allFieldMatch) return _.map(datasets, allFieldMatch[1]);
     const datasetFieldMatch = selector.match(
@@ -176,11 +172,11 @@ export class ConfigurableActionComponent
   }
 
   private buildDatasetStaticMap() {
-    const datasets = _.get(
+    const datasets: ActionItemDataset[] = _.get(
       this.actionItems,
       "datasets",
       [],
-    ) as ActionItemDataset[];
+    );
     const ds0 = _.get(datasets, "[0]");
 
     const staticMap: Record<string, () => unknown> = {
