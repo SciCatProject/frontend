@@ -17,13 +17,9 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { MatDialog } from "@angular/material/dialog";
-import { showMessageAction } from "state-management/actions/user.actions";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 import { AppConfigService } from "app-config.service";
-import {
-  OutputDatasetObsoleteDto,
-  UserProfile,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   ActionButtonStyle,
   ActionItemDataset,
@@ -111,8 +107,8 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
         this.selectedSets = datasets;
         this.currentArchViewMode = mode;
         this.actionItems = {
-          datasets: datasets as ActionItemDataset[],
-          user: profile as UserProfile,
+          datasets: datasets,
+          user: profile,
           currentArchViewMode: mode,
         };
       }),

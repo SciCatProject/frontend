@@ -22,10 +22,7 @@ import {
   selectProfile,
   selectColumnsWithHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
-import {
-  OutputDatasetObsoleteDto,
-  UserProfile,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
 import { TableService } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
@@ -302,8 +299,8 @@ export class BatchViewComponent implements OnInit, OnDestroy {
           this.datasetList = result;
           this.hasBatch = result.length > 0;
           this.actionItems = {
-            datasets: result as ActionItemDataset[],
-            user: this.userProfile as UserProfile,
+            datasets: result,
+            user: this.userProfile,
           };
         }
       }),
