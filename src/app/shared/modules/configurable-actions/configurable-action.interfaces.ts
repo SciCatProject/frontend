@@ -39,9 +39,11 @@ export interface ActionItemDataset {
 
 export interface ActionItemPublishedData {
   doi: string;
+  status: string;
 }
 
 export interface ActionItems {
   datasets: ActionItemDataset[];
   publisheddata: ActionItemPublishedData[];
+
 }

@@ -97,6 +97,7 @@ function processSelector(
     "#DatasetsField\\[(\\w+)\\]": (m) =>
       jsonObject.datasets.map((i) => i[m[1]]),
     "#PublishedData0Doi": (m) => jsonObject.publisheddata[0]?.doi,
+    "#PublishedData0Status": (m) => jsonObject.publisheddata[0]?.status,
     "#PublishedData\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) =>
       jsonObject.publisheddata[Number(m[1])][m[2]],
   };
