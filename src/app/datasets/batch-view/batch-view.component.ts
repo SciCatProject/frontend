@@ -318,28 +318,8 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     );
   }
 
-  onActionFinished(event: {
-    success: boolean;
-    result?: unknown;
-    error?: Error;
-  }) {
+  onActionFinished(event: { success: boolean }) {
     if (event.success) return this.clearBatch();
-    const errorMessage =
-      typeof event.error === "string"
-        ? event.error
-        : event.error?.message || "Action failed";
-
-    if (errorMessage !== "Cancelled by user") {
-      this.store.dispatch(
-        showMessageAction({
-          message: {
-            type: MessageType.Error,
-            content: errorMessage,
-            duration: 5000,
-          },
-        }),
-      );
-    }
   }
 
   ngOnDestroy() {
