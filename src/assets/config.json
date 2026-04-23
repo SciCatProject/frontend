@@ -1,6 +1,7 @@
 {
   "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": false,
+  "addScientificMetadataKeysAsColumn": false,
   "allowConfigOverrides": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
