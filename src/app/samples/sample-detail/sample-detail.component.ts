@@ -31,7 +31,7 @@ import {
   OutputAttachmentV3Dto,
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
-  SampleClass,
+  OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface TableData {
@@ -58,7 +58,7 @@ export class SampleDetailComponent
 
   appConfig = this.appConfigService.getConfig();
 
-  sample: SampleClass;
+  sample: OutputSampleDto;
   user: ReturnedUserDto;
   attachment: CreateAttachmentV3Dto;
   attachments: OutputAttachmentV3Dto[] = [];
