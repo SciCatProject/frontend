@@ -5,16 +5,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { ConfigurableActionsComponent } from "./configurable-actions.component";
 import { ConfigurableActionComponent } from "./configurable-action.component";
 import { MatIconModule } from "@angular/material/icon";
-import { EffectsModule } from "@ngrx/effects";
-import { ActionEffects } from "state-management/effects/actions.effect";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    EffectsModule.forFeature([ActionEffects]),
-  ],
+  imports: [CommonModule, MatIconModule, MatButtonModule],
   declarations: [ConfigurableActionsComponent, ConfigurableActionComponent],
   exports: [ConfigurableActionsComponent, ConfigurableActionComponent],
 })
