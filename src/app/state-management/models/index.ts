@@ -125,6 +125,7 @@ export enum ArchViewMode {
   work_in_progress = "work in progress",
   system_error = "system error",
   user_error = "user error",
+  deleted = "deleted",
 }
 export enum JobViewMode {
   myJobs = "my jobs",

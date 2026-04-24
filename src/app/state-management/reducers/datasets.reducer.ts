@@ -343,11 +343,16 @@ const reducer = createReducer(
             ],
           };
           break;
+        case ArchViewMode.deleted:
+          mode = {
+            "datasetlifecycle.archiveStatusMessage": "deleted",
+          };
+          break;
         default: {
           break;
         }
       }
-      const filters = { ...state.filters, skip: 0, mode, modeToggle };
+      const filters = { skip: 0, ...state.filters, mode, modeToggle };
       return { ...state, filters };
     },
   ),

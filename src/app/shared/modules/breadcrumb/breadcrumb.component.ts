@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, NavigationEnd, Params } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { combineLatest } from "rxjs";
 
 import {
   selectArchiveViewMode,
@@ -8,8 +9,11 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import { take, filter } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
-import { ArchViewMode } from "state-management/models";
 import { Location } from "@angular/common";
+import {
+  setFiltersAction,
+  setArchiveViewModeAction,
+} from "state-management/actions/datasets.actions";
 
 interface Breadcrumb {
   label: string;
@@ -49,7 +53,7 @@ export class BreadcrumbComponent implements OnInit {
     // Update breadcrumb when navigating to child routes
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
+      .subscribe(() => {
         this.setBreadcrumbs();
       });
   }
@@ -115,81 +119,20 @@ export class BreadcrumbComponent implements OnInit {
     }
     // this catches errors and redirects to the fallback, this could/should be set in the routing module?
     if (crumb.fallback === "/datasets") {
-      this.store
-        .select(selectFilters)
-        .pipe(take(1))
-        .subscribe((filters) => {
-          this.store
-            .select(selectArchiveViewMode)
-            .pipe(take(1))
-            .subscribe((currentMode) => {
-              filters["mode"] = setMode(currentMode);
-              this.location.back();
-            });
-        });
+      combineLatest([
+        this.store.select(selectFilters).pipe(take(1)),
+        this.store.select(selectArchiveViewMode).pipe(take(1)),
+      ]).subscribe(([filters, modeToggle]) => {
+        this.store.dispatch(
+          setFiltersAction({ datasetFilters: { ...filters } }),
+        );
+        this.store.dispatch(setArchiveViewModeAction({ modeToggle }));
+        this.location.back();
+      });
     } else {
       this.router
         .navigateByUrl(url + crumb.url)
-        .catch((error) => this.router.navigateByUrl(url + crumb.fallback));
+        .catch(() => this.router.navigateByUrl(url + crumb.fallback));
     }
   }
 }
-
-const setMode = (modeToggle: ArchViewMode) => {
-  switch (modeToggle) {
-    case ArchViewMode.all:
-      return {};
-    case ArchViewMode.archivable:
-      return {
-        "datasetlifecycle.archivable": true,
-        "datasetlifecycle.retrievable": false,
-      };
-    case ArchViewMode.retrievable:
-      return {
-        "datasetlifecycle.retrievable": true,
-        "datasetlifecycle.archivable": false,
-      };
-    case ArchViewMode.work_in_progress:
-      return {
-        $or: [
-          {
-            "datasetlifecycle.retrievable": false,
-            "datasetlifecycle.archivable": false,
-            "datasetlifecycle.archiveStatusMessage": {
-              $ne: "scheduleArchiveJobFailed",
-            },
-            "datasetlifecycle.retrieveStatusMessage": {
-              $ne: "scheduleRetrieveJobFailed",
-            },
-          },
-        ],
-      };
-    case ArchViewMode.system_error:
-      return {
-        $or: [
-          {
-            "datasetlifecycle.retrievable": true,
-            "datasetlifecycle.archivable": true,
-          },
-          {
-            "datasetlifecycle.archiveStatusMessage": "scheduleArchiveJobFailed",
-          },
-          {
-            "datasetlifecycle.retrieveStatusMessage":
-              "scheduleRetrieveJobFailed",
-          },
-        ],
-      };
-    case ArchViewMode.user_error:
-      return {
-        $or: [
-          {
-            "datasetlifecycle.archiveStatusMessage": "missingFilesError",
-          },
-        ],
-      };
-    default: {
-      return {};
-    }
-  }
-};

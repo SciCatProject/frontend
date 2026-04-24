@@ -38,6 +38,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     ArchViewMode.work_in_progress,
     ArchViewMode.system_error,
     ArchViewMode.user_error,
+    ArchViewMode.deleted,
   ];
 
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
