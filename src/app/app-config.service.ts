@@ -78,6 +78,7 @@ export class DefaultTab {
 
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
+  addScientificMetadataKeysAsColumn?: boolean;
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;

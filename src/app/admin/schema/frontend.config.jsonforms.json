@@ -17,6 +17,7 @@
         }
       },
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
+      "addScientificMetadataKeysAsColumn": { "type": "boolean" },
       "allowConfigOverrides": { "type": "boolean" },
       "checkBoxFilterClickTrigger": { "type": "boolean" },
       "dateFormat": { "type": "string" },
