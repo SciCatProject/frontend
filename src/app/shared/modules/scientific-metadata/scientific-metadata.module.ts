@@ -71,9 +71,11 @@ export interface ScientificMetadata {
 
 export interface ScientificMetadataTableData {
   name: string;
+  columnName: string;
   value: string | number;
   unit: string;
   human_name?: string;
   type?: string;
   ontology_reference?: string;
+  validUnit?: boolean;
 }
