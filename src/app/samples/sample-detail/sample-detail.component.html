@@ -87,7 +87,7 @@
                         ></metadata-view>
                       </div>
                     </mat-tab>
-                    <mat-tab>
+                    <mat-tab *ngIf="appConfig.editMetadataEnabled">
                       <ng-template mat-tab-label>
                         <mat-icon> edit </mat-icon> Edit
                       </ng-template>

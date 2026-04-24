@@ -10,7 +10,7 @@ import {
   removeFromBatchAction,
   storeBatchAction,
 } from "state-management/actions/datasets.actions";
-import { Message, MessageType } from "state-management/models";
+import { Message, MessageType, TableColumn } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
@@ -23,9 +23,16 @@ import { AppConfigService } from "app-config.service";
 import {
   selectIsAdmin,
   selectProfile,
+  selectColumnsWithHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
+import { TableService } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.service";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
+import { DatasetsListService } from "shared/services/datasets-list.service";
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
+import { TranslateService } from "@ngx-translate/core";
+import { translateComponentLabel } from "shared/pipes/component-translate.pipe";
 
 @Component({
   selector: "batch-view",
@@ -59,6 +66,9 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     private archivingSrv: ArchivingService,
     private router: Router,
     private route: ActivatedRoute,
+    private tableService: TableService,
+    private datasetsListService: DatasetsListService,
+    private translateService: TranslateService,
   ) {}
 
   private clearBatch() {
@@ -67,6 +77,49 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   private storeBatch(datasetUpdatedBatch: OutputDatasetObsoleteDto[]) {
     this.store.dispatch(storeBatchAction({ batch: datasetUpdatedBatch }));
+  }
+
+  private getConfiguredDatasetColumns(): TableColumn[] {
+    let configuredColumns: TableColumn[] = [];
+
+    this.store
+      .select(selectColumnsWithHasFetchedSettings)
+      .pipe(first())
+      .subscribe(({ columns, hasFetchedSettings }) => {
+        if (hasFetchedSettings && columns.length) {
+          configuredColumns = columns;
+        }
+      });
+
+    if (configuredColumns.length) {
+      return configuredColumns;
+    }
+
+    return this.appConfig.defaultDatasetsListSettings?.columns || [];
+  }
+
+  private getExportColumns(): TableField<OutputDatasetObsoleteDto>[] {
+    return this.datasetsListService
+      .convertSavedDatasetColumns(this.getConfiguredDatasetColumns())
+      .filter((column) => column.display !== "hidden")
+      .map((column) => ({
+        ...column,
+        header: this.translateDatasetColumnHeader(column),
+        toExport:
+          column.toExport ||
+          ((row: OutputDatasetObsoleteDto) =>
+            typeof row === "object" ? row[column.name] : ""),
+      }));
+  }
+
+  private translateDatasetColumnHeader(
+    column: TableField<OutputDatasetObsoleteDto>,
+  ): string {
+    return translateComponentLabel(
+      this.translateService,
+      column.header || column.name,
+      "dataset",
+    );
   }
 
   onEmpty() {
@@ -83,6 +136,19 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   onPublish() {
     this.router.navigate(["datasets", "selection", "publish"]);
+  }
+
+  onExportCsv() {
+    const columns = this.getExportColumns();
+
+    this.tableService.exportToCsv(
+      columns,
+      this.datasetList,
+      {
+        selected: [],
+      } as any,
+      `datasets-selection-${TableService.getFormattedFileNamingDate()}.csv`,
+    );
   }
 
   onShareClick() {
@@ -277,6 +343,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         this.userProfile = userProfile;
       })
       .unsubscribe();
+    this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
     this.store.dispatch(prefillBatchAction());
     this.subscriptions.push(
       this.batch$.subscribe((result) => {

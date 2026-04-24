@@ -14,7 +14,10 @@ import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
-import { selectIsAdmin } from "state-management/selectors/user.selectors";
+import {
+  selectIsAdmin,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "publisheddata-details",
@@ -27,6 +30,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   isAdmin$ = this.store.select(selectIsAdmin);
   publishedData: PublishedData & { metadata?: any };
   subscriptions: Subscription[] = [];
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
   appConfig = this.appConfigService.getConfig();
   show = false;
   landingPageUrl = "";
