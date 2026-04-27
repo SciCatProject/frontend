@@ -27,8 +27,6 @@ describe("DatafilesComponent", () => {
   let fixture: ComponentFixture<DatafilesComponent>;
 
   const getConfig = () => ({
-    fileDownloadEnabled: true,
-    multipleDownloadEnabled: true,
     datafilesActionsEnabled: true,
     datafilesActions: [
       {
