@@ -299,7 +299,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     // This applies to both multiselect type and checkBoxFilter
     // skip PID text input to avoid triggering on keystrokes
     // Array check can be removed when we remove text input filter type
-    if (Array.isArray(value) && this.appConfig.checkBoxFilterClickTrigger) {
+    if (Array.isArray(value) && this.appConfig.autoApplyFilters) {
       this.applyFilters();
     }
   }

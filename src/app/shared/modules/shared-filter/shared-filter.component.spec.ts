@@ -5,6 +5,7 @@ import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
 import { SharedFilterComponent } from "./shared-filter.component";
 import { of } from "rxjs";
+import { AppConfigService } from "app-config.service";
 
 describe("SharedFilterComponent", () => {
   let component: SharedFilterComponent;
@@ -15,6 +16,9 @@ describe("SharedFilterComponent", () => {
       declarations: [SharedFilterComponent],
       imports: [ReactiveFormsModule],
       schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: AppConfigService, useValue: { getConfig: () => ({}) } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedFilterComponent);

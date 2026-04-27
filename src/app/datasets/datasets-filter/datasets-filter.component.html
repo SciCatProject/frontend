@@ -51,6 +51,7 @@
         (numericRangeChange)="numericRangeChange(filter.key, $event)"
         [filterValue]="activeFilters[filter.key]"
         [collapsible]="filter.type === 'checkbox'"
+        (applyEnterKey)="applyFilters()"
       ></shared-filter>
     </ng-container>
 
@@ -65,6 +66,7 @@
       [conditionSettingScope]="'dataset'"
       [addConditionAction]="addCondition"
       [removeConditionAction]="removeCondition"
+      [dialogTitle]="'Add Dataset Metadata Key'"
     ></shared-condition>
 
     <div class="section-container">

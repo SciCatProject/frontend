@@ -49,6 +49,8 @@ export class SharedConditionComponent implements OnDestroy {
   @Output() conditionsApplied = new EventEmitter<void>();
 
   conditionConfigs$: Observable<ConditionConfig[]>;
+  @Input() dialogTitle = "Add Metadata Key";
+
 
   humanNameMap: { [key: string]: string } = {};
   tempConditionValues: string[] = [];
@@ -248,6 +250,7 @@ export class SharedConditionComponent implements OnDestroy {
                   usedFields: usedFields,
                   parameterKeys: availableKeys,
                   humanNameMap: this.humanNameMap,
+                  dialogTitle: this.dialogTitle,
                 },
                 restoreFocus: false,
               },

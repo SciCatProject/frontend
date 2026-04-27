@@ -78,6 +78,7 @@ export class DefaultTab {
 
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
+  addScientificMetadataKeysAsColumn?: boolean;
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
@@ -165,12 +166,12 @@ export interface AppConfigInterface {
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
-  checkBoxFilterClickTrigger?: boolean;
   hideEmptyMetadataTable?: boolean;
   ingestorComponent?: IngestorComponentConfig;
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
+  autoApplyFilters?: boolean;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

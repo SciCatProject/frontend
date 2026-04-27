@@ -7,7 +7,7 @@
   [matMenuTriggerFor]="menu"
   [dir]="tableSetting.direction === 'rtl' ? 'ltr' : 'rtl'"
 >
-  <mat-icon>more_horiz</mat-icon>
+  <mat-icon>more_vert</mat-icon>
 </button>
 
 <mat-menu
@@ -26,7 +26,7 @@
       [disabled]="menu.disabled"
       (click)="menuButton_OnClick(menu)"
     >
-      <mat-icon>{{ menu.icon }}</mat-icon>
+      <mat-icon *ngIf="menu.icon">{{ menu.icon }}</mat-icon>
       <span
         [class.text-align-right]="tableSetting.direction === 'rtl'"
         class="text-align-left"
