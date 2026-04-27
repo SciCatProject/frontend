@@ -164,20 +164,23 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon> folder </mat-icon> Datasets
+        <mat-icon> folder </mat-icon> Related Datasets
       </ng-template>
 
       <div class="datasets-table">
-        <app-table
-          [data]="tableData"
+        <dynamic-mat-table
           [columns]="tableColumns"
-          [paginate]="tablePaginate"
-          [currentPage]="vm.datasetsPage"
-          [dataCount]="vm.datasetsCount"
-          [dataPerPage]="vm.datasetsPerPage"
-          (pageChange)="onPageChange($event)"
-          (rowClick)="onRowClick($event)"
-        ></app-table>
+          [dataSource]="dataSource"
+          [setting]="setting"
+          [pagingMode]="paginationMode"
+          [pagination]="pagination"
+          [rowSelectionMode]="rowSelectionMode"
+          [showGlobalTextSearch]="false"
+          [emptyMessage]="'No datasets available'"
+          [emptyIcon]="'folder'"
+          (paginationChange)="onPaginationChange($event)"
+          (onRowEvent)="onRowEvent($event)"
+        ></dynamic-mat-table>
       </div>
     </mat-tab>
   </mat-tab-group>

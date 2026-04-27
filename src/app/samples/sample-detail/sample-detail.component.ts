@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { fromEvent, Subscription } from "rxjs";
+import { BehaviorSubject, fromEvent, Subscription } from "rxjs";
 import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";
 import { Store } from "@ngrx/store";
 import {
@@ -16,10 +16,6 @@ import {
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import {
-  TableColumn,
-  PageChangeEvent,
-} from "shared/modules/table/table.component";
-import {
   PickedFile,
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
@@ -27,12 +23,22 @@ import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 import {
   CreateAttachmentV3Dto,
-  DatasetClass,
   OutputAttachmentV3Dto,
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
+import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  TablePagination,
+  TablePaginationMode,
+} from "shared/modules/dynamic-material-table/models/table-pagination.model";
+import {
+  IRowEvent,
+  RowEventType,
+  TableSelectionMode,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
 
 export interface TableData {
   pid: string;
@@ -65,16 +71,35 @@ export class SampleDetailComponent
   show = false;
   subscriptions: Subscription[] = [];
 
-  tableData: TableData[] = [];
-  tablePaginate = true;
-  tableColumns: TableColumn[] = [
-    { name: "name", icon: "portrait", sort: false, inList: true },
-    { name: "sourceFolder", icon: "explore", sort: false, inList: true },
-    { name: "size", icon: "save", sort: false, inList: true },
-    { name: "creationTime", icon: "calendar_today", sort: false, inList: true },
-    { name: "owner", icon: "face", sort: false, inList: true },
-    { name: "location", icon: "explore", sort: false, inList: true },
+  tableColumns: TableField<TableData>[] = [
+    { name: "name", header: "Name" },
+    { name: "sourceFolder", header: "Source Folder" },
+    { name: "size", header: "Size" },
+    { name: "creationTime", header: "Creation Time" },
+    { name: "owner", header: "Owner" },
+    { name: "location", header: "Location" },
   ];
+
+  setting: ITableSetting = {
+    rowStyle: {
+      "border-bottom": "1px solid #d2d2d2",
+    },
+  };
+
+  dataSource: BehaviorSubject<TableData[]> = new BehaviorSubject<TableData[]>(
+    [],
+  );
+
+  paginationMode: TablePaginationMode = "server-side";
+
+  pagination: TablePagination = {
+    pageSizeOptions: [5, 10, 25, 50, 100],
+    pageIndex: 0,
+    pageSize: 25,
+    length: 0,
+  };
+
+  rowSelectionMode: TableSelectionMode = "none";
 
   constructor(
     private appConfigService: AppConfigService,
@@ -143,11 +168,11 @@ export class SampleDetailComponent
     );
   }
 
-  onPageChange(event: PageChangeEvent) {
+  onPaginationChange({ pageIndex, pageSize }: TablePagination) {
     this.store.dispatch(
       changeDatasetsPageAction({
-        page: event.pageIndex,
-        limit: event.pageSize,
+        page: pageIndex,
+        limit: pageSize,
       }),
     );
     this.store.dispatch(
@@ -155,9 +180,11 @@ export class SampleDetailComponent
     );
   }
 
-  onRowClick(dataset: DatasetClass) {
-    const id = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl("/datasets/" + id);
+  onRowEvent(event: IRowEvent<TableData>) {
+    if (event.event === RowEventType.RowClick) {
+      const id = encodeURIComponent(event.sender.row.pid);
+      this.router.navigateByUrl("/datasets/" + id);
+    }
   }
 
   ngOnInit() {
@@ -174,6 +201,14 @@ export class SampleDetailComponent
         if (vm.attachments) {
           this.attachments = vm.attachments;
         }
+
+        this.dataSource.next(this.formatTableData(vm.datasets));
+        this.pagination = {
+          ...this.pagination,
+          pageIndex: vm.datasetsPage || 0,
+          pageSize: vm.datasetsPerPage || this.pagination.pageSize,
+          length: vm.datasetsCount || 0,
+        };
       }),
     );
     // Prevent user from reloading page if there are unsave changes
@@ -182,11 +217,6 @@ export class SampleDetailComponent
         if (this.hasUnsavedChanges()) {
           event.preventDefault();
         }
-      }),
-    );
-    this.subscriptions.push(
-      this.vm$.subscribe((vm) => {
-        this.tableData = this.formatTableData(vm.datasets);
       }),
     );
 
