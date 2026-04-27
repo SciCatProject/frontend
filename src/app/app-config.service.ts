@@ -78,6 +78,7 @@ export class DefaultTab {
 
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
+  addScientificMetadataKeysAsColumn?: boolean;
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
@@ -160,6 +161,7 @@ export interface AppConfigInterface {
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
+  timezone?: string;
   defaultMainPage?: MainPageConfiguration;
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
@@ -261,6 +263,10 @@ export class AppConfigService {
 
     if (!config.dateFormat) {
       config.dateFormat = "yyyy-MM-dd HH:mm";
+    }
+
+    if (!config.timezone) {
+      config.timezone = "UTC";
     }
 
     if (config.metadataFloatFormatEnabled && !config.metadataFloatFormat) {

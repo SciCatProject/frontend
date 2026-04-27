@@ -30,6 +30,7 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
 import { TranslateModule } from "@ngx-translate/core";
 import { JsonPreviewDialogModule } from "./modules/json-preview-dialog/json-preview-dialog.module";
 import { DatasetsListService } from "./services/datasets-list.service";
+import { AjvService } from "./services/ajv.service";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -67,6 +68,7 @@ import { DatasetsListService } from "./services/datasets-list.service";
     AttachmentService,
     JsonformsAccordionRendererService,
     DatasetsListService,
+    AjvService,
   ],
   exports: [
     BreadcrumbModule,

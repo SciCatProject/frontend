@@ -26,6 +26,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { PublishedDataService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AppConfigService } from "app-config.service";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 describe("PublisheddataEditComponent", () => {
   let component: PublisheddataEditComponent;
@@ -51,6 +52,7 @@ describe("PublisheddataEditComponent", () => {
         MatOptionModule,
         MatSelectModule,
         ReactiveFormsModule,
+        SharedScicatFrontendModule,
       ],
       providers: [
         provideMockStore({

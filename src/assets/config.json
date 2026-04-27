@@ -1,11 +1,17 @@
 {
   "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": false,
+  "addScientificMetadataKeysAsColumn": false,
   "allowConfigOverrides": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "datasetJsonScientificMetadata": true,
-  "datasetPageSizeOptions": [5, 10, 25, 100],
+  "datasetPageSizeOptions": [
+    5,
+    10,
+    25,
+    100
+  ],
   "editDatasetEnabled": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
@@ -43,7 +49,7 @@
   },
   "logbookEnabled": true,
   "loginFormEnabled": true,
-  "thumbnailFetchLimitPerPage": 100,  
+  "thumbnailFetchLimitPerPage": 100,
   "metadataPreviewEnabled": true,
   "metadataStructure": "",
   "multipleDownloadAction": "http://localhost:3012/zip",
@@ -85,19 +91,22 @@
       "type": "form",
       "url": "https://zip.scicatproject.org/download/all",
       "target": "_blank",
-      "variables" : {
+      "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0FilesPath",
         "totalSize": "#Dataset0FilesTotalSize",
         "folder": "#Dataset0SourceFolder"
       },
       "enabled": "#MaxDownloadableSize(@totalSize)",
-      "inputs" : {
-        "item[]" : "@pid",
-        "directory[]" : "@folder",
+      "inputs": {
+        "item[]": "@pid",
+        "directory[]": "@folder",
         "files[]": "@files"
       },
-      "authorization": ["#datasetAccess", "#datasetPublic"]
+      "authorization": [
+        "#datasetAccess",
+        "#datasetPublic"
+      ]
     },
     {
       "id": "3072fafc-4363-11ef-b9f9-ebf568222d26",
@@ -109,22 +118,25 @@
       "type": "form",
       "url": "https://zip.scicatproject.org/download/selected",
       "target": "_blank",
-      "variables" : {
+      "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0SelectedFilesPath",
         "selected": "#Dataset0SelectedFilesCount",
         "totalSize": "#Dataset0SelectedFilesTotalSize",
         "folder": "#Dataset0SourceFolder"
       },
-      "inputs" : {
-        "auth_token" : "#tokenBearer",
-        "jwt" : "#jwt",
-        "item[]" : "@pid",
-        "directory[]" : "@folder",
+      "inputs": {
+        "auth_token": "#tokenBearer",
+        "jwt": "#jwt",
+        "item[]": "@pid",
+        "directory[]": "@folder",
         "files[]": "@files"
       },
       "enabled": "#Length(@files) && #MaxDownloadableSize(@totalSize)",
-      "authorization": ["#datasetAccess", "#datasetPublic"]
+      "authorization": [
+        "#datasetAccess",
+        "#datasetPublic"
+      ]
     },
     {
       "id": "4f974f0e-4364-11ef-9c63-03d19f813f4e",
@@ -136,21 +148,24 @@
       "type": "form",
       "url": "https://www.scicat.info/notebook/all",
       "target": "_blank",
-      "variables" : {
+      "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0FilesPath",
         "totalSize": "#Dataset0FilesTotalSize",
         "folder": "#Dataset0SourceFolder"
       },
       "enabled": "",
-      "inputs" : {
-        "auth_token" : "#token",
-        "jwt" : "#jwt",
-        "item[]" : "@pid",
-        "directory[]" : "@folder",
+      "inputs": {
+        "auth_token": "#token",
+        "jwt": "#jwt",
+        "item[]": "@pid",
+        "directory[]": "@folder",
         "files[]": "@files"
-      },      
-      "authorization": ["#datasetAccess", "#datasetPublic"]
+      },
+      "authorization": [
+        "#datasetAccess",
+        "#datasetPublic"
+      ]
     },
     {
       "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
@@ -161,22 +176,25 @@
       "type": "form",
       "url": "https://www.scicat.info/notebook/selected",
       "target": "_blank",
-      "variables" : {
+      "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0SelectedFilesPath",
         "selected": "#Dataset0SelectedFilesCount",
         "totalSize": "#Dataset0SelectedFilesTotalSize",
         "folder": "#Dataset0SourceFolder"
       },
-      "inputs" : {
-        "auth_token" : "#token",
-        "jwt" : "#jwt",
-        "item[]" : "@pid",
-        "directory[]" : "@folder",
+      "inputs": {
+        "auth_token": "#token",
+        "jwt": "#jwt",
+        "item[]": "@pid",
+        "directory[]": "@folder",
         "files[]": "@files"
       },
       "enabled": "#Length(@files) > 0",
-      "authorization": ["#datasetAccess", "#datasetPublic"]
+      "authorization": [
+        "#datasetAccess",
+        "#datasetPublic"
+      ]
     },
     {
       "id": "0cd5b592-0b1a-11f0-a42c-23e177127ee7",
@@ -188,8 +206,11 @@
       "icon": "/assets/icons/jupyter_logo.png",
       "url": "https://www.sciwyrm.info/notebook",
       "target": "_blank",
-      "authorization": ["#datasetAccess", "#datasetPublic"],
-      "variables" : {
+      "authorization": [
+        "#datasetAccess",
+        "#datasetPublic"
+      ],
+      "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0FilesPath",
         "folder": "#Dataset0SourceFolder"
@@ -207,8 +228,11 @@
       "url": "https://www.sciwyrm.info/notebook",
       "target": "_blank",
       "enabled": "#Length(@files) > 0",
-      "authorization": ["#datasetAccess", "#datasetPublic"],
-      "variables" : {
+      "authorization": [
+        "#datasetAccess",
+        "#datasetPublic"
+      ],
+      "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0SelectedFilesPath",
         "selected": "#Dataset0SelectedFiles",
@@ -216,7 +240,7 @@
       },
       "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ @pid }}\",\"directory\":\"{{ @folder }}\",\"files\": {{ @files[] }},\"jwt\":\"{{ #jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
       "filename": "{{ #uuid }}.ipynb"
-    },    
+    },
     {
       "id": "9c6a11b6-a526-11f0-8795-6f025b320cc3",
       "description": "This action let users make a call an arbitrary URL and store the reply in the store",
@@ -224,14 +248,14 @@
       "label": "Publish",
       "type": "xhr",
       "mat_icon": "lock_open",
-      "method" : "PATCH",
+      "method": "PATCH",
       "url": "http://localhost:3000/dataset/{{ @pid }}/",
       "target": "_blank",
       "enabled": "(#datasetOwner || #userIsAdmin) && !@isPublished",
       "authorization": "#datasetOwner && !@isPublished",
-      "variables" : {
+      "variables": {
         "pid": "@Dataset0Pid",
-        "isPublished" : "#Dataset[0]Field[isPublished]"
+        "isPublished": "#Dataset[0]Field[isPublished]"
       },
       "payload": "{\"isPublished\":\"true\"}",
       "headers": {
@@ -246,14 +270,14 @@
       "label": "Unpublish",
       "type": "xhr",
       "mat_icon": "lock",
-      "method" : "PATCH",
+      "method": "PATCH",
       "url": "http://localhost:3000/dataset/{{ @pid }}/",
       "target": "_blank",
       "enabled": "(#datasetOwner || #userIsAdmin) && @isPublished",
       "authorization": "#datasetOwner && @isPublished",
-      "variables" : {
+      "variables": {
         "pid": "#Dataset0Pid",
-        "isPublished" : "#Dataset[0]Field[isPublished]"
+        "isPublished": "#Dataset[0]Field[isPublished]"
       },
       "payload": "{\"isPublished\":\"false\"}",
       "headers": {
@@ -275,7 +299,7 @@
   "datasetDetailsActionsEnabled": false,
   "datasetDetailsActions": [],
   "selectionActionsEnabled": true,
-  "selectionActions": [],  
+  "selectionActions": [],
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",
@@ -292,214 +316,215 @@
       {
         "name": "select",
         "type": "standard",
-	      "width": 120,
+        "width": 120,
         "enabled": true
       },
       {
         "name": "pid",
         "type": "standard",
-	      "width": 130,
+        "width": 130,
         "enabled": true
       },
       {
         "name": "datasetName",
         "type": "standard",
-	      "width": 250,
+        "width": 250,
         "enabled": true
       },
       {
         "name": "runNumber",
         "type": "standard",
-	      "width": 120,
+        "width": 120,
         "enabled": true
       },
       {
         "name": "sourceFolder",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "sourceFolderHost",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "size",
         "type": "standard",
-	      "width": 150,
+        "width": 150,
         "enabled": true
       },
       {
         "name": "numberOfFiles",
         "type": "standard",
-	      "width": 120,
+        "width": 120,
         "enabled": false
       },
       {
         "name": "creationTime",
         "type": "date",
         "enabled": true,
-	      "width": 200,
-	      "format": "yyyy-mm-dd HH:MM"
+        "width": 200,
+        "format": "yyyy-mm-dd HH:MM"
       },
       {
         "name": "keywords",
         "type": "list",
         "enabled": false,
-	      "width": 200
+        "width": 200
       },
       {
         "name": "description",
         "type": "hovercontent",
         "enabled": false,
-	      "width": 150
+        "width": 150
       },
       {
         "name": "type",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "image",
         "type": "standard",
-	      "width": 250,
+        "width": 250,
         "enabled": true
       },
       {
         "name": "scientificMetadata",
         "type": "hovercontent",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "scientificMetadataSchema",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "scientificMetadataValid",
         "type": "standard",
-	      "width": 100,
+        "width": 100,
         "enabled": false
       },
       {
         "name": "owner",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "ownerEmail",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "orcidOfOwner",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "contactEmail",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "proposalId",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": true
       },
       {
         "name": "proposalIds",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "license",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "isPublished",
         "type": "standard",
-	      "width": 100,
+        "width": 100,
         "enabled": false
       },
       {
         "name": "techniques",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "comment",
         "type": "editable",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "dataQualityMetrics",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "principalInvestigator",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "startTime",
         "type": "date",
-	      "width": 200,
+        "width": 200,
         "enabled": false,
-	      "format": "yyyy-mm-dd HH:MM"
+        "format": "yyyy-mm-dd HH:MM",
+        "sort": "desc"
       },
       {
         "name": "endTime",
         "type": "date",
-	      "width": 200,
+        "width": 200,
         "enabled": false,
-	      "format": "yyyy-mm-dd HH:MM"
+        "format": "yyyy-mm-dd HH:MM"
       },
       {
         "name": "creationLocation",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "sampleIds",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "ownerGroup",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "dataStatus",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       },
       {
         "name": "accessGroups",
         "type": "standard",
-	      "width": 200,
+        "width": 200,
         "enabled": false
       }
     ],
@@ -572,7 +597,8 @@
         "type": "date",
         "format": "yyyy-MM-dd",
         "width": 200,
-        "enabled": true
+        "enabled": true,
+        "sort": "desc"
       },
       {
         "name": "pi_lastname",
@@ -701,6 +727,7 @@
     }
   },
   "dateFormat": "yyyy-MM-dd HH:mm",
+  "timezone": "UTC",
   "datasetDetailComponent": {
     "enableCustomizedComponent": false,
     "customization": [

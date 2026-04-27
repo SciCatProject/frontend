@@ -777,7 +777,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
-
+  
   describe("Auto apply filters", () => {
     beforeEach(() => {
       cy.clearLocalStorage();
@@ -851,6 +851,51 @@ describe("Datasets general", () => {
       cy.get("mat-form-field#keywords input.item-input")
         .click()
         .type("{enter}");
+    });
+  });
+  
+  describe("Sorting datasets by a column from config", () => {
+    beforeEach(() => {
+      cy.createDataset({
+        type: "raw",
+        datasetName: "B DatasetName",
+      });
+      cy.createDataset({
+        type: "raw",
+        datasetName: "A DatasetName",
+      });
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            columns: [
+              {
+                name: "select",
+                type: "standard",
+                width: 120,
+                enabled: true,
+              },
+              {
+                name: "datasetName",
+                type: "standard",
+                width: 200,
+                enabled: true,
+                sort: "asc",
+              },
+            ],
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+        cy.visit("/datasets");
+        cy.wait("@getConfig", { timeout: 20000 });
+        cy.finishedLoading();
+      });
+    });
+
+    it("should sort datasets by datasetName in asc order from config", () => {
+      cy.get(".dataset-table mat-row").first().should("contain", "A DatasetName");
     });
   });
 });

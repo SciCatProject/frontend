@@ -17,8 +17,10 @@
         }
       },
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
+      "addScientificMetadataKeysAsColumn": { "type": "boolean" },
       "allowConfigOverrides": { "type": "boolean" },
       "dateFormat": { "type": "string" },
+      "timezone": { "type": "string" },
       "accessTokenPrefix": { "type": "string" },
       "addDatasetEnabled": { "type": "boolean" },
       "archiveWorkflowEnabled": { "type": "boolean" },
@@ -185,7 +187,8 @@
                 "format": {
                   "type": "string"
                 },
-                "enabled": { "type": "boolean" }
+                "enabled": { "type": "boolean" },
+                "sort": { "type": "string" }
               }
             }
           },
@@ -263,7 +266,8 @@
                   "type": "string",
                   "enum": ["standard", "hoverContent", "editable", "date"]
                 },
-                "format": { "type": "string" }
+                "format": { "type": "string" },
+                "sort": { "type": "string" }
               }
             }
           },
@@ -407,6 +411,16 @@
             }
           }
         }
+      },
+      "defaultTab": {
+        "type": "object",
+        "properties": {
+          "proposal": {
+            "type": "string",
+            "enum": ["details", "datasets", "relatedProposals", "logbook"],
+            "default": "details"
+          }
+        }
       }
     }
   },
@@ -421,6 +435,7 @@
         },
         "elements": [
           { "type": "Control", "scope": "#/properties/dateFormat" },
+          { "type": "Control", "scope": "#/properties/timezone" },
           { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
           { "type": "Control", "scope": "#/properties/landingPage" },
           { "type": "Control", "scope": "#/properties/metadataStructure" },
@@ -934,6 +949,20 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Default Tab Settings",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/defaultTab/properties/proposal",
+            "label": "Default Proposal Tab"
           }
         ]
       }

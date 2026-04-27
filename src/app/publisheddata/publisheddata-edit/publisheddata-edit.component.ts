@@ -26,6 +26,7 @@ import {
   selectCurrentPublishedData,
   selectPublishedDataConfig,
 } from "state-management/selectors/published-data.selectors";
+import { AjvService } from "shared/services/ajv.service";
 
 @Component({
   selector: "publisheddata-edit",
@@ -74,6 +75,7 @@ export class PublisheddataEditComponent
     private router: Router,
     private store: Store,
     private appConfigService: AppConfigService,
+    protected ajvService: AjvService,
   ) {}
 
   isSchemaEmpty(): boolean {
@@ -139,7 +141,9 @@ export class PublisheddataEditComponent
     this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
-          this.schema = publishedDataConfig.metadataSchema;
+          this.schema = this.ajvService.cleanupSchema(
+            publishedDataConfig.metadataSchema,
+          );
           this.uiSchema = publishedDataConfig.uiSchema;
         }
       },
