@@ -17,13 +17,10 @@ import {
   MockMatDialogRef,
   MockUserApi,
 } from "shared/MockStubs";
-//import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-//import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AppConfigService } from "app-config.service";
-//import { boolean } from "mathjs";
 import {
   higherMaxFileSizeLimit,
   lowerMaxFileSizeLimit,
@@ -604,6 +601,24 @@ describe("1000: ConfigurableActionComponent", () => {
 
       expect(component.disabled).toEqual(!testCase.result);
     });
+  });
+
+  it("0640: ESS link should not log errors when disabled is checked repeatedly", () => {
+    const consoleErrorSpy = spyOn(console, "error");
+
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.link,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    } as TestCase);
+
+    expect(component.disabled).toBeFalse();
+    expect(component.disabled).toBeFalse();
+    expect(component.disabled).toBeFalse();
+
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   function createFakeElement(elementType: string): HTMLElement {

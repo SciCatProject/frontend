@@ -1,5 +1,5 @@
 import { NgModule, ModuleWithProviders } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSortModule } from "@angular/material/sort";
 import { DragDropModule } from "@angular/cdk/drag-drop";
@@ -37,6 +37,8 @@ import { ITableSetting, TableSetting } from "../models/table-setting.model";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { EmptyContentModule } from "shared/modules/generic-empty-content/empty-content.module";
 import { MatCardModule } from "@angular/material/card";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { TimeDurationPipe } from "shared/pipes/time-duration.pipe";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtensionsModule = [RowMenuModule];
@@ -83,6 +85,9 @@ const ExtensionsModule = [RowMenuModule];
       provide: OverlayContainer,
       useClass: FullscreenOverlayContainer,
     },
+    DatePipe,
+    FileSizePipe,
+    TimeDurationPipe,
   ],
 })
 

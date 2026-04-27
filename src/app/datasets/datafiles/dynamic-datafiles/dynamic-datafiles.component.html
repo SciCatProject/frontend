@@ -1,0 +1,59 @@
+<ng-template [ngIf]="dataset$ | async">
+  <ng-template [ngIf]="maxFileSize && tooLargeFile">
+    <span>
+      <mat-icon class="warning-icon"> warning </mat-icon>
+      <span [innerHTML]="hasFileAboveMaxSizeWarning()"></span>
+    </span>
+  </ng-template>
+
+  <ng-template [ngIf]="maxFileSize">
+    <div>
+      <mat-icon> info </mat-icon>
+      Maximum allowed download size: {{ maxFileSize | filesize }}
+    </div>
+  </ng-template>
+
+  <ng-template [ngIf]="files && maxFileSize">
+    <div class="selected" fxLayout="row" fxLayoutAlign="space-evenly end">
+      <div fxFlex="auto" style="margin-bottom: 0.5em">
+        Selected: {{ selectedFileSize | filesize
+        }}{{ maxFileSize ? " / " + (maxFileSize | filesize) : "" }}
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="datafiles-header">
+    <span [ngPlural]="count" class="nbr-of-files">
+      <ng-template ngPluralCase="=0">No datafiles.</ng-template>
+      <ng-template ngPluralCase="=1">1 datafile.</ng-template>
+      <ng-template ngPluralCase="other">{{ count }} datafiles.</ng-template>
+    </span>
+
+    <configurable-actions
+      [actionsConfig]="appConfig.datafilesActions"
+      [actionItems]="actionItems"
+    ></configurable-actions>
+  </div>
+
+  <dynamic-mat-table
+    [tableName]="tableName"
+    [columns]="columns"
+    [pending]="pending"
+    [setting]="setting"
+    [pagingMode]="paginationMode"
+    [dataSource]="dataSource"
+    [pagination]="pagination"
+    [rowSelectionMode]="rowSelectionMode"
+    [rowSelectionModel]="rowSelectionModel"
+    [showGlobalTextSearch]="false"
+    (paginationChange)="onPaginationChange($event)"
+    (globalTextSearchChange)="onGlobalTextSearchChange($event)"
+    (onRowEvent)="onRowClick($event)"
+    (settingChange)="onSettingChange($event)"
+    (onTableEvent)="onTableEvent($event)"
+    class="mat-elevation-z2"
+    [emptyMessage]="'No files available'"
+    [emptyIcon]="'folder'"
+  >
+  </dynamic-mat-table>
+</ng-template>

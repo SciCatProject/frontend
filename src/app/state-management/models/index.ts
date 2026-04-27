@@ -19,6 +19,7 @@ export interface Settings {
   fe_sample_table_conditions?: ConditionConfig[];
   fe_instrument_table_columns?: TableColumn[];
   fe_file_table_columns?: TableColumn[];
+  fe_datafiles_table_columns?: TableColumn[];
 }
 
 export interface TableColumn {
@@ -31,6 +32,9 @@ export interface TableColumn {
   enabled: boolean;
   format?: string;
   tooltip?: string;
+  emptyValue?: string;
+  pipe?: string;
+  pipeArgs?: unknown[];
   width?: number;
   sort?: FieldSort;
 }
@@ -196,6 +200,33 @@ export interface JobFilters extends GenericFilters {
   mode: Record<string, string> | undefined;
 }
 
+export interface FilesDatasetFilter {
+  datasetId: string;
+  skip: number;
+  limit: number;
+  sortField: string;
+}
+
+export interface DataFile {
+  path: string;
+  size?: number;
+  time?: string;
+  chk?: string;
+  uid?: string;
+  gid?: string;
+  perm?: string;
+  hash?: string;
+  metadata?: Record<string, unknown>;
+  selected?: boolean;
+}
+
+export interface FileOrigdatablock {
+  id: string;
+  datasetId: string;
+  dataFileList: DataFile;
+  [key: string]: unknown;
+}
+
 export type ConditionSettingScope = "dataset" | "sample";
 
 export const SETTINGS_CONFIG = [
@@ -220,6 +251,7 @@ export const SETTINGS_CONFIG = [
     configKey: "columns",
   },
   { key: "fe_file_table_columns", scope: "file", configKey: "columns" },
+  { key: "fe_datafiles_table_columns", scope: "dataset", configKey: "columns" },
 ];
 
 export type SettingScope =

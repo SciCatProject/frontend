@@ -53,6 +53,7 @@ export interface AbstractField {
   style?: any /* private property used only in html */;
   header?: string /* The title of the column */;
   tooltip?: string /* The tooltip of the column */;
+  emptyValue?: string /* Displayed when the cell value is empty */;
   isKey?: boolean;
   inlineEdit?: boolean;
   display?: FieldDisplay /* Hide and visible this column */;
@@ -84,6 +85,8 @@ export interface AbstractField {
   option?: any; // for store share data show in cell of column
   categoryData?: any[];
   pipes?: IPipe[];
+  pipe?: string;
+  pipeArgs?: unknown[];
   toString?: (column: TableField<any>, row: TableRow) => string;
   customSort?: (column: TableField<any>, row: any) => string;
   customRender?: (column: TableField<any>, row: any) => string;

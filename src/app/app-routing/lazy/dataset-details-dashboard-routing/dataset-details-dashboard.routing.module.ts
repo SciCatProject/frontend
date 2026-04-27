@@ -4,7 +4,7 @@ import { AdminGuard } from "app-routing/admin.guard";
 import { AuthGuard } from "app-routing/auth.guard";
 import { ServiceGuard } from "app-routing/service.guard";
 import { AdminTabComponent } from "datasets/admin-tab/admin-tab.component";
-import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
+import { DatafilesWrapperComponent } from "datasets/datafiles/datafiles-wrapper.component";
 import { JsonScientificMetadataComponent } from "datasets/jsonScientificMetadata/jsonScientificMetadata.component";
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
 import { DatasetLifecycleComponent } from "datasets/dataset-lifecycle/dataset-lifecycle.component";
@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: "datafiles",
-    component: DatafilesComponent,
+    component: DatafilesWrapperComponent,
   },
   {
     path: "relatedDatasets",

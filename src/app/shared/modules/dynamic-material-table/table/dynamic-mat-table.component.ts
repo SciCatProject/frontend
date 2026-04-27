@@ -78,6 +78,8 @@ import {
 import { TableDataSource } from "../cores/table-data-source";
 import { DatePipe } from "@angular/common";
 import { AppConfigService } from "app-config.service";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { TimeDurationPipe } from "shared/pipes/time-duration.pipe";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -332,6 +334,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     private overlayPositionBuilder: OverlayPositionBuilder,
     public readonly config: TableSetting,
     private datePipe: DatePipe,
+    private fileSizePipe: FileSizePipe,
+    private timeDurationPipe: TimeDurationPipe,
     public appConfigService: AppConfigService,
   ) {
     super(tableService, cdr, config);
@@ -1045,13 +1049,14 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   getColumnValue(data: Record<string, unknown>, column: TableField<any>) {
     const fieldName = column.name.trim();
+    const emptyValue = column.emptyValue ?? "";
 
     if (fieldName.includes(",")) {
       const fields = fieldName.split(",").map((f) => f.trim());
       const values = fields.map((field) =>
-        this.getColumnValue(data, { name: field }),
+        this.getColumnValue(data, { ...column, name: field, emptyValue: "" }),
       );
-      return values.filter((value) => value !== "").join(", ");
+      return values.filter((value) => value !== "").join(", ") || emptyValue;
     }
 
     // get nested value if name has dots
@@ -1059,8 +1064,17 @@ export class DynamicMatTableComponent<T extends TableRow>
       ? fieldName.split(".").reduce((acc, key) => acc?.[key], data)
       : data[fieldName];
 
-    if (value === null || value === undefined) {
-      return "";
+    if (value === null || value === undefined || value === "") {
+      return emptyValue;
+    }
+
+    if (column.pipe) {
+      const pipedValue = this.applyColumnPipe(value, column);
+      return pipedValue === null ||
+        pipedValue === undefined ||
+        pipedValue === ""
+        ? emptyValue
+        : pipedValue;
     }
 
     // If column format for date is provided, format the value
@@ -1074,7 +1088,11 @@ export class DynamicMatTableComponent<T extends TableRow>
             column,
           );
         }
-        return this.datePipe.transform(value as string, column.format);
+        const formattedValue = this.datePipe.transform(
+          value as string,
+          column.format,
+        );
+        return formattedValue || emptyValue;
       } catch (e) {
         console.error("Date format error:", e);
         return value;
@@ -1082,6 +1100,22 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
 
     return value;
+  }
+
+  private applyColumnPipe(value: unknown, column: TableField<any>) {
+    const pipeArgs = column.pipeArgs ?? [];
+
+    switch (column.pipe.toLowerCase()) {
+      case "date":
+        return this.datePipe.transform(value as string, pipeArgs[0] as string);
+      case "filesize":
+        return this.fileSizePipe.transform(Number(value));
+      case "timeduration":
+        return this.timeDurationPipe.transform(Number(value));
+      default:
+        console.log("No such pipe exists:", value, column.pipe);
+        return value;
+    }
   }
 
   metadataNameHoverContent(row: any) {

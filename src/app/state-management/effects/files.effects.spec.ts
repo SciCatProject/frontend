@@ -12,13 +12,14 @@ import { Type } from "@angular/core";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock } from "shared/MockStubs";
 import { FilesEffects } from "./files.effects";
+import { FileOrigdatablock } from "state-management/models";
 
 describe("FileEffects", () => {
   let actions: TestObservable;
   let effects: FilesEffects;
   let origDatablocksApi: jasmine.SpyObj<OrigdatablocksService>;
 
-  const mockOrigDatablockFile = createMock<object>({
+  const mockOrigDatablockFile = createMock<FileOrigdatablock>({
     _id: "2b568c4d-7b0f-47f5-b4af-b94098d6b98f",
     size: 913818,
     dataFileList: {
@@ -102,6 +103,48 @@ describe("FileEffects", () => {
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchAllOrigDatablocks$).toBeObservable(expected);
+      });
+    });
+  });
+
+  describe("fetchDatasetOrigDatablocks$", () => {
+    describe("ofType fetchDatasetOrigDatablocksAction", () => {
+      it("should result in a fetchDatasetOrigDatablocksCompleteAction and a fetchCountAction", () => {
+        const action = fromActions.fetchDatasetOrigDatablocksAction({
+          datasetId: "20.500.12269/BRIGHTNESS/V200022",
+        });
+        const outcome1 = fromActions.fetchDatasetOrigDatablocksCompleteAction({
+          currentDatasetOrigDatablocks: origDatablockFiles,
+        });
+        const outcome2 = fromActions.fetchCountAction({
+          fields: {
+            datasetId: "20.500.12269/BRIGHTNESS/V200022",
+            text: undefined,
+          },
+        });
+
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: origDatablockFiles });
+        origDatablocksApi.origDatablocksControllerFullqueryFilesV3.and.returnValue(
+          response,
+        );
+
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchDatasetOrigDatablocks$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchDatasetOrigDatablocksFailedAction", () => {
+        const action = fromActions.fetchDatasetOrigDatablocksAction({});
+        const outcome = fromActions.fetchDatasetOrigDatablocksFailedAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-#", {});
+        origDatablocksApi.origDatablocksControllerFullqueryFilesV3.and.returnValue(
+          response,
+        );
+
+        const expected = cold("--b", { b: outcome });
+        expect(effects.fetchDatasetOrigDatablocks$).toBeObservable(expected);
       });
     });
   });

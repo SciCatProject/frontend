@@ -30,7 +30,7 @@ import { Subscription } from "rxjs";
 export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
   @Input({ required: true }) actionItems: ActionItems;
-  //@Input() files?: DataFiles_File[];
+  //@Input() files?: DataFile[];
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
 
@@ -225,7 +225,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return selector;
   }
 
-  buildDependenciesGraph(variables: Record<string, any>) {
+  buildDependenciesGraph(variables: Record<string, any> = {}) {
     /**
      * Builds a dependency graph for configured variables.
      *
@@ -256,7 +256,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
      * then the final value is passed through `processSelector` so configured
      * selectors are converted into values from the current action items.
      */
-    const depsGraph = this.buildDependenciesGraph(this.actionConfig.variables);
+    const variableDefinitions = this.actionConfig.variables ?? {};
+    const depsGraph = this.buildDependenciesGraph(variableDefinitions);
     const visited: Set<string> = new Set();
     const resolveVariable = (varKey: string): any => {
       const deps = depsGraph[varKey] ?? new Set();
@@ -270,7 +271,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
           this.variables[dep] = resolveVariable(dep);
         }
       }
-      const varDef = this.actionConfig.variables?.[varKey];
+      const varDef = variableDefinitions[varKey];
       const resolved = varDef.replace(
         /@(\w+)(\[(\d+)\])?/g,
         (_, name, _fullIndex, index) => {
@@ -285,7 +286,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       return this.processSelector(this.actionItems, resolved);
     };
 
-    for (const key of Object.keys(this.actionConfig.variables ?? {})) {
+    for (const key of Object.keys(variableDefinitions)) {
       this.variables[key] = resolveVariable(key);
     }
   }
@@ -341,7 +342,9 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   get disabled() {
     let res = false;
     try {
-      this.update_status();
+      if (this.actionConfig.variables) {
+        this.update_status();
+      }
 
       const expr = this.disabled_condition;
       const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);

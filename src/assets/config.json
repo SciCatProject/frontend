@@ -79,6 +79,7 @@
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,
   "hideEmptyMetadataTable": false,
+  "dynamicDatafilesViewEnabled": false,
   "datafilesActionsEnabled": true,
   "datafilesActions": [
     {
@@ -677,6 +678,54 @@
       }
     ]
   },
+  "defaultDatafilesColumnsList": [
+    {
+      "name": "dataFileList.path",
+      "type": "standard",
+      "icon": "text_snippet",
+      "header": "Filename",
+      "enabled": true
+    },
+    {
+      "name": "dataFileList.size",
+      "type": "standard",
+      "icon": "save",
+      "header": "Size",
+      "pipe": "filesize"
+    },
+    {
+      "name": "dataFileList.metadata.measurement_type",
+      "type": "standard",
+      "icon": "person",
+      "header": "Measurement type"
+    },
+    {
+      "name": "dataFileList.metadata.sample_type",
+      "type": "standard",
+      "icon": "person",
+      "header": "Sample type"
+    },
+    {
+      "name": "dataFileList.metadata.measurement_subtype",
+      "type": "standard",
+      "icon": "person",
+      "header": "Measurement Subtype"
+    },
+    {
+      "name": "dataFileList.metadata.duration",
+      "type": "standard",
+      "icon": "access_time",
+      "header": "Duration",
+      "pipe": "timeDuration"
+    },
+    {
+      "name": "dataFileList.time",
+      "type": "date",
+      "icon": "access_time",
+      "header": "Created at",
+      "format": "yyyy-mm-dd HH:MM"
+    }
+  ],
   "labelsLocalization": {
     "dataset": {
       "pid": "PID",

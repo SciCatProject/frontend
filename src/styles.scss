@@ -6,7 +6,7 @@
 @use "./app/_layout/app-header/app-header-theme" as app-header;
 @use "./app/datasets/batch-view/batch-view-theme" as batch-view;
 @use "./app/datasets/dashboard/dashboard-theme" as dashboard;
-@use "./app/datasets/datafiles/datafiles-theme" as datafiles;
+@use "./app/datasets/datafiles/static-datafiles/datafiles-theme" as datafiles;
 @use "./app/datasets/dataset-detail/dataset-detail/dataset-detail-theme" as
   dataset-detail;
 @use "./app/datasets/dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic-theme"

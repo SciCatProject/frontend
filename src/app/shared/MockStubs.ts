@@ -8,7 +8,7 @@ import {
   ActionConfig,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
-import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import { DataFile } from "state-management/models";
 import {
   Instrument,
   OutputJobV3Dto,
@@ -277,7 +277,7 @@ export class MockScicatDataSource extends SciCatDataSource {
 export class MockDatafilesActionsComponent {
   actionsConfig: ActionConfig[];
   actionItems: ActionItems;
-  files: DataFiles_File[];
+  files: DataFile[];
   visible: boolean;
 }
 

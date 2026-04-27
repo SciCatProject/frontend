@@ -16,7 +16,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MockStore } from "@ngrx/store/testing";
-import { AppConfigService } from "app-config.service";
+import { AppConfigInterface, AppConfigService } from "app-config.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -80,5 +80,21 @@ describe("DetailsDashboardComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should use the dynamic datafiles fetch tab when dynamic datafiles are enabled", () => {
+    component.appConfig = {
+      dynamicDatafilesViewEnabled: true,
+    } as AppConfigInterface;
+
+    expect(component.getFetchDataTab("Datafiles")).toBe("Dynamic Datafiles");
+  });
+
+  it("should use the static datafiles fetch tab when dynamic datafiles are disabled", () => {
+    component.appConfig = {
+      dynamicDatafilesViewEnabled: false,
+    } as AppConfigInterface;
+
+    expect(component.getFetchDataTab("Datafiles")).toBe("Datafiles");
   });
 });

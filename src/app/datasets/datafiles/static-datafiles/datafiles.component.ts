@@ -35,7 +35,7 @@ import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/p
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
 import { NgForm } from "@angular/forms";
-import { DataFiles_File } from "./datafiles.interfaces";
+import { DataFile } from "state-management/models";
 import {
   ActionItemDataset,
   ActionItems,
@@ -69,7 +69,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   subscriptions: Subscription[] = [];
 
-  files: Array<DataFiles_File> = [];
+  files: Array<DataFile> = [];
   datasetPid = "";
   actionItems: ActionItems = {
     datasets: [],
@@ -116,7 +116,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
       dateFormat: "yyyy-MM-dd HH:mm",
     },
   ];
-  tableData: DataFiles_File[] = [];
+  tableData: DataFile[] = [];
 
   constructor(
     public appConfigService: AppConfigService,
@@ -259,9 +259,9 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
         if (datablocks) {
-          const files: DataFiles_File[] = [];
+          const files: DataFile[] = [];
           datablocks.forEach((block) => {
-            block.dataFileList.map((file: DataFiles_File) => {
+            block.dataFileList.map((file: DataFile) => {
               this.totalFileSize += file.size;
               file.selected = false;
               files.push(file);

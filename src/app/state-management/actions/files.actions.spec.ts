@@ -1,7 +1,16 @@
-import { mockOrigDatablock as origDatablock } from "shared/MockStubs";
+import { FileOrigdatablock } from "state-management/models";
 import * as fromActions from "./files.actions";
 
 describe("File Actions", () => {
+  const origDatablock: FileOrigdatablock = {
+    id: "orig-datablock-id",
+    datasetId: "dataset-id",
+    dataFileList: {
+      path: "/file/1",
+      size: 100,
+      time: "2019-09-06T13:11:37.102Z",
+    },
+  };
   const origDatablocks = [origDatablock];
 
   describe("fetchAllOrigDatablocksAction", () => {
@@ -65,6 +74,106 @@ describe("File Actions", () => {
 
       expect({ ...action }).toEqual({
         type: "[OrigDatablock] Fetch Count Failed",
+      });
+    });
+  });
+
+  describe("fetchDatasetOrigDatablocksAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchDatasetOrigDatablocksAction({
+        datasetId: "dataset-id",
+        limit: 10,
+        skip: 0,
+      });
+
+      expect({ ...action }).toEqual({
+        type: "[OrigDatablock] Fetch Dataset Orig Datablocks",
+        datasetId: "dataset-id",
+        limit: 10,
+        skip: 0,
+      });
+    });
+  });
+
+  describe("fetchDatasetOrigDatablocksCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchDatasetOrigDatablocksCompleteAction({
+        currentDatasetOrigDatablocks: origDatablocks,
+      });
+
+      expect({ ...action }).toEqual({
+        type: "[OrigDatablock] Fetch Dataset Orig Datablocks Complete",
+        currentDatasetOrigDatablocks: origDatablocks,
+      });
+    });
+  });
+
+  describe("fetchDatasetOrigDatablocksFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchDatasetOrigDatablocksFailedAction();
+
+      expect({ ...action }).toEqual({
+        type: "[OrigDatablock] Fetch Dataset Orig Datablocks Failed",
+      });
+    });
+  });
+
+  describe("selectOrigDatablockAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.selectOrigDatablockAction({ origDatablock });
+
+      expect({ ...action }).toEqual({
+        type: "[OrigDatablock] Select Orig Datablock",
+        origDatablock,
+      });
+    });
+  });
+
+  describe("deselectOrigDatablockAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.deselectOrigDatablockAction({
+        origDatablock,
+      });
+
+      expect({ ...action }).toEqual({
+        type: "[OrigDatablock] Deselect Orig Datablock",
+        origDatablock,
+      });
+    });
+  });
+
+  describe("selectAllOrigDatablocksAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.selectAllOrigDatablocksAction({
+        origDatablocks,
+      });
+
+      expect({ ...action }).toEqual({
+        type: "[OrigDatablock] Select All Orig Datablocks",
+        origDatablocks,
+      });
+    });
+  });
+
+  describe("deselectOrigDatablocksAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.deselectOrigDatablocksAction({
+        origDatablocks,
+      });
+
+      expect({ ...action }).toEqual({
+        type: "[OrigDatablock] Deselect Orig Datablocks",
+        origDatablocks,
+      });
+    });
+  });
+
+  describe("clearSelectionAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearSelectionAction();
+
+      expect({ ...action }).toEqual({
+        type: "[OrigDatablock] Clear Selection",
       });
     });
   });

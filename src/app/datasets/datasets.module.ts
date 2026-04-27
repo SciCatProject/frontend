@@ -43,7 +43,9 @@ import { ReduceComponent } from "./reduce/reduce.component";
 import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard/dataset-details-dashboard.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DatablocksComponent } from "./datablocks-table/datablocks-table.component";
-import { DatafilesComponent } from "./datafiles/datafiles.component";
+import { DatafilesWrapperComponent } from "./datafiles/datafiles-wrapper.component";
+import { DatafilesComponent } from "./datafiles/static-datafiles/datafiles.component";
+import { DynamicDatafilesComponent } from "./datafiles/dynamic-datafiles/dynamic-datafiles.component";
 import { JsonScientificMetadataComponent } from "./jsonScientificMetadata/jsonScientificMetadata.component";
 import { DatasetDetailComponent } from "./dataset-detail/dataset-detail/dataset-detail.component";
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
@@ -89,9 +91,12 @@ import { IngestorModule } from "../ingestor/ingestor.module";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import { TimeDurationPipe } from "shared/pipes/time-duration.pipe";
 import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
+import { FilesEffects } from "state-management/effects/files.effects";
+import { filesReducer } from "state-management/reducers/files.reducer";
 
 @NgModule({
   imports: [
@@ -140,6 +145,7 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
+      FilesEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
@@ -149,6 +155,7 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     StoreModule.forFeature("publishedData", publishedDataReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
     StoreModule.forFeature("users", userReducer),
+    StoreModule.forFeature("files", filesReducer),
     LogbooksModule,
     MatMenuModule,
     CdkDropList,
@@ -167,7 +174,9 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     DashboardComponent,
     DatablocksComponent,
     JsonScientificMetadataComponent,
+    DatafilesWrapperComponent,
     DatafilesComponent,
+    DynamicDatafilesComponent,
     DatasetDetailWrapperComponent,
     DatasetDetailComponent,
     DatasetDetailDynamicComponent,
@@ -197,12 +206,15 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     SharedScicatFrontendModule,
     FileSizePipe,
     TitleCasePipe,
+    TimeDurationPipe,
   ],
   exports: [
     DashboardComponent,
     DatablocksComponent,
     JsonScientificMetadataComponent,
+    DatafilesWrapperComponent,
     DatafilesComponent,
+    DynamicDatafilesComponent,
     DatasetDetailWrapperComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,

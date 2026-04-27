@@ -47,6 +47,7 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
 import { fetchInstrumentAction } from "state-management/actions/instruments.actions";
+import { fetchDatasetOrigDatablocksAction } from "state-management/actions/files.actions";
 
 export interface JWT {
   jwt: string;
@@ -60,6 +61,7 @@ enum TAB {
   details = "Details",
   jsonScientificMetadata = "Scientific Metadata (JSON)",
   datafiles = "Datafiles",
+  dynamicDatafiles = "Dynamic Datafiles",
   relatedDatasets = "Related Datasets",
   reduce = "Reduce",
   logbook = "Logbook",
@@ -105,7 +107,14 @@ export class DatasetDetailsDashboardComponent
       action: fetchRelatedDatasetsAction,
       loaded: false,
     },
-    [TAB.datafiles]: { action: fetchOrigDatablocksAction, loaded: false },
+    [TAB.datafiles]: {
+      action: fetchOrigDatablocksAction,
+      loaded: false,
+    },
+    [TAB.dynamicDatafiles]: {
+      action: fetchDatasetOrigDatablocksAction,
+      loaded: false,
+    },
     [TAB.logbook]: { action: fetchDatasetLogbookAction, loaded: false },
     [TAB.attachments]: { action: fetchAttachmentsAction, loaded: false },
     [TAB.admin]: { action: fetchDatablocksAction, loaded: false },
@@ -246,11 +255,19 @@ export class DatasetDetailsDashboardComponent
   onTabSelected(tab: string) {
     this.fetchDataForTab(tab);
   }
+
+  getFetchDataTab(tab: string): string {
+    return tab === TAB.datafiles && this.appConfig.dynamicDatafilesViewEnabled
+      ? TAB.dynamicDatafiles
+      : tab;
+  }
+
   fetchDataForTab(tab: string) {
-    if (tab in this.fetchDataActions) {
+    const fetchDataTab = this.getFetchDataTab(tab);
+    if (fetchDataTab in this.fetchDataActions) {
       const args: { [key: string]: any } = { pid: this.dataset?.pid };
       // load related data for selected tab
-      switch (tab) {
+      switch (fetchDataTab) {
         case TAB.details:
           {
             const { action, loaded } = this.fetchDataActions[TAB.attachments];
@@ -268,10 +285,24 @@ export class DatasetDetailsDashboardComponent
             }
           }
           break;
+        case TAB.dynamicDatafiles:
+          {
+            const { action, loaded } = this.fetchDataActions[fetchDataTab];
+            if (!loaded) {
+              const dargs = {
+                datasetId: this.dataset?.pid,
+                skip: 0,
+                limit: 25,
+              };
+              this.fetchDataActions[fetchDataTab].loaded = true;
+              this.store.dispatch(action(dargs));
+            }
+          }
+          break;
         default: {
-          const { action, loaded } = this.fetchDataActions[tab];
+          const { action, loaded } = this.fetchDataActions[fetchDataTab];
           if (!loaded) {
-            this.fetchDataActions[tab].loaded = true;
+            this.fetchDataActions[fetchDataTab].loaded = true;
             this.store.dispatch(action(args));
           }
         }

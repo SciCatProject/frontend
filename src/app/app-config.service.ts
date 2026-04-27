@@ -84,6 +84,7 @@ export interface AppConfigInterface {
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
   datasetJsonScientificMetadata: boolean;
+  dynamicDatafilesViewEnabled?: boolean;
   datasetPageSizeOptions?: number[];
   datasetReduceEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
@@ -156,6 +157,7 @@ export interface AppConfigInterface {
   metadataEditingUnitListDisabled?: boolean;
   defaultDatasetsListSettings?: ListSettings;
   defaultProposalsListSettings?: ListSettings;
+  defaultDatafilesColumnsList?: TableColumn[];
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
   datasetDetailComponent?: DatasetDetailComponentConfig;

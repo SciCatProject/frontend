@@ -1,4 +1,4 @@
-import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import { DataFile } from "state-management/models";
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface ActionConfig {
@@ -35,7 +35,7 @@ export interface ActionItemDataset {
   pid: string;
   sourceFolder?: string;
   isPublished?: boolean;
-  files?: DataFiles_File[];
+  files?: DataFile[];
 }
 
 export interface ActionItems {

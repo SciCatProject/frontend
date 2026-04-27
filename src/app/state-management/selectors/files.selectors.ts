@@ -9,6 +9,11 @@ export const selectAllOrigDatablocks = createSelector(
   (state) => state.origDatablocks,
 );
 
+export const selectCurrentDatasetOrigDatablocks = createSelector(
+  selectFilesState,
+  (state) => state.currentDatasetOrigDatablocks,
+);
+
 export const selectCurrentOrigDatablock = createSelector(
   selectFilesState,
   (state) => state.currentOrigDatablock,
@@ -17,6 +22,26 @@ export const selectCurrentOrigDatablock = createSelector(
 export const selectOrigDatablocksCount = createSelector(
   selectFilesState,
   (state) => state.totalCount,
+);
+
+export const selectCurrentDatasetOrigDatablocksCount = createSelector(
+  selectFilesState,
+  (state) => state.currentDatasetCount,
+);
+
+export const selectSelectedOrigDatablocks = createSelector(
+  selectFilesState,
+  (state) => state.selectedOrigDatablocks,
+);
+
+export const selectSelectedOrigDatablocksCount = createSelector(
+  selectFilesState,
+  (state) => state.selectedOrigDatablocksCount,
+);
+
+export const selectDatasetFilter = createSelector(
+  selectFilesState,
+  (state) => state.datasetFilter,
 );
 
 export const selectFilesWithCountAndTableSettings = createSelector(
@@ -31,3 +56,19 @@ export const selectFilesWithCountAndTableSettings = createSelector(
     },
   }),
 );
+
+export const selectCurrentDatasetFilesWithCountAndTableSettings =
+  createSelector(
+    selectCurrentDatasetOrigDatablocks,
+    selectCurrentDatasetOrigDatablocksCount,
+    selectSelectedOrigDatablocks,
+    selectSettings,
+    (origDatablocks, count, selectedOrigDatablocks, settings) => ({
+      origDatablocks,
+      count,
+      selectedOrigDatablocks,
+      tablesSettings: {
+        columns: settings.fe_datafiles_table_columns,
+      },
+    }),
+  );
