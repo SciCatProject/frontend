@@ -486,6 +486,8 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
 
+      cy.get("body").type("{esc}");
+      
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Save table setting").click();
 
