@@ -80,7 +80,9 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
     },
   };
 
-  dataSource: BehaviorSubject<object[]> = new BehaviorSubject<object[]>([]);
+  dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
+    OutputDatasetObsoleteDto[]
+  >([]);
 
   paginationMode: TablePaginationMode = "server-side";
 
@@ -127,12 +129,13 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
 
   formatTableData(
     datasets: OutputDatasetObsoleteDto[],
-  ): Record<string, unknown>[] {
+  ): OutputDatasetObsoleteDto[] {
     if (!datasets) {
       return [];
     }
 
     return datasets.map((dataset) => ({
+      ...dataset,
       pid: dataset.pid,
       name: dataset.datasetName,
       sourceFolder: dataset.sourceFolder,
@@ -156,7 +159,7 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchRelatedDatasetsAction());
   }
 
-  onRowEvent({ event, sender }: IRowEvent<DatasetClass>): void {
+  onRowEvent({ event, sender }: IRowEvent<OutputDatasetObsoleteDto>): void {
     if (event === RowEventType.RowClick) {
       const pid = encodeURIComponent(sender.row.pid);
       this.router.navigateByUrl("/datasets/" + pid);
