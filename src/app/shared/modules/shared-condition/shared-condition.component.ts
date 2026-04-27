@@ -51,7 +51,6 @@ export class SharedConditionComponent implements OnDestroy {
   conditionConfigs$: Observable<ConditionConfig[]>;
   @Input() dialogTitle = "Add Metadata Key";
 
-
   humanNameMap: { [key: string]: string } = {};
   tempConditionValues: string[] = [];
   hoverKey: string | null = null;
