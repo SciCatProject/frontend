@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>Add Characteristic</h2>
+<h2 mat-dialog-title>
+  {{ data.dialogTitle }}
+</h2>
 <form
   [formGroup]="parametersForm"
   class="search-parameters-form"
@@ -6,7 +8,9 @@
 >
   <mat-dialog-content>
     <mat-form-field class="search-field">
-      <mat-label>Field</mat-label>
+      <mat-label
+        >Field
+      </mat-label>
       <input
         matInput
         autocomplete="off"

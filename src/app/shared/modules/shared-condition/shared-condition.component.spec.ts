@@ -49,6 +49,7 @@ describe("SharedConditionComponent", () => {
 
     fixture = TestBed.createComponent(SharedConditionComponent);
     component = fixture.componentInstance;
+    component.conditionSettingScope = "dataset";
     fixture.detectChanges();
   });
 

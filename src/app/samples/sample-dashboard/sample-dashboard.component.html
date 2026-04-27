@@ -21,7 +21,6 @@
               (search)="onTextSearchChange($event)"
             ></app-search-bar>
 
-            
             <shared-condition
               #conditionFilter
               *ngIf="appConfig.scienceSearchEnabled"
@@ -29,9 +28,10 @@
               [metadataKeys]="vm.metadataKeys"
               [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
               [showConditionToggle]="false"
-              [conditionType]="'samples'"
+              [conditionSettingScope]="'sample'"
               [addConditionAction]="addCondition"
               [removeConditionAction]="removeCondition"
+              [dialogTitle]="'Add Sample Metadata Key'"
             ></shared-condition>
 
             <div class="section-container">

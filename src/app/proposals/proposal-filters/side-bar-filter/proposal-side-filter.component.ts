@@ -133,7 +133,7 @@ export class ProposalSideFilterComponent implements OnInit {
         }),
       );
     }
-    if (this.appConfig.checkBoxFilterClickTrigger) {
+    if (this.appConfig.autoApplyFilters) {
       this.applyFilters();
     }
   }
