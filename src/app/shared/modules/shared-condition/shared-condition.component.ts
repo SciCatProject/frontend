@@ -5,10 +5,14 @@ import {
   Output,
   OnDestroy,
 } from "@angular/core";
-import { map, take } from "rxjs/operators";
+import { take } from "rxjs/operators";
 import { ConditionConfig } from "state-management/state/user.store";
 import { isEqual } from "lodash-es";
-import { ScientificCondition } from "state-management/models";
+import {
+  ScientificCondition,
+  ConditionSettingScope,
+  getSettingKey,
+} from "state-management/models";
 import { ConnectedPosition } from "@angular/cdk/overlay";
 import { Store } from "@ngrx/store";
 import { MatDialog } from "@angular/material/dialog";
@@ -16,7 +20,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { AsyncPipe } from "@angular/common";
 import { UnitsService } from "shared/services/units.service";
 import { UnitsOptionsService } from "shared/services/units-options.service";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import {
   SearchParametersDialogComponent,
   SearchParametersDialogData,
@@ -39,18 +43,13 @@ export class SharedConditionComponent implements OnDestroy {
   @Input() metadataKeys: string[] = [];
   @Input() unitsEnabled = false;
   @Input() showConditionToggle = false;
-  @Input() conditionType: "datasets" | "samples" = "datasets";
+  @Input() conditionSettingScope: ConditionSettingScope;
   @Input() addConditionAction: (condition: ScientificCondition) => void;
   @Input() removeConditionAction: (condition: ScientificCondition) => void;
   @Output() conditionsApplied = new EventEmitter<void>();
 
-  allConditions$ = this.store.select(selectConditions);
-
-  conditionConfigs$ = this.allConditions$.pipe(
-    map((configs) =>
-      configs.filter((c) => c.conditionType === this.conditionType),
-    ),
-  );
+  conditionConfigs$: Observable<ConditionConfig[]>;
+  @Input() dialogTitle = "Add Metadata Key";
 
   humanNameMap: { [key: string]: string } = {};
   tempConditionValues: string[] = [];
@@ -82,6 +81,10 @@ export class SharedConditionComponent implements OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.conditionConfigs$ = this.store.select(
+      selectConditions(this.conditionSettingScope),
+    );
+
     if (this.showConditions) {
       this.buildMetadataMaps();
       this.applyEnabledConditions();
@@ -93,10 +96,17 @@ export class SharedConditionComponent implements OnDestroy {
   // Helper to get all conditions and update store
   updateStore(updatedConditions: ConditionConfig[]) {
     this.store.dispatch(
-      updateConditionsConfigs({ conditionConfigs: updatedConditions }),
+      updateConditionsConfigs({
+        conditionConfigs: updatedConditions,
+        scope: this.conditionSettingScope,
+      }),
     );
+
+    const key = getSettingKey(this.conditionSettingScope, "conditions");
     this.store.dispatch(
-      updateUserSettingsAction({ property: { conditions: updatedConditions } }),
+      updateUserSettingsAction({
+        property: { [key]: updatedConditions },
+      }),
     );
   }
 
@@ -114,34 +124,14 @@ export class SharedConditionComponent implements OnDestroy {
 
   applyEnabledConditions() {
     this.subscriptions.push(
-      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-        const needsUpdate = allConditions.some((c) => !c.conditionType);
-        if (needsUpdate && allConditions.length > 0) {
-          const updatedConditions = allConditions.map((c) => ({
-            ...c,
-            conditionType: c.conditionType || this.conditionType,
-          }));
-          this.updateStore(updatedConditions);
-
-          updatedConditions
-            .filter((c) => c.conditionType === this.conditionType)
-            .forEach((config) => {
-              this.applyUnitsOptions(config.condition);
-            });
-          return;
-        }
-
-        const myConditions = allConditions.filter(
-          (c) => !c.conditionType || c.conditionType === this.conditionType,
-        );
-
-        myConditions.forEach((config) => {
+      this.conditionConfigs$.pipe(take(1)).subscribe((conditions = []) => {
+        conditions.forEach((config) => {
           if (config.condition.lhs) {
             this.removeConditionAction?.(config.condition);
           }
         });
 
-        myConditions.forEach((config) => {
+        conditions.forEach((config) => {
           this.applyUnitsOptions(config.condition);
           if (config.enabled && config.condition.lhs && config.condition.rhs) {
             const condition = { ...config.condition };
@@ -244,11 +234,8 @@ export class SharedConditionComponent implements OnDestroy {
     this.buildMetadataMaps();
 
     this.subscriptions.push(
-      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-        const myConditions = allConditions.filter(
-          (c) => c.conditionType === this.conditionType,
-        );
-        const usedFields = myConditions.map((config) => config.condition.lhs);
+      this.conditionConfigs$.pipe(take(1)).subscribe((conditions = []) => {
+        const usedFields = conditions.map((config) => config.condition.lhs);
         const availableKeys = this.metadataKeys.filter(
           (key) => !usedFields.includes(key),
         );
@@ -262,6 +249,7 @@ export class SharedConditionComponent implements OnDestroy {
                   usedFields: usedFields,
                   parameterKeys: availableKeys,
                   humanNameMap: this.humanNameMap,
+                  dialogTitle: this.dialogTitle,
                 },
                 restoreFocus: false,
               },
@@ -271,8 +259,8 @@ export class SharedConditionComponent implements OnDestroy {
               if (res) {
                 const { data } = res;
 
-                const existingConditionIndex = myConditions.findIndex(
-                  (config) => isEqual(config.condition.lhs, data.lhs),
+                const existingConditionIndex = conditions.findIndex((config) =>
+                  isEqual(config.condition.lhs, data.lhs),
                 );
 
                 if (existingConditionIndex !== -1) {
@@ -290,10 +278,9 @@ export class SharedConditionComponent implements OnDestroy {
                     human_name: this.humanNameMap[data.lhs],
                   },
                   enabled: true,
-                  conditionType: this.conditionType,
                 };
 
-                this.updateStore([...allConditions, newCondition]);
+                this.updateStore([...conditions, newCondition]);
 
                 this.snackBar.open("Condition added successfully", "Close", {
                   duration: 2000,
@@ -308,16 +295,14 @@ export class SharedConditionComponent implements OnDestroy {
 
   removeCondition(condition: ConditionConfig, index: number) {
     this.subscriptions.push(
-      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-        const actualIndex = allConditions.findIndex(
-          (c) =>
-            c.condition.lhs === condition.condition.lhs &&
-            c.conditionType === this.conditionType,
+      this.conditionConfigs$.pipe(take(1)).subscribe((conditions = []) => {
+        const actualIndex = conditions.findIndex(
+          (c) => c.condition.lhs === condition.condition.lhs,
         );
 
         if (actualIndex === -1) return;
 
-        const updatedConditions = [...allConditions];
+        const updatedConditions = [...conditions];
         updatedConditions.splice(actualIndex, 1);
         this.tempConditionValues.splice(index, 1);
 
@@ -336,22 +321,16 @@ export class SharedConditionComponent implements OnDestroy {
 
   updateConditionField(index: number, updates: Partial<ScientificCondition>) {
     this.subscriptions.push(
-      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-        const myConditions = allConditions.filter(
-          (c) => c.conditionType === this.conditionType,
-        );
+      this.conditionConfigs$.pipe(take(1)).subscribe((conditions = []) => {
+        if (!conditions[index]) return;
 
-        if (!myConditions[index]) return;
-
-        const actualIndex = allConditions.findIndex(
-          (c) =>
-            c.condition.lhs === myConditions[index].condition.lhs &&
-            c.conditionType === this.conditionType,
+        const actualIndex = conditions.findIndex(
+          (c) => c.condition.lhs === conditions[index].condition.lhs,
         );
 
         if (actualIndex === -1) return;
 
-        const updatedConditions = [...allConditions];
+        const updatedConditions = [...conditions];
         const conditionConfig = updatedConditions[actualIndex];
 
         updatedConditions[actualIndex] = {
@@ -364,7 +343,10 @@ export class SharedConditionComponent implements OnDestroy {
         };
 
         this.store.dispatch(
-          updateConditionsConfigs({ conditionConfigs: updatedConditions }),
+          updateConditionsConfigs({
+            conditionConfigs: updatedConditions,
+            scope: this.conditionSettingScope,
+          }),
         );
       }),
     );
@@ -406,22 +388,16 @@ export class SharedConditionComponent implements OnDestroy {
 
   toggleConditionEnabled(index: number, enabled: boolean) {
     this.subscriptions.push(
-      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-        const myConditions = allConditions.filter(
-          (c) => c.conditionType === this.conditionType,
-        );
+      this.conditionConfigs$.pipe(take(1)).subscribe((conditions = []) => {
+        if (!conditions[index]) return;
 
-        if (!myConditions[index]) return;
-
-        const actualIndex = allConditions.findIndex(
-          (c) =>
-            c.condition.lhs === myConditions[index].condition.lhs &&
-            c.conditionType === this.conditionType,
+        const actualIndex = conditions.findIndex(
+          (c) => c.condition.lhs === conditions[index].condition.lhs,
         );
 
         if (actualIndex === -1) return;
 
-        const updatedConditions = [...allConditions];
+        const updatedConditions = [...conditions];
         updatedConditions[actualIndex] = {
           ...updatedConditions[actualIndex],
           enabled,
@@ -441,15 +417,8 @@ export class SharedConditionComponent implements OnDestroy {
 
   applyConditions() {
     this.subscriptions.push(
-      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-        const myConditions = allConditions.filter(
-          (c) => c.conditionType === this.conditionType,
-        );
-        const otherConditions = allConditions.filter(
-          (c) => c.conditionType !== this.conditionType,
-        );
-
-        const updatedMyConditions = myConditions.map((config, i) => {
+      this.conditionConfigs$.pipe(take(1)).subscribe((conditions = []) => {
+        const updatedMyConditions = conditions.map((config, i) => {
           const lhs = config.condition.lhs;
           const baseCondition = {
             ...config.condition,
@@ -490,10 +459,10 @@ export class SharedConditionComponent implements OnDestroy {
           return { ...config, condition: baseCondition };
         });
 
-        // Removes old conditions for this type
-        myConditions.forEach((c) => this.removeConditionAction?.(c.condition));
+        // Removes old conditions
+        conditions.forEach((c) => this.removeConditionAction?.(c.condition));
 
-        // Adds updated conditions for this type
+        // Adds updated conditions
         updatedMyConditions.forEach((config) => {
           if (
             config.enabled &&
@@ -505,8 +474,8 @@ export class SharedConditionComponent implements OnDestroy {
           }
         });
 
-        // Merges other conditions with updated conditions for this type
-        this.updateStore([...otherConditions, ...updatedMyConditions]);
+        // Merges other conditions with updated conditions
+        this.updateStore(updatedMyConditions);
         this.tempConditionValues = [];
         this.conditionsApplied.emit();
       }),
@@ -515,19 +484,12 @@ export class SharedConditionComponent implements OnDestroy {
 
   clearConditions() {
     this.subscriptions.push(
-      this.allConditions$.pipe(take(1)).subscribe((allConditions = []) => {
-        const myConditions = allConditions.filter(
-          (c) => c.conditionType === this.conditionType,
-        );
-
-        myConditions.forEach((config) =>
+      this.conditionConfigs$.pipe(take(1)).subscribe((conditions = []) => {
+        conditions.forEach((config) =>
           this.removeConditionAction?.(config.condition),
         );
 
-        const updatedConditions = allConditions.filter(
-          (c) => c.conditionType !== this.conditionType,
-        );
-        this.updateStore(updatedConditions);
+        this.updateStore([]);
       }),
     );
   }

@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { getSettingKey } from "state-management/models";
 import { UserState } from "state-management/state/user.store";
 
 const selectUserState = createFeatureSelector<UserState>("users");
@@ -91,23 +92,18 @@ export const selectIsLoading = createSelector(
 
 export const selectColumns = createSelector(
   selectUserState,
-  (state) => state.columns,
-);
-
-export const selectTablesSettings = createSelector(
-  selectUserState,
-  (state) => state.tablesSettings,
+  (state) => state.settings.fe_dataset_table_columns,
 );
 
 export const selectFilters = createSelector(
   selectUserState,
-  (state) => state.filters,
+  (state) => state.settings.fe_dataset_table_filters,
 );
 
-export const selectConditions = createSelector(
-  selectUserState,
-  (state) => state.conditions,
-);
+export const selectConditions = (scope: "dataset" | "sample") =>
+  createSelector(selectUserState, (state) => {
+    return state.settings[getSettingKey(scope, "conditions")] || [];
+  });
 
 export const selectSampleDialogPageViewModel = createSelector(
   selectCurrentUser,
@@ -153,7 +149,7 @@ export const selectHasFetchedSettings = createSelector(
 export const selectColumnsWithHasFetchedSettings = createSelector(
   selectUserState,
   (state) => ({
-    columns: state.columns,
+    columns: state.settings.fe_dataset_table_columns,
     hasFetchedSettings: state.hasFetchedSettings,
   }),
 );

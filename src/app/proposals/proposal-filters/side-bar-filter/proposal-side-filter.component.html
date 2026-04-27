@@ -26,6 +26,7 @@
         (dateRangeChange)="setDateFilter(filter.key, $event)"
         [filterValue]="activeFilters[filter.key]"
         [collapsible]="filter.type === 'checkbox'"
+        (applyEnterKey)="applyFilters()"
       ></shared-filter>
     </ng-container>
     <div class="section-container">

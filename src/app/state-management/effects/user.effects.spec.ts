@@ -55,6 +55,10 @@ class AppConfigServiceMock {
         conditions: [],
         filters: [],
       },
+      defaultProposalsListSettings: {
+        columns: [],
+        filters: [],
+      },
     };
   }
 }
@@ -597,15 +601,29 @@ describe("UserEffects", () => {
 
     it("should result in a fetchUserSettingsCompleteAction", () => {
       const userSettings = {
-        columns: [],
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
         id: "testId",
       } as unknown as UserSettings;
+
+      const normalizedUserSettings = {
+        ...userSettings,
+        externalSettings: {
+          fe_dataset_table_columns: [],
+          fe_dataset_table_conditions: [],
+          fe_dataset_table_filters: [],
+          fe_proposal_table_columns: [],
+          fe_proposal_table_filters: [],
+          fe_sample_table_columns: [],
+          fe_sample_table_conditions: [],
+          fe_instrument_table_columns: [],
+          fe_file_table_columns: [],
+        },
+      } as unknown as UserSettings;
       const action = fromActions.fetchUserSettingsAction({ id });
       const outcome = fromActions.fetchUserSettingsCompleteAction({
-        userSettings,
+        userSettings: normalizedUserSettings,
       });
 
       actions = hot("-a", { a: action });
@@ -632,7 +650,6 @@ describe("UserEffects", () => {
   describe("setLimitFilters$", () => {
     it("should result in a setDatasetsLimitFilterAction and a setJobsLimitFilterAction", () => {
       const userSettings = {
-        columns: [],
         datasetCount: 10,
         jobCount: 10,
       } as unknown as UserSettings;
@@ -657,7 +674,10 @@ describe("UserEffects", () => {
   describe("addCustomColumns$", () => {
     it("should result in an addCustomColumnsCompleteAction", () => {
       const names = ["test"];
-      const action = fromActions.addCustomColumnsAction({ names });
+      const action = fromActions.addCustomColumnsAction({
+        names,
+        scope: "dataset",
+      });
       const outcome = fromActions.addCustomColumnsCompleteAction();
 
       actions = hot("-a", { a: action });
@@ -668,12 +688,16 @@ describe("UserEffects", () => {
   });
 
   describe("updateUserColumns$", () => {
-    const property = { columns: [] };
+    const property = { fe_dataset_table_columns: [] };
     describe("ofType selectColumnAction", () => {
       it("should dispatch an updateUserSettingsAction", () => {
         const name = "test";
         const columnType = "standard";
-        const action = fromActions.selectColumnAction({ name, columnType });
+        const action = fromActions.selectColumnAction({
+          name,
+          columnType,
+          scope: "dataset",
+        });
         const outcome = fromActions.updateUserSettingsAction({ property });
 
         actions = hot("-a", { a: action });
@@ -687,7 +711,11 @@ describe("UserEffects", () => {
       it("should dispatch an updateUserSettingsAction", () => {
         const name = "test";
         const columnType = "standard";
-        const action = fromActions.deselectColumnAction({ name, columnType });
+        const action = fromActions.deselectColumnAction({
+          name,
+          columnType,
+          scope: "dataset",
+        });
         const outcome = fromActions.updateUserSettingsAction({ property });
 
         actions = hot("-a", { a: action });
@@ -699,22 +727,19 @@ describe("UserEffects", () => {
   });
 
   describe("updateUserSettings$", () => {
-    const property = { columns: [] };
+    const property = { fe_dataset_table_columns: [] };
 
     it("should result in an updateUserSettingsCompleteAction", () => {
       // TODO: try to fix the types here instead of using type casting and conversion
       const userSettings = {
-        columns: [],
-        filters: [],
-        conditions: [],
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
         id: "testId",
         externalSettings: {
-          columns: [],
-          filters: [],
-          conditions: [],
+          fe_dataset_table_columns: [],
+          fe_dataset_table_filters: [],
+          fe_dataset_table_conditions: [],
         },
       } as unknown as UserSettings;
 
@@ -724,9 +749,9 @@ describe("UserEffects", () => {
         userId: "testId",
         id: "testId",
         externalSettings: {
-          columns: [],
-          filters: [],
-          conditions: [],
+          fe_dataset_table_columns: [],
+          fe_dataset_table_filters: [],
+          fe_dataset_table_conditions: [],
         },
       };
       const action = fromActions.updateUserSettingsAction({ property });

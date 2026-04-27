@@ -140,8 +140,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
           this.dataSource.next(origDatablocks);
           this.pending = false;
 
-          const savedTableConfigColumns =
-            tablesSettings?.[this.tableName]?.columns;
+          const savedTableConfigColumns = tablesSettings?.columns;
           const tableSort = this.getTableSort();
           const paginationConfig = this.getTablePaginationConfig(count);
 
@@ -243,23 +242,16 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column) => {
-      const { name, display, index, width } = column;
+    const columnsSetting = setting.columnSetting.map((column, index) => {
+      const { name, display, width } = column;
 
-      return { name, display, index, width };
+      return { name, display, order: index, width };
     });
-
-    const tablesSettings = {
-      ...this.tablesSettings,
-      [setting.settingName || this.tableName]: {
-        columns: columnsSetting,
-      },
-    };
 
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
-          tablesSettings,
+          fe_file_table_columns: columnsSetting,
         },
       }),
     );

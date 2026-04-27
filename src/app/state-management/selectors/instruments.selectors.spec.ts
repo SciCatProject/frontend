@@ -81,12 +81,14 @@ describe("Instrument Selectors", () => {
           fromSelectors.selectInstrumentsCount.projector(
             initialInstrumentState,
           ),
-          fromUserSelectors.selectTablesSettings.projector(initialUserState),
+          fromUserSelectors.selectSettings.projector(initialUserState),
         ),
       ).toEqual({
         instruments: [],
         count: 0,
-        tablesSettings: {},
+        tablesSettings: {
+          columns: initialUserState.settings.fe_instrument_table_columns,
+        },
       });
     });
 

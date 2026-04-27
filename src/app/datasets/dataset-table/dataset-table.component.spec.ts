@@ -329,7 +329,7 @@ describe("DatasetTableComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         updateUserSettingsAction({
           property: {
-            columns: [
+            fe_dataset_table_columns: [
               {
                 name: "datasetName",
                 header: undefined,
@@ -381,7 +381,7 @@ describe("DatasetTableComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         updateUserSettingsAction({
           property: {
-            columns: [
+            fe_dataset_table_columns: [
               jasmine.objectContaining({
                 name: "scientificMetadata.sample.temperature",
                 userAdded: undefined,
