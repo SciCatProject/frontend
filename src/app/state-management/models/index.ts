@@ -239,7 +239,7 @@ export const getSettingKey = (
   );
 
   if (!settingKey) {
-    throw new Error("Missing setting key in SETTINGS_CONFIG");
+    throw new Error(`Missing ${scope}:${kind} in SETTINGS_CONFIG`);
   }
 
   return settingKey.key;

@@ -20,7 +20,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { AsyncPipe } from "@angular/common";
 import { UnitsService } from "shared/services/units.service";
 import { UnitsOptionsService } from "shared/services/units-options.service";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import {
   SearchParametersDialogComponent,
   SearchParametersDialogData,
@@ -48,7 +48,7 @@ export class SharedConditionComponent implements OnDestroy {
   @Input() removeConditionAction: (condition: ScientificCondition) => void;
   @Output() conditionsApplied = new EventEmitter<void>();
 
-  conditionConfigs$ = this.store.select(selectConditions("dataset"));
+  conditionConfigs$: Observable<ConditionConfig[]>;
 
   humanNameMap: { [key: string]: string } = {};
   tempConditionValues: string[] = [];
