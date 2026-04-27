@@ -22,7 +22,10 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TranslateService } from "@ngx-translate/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { TablePagination } from "shared/modules/dynamic-material-table/models/table-pagination.model";
-import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 
 describe("RelatedDatasetsComponent", () => {
