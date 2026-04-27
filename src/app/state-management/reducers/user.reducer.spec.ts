@@ -10,17 +10,18 @@ import {
 import { SDKToken } from "shared/services/auth/auth.service";
 
 describe("UserReducer", () => {
-  describe("on setDatasetTableColumnsAction", () => {
+  describe("on setTableColumnsAction", () => {
     it("should set the columns", () => {
       const columns: TableColumn[] = [
         { name: "testColumn", order: 0, type: "standard", enabled: true },
       ];
-      const action = fromActions.setDatasetTableColumnsAction({
+      const action = fromActions.setTableColumnsAction({
         columns,
+        scope: "dataset",
       });
       const state = userReducer(initialUserState, action);
 
-      expect(state.columns.length).toEqual(1);
+      expect(state.settings.fe_dataset_table_columns.length).toEqual(1);
     });
   });
 
@@ -117,12 +118,16 @@ describe("UserReducer", () => {
 
   describe("on fetchUserSettingsCompleteAction", () => {
     it("should set jobCount and datasetCount settings, and columns if not empty", () => {
+      const datasetColumns: TableColumn[] = [
+        { name: "test", order: 0, type: "standard", enabled: true },
+      ];
       const userSettings = {
-        columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        externalSettings: {},
+        externalSettings: {
+          fe_dataset_table_columns: datasetColumns,
+        },
         id: "testId",
       };
       const action = fromActions.fetchUserSettingsCompleteAction({
@@ -132,19 +137,20 @@ describe("UserReducer", () => {
 
       expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
       expect(state.settings.jobCount).toEqual(userSettings.jobCount);
-      expect(state.columns).toEqual(
-        (userSettings as { columns: TableColumn[] }).columns,
+      expect(state.settings.fe_dataset_table_columns).toEqual(
+        userSettings.externalSettings.fe_dataset_table_columns,
       );
     });
 
     it("should set jobCount and datasetCount settings, and not columns if empty", () => {
       const userSettings = {
-        columns: [],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
         id: "testId",
-        externalSettings: {},
+        externalSettings: {
+          fe_dataset_table_columns: [],
+        },
       };
       const action = fromActions.fetchUserSettingsCompleteAction({
         userSettings,
@@ -153,18 +159,24 @@ describe("UserReducer", () => {
 
       expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
       expect(state.settings.jobCount).toEqual(userSettings.jobCount);
-      expect(state.columns).toEqual(initialUserState.columns);
+      expect(state.settings.fe_dataset_table_columns).toEqual(
+        initialUserState.settings.fe_dataset_table_columns,
+      );
     });
   });
 
   describe("on updateUserSettingsCompleteAction", () => {
     it("should set jobCount and datasetCount settings, and columns if not empty", () => {
+      const datasetColumns: TableColumn[] = [
+        { name: "test", order: 0, type: "standard", enabled: true },
+      ];
       const userSettings = {
-        columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        externalSettings: {},
+        externalSettings: {
+          fe_dataset_table_columns: datasetColumns,
+        },
         id: "testId",
       };
       const action = fromActions.updateUserSettingsCompleteAction({
@@ -174,18 +186,19 @@ describe("UserReducer", () => {
 
       expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
       expect(state.settings.jobCount).toEqual(userSettings.jobCount);
-      expect(state.columns).toEqual(
-        (userSettings as { columns: TableColumn[] }).columns,
+      expect(state.settings.fe_dataset_table_columns).toEqual(
+        userSettings.externalSettings.fe_dataset_table_columns,
       );
     });
 
     it("should set jobCount and datasetCount settings, and not columns if empty", () => {
       const userSettings = {
-        columns: [],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        externalSettings: {},
+        externalSettings: {
+          fe_dataset_table_columns: [],
+        },
         id: "testId",
       };
       const action = fromActions.updateUserSettingsCompleteAction({
@@ -195,7 +208,9 @@ describe("UserReducer", () => {
 
       expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
       expect(state.settings.jobCount).toEqual(userSettings.jobCount);
-      expect(state.columns).toEqual(initialUserState.columns);
+      expect(state.settings.fe_dataset_table_columns).toEqual(
+        initialUserState.settings.fe_dataset_table_columns,
+      );
     });
   });
 
@@ -234,14 +249,27 @@ describe("UserReducer", () => {
   describe("on addColumnAction", () => {
     it("should append a new column to the columns property", () => {
       const names = ["test"];
-      const action = fromActions.addCustomColumnsAction({ names });
+      const action = fromActions.addCustomColumnsAction({
+        names,
+        scope: "dataset",
+      });
       const state = userReducer(initialUserState, action);
 
-      expect(state.columns[state.columns.length - 1].name).toEqual("test");
-      expect(state.columns[state.columns.length - 1].order).toEqual(
-        state.columns.length - 1,
-      );
-      expect(state.columns[state.columns.length - 1].enabled).toEqual(false);
+      expect(
+        state.settings.fe_dataset_table_columns[
+          state.settings.fe_dataset_table_columns.length - 1
+        ].name,
+      ).toEqual("test");
+      expect(
+        state.settings.fe_dataset_table_columns[
+          state.settings.fe_dataset_table_columns.length - 1
+        ].order,
+      ).toEqual(state.settings.fe_dataset_table_columns.length - 1);
+      expect(
+        state.settings.fe_dataset_table_columns[
+          state.settings.fe_dataset_table_columns.length - 1
+        ].enabled,
+      ).toEqual(false);
     });
   });
 
@@ -250,10 +278,14 @@ describe("UserReducer", () => {
       const name = "dataStatus";
       const columnType = "standard";
 
-      const action = fromActions.selectColumnAction({ name, columnType });
+      const action = fromActions.selectColumnAction({
+        name,
+        columnType,
+        scope: "dataset",
+      });
       const state = userReducer(initialUserState, action);
 
-      state.columns.forEach((column) => {
+      state.settings.fe_dataset_table_columns.forEach((column) => {
         if (column.name === name && column.type === columnType) {
           expect(column.enabled).toEqual(true);
         }
@@ -266,10 +298,14 @@ describe("UserReducer", () => {
       const name = "datasetName";
       const columnType = "standard";
 
-      const action = fromActions.deselectColumnAction({ name, columnType });
+      const action = fromActions.deselectColumnAction({
+        name,
+        columnType,
+        scope: "dataset",
+      });
       const state = userReducer(initialUserState, action);
 
-      state.columns.forEach((column) => {
+      state.settings.fe_dataset_table_columns.forEach((column) => {
         if (column.name === name && column.type === columnType) {
           expect(column.enabled).toEqual(false);
         }

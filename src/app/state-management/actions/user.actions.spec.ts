@@ -226,7 +226,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const userSettings: UserSettings = {
         externalSettings: {
-          columns: [],
+          fe_dataset_table_columns: [],
         },
         datasetCount: 25,
         jobCount: 25,
@@ -254,7 +254,7 @@ describe("User Actions", () => {
 
   describe("updateUserSettingsAction", () => {
     it("should create an action", () => {
-      const property = { columns: [] };
+      const property = { fe_dataset_table_columns: [] };
       const action = fromActions.updateUserSettingsAction({ property });
       expect({ ...action }).toEqual({
         type: "[User] Update User Settings",
@@ -267,7 +267,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const userSettings: UserSettings = {
         externalSettings: {
-          columns: [],
+          fe_dataset_table_columns: [],
         },
         datasetCount: 25,
         jobCount: 25,
@@ -344,10 +344,14 @@ describe("User Actions", () => {
   describe("addCustomColumnsAction", () => {
     it("should create an action", () => {
       const names = ["test"];
-      const action = fromActions.addCustomColumnsAction({ names });
+      const action = fromActions.addCustomColumnsAction({
+        names,
+        scope: "dataset",
+      });
       expect({ ...action }).toEqual({
         type: "[User] Add Custom Columns",
         names,
+        scope: "dataset",
       });
     });
   });
@@ -365,11 +369,16 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const name = "test";
       const columnType = "standard";
-      const action = fromActions.selectColumnAction({ name, columnType });
+      const action = fromActions.selectColumnAction({
+        name,
+        columnType,
+        scope: "dataset",
+      });
       expect({ ...action }).toEqual({
         type: "[User] Select Column",
         name,
         columnType,
+        scope: "dataset",
       });
     });
   });
@@ -378,11 +387,16 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const name = "test";
       const columnType = "standard";
-      const action = fromActions.deselectColumnAction({ name, columnType });
+      const action = fromActions.deselectColumnAction({
+        name,
+        columnType,
+        scope: "dataset",
+      });
       expect({ ...action }).toEqual({
         type: "[User] Deselect Column",
         name,
         columnType,
+        scope: "dataset",
       });
     });
   });
