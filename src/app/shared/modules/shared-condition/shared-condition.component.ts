@@ -43,7 +43,7 @@ export class SharedConditionComponent implements OnDestroy {
   @Input() addConditionAction: (condition: ScientificCondition) => void;
   @Input() removeConditionAction: (condition: ScientificCondition) => void;
   @Output() conditionsApplied = new EventEmitter<void>();
-
+  @Input() dialogTitle = "Add Metadata Key";
   allConditions$ = this.store.select(selectConditions);
 
   conditionConfigs$ = this.allConditions$.pipe(
@@ -262,6 +262,7 @@ export class SharedConditionComponent implements OnDestroy {
                   usedFields: usedFields,
                   parameterKeys: availableKeys,
                   humanNameMap: this.humanNameMap,
+                  dialogTitle: this.dialogTitle,
                 },
                 restoreFocus: false,
               },
