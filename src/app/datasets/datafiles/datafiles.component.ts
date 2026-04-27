@@ -123,10 +123,10 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     DataFiles_File[]
   >([]);
 
-  paginationMode: TablePaginationMode = "server-side";
+  paginationMode: TablePaginationMode = "client-side";
 
   pagination: TablePagination = {
-    pageSizeOptions: [10, 25, 50],
+    pageSizeOptions: [5, 10, 25, 50, 100],
     pageIndex: 0,
     pageSize: 25,
     length: 0,
@@ -225,6 +225,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
         if (datablocks) {
+          this.totalFileSize = 0;
           const files: DataFiles_File[] = [];
           datablocks.forEach((block) => {
             block.dataFileList.map((file: DataFiles_File) => {
@@ -235,10 +236,19 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
           });
           this.count = files.length;
           this.files = files;
-          this.dataSource.next(files);
-          this.pagination.length = files.length;
+
+          this.pagination = {
+            ...this.pagination,
+            pageIndex: 0,
+            length: files.length,
+            pageSize: this.pagination.pageSize || 25,
+          };
+
+          this.applyPagination();
           this.tooLargeFile = this.hasTooLargeFiles(this.files);
-          this.actionItems.datasets[0].files = files;
+          if (this.actionItems.datasets.length > 0) {
+            this.actionItems.datasets[0].files = files;
+          }
         }
       }),
     );
@@ -264,6 +274,22 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     } else {
       this[`${form}Element`].nativeElement.submit();
     }
+  }
+
+  applyPagination() {
+    const start = this.pagination.pageIndex * this.pagination.pageSize;
+    const end = start + this.pagination.pageSize;
+    this.dataSource.next(this.files.slice(start, end));
+  }
+
+  onPaginationChange({ pageIndex, pageSize }: TablePagination) {
+    this.pagination = {
+      ...this.pagination,
+      pageIndex,
+      pageSize,
+      length: this.files.length,
+    };
+    this.applyPagination();
   }
 
   ngOnDestroy() {
