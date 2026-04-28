@@ -25,7 +25,11 @@ import {
   concatMap,
 } from "rxjs/operators";
 import { of } from "rxjs";
-import { MessageType } from "state-management/models";
+import {
+  ConditionSettingScope,
+  MessageType,
+  SETTINGS_CONFIG,
+} from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
   selectColumns,
@@ -49,7 +53,6 @@ import { clearPublishedDataStateAction } from "state-management/actions/publishe
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
-import { selectColumnAction } from "state-management/actions/user.actions";
 import { initialUserState } from "state-management/state/user.store";
 
 @Injectable()
@@ -325,28 +328,46 @@ export class UserEffects {
         this.usersService.usersControllerGetSettingsV3(id, null).pipe(
           map((userSettings: UserSettings) => {
             const config = this.configService.getConfig();
-            const externalSettings = userSettings.externalSettings || {};
+            const externalSettings = {
+              ...(userSettings.externalSettings || {}),
+            };
 
-            const settingsToCheck = ["columns", "conditions", "filters"];
+            const settingsToCheck = SETTINGS_CONFIG.map((s) => s.key);
 
             for (const setting of settingsToCheck) {
-              let items = [];
+              let items = externalSettings[setting];
 
-              if (Array.isArray(externalSettings[setting])) {
-                items = externalSettings[setting];
+              if (!Array.isArray(items) || items.length < 1) {
+                const settingConfig = SETTINGS_CONFIG.find(
+                  (s) => s.key === setting,
+                );
+                switch (settingConfig?.scope) {
+                  case "dataset":
+                    items =
+                      config.defaultDatasetsListSettings?.[
+                        settingConfig.configKey
+                      ] || initialUserState.settings[setting];
+                    break;
+                  case "proposal":
+                    items =
+                      config.defaultProposalsListSettings?.[
+                        settingConfig.configKey
+                      ] || initialUserState.settings[setting];
+                    break;
+                  default:
+                    items = initialUserState.settings[setting] || [];
+                }
               }
-
-              if (items.length < 1) {
-                items =
-                  config.defaultDatasetsListSettings[setting] ||
-                  initialUserState[setting];
-              }
-
-              userSettings[setting] = items;
+              externalSettings[setting] = items;
             }
 
+            const normalizedUserSettings = {
+              ...userSettings,
+              externalSettings,
+            };
+
             return fromActions.fetchUserSettingsCompleteAction({
-              userSettings,
+              userSettings: normalizedUserSettings,
             });
           }),
           catchError(() => of(fromActions.fetchUserSettingsFailedAction())),
@@ -368,43 +389,52 @@ export class UserEffects {
   setFilters$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsCompleteAction),
-      mergeMap(({ userSettings }) => [
-        fromActions.updateFilterConfigs({
-          filterConfigs: (userSettings as any).filters,
-        }),
-      ]),
+      mergeMap(({ userSettings }) =>
+        SETTINGS_CONFIG.filter((s) => s.configKey === "filters").map((s) =>
+          fromActions.updateFilterConfigs({
+            filterConfigs: userSettings.externalSettings?.[s.key] || [],
+            scope: s.scope as "dataset" | "proposal",
+          }),
+        ),
+      ),
     );
   });
 
   setConditions$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsCompleteAction),
-      mergeMap(({ userSettings }) => {
-        const actions = [];
+      mergeMap(({ userSettings }) =>
+        SETTINGS_CONFIG.filter((s) => s.configKey === "conditions").flatMap(
+          (s) => {
+            const scope = s.scope as ConditionSettingScope;
+            const incoming = userSettings.externalSettings?.[s.key];
 
-        // TODO: Check with the types here. This is working better as it is now with the conditions and filters. We are leaving it for now as it was from before.
-        (userSettings as any).conditions
-          .filter((condition) => condition.enabled)
-          .forEach((condition) => {
+            const conditions = incoming.length > 0 ? incoming : [];
+
+            const actions = [];
+
+            if (scope === "dataset") {
+              // TODO: Check with the types here. This is working better as it is now with the conditions and filters. We are leaving it for now as it was from before.
+              conditions
+                .filter((c) => c.enabled)
+                .forEach((c) => {
+                  actions.push(
+                    addScientificConditionAction({ condition: c.condition }),
+                  );
+                });
+            }
+
             actions.push(
-              addScientificConditionAction({ condition: condition.condition }),
-            );
-            actions.push(
-              selectColumnAction({
-                name: condition.condition.lhs,
-                columnType: "custom",
+              fromActions.updateConditionsConfigs({
+                conditionConfigs: conditions,
+                scope,
               }),
             );
-          });
 
-        actions.push(
-          fromActions.updateConditionsConfigs({
-            conditionConfigs: (userSettings as any).conditions,
-          }),
-        );
-
-        return actions;
-      }),
+            return actions;
+          },
+        ),
+      ),
     );
   });
 
@@ -428,7 +458,7 @@ export class UserEffects {
       ),
       map((columns) =>
         fromActions.updateUserSettingsAction({
-          property: { columns },
+          property: { fe_dataset_table_columns: columns },
         }),
       ),
     );
@@ -440,12 +470,7 @@ export class UserEffects {
       concatLatestFrom(() => [this.user$]),
       takeWhile(([action, user]) => !!user),
       switchMap(([{ property }, user]) => {
-        const settingsToNest = [
-          "columns",
-          "conditions",
-          "filters",
-          "tablesSettings",
-        ];
+        const settingsToNest = SETTINGS_CONFIG.map((s) => s.key);
         const propertyKeys = Object.keys(property);
         const newProperty = {};
         let useExternalSettings = false;
@@ -473,20 +498,12 @@ export class UserEffects {
               JSON.stringify(newProperty) as any,
             );
         return apiCall$.pipe(
-          map((userSettings: UserSettings) => {
-            userSettings["conditions"] = (
-              userSettings.externalSettings as any
-            ).conditions;
-            userSettings["filters"] = (
-              userSettings.externalSettings as any
-            ).filters;
-            userSettings["columns"] = (
-              userSettings.externalSettings as any
-            ).columns;
-            return fromActions.updateUserSettingsCompleteAction({
+          map((userSettings: UserSettings) =>
+            fromActions.updateUserSettingsCompleteAction({
               userSettings,
-            });
-          }),
+            }),
+          ),
+
           catchError(() => of(fromActions.updateUserSettingsFailedAction())),
         );
       }),
@@ -508,32 +525,10 @@ export class UserEffects {
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loadDefaultSettings),
-      concatLatestFrom(() => this.store.select(selectConditions)),
-      map(([{ config }, existingConditions]) => {
-        const defaultFilters =
-          config.defaultDatasetsListSettings.filters ||
-          initialUserState.filters;
-        const defaultConditions =
-          config.defaultDatasetsListSettings.conditions ||
-          initialUserState.conditions;
-
-        // NOTE: config.localColumns is for backward compatibility.
-        //       it should be removed once no longer needed
-        const columns =
-          config.defaultDatasetsListSettings.columns ||
-          config.localColumns ||
-          initialUserState.columns;
+      concatLatestFrom(() => this.store.select(selectConditions("dataset"))),
+      map(([{ config }, existingDatasetConditions]) => {
         const isAuthenticated = this.authService.isAuthenticated();
-
         const actions = [];
-
-        if (!existingConditions || existingConditions.length === 0) {
-          actions.push(
-            fromActions.updateConditionsConfigs({
-              conditionConfigs: defaultConditions,
-            }),
-          );
-        }
 
         actions.push(
           fromActions.updateHasFetchedSettings({
@@ -541,14 +536,105 @@ export class UserEffects {
           }),
         );
 
-        actions.push(
-          fromActions.updateFilterConfigs({ filterConfigs: defaultFilters }),
+        SETTINGS_CONFIG.filter((s) => s.configKey === "filters").forEach(
+          (s) => {
+            let filterConfigs;
+
+            switch (s.scope) {
+              case "dataset":
+                filterConfigs =
+                  config.defaultDatasetsListSettings?.filters ||
+                  initialUserState.settings.fe_dataset_table_filters;
+                break;
+              case "proposal":
+                filterConfigs =
+                  config.defaultProposalsListSettings?.filters ||
+                  initialUserState.settings.fe_proposal_table_filters;
+                break;
+              default:
+                filterConfigs = initialUserState.settings[s.key];
+                break;
+            }
+
+            actions.push(
+              fromActions.updateFilterConfigs({
+                filterConfigs,
+                scope: s.scope as "dataset" | "proposal",
+              }),
+            );
+          },
         );
 
-        actions.push(
-          fromActions.setDatasetTableColumnsAction({
-            columns,
-          }),
+        SETTINGS_CONFIG.filter((s) => s.configKey === "conditions").forEach(
+          (s) => {
+            const scope = s.scope as ConditionSettingScope;
+            let defaultConditions;
+
+            switch (scope) {
+              case "dataset":
+                defaultConditions =
+                  config.defaultDatasetsListSettings?.conditions ||
+                  initialUserState.settings.fe_dataset_table_conditions;
+                break;
+              case "sample":
+                defaultConditions =
+                  initialUserState.settings.fe_sample_table_conditions;
+                break;
+              default:
+                defaultConditions = initialUserState.settings[s.key];
+                break;
+            }
+
+            const conditionConfigs =
+              scope === "dataset" && existingDatasetConditions?.length
+                ? existingDatasetConditions
+                : defaultConditions;
+
+            actions.push(
+              fromActions.updateConditionsConfigs({
+                conditionConfigs,
+                scope,
+              }),
+            );
+          },
+        );
+
+        SETTINGS_CONFIG.filter((s) => s.configKey === "columns").forEach(
+          (s) => {
+            let columnsConfig = [];
+
+            // NOTE: config.localColumns is for backward compatibility.
+            //       it should be removed once no longer needed
+
+            switch (s.scope) {
+              case "dataset":
+                columnsConfig =
+                  config.defaultDatasetsListSettings?.columns ||
+                  config.localColumns ||
+                  initialUserState.settings.fe_dataset_table_columns;
+                break;
+              case "proposal":
+                columnsConfig =
+                  config.defaultProposalsListSettings?.columns ||
+                  initialUserState.settings.fe_proposal_table_columns;
+                break;
+              default:
+                columnsConfig = initialUserState.settings[s.key];
+                break;
+            }
+
+            actions.push(
+              fromActions.setTableColumnsAction({
+                columns: columnsConfig,
+                scope: s.scope as
+                  | "dataset"
+                  | "proposal"
+                  | "sample"
+                  | "instrument"
+                  | "file",
+              }),
+            );
+          },
         );
 
         return actions;

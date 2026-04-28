@@ -15,7 +15,7 @@ import {
   OutputDatasetObsoleteDto,
   ProposalClass,
   PublishedData,
-  SampleClass,
+  OutputSampleDto,
   Logbook,
   Policy,
   ReturnedUserDto,
@@ -129,6 +129,13 @@ export class MockDatasetApi {
     return of([]);
   }
 
+  datasetsControllerFindByIdAndUpdateV3(
+    pid: string,
+    body: Record<string, unknown>,
+  ) {
+    return of(null);
+  }
+
   datasetsControllerCountV3(data?: any) {
     return of(0);
   }
@@ -154,6 +161,10 @@ export class MockActivatedRoute {
   queryParams = of([{ limit: 10 }]);
   url = of([]);
   children = [];
+}
+
+export class MockDatasetsListService {
+  destroy() {}
 }
 
 export class MockRouter {
@@ -239,7 +250,7 @@ export class MockPublishedDataApi {
     ]);
   }
 
-  publishedDataControllerFormPopulateV3() {
+  publishedDataV4ControllerFormPopulateV4() {
     return of({});
   }
 }
@@ -328,7 +339,7 @@ export function createMock<T>(data?: Partial<T>): T {
 
 export const mockDataset = createMock<OutputDatasetObsoleteDto>({});
 export const mockAttachment = createMock<OutputAttachmentV3Dto>({});
-export const mockSample = createMock<SampleClass>({});
+export const mockSample = createMock<OutputSampleDto>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});
 export const mockOrigDatablock = createMock<OrigDatablock>({});

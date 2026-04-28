@@ -125,8 +125,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
           const defaultConfigColumns =
             this.appConfig?.defaultProposalsListSettings?.columns;
 
-          const userConfigColumns =
-            tablesSettings?.[this.tableName]?.columns || [];
+          const userConfigColumns = tablesSettings?.columns || [];
 
           const userTableConfigColumns =
             this.convertSavedColumns(userConfigColumns);
@@ -148,6 +147,13 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
             this.initTable(tableSettingsConfig, paginationConfig);
           }
         }),
+    );
+
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+        this.globalTextSearch = searchQuery.text || "";
+      }),
     );
   }
 
@@ -250,17 +256,10 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
       };
     });
 
-    const tablesSettings = {
-      ...this.tablesSettings,
-      [setting.settingName || this.tableName]: {
-        columns: columnsSetting,
-      },
-    };
-
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
-          tablesSettings,
+          fe_proposal_table_columns: columnsSetting,
         },
       }),
     );

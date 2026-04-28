@@ -34,7 +34,7 @@
           </mat-form-field>
 
           <mat-expansion-panel
-            *ngIf="schema.properties"
+            *ngIf="!isSchemaEmpty()"
             (opened)="panelOpenState.set(true)"
             (closed)="panelOpenState.set(false)"
           >
@@ -49,6 +49,7 @@
               [schema]="schema"
               [uischema]="uiSchema"
               [renderers]="renderers"
+              [ajv]="ajvService.getAjv()"
               (errors)="onErrors($event)"
               (dataChange)="onMetadataChange($event)"
             ></jsonforms>
@@ -69,9 +70,7 @@
             class="save-and-continue"
             mat-raised-button
             color="primary"
-            [disabled]="
-              !formIsValid() || (panelOpenState() && !metadataIsValid())
-            "
+            [disabled]="!formIsValid()"
           >
             Save and Continue
           </button>

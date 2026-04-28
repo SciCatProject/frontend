@@ -47,8 +47,6 @@ export interface UserState {
 
   columns: TableColumn[];
 
-  tablesSettings: object;
-
   filters: FilterConfig[];
 
   conditions: ConditionConfig[];
@@ -72,6 +70,15 @@ export const initialUserState: UserState = {
     datasetCount: 25,
     jobCount: 25,
     darkTheme: false,
+    fe_dataset_table_columns: [],
+    fe_dataset_table_filters: [],
+    fe_dataset_table_conditions: [],
+    fe_proposal_table_columns: [],
+    fe_proposal_table_filters: [],
+    fe_sample_table_columns: [],
+    fe_sample_table_conditions: [],
+    fe_instrument_table_columns: [],
+    fe_file_table_columns: [],
   }, // TODO sync with server settings?
 
   message: undefined,
@@ -131,6 +138,4 @@ export const initialUserState: UserState = {
   ],
 
   conditions: [],
-
-  tablesSettings: {},
 };

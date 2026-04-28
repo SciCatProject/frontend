@@ -55,11 +55,13 @@ export const testData = {
   },
   proposal: {
     proposalId: "20170266",
+    pi_email: "pi@uni.edu",
     email: "proposer@uni.edu",
     title: "Cypress minimal test proposal",
     abstract: "Abstract of test proposal",
     ownerGroup: "20170251-group",
     accessGroups: [],
+    type: "Default Proposal",
   },
   instrument: {
     uniqueName: "ESS1-1",
@@ -69,6 +71,21 @@ export const testData = {
       department: "An immaginary department #1",
       main_user: "ESS",
     },
+  },
+  sample: {
+    ownerGroup: "ess",
+    accessGroups: ["string"],
+    instrumentGroup: "string",
+    sampleId: "string",
+    owner: "string",
+    description: "Cypress Sample",
+    type: "string",
+    proposalId: "cypress",
+    parentSampleId: "string",
+    sampleCharacteristics: {
+      test_characteristic: { type: "number", value: 10, unit: "" },
+    },
+    isPublished: false,
   },
   rawDataset: {
     principalInvestigator: "string",

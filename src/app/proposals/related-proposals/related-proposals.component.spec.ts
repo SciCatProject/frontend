@@ -15,6 +15,7 @@ import { DynamicMatTableModule } from "shared/modules/dynamic-material-table/tab
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TranslateService } from "@ngx-translate/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
+import { AppConfigService } from "app-config.service";
 
 describe("RelatedProposalsComponent", () => {
   let component: RelatedProposalsComponent;
@@ -56,6 +57,7 @@ describe("RelatedProposalsComponent", () => {
         { provide: Router, useValue: router },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: TranslateService, useValue: { instant: (k: string) => k } },
+        { provide: AppConfigService, useValue: { getConfig: () => ({}) } },
       ],
     }).compileComponents();
 

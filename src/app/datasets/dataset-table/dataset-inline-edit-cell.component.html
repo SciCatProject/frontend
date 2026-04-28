@@ -1,0 +1,40 @@
+<div
+  class="inline-edit-cell"
+  [class.can-edit]="canEdit"
+  [class.is-editing]="isEditing"
+  (click)="onCellClick($event)"
+  (dblclick)="onCellDoubleClick($event)"
+  (mousedown)="onCellMouseDown($event)"
+>
+  <ng-container *ngIf="isEditing; else readMode">
+    <div class="inline-edit-editor" (click)="$event.stopPropagation()">
+      <input
+        #valueInput
+        matInput
+        class="inline-edit-input"
+        [(ngModel)]="draftValue"
+        [disabled]="isSaving"
+        (click)="$event.stopPropagation()"
+        (keydown.enter)="saveValue($event)"
+        (keydown.escape)="cancelEdit($event)"
+      />
+      <button
+        mat-icon-button
+        type="button"
+        class="save-button"
+        aria-label="Save value"
+        [disabled]="isSaving"
+        (click)="saveValue($event)"
+      >
+        <mat-icon>check</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #readMode>
+    <span *ngIf="displayValue" class="inline-edit-text">
+      {{ displayValue }}
+    </span>
+    <mat-icon *ngIf="canEdit" class="edit-icon">edit</mat-icon>
+  </ng-template>
+</div>

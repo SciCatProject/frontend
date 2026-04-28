@@ -39,8 +39,6 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
-      es01:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/v3/health"]
       interval: 30s
@@ -61,60 +59,6 @@ services:
     labels:
       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend.entrypoints=web"
-  es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
-    ports:
-      - 9200:9200
-    environment:
-      - xpack.security.enabled=false
-      - node.name=es01
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-      - ES_PASSWORD=password
-      - cluster.name=es-cluster
-      - cluster.initial_master_nodes=es01
-      - discovery.seed_hosts=es01
-      - cluster.routing.allocation.disk.threshold_enabled=false
-      - bootstrap.memory_lock=true
-    mem_limit: 1g
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
-      memlock:
-        soft: -1
-        hard: -1
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -s -X GET http://es01:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
-        ]
-      interval: 30s
-      timeout: 10s
-      start_period: 60s
-      retries: 4
-  
-  
-  ## NOTE:
-  ## scichat-loopback is ESS specific microservice for logbook
-  ## Discussion is needed to decide if this should be included in the e2e test
-  ## If not, remove the following block and also .env.scichat-loopback.e2e in the same directory
-  
-  
-  # scichat-loopback:
-  #   image: "ghcr.io/scicatproject/scichat-loopback:latest"
-  #   command:
-  #     [
-  #       "node",
-  #       "-r",
-  #       "dotenv/config",
-  #       "."
-  #     ]
-  #   volumes:
-  #     - "./CI/e2e/.env.scichat-loopback.e2e:/home/node/app/.env"
-  #   depends_on:
-  #     mongodb:
-  #       condition: service_healthy
 
 volumes:
   mongodb_data:

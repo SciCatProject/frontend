@@ -443,3 +443,37 @@ jsonforms {
 .mat-mdc-tab-body-content {
   overflow: hidden !important;
 }
+
+/* Global readable Material tooltip */
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  font-size: 16px;
+  line-height: 1.4;
+  max-width: 400px;
+  border-radius: 8px;
+  white-space: normal;
+}
+
+// Enter hint for input fields
+
+.enter-hint {
+align-items: center;
+gap: 4px;
+padding: 2px 6px;
+font-size: 1.2em;
+line-height: 1;
+color: var(--theme-primary-default);
+}
+
+.enter-hint {
+display: none;
+}
+
+.mat-mdc-form-field.mat-focused .enter-hint {
+display: inline-flex;
+}
+
+.mat-mdc-form-field-text-suffix,
+.mat-mdc-form-field-icon-suffix {
+display: flex;
+align-items: center;
+}

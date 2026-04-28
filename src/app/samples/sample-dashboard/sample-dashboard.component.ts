@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputSampleDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changePageAction,
   fetchSamplesAction,
@@ -8,8 +8,6 @@ import {
   setTextFilterAction,
   prefillFiltersAction,
   fetchMetadataKeysAction,
-  addCharacteristicsFilterAction,
-  removeCharacteristicsFilterAction,
 } from "state-management/actions/samples.actions";
 import { BehaviorSubject, combineLatest, Subscription } from "rxjs";
 import { selectSampleDashboardPageViewModel } from "state-management/selectors/samples.selectors";
@@ -21,7 +19,6 @@ import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.compo
 import deepEqual from "deep-equal";
 import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
-import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AppConfigService } from "app-config.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -43,6 +40,12 @@ import { updateUserSettingsAction } from "state-management/actions/user.actions"
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
+import {
+  addCharacteristicsFilterAction,
+  removeCharacteristicsFilterAction,
+} from "state-management/actions/samples.actions";
+import { ScientificCondition } from "state-management/models";
 
 @Component({
   selector: "sample-dashboard",
@@ -52,6 +55,8 @@ import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/defau
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
+
+  @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -117,8 +122,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   paginationMode: TablePaginationMode = "server-side";
 
-  dataSource: BehaviorSubject<SampleClass[]> = new BehaviorSubject<
-    SampleClass[]
+  dataSource: BehaviorSubject<OutputSampleDto[]> = new BehaviorSubject<
+    OutputSampleDto[]
   >([]);
 
   pagination: TablePagination = {};
@@ -136,11 +141,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private appConfigService: AppConfigService,
     private datePipe: DatePipe,
-    public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
     private tableConfigService: TableConfigService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -152,8 +157,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         this.dataSource.next(samples);
         this.pending = false;
 
-        const savedTableConfigColumns =
-          tableSettings?.[this.tableName]?.columns;
+        const savedTableConfigColumns = tableSettings?.columns;
         const tableSort = this.getTableSort();
         const paginationConfig = this.getTablePaginationConfig(count);
 
@@ -208,7 +212,19 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  formatTableData(samples: SampleClass[]): any {
+  addCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(
+      addCharacteristicsFilterAction({ characteristic: condition }),
+    );
+  };
+
+  removeCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(
+      removeCharacteristicsFilterAction({ lhs: condition.lhs }),
+    );
+  };
+
+  formatTableData(samples: OutputSampleDto[]): any {
     if (samples) {
       return samples.map((sample) => ({
         sampleId: sample.sampleId,
@@ -233,24 +249,24 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  openSearchParametersDialog() {
-    this.dialog
-      .open(SearchParametersDialogComponent, {
-        data: { parameterKeys: this.metadataKeys },
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          const { data } = res;
-          this.store.dispatch(
-            addCharacteristicsFilterAction({ characteristic: data }),
-          );
-        }
-      });
+  applyFilters() {
+    if (this.conditionFilter) {
+      this.conditionFilter.applyConditions();
+    }
+    this.store.dispatch(fetchSamplesAction());
   }
 
-  removeCharacteristic(index: number) {
-    this.store.dispatch(removeCharacteristicsFilterAction({ index }));
+  reset() {
+    this.store.dispatch(setTextFilterAction({ text: "" }));
+
+    this.vm$.pipe(take(1)).subscribe((vm) => {
+      vm.characteristicsFilter?.forEach((c) => {
+        this.store.dispatch(removeCharacteristicsFilterAction({ lhs: c.lhs }));
+      });
+    });
+    this.conditionFilter?.clearConditions();
+
+    this.store.dispatch(fetchSamplesAction());
   }
 
   getTableSort(): ITableSetting["tableSort"] {
@@ -309,23 +325,16 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column) => {
-      const { name, display, index, width } = column;
+    const columnsSetting = setting.columnSetting.map((column, index) => {
+      const { name, display, width } = column;
 
-      return { name, display, index, width };
+      return { name, display, order: index, width };
     });
-
-    const tablesSettings = {
-      ...this.tablesSettings,
-      [setting.settingName || this.tableName]: {
-        columns: columnsSetting,
-      },
-    };
 
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
-          tablesSettings,
+          fe_sample_table_columns: columnsSetting,
         },
       }),
     );
@@ -343,7 +352,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(event: IRowEvent<SampleClass>) {
+  onRowClick(event: IRowEvent<OutputSampleDto>) {
     if (event.event === RowEventType.RowClick) {
       const id = encodeURIComponent(event.sender.row.sampleId);
       this.router.navigateByUrl("/samples/" + id);

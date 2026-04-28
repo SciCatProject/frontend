@@ -27,6 +27,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ProposalSideFilterComponent } from "./proposal-filters/side-bar-filter/proposal-side-filter.component";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ProposalTableComponent } from "./proposal-table/proposal-table.component";
@@ -100,6 +101,7 @@ export const PROPOSAL_DATE_FORMATS = {
   providers: [
     DatePipe,
     FileSizePipe,
+    JsonHeadPipe,
     SlicePipe,
     { provide: MAT_DATE_FORMATS, useValue: PROPOSAL_DATE_FORMATS },
   ],

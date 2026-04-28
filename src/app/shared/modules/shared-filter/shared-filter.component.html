@@ -3,26 +3,37 @@
   <ng-container [ngSwitch]="filterType">
     <ng-container *ngSwitchDefault>
       <mat-form-field [id]="key">
-        <mat-label>{{ label }}</mat-label>
+        <mat-label>{{ label }} </mat-label>
         <input
           matInput
           #input
           type="text"
           (input)="onInput($event)"
+          (keydown.enter)="onApplyEnter($event)"
           [matTooltip]="tooltip"
           matTooltipPosition="after"
           formControlName="textField"
         />
+        <span
+          *ngIf="appConfig.autoApplyFilters"
+          matSuffix
+          class="enter-hint"
+          matTooltip="Press Enter to apply"
+          matTooltipPosition="after"
+          matTooltipShowDelay="500"
+          >↵</span
+        >
       </mat-form-field>
     </ng-container>
 
     <ng-container *ngSwitchCase="'dateRange'">
       <mat-form-field
+        class="date-range-field"
         [matTooltip]="tooltip"
         matTooltipPosition="after"
         [id]="key"
       >
-        <mat-label>{{ label }}</mat-label>
+        <mat-label>{{ label }} </mat-label>
         <mat-date-range-input
           formGroupName="dateRangeField"
           [rangePicker]="picker"
@@ -32,14 +43,25 @@
             (dateChange)="dateChanged($event, 'begin')"
             formControlName="start"
             data-cy="creation-time-begin"
+            (keydown.enter)="onApplyEnter($event)"
           />
           <input
             matEndDate
             (dateChange)="dateChanged($event, 'end')"
             formControlName="end"
             data-cy="creation-time-end"
+            (keydown.enter)="onApplyEnter($event)"
           />
         </mat-date-range-input>
+        <span
+          *ngIf="appConfig.autoApplyFilters"
+          matSuffix
+          class="enter-hint"
+          matTooltip="Press Enter to apply"
+          matTooltipPosition="after"
+          matTooltipShowDelay="500"
+          >↵</span
+        >
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
@@ -50,11 +72,17 @@
         class="collapsible-filter-wrapper"
         [class.collapsed]="collapsible && collapsed"
       >
-        <mat-label class="filter-title"
+        <mat-label
+          class="filter-title"
+          [class.clickable]="collapsible"
+          (click)="toggleCollapse()"
           >{{ label | translate: localization }}
           <span *ngIf="shouldShowBadge" class="filter-badge">{{
             badgeCount
-          }}</span></mat-label
+          }}</span
+          ><mat-icon *ngIf="collapsible" class="icon-collapse">
+            {{ collapsed ? "expand_more" : "expand_less" }}
+          </mat-icon></mat-label
         >
         <mat-form-field
           *ngIf="showCheckboxSearch"
@@ -89,14 +117,6 @@
         <ng-template #noItems>
           <div class="empty-text">No options found</div>
         </ng-template>
-        <button
-          *ngIf="collapsible"
-          class="collapse-toggle"
-          type="button"
-          (click)="toggleCollapse()"
-        >
-          <mat-icon>{{ collapsed ? "expand_more" : "expand_less" }}</mat-icon>
-        </button>
       </div>
 
       <mat-divider />
@@ -110,6 +130,7 @@
         (selectionChange)="onSelectionChange($event)"
         [facetCounts$]="facetCounts$"
         [currentFilter$]="currentFilter$"
+        (keydown.enter)="onApplyEnter($event)"
       ></multiselect-filter>
     </ng-container>
     <ng-container *ngSwitchCase="'number'">

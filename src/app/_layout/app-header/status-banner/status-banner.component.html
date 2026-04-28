@@ -1,0 +1,12 @@
+<mat-toolbar [ngClass]="['toolbar', 'toolbar-' + code]">
+  <span class="status-message">
+    <mat-icon class="status-icon">
+      {{ code === "INFO" ? "info" : "warning" }}
+    </mat-icon>
+    <span [innerHTML]="message"></span>
+  </span>
+  <span class="spacer"></span>
+  <button mat-icon-button aria-label="Dismiss" (click)="onDismiss()">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>

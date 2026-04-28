@@ -13,9 +13,12 @@ import { BatchCardModule } from "datasets/batch-card/batch-card.module";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { UsersModule } from "../users/users.module";
 import { MatChipsModule } from "@angular/material/chips";
+import { StatusBannerComponent } from "./app-header/status-banner/status-banner.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
+    StatusBannerComponent,
     AppLayoutComponent,
     AppHeaderComponent,
     AppMainLayoutComponent,
@@ -25,6 +28,7 @@ import { MatChipsModule } from "@angular/material/chips";
     BatchCardModule,
     MatBadgeModule,
     MatButtonModule,
+    MatTooltipModule,
     MatIconModule,
     MatMenuModule,
     MatChipsModule,

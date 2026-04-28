@@ -3,14 +3,14 @@ import {
   CreateAttachmentV3Dto,
   OutputAttachmentV3Dto,
   OutputDatasetObsoleteDto,
-  SampleClass,
+  OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SampleFilters, ScientificCondition } from "state-management/models";
 
 export const fetchSamplesAction = createAction("[Sample] Fetch Samples");
 export const fetchSamplesCompleteAction = createAction(
   "[Sample] Fetch Samples Complete",
-  props<{ samples: SampleClass[] }>(),
+  props<{ samples: OutputSampleDto[] }>(),
 );
 export const fetchSamplesFailedAction = createAction(
   "[Sample] Fetch Samples Failed",
@@ -44,7 +44,7 @@ export const fetchSampleAction = createAction(
 );
 export const fetchSampleCompleteAction = createAction(
   "[Sample] Fetch Sample Complete",
-  props<{ sample: SampleClass }>(),
+  props<{ sample: OutputSampleDto }>(),
 );
 export const fetchSampleFailedAction = createAction(
   "[Sample] Fetch Sample Failed",
@@ -90,11 +90,11 @@ export const fetchSampleDatasetsCountFailedAction = createAction(
 
 export const addSampleAction = createAction(
   "[Sample] Add Sample",
-  props<{ sample: SampleClass }>(),
+  props<{ sample: OutputSampleDto }>(),
 );
 export const addSampleCompleteAction = createAction(
   "[Sample] Add Sample Complete",
-  props<{ sample: SampleClass }>(),
+  props<{ sample: OutputSampleDto }>(),
 );
 export const addSampleFailedAction = createAction("[Sample] Add Sample Failed");
 
@@ -104,7 +104,7 @@ export const saveCharacteristicsAction = createAction(
 );
 export const saveCharacteristicsCompleteAction = createAction(
   "[Sample] Save Characteristics Complete",
-  props<{ sample: SampleClass }>(),
+  props<{ sample: OutputSampleDto }>(),
 );
 export const saveCharacteristicsFailedAction = createAction(
   "[Sample] Save Characteristics Failed",
@@ -178,7 +178,7 @@ export const addCharacteristicsFilterAction = createAction(
 
 export const removeCharacteristicsFilterAction = createAction(
   "[Sample] Remove Characteristics Filter",
-  props<{ index: number }>(),
+  props<{ lhs: string }>(),
 );
 
 export const clearSamplesStateAction = createAction("[Sample] Clear State");

@@ -29,6 +29,8 @@ import { EmptyContentModule } from "./modules/generic-empty-content/empty-conten
 import { JsonformsAccordionRendererService } from "./services/jsonforms-accordion-renderer.service";
 import { TranslateModule } from "@ngx-translate/core";
 import { JsonPreviewDialogModule } from "./modules/json-preview-dialog/json-preview-dialog.module";
+import { DatasetsListService } from "./services/datasets-list.service";
+import { AjvService } from "./services/ajv.service";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -65,6 +67,8 @@ import { JsonPreviewDialogModule } from "./modules/json-preview-dialog/json-prev
     ScicatDataService,
     AttachmentService,
     JsonformsAccordionRendererService,
+    DatasetsListService,
+    AjvService,
   ],
   exports: [
     BreadcrumbModule,

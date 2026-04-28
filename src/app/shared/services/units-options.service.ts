@@ -4,8 +4,6 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class UnitsOptionsService {
-  // private unitsOptionsMap: Record<string, string[]> = {};
-
   setUnitsOptions(lhs: string, unitsOptions: string[]) {
     localStorage.setItem(`unitsOptions_${lhs}`, JSON.stringify(unitsOptions));
   }

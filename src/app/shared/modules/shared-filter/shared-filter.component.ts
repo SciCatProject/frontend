@@ -18,6 +18,7 @@ import { INumericRange } from "../numeric-range/form/model/numeric-range-field.m
 import { FilterType } from "state-management/state/user.store";
 import { toIsoUtc } from "../filters/utils";
 import { orderBy } from "lodash-es";
+import { AppConfigService } from "app-config.service";
 
 type FacetItem = { _id: string; label?: string; count: number };
 @Component({
@@ -27,12 +28,13 @@ type FacetItem = { _id: string; label?: string; count: number };
   standalone: false,
 })
 export class SharedFilterComponent implements OnChanges {
+  private readonly CHECKBOX_DISPLAY_LIMIT = 10;
+  private readonly CHECKBOX_SEARCH_THRESHOLD = 10;
   private dateRange: DateRange = {
     begin: null,
     end: null,
   };
-  checkboxDisplaylimit = 10;
-  searchInputDisplayThreshold = 10;
+  currentCheckboxDisplayLimit = this.CHECKBOX_DISPLAY_LIMIT;
   checkboxFacetCounts: FacetItem[] = [];
   showCheckboxSearch = false;
 
@@ -61,7 +63,7 @@ export class SharedFilterComponent implements OnChanges {
   @Input() prefilled: string | DateRange | string[] | INumericRange = undefined;
   @Input()
   set clear(value: boolean) {
-    this.checkboxDisplaylimit = 10;
+    this.currentCheckboxDisplayLimit = this.CHECKBOX_DISPLAY_LIMIT;
     if (value) {
       this.filterForm.reset({
         textField: "",
@@ -89,15 +91,18 @@ export class SharedFilterComponent implements OnChanges {
     end?: string;
   }>();
 
-  constructor() {}
+  @Output() applyEnterKey = new EventEmitter<void>();
+  appConfig = this.appConfigService.getConfig();
+
+  constructor(public appConfigService: AppConfigService) {}
   ngOnInit() {
     // Reset display limit whenever the text search changes
     this.filterForm.get("textField")!.valueChanges.subscribe(() => {
-      this.checkboxDisplaylimit = 10;
+      this.currentCheckboxDisplayLimit = this.CHECKBOX_DISPLAY_LIMIT;
     });
   }
   ngOnChanges(changes: SimpleChanges) {
-    if (this.checkboxFacetCounts.length > this.searchInputDisplayThreshold) {
+    if (this.checkboxFacetCounts.length > this.CHECKBOX_SEARCH_THRESHOLD) {
       this.showCheckboxSearch = true;
     } else {
       this.showCheckboxSearch = false;
@@ -186,7 +191,7 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   onShowMore() {
-    this.checkboxDisplaylimit += 10;
+    this.currentCheckboxDisplayLimit += this.CHECKBOX_DISPLAY_LIMIT;
   }
 
   onToggleCheckbox(id: string, checked: boolean) {
@@ -198,10 +203,13 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   get visibleFacetCounts(): FacetItem[] {
-    return this.filteredFacetCounts().slice(0, this.checkboxDisplaylimit);
+    return this.filteredFacetCounts().slice(
+      0,
+      this.currentCheckboxDisplayLimit,
+    );
   }
   get hasMore(): boolean {
-    return this.filteredFacetCounts().length > this.checkboxDisplaylimit;
+    return this.filteredFacetCounts().length > this.currentCheckboxDisplayLimit;
   }
 
   trackById = (_: number, x: FacetItem) => x._id;
@@ -241,6 +249,14 @@ export class SharedFilterComponent implements OnChanges {
     if (this.collapsible && this.filterType === "checkbox") {
       this.collapsed = !this.collapsed;
     }
+  }
+
+  onApplyEnter(event?: Event) {
+    if (!this.appConfig.autoApplyFilters) {
+      return;
+    }
+    event?.preventDefault();
+    this.applyEnterKey.emit();
   }
 
   /** Checkbox filter helpers END*/

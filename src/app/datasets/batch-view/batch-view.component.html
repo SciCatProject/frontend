@@ -46,8 +46,19 @@
         class="button"
         color="primary"
       >
-        <mat-icon> remove_shopping_cart </mat-icon>
-        Empty Cart
+        <mat-icon> remove_circle_outline </mat-icon>
+        Empty Selection
+      </button>
+      <button
+        *ngIf="!editingPublishedDataDoi"
+        mat-button
+        id="exportCsvButton"
+        (click)="onExportCsv()"
+        class="button"
+        color="primary"
+      >
+        <mat-icon> download </mat-icon>
+        Export CSV
       </button>
       <button
         *ngIf="!editingPublishedDataDoi"

@@ -34,7 +34,7 @@ describe("ProposalSideFilterComponent", () => {
     mockRoute = { snapshot: { queryParams: {} } };
     mockRouter = { navigate: jasmine.createSpy("navigate") };
     const getConfig = () => ({
-      checkBoxFilterClickTrigger: false,
+      autoApplyFilters: false,
       defaultProposalsListSettings: {
         filters: [
           {
@@ -188,8 +188,8 @@ describe("ProposalSideFilterComponent", () => {
     expect(component.clearFilters).toBeFalse();
   }));
 
-  it("should call applyFilters on setFilter if checkBoxFilterClickTrigger is true", () => {
-    component.appConfig.checkBoxFilterClickTrigger = true;
+  it("should call applyFilters on setFilter if autoApplyFilters is true", () => {
+    component.appConfig.autoApplyFilters = true;
 
     spyOn(component, "applyFilters");
     component.setFilter("proposalId", ["test123"]);

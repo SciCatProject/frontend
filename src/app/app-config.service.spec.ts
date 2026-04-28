@@ -5,6 +5,7 @@ import {
   AppConfigService,
   HelpMessages,
 } from "app-config.service";
+import { time } from "node:console";
 import { Observable, of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
@@ -19,6 +20,7 @@ const appConfig: AppConfigInterface = {
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
   datasetJsonScientificMetadata: true,
+  datasetPageSizeOptions: [5, 10, 25, 100],
   editDatasetEnabled: true,
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
@@ -41,6 +43,7 @@ const appConfig: AppConfigInterface = {
   ingestManual: null,
   jobsEnabled: true,
   dateFormat: "yyyy-MM-dd HH:mm",
+  timezone: "UTC",
   jsonMetadataEnabled: true,
   jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
   landingPage: "doi2.psi.ch/detail/",
@@ -248,6 +251,22 @@ describe("AppConfigService", () => {
 
       expect(service["appConfig"]).toEqual(appConfig);
     });
+
+    it("should default datasetPageSizeOptions when missing", async () => {
+      const configWithoutDatasetPageSizeOptions = {
+        ...appConfig,
+        datasetPageSizeOptions: undefined,
+      };
+      spyOn(service["http"], "get").and.returnValue(
+        of(configWithoutDatasetPageSizeOptions),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().datasetPageSizeOptions).toEqual([
+        5, 10, 25, 100,
+      ]);
+    });
   });
 
   describe("#getConfig()", () => {
@@ -256,12 +275,14 @@ describe("AppConfigService", () => {
         accessTokenPrefix: "",
         lbBaseURL: "http://127.0.0.1:3000",
         gettingStarted: null,
+        datasetPageSizeOptions: [5, 10, 25, 100],
         defaultMainPage: {
           nonAuthenticatedUser: "DATASETS",
           authenticatedUser: "DATASETS",
         },
         mainMenu: { nonAuthenticatedUser: { datasets: true } },
         dateFormat: "yyyy-MM-dd HH:mm",
+        timezone: "UTC",
         oAuth2Endpoints: [
           {
             authURL: "abcd",
@@ -281,6 +302,7 @@ describe("AppConfigService", () => {
       accessTokenPrefix: "Bearer ",
       lbBaseURL: "http://127.0.0.1:3000",
       gettingStarted: "aGettingStarted",
+      datasetPageSizeOptions: [5, 10, 25, 100],
       addDatasetEnabled: true,
       defaultMainPage: {
         nonAuthenticatedUser: "DATASETS",
@@ -289,6 +311,7 @@ describe("AppConfigService", () => {
       mainMenu: { nonAuthenticatedUser: { datasets: true, files: true } },
       oAuth2Endpoints: [],
       dateFormat: "yyyy-MM-dd HH:mm",
+      timezone: "UTC",
     };
 
     const mockHttpGet = (

@@ -27,6 +27,7 @@ import { map, Observable, Subscription } from "rxjs";
 })
 export class AppHeaderComponent implements OnInit {
   private sub: Subscription;
+  showStatusBanner: boolean;
 
   config = this.appConfigService.getConfig();
   facility = this.config.facility ?? "";
@@ -89,6 +90,8 @@ export class AppHeaderComponent implements OnInit {
     this.isSiteHeaderLogoUrlExternal$ = this.siteHeaderLogoUrl$.pipe(
       map((siteHeaderLogoUrl) => this.isFullUrl(siteHeaderLogoUrl)),
     );
+
+    this.showStatusBanner = !!this.config.statusBannerMessage;
   }
 
   logout(): void {

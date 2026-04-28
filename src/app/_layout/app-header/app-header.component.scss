@@ -7,8 +7,7 @@
   mat-toolbar {
     height: 3.5rem;
 
-    a,
-    .main-menu {
+    a {
       height: 2.5rem;
       padding: 0.5rem;
 
@@ -17,10 +16,19 @@
         margin-right: 0.5rem;
       }
     }
-    .main-menu mat-icon {
-      font-size: 32px;
-      padding-top: 5px;
-      cursor: pointer;
+    .main-menu {
+      width: 48px;
+      height: 48px;
+      line-height: 48px;
+
+      mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        right: 4px;
+        bottom: 4px;
+      }
     }
 
     .spacer,
@@ -32,16 +40,6 @@
       text-align: center;
     }
 
-    .toplink {
-      padding: 0.5rem 1rem;
-      font: bold;
-      font-size: 11pt;
-
-      mat-icon {
-        vertical-align: middle;
-      }
-    }
-
     button {
       vertical-align: middle;
     }
@@ -50,7 +48,6 @@
       font-size: 0.75rem;
       line-height: 1rem;
       height: auto;
-
       .user-image {
         height: 2rem;
       }

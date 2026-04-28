@@ -330,13 +330,7 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataFailedAction),
       switchMap((errors) => {
-        const messageContent = `Registration Failed. ${
-          Array.isArray(errors.error)
-            ? errors.error
-                .map((e) => e.replaceAll("instance", "metadata"))
-                .join(", ")
-            : errors.error
-        }`;
+        const messageContent = `Registration Failed. ${errors.error.map((e) => e.message).join(", ")}`;
 
         const message = {
           type: MessageType.Error,
@@ -352,13 +346,7 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.publishPublishedDataFailedAction),
       switchMap((errors) => {
-        const messageContent = `Publishing Failed. ${
-          Array.isArray(errors.error)
-            ? errors.error
-                .map((e) => e.replaceAll("instance", "metadata"))
-                .join(", ")
-            : errors.error
-        }`;
+        const messageContent = `Publishing Failed. ${errors.error.map((e) => e.message).join(", ")}`;
 
         const message = {
           type: MessageType.Error,

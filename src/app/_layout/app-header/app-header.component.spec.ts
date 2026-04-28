@@ -24,6 +24,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { AppConfigService } from "app-config.service";
 import { Router } from "@angular/router";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 describe("AppHeaderComponent", () => {
   let component: AppHeaderComponent;
@@ -45,6 +46,7 @@ describe("AppHeaderComponent", () => {
         MatIconModule,
         MatMenuModule,
         MatToolbarModule,
+        MatTooltipModule,
         StoreModule.forRoot({}),
       ],
       providers: [

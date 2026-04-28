@@ -17,14 +17,19 @@
         }
       },
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
+      "addScientificMetadataKeysAsColumn": { "type": "boolean" },
       "allowConfigOverrides": { "type": "boolean" },
-      "checkBoxFilterClickTrigger": { "type": "boolean" },
       "dateFormat": { "type": "string" },
+      "timezone": { "type": "string" },
       "accessTokenPrefix": { "type": "string" },
       "addDatasetEnabled": { "type": "boolean" },
       "archiveWorkflowEnabled": { "type": "boolean" },
       "datasetReduceEnabled": { "type": "boolean" },
       "datasetJsonScientificMetadata": { "type": "boolean" },
+      "datasetPageSizeOptions": {
+        "type": "array",
+        "items": { "type": "number" }
+      },
       "editDatasetEnabled": { "type": "boolean" },
       "editDatasetSampleEnabled": { "type": "boolean" },
       "editMetadataEnabled": { "type": "boolean" },
@@ -52,6 +57,7 @@
       "logbookEnabled": { "type": "boolean" },
       "loginFormEnabled": { "type": "boolean" },
       "metadataPreviewEnabled": { "type": "boolean" },
+      "autoApplyFilters": { "type": "boolean" },
       "metadataStructure": { "type": "string" },
       "multipleDownloadAction": { "type": "string" },
       "multipleDownloadEnabled": { "type": "boolean" },
@@ -99,6 +105,12 @@
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
       "datafilesActionsEnabled": { "type": "boolean" },
+      "statusBannerMessage": { "type": "string" },
+      "statusBannerCode": {
+        "type": "string",
+        "enum": ["INFO", "WARN"],
+        "default": "INFO"
+      },
       "datafilesActions": {
         "type": "array",
         "items": {
@@ -167,8 +179,16 @@
               "properties": {
                 "name": { "type": "string" },
                 "order": { "type": "number" },
-                "type": { "type": "string" },
-                "enabled": { "type": "boolean" }
+                "width": { "type": "number" },
+                "type": {
+                  "type": "string",
+                  "enum": ["standard", "hoverContent", "editable", "date"]
+                },
+                "format": {
+                  "type": "string"
+                },
+                "enabled": { "type": "boolean" },
+                "sort": { "type": "string" }
               }
             }
           },
@@ -179,7 +199,10 @@
               "properties": {
                 "key": { "type": "string" },
                 "label": { "type": "string" },
-                "type": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["text", "multiSelect", "dateRange", "checkbox"]
+                },
                 "description": { "type": "string" },
                 "enabled": { "type": "boolean" }
               }
@@ -239,8 +262,12 @@
                 "name": { "type": "string" },
                 "enabled": { "type": "boolean" },
                 "width": { "type": "number" },
-                "type": { "type": "string" },
-                "format": { "type": "string" }
+                "type": {
+                  "type": "string",
+                  "enum": ["standard", "hoverContent", "editable", "date"]
+                },
+                "format": { "type": "string" },
+                "sort": { "type": "string" }
               }
             }
           },
@@ -251,7 +278,10 @@
               "properties": {
                 "key": { "type": "string" },
                 "label": { "type": "string" },
-                "type": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["text", "multiSelect", "dateRange", "checkbox"]
+                },
                 "description": { "type": "string" },
                 "enabled": { "type": "boolean" }
               }
@@ -381,6 +411,16 @@
             }
           }
         }
+      },
+      "defaultTab": {
+        "type": "object",
+        "properties": {
+          "proposal": {
+            "type": "string",
+            "enum": ["details", "datasets", "relatedProposals", "logbook"],
+            "default": "details"
+          }
+        }
       }
     }
   },
@@ -395,6 +435,7 @@
         },
         "elements": [
           { "type": "Control", "scope": "#/properties/dateFormat" },
+          { "type": "Control", "scope": "#/properties/timezone" },
           { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
           { "type": "Control", "scope": "#/properties/landingPage" },
           { "type": "Control", "scope": "#/properties/metadataStructure" },
@@ -409,10 +450,8 @@
           { "type": "Control", "scope": "#/properties/siteIcon" },
           { "type": "Control", "scope": "#/properties/siteTitle" },
           { "type": "Control", "scope": "#/properties/siteSciCatLogo" },
-          {
-            "type": "Control",
-            "scope": "#/properties/checkBoxFilterClickTrigger"
-          },
+          { "type": "Control", "scope": "#/properties/statusBannerMessage" },
+          { "type": "Control", "scope": "#/properties/statusBannerCode" },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
           {
             "type": "Control",
@@ -425,6 +464,7 @@
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"
           },
+          { "type": "Control", "scope": "#/properties/datasetPageSizeOptions" },
           { "type": "Control", "scope": "#/properties/editDatasetEnabled" },
           {
             "type": "Control",
@@ -438,7 +478,8 @@
           { "type": "Control", "scope": "#/properties/jsonMetadataEnabled" },
           { "type": "Control", "scope": "#/properties/logbookEnabled" },
           { "type": "Control", "scope": "#/properties/loginFormEnabled" },
-          { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" }
+          { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" },
+          { "type": "Control", "scope": "#/properties/autoApplyFilters" }
         ]
       },
       {
@@ -809,11 +850,12 @@
               {
                 "type": "Group",
                 "label": "Columns list",
-                "options": { "expandable": true },
+                "options": { "expandable": true, "showSortButtons": true },
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns"
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns",
+                    "options": { "showSortButtons": true }
                   }
                 ]
               },
@@ -824,7 +866,8 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters"
+                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters",
+                    "options": { "showSortButtons": true }
                   }
                 ]
               },
@@ -856,7 +899,8 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns"
+                    "scope": "#/properties/defaultProposalsListSettings/properties/columns",
+                    "options": { "showSortButtons": true }
                   }
                 ]
               },
@@ -867,7 +911,8 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters"
+                    "scope": "#/properties/defaultProposalsListSettings/properties/filters",
+                    "options": { "showSortButtons": true }
                   }
                 ]
               }
@@ -904,6 +949,20 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Default Tab Settings",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/defaultTab/properties/proposal",
+            "label": "Default Proposal Tab"
           }
         ]
       }

@@ -19,11 +19,17 @@ import { TableSelectionMode } from "shared/modules/dynamic-material-table/models
 import { DatePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
-import { DateTime } from "luxon";
 import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TablePaginationMode } from "shared/modules/dynamic-material-table/models/table-pagination.model";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
+import {
+  IRowEvent,
+  RowEventType,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
+import { ContextMenuItem } from "shared/modules/dynamic-material-table/models/context-menu.model";
+import { ScientificMetadataColumnsService } from "shared/services/scientific-metadata-columns.service";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "metadata-view",
@@ -73,6 +79,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   showGlobalTextSearch = false;
 
+  rowContextMenuItems: ContextMenuItem[];
+  canAddScientificMetadataKeysAsColumn: boolean;
+
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
     saveSettingMode: "none",
@@ -86,7 +95,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           {
             name: "human_name",
             header: "Name",
-            width: 250,
+            width: 300,
             hoverContent: true,
             hoverOnCell: true,
             customRender: (column, row) => {
@@ -106,6 +115,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           {
             name: "value",
             header: "Value",
+            width: 250,
             customRender: (column, row) => {
               if (row.type === "date") {
                 return this.datePipe.transform(row[column.name]);
@@ -144,7 +154,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             contentIconLink: (column, row) => {
               return row.ontology_reference;
             },
-            width: 500,
           },
           {
             name: "unit",
@@ -178,12 +187,21 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   };
 
   constructor(
+    private appConfigService: AppConfigService,
     private unitsService: UnitsService,
     private datePipe: DatePipe,
     private formatNumberPipe: FormatNumberPipe,
+    private scientificMetadataColumnsService: ScientificMetadataColumnsService,
     public linkyPipe: LinkyPipe,
     public prettyUnit: PrettyUnitPipe,
-  ) {}
+  ) {
+    this.canAddScientificMetadataKeysAsColumn =
+      this.appConfigService.getConfig().addScientificMetadataKeysAsColumn ===
+      true;
+    this.rowContextMenuItems = this.canAddScientificMetadataKeysAsColumn
+      ? [this.scientificMetadataColumnsService.addAsColumnAction]
+      : [];
+  }
 
   createMetadataArray(
     metadata: Record<string, any>,
@@ -191,46 +209,62 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     const metadataArray: ScientificMetadataTableData[] = [];
     Object.keys(metadata).forEach((key) => {
       let metadataObject: ScientificMetadataTableData;
-      const humanReadableName = metadata[key]["human_name"];
+      const entry = metadata[key];
+      const humanReadableName =
+        entry !== null && typeof entry === "object"
+          ? entry["human_name"]
+          : undefined;
+      const columnName = `scientificMetadata.${key}${
+        entry !== null &&
+        typeof entry === "object" &&
+        "value" in (entry as ScientificMetadata)
+          ? ".value"
+          : ""
+      }`;
 
       if (
-        typeof metadata[key] === "object" &&
-        "value" in (metadata[key] as ScientificMetadata)
+        entry !== null &&
+        typeof entry === "object" &&
+        "value" in (entry as ScientificMetadata)
       ) {
-        const formattedValue = this.formatNumberPipe.transform(
-          metadata[key]["value"],
-        );
+        const formattedValue = this.formatNumberPipe.transform(entry["value"]);
 
         metadataObject = {
           name: key,
+          columnName,
           value: formattedValue,
-          unit: metadata[key]["unit"],
+          unit: entry["unit"],
           human_name: humanReadableName,
-          type: metadata[key]["type"],
-          ontology_reference: metadata[key]["ontology_reference"],
+          type: entry["type"],
+          ontology_reference: entry["ontology_reference"],
         };
 
-        const validUnit = this.unitsService.unitValidation(
-          metadata[key]["unit"],
-        );
+        const validUnit = this.unitsService.unitValidation(entry["unit"]);
 
         metadataObject["validUnit"] = validUnit;
       } else {
         const metadataValue =
-          typeof metadata[key] === MetadataTypes.string ||
-          typeof metadata[key] === MetadataTypes.number
-            ? metadata[key]
-            : JSON.stringify(metadata[key]);
+          typeof entry === MetadataTypes.string ||
+          typeof entry === MetadataTypes.number
+            ? entry
+            : JSON.stringify(entry);
 
         const formattedValue = this.formatNumberPipe.transform(metadataValue);
 
         metadataObject = {
           name: key,
+          columnName,
           value: formattedValue,
           unit: "",
           human_name: humanReadableName,
-          type: metadata[key]["type"],
-          ontology_reference: metadata[key]["ontology_reference"],
+          type:
+            entry !== null && typeof entry === "object"
+              ? entry["type"]
+              : undefined,
+          ontology_reference:
+            entry !== null && typeof entry === "object"
+              ? entry["ontology_reference"]
+              : undefined,
         };
       }
       metadataArray.push(metadataObject);
@@ -249,6 +283,20 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     }
   }
 
+  async onRowEvent({ event, sender }: IRowEvent<ScientificMetadataTableData>) {
+    if (
+      !this.canAddScientificMetadataKeysAsColumn ||
+      event !== RowEventType.RowActionMenu ||
+      sender.action?.name !==
+        this.scientificMetadataColumnsService.addAsColumnAction.name ||
+      !sender.row
+    ) {
+      return;
+    }
+
+    await this.scientificMetadataColumnsService.addMetadataColumn(sender.row);
+  }
+
   initTable(settingConfig: ITableSetting): void {
     const currentColumnSetting = settingConfig.settingList.find(
       (s) => s.isCurrentSetting,
@@ -263,6 +311,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       if (propName === "metadata") {
         this.metadata = changes[propName].currentValue;
         this.tableData = this.createMetadataArray(this.metadata);
+        this.dataSource.next(this.tableData);
       }
     }
   }

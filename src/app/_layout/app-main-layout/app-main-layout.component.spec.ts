@@ -4,12 +4,12 @@ import { AppMainLayoutComponent } from "./app-main-layout.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { AppHeaderComponent } from "_layout/app-header/app-header.component";
-import { RouterTestingModule } from "@angular/router/testing";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MockStore, MockActivatedRoute, MockRouter } from "shared/MockStubs";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 describe("AppMainLayoutComponent", () => {
   let component: AppMainLayoutComponent;
@@ -23,7 +23,7 @@ describe("AppMainLayoutComponent", () => {
         BreadcrumbModule,
         MatMenuModule,
         MatToolbarModule,
-        RouterTestingModule,
+        MatTooltipModule,
       ],
     });
     TestBed.overrideComponent(AppMainLayoutComponent, {

@@ -82,6 +82,7 @@ import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
+import { DatasetInlineEditCellComponent } from "./dataset-table/dataset-inline-edit-cell.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
 import { IngestorModule } from "../ingestor/ingestor.module";
@@ -90,6 +91,7 @@ import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
 import { OverlayModule } from "@angular/cdk/overlay";
+import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
 
 @NgModule({
   imports: [
@@ -158,6 +160,7 @@ import { OverlayModule } from "@angular/cdk/overlay";
     MatBadgeModule,
     OverlayModule,
     IngestorModule,
+    SharedConditionModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -169,6 +172,7 @@ import { OverlayModule } from "@angular/cdk/overlay";
     DatasetDetailComponent,
     DatasetDetailDynamicComponent,
     DatasetTableComponent,
+    DatasetInlineEditCellComponent,
     DatasetsFilterComponent,
     PublishComponent,
     ReduceComponent,
