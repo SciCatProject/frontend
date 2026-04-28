@@ -8,12 +8,10 @@ import {
 
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
-import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
-import { updatePropertyAction } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 import {
@@ -22,20 +20,14 @@ import {
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 
-type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: JSONValue }
-  | JSONValue[];
-
 function processSelector(
   jsonObject: ActionItems,
   selector: string,
 ): string | string[] | number | number[] {
-  let match: RegExpMatchArray | null;
-
+  if (!jsonObject.datasets?.length) {
+    console.warn("No datasets available");
+    return undefined;
+  }
   // Map of static patterns to processing functions
   const keywordMap: { [pattern: string]: (RegExpMatchArray) => any } = {
     "#Dataset0Pid": (m) => jsonObject.datasets[0]?.pid,
@@ -98,9 +90,9 @@ function processSelector(
     // eslint-disable-next-line no-useless-escape
     "#DatasetsField\\[(\\w+)\\]": (m) =>
       jsonObject.datasets?.map((i) => i[m[1]]),
-    "#InstrumentField\\[(\\w+)\\]": (m) => {
-      if (jsonObject.instrument) {
-        return jsonObject.instrument[m[1]];
+    "#Instrument\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) => {
+      if (jsonObject.instruments?.[Number(m[1])]) {
+        return jsonObject.instruments?.[Number(m[1])][m[2]];
       }
     },
   };
@@ -108,10 +100,8 @@ function processSelector(
   // Check for direct pattern matches
   for (const [pattern, fn] of Object.entries(keywordMap)) {
     const match = selector.match(new RegExp(pattern));
-
     if (match) {
       const res = fn(match);
-
       return res;
     }
   }
