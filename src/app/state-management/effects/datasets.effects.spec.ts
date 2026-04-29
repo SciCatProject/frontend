@@ -22,6 +22,7 @@ import {
   DatasetsControllerCreateV3Request,
   DatasetsService,
   OutputDatasetObsoleteDto,
+  MetadataKeysV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import {
@@ -30,7 +31,6 @@ import {
   mockDataset,
 } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
-import { MetadataKeysV4Service } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   provideHttpClient,
   withInterceptorsFromDi,
@@ -56,7 +56,6 @@ const derivedData = createMock<OutputDatasetObsoleteDto>({
   updatedBy: "",
 });
 const derivedDataset = { pid: "testPid", ...derivedData };
-
 const dataset = { pid: "testPid", ...mockDataset };
 
 describe("DatasetEffects", () => {
@@ -67,67 +66,56 @@ describe("DatasetEffects", () => {
 
   const getConfig = () => ({});
 
-  import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
-import { provideHttpClientTesting } from "@angular/common/http/testing";
-
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    providers: [
-      DatasetEffects,
-      provideMockActions(() => actions),
-      provideMockStore({
-        selectors: [
-          { selector: selectCurrentDataset, value: dataset },
-          {
-            selector: selectRelatedDatasetsFilters,
-            value: { skip: 0, limit: 25, sortField: "creationTime:desc" },
-          },
-          {
-            selector: selectFullqueryParams,
-            value: {
-              query: JSON.stringify({ isPublished: false }),
-              limits: { skip: 0, limit: 25, order: "test asc" },
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        DatasetEffects,
+        provideMockActions(() => actions),
+        provideMockStore({
+          selectors: [
+            { selector: selectCurrentDataset, value: dataset },
+            {
+              selector: selectRelatedDatasetsFilters,
+              value: { skip: 0, limit: 25, sortField: "creationTime:desc" },
             },
-          },
-          { selector: selectFullfacetParams, value: {} },
-        ],
-      }),
-      {
-        provide: DatasetsService,
-        useValue: jasmine.createSpyObj("datasetApi", [
-          "datasetsControllerCreateV3",
-          "datasetsControllerFullqueryV3",
-          "datasetsControllerFullfacetV3",
-          "datasetsControllerMetadataKeysV3",
-          "datasetsControllerFindAllV3",
-          "datasetsControllerFindByIdV3",
-          "datasetsControllerFindByIdAndUpdateV3",
-          "datasetsControllerCreateAttachmentV3",
-          "datasetsControllerFindOneAttachmentAndUpdateV3",
-          "datasetsControllerFindOneAttachmentAndRemoveV3",
-          "datasetsControllerAppendToArrayFieldV3",
-          "datasetsControllerCountV3",
-        ]),
-      },
-      {
-        provide: MetadataKeysV4Service,
-        useValue: jasmine.createSpyObj("metadataKeysApi", [
-          "metadataKeysV4ControllerFindAllV4",
-        ]),
-      },
-      { provide: AppConfigService, useValue: { getConfig } },
-      provideHttpClient(withInterceptorsFromDi()),
-      provideHttpClientTesting(),
-    ],
-  });
-
-  effects = TestBed.inject(DatasetEffects);
-  datasetApi = injectedStub(DatasetsService);
-  metadataKeysApi = injectedStub(MetadataKeysV4Service);
-});
+            {
+              selector: selectFullqueryParams,
+              value: {
+                query: JSON.stringify({ isPublished: false }),
+                limits: { skip: 0, limit: 25, order: "test asc" },
+              },
+            },
+            { selector: selectFullfacetParams, value: {} },
+          ],
+        }),
+        {
+          provide: DatasetsService,
+          useValue: jasmine.createSpyObj("datasetApi", [
+            "datasetsControllerCreateV3",
+            "datasetsControllerFullqueryV3",
+            "datasetsControllerFullfacetV3",
+            "datasetsControllerMetadataKeysV3",
+            "datasetsControllerFindAllV3",
+            "datasetsControllerFindByIdV3",
+            "datasetsControllerFindByIdAndUpdateV3",
+            "datasetsControllerCreateAttachmentV3",
+            "datasetsControllerFindOneAttachmentAndUpdateV3",
+            "datasetsControllerFindOneAttachmentAndRemoveV3",
+            "datasetsControllerAppendToArrayFieldV3",
+            "datasetsControllerCountV3",
+          ]),
+        },
+        {
+          provide: MetadataKeysV4Service,
+          useValue: jasmine.createSpyObj("metadataKeysApi", [
+            "metadataKeysV4ControllerFindAllV4",
+          ]),
+        },
+        { provide: AppConfigService, useValue: { getConfig } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
 
     effects = TestBed.inject(DatasetEffects);
     datasetApi = injectedStub(DatasetsService);
