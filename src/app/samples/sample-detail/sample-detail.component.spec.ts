@@ -37,6 +37,7 @@ import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { AppConfigService } from "app-config.service";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { TablePagination } from "shared/modules/dynamic-material-table/models/table-pagination.model";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
