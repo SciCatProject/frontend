@@ -114,7 +114,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
-    this.store.dispatch(fetchMetadataKeysAction());
+    this.store.dispatch(fetchMetadataKeysAction({}));
 
     this.subscriptions.push(
       combineLatest([

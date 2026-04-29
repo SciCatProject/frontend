@@ -221,8 +221,8 @@ describe("Datasets general", () => {
         .find(".condition-panel")
         .should("have.length", 0);
     });
-    // skipping for now but will be relevant when we can fetch human-readable names from metadataKeys endpoint in the future
-    it.skip("should search by human name", () => {
+
+    it("should search by human name", () => {
       cy.visit("/datasets");
 
       cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
@@ -364,7 +364,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
 
-    it("should add a condition when pressing Enter", () => {
+    it("should search a metadata key when pressing Enter", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
@@ -382,6 +382,8 @@ describe("Datasets general", () => {
       });
 
       cy.get('input[name="lhs"]').type("extra_entry_end_time{enter}");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
       cy.get(".condition-panel").first().click();
 

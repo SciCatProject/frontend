@@ -8,9 +8,7 @@
 >
   <mat-dialog-content>
     <mat-form-field class="search-field">
-      <mat-label
-        >Field
-      </mat-label>
+      <mat-label>Field </mat-label>
       <input
         matInput
         autocomplete="off"
@@ -21,11 +19,12 @@
         formControlName="lhs"
         (blur)="getUnits(lhs)"
         (focus)="toggleUnitField()"
+        (keydown.enter)="searchMetadataKeys(); $event.preventDefault()"
       />
       <span
         matSuffix
         class="enter-hint"
-        matTooltip="Press Enter to apply"
+        matTooltip="Press Enter to search"
         matTooltipPosition="after"
         matTooltipShowDelay="500"
         >↵</span
@@ -35,7 +34,7 @@
     <div class="scroll-table-container">
       <table
         mat-table
-        [dataSource]="filteredKeys$ | async"
+        [dataSource]="parameterKeys"
         class="mat-elevation-z1 mat-table"
       >
         <ng-container matColumnDef="field">
