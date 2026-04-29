@@ -30,6 +30,7 @@ import {
   mockDataset,
 } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
+import { MetadataKeysV4Service } from '@scicatproject/scicat-sdk-ts-angular';
 
 const derivedData = createMock<OutputDatasetObsoleteDto>({
   investigator: "",
@@ -57,6 +58,7 @@ describe("DatasetEffects", () => {
   let actions: TestObservable;
   let effects: DatasetEffects;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
+  let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
 
   const getConfig = () => ({});
 
@@ -105,6 +107,7 @@ describe("DatasetEffects", () => {
 
     effects = TestBed.inject(DatasetEffects);
     datasetApi = injectedStub(DatasetsService);
+    metadataKeysApi = injectedStub(MetadataKeysV4Service);
   });
 
   const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
@@ -194,8 +197,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: metadataKeys });
-      datasetApi.datasetsControllerMetadataKeysV3.and.returnValue(response);
-
+      metadataKeysApi.metadataKeysV4.and.returnValue(response);
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
     });
@@ -206,7 +208,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerMetadataKeysV3.and.returnValue(response);
+      metadataKeysApi.metadataKeysV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
