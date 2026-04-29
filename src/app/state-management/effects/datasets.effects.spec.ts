@@ -187,7 +187,7 @@ describe("DatasetEffects", () => {
   describe("fetchMetadataKeys$", () => {
     it("should result in a fetchMetadataKeysCompleteAction", () => {
       const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysAction();
+      const action = fromActions.fetchMetadataKeysAction({});
       const outcome = fromActions.fetchMetadataKeysCompleteAction({
         metadataKeys,
       });
@@ -201,7 +201,7 @@ describe("DatasetEffects", () => {
     });
 
     it("should result in a fetchMetadataKeysFailedAction", () => {
-      const action = fromActions.fetchMetadataKeysAction();
+      const action = fromActions.fetchMetadataKeysAction({});
       const outcome = fromActions.fetchMetadataKeysFailedAction();
 
       actions = hot("-a", { a: action });
@@ -238,7 +238,7 @@ describe("DatasetEffects", () => {
           unit: "s",
         };
         const action = fromActions.addScientificConditionAction({ condition });
-        const outcome = fromActions.fetchMetadataKeysAction();
+        const outcome = fromActions.fetchMetadataKeysAction({});
 
         actions = hot("-a", { a: action });
 
@@ -258,7 +258,7 @@ describe("DatasetEffects", () => {
         const action = fromActions.removeScientificConditionAction({
           condition,
         });
-        const outcome = fromActions.fetchMetadataKeysAction();
+        const outcome = fromActions.fetchMetadataKeysAction({});
 
         actions = hot("-a", { a: action });
 
@@ -270,7 +270,7 @@ describe("DatasetEffects", () => {
     describe("ofType clearFacetsAction", () => {
       it("should result in a fetchMetadataKeysAction", () => {
         const action = fromActions.clearFacetsAction();
-        const outcome = fromActions.fetchMetadataKeysAction();
+        const outcome = fromActions.fetchMetadataKeysAction({});
 
         actions = hot("-a", { a: action });
 
@@ -667,7 +667,7 @@ describe("DatasetEffects", () => {
 
     describe("ofType fetchMetadataKeysAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.fetchMetadataKeysAction();
+        const action = fromActions.fetchMetadataKeysAction({});
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
