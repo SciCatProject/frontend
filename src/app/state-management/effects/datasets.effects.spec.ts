@@ -30,7 +30,7 @@ import {
   mockDataset,
 } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
-import { MetadataKeysV4Service } from '@scicatproject/scicat-sdk-ts-angular';
+import { MetadataKeysV4Service } from "@scicatproject/scicat-sdk-ts-angular";
 
 const derivedData = createMock<OutputDatasetObsoleteDto>({
   investigator: "",
