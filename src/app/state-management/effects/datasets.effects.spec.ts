@@ -208,7 +208,9 @@ describe("DatasetEffects", () => {
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: metadataKeys });
+      const response = cold("-a|", {
+        a: [{ key: "test", humanReadable: "Test" }],
+      });
       metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
         response,
       );
