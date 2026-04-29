@@ -16,7 +16,6 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
-import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   changeDatasetsPageAction,
   fetchSampleDatasetsAction,
@@ -36,10 +35,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTabsModule } from "@angular/material/tabs";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { AppConfigService } from "app-config.service";
-import {
-  DatasetClass,
-  ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -204,20 +201,20 @@ describe("SampleDetailComponent", () => {
     });
   });
 
-  describe("#onPageChange()", () => {
+  describe("#onPaginationChange()", () => {
     it("should dispatch a changeDatasetsPageAction and a fetchSampleDatasetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const sample = mockSample;
       sample.sampleId = "testId";
       component.sample = sample;
-      const event: PageChangeEvent = {
+      const event: TablePagination = {
         pageIndex: 1,
         pageSize: 25,
         length: 25,
       };
 
-      component.onPageChange(event);
+      component.onPaginationChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -232,12 +229,15 @@ describe("SampleDetailComponent", () => {
     });
   });
 
-  describe("#onRowClick()", () => {
+  describe("#onRowEvent()", () => {
     it("should navigate to a dataset", () => {
       const dataset = mockDataset;
       dataset.pid = "testId";
 
-      component.onRowClick(dataset as DatasetClass);
+      component.onRowEvent({
+        event: RowEventType.RowClick,
+        sender: { row: dataset },
+      } as any);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
