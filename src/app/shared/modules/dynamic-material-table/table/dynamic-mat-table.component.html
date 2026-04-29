@@ -162,7 +162,6 @@
           "
           matTooltipClass="cell-tooltip"
           matTooltipPosition="above"
-          matTooltipPositionAtOrigin
           matTooltipShowDelay="500"
           [disabled]="column.sort === 'none'"
           class="header-caption"
@@ -254,7 +253,6 @@
                   [innerHTML]="columnName(row, column)"
                   matTooltip="{{ columnName(row, column) }}"
                   matTooltipPosition="above"
-                  matTooltipPositionAtOrigin
                   matTooltipShowDelay="500"
                 ></span>
               </ng-template>
@@ -275,7 +273,6 @@
               <span
                 matTooltip="{{ getColumnValue(row, column) }}"
                 matTooltipPosition="above"
-                matTooltipPositionAtOrigin
                 matTooltipShowDelay="500"
               >
                 {{ getColumnValue(row, column) }}
