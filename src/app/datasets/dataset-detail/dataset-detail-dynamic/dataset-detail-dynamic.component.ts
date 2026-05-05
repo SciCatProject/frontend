@@ -70,6 +70,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   actionItems: ActionItems = {
     datasets: [],
+    instruments: undefined,
   };
 
   constructor(
@@ -100,6 +101,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.store.select(selectCurrentInstrument).subscribe((instrument) => {
+        if (instrument) {
+          console.log("Updatding action items");
+          this.actionItems.instruments = [instrument];
+        }
         this.instrument = instrument;
       }),
     );

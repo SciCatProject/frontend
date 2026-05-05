@@ -1,4 +1,5 @@
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface ActionConfig {
   id: string;
@@ -39,4 +40,5 @@ export interface ActionItemDataset {
 
 export interface ActionItems {
   datasets: ActionItemDataset[];
+  instruments?: Instrument[];
 }

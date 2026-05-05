@@ -8,12 +8,10 @@ import {
 
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
-import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
-import { updatePropertyAction } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 import {
@@ -21,22 +19,15 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
-import { result } from "lodash-es";
-
-type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: JSONValue }
-  | JSONValue[];
 
 function processSelector(
   jsonObject: ActionItems,
   selector: string,
 ): string | string[] | number | number[] {
-  let match: RegExpMatchArray | null;
-
+  if (!jsonObject.datasets?.length) {
+    console.warn("No datasets available");
+    return undefined;
+  }
   // Map of static patterns to processing functions
   const keywordMap: { [pattern: string]: (RegExpMatchArray) => any } = {
     "#Dataset0Pid": (m) => jsonObject.datasets[0]?.pid,
@@ -59,8 +50,11 @@ function processSelector(
         .map((i) => Number(i.size))
         .reduce((acc, val) => acc + val, 0),
     // eslint-disable-next-line no-useless-escape
-    "#Dataset\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) =>
-      jsonObject.datasets[Number(m[1])][m[2]],
+    "#Dataset\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) => {
+      if (jsonObject.datasets?.[Number(m[1])]) {
+        return jsonObject.datasets?.[Number(m[1])][m[2]];
+      }
+    },
     "#DatasetsPid": (m) => jsonObject.datasets?.map((i) => i.pid),
     "#DatasetsFilesPath": (m) =>
       jsonObject.datasets
@@ -95,16 +89,19 @@ function processSelector(
         .reduce((acc, val) => acc + val, 0),
     // eslint-disable-next-line no-useless-escape
     "#DatasetsField\\[(\\w+)\\]": (m) =>
-      jsonObject.datasets.map((i) => i[m[1]]),
+      jsonObject.datasets?.map((i) => i[m[1]]),
+    "#Instrument\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) => {
+      if (jsonObject.instruments?.[Number(m[1])]) {
+        return jsonObject.instruments?.[Number(m[1])][m[2]];
+      }
+    },
   };
 
   // Check for direct pattern matches
   for (const [pattern, fn] of Object.entries(keywordMap)) {
     const match = selector.match(new RegExp(pattern));
-
     if (match) {
       const res = fn(match);
-
       return res;
     }
   }
@@ -351,6 +348,49 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return headers;
   }
 
+  prepare_url() {
+    if (this.actionConfig.url) {
+      return (
+        this.actionConfig.url
+          .replace(
+            // Handle {{ #Year( @date ) }},
+            // eslint-disable-next-line no-useless-escape
+            /\{\{\s*\#Year\(([@#]\w+)\)\s*\}\}/g,
+            (_, variableName) => {
+              const date = this.get_value_from_definition(variableName);
+              return String(new Date(date).getUTCFullYear());
+            },
+          )
+          // eslint-disable-next-line no-useless-escape
+          .replace(
+            /\{\{\s*([@#]\w+(?:\[\d+\])?)\s*\}\}/g,
+            (_, variableName) => {
+              // Handle array indexing like @files[0]
+              const arrayMatch = variableName.match(/^([@#]\w+)\[(\d+)\]$/);
+              if (arrayMatch) {
+                const baseVariable = arrayMatch[1];
+                const index = parseInt(arrayMatch[2], 10);
+                const value = this.get_value_from_definition(baseVariable);
+
+                if (Array.isArray(value) && index < value.length) {
+                  return value[index];
+                }
+                console.error(
+                  `Could not resolve array ${variableName} at index ${index}`,
+                );
+                return "";
+              }
+              // Handle normal variables
+              return this.get_value_from_definition(variableName);
+            },
+          )
+      );
+    } else {
+      console.error("No URL provided for configurable action");
+      return "";
+    }
+  }
+
   type_form() {
     if (this.form !== null) {
       document.body.removeChild(this.form);
@@ -520,6 +560,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   type_link() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+    const url = this.prepare_url();
+    window.open(url, this.actionConfig.target || "_self");
   }
 }
