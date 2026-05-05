@@ -134,9 +134,11 @@ export class SampleEffects {
           .datasetsControllerFindAllV3(
             JSON.stringify({
               where: { sampleId },
-              order,
-              skip,
-              limit,
+              limits: {
+                order,
+                skip,
+                limit,
+              },
             }),
           )
           .pipe(
@@ -155,11 +157,11 @@ export class SampleEffects {
       ofType(fromActions.fetchSampleDatasetsCountAction),
       switchMap(({ sampleId }) =>
         this.datasetApi
-          .datasetsControllerFindAllV3(JSON.stringify({ where: { sampleId } }))
+          .datasetsControllerCountV3(JSON.stringify({ where: { sampleId } }))
           .pipe(
-            map((datasets) =>
+            map(({ count }) =>
               fromActions.fetchSampleDatasetsCountCompleteAction({
-                count: datasets.length,
+                count,
               }),
             ),
             catchError(() =>
