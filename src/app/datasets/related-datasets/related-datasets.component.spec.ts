@@ -1,20 +1,32 @@
 import { DatePipe } from "@angular/common";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
-import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
-import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/datasets.selectors";
+import {
+  selectRelatedDatasetsCurrentPage,
+  selectRelatedDatasetsPageViewModel,
+  selectRelatedDatasetsPerPage,
+} from "state-management/selectors/datasets.selectors";
 
 import { RelatedDatasetsComponent } from "./related-datasets.component";
-import { TableModule } from "shared/modules/table/table.module";
-import { createMock } from "shared/MockStubs";
+import { MockActivatedRoute, createMock } from "shared/MockStubs";
 import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
-import { EmptyContentModule } from "shared/modules/generic-empty-content/empty-content.module";
+import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { DynamicMatTableModule } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
+import { TablePagination } from "shared/modules/dynamic-material-table/models/table-pagination.model";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;
@@ -22,14 +34,19 @@ describe("RelatedDatasetsComponent", () => {
 
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
+    navigate: jasmine.createSpy("navigate"),
   };
   let store: Store;
-  let dispatchSpy;
+  let dispatchSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RelatedDatasetsComponent],
-      imports: [TableModule, EmptyContentModule],
+      imports: [
+        BrowserAnimationsModule,
+        DynamicMatTableModule.forRoot({}),
+        SharedScicatFrontendModule,
+      ],
       providers: [
         DatePipe,
         provideMockStore({
@@ -39,16 +56,23 @@ describe("RelatedDatasetsComponent", () => {
               value: {
                 relatedDatasets: [],
                 relatedDatasetsCount: 0,
-                relatedDatasetsFilters: {
-                  skip: 0,
-                  limit: 25,
-                  sortField: "creationTime:desc",
-                },
               },
+            },
+            {
+              selector: selectRelatedDatasetsCurrentPage,
+              value: 0,
+            },
+            {
+              selector: selectRelatedDatasetsPerPage,
+              value: 25,
             },
           ],
         }),
         { provide: Router, useValue: router },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     }).compileComponents();
 
@@ -65,17 +89,17 @@ describe("RelatedDatasetsComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#onPageChange", () => {
-    it("should dispatch a changeRelatedDatasetsPageAction and a fetchRelatedDatasetsAction", () => {
+  describe("#onPaginationChange()", () => {
+    it("should dispatch changeRelatedDatasetsPageAction and fetchRelatedDatasetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event: PageChangeEvent = {
+      const event: TablePagination = {
         pageIndex: 0,
         pageSize: 25,
         length: 25,
       };
 
-      component.onPageChange(event);
+      component.onPaginationChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -88,11 +112,14 @@ describe("RelatedDatasetsComponent", () => {
     });
   });
 
-  describe("#onRowClick()", () => {
+  describe("#onRowEvent()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = createMock<DatasetClass>({});
+      const dataset = createMock<DatasetClass>({ pid: "PID-123" });
 
-      component.onRowClick(dataset);
+      component.onRowEvent({
+        event: RowEventType.RowClick,
+        sender: { row: dataset },
+      } as any);
 
       expect(router.navigateByUrl).toHaveBeenCalledOnceWith(
         "/datasets/" + encodeURIComponent(dataset.pid),

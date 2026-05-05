@@ -13,7 +13,7 @@
     </div>
   </ng-template>
 
-  <ng-template [ngIf]="tableData && maxFileSize">
+  <ng-template [ngIf]="files.length > 0 && maxFileSize">
     <div class="selected" fxLayout="row" fxLayoutAlign="space-evenly end">
       <div fxFlex="auto" style="margin-bottom: 0.5em">
         Selected: {{ selectedFileSize | filesize
@@ -38,17 +38,17 @@
     ></configurable-actions>
   </div>
 
-  <app-table
-    [data]="tableData"
+  <dynamic-mat-table
     [columns]="tableColumns"
-    [paginate]="true"
-    [currentPage]="currentPage"
-    [dataCount]="count"
-    [dataPerPage]="pageSize"
-    (pageChange)="onPageChange($event)"
-    [select]="fileDownloadEnabled"
-    (selectAll)="onSelectAll($event)"
-    (selectOne)="onSelectOne($event)"
+    [dataSource]="dataSource"
+    [setting]="setting"
+    [pagination]="pagination"
+    [pagingMode]="paginationMode"
+    [showGlobalTextSearch]="false"
+    [rowSelectionMode]="rowSelectionMode"
+    [emptyMessage]="'No datafiles available'"
+    (onRowEvent)="onRowEvent($event)"
+    (paginationChange)="onPaginationChange($event)"
   >
-  </app-table>
+  </dynamic-mat-table>
 </ng-template>

@@ -1,12 +1,8 @@
 import { DatePipe } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
-import {
-  PageChangeEvent,
-  TableColumn,
-} from "shared/modules/table/table.component";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
@@ -20,6 +16,18 @@ import {
   selectRelatedDatasetsPageViewModel,
   selectRelatedDatasetsPerPage,
 } from "state-management/selectors/datasets.selectors";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
+import { BehaviorSubject, Subscription } from "rxjs";
+import {
+  TablePagination,
+  TablePaginationMode,
+} from "shared/modules/dynamic-material-table/models/table-pagination.model";
+import {
+  IRowEvent,
+  RowEventType,
+  TableSelectionMode,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
+import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 
 @Component({
   selector: "app-related-datasets",
@@ -27,7 +35,7 @@ import {
   styleUrls: ["./related-datasets.component.scss"],
   standalone: false,
 })
-export class RelatedDatasetsComponent {
+export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectRelatedDatasetsPageViewModel).pipe(
     map((vm) => ({
       ...vm,
@@ -37,45 +45,55 @@ export class RelatedDatasetsComponent {
   currentPage$ = this.store.select(selectRelatedDatasetsCurrentPage);
   datasetsPerPage$ = this.store.select(selectRelatedDatasetsPerPage);
 
-  tablePaginate = true;
-  tableColumns: TableColumn[] = [
+  subscriptions: Subscription[] = [];
+
+  tableColumns: TableField<any>[] = [
     {
       name: "name",
-      icon: "portrait",
-      sort: true,
-      inList: true,
+      header: "Name",
     },
     {
       name: "sourceFolder",
-      icon: "explore",
-      sort: true,
-      inList: true,
+      header: "Source Folder",
     },
     {
       name: "size",
-      icon: "save",
-      sort: true,
-      inList: true,
+      header: "Size",
     },
     {
       name: "type",
-      icon: "bubble_chart",
-      sort: true,
-      inList: true,
+      header: "Type",
     },
     {
       name: "creationTime",
-      icon: "calendar_today",
-      sort: true,
-      inList: true,
+      header: "Creation Time",
     },
     {
       name: "owner",
-      icon: "face",
-      sort: true,
-      inList: true,
+      header: "Owner",
     },
   ];
+
+  setting: ITableSetting = {
+    rowStyle: {
+      "border-bottom": "1px solid #d2d2d2",
+    },
+  };
+
+  dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
+    OutputDatasetObsoleteDto[]
+  >([]);
+
+  paginationMode: TablePaginationMode = "server-side";
+
+  pagination: TablePagination = {
+    pageSizeOptions: [5, 10, 25, 50, 100],
+    pageIndex: 0,
+    pageSize: 10,
+    length: 0,
+  };
+
+  rowSelectionMode: TableSelectionMode = "none";
 
   constructor(
     private datePipe: DatePipe,
@@ -83,14 +101,41 @@ export class RelatedDatasetsComponent {
     private store: Store,
   ) {}
 
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.vm$.subscribe((vm) => {
+        this.dataSource.next(vm.relatedDatasets);
+        this.pagination.length = vm.relatedDatasetsCount || 0;
+      }),
+    );
+
+    this.subscriptions.push(
+      this.datasetsPerPage$.subscribe((size) => {
+        const pageSize = size || 25;
+        this.pagination.pageSize = pageSize;
+        if (!this.pagination.pageSizeOptions.includes(pageSize)) {
+          this.pagination.pageSizeOptions = [
+            ...this.pagination.pageSizeOptions,
+            pageSize,
+          ].sort((a, b) => a - b);
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe());
+  }
+
   formatTableData(
     datasets: OutputDatasetObsoleteDto[],
-  ): Record<string, unknown>[] {
+  ): OutputDatasetObsoleteDto[] {
     if (!datasets) {
       return [];
     }
 
     return datasets.map((dataset) => ({
+      ...dataset,
       pid: dataset.pid,
       name: dataset.datasetName,
       sourceFolder: dataset.sourceFolder,
@@ -104,18 +149,20 @@ export class RelatedDatasetsComponent {
     }));
   }
 
-  onPageChange(event: PageChangeEvent): void {
+  onPaginationChange({ pageIndex, pageSize }: TablePagination): void {
     this.store.dispatch(
       changeRelatedDatasetsPageAction({
-        page: event.pageIndex,
-        limit: event.pageSize,
+        page: pageIndex,
+        limit: pageSize,
       }),
     );
     this.store.dispatch(fetchRelatedDatasetsAction());
   }
 
-  onRowClick(dataset: DatasetClass): void {
-    const pid = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl("/datasets/" + pid);
+  onRowEvent({ event, sender }: IRowEvent<OutputDatasetObsoleteDto>): void {
+    if (event === RowEventType.RowClick) {
+      const pid = encodeURIComponent(sender.row.pid);
+      this.router.navigateByUrl("/datasets/" + pid);
+    }
   }
 }

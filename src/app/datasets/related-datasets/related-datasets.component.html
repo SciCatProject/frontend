@@ -1,19 +1,14 @@
 <div class="dataset-table" *ngIf="vm$ | async as vm">
-  <app-table
-    [data]="vm.relatedDatasets"
+  <dynamic-mat-table
     [columns]="tableColumns"
-    [paginate]="tablePaginate"
-    [currentPage]="currentPage$ | async"
-    [dataCount]="vm.relatedDatasetsCount"
-    [dataPerPage]="datasetsPerPage$ | async"
-    (pageChange)="onPageChange($event)"
-    (rowClick)="onRowClick($event)"
-  ></app-table>
-
-  <app-empty-content
-    *ngIf="!vm.relatedDatasets?.length"
-    message="No related datasets available."
-    icon="folder"
-  >
-  </app-empty-content>
+    [setting]="setting"
+    [dataSource]="dataSource"
+    [pagination]="pagination"
+    [pagingMode]="paginationMode"
+    [showGlobalTextSearch]="false"
+    [rowSelectionMode]="rowSelectionMode"
+    [emptyMessage]="'No related datasets available'"
+    (paginationChange)="onPaginationChange($event)"
+    (onRowEvent)="onRowEvent($event)"
+  ></dynamic-mat-table>
 </div>
