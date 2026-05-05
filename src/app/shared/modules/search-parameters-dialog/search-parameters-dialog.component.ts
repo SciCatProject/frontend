@@ -7,6 +7,9 @@ import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConnectedPosition } from "@angular/cdk/overlay";
+import { Store } from "@ngrx/store";
+import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
+import { fetchMetadataKeysAction } from "state-management/actions/datasets.actions";
 
 export interface SearchParametersDialogData {
   parameterKeys: string[];
@@ -73,19 +76,6 @@ export class SearchParametersDialogComponent {
     ),
   );
 
-  filteredKeys$ = this.parametersForm.get("lhs")?.valueChanges.pipe(
-    startWith(""),
-    map((value: string) => {
-      const searchTerm = value.toLowerCase();
-      return this.parameterKeys.filter((key) => {
-        const keyMatches = key.toLowerCase().includes(searchTerm);
-        const humanName = this.humanNameMap[key]?.toLowerCase() || "";
-        const humanNameMatches = humanName.includes(searchTerm);
-        return keyMatches || humanNameMatches;
-      });
-    }),
-  );
-
   constructor(
     public appConfigService: AppConfigService,
     @Inject(MAT_DIALOG_DATA)
@@ -93,11 +83,18 @@ export class SearchParametersDialogComponent {
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
     private snackBar: MatSnackBar,
+    private store: Store,
   ) {
     if (this.data.condition?.lhs) {
       this.getUnits(this.data.condition.lhs);
     }
     this.humanNameMap = data.humanNameMap || {};
+  }
+
+  ngOnInit(): void {
+    this.store.select(selectMetadataKeys).subscribe((keys) => {
+      this.parameterKeys = keys;
+    });
   }
 
   add = (): void => {
@@ -124,6 +121,11 @@ export class SearchParametersDialogComponent {
   };
 
   cancel = (): void => this.dialogRef.close();
+
+  searchMetadataKeys = (): void => {
+    const searchTerm = this.parametersForm.get("lhs")?.value || "";
+    this.store.dispatch(fetchMetadataKeysAction({ searchTerm }));
+  };
 
   getUnits = (parameterKey: string): void => {
     this.units = this.unitsService.getUnits(parameterKey);

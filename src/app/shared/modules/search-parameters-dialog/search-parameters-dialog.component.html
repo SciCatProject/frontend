@@ -1,12 +1,14 @@
 <h2 mat-dialog-title>
   {{ data.dialogTitle }}
 </h2>
-<form [formGroup]="parametersForm" class="search-parameters-form">
+<form
+  [formGroup]="parametersForm"
+  class="search-parameters-form"
+  (ngSubmit)="add()"
+>
   <mat-dialog-content>
     <mat-form-field class="search-field">
-      <mat-label
-        >Field
-      </mat-label>
+      <mat-label>Field </mat-label>
       <input
         matInput
         autocomplete="off"
@@ -17,13 +19,22 @@
         formControlName="lhs"
         (blur)="getUnits(lhs)"
         (focus)="toggleUnitField()"
+        (keydown.enter)="searchMetadataKeys(); $event.preventDefault()"
       />
+      <span
+        matSuffix
+        class="enter-hint"
+        matTooltip="Press Enter to search"
+        matTooltipPosition="after"
+        matTooltipShowDelay="500"
+        >↵</span
+      >
     </mat-form-field>
 
     <div class="scroll-table-container">
       <table
         mat-table
-        [dataSource]="filteredKeys$ | async"
+        [dataSource]="parameterKeys"
         class="mat-elevation-z1 mat-table"
       >
         <ng-container matColumnDef="field">
@@ -101,9 +112,7 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions [attr.align]="'end'">
-    <button mat-button (click)="cancel()">Cancel</button>
-    <button mat-button type="submit" (click)="add()" color="primary">
-      Apply
-    </button>
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-button type="submit" color="primary">Apply</button>
   </mat-dialog-actions>
 </form>
