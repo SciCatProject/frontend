@@ -15,6 +15,10 @@ import {
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { SciCatDataSource } from "shared/services/scicat.datasource";
+import {
+  IRowEvent,
+  RowEventType,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
 
 @Component({
   selector: "app-publisheddata-dashboard",
@@ -120,6 +124,13 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
         this.pagination = { ...this.pagination, length: count };
       }),
     );
+  }
+
+  onRowEvent(event: IRowEvent<PublishedData>) {
+    if (event?.event === RowEventType.RowClick) {
+      const id = encodeURIComponent(event.sender.row.doi);
+      this.router.navigateByUrl("/publishedDatasets/" + id);
+    }
   }
 
   onPaginationChange(pagination: TablePagination) {
