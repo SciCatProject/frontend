@@ -122,7 +122,7 @@ describe("Published Data Selectors", () => {
           limit: 25,
         },
         tablesSettings: {
-          columns: [],
+          columns: initialUserState.settings.fe_publisheddata_table_columns,
         },
       });
     });
