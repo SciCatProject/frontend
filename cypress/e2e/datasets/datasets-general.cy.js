@@ -477,6 +477,11 @@ describe("Datasets general", () => {
 
       cy.contains("Location").should("not.exist");
     });
+
+    it("should hide disabled filters in the list", () => {
+      cy.contains("Keyword").should("not.exist");
+      cy.contains("Type").should("exist");
+    });
   });
 
   describe("Pre-configured conditions test", () => {
