@@ -95,12 +95,8 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.vm$.pipe(take(1)).subscribe((vm) => {
         this.currentFilters = vm.filters;
-        const { skip, limit, sortField } = vm.filters;
+        const { skip, limit } = vm.filters;
         const pageIndex = skip / limit;
-
-        const [field, direction] = sortField
-          ? sortField.split(" ")
-          : ["", "asc"];
 
         this.loadData(vm.filters, pageIndex, limit);
 
@@ -154,13 +150,13 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     this.currentFilters = newFilters;
   }
 
-  getSort() {
-    const sortField = this.currentFilters.sortField;
+  getSort(filters: any) {
+    const sortField = filters?.sortField;
     return sortField ? sortField.split(" ") : ["", "asc"];
   }
 
   loadData(filters: any, pageIndex: number, pageSize: number) {
-    const [field, direction] = this.getSort();
+    const [field, direction] = this.getSort(filters);
     this.scicatDataSource.loadAllData(
       filters,
       field,
