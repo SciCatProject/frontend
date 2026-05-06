@@ -3,6 +3,7 @@ import { PublishedDataState } from "state-management/state/published-data.store"
 import * as fromSelectors from "./published-data.selectors";
 import { createMock } from "shared/MockStubs";
 import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
+import { initialUserState } from "./user.selectors.spec";
 
 const publishedData = createMock<PublishedData>({
   doi: "testDOI",
@@ -108,6 +109,7 @@ describe("Published Data Selectors", () => {
           fromSelectors.selectPage.projector(initialPublishedDataState.filters),
           initialPublishedDataState.filters.limit,
           initialPublishedDataState.filters,
+          initialUserState.settings,
         ),
       ).toEqual({
         publishedData: [],
@@ -118,6 +120,9 @@ describe("Published Data Selectors", () => {
           sortField: "publicationYear desc",
           skip: 0,
           limit: 25,
+        },
+        tablesSettings: {
+          columns: initialUserState.settings.fe_publisheddata_table_columns,
         },
       });
     });
