@@ -12,13 +12,18 @@ import {
   TablePagination,
   TablePaginationMode,
 } from "shared/modules/dynamic-material-table/models/table-pagination.model";
-import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  ITableSetting,
+  TableSettingEventType,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { SciCatDataSource } from "shared/services/scicat.datasource";
 import {
   IRowEvent,
   RowEventType,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { TableConfigService } from "shared/services/table-config.service";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
 
 @Component({
   selector: "app-publisheddata-dashboard",
@@ -29,14 +34,8 @@ import {
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   public vm$ = this.store.select(selectPublishedDataDashboardPageViewModel);
 
-  columns: TableField<any>[] = [
-    { name: "doi", header: "DOI", index: 0 },
-    { name: "title", header: "Title", index: 1 },
-    { name: "creator", header: "Creator", index: 2 },
-    { name: "status", header: "Status", index: 3 },
-    { name: "createdBy", header: "Created by", index: 4 },
-    { name: "createdAt", header: "Created at", index: 5 },
-  ];
+  columns: TableField<any>[] = [];
+  setting: ITableSetting = {};
 
   tableName = "publishedDataTable";
   rowSelectionMode: "single" | "multi" | "none" = "none";
@@ -44,14 +43,21 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   pending = false;
   globalTextSearch = "";
 
-  setting: ITableSetting = {
+  tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
     settingList: [
       {
         visibleActionMenu: actionMenu,
         isDefaultSetting: true,
         isCurrentSetting: true,
-        columnSetting: [],
+        columnSetting: [
+          { name: "doi", header: "DOI", index: 0 },
+          { name: "title", header: "Title", index: 1 },
+          { name: "creator", header: "Creator", index: 2 },
+          { name: "status", header: "Status", index: 3 },
+          { name: "createdBy", header: "Created by", index: 4 },
+          { name: "createdAt", header: "Created at", index: 5 },
+        ],
       },
     ],
     rowStyle: {
@@ -86,6 +92,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     private appConfigService: AppConfigService,
     private dataService: ScicatDataService,
     private exportService: ExportExcelService,
+    private tableConfigService: TableConfigService,
   ) {
     this.scicatDataSource = new SciCatDataSource(
       this.appConfigService,
@@ -103,6 +110,20 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
         const pageIndex = skip / limit;
 
         this.loadData(vm.filters, pageIndex, limit);
+
+        const tableSettingsConfig =
+          this.tableConfigService.getTableSettingsConfig(
+            this.tableName,
+            this.tableDefaultSettingsConfig,
+            vm.tablesSettings?.columns || [],
+          );
+
+        const currentColumnSetting = tableSettingsConfig.settingList.find(
+          (s) => s.isCurrentSetting,
+        )?.columnSetting;
+
+        this.columns = currentColumnSetting;
+        this.setting = tableSettingsConfig;
 
         this.pagination = {
           ...this.pagination,
@@ -143,6 +164,32 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     };
 
     this.loadData(newFilters, pageIndex, pageSize);
+  }
+
+  saveTableSettings(setting: ITableSetting) {
+    const columnsSetting = setting.columnSetting.map((column, index) => {
+      const { name, display, width } = column;
+
+      return { name, display, order: index, width };
+    });
+
+    this.store.dispatch(
+      updateUserSettingsAction({
+        property: { fe_publisheddata_table_columns: columnsSetting },
+      }),
+    );
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.save ||
+      event.type === TableSettingEventType.create
+    ) {
+      this.saveTableSettings(event.setting);
+    }
   }
 
   onGlobalTextSearchChange(text: string) {

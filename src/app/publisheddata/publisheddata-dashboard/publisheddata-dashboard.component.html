@@ -11,6 +11,7 @@
   [globalTextSearch]="globalTextSearch"
   [globalTextSearchPlaceholder]="'Title, Creator, DOI...'"
   (onRowEvent)="onRowEvent($event)"
+  (settingChange)="onSettingChange($event)"
   (paginationChange)="onPaginationChange($event)"
   (globalTextSearchChange)="onGlobalTextSearchChange($event)"
   (globalTextSearchApply)="onGlobalTextSearchAction()"
