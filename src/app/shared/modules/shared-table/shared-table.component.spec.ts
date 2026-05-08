@@ -203,13 +203,15 @@ describe("SharedTableComponent", () => {
 
   describe("#ngAfterViewInit()", () => {
     it("should add the sort/paginator merge subscription to the tracked list", () => {
-      (component as any).subscriptions = [];
+      const pushSpy = spyOn(
+        (component as any).subscriptions,
+        "push",
+      ).and.callThrough();
+
       component.ngAfterViewInit();
 
-      // Expects at least: sort-reset subscription + merge subscription
-      expect((component as any).subscriptions.length).toBeGreaterThanOrEqualTo(
-        2,
-      );
+      // sort-reset subscription + merge subscription
+      expect(pushSpy).toHaveBeenCalledTimes(2);
     });
   });
 });
