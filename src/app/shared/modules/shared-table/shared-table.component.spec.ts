@@ -200,4 +200,16 @@ describe("SharedTableComponent", () => {
   describe("#getFilterColumns()", () => {
     xit("should ...", () => {});
   });
+
+  describe("#ngAfterViewInit()", () => {
+    it("should add the sort/paginator merge subscription to the tracked list", () => {
+      (component as any).subscriptions = [];
+      component.ngAfterViewInit();
+
+      // Expects at least: sort-reset subscription + merge subscription
+      expect((component as any).subscriptions.length).toBeGreaterThanOrEqualTo(
+        2,
+      );
+    });
+  });
 });
