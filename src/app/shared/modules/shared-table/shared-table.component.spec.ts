@@ -200,4 +200,18 @@ describe("SharedTableComponent", () => {
   describe("#getFilterColumns()", () => {
     xit("should ...", () => {});
   });
+
+  describe("#ngOnDestroy()", () => {
+    it("should call unsubscribe() on every tracked subscription", () => {
+      const spy = jasmine.createSpy("unsubscribe");
+      (component as any).subscriptions = [
+        { unsubscribe: spy },
+        { unsubscribe: spy },
+      ];
+
+      component.ngOnDestroy();
+
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+  });
 });

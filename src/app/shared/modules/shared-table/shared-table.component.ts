@@ -269,7 +269,7 @@ export class SharedTableComponent
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => sub.unsubscribe);
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   onRowClick(event: any) {
