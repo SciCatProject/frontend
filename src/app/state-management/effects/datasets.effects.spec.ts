@@ -135,6 +135,21 @@ describe("DatasetEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
     });
+
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const datasets = [dataset];
+      const action = fromActions.fetchDatasetsAction();
+      const outcome = fromActions.fetchDatasetsCompleteAction({ datasets });
+
+      // Second action at frame 3 cancels the first request (which would complete at frame 3).
+      // Only the response to the second action, arriving at frame 5, is emitted.
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", { a: datasets });
+      datasetApi.datasetsControllerFullqueryV3.and.returnValue(response);
+
+      const expected = cold("-----b", { b: outcome });
+      expect(effects.fetchDatasets$).toBeObservable(expected);
+    });
   });
 
   describe("fetchFacetCounts$", () => {
@@ -182,6 +197,38 @@ describe("DatasetEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
     });
+
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const facetCounts: FacetCounts = {
+        creationLocation: [],
+        creationTime: [],
+        keywords: [],
+        ownerGroup: [],
+        type: [],
+      };
+      const action = fromActions.fetchFacetCountsAction();
+      const outcome = fromActions.fetchFacetCountsCompleteAction({
+        facetCounts,
+        allCounts: 0,
+      });
+      const responseArray = [
+        {
+          all: [{ totalSets: 0 }],
+          creationLocation: [],
+          creationTime: [],
+          keywords: [],
+          ownerGroup: [],
+          type: [],
+        },
+      ];
+
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", { a: responseArray });
+      datasetApi.datasetsControllerFullfacetV3.and.returnValue(response);
+
+      const expected = cold("-----b", { b: outcome });
+      expect(effects.fetchFacetCounts$).toBeObservable(expected);
+    });
   });
 
   describe("fetchMetadataKeys$", () => {
@@ -209,6 +256,21 @@ describe("DatasetEffects", () => {
       datasetApi.datasetsControllerMetadataKeysV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysAction();
+      const outcome = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", { a: metadataKeys });
+      datasetApi.datasetsControllerMetadataKeysV3.and.returnValue(response);
+
+      const expected = cold("-----b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
     });
   });
