@@ -207,22 +207,24 @@ export class SharedTableComponent
     );
 
     this.setDefaultFilters();
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        tap(() => {
-          this.router.navigate([], {
-            queryParams: {
-              sortActive: this.sort.active,
-              sortDirection: this.sort.direction,
-              pageIndex: this.paginator.pageIndex,
-              pageSize: this.paginator.pageSize,
-            },
-            queryParamsHandling: "merge",
-          });
-          this.loadDataPage();
-        }),
-      )
-      .subscribe();
+    this.subscriptions.push(
+      merge(this.sort.sortChange, this.paginator.page)
+        .pipe(
+          tap(() => {
+            this.router.navigate([], {
+              queryParams: {
+                sortActive: this.sort.active,
+                sortDirection: this.sort.direction,
+                pageIndex: this.paginator.pageIndex,
+                pageSize: this.paginator.pageSize,
+              },
+              queryParamsHandling: "merge",
+            });
+            this.loadDataPage();
+          }),
+        )
+        .subscribe(),
+    );
 
     // copy changes in URL parameters to corresponding GUI fields
     // Important: Do only once
