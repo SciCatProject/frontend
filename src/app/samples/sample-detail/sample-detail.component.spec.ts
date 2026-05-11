@@ -38,6 +38,12 @@ import { AppConfigService } from "app-config.service";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { TablePagination } from "shared/modules/dynamic-material-table/models/table-pagination.model";
+import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
+import { provideMockStore } from "@ngrx/store/testing";
+import { selectSampleDetailPageViewModel } from "state-management/selectors/samples.selectors";
+import { selectColumnsWithHasFetchedSettings } from "state-management/selectors/user.selectors";
+import { DatasetsListService } from "shared/services/datasets-list.service";
+import { MockDatasetsListService } from "shared/MockStubs";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -67,7 +73,35 @@ describe("SampleDetailComponent", () => {
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
-      providers: [DatePipe, FileSizePipe, SlicePipe],
+      providers: [
+        DatePipe,
+        FileSizePipe,
+        SlicePipe,
+        JsonHeadPipe,
+        provideMockStore({
+          selectors: [
+            {
+              selector: selectSampleDetailPageViewModel,
+              value: {
+                sample: mockSample,
+                user: null,
+                attachments: [],
+                datasets: [],
+                datasetsPage: 0,
+                datasetsPerPage: 25,
+                datasetsCount: 0,
+              },
+            },
+            {
+              selector: selectColumnsWithHasFetchedSettings,
+              value: {
+                columns: [],
+                hasFetchedSettings: true,
+              },
+            },
+          ],
+        }),
+      ],
     });
     TestBed.overrideComponent(SampleDetailComponent, {
       set: {
@@ -80,6 +114,7 @@ describe("SampleDetailComponent", () => {
           },
           { provide: Router, useValue: router },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: DatasetsListService, useClass: MockDatasetsListService },
         ],
       },
     });
@@ -102,21 +137,6 @@ describe("SampleDetailComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
-  });
-
-  describe("#formatTableData()", () => {
-    it("should return empty array if there are no datasets", () => {
-      const data = component.formatTableData(null);
-
-      expect(data).toEqual([]);
-    });
-
-    it("should return an array of data objects if there are datasets", () => {
-      const datasets = [mockDataset];
-      const data = component.formatTableData(datasets);
-
-      expect(data.length).toEqual(1);
-    });
   });
 
   describe("#onSaveCharacteristics()", () => {
