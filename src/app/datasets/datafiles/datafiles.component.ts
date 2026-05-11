@@ -46,6 +46,7 @@ import {
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 
 @Component({
   selector: "datafiles",
@@ -113,7 +114,20 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     },
   ];
 
-  setting: ITableSetting = {
+  setting: ITableSetting = {};
+
+  tableDefaultSettingsConfig: ITableSetting = {
+    visibleActionMenu: actionMenu,
+    saveSettingMode: "none",
+    settingList: [
+      {
+        visibleActionMenu: actionMenu,
+        saveSettingMode: "none",
+        isDefaultSetting: true,
+        isCurrentSetting: true,
+        columnSetting: [],
+      },
+    ],
     rowStyle: {
       "border-bottom": "1px solid #d2d2d2",
     },
@@ -215,6 +229,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   }
   //ngAfterViewInit() {
   ngOnInit() {
+    this.setting = this.tableDefaultSettingsConfig;
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
