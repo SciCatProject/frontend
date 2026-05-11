@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
 import {
-  DatasetClass,
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -17,7 +16,7 @@ import {
   selectRelatedDatasetsPerPage,
 } from "state-management/selectors/datasets.selectors";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, take, combineLatest } from "rxjs";
 import {
   TablePagination,
   TablePaginationMode,
@@ -28,6 +27,12 @@ import {
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { AppConfigService } from "app-config.service";
+import { TableConfigService } from "shared/services/table-config.service";
+import { DatasetsListService } from "shared/services/datasets-list.service";
+import { TableColumn } from "state-management/models";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { selectColumnsWithHasFetchedSettings } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-related-datasets",
@@ -45,7 +50,23 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   currentPage$ = this.store.select(selectRelatedDatasetsCurrentPage);
   datasetsPerPage$ = this.store.select(selectRelatedDatasetsPerPage);
 
-  subscriptions: Subscription[] = [];
+  subscription: Subscription;
+
+  relatedDatasets$ = this.store.select(selectRelatedDatasetsPageViewModel);
+
+  appConfig = this.appConfigService.getConfig();
+
+  selectColumnsWithFetchedSettings$ = this.store.select(
+    selectColumnsWithHasFetchedSettings,
+  );
+
+  tableName = "relatedDatasetsTable";
+
+  columns: TableField<any>[];
+
+  pending = true;
+
+  setting: ITableSetting = {};
 
   tableColumns: TableField<any>[] = [
     {
@@ -74,7 +95,18 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
     },
   ];
 
-  setting: ITableSetting = {
+  tableDefaultSettingsConfig: ITableSetting = {
+    visibleActionMenu: actionMenu,
+    saveSettingMode: "none",
+    settingList: [
+      {
+        visibleActionMenu: actionMenu,
+        saveSettingMode: "none",
+        isDefaultSetting: true,
+        isCurrentSetting: true,
+        columnSetting: [],
+      },
+    ],
     rowStyle: {
       "border-bottom": "1px solid #d2d2d2",
     },
@@ -99,32 +131,71 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private router: Router,
     private store: Store,
+    private appConfigService: AppConfigService,
+    private tableConfigService: TableConfigService,
+    private datasetsListService: DatasetsListService,
   ) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.vm$.subscribe((vm) => {
-        this.dataSource.next(vm.relatedDatasets);
-        this.pagination.length = vm.relatedDatasetsCount || 0;
-      }),
-    );
+    this.store.dispatch(fetchRelatedDatasetsAction());
 
-    this.subscriptions.push(
-      this.datasetsPerPage$.subscribe((size) => {
-        const pageSize = size || 25;
-        this.pagination.pageSize = pageSize;
-        if (!this.pagination.pageSizeOptions.includes(pageSize)) {
-          this.pagination.pageSizeOptions = [
-            ...this.pagination.pageSizeOptions,
-            pageSize,
-          ].sort((a, b) => a - b);
-        }
-      }),
-    );
+    this.subscription = combineLatest([
+      this.vm$,
+      this.selectColumnsWithFetchedSettings$.pipe(take(1)),
+      this.currentPage$,
+      this.datasetsPerPage$,
+    ]).subscribe(([vm, defaultTableColumns, currentPage, datasetsPerPage]) => {
+      this.dataSource.next(vm.relatedDatasets);
+      this.pending = false;
+
+      const defaultConfigColumns =
+        this.appConfig?.defaultDatasetsListSettings?.columns || [];
+
+      const userTableConfigColumns =
+        this.datasetsListService.convertSavedDatasetColumns(
+          defaultTableColumns.columns,
+        );
+
+      this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+        this.datasetsListService.convertSavedDatasetColumns(
+          defaultConfigColumns as TableColumn[],
+        );
+
+      const tableSettingsConfig =
+        this.tableConfigService.getTableSettingsConfig(
+          this.tableName,
+          this.tableDefaultSettingsConfig,
+          userTableConfigColumns,
+        );
+
+      const paginationConfig = {
+        pageSizeOptions: [5, 10, 25, 100],
+        pageIndex: currentPage || 0,
+        pageSize: datasetsPerPage || 10,
+        length: vm.relatedDatasetsCount || 0,
+      };
+
+      if (tableSettingsConfig?.settingList.length) {
+        this.initTable(tableSettingsConfig, paginationConfig);
+      }
+    });
+  }
+
+  initTable(
+    settingConfig: ITableSetting,
+    paginationConfig: TablePagination,
+  ): void {
+    const currentColumnSetting = settingConfig.settingList.find(
+      (s) => s.isCurrentSetting,
+    )?.columnSetting;
+
+    this.columns = currentColumnSetting;
+    this.setting = settingConfig;
+    this.pagination = paginationConfig;
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscription.unsubscribe();
   }
 
   formatTableData(
