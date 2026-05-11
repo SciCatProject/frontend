@@ -3,9 +3,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
-import {
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,
