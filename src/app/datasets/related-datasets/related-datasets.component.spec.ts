@@ -27,6 +27,8 @@ import {
   withInterceptorsFromDi,
 } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { selectColumnsWithHasFetchedSettings } from "state-management/selectors/user.selectors";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;
@@ -49,6 +51,7 @@ describe("RelatedDatasetsComponent", () => {
       ],
       providers: [
         DatePipe,
+        FileSizePipe,
         provideMockStore({
           selectors: [
             {
@@ -65,6 +68,10 @@ describe("RelatedDatasetsComponent", () => {
             {
               selector: selectRelatedDatasetsPerPage,
               value: 25,
+            },
+            {
+              selector: selectColumnsWithHasFetchedSettings,
+              value: { columns: [], hasFetchedSettings: true },
             },
           ],
         }),
