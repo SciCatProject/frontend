@@ -29,6 +29,7 @@ import {
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { selectColumnsWithHasFetchedSettings } from "state-management/selectors/user.selectors";
+import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;
@@ -52,6 +53,7 @@ describe("RelatedDatasetsComponent", () => {
       providers: [
         DatePipe,
         FileSizePipe,
+        JsonHeadPipe,
         provideMockStore({
           selectors: [
             {
