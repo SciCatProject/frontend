@@ -1,6 +1,7 @@
 <div class="dataset-table" *ngIf="vm$ | async as vm">
   <dynamic-mat-table
-    [columns]="tableColumns"
+    [columns]="columns"
+    [pending]="pending"
     [setting]="setting"
     [dataSource]="dataSource"
     [pagination]="pagination"
