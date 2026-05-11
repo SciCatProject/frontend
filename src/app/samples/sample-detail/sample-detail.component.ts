@@ -1,6 +1,12 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, fromEvent, Subscription } from "rxjs";
+import {
+  BehaviorSubject,
+  fromEvent,
+  Subscription,
+  take,
+  combineLatest,
+} from "rxjs";
 import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";
 import { Store } from "@ngrx/store";
 import {
@@ -13,8 +19,6 @@ import {
   removeAttachmentAction,
   fetchSampleAttachmentsAction,
 } from "../../state-management/actions/samples.actions";
-import { DatePipe, SlicePipe } from "@angular/common";
-import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import {
   PickedFile,
   SubmitCaptionEvent,
@@ -39,16 +43,11 @@ import {
   RowEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-
-export interface TableData {
-  pid: string;
-  name: string;
-  sourceFolder: string;
-  size: string;
-  creationTime: string | null;
-  owner: string;
-  location: string;
-}
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TableConfigService } from "shared/services/table-config.service";
+import { DatasetsListService } from "shared/services/datasets-list.service";
+import { TableColumn } from "state-management/models";
+import { selectColumnsWithHasFetchedSettings } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-sample-detail",
@@ -62,6 +61,16 @@ export class SampleDetailComponent
   private _hasUnsavedChanges = false;
   vm$ = this.store.select(selectSampleDetailPageViewModel);
 
+  selectColumnsWithFetchedSettings$ = this.store.select(
+    selectColumnsWithHasFetchedSettings,
+  );
+
+  tableName = "sampleDatasetsTable";
+
+  columns: TableField<any>[];
+
+  setting: ITableSetting = {};
+
   appConfig = this.appConfigService.getConfig();
 
   sample: OutputSampleDto;
@@ -71,24 +80,26 @@ export class SampleDetailComponent
   show = false;
   subscriptions: Subscription[] = [];
 
-  tableColumns: TableField<TableData>[] = [
-    { name: "name", header: "Name" },
-    { name: "sourceFolder", header: "Source Folder" },
-    { name: "size", header: "Size" },
-    { name: "creationTime", header: "Creation Time" },
-    { name: "owner", header: "Owner" },
-    { name: "location", header: "Location" },
-  ];
-
-  setting: ITableSetting = {
+  tableDefaultSettingsConfig: ITableSetting = {
+    visibleActionMenu: actionMenu,
+    saveSettingMode: "none",
+    settingList: [
+      {
+        visibleActionMenu: actionMenu,
+        saveSettingMode: "none",
+        isDefaultSetting: true,
+        isCurrentSetting: true,
+        columnSetting: [],
+      },
+    ],
     rowStyle: {
       "border-bottom": "1px solid #d2d2d2",
     },
   };
 
-  dataSource: BehaviorSubject<TableData[]> = new BehaviorSubject<TableData[]>(
-    [],
-  );
+  dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
+    OutputDatasetObsoleteDto[]
+  >([]);
 
   paginationMode: TablePaginationMode = "server-side";
 
@@ -103,32 +114,24 @@ export class SampleDetailComponent
 
   constructor(
     private appConfigService: AppConfigService,
-    private datePipe: DatePipe,
-    private filesizePipe: FileSizePipe,
     private router: Router,
     private route: ActivatedRoute,
-    private slicePipe: SlicePipe,
     private store: Store,
+    private tableConfigService: TableConfigService,
+    private datasetsListService: DatasetsListService,
   ) {}
 
-  formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
-    let tableData: TableData[] = [];
-    if (datasets) {
-      tableData = datasets.map((dataset: any) => ({
-        pid: dataset.pid,
-        name: dataset.datasetName,
-        sourceFolder:
-          "..." + this.slicePipe.transform(dataset.sourceFolder, -14),
-        size: this.filesizePipe.transform(dataset.size),
-        creationTime: this.datePipe.transform(
-          dataset.creationTime,
-          "yyyy-MM-dd HH:mm",
-        ),
-        owner: dataset.owner,
-        location: dataset.creationLocation,
-      }));
-    }
-    return tableData;
+  initTable(
+    settingConfig: ITableSetting,
+    paginationConfig: TablePagination,
+  ): void {
+    const currentColumnSetting = settingConfig.settingList.find(
+      (s) => s.isCurrentSetting,
+    )?.columnSetting;
+
+    this.columns = currentColumnSetting;
+    this.setting = settingConfig;
+    this.pagination = paginationConfig;
   }
 
   onSaveCharacteristics(characteristics: Record<string, unknown>) {
@@ -180,7 +183,7 @@ export class SampleDetailComponent
     );
   }
 
-  onRowEvent(event: IRowEvent<TableData>) {
+  onRowEvent(event: IRowEvent<OutputDatasetObsoleteDto>) {
     if (event.event === RowEventType.RowClick) {
       const id = encodeURIComponent(event.sender.row.pid);
       this.router.navigateByUrl("/datasets/" + id);
@@ -189,7 +192,10 @@ export class SampleDetailComponent
 
   ngOnInit() {
     this.subscriptions.push(
-      this.vm$.subscribe((vm) => {
+      combineLatest([
+        this.vm$,
+        this.selectColumnsWithFetchedSettings$.pipe(take(1)),
+      ]).subscribe(([vm, defaultTableColumns]) => {
         if (vm.sample) {
           this.sample = vm.sample;
 
@@ -202,7 +208,38 @@ export class SampleDetailComponent
           this.attachments = vm.attachments;
         }
 
-        this.dataSource.next(this.formatTableData(vm.datasets));
+        this.dataSource.next(vm.datasets);
+
+        const defaultConfigColumns =
+          this.appConfig?.defaultDatasetsListSettings?.columns || [];
+
+        const userTableConfigColumns =
+          this.datasetsListService.convertSavedDatasetColumns(
+            defaultTableColumns.columns,
+          );
+
+        this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+          this.datasetsListService.convertSavedDatasetColumns(
+            defaultConfigColumns as TableColumn[],
+          );
+
+        const tableSettingsConfig =
+          this.tableConfigService.getTableSettingsConfig(
+            this.tableName,
+            this.tableDefaultSettingsConfig,
+            userTableConfigColumns,
+          );
+
+        const paginationConfig = {
+          pageSizeOptions: [5, 10, 25, 50, 100],
+          pageIndex: vm.datasetsPage || 0,
+          pageSize: vm.datasetsPerPage || this.pagination.pageSize,
+          length: vm.datasetsCount || 0,
+        };
+
+        if (tableSettingsConfig?.settingList.length) {
+          this.initTable(tableSettingsConfig, paginationConfig);
+        }
         this.pagination = {
           ...this.pagination,
           pageIndex: vm.datasetsPage || 0,
