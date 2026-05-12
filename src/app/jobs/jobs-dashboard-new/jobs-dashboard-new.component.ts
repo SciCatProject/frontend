@@ -194,6 +194,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
       limit: pageSize,
     };
 
+    this.currentFilters = newFilters;
     this.loadData(newFilters, pageIndex, pageSize);
   }
 
@@ -253,6 +254,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.scicatDataSource.disconnectExportData();
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
