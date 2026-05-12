@@ -6,6 +6,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { PipesModule } from "shared/pipes/pipes.module";
+import { DatePipe } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
@@ -99,7 +100,7 @@ describe("1000: ConfigurableActionComponent", () => {
         StoreModule.forRoot({}),
       ],
       declarations: [ConfigurableActionComponent],
-      providers: [provideMockStore()],
+      providers: [provideMockStore(), DatePipe],
     });
     TestBed.overrideComponent(ConfigurableActionComponent, {
       set: {
@@ -982,5 +983,93 @@ describe("1000: ConfigurableActionComponent", () => {
       current_action.url,
       current_action.target,
     );
+  });
+
+  it("1140: should build dependency graph", () => {
+    const variables = {
+      files: "#Dataset0FilesPath",
+      first: "@files[0]",
+      copy: "@first",
+    };
+
+    const graph = component.buildDependenciesGraph(variables);
+
+    expect(graph["files"]).toEqual(new Set());
+    expect(graph["first"]).toEqual(new Set(["files"]));
+    expect(graph["copy"]).toEqual(new Set(["first"]));
+  });
+
+  it("1150:should support multiple dependencies", () => {
+    const variables = {
+      a: "@b",
+      b: "@c",
+      c: "@a",
+    };
+
+    const graph = component.buildDependenciesGraph(variables);
+
+    expect(graph["a"]).toEqual(new Set(["b"]));
+    expect(graph["b"]).toEqual(new Set(["c"]));
+    expect(graph["c"]).toEqual(new Set(["a"]));
+  });
+
+  it("1160: should resolve dependent variables", () => {
+    component.actionConfig = {
+      variables: {
+        files: "#Dataset0FilesPath",
+        first: "@files[0]",
+      },
+    } as any;
+
+    component.update_status();
+
+    expect(component.variables["files"]).toEqual([
+      "/file/1",
+      "/file/2",
+      "/file/3",
+    ]);
+
+    expect(component.variables["first"]).toBe("/file/1");
+  });
+
+  it("1170: should resolve chained dependencies", () => {
+    component.actionConfig = {
+      variables: {
+        files: "#Dataset0FilesPath",
+        first: "@files[0]",
+        copy: "@first",
+      },
+    } as any;
+
+    component.update_status();
+
+    expect(component.variables["copy"]).toBe("/file/1");
+  });
+
+  it("1180: should detect cyclic dependencies", () => {
+    spyOn(console, "error");
+
+    component.actionConfig = {
+      variables: {
+        a: "@b",
+        b: "@a",
+      },
+    } as any;
+
+    component.update_status();
+
+    expect(console.error).toHaveBeenCalled();
+  });
+
+  it("1190: should resolve selectors after variable substitution", () => {
+    component.actionConfig = {
+      variables: {
+        year: "#date_format(2026-05-12T14:53:45Z, yyyy)",
+      },
+    } as any;
+
+    component.update_status();
+
+    expect(component.variables["year"]).toBe("2026");
   });
 });
