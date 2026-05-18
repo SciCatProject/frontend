@@ -6,10 +6,7 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import {
-  OutputDatasetObsoleteDto,
-  UsersService,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   selectCurrentDataset,
   selectIsCurrentDatasetInBatch,
@@ -21,8 +18,8 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, IsActiveMatchOptions } from "@angular/router";
-import { Subscription, Observable, combineLatest, Subject } from "rxjs";
-import { map, takeUntil } from "rxjs/operators";
+import { Subscription, Observable, combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 import * as fromDatasetActions from "state-management/actions/datasets.actions";
 import {
   clearCurrentDatasetStateAction,
@@ -47,6 +44,7 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
 import { fetchInstrumentAction } from "state-management/actions/instruments.actions";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 export interface JWT {
   jwt: string;
@@ -83,7 +81,7 @@ export class DatasetDetailsDashboardComponent
   jwt$: Observable<JWT> = new Observable<JWT>();
   appConfig = this.appConfigService.getConfig();
 
-  dataset: OutputDatasetObsoleteDto | undefined;
+  dataset: CurrentDataset | undefined;
   navLinks: {
     location: string;
     label: string;

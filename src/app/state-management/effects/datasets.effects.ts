@@ -7,8 +7,8 @@ import {
   Datablock,
   DatasetsService,
   OrigDatablock,
-  OutputDatasetObsoleteDto,
   UpdateAttachmentV3Dto,
+  DatasetsV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
@@ -36,6 +36,7 @@ import {
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 @Injectable()
 export class DatasetEffects {
@@ -166,7 +167,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
       switchMap(({ pid }) => {
-        return this.datasetsService.datasetsControllerFindByIdV3(pid).pipe(
+        return this.datasetsV4Service.datasetsV4ControllerFindByIdV4(pid).pipe(
           map((dataset) => fromActions.fetchDatasetCompleteAction({ dataset })),
           catchError(() => of(fromActions.fetchDatasetFailedAction())),
         );
@@ -234,7 +235,6 @@ export class DatasetEffects {
           limits: {
             skip: filters.skip,
             limit: filters.limit,
-            order: filters.sortField,
           },
         };
         if (dataset.type === "raw") {
@@ -248,8 +248,8 @@ export class DatasetEffects {
             pid: { $in: dataset.inputDatasets },
           };
         }
-        return this.datasetsService
-          .datasetsControllerFindAllV3(JSON.stringify(queryFilter))
+        return this.datasetsV4Service
+          .datasetsV4ControllerFindAllV4(JSON.stringify(queryFilter))
           .pipe(
             map((relatedDatasets) =>
               fromActions.fetchRelatedDatasetsCompleteAction({
@@ -283,8 +283,8 @@ export class DatasetEffects {
             pid: { $in: dataset.inputDatasets },
           };
         }
-        return this.datasetsService
-          .datasetsControllerCountV3(JSON.stringify(queryFilter))
+        return this.datasetsV4Service
+          .datasetsV4ControllerCountV4(JSON.stringify(queryFilter))
           .pipe(
             map(({ count }) =>
               fromActions.fetchRelatedDatasetsCountCompleteAction({
@@ -526,15 +526,16 @@ export class DatasetEffects {
     private datasetsService: DatasetsService,
     private store: Store,
     private appConfigService: AppConfigService,
+    private datasetsV4Service: DatasetsV4Service,
   ) {}
 
-  private storeBatch(batch: OutputDatasetObsoleteDto[], userId: string) {
+  private storeBatch(batch: CurrentDataset[], userId: string) {
     const json = JSON.stringify(batch);
     localStorage.setItem("batch", json);
     localStorage.setItem("batchUser", userId);
   }
 
-  private retrieveBatch(ofUserId: string): OutputDatasetObsoleteDto[] {
+  private retrieveBatch(ofUserId: string): CurrentDataset[] {
     const json = localStorage.getItem("batch");
     const userId = localStorage.getItem("batchUser");
 

@@ -33,6 +33,7 @@ import { DatasetsListService } from "shared/services/datasets-list.service";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 import { TranslateService } from "@ngx-translate/core";
 import { translateComponentLabel } from "shared/pipes/component-translate.pipe";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 @Component({
   selector: "batch-view",
@@ -41,7 +42,7 @@ import { translateComponentLabel } from "shared/pipes/component-translate.pipe";
   standalone: false,
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  batch$: Observable<OutputDatasetObsoleteDto[]> = this.store.select(
+  batch$: Observable<CurrentDataset[]> = this.store.select(
     selectDatasetsInBatch,
   );
   userProfile$ = this.store.select(selectProfile);
@@ -55,7 +56,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   shareEnabled = this.appConfig.shareEnabled;
 
-  datasetList: OutputDatasetObsoleteDto[] = [];
+  datasetList: CurrentDataset[] = [];
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
 
@@ -75,7 +76,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearBatchAction());
   }
 
-  private storeBatch(datasetUpdatedBatch: OutputDatasetObsoleteDto[]) {
+  private storeBatch(datasetUpdatedBatch: CurrentDataset[]) {
     this.store.dispatch(storeBatchAction({ batch: datasetUpdatedBatch }));
   }
 

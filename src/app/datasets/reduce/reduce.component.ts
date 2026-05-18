@@ -25,6 +25,7 @@ import {
   DatasetClass,
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 @Component({
   selector: "reduce",
@@ -33,7 +34,7 @@ import {
   standalone: false,
 })
 export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
-  dataset: OutputDatasetObsoleteDto | undefined;
+  dataset: CurrentDataset | undefined;
   subscriptions: Subscription[] = [];
   derivedDatasets$ = this.store
     .select(selectDatasets)
@@ -88,7 +89,7 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
     private ownershipService: OwnershipService,
   ) {}
 
-  reduceDataset(dataset: OutputDatasetObsoleteDto): void {
+  reduceDataset(dataset: CurrentDataset): void {
     this.store.dispatch(reduceDatasetAction({ dataset }));
   }
 
