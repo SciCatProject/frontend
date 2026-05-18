@@ -65,8 +65,8 @@ describe("JobsDashboardNewComponent", () => {
 
   describe("#onRowEvent", () => {
     it("should navigate to a Job detail", () => {
-      const job = { id: "job-1" };
-      const id = encodeURIComponent(job.id);
+      const job = { jobId: "job-1" };
+      const id = encodeURIComponent(job.jobId);
 
       component.onRowEvent({
         event: RowEventType.RowClick,
