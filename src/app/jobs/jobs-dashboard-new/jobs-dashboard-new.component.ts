@@ -178,9 +178,9 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
     );
   }
 
-  onRowEvent(event: IRowEvent<OutputJobV3Dto>) {
+  onRowEvent(event: IRowEvent<OutputJobV3Dto & { jobId: string }>) {
     if (event?.event === RowEventType.RowClick) {
-      const id = encodeURIComponent(event.sender.row.id);
+      const id = encodeURIComponent(event.sender.row.jobId);
       this.router.navigateByUrl("/user/jobs/" + id);
     }
   }
