@@ -244,6 +244,34 @@ Cypress.Commands.add("createSample", (sample) => {
   });
 });
 
+Cypress.Commands.add("createJob", (overwrites = {}) => {
+  return cy.getCookie("user").then((userCookie) => {
+    const user = JSON.parse(decodeURIComponent(userCookie.value));
+
+    cy.getToken().then((token) => {
+      cy.log("Job: " + JSON.stringify(overwrites, null, 2));
+      cy.log("User: " + JSON.stringify(user, null, 2));
+      
+      const job = {
+        ...testData.job,
+        emailJobInitiator: user.email,
+        ...overwrites,
+      };
+
+      cy.request({
+        method: "POST",
+        url: lbBaseUrl + "/jobs",
+        headers: {
+          Authorization: token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: job,
+      });
+    });
+  });
+});
+
 Cypress.Commands.add("updateProposal", (proposalId, updateProposalDto) => {
   return cy.getCookie("user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
@@ -433,6 +461,51 @@ Cypress.Commands.add("removeSamples", () => {
           cy.request({
             method: "DELETE",
             url: lbBaseUrl + "/Samples/" + sample.sampleId,
+            headers: {
+              Authorization: token,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
+        });
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("removeJobs", () => {
+  cy.login(Cypress.env("username"), Cypress.env("password"));
+  cy.getToken().then((token) => {
+    const fields = { type: "embargo_period" };
+    const limits = { limit: 10, skip: 0, sort: { type: "asc" } };
+
+    cy.request({
+      method: "GET",
+      url:
+        lbBaseUrl +
+        "/jobs/fullquery?fields=" +
+        encodeURIComponent(JSON.stringify(fields)) +
+        "&limits=" +
+        encodeURIComponent(JSON.stringify(limits)),
+      headers: {
+        Authorization: token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .its("body")
+      .as("jobs");
+
+    cy.login(
+      Cypress.env("secondaryUsername"),
+      Cypress.env("secondaryPassword"),
+    );
+    cy.getToken().then((token) => {
+      cy.get("@jobs").then((jobs) => {
+        jobs.forEach((job) => {
+          cy.request({
+            method: "DELETE",
+            url: lbBaseUrl + `/jobs/${encodeURIComponent(job.id)}`,
             headers: {
               Authorization: token,
               Accept: "application/json",
