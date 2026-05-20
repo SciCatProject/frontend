@@ -79,6 +79,7 @@ export class FormatNumberPipe implements PipeTransform {
     if (!this.enabled) {
       if (
         typeof innerValue === "number" &&
+        innerValue !== 0 &&
         (innerValue >= 1e5 || innerValue <= 1e-5)
       ) {
         return innerValue.toExponential();
@@ -88,11 +89,6 @@ export class FormatNumberPipe implements PipeTransform {
 
     if (typeof innerValue !== "number" || !Number.isFinite(innerValue)) {
       // value is not a finite number
-      return String(innerValue);
-    }
-
-    // Do not format integers
-    if (Number.isInteger(innerValue)) {
       return String(innerValue);
     }
 
