@@ -92,6 +92,11 @@ export class FormatNumberPipe implements PipeTransform {
       return String(innerValue);
     }
 
+    // Do not format integers
+    if (Number.isInteger(innerValue)) {
+      return String(innerValue);
+    }
+
     // use scientific notation if float value is large or small
     const absoluteValue = Math.abs(innerValue);
     if (absoluteValue < this.minCutoff || absoluteValue > this.maxCutoff) {
