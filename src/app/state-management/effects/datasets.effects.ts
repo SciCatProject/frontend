@@ -303,7 +303,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.addDatasetAction),
       mergeMap(({ dataset }) =>
-        this.datasetsService.datasetsControllerCreateV3(dataset).pipe(
+        this.datasetsV4Service.datasetsV4ControllerCreateV4(dataset).pipe(
           mergeMap((res) => [
             fromActions.addDatasetCompleteAction({
               dataset: res,

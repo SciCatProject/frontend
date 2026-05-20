@@ -1,5 +1,5 @@
 import { JsonSchema, JsonSchema7 } from "@jsonforms/core";
-import { CreateRawDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { CreateDatasetDto, CreateRawDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { isArray } from "mathjs";
 import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
@@ -198,7 +198,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
   // 0 => number
   // -1 => skip number
   // -2 => optional number
-  const emptyDatasetForSchema: CreateRawDatasetObsoleteDto = {
+  const emptyDatasetForSchema: CreateDatasetDto = {
     ownerGroup: "--string",
     accessGroups: [],
     isPublished: false,
@@ -217,7 +217,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
     description: "--string --optional",
     license: "--string --optional",
     keywords: [],
-    principalInvestigator: "--string", // skip [],
+    principalInvestigators: [], // skip [],
     scientificMetadata: {},
     ownerEmail: "--mail --optional",
 
@@ -236,9 +236,9 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
     runNumber: "--optional",
     datasetlifecycle: undefined,
 
-    proposalId: "--string --optional",
-    sampleId: "--string --optional",
-    instrumentId: "--string --optional",
+    proposalIds: [],
+    sampleIds: [],
+    instrumentIds: [],
     inputDatasets: [],
     usedSoftware: [],
     jobLogData: "--string --optional",
@@ -308,7 +308,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
       "Short comment provided by the user about a given dataset. This is additional to the description field.",
     dataQualityMetrics:
       "Data Quality Metrics given by the user to rate the dataset.",
-    principalInvestigator:
+    principalInvestigators:
       "First name and last name of principal investigator(s). If multiple PIs are present, use a semicolon separated list. This field is required if the dataset is a Raw dataset.",
     startTime:
       "Start time of data acquisition for the current dataset. It is expected to be in ISO8601 format according to specifications for internet date/time format in RFC 3339, chapter 5.6.",
