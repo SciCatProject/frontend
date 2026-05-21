@@ -6,11 +6,12 @@ import {
 import { MockStore } from "shared/MockStubs";
 import { BreadcrumbComponent } from "./breadcrumb.component";
 import { Store } from "@ngrx/store";
-import { provideRouter } from "@angular/router";
+import { provideRouter, Router } from "@angular/router";
 
 describe("BreadcrumbComponent", () => {
   let component: BreadcrumbComponent;
   let fixture: ComponentFixture<BreadcrumbComponent>;
+  let router: Router;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -27,6 +28,7 @@ describe("BreadcrumbComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BreadcrumbComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
@@ -36,5 +38,26 @@ describe("BreadcrumbComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should navigate to datasets page when datasets breadcrumb is clicked", () => {
+    const navigateByUrlSpy = spyOn(router, "navigateByUrl").and.returnValue(
+      Promise.resolve(true),
+    );
+
+    const datasetsCrumb = {
+      label: "Datasets",
+      path: "datasets",
+      params: {},
+      url: "/datasets",
+      fallback: "/datasets",
+    };
+
+    component.breadcrumbs = [datasetsCrumb];
+    component.crumbClick(0, datasetsCrumb);
+    component.crumbClick(0, datasetsCrumb);
+
+    expect(navigateByUrlSpy).toHaveBeenCalledTimes(2);
+    expect(navigateByUrlSpy).toHaveBeenCalledWith("/datasets");
   });
 });
