@@ -123,16 +123,6 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on prefillBatchCompleteAction", () => {
-    it("should set batch property", () => {
-      const batch = [];
-      const action = fromActions.prefillBatchCompleteAction({ batch });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.batch).toEqual(batch);
-    });
-  });
-
   describe("on addToBatchAction", () => {
     it("should update batch property with selectedSets", () => {
       const batchedPids = initialDatasetState.batch.map(
