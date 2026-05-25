@@ -9,7 +9,6 @@ import { DatasetFilters } from "state-management/models";
 import {
   fetchDatasetsAction,
   fetchFacetCountsAction,
-  prefillBatchAction,
   prefillFiltersAction,
   addDatasetAction,
   fetchDatasetCompleteAction,
@@ -113,7 +112,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(

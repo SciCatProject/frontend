@@ -102,10 +102,6 @@ const reducer = createReducer(
     },
   ),
 
-  on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
-    ...state,
-    batch,
-  })),
   on(fromActions.addToBatchAction, (state) => {
     const batchedPids = state.batch.map((dataset) => dataset.pid);
     const addition = state.selectedSets.filter(

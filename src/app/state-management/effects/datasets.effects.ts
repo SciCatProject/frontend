@@ -14,23 +14,13 @@ import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
-  selectDatasetsInBatch,
   selectCurrentDataset,
   selectRelatedDatasetsFilters,
 } from "state-management/selectors/datasets.selectors";
 import * as fromActions from "state-management/actions/datasets.actions";
-import {
-  mergeMap,
-  map,
-  catchError,
-  switchMap,
-  tap,
-  filter,
-} from "rxjs/operators";
+import { mergeMap, map, catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
-  logoutCompleteAction,
   loadingAction,
   loadingCompleteAction,
   updateUserSettingsAction,
@@ -43,8 +33,6 @@ export class DatasetEffects {
   relatedDatasetsFilters$ = this.store.select(selectRelatedDatasetsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   fullfacetParams$ = this.store.select(selectFullfacetParams);
-  datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
-  currentUser$ = this.store.select(selectCurrentUser);
 
   fetchDatasets$ = createEffect(() => {
     return this.actions$.pipe(
@@ -484,64 +472,10 @@ export class DatasetEffects {
     );
   });
 
-  prefillBatch$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.prefillBatchAction),
-      concatLatestFrom(() => this.currentUser$),
-      filter(([, user]) => user != null),
-      map(([, user]) => this.retrieveBatch(user?.id)),
-      map((batch) => fromActions.prefillBatchCompleteAction({ batch })),
-    );
-  });
-
-  storeBatch$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(
-          fromActions.addToBatchAction,
-          fromActions.addCurrentToBatchAction,
-          fromActions.storeBatchAction,
-          fromActions.removeFromBatchAction,
-          fromActions.clearBatchAction,
-        ),
-        concatLatestFrom(() => [this.datasetsInBatch$, this.currentUser$]),
-        tap(([, batch, user]) => this.storeBatch(batch, user?.id)),
-      );
-    },
-    { dispatch: false },
-  );
-
-  clearBatchOnLogout$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(logoutCompleteAction),
-        tap(() => this.storeBatch([], "")),
-      );
-    },
-    { dispatch: false },
-  );
-
   constructor(
     private actions$: Actions,
     private datasetsService: DatasetsService,
     private store: Store,
     private appConfigService: AppConfigService,
   ) {}
-
-  private storeBatch(batch: OutputDatasetObsoleteDto[], userId: string) {
-    const json = JSON.stringify(batch);
-    localStorage.setItem("batch", json);
-    localStorage.setItem("batchUser", userId);
-  }
-
-  private retrieveBatch(ofUserId: string): OutputDatasetObsoleteDto[] {
-    const json = localStorage.getItem("batch");
-    const userId = localStorage.getItem("batchUser");
-
-    if (json != null && userId === ofUserId) {
-      return JSON.parse(json);
-    } else {
-      return [];
-    }
-  }
 }

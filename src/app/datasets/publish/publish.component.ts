@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActionsSubject, Store } from "@ngrx/store";
 import { first, tap } from "rxjs/operators";
 
-import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   createPublishedDataAction,
   createPublishedDataCompleteAction,
@@ -116,7 +115,6 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   }
 
   ngOnInit() {
-    this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchPublishedDataConfigAction());
 
     this.datasets$

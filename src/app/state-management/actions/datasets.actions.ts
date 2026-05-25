@@ -119,11 +119,6 @@ export const changeRelatedDatasetsPageAction = createAction(
   props<{ page: number; limit: number }>(),
 );
 
-export const prefillBatchAction = createAction("[Dataset] Prefill Batch");
-export const prefillBatchCompleteAction = createAction(
-  "[Dataset] Prefill Batch Complete",
-  props<{ batch: OutputDatasetObsoleteDto[] }>(),
-);
 export const addToBatchAction = createAction("[Dataset] Add To Batch");
 export const addCurrentToBatchAction = createAction(
   "[Dataset] Add Current To Batch",

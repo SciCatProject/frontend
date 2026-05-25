@@ -6,7 +6,6 @@ import { selectDatasetsInBatch } from "state-management/selectors/datasets.selec
 import {
   appendToDatasetArrayFieldAction,
   clearBatchAction,
-  prefillBatchAction,
   removeFromBatchAction,
   storeBatchAction,
 } from "state-management/actions/datasets.actions";
@@ -344,7 +343,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       })
       .unsubscribe();
     this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
-    this.store.dispatch(prefillBatchAction());
     this.subscriptions.push(
       this.batch$.subscribe((result) => {
         if (result) {

@@ -222,24 +222,6 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("prefillBatchAction", () => {
-    it("should create an action", () => {
-      const action = fromActions.prefillBatchAction();
-      expect({ ...action }).toEqual({ type: "[Dataset] Prefill Batch" });
-    });
-  });
-
-  describe("prefillBatchCompleteAction", () => {
-    it("should create an action", () => {
-      const batch = [dataset];
-      const action = fromActions.prefillBatchCompleteAction({ batch });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Prefill Batch Complete",
-        batch,
-      });
-    });
-  });
-
   describe("addToBatchAction", () => {
     it("should create an action", () => {
       const action = fromActions.addToBatchAction();
