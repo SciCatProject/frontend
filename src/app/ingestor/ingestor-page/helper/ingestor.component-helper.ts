@@ -1,5 +1,8 @@
 import { JsonSchema, JsonSchema7 } from "@jsonforms/core";
-import { CreateDatasetDto, CreateRawDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  CreateDatasetDto,
+  CreateRawDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { isArray } from "mathjs";
 import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
