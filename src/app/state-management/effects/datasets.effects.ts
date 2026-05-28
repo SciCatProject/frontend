@@ -9,6 +9,7 @@ import {
   OrigDatablock,
   UpdateAttachmentV3Dto,
   DatasetsV4Service,
+  DatasetsPublicV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
@@ -166,11 +167,27 @@ export class DatasetEffects {
   fetchDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
-      switchMap(({ pid }) => {
-        return this.datasetsV4Service.datasetsV4ControllerFindByIdV4(pid).pipe(
-          map((dataset) => fromActions.fetchDatasetCompleteAction({ dataset })),
-          catchError(() => of(fromActions.fetchDatasetFailedAction())),
-        );
+      concatLatestFrom(() => this.currentUser$),
+      switchMap(([{ pid }, user]) => {
+        if (user) {
+          return this.datasetsV4Service
+            .datasetsV4ControllerFindByIdV4(pid)
+            .pipe(
+              map((dataset) =>
+                fromActions.fetchDatasetCompleteAction({ dataset }),
+              ),
+              catchError(() => of(fromActions.fetchDatasetFailedAction())),
+            );
+        } else {
+          return this.datasetsPublicV4Service
+            .datasetsPublicV4ControllerFindByIdPublicV4(pid)
+            .pipe(
+              map((dataset) =>
+                fromActions.fetchDatasetCompleteAction({ dataset }),
+              ),
+              catchError(() => of(fromActions.fetchDatasetFailedAction())),
+            );
+        }
       }),
     );
   });
@@ -228,8 +245,9 @@ export class DatasetEffects {
       concatLatestFrom(() => [
         this.currentDataset$,
         this.relatedDatasetsFilters$,
+        this.currentUser$,
       ]),
-      switchMap(([, dataset, filters]) => {
+      switchMap(([, dataset, filters], user) => {
         const queryFilter = {
           where: {},
           limits: {
@@ -248,18 +266,35 @@ export class DatasetEffects {
             pid: { $in: dataset.inputDatasets },
           };
         }
-        return this.datasetsV4Service
-          .datasetsV4ControllerFindAllV4(JSON.stringify(queryFilter))
-          .pipe(
-            map((relatedDatasets) =>
-              fromActions.fetchRelatedDatasetsCompleteAction({
-                relatedDatasets,
-              }),
-            ),
-            catchError(() =>
-              of(fromActions.fetchRelatedDatasetsFailedAction()),
-            ),
-          );
+        if (user) {
+          return this.datasetsV4Service
+            .datasetsV4ControllerFindAllV4(JSON.stringify(queryFilter))
+            .pipe(
+              map((relatedDatasets) =>
+                fromActions.fetchRelatedDatasetsCompleteAction({
+                  relatedDatasets,
+                }),
+              ),
+              catchError(() =>
+                of(fromActions.fetchRelatedDatasetsFailedAction()),
+              ),
+            );
+        } else {
+          return this.datasetsPublicV4Service
+            .datasetsPublicV4ControllerFindAllPublicV4(
+              JSON.stringify(queryFilter),
+            )
+            .pipe(
+              map((relatedDatasets) =>
+                fromActions.fetchRelatedDatasetsCompleteAction({
+                  relatedDatasets,
+                }),
+              ),
+              catchError(() =>
+                of(fromActions.fetchRelatedDatasetsFailedAction()),
+              ),
+            );
+        }
       }),
     );
   });
@@ -267,8 +302,8 @@ export class DatasetEffects {
   fetchRelatedDatasetsCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedDatasetsAction),
-      concatLatestFrom(() => [this.currentDataset$]),
-      switchMap(([, dataset]) => {
+      concatLatestFrom(() => [this.currentDataset$, this.currentUser$]),
+      switchMap(([, dataset, user]) => {
         const queryFilter = {
           where: {},
         };
@@ -283,18 +318,35 @@ export class DatasetEffects {
             pid: { $in: dataset.inputDatasets },
           };
         }
-        return this.datasetsV4Service
-          .datasetsV4ControllerCountV4(JSON.stringify(queryFilter))
-          .pipe(
-            map(({ count }) =>
-              fromActions.fetchRelatedDatasetsCountCompleteAction({
-                count,
-              }),
-            ),
-            catchError(() =>
-              of(fromActions.fetchRelatedDatasetsCountFailedAction()),
-            ),
-          );
+        if (user) {
+          return this.datasetsV4Service
+            .datasetsV4ControllerCountV4(JSON.stringify(queryFilter))
+            .pipe(
+              map(({ count }) =>
+                fromActions.fetchRelatedDatasetsCountCompleteAction({
+                  count,
+                }),
+              ),
+              catchError(() =>
+                of(fromActions.fetchRelatedDatasetsCountFailedAction()),
+              ),
+            );
+        } else {
+          return this.datasetsPublicV4Service
+            .datasetsPublicV4ControllerCountPublicV4(
+              JSON.stringify(queryFilter),
+            )
+            .pipe(
+              map(({ count }) =>
+                fromActions.fetchRelatedDatasetsCountCompleteAction({
+                  count,
+                }),
+              ),
+              catchError(() =>
+                of(fromActions.fetchRelatedDatasetsCountFailedAction()),
+              ),
+            );
+        }
       }),
     );
   });
@@ -527,6 +579,7 @@ export class DatasetEffects {
     private store: Store,
     private appConfigService: AppConfigService,
     private datasetsV4Service: DatasetsV4Service,
+    private datasetsPublicV4Service: DatasetsPublicV4Service,
   ) {}
 
   private storeBatch(batch: CurrentDataset[], userId: string) {
