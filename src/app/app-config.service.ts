@@ -172,6 +172,10 @@ export interface AppConfigInterface {
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
   autoApplyFilters?: boolean;
+  helpEnabled: boolean;
+  infoEnabled: boolean;
+  infoHtmlFile: string;
+  infoHtmlContent: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -279,6 +283,16 @@ export class AppConfigService {
 
     if (!config.datasetPageSizeOptions?.length) {
       config.datasetPageSizeOptions = [5, 10, 25, 100];
+    }
+
+    if (!config.infoHtmlContent) {
+      try {
+        config.infoHtmlContent = await firstValueFrom(
+          this.http.get(config.infoHtmlFile,{ responseType: 'text' }).pipe(timeout(2000)),
+        );
+      } catch (err) {
+        config.infoHtmlContent = "Here goes your SciCat Info page!!<br>For more information, please read the documentation available on the <a href=\"https://scicatproject.org\">SciCat Website</a>"
+      }
     }
 
     this.appConfig = config;

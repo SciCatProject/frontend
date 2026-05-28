@@ -939,5 +939,9 @@
       "publishedData": true,
       "samples": true
     }
-  }
+  },
+  "helpEnabled": false,
+  "helpHtmlFile": "helpContent.html",
+  "infoEnabled": false,
+  "infoHtmlFile": "infoContent.html"
 }
