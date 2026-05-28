@@ -51,7 +51,7 @@ const derivedData = createMock<OutputDatasetObsoleteDto>({
 });
 const derivedDataset = { pid: "testPid", ...derivedData };
 
-const dataset = { pid: "testPid", ...mockDataset };
+const dataset = { pid: "testPid", datasetName: "test name", ...mockDataset };
 
 describe("DatasetEffects", () => {
   let actions: TestObservable;

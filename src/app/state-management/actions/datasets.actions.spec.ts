@@ -12,13 +12,12 @@ import {
 } from "shared/MockStubs";
 import {
   DatasetsControllerCreateV3Request,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("Dataset Actions", () => {
   const datasets = [dataset];
-  const derivedDataset = createMock<OutputDatasetObsoleteDto>({
-    investigator: "",
+  const derivedDataset = createMock<OutputDatasetDto>({
     inputDatasets: [],
     usedSoftware: [],
     owner: "",
@@ -26,13 +25,13 @@ describe("Dataset Actions", () => {
     sourceFolder: "",
     creationTime: "",
     ownerGroup: "",
-    datasetName: "",
+    datasetName: "test name",
     type: "derived",
     numberOfFilesArchived: 0,
     createdAt: "",
     createdBy: "",
     creationLocation: "",
-    principalInvestigator: "",
+    principalInvestigators: [],
     updatedAt: "",
     updatedBy: "",
   });

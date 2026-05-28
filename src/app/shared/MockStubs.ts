@@ -12,7 +12,7 @@ import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
   Instrument,
   OutputJobV3Dto,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
   ProposalClass,
   PublishedData,
   OutputSampleDto,
@@ -337,7 +337,7 @@ export function createMock<T>(data?: Partial<T>): T {
   return data as T;
 }
 
-export const mockDataset = createMock<OutputDatasetObsoleteDto>({});
+export const mockDataset = createMock<OutputDatasetDto>({});
 export const mockAttachment = createMock<OutputAttachmentV3Dto>({});
 export const mockSample = createMock<OutputSampleDto>({});
 export const mockProposal = createMock<ProposalClass>({});
