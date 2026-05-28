@@ -33,6 +33,10 @@ import { DatasetsListService } from "shared/services/datasets-list.service";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 import { TranslateService } from "@ngx-translate/core";
 import { translateComponentLabel } from "shared/pipes/component-translate.pipe";
+import {
+  ActionItemDataset,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "batch-view",
@@ -56,6 +60,9 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   shareEnabled = this.appConfig.shareEnabled;
 
   datasetList: OutputDatasetObsoleteDto[] = [];
+  actionItems: ActionItems = {
+    datasets: [],
+  };
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
 
@@ -349,6 +356,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       this.batch$.subscribe((result) => {
         if (result) {
           this.datasetList = result;
+          this.actionItems.datasets = <ActionItemDataset[]>result;
           this.hasBatch = result.length > 0;
         }
       }),

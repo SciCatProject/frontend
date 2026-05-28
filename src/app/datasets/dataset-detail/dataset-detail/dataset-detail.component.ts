@@ -48,6 +48,10 @@ import {
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
+import {
+  ActionItemDataset,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 /**
  * Component to show details for a data set, using the
@@ -75,6 +79,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   localization = "dataset";
   dataset: OutputDatasetObsoleteDto | undefined;
+  actionItems: ActionItems = {
+    datasets: [],
+  };
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);
@@ -107,6 +114,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         this.dataset = dataset;
+        this.actionItems.datasets = <ActionItemDataset[]>[dataset];
         if (this.dataset) {
           combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
             ([groups, isAdmin]) => {
