@@ -350,6 +350,40 @@ describe("DatasetsReducer", () => {
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
     });
+
+    it("should set deleted mode filter", () => {
+      const modeToggle = ArchViewMode.deleted;
+
+      const action = fromActions.setArchiveViewModeAction({ modeToggle });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.filters.mode).toEqual({
+        "datasetlifecycle.archiveStatusMessage": "deleted",
+      });
+      expect(state.filters.modeToggle).toEqual(modeToggle);
+      expect(state.filters.skip).toEqual(0);
+    });
+
+    it("should preserve existing skip when mode changes", () => {
+      const modeToggle = ArchViewMode.archivable;
+      const stateIn = {
+        ...initialDatasetState,
+        filters: {
+          ...initialDatasetState.filters,
+          skip: 42,
+        },
+      };
+
+      const action = fromActions.setArchiveViewModeAction({ modeToggle });
+      const state = fromDatasets.datasetsReducer(stateIn, action);
+
+      expect(state.filters.skip).toEqual(42);
+      expect(state.filters.modeToggle).toEqual(modeToggle);
+      expect(state.filters.mode).toEqual({
+        "datasetlifecycle.archivable": true,
+        "datasetlifecycle.retrievable": false,
+      });
+    });
   });
 
   describe("on setPublicViewMode", () => {
@@ -374,6 +408,36 @@ describe("DatasetsReducer", () => {
       expect(state.filters.text).toEqual(values.text);
       expect(state.searchTerms).toEqual(values.text);
       expect(state.hasPrefilledFilters).toEqual(true);
+    });
+  });
+
+  describe("on setFiltersAction", () => {
+    it("should restore filters without updating searchTerms or hasPrefilledFilters", () => {
+      const stateIn = {
+        ...initialDatasetState,
+        searchTerms: "keep-me",
+        hasPrefilledFilters: false,
+      };
+      const datasetFilters = {
+        text: "restored",
+        skip: 12,
+        modeToggle: ArchViewMode.deleted,
+        mode: {
+          "datasetlifecycle.archiveStatusMessage": "deleted",
+        },
+      };
+
+      const action = fromActions.setFiltersAction({ datasetFilters });
+      const state = fromDatasets.datasetsReducer(stateIn, action);
+
+      expect(state.filters.text).toEqual("restored");
+      expect(state.filters.skip).toEqual(12);
+      expect(state.filters.modeToggle).toEqual(ArchViewMode.deleted);
+      expect(state.filters.mode).toEqual({
+        "datasetlifecycle.archiveStatusMessage": "deleted",
+      });
+      expect(state.searchTerms).toEqual("keep-me");
+      expect(state.hasPrefilledFilters).toEqual(false);
     });
   });
 

@@ -299,10 +299,7 @@ export const setTextFilterAction = createAction(
 export const setFiltersAction = createAction(
   "[Dataset] Set Filters",
   props<{
-    datasetFilters: Record<
-      string,
-      string | DateRange | string[] | INumericRange
-    >;
+    datasetFilters: Partial<DatasetFilters>;
   }>(),
 );
 export const addDatasetFilterAction = createAction(

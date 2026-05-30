@@ -112,6 +112,10 @@ export class DatasetsListService implements OnDestroy {
     return false;
   }
 
+  deletedCondition(dataset: DatasetClass): boolean {
+    return dataset.datasetlifecycle.archiveStatusMessage === "deleted";
+  }
+
   convertSavedDatasetColumns(columns: TableColumn[]): TableField<any>[] {
     return columns
       .filter((column) => column.name !== "select")
@@ -188,6 +192,8 @@ export class DatasetsListService implements OnDestroy {
               return "Archivable";
             } else if (this.retrievableCondition(row)) {
               return "Retrievable";
+            } else if (this.deletedCondition(row)) {
+              return "Deleted";
             } else if (this.systemErrorCondition(row)) {
               return "System error";
             } else if (this.userErrorCondition(row)) {
@@ -204,6 +210,8 @@ export class DatasetsListService implements OnDestroy {
               return "Archivable";
             } else if (this.retrievableCondition(row)) {
               return "Retrievable";
+            } else if (this.deletedCondition(row)) {
+              return "Deleted";
             } else if (this.systemErrorCondition(row)) {
               return "System error";
             } else if (this.userErrorCondition(row)) {
