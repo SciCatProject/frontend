@@ -17,11 +17,28 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchFacetCountsAction,
+    (state): DatasetState => ({
+      ...state,
+      facetCountsIsLoading: true,
+    }),
+  ),
+
+  on(
     fromActions.fetchFacetCountsCompleteAction,
     (state, { facetCounts, allCounts }): DatasetState => ({
       ...state,
       facetCounts,
       totalCount: allCounts,
+      facetCountsIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchFacetCountsFailedAction,
+    (state): DatasetState => ({
+      ...state,
+      facetCountsIsLoading: false,
     }),
   ),
 
