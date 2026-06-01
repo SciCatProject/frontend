@@ -348,7 +348,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           ),
         )
         .subscribe(
-          ([datasets, currentUser, count, isLoading, defaultTableColumns]) => {
+          ([
+            datasets,
+            currentUser,
+            count,
+            isFacetCountsLoading,
+            defaultTableColumns,
+          ]) => {
             const userConfigColumns = defaultTableColumns.columns;
 
             this.rowSelectionMode = currentUser ? "multi" : "none";
@@ -359,7 +365,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               const tableSort = this.getTableSort();
               const paginationConfig = this.getTablePaginationConfig(
                 count,
-                isLoading,
+                isFacetCountsLoading,
               );
 
               const defaultConfigColumns =

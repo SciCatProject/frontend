@@ -125,7 +125,10 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
           combineLatestWith(this.isFacetCountsLoading$),
         )
         .subscribe(
-          async ([{ proposals, count, tablesSettings }, isLoading]) => {
+          async ([
+            { proposals, count, tablesSettings },
+            isFacetCountsLoading,
+          ]) => {
             this.dataSource.next(proposals);
             this.pending = false;
 
@@ -143,7 +146,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
             const tableSort = this.getTableSort();
             const paginationConfig = this.getTablePaginationConfig(
               count,
-              isLoading,
+              isFacetCountsLoading,
             );
             const tableSettingsConfig =
               this.tableConfigService.getTableSettingsConfig(

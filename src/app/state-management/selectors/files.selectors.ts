@@ -31,3 +31,8 @@ export const selectFilesWithCountAndTableSettings = createSelector(
     },
   }),
 );
+
+export const selectFilesFacetCountsIsLoading = createSelector(
+  selectFilesState,
+  (state) => state.facetCountsIsLoading,
+);
