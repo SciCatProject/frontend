@@ -83,7 +83,9 @@ export class RelatedDatasetsComponent {
     private store: Store,
   ) {}
 
-  formatTableData(datasets: PartialOutputDatasetDto[]): Record<string, unknown>[] {
+  formatTableData(
+    datasets: PartialOutputDatasetDto[],
+  ): Record<string, unknown>[] {
     if (!datasets) {
       return [];
     }

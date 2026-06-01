@@ -1,5 +1,11 @@
 import { DatasetFilters, ArchViewMode } from "state-management/models";
-import { PartialOutputDatasetDto, OutputAttachmentV3Dto, Datablock, OrigDatablock, HistoryClass } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  PartialOutputDatasetDto,
+  OutputAttachmentV3Dto,
+  Datablock,
+  OrigDatablock,
+  HistoryClass,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface FacetCount {
   _id: string;
