@@ -3,9 +3,8 @@ import {
   Attachment,
   OrigDatablock,
   Datablock,
-  DatasetsControllerCreateV3Request,
+  CreateDatasetDto,
   OutputAttachmentV3Dto,
-  OutputDatasetDto,
   PartialOutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FacetCounts } from "state-management/state/datasets.store";
@@ -141,7 +140,7 @@ export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
 export const addDatasetAction = createAction(
   "[Dataset] Add Dataset",
-  props<{ dataset: DatasetsControllerCreateV3Request }>(),
+  props<{ dataset: CreateDatasetDto }>(),
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",

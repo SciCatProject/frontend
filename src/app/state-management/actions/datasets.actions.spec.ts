@@ -11,8 +11,9 @@ import {
   mockAttachment as attachment,
 } from "shared/MockStubs";
 import {
-  DatasetsControllerCreateV3Request,
+  CreateDatasetDto,
   OutputDatasetDto,
+  PartialOutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("Dataset Actions", () => {
@@ -273,11 +274,11 @@ describe("Dataset Actions", () => {
   describe("addDatasetAction", () => {
     it("should create an action", () => {
       const action = fromActions.addDatasetAction({
-        dataset: dataset as DatasetsControllerCreateV3Request,
+        dataset: dataset as PartialOutputDatasetDto,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Dataset",
-        dataset: dataset as DatasetsControllerCreateV3Request,
+        dataset: dataset as PartialOutputDatasetDto,
       });
     });
   });
