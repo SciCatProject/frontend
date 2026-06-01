@@ -3,16 +3,12 @@ import {
   Attachment,
   OrigDatablock,
   Datablock,
-  OutputDatasetObsoleteDto,
   DatasetsControllerCreateV3Request,
   OutputAttachmentV3Dto,
   OutputDatasetDto,
   PartialOutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import {
-  FacetCounts,
-  CurrentDataset,
-} from "state-management/state/datasets.store";
+import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
   DatasetFilters,
@@ -26,7 +22,7 @@ import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-r
 export const fetchDatasetsAction = createAction("[Dataset] Fetch Datasets");
 export const fetchDatasetsCompleteAction = createAction(
   "[Dataset] Fetch Datasets Complete",
-  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
+  props<{ datasets: PartialOutputDatasetDto[] }>(),
 );
 export const fetchDatasetsFailedAction = createAction(
   "[Dataset] Fetch Datasets Failed",
@@ -60,7 +56,7 @@ export const fetchDatasetAction = createAction(
 );
 export const fetchDatasetCompleteAction = createAction(
   "[Dataset] Fetch Dataset Complete",
-  props<{ dataset: OutputDatasetDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const fetchDatasetFailedAction = createAction(
   "[Dataset] Fetch Dataset Failed",
@@ -127,7 +123,7 @@ export const changeRelatedDatasetsPageAction = createAction(
 export const prefillBatchAction = createAction("[Dataset] Prefill Batch");
 export const prefillBatchCompleteAction = createAction(
   "[Dataset] Prefill Batch Complete",
-  props<{ batch: CurrentDataset[] }>(),
+  props<{ batch: PartialOutputDatasetDto[] }>(),
 );
 export const addToBatchAction = createAction("[Dataset] Add To Batch");
 export const addCurrentToBatchAction = createAction(
@@ -135,11 +131,11 @@ export const addCurrentToBatchAction = createAction(
 );
 export const storeBatchAction = createAction(
   "[Dataset] Store To Batch",
-  props<{ batch: CurrentDataset[] }>(),
+  props<{ batch: PartialOutputDatasetDto[] }>(),
 );
 export const removeFromBatchAction = createAction(
   "[Dataset] Remove From Batch",
-  props<{ dataset: CurrentDataset }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
@@ -149,7 +145,7 @@ export const addDatasetAction = createAction(
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",
-  props<{ dataset: OutputDatasetDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const addDatasetFailedAction = createAction(
   "[Dataset] Add Dataset Failed",
@@ -217,7 +213,7 @@ export const removeAttachmentFailedAction = createAction(
 
 export const reduceDatasetAction = createAction(
   "[Dataset] Reduce Dataset",
-  props<{ dataset: CurrentDataset }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const reduceDatasetCompleteAction = createAction(
   "[Dataset] Reduce Dataset Complete",
@@ -242,15 +238,15 @@ export const appendToDatasetArrayFieldFailedAction = createAction(
 
 export const selectDatasetAction = createAction(
   "[Dataset] Select Dataset",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const selectDatasetsAction = createAction(
   "[Dataset] Select Datasets",
-  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
+  props<{ datasets: PartialOutputDatasetDto[] }>(),
 );
 export const deselectDatasetAction = createAction(
   "[Dataset] Deselect Dataset",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 
 export const selectAllDatasetsAction = createAction(

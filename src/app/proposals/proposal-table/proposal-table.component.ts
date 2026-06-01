@@ -30,8 +30,7 @@ import {
 } from "state-management/selectors/proposals.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
-  Instrument,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
@@ -93,7 +92,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
-  datasets: OutputDatasetObsoleteDto[] = [];
+  datasets: OutputDatasetDto[] = [];
 
   @Input() sideFilterCollapsed = false;
 

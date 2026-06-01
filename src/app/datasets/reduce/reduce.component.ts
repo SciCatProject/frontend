@@ -21,10 +21,7 @@ import {
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
-import {
-  DatasetClass,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { CurrentDataset } from "state-management/state/datasets.store";
 
 @Component({

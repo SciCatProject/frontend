@@ -21,7 +21,7 @@ import { Type } from "@angular/core";
 import {
   DatasetsControllerCreateV3Request,
   DatasetsService,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import {
@@ -31,8 +31,7 @@ import {
 } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 
-const derivedData = createMock<OutputDatasetObsoleteDto>({
-  investigator: "",
+const derivedData = createMock<OutputDatasetDto>({
   inputDatasets: [],
   usedSoftware: [],
   owner: "",
@@ -41,11 +40,12 @@ const derivedData = createMock<OutputDatasetObsoleteDto>({
   creationTime: new Date().toString(),
   type: "derived",
   ownerGroup: "",
+  datasetName: "test name",
   createdAt: "",
   createdBy: "",
   creationLocation: "",
   numberOfFilesArchived: 0,
-  principalInvestigator: "",
+  principalInvestigators: [],
   updatedAt: "",
   updatedBy: "",
 });

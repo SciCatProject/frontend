@@ -56,10 +56,9 @@ export class DatasetEffects {
         fromActions.sortByColumnAction,
         fromActions.setArchiveViewModeAction,
       ),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([, params]) => {
+      concatLatestFrom(() => [this.fullqueryParams$, this.currentUser$]),
+      mergeMap(([, params, user]) => {
         const config = this.appConfigService.getConfig();
-
         const defaultConfigColumns =
           config?.defaultDatasetsListSettings?.columns;
         let defaultColumn = "createdAt";
@@ -67,31 +66,41 @@ export class DatasetEffects {
 
         if (defaultConfigColumns) {
           const sortCol = defaultConfigColumns.find((col) => col.sort);
-
           if (sortCol) {
             defaultColumn = sortCol.name;
             defaultDirection = sortCol.sort;
           }
         }
 
-        if (!params.limits.order) {
-          params.limits.order = `${defaultColumn}:${defaultDirection}`;
+        if (Object.keys(params.limits.sort).length === 0) {
+          params.limits.sort = { [defaultColumn]: defaultDirection };
         }
-        return params;
+
+        const filter = {
+          where: params.query,
+          limits: params.limits,
+        };
+
+        if (user) {
+          return this.datasetsV4Service
+            .datasetsV4ControllerFindAllV4(JSON.stringify(filter))
+            .pipe(
+              map((datasets) =>
+                fromActions.fetchDatasetsCompleteAction({ datasets: datasets }),
+              ),
+              catchError(() => of(fromActions.fetchDatasetsFailedAction())),
+            );
+        } else {
+          return this.datasetsPublicV4Service
+            .datasetsPublicV4ControllerFindAllPublicV4(JSON.stringify(filter))
+            .pipe(
+              map((datasets) =>
+                fromActions.fetchDatasetsCompleteAction({ datasets: datasets }),
+              ),
+              catchError(() => of(fromActions.fetchDatasetsFailedAction())),
+            );
+        }
       }),
-      mergeMap(({ query, limits }) =>
-        this.datasetsService
-          .datasetsControllerFullqueryV3(
-            JSON.stringify(limits),
-            JSON.stringify(query),
-          )
-          .pipe(
-            map((datasets) =>
-              fromActions.fetchDatasetsCompleteAction({ datasets }),
-            ),
-            catchError(() => of(fromActions.fetchDatasetsFailedAction())),
-          ),
-      ),
     );
   });
 

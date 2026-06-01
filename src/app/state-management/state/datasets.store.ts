@@ -1,13 +1,5 @@
 import { DatasetFilters, ArchViewMode } from "state-management/models";
-import {
-  OutputDatasetDto,
-  OutputDatasetObsoleteDto,
-  Datablock,
-  OrigDatablock,
-  OutputAttachmentV3Dto,
-  HistoryClass,
-  PartialOutputDatasetDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { PartialOutputDatasetDto, OutputAttachmentV3Dto, Datablock, OrigDatablock, HistoryClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface FacetCount {
   _id: string;
@@ -24,9 +16,19 @@ export interface Pagination {
   limit: number;
 }
 
+export type CurrentDataset = PartialOutputDatasetDto & {
+  attachments?: OutputAttachmentV3Dto[];
+  datablocks?: Datablock[];
+  origdatablocks?: OrigDatablock[];
+  history?: HistoryClass[];
+  proposalIds?: string[];
+  sampleIds?: string[];
+  instrumentIds?: string[];
+};
+
 export interface DatasetState {
-  datasets: OutputDatasetObsoleteDto[];
-  selectedSets: OutputDatasetObsoleteDto[];
+  datasets: PartialOutputDatasetDto[];
+  selectedSets: PartialOutputDatasetDto[];
   currentSet: CurrentDataset | undefined;
   relatedDatasets: PartialOutputDatasetDto[];
   relatedDatasetsCount: number;
@@ -51,13 +53,6 @@ export interface DatasetState {
 
   openwhiskResult: Record<string, unknown> | undefined;
 }
-
-export type CurrentDataset = (OutputDatasetDto | OutputDatasetObsoleteDto) & {
-  attachments?: OutputAttachmentV3Dto[];
-  datablocks?: Datablock[];
-  origdatablocks?: OrigDatablock[];
-  history?: HistoryClass[];
-};
 
 export const initialDatasetState: DatasetState = {
   datasets: [],

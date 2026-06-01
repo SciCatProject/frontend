@@ -88,7 +88,7 @@ export const testData = {
     isPublished: false,
   },
   rawDataset: {
-    principalInvestigator: "string",
+    principalInvestigators: ["string"],
     endTime: "2019-10-31T14:44:46.143Z",
     creationLocation: "Cypress",
     dataFormat: "Nexus Version x.y",
@@ -108,12 +108,11 @@ export const testData = {
     datasetName: "Cypress Dataset",
     classification: "AV=medium,CO=low",
     license: "string",
-    version: "string",
     isPublished: false,
     ownerGroup: "ess",
     accessGroups: [],
-    sampleId: "string",
-    proposalId: "20170266",
+    sampleIds: ["string"],
+    proposalIds: ["20170266"],
     datasetlifecycle: {
       archivable: true,
       retrievable: false,

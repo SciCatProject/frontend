@@ -279,26 +279,36 @@ export class DatasetDetailsDashboardComponent
 
   fetchDatasetRelatedDocuments(): void {
     if (this.dataset) {
-      if ("proposalId" in this.dataset && this.dataset.proposalId) {
-        this.store.dispatch(
-          fetchProposalAction({
-            proposalId: this.dataset.proposalId,
-          }),
-        );
+      if (
+        "proposalIds" in this.dataset &&
+        this.dataset.proposalIds.length > 0
+      ) {
+        this.dataset.proposalIds.forEach((proposalId) => {
+          this.store.dispatch(
+            fetchProposalAction({
+              proposalId: proposalId,
+            }),
+          );
+        });
       } else {
         this.store.dispatch(clearLogbookAction());
       }
-      if ("sampleId" in this.dataset && this.dataset.sampleId) {
-        this.store.dispatch(
-          fetchSampleAction({ sampleId: this.dataset.sampleId }),
-        );
+      if ("sampleIds" in this.dataset && this.dataset.sampleIds.length > 0) {
+        this.dataset.sampleIds.forEach((sampleId) => {
+          this.store.dispatch(fetchSampleAction({ sampleId: sampleId }));
+        });
       }
-      if ("instrumentId" in this.dataset && this.dataset.instrumentId) {
-        this.store.dispatch(
-          fetchInstrumentAction({
-            pid: this.dataset.instrumentId,
-          }),
-        );
+      if (
+        "instrumentIds" in this.dataset &&
+        this.dataset.instrumentIds.length > 0
+      ) {
+        this.dataset.instrumentIds.forEach((instrumentId) => {
+          this.store.dispatch(
+            fetchInstrumentAction({
+              pid: instrumentId,
+            }),
+          );
+        });
       }
     }
   }

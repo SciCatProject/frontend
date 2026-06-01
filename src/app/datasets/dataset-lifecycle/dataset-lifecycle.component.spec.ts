@@ -25,7 +25,7 @@ import { AppConfigService } from "app-config.service";
 import { createMock, mockDataset } from "shared/MockStubs";
 import {
   HistoryClass,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 const historyItems = [
@@ -82,7 +82,7 @@ describe("DatasetLifecycleComponent", () => {
     fixture = TestBed.createComponent(DatasetLifecycleComponent);
     component = fixture.componentInstance;
     component.dataset = createMock<
-      OutputDatasetObsoleteDto & { history: HistoryClass[] }
+      OutputDatasetDto & { history: HistoryClass[] }
     >({
       pid: "testPid",
       history: [],
@@ -126,7 +126,7 @@ describe("DatasetLifecycleComponent", () => {
 
     it("should parse dataset.history into a HistoryItem array if dataset is defined", () => {
       const keywords = ["test", "parse"];
-      const dataset = createMock<OutputDatasetObsoleteDto>({ ...mockDataset });
+      const dataset = createMock<OutputDatasetDto>({ ...mockDataset });
       dataset.history = [
         {
           id: "testId",
