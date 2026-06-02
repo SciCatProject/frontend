@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, combineLatestWith, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
@@ -19,10 +19,7 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
-import {
-  selectFilesFacetCountsIsLoading,
-  selectFilesWithCountAndTableSettings,
-} from "state-management/selectors/files.selectors";
+import { selectFilesWithCountAndTableSettings } from "state-management/selectors/files.selectors";
 import { fetchAllOrigDatablocksAction } from "state-management/actions/files.actions";
 import { get } from "lodash-es";
 import { DatePipe } from "@angular/common";
@@ -39,7 +36,6 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
   filesWithCountAndTableSettings$ = this.store.select(
     selectFilesWithCountAndTableSettings,
   );
-  isFacetCountsLoading$ = this.store.select(selectFilesFacetCountsIsLoading);
 
   subscriptions: Subscription[] = [];
 
@@ -145,37 +141,29 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.filesWithCountAndTableSettings$
-        .pipe(combineLatestWith(this.isFacetCountsLoading$))
-        .subscribe(
-          ([
-            { origDatablocks, count, tablesSettings },
-            isFacetCountsLoading,
-          ]) => {
-            this.tablesSettings = tablesSettings;
-            this.dataSource.next(origDatablocks);
-            this.pending = false;
+      this.filesWithCountAndTableSettings$.subscribe(
+        ({ origDatablocks, count, tablesSettings }) => {
+          this.tablesSettings = tablesSettings;
+          this.dataSource.next(origDatablocks);
+          this.pending = false;
 
-            const savedTableConfigColumns = tablesSettings?.columns;
-            const tableSort = this.getTableSort();
-            const paginationConfig = this.getTablePaginationConfig(
-              count,
-              isFacetCountsLoading,
+          const savedTableConfigColumns = tablesSettings?.columns;
+          const tableSort = this.getTableSort();
+          const paginationConfig = this.getTablePaginationConfig(count);
+
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              this.tableDefaultSettingsConfig,
+              savedTableConfigColumns,
+              tableSort,
             );
 
-            const tableSettingsConfig =
-              this.tableConfigService.getTableSettingsConfig(
-                this.tableName,
-                this.tableDefaultSettingsConfig,
-                savedTableConfigColumns,
-                tableSort,
-              );
-
-            if (tableSettingsConfig?.settingList.length) {
-              this.initTable(tableSettingsConfig, paginationConfig);
-            }
-          },
-        ),
+          if (tableSettingsConfig?.settingList.length) {
+            this.initTable(tableSettingsConfig, paginationConfig);
+          }
+        },
+      ),
     );
 
     this.subscriptions.push(
@@ -215,7 +203,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  getTablePaginationConfig(dataCount = 0, isLoading = false): TablePagination {
+  getTablePaginationConfig(dataCount = 0): TablePagination {
     const { queryParams } = this.route.snapshot;
 
     return {
@@ -223,7 +211,6 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
       pageIndex: queryParams.pageIndex,
       pageSize: queryParams.pageSize || this.defaultPageSize,
       length: dataCount,
-      isLoading,
     };
   }
 
