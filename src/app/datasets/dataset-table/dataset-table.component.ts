@@ -187,7 +187,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  getTablePaginationConfig(dataCount = 0, isLoading: boolean): TablePagination {
+  getTablePaginationConfig(dataCount = 0, isLoading = false): TablePagination {
     const { queryParams } = this.route.snapshot;
 
     const { skip = 0, limit = 25 } = JSON.parse(queryParams.args ?? "{}");
