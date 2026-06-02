@@ -5,15 +5,14 @@ import {
   OnInit,
   SimpleChanges,
 } from "@angular/core";
+import { DatePipe } from "@angular/common";
 
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
-import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
-import { updatePropertyAction } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 import {
@@ -21,97 +20,6 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
-import { result } from "lodash-es";
-
-type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: JSONValue }
-  | JSONValue[];
-
-function processSelector(
-  jsonObject: ActionItems,
-  selector: string,
-): string | string[] | number | number[] {
-  let match: RegExpMatchArray | null;
-
-  // Map of static patterns to processing functions
-  const keywordMap: { [pattern: string]: (RegExpMatchArray) => any } = {
-    "#Dataset0Pid": (m) => jsonObject.datasets[0]?.pid,
-    "#Dataset0FilesPath": (m) =>
-      jsonObject.datasets[0]?.files?.map((i) => i.path),
-    "#Dataset0FilesTotalSize": (m) =>
-      jsonObject.datasets[0]?.files
-        ?.map((i) => Number(i.size))
-        .reduce((acc, val) => acc + val, 0),
-    "#Dataset0SourceFolder": (m) => jsonObject.datasets[0]?.sourceFolder,
-    "#Dataset0SelectedFilesPath": (m) =>
-      jsonObject.datasets[0]?.files
-        ?.filter((i) => i.selected)
-        .map((i) => i.path),
-    "#Dataset0SelectedFilesCount": (m) =>
-      jsonObject.datasets[0]?.files?.filter((i) => i.selected).length,
-    "#Dataset0SelectedFilesTotalSize": (m) =>
-      jsonObject.datasets[0]?.files
-        ?.filter((i) => i.selected)
-        .map((i) => Number(i.size))
-        .reduce((acc, val) => acc + val, 0),
-    // eslint-disable-next-line no-useless-escape
-    "#Dataset\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) =>
-      jsonObject.datasets[Number(m[1])][m[2]],
-    "#DatasetsPid": (m) => jsonObject.datasets?.map((i) => i.pid),
-    "#DatasetsFilesPath": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .map((i) => i.path),
-    "#DatasetsFilesTotalSize": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .map((i) => Number(i.size))
-        .reduce((acc, val) => acc + val, 0),
-    "#DatasetsSourceFolder": (m) =>
-      jsonObject.datasets?.map((i) => i.sourceFolder),
-    "#DatasetsSelectedFilesPath": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .filter((i) => i.selected)
-        .map((i) => i.path),
-    "#DatasetsSelectedFilesCount": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .filter((i) => i.selected).length,
-    "#DatasetsSelectedFilesTotalSize": (m) =>
-      jsonObject.datasets
-        ?.map((i) => i.files)
-        .flat()
-        .filter((i) => i.selected)
-        .map((i) => Number(i.size))
-        .reduce((acc, val) => acc + val, 0),
-    // eslint-disable-next-line no-useless-escape
-    "#DatasetsField\\[(\\w+)\\]": (m) =>
-      jsonObject.datasets.map((i) => i[m[1]]),
-  };
-
-  // Check for direct pattern matches
-  for (const [pattern, fn] of Object.entries(keywordMap)) {
-    const match = selector.match(new RegExp(pattern));
-
-    if (match) {
-      const res = fn(match);
-
-      return res;
-    }
-  }
-
-  // No pattern matched, return selector itself
-  return selector;
-}
 
 @Component({
   selector: "configurable-action",
@@ -146,6 +54,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     private snackBar: MatSnackBar,
     private store: Store,
     private router: Router,
+    private datePipe: DatePipe,
   ) {
     this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
       this.jwt = jwt.jwt;
@@ -216,6 +125,171 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     }
   }
 
+  private processSelector(
+    jsonObject: ActionItems,
+    selector: string,
+  ): string | string[] | number | number[] {
+    if (!jsonObject.datasets?.length) {
+      console.warn("No datasets available");
+      return undefined;
+    }
+    // Map of static patterns to processing functions
+    const keywordMap: { [pattern: string]: (RegExpMatchArray) => any } = {
+      "#Dataset0Pid": (m) => jsonObject.datasets[0]?.pid,
+      "#Dataset0FilesPath": (m) =>
+        jsonObject.datasets[0]?.files?.map((i) => i.path),
+      "#Dataset0FilesTotalSize": (m) =>
+        jsonObject.datasets[0]?.files
+          ?.map((i) => Number(i.size))
+          .reduce((acc, val) => acc + val, 0),
+      "#Dataset0SourceFolder": (m) => jsonObject.datasets[0]?.sourceFolder,
+      "#Dataset0SelectedFilesPath": (m) =>
+        jsonObject.datasets[0]?.files
+          ?.filter((i) => i.selected)
+          .map((i) => i.path),
+      "#Dataset0SelectedFilesCount": (m) =>
+        jsonObject.datasets[0]?.files?.filter((i) => i.selected).length,
+      "#Dataset0SelectedFilesTotalSize": (m) =>
+        jsonObject.datasets[0]?.files
+          ?.filter((i) => i.selected)
+          .map((i) => Number(i.size))
+          .reduce((acc, val) => acc + val, 0),
+      // eslint-disable-next-line no-useless-escape
+      "#Dataset\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) => {
+        if (jsonObject.datasets?.[Number(m[1])]) {
+          return jsonObject.datasets?.[Number(m[1])][m[2]];
+        }
+      },
+      "#DatasetsPid": (m) => jsonObject.datasets?.map((i) => i.pid),
+      "#DatasetsFilesPath": (m) =>
+        jsonObject.datasets
+          ?.map((i) => i.files)
+          .flat()
+          .map((i) => i.path),
+      "#DatasetsFilesTotalSize": (m) =>
+        jsonObject.datasets
+          ?.map((i) => i.files)
+          .flat()
+          .map((i) => Number(i.size))
+          .reduce((acc, val) => acc + val, 0),
+      "#DatasetsSourceFolder": (m) =>
+        jsonObject.datasets?.map((i) => i.sourceFolder),
+      "#DatasetsSelectedFilesPath": (m) =>
+        jsonObject.datasets
+          ?.map((i) => i.files)
+          .flat()
+          .filter((i) => i.selected)
+          .map((i) => i.path),
+      "#DatasetsSelectedFilesCount": (m) =>
+        jsonObject.datasets
+          ?.map((i) => i.files)
+          .flat()
+          .filter((i) => i.selected).length,
+      "#DatasetsSelectedFilesTotalSize": (m) =>
+        jsonObject.datasets
+          ?.map((i) => i.files)
+          .flat()
+          .filter((i) => i.selected)
+          .map((i) => Number(i.size))
+          .reduce((acc, val) => acc + val, 0),
+      // eslint-disable-next-line no-useless-escape
+      "#DatasetsField\\[(\\w+)\\]": (m) =>
+        jsonObject.datasets?.map((i) => i[m[1]]),
+      "#Instruments\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) => {
+        if (jsonObject.instruments?.[Number(m[1])]) {
+          return jsonObject.instruments?.[Number(m[1])][m[2]];
+        }
+      },
+      "#date_format\\(([^,]+),\\s*([^)]+)\\)": (m) => {
+        const dateInput = m[1].trim();
+        const format = m[2].trim();
+        const date = new Date(dateInput);
+
+        console.log(`Date: ${date} Format: ${format}`);
+        if (isNaN(date.getTime())) {
+          console.warn("Invalid date:", dateInput);
+          return "";
+        }
+        return this.datePipe.transform(date, format);
+      },
+    };
+    // Check for direct pattern matches
+    for (const [pattern, fn] of Object.entries(keywordMap)) {
+      const match = selector.match(new RegExp(pattern));
+      if (match) {
+        const res = fn(match);
+        return res;
+      }
+    }
+    // No pattern matched, return selector itself
+    return selector;
+  }
+
+  buildDependenciesGraph(variables: Record<string, any>) {
+    /**
+     * Builds a dependency graph for configured variables.
+     *
+     * Each graph entry maps a variable name to the set of other variables it
+     * references with `@variableName` syntax. The graph is later used to resolve
+     * variables in dependency order.
+     */
+    const graph: Record<string, Set<string>> = {};
+    Object.entries(variables).forEach(([key, value]) => {
+      const deps: string[] = [];
+      if (typeof value === "string") {
+        const matches = value.matchAll(/@(\w+)/g);
+        for (const match of matches) {
+          deps.push(match[1]);
+        }
+      }
+      graph[key] = new Set(deps);
+    });
+    return graph;
+  }
+
+  update_status() {
+    /**
+     * Resolves all variables declared in the action configuration.
+     *
+     * Variable definitions can reference other variables with `@name` and can
+     * read array entries with `@name[index]`. Dependencies are resolved first,
+     * then the final value is passed through `processSelector` so configured
+     * selectors are converted into values from the current action items.
+     */
+    const depsGraph = this.buildDependenciesGraph(this.actionConfig.variables);
+    const visited: Set<string> = new Set();
+    const resolveVariable = (varKey: string): any => {
+      const deps = depsGraph[varKey] ?? new Set();
+      for (const dep of deps ?? []) {
+        if (!(dep in this.variables)) {
+          if (visited.has(dep)) {
+            console.error(`Cyclic dependency detected in variable ${dep}`);
+            continue;
+          }
+          visited.add(dep);
+          this.variables[dep] = resolveVariable(dep);
+        }
+      }
+      const varDef = this.actionConfig.variables?.[varKey];
+      const resolved = varDef.replace(
+        /@(\w+)(\[(\d+)\])?/g,
+        (_, name, _fullIndex, index) => {
+          let value = this.variables[name];
+          if (value === undefined) return undefined;
+          if (index !== undefined) {
+            value = value?.[Number(index)];
+          }
+          return value;
+        },
+      );
+      return this.processSelector(this.actionItems, resolved);
+    };
+
+    for (const key of Object.keys(this.actionConfig.variables ?? {})) {
+      this.variables[key] = resolveVariable(key);
+    }
+  }
+
   ngOnInit() {
     this.subscriptions.push(
       this.userProfile$.subscribe((userProfile) => {
@@ -249,14 +323,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         console.error("Configurable action error on changes", error);
       }
     }
-  }
-
-  update_status() {
-    Object.entries(this.actionConfig.variables ?? {}).forEach(
-      ([key, selector]) => {
-        this.variables[key] = processSelector(this.actionItems, selector);
-      },
-    );
   }
 
   get context() {
@@ -349,6 +415,40 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       headers[headerKey] = updatedValue;
     }
     return headers;
+  }
+
+  prepare_url() {
+    if (this.actionConfig.url) {
+      return (
+        this.actionConfig.url
+          // eslint-disable-next-line no-useless-escape
+          .replace(
+            /\{\{\s*([@#]\w+(?:\[\d+\])?)\s*\}\}/g,
+            (_, variableName) => {
+              // Handle array indexing like @files[0]
+              const arrayMatch = variableName.match(/^([@#]\w+)\[(\d+)\]$/);
+              if (arrayMatch) {
+                const baseVariable = arrayMatch[1];
+                const index = parseInt(arrayMatch[2], 10);
+                const value = this.get_value_from_definition(baseVariable);
+
+                if (Array.isArray(value) && index < value.length) {
+                  return value[index];
+                }
+                console.error(
+                  `Could not resolve array ${variableName} at index ${index}`,
+                );
+                return "";
+              }
+              // Handle normal variables
+              return this.get_value_from_definition(variableName);
+            },
+          )
+      );
+    } else {
+      console.error("No URL provided for configurable action");
+      return "";
+    }
   }
 
   type_form() {
@@ -520,6 +620,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   type_link() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+    const url = this.prepare_url();
+    window.open(url, this.actionConfig.target || "_self");
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 }
