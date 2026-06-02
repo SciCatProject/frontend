@@ -127,6 +127,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
   private processSelector(
     jsonObject: ActionItems,
+    userObject: any,
     selector: string,
   ): string | string[] | number | number[] {
     if (!jsonObject.datasets?.length) {
@@ -200,6 +201,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
           return jsonObject.instruments?.[Number(m[1])][m[2]];
         }
       },
+      "#Username": (m) => userObject.username,
+      "#UserEmail": (m) => userObject.email,
       "#date_format\\(([^,]+),\\s*([^)]+)\\)": (m) => {
         const dateInput = m[1].trim();
         const format = m[2].trim();
@@ -282,7 +285,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
           return value;
         },
       );
-      return this.processSelector(this.actionItems, resolved);
+      return this.processSelector(this.actionItems, this.userProfile, resolved);
     };
 
     for (const key of Object.keys(this.actionConfig.variables ?? {})) {
