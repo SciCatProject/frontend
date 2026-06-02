@@ -1,5 +1,5 @@
 <!-- shared-filter.component.html -->
-<form [formGroup]="filterForm">
+<form [formGroup]="filterForm" data-cy="shared-filter-form">
   <ng-container [ngSwitch]="filterType">
     <ng-container *ngSwitchDefault>
       <mat-form-field [id]="key">
