@@ -473,9 +473,16 @@ describe("Datasets general", () => {
     });
 
     it("should automatically apply pre-configured filters from config", () => {
-      cy.contains("Type").should("exist");
+      cy.get('[data-cy="shared-filter-form"]').should("contain", "Type");
+      cy.get('[data-cy="shared-filter-form"]').should(
+        "not.contain",
+        "Location",
+      );
+    });
 
-      cy.contains("Location").should("not.exist");
+    it("should hide disabled filters in the list", () => {
+      cy.get('[data-cy="shared-filter-form"]').should("not.contain", "Keyword");
+      cy.get('[data-cy="shared-filter-form"]').should("contain", "Type");
     });
   });
 
