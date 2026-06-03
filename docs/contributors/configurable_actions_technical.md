@@ -148,6 +148,8 @@ This section list all the default values and operators that are available when c
 | #datasetOwner | boolean | True if the user is part of the owner group of the dataset(s) |
 | #userIsAdmin | boolean | True if the user is an admin |
 | #uuid | string | A v4 uuid generated on the fly |
+| #Username | string | The currently logged in user's username |
+| #UserEmail | string | email address of the user |
 | @variable | any | replace the string with the valu eof the variable defined in the action variable |
 
 ## How to Configure
