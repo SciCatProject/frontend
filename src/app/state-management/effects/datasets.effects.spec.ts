@@ -138,7 +138,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: datasets });
-      datasetsV4Service.datasetsV4ControllerFullqueryV4.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
@@ -150,7 +150,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetsV4Service.datasetsV4ControllerFullqueryV4.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
@@ -309,7 +309,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetsV4Service.datasetsV4ControllerFindByIdV4.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindByIdV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDataset$).toBeObservable(expected);
@@ -321,7 +323,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetsV4Service.datasetsV4ControllerFindByIdV4.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindByIdV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDataset$).toBeObservable(expected);

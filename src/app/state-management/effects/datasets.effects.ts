@@ -81,25 +81,20 @@ export class DatasetEffects {
           limits: params.limits,
         };
 
-        if (user) {
-          return this.datasetsV4Service
-            .datasetsV4ControllerFindAllV4(JSON.stringify(filter))
-            .pipe(
-              map((datasets) =>
-                fromActions.fetchDatasetsCompleteAction({ datasets: datasets }),
-              ),
-              catchError(() => of(fromActions.fetchDatasetsFailedAction())),
+        const apiCall$ = user
+          ? this.datasetsV4Service.datasetsV4ControllerFindAllV4(
+              JSON.stringify(filter),
+            )
+          : this.datasetsPublicV4Service.datasetsPublicV4ControllerFindAllPublicV4(
+              JSON.stringify(filter),
             );
-        } else {
-          return this.datasetsPublicV4Service
-            .datasetsPublicV4ControllerFindAllPublicV4(JSON.stringify(filter))
-            .pipe(
-              map((datasets) =>
-                fromActions.fetchDatasetsCompleteAction({ datasets: datasets }),
-              ),
-              catchError(() => of(fromActions.fetchDatasetsFailedAction())),
-            );
-        }
+
+        return apiCall$.pipe(
+          map((datasets) =>
+            fromActions.fetchDatasetsCompleteAction({ datasets: datasets }),
+          ),
+          catchError(() => of(fromActions.fetchDatasetsFailedAction())),
+        );
       }),
     );
   });
@@ -111,27 +106,34 @@ export class DatasetEffects {
         fromActions.setPublicViewModeAction,
         fromActions.sortByColumnAction,
       ),
-      concatLatestFrom(() => this.fullfacetParams$),
-      map(([, params]) => params),
-      mergeMap(({ fields, facets }) =>
-        this.datasetsService
-          .datasetsControllerFullfacetV3(
-            JSON.stringify(facets),
-            JSON.stringify(fields),
-          )
-          .pipe(
-            map((res) => {
-              const { all, ...facetCounts } = res[0];
+      concatLatestFrom(() => [this.fullfacetParams$, this.currentUser$]),
+      mergeMap(([, params, user]) => {
+        const { fields, facets } = params;
 
-              const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
-              return fromActions.fetchFacetCountsCompleteAction({
-                facetCounts,
-                allCounts,
-              });
-            }),
-            catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
-          ),
-      ),
+        const filter = {
+          fields: JSON.stringify(fields),
+          facets: JSON.stringify(facets),
+        };
+
+        const apiCall$ = user
+          ? this.datasetsV4Service.datasetsV4ControllerFullfacetV4(filter)
+          : this.datasetsPublicV4Service.datasetsPublicV4ControllerFullfacetV4(
+              filter,
+            );
+
+        return apiCall$.pipe(
+          map((res) => {
+            const { all, ...facetCounts } = res[0];
+
+            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+            return fromActions.fetchFacetCountsCompleteAction({
+              facetCounts,
+              allCounts,
+            });
+          }),
+          catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
+        );
+      }),
     );
   });
 
@@ -178,25 +180,16 @@ export class DatasetEffects {
       ofType(fromActions.fetchDatasetAction),
       concatLatestFrom(() => this.currentUser$),
       switchMap(([{ pid }, user]) => {
-        if (user) {
-          return this.datasetsV4Service
-            .datasetsV4ControllerFindByIdV4(pid)
-            .pipe(
-              map((dataset) =>
-                fromActions.fetchDatasetCompleteAction({ dataset }),
-              ),
-              catchError(() => of(fromActions.fetchDatasetFailedAction())),
+        const apiCall$ = user
+          ? this.datasetsV4Service.datasetsV4ControllerFindByIdV4(pid)
+          : this.datasetsPublicV4Service.datasetsPublicV4ControllerFindByIdPublicV4(
+              pid,
             );
-        } else {
-          return this.datasetsPublicV4Service
-            .datasetsPublicV4ControllerFindByIdPublicV4(pid)
-            .pipe(
-              map((dataset) =>
-                fromActions.fetchDatasetCompleteAction({ dataset }),
-              ),
-              catchError(() => of(fromActions.fetchDatasetFailedAction())),
-            );
-        }
+
+        return apiCall$.pipe(
+          map((dataset) => fromActions.fetchDatasetCompleteAction({ dataset })),
+          catchError(() => of(fromActions.fetchDatasetFailedAction())),
+        );
       }),
     );
   });
@@ -275,35 +268,22 @@ export class DatasetEffects {
             pid: { $in: dataset.inputDatasets },
           };
         }
-        if (user) {
-          return this.datasetsV4Service
-            .datasetsV4ControllerFindAllV4(JSON.stringify(queryFilter))
-            .pipe(
-              map((relatedDatasets) =>
-                fromActions.fetchRelatedDatasetsCompleteAction({
-                  relatedDatasets,
-                }),
-              ),
-              catchError(() =>
-                of(fromActions.fetchRelatedDatasetsFailedAction()),
-              ),
-            );
-        } else {
-          return this.datasetsPublicV4Service
-            .datasetsPublicV4ControllerFindAllPublicV4(
+        const apiCall$ = user
+          ? this.datasetsV4Service.datasetsV4ControllerFindAllV4(
               JSON.stringify(queryFilter),
             )
-            .pipe(
-              map((relatedDatasets) =>
-                fromActions.fetchRelatedDatasetsCompleteAction({
-                  relatedDatasets,
-                }),
-              ),
-              catchError(() =>
-                of(fromActions.fetchRelatedDatasetsFailedAction()),
-              ),
+          : this.datasetsPublicV4Service.datasetsPublicV4ControllerFindAllPublicV4(
+              JSON.stringify(queryFilter),
             );
-        }
+
+        return apiCall$.pipe(
+          map((relatedDatasets) =>
+            fromActions.fetchRelatedDatasetsCompleteAction({
+              relatedDatasets,
+            }),
+          ),
+          catchError(() => of(fromActions.fetchRelatedDatasetsFailedAction())),
+        );
       }),
     );
   });
@@ -327,35 +307,24 @@ export class DatasetEffects {
             pid: { $in: dataset.inputDatasets },
           };
         }
-        if (user) {
-          return this.datasetsV4Service
-            .datasetsV4ControllerCountV4(JSON.stringify(queryFilter))
-            .pipe(
-              map(({ count }) =>
-                fromActions.fetchRelatedDatasetsCountCompleteAction({
-                  count,
-                }),
-              ),
-              catchError(() =>
-                of(fromActions.fetchRelatedDatasetsCountFailedAction()),
-              ),
-            );
-        } else {
-          return this.datasetsPublicV4Service
-            .datasetsPublicV4ControllerCountPublicV4(
+        const apiCall$ = user
+          ? this.datasetsV4Service.datasetsV4ControllerCountV4(
               JSON.stringify(queryFilter),
             )
-            .pipe(
-              map(({ count }) =>
-                fromActions.fetchRelatedDatasetsCountCompleteAction({
-                  count,
-                }),
-              ),
-              catchError(() =>
-                of(fromActions.fetchRelatedDatasetsCountFailedAction()),
-              ),
+          : this.datasetsPublicV4Service.datasetsPublicV4ControllerCountPublicV4(
+              JSON.stringify(queryFilter),
             );
-        }
+
+        return apiCall$.pipe(
+          map(({ count }) =>
+            fromActions.fetchRelatedDatasetsCountCompleteAction({
+              count,
+            }),
+          ),
+          catchError(() =>
+            of(fromActions.fetchRelatedDatasetsCountFailedAction()),
+          ),
+        );
       }),
     );
   });
@@ -382,8 +351,8 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.updatePropertyAction),
       switchMap(({ pid, property }) =>
-        this.datasetsService
-          .datasetsControllerFindByIdAndUpdateV3(pid, property)
+        this.datasetsV4Service
+          .datasetsV4ControllerFindByIdAndUpdateV4(pid, property)
           .pipe(
             switchMap(() => [
               fromActions.updatePropertyCompleteAction(),
@@ -399,8 +368,8 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.updatePropertyInlineAction),
       switchMap(({ pid, property }) =>
-        this.datasetsService
-          .datasetsControllerFindByIdAndUpdateV3(pid, property)
+        this.datasetsV4Service
+          .datasetsV4ControllerFindByIdAndUpdateV4(pid, property)
           .pipe(
             map(() => fromActions.updatePropertyCompleteAction()),
             catchError(() => of(fromActions.updatePropertyFailedAction())),
