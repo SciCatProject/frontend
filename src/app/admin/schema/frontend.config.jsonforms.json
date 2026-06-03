@@ -104,6 +104,10 @@
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
+      "helpEnabled": { "type": "boolean" },
+      "helpHtmlContent": { "type": "string" },
+      "infoEnabled": { "type": "boolean" },
+      "infoHtmlContent": { "type": "string" },
       "datafilesActionsEnabled": { "type": "boolean" },
       "statusBannerMessage": { "type": "string" },
       "statusBannerCode": {
@@ -949,6 +953,48 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Header",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/helpEnabled",
+                "label": "Help Enabled"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/infoEnabled",
+                "label": "Info Enabled"
+              }
+            ]
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/helpHtmlContent",
+            "label": "Help HTML Content",
+            "options": {
+              "multi": true,
+              "rows": 5
+            }
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/infoHtmlContent",
+            "label": "Info HTML Content",
+            "options": {
+              "multi": true,
+              "rows": 5
+            }
           }
         ]
       },

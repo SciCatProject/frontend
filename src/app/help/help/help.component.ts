@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { AppConfigService, HelpMessages } from "app-config.service";
 
 @Component({
@@ -13,9 +14,13 @@ export class HelpComponent implements OnInit {
   ingestManual: string | null = null;
   gettingStarted: string | null = null;
   shoppingCartEnabled = false;
+  helpHtmlContent: SafeHtml | string = "";
   helpMessages: HelpMessages;
   supportEmail: string | undefined;
-  constructor(public appConfigService: AppConfigService) {}
+  constructor(
+    public appConfigService: AppConfigService,
+    private sanitizer: DomSanitizer,
+  ) {}
 
   ngOnInit() {
     this.facility = this.appConfig.facility;
@@ -27,5 +32,8 @@ export class HelpComponent implements OnInit {
     this.gettingStarted = this.appConfig.gettingStarted;
     this.shoppingCartEnabled = this.appConfig.shoppingCartEnabled;
     this.supportEmail = this.appConfig.supportEmail;
+    this.helpHtmlContent = this.sanitizer.bypassSecurityTrustHtml(
+      this.appConfig.helpHtmlContent || "",
+    );
   }
 }

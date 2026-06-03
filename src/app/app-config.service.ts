@@ -173,6 +173,7 @@ export interface AppConfigInterface {
   statusBannerCode?: "INFO" | "WARN";
   autoApplyFilters?: boolean;
   helpEnabled: boolean;
+  helpHtmlContent: string;
   infoEnabled: boolean;
   infoHtmlFile: string;
   infoHtmlContent: string;

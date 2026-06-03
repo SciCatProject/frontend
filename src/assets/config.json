@@ -941,7 +941,7 @@
     }
   },
   "helpEnabled": false,
-  "helpHtmlFile": "helpContent.html",
+  "helpHtmlContent": "Here you can place your custom help content",
   "infoEnabled": false,
-  "infoHtmlFile": "infoContent.html"
+  "infoHtmlContent": "Here you can place your custom info/about content"
 }

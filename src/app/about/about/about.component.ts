@@ -19,19 +19,11 @@ export class AboutComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
-    const html = this.appConfig.infoHtmlContent;
-    this.htmlContent = this.sanitizer.bypassSecurityTrustHtml(html);
-
-    // private fileLoader: FileLoaderService
-    //
-    // this.fileLoader.loadFile('assets/example.html').subscribe({
-    //   next: (content) => {
-    //     this.fileContent = content;
-    //   },
-    //   error: (err) => {
-    //     console.error('Error loading file:', err);
-    //   },
-    // });
+    if (this.appConfig.infoEnabled) {
+      const html = this.appConfig.infoHtmlContent;
+      this.htmlContent = this.sanitizer.bypassSecurityTrustHtml(html);
+    } else {
+      this.htmlContent = "Info page is disabled";
+    }
   }
 }
