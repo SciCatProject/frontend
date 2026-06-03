@@ -128,7 +128,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.store.select(selectCurrentProposal).subscribe((proposal) => {
-        console.log("DEBUG - proposal", proposal);
         this.proposal = proposal;
       }),
     );

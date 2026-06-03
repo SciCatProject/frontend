@@ -12,7 +12,7 @@ describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
 
-    cy.intercept("PATCH", "/api/v3/datasets/**/*").as("metadata");
+    cy.intercept("PATCH", "/api/v4/datasets/**/*").as("metadata");
     cy.intercept("GET", "*").as("fetch");
   });
 
