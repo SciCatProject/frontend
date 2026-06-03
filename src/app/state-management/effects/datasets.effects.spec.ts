@@ -33,6 +33,11 @@ import {
 } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 
 const derivedData = createMock<OutputDatasetDto>({
   inputDatasets: [],
@@ -107,6 +112,8 @@ describe("DatasetEffects", () => {
             "datasetsV4ControllerFindByIdV4",
             "datasetsV4ControllerCreateV4",
             "datasetsV4ControllerCountV4",
+            "datasetsV4ControllerFullfacetV4",
+            "datasetsV4ControllerFindByIdAndUpdateV4",
           ]),
         },
         {
@@ -115,9 +122,12 @@ describe("DatasetEffects", () => {
             "datasetsPublicV4ControllerFindAllPublicV4",
             "datasetsPublicV4ControllerFindByIdPublicV4",
             "datasetsPublicV4ControllerCountPublicV4",
+            "datasetsPublicV4ControllerFullfacetV4",
           ]),
         },
         { provide: AppConfigService, useValue: { getConfig } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     });
 
@@ -185,7 +195,9 @@ describe("DatasetEffects", () => {
       ];
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: responseArray });
-      datasetApi.datasetsControllerFullfacetV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
@@ -197,7 +209,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFullfacetV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
@@ -441,7 +455,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerFindByIdAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -458,7 +472,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerFindByIdAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -480,7 +494,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerFindByIdAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -497,7 +511,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerFindByIdAndUpdateV4.and.returnValue(
         response,
       );
 

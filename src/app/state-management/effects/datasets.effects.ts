@@ -249,7 +249,7 @@ export class DatasetEffects {
         this.relatedDatasetsFilters$,
         this.currentUser$,
       ]),
-      switchMap(([, dataset, filters], user) => {
+      switchMap(([, dataset, filters, user]) => {
         const queryFilter = {
           where: {},
           limits: {

@@ -36,7 +36,6 @@ const reducer = createReducer(
       ...state,
       currentSet: {
         ...dataset,
-        origdatablocks: state.currentSet?.origdatablocks,
       },
     }),
   ),
@@ -56,10 +55,12 @@ const reducer = createReducer(
     (state, { origdatablocks }) => {
       return {
         ...state,
-        currentSet: {
-          ...state.currentSet,
-          origdatablocks,
-        },
+        currentSet: state.currentSet
+          ? {
+              ...state.currentSet,
+              origdatablocks,
+            }
+          : state.currentSet,
       };
     },
   ),
@@ -148,7 +149,7 @@ const reducer = createReducer(
     fromActions.addAttachmentCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
+        const attachments = (state.currentSet.attachments || []).filter(
           (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
@@ -163,7 +164,7 @@ const reducer = createReducer(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
+        const attachments = (state.currentSet.attachments || []).filter(
           (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
@@ -178,7 +179,7 @@ const reducer = createReducer(
     fromActions.removeAttachmentCompleteAction,
     (state, { attachmentId }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
+        const attachments = (state.currentSet.attachments || []).filter(
           (attachment) => attachment.id !== attachmentId,
         );
         const currentSet = { ...state.currentSet, attachments };
