@@ -1,4 +1,5 @@
-describe("Datasets", () => {
+describe.skip("Datasets", () => {
+  // Skipped: Backend Datasets V4 controller does not yet support scientific metadata key encoding/decoding
   const metadataName = "some name";
   const metadataValue = "some value";
   const metadataValidJson = {
