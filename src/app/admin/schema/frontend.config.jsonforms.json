@@ -106,8 +106,8 @@
       "hideEmptyMetadataTable": { "type": "boolean" },
       "helpEnabled": { "type": "boolean" },
       "helpHtmlContent": { "type": "string" },
-      "infoEnabled": { "type": "boolean" },
-      "infoHtmlContent": { "type": "string" },
+      "aboutEnabled": { "type": "boolean" },
+      "aboutHtmlContent": { "type": "string" },
       "datafilesActionsEnabled": { "type": "boolean" },
       "statusBannerMessage": { "type": "string" },
       "statusBannerCode": {
@@ -967,34 +967,44 @@
             "type": "HorizontalLayout",
             "elements": [
               {
-                "type": "Control",
-                "scope": "#/properties/helpEnabled",
-                "label": "Help Enabled"
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/helpEnabled",
+                    "label": "Help Enabled"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/helpHtmlContent",
+                    "label": "Help HTML Content",
+                    "options": {
+                      "multi": true,
+                      "rows": 5
+                    }
+                  }
+                ]
               },
               {
-                "type": "Control",
-                "scope": "#/properties/infoEnabled",
-                "label": "Info Enabled"
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/aboutEnabled",
+                    "label": "Info Enabled"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/aboutHtmlContent",
+                    "label": "Info HTML Content",
+                    "options": {
+                      "multi": true,
+                      "rows": 5
+                    }
+                  }
+                ]
               }
             ]
-          },
-          {
-            "type": "Control",
-            "scope": "#/properties/helpHtmlContent",
-            "label": "Help HTML Content",
-            "options": {
-              "multi": true,
-              "rows": 5
-            }
-          },
-          {
-            "type": "Control",
-            "scope": "#/properties/infoHtmlContent",
-            "label": "Info HTML Content",
-            "options": {
-              "multi": true,
-              "rows": 5
-            }
           }
         ]
       },

@@ -174,9 +174,9 @@ export interface AppConfigInterface {
   autoApplyFilters?: boolean;
   helpEnabled: boolean;
   helpHtmlContent: string;
-  infoEnabled: boolean;
+  aboutEnabled: boolean;
   infoHtmlFile: string;
-  infoHtmlContent: string;
+  aboutHtmlContent: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -286,13 +286,13 @@ export class AppConfigService {
       config.datasetPageSizeOptions = [5, 10, 25, 100];
     }
 
-    if (!config.infoHtmlContent) {
+    if (!config.aboutHtmlContent) {
       try {
-        config.infoHtmlContent = await firstValueFrom(
+        config.aboutHtmlContent = await firstValueFrom(
           this.http.get(config.infoHtmlFile,{ responseType: 'text' }).pipe(timeout(2000)),
         );
       } catch (err) {
-        config.infoHtmlContent = "Here goes your SciCat Info page!!<br>For more information, please read the documentation available on the <a href=\"https://scicatproject.org\">SciCat Website</a>"
+        config.aboutHtmlContent = "Here goes your SciCat Info page!!<br>For more information, please read the documentation available on the <a href=\"https://scicatproject.org\">SciCat Website</a>"
       }
     }
 

@@ -1,5 +1,1 @@
-<div fxLayout="row" fxLayout.xs="column">
-  <div fxFlex="80%">
-    <div [innerHTML]="htmlContent"></div>
-  </div>
-</div>
+<div *ngIf="htmlContent" class="about" fxFlex="80%" [innerHTML]="htmlContent"></div>

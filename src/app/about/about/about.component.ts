@@ -11,7 +11,7 @@ import { AppConfigService } from "app-config.service";
 export class AboutComponent implements OnInit {
   appConfig = this.appConfigService.getConfig();
 
-  htmlContent: SafeHtml | string = "No content available.";
+  htmlContent: SafeHtml | string = "No about content available.";
 
   constructor(
     public appConfigService: AppConfigService,
@@ -19,9 +19,13 @@ export class AboutComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.appConfig.infoEnabled) {
-      const html = this.appConfig.infoHtmlContent;
-      this.htmlContent = this.sanitizer.bypassSecurityTrustHtml(html);
+    if (this.appConfig.aboutEnabled) {
+      const html = this.appConfig.aboutHtmlContent;
+      console.log(html);
+      if (html) {
+        this.htmlContent = this.sanitizer.bypassSecurityTrustHtml(html);
+      }
+      console.log(this.htmlContent);
     } else {
       this.htmlContent = "Info page is disabled";
     }

@@ -942,6 +942,6 @@
   },
   "helpEnabled": false,
   "helpHtmlContent": "Here you can place your custom help content",
-  "infoEnabled": false,
-  "infoHtmlContent": "Here you can place your custom info/about content"
+  "aboutEnabled": false,
+  "aboutHtmlContent": "Here you can place your custom info/about content"
 }
