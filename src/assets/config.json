@@ -307,13 +307,13 @@
       "label": "Private",
       "type": "xhr",
       "mat_icon": "publish",
-      "method" : "POST",
+      "method": "POST",
       "url": "/api/v4/publisheddata/{{ @doi }}/private",
       "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"published\")",
       "authorization": "#datasetOwner || #userIsAdmin",
-      "variables" : {
+      "variables": {
         "doi": "#PublishedData0Doi",
-        "status" : "#PublishedData[0]Field[status]"
+        "status": "#PublishedData[0]Field[status]"
       },
       "headers": {
         "Content-Type": "application/json",
@@ -327,13 +327,13 @@
       "label": "publish",
       "type": "xhr",
       "mat_icon": "publish",
-      "method" : "POST",
+      "method": "POST",
       "url": "/api/v4/publisheddata/{{ @doi }}/publish",
       "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"private\")",
       "authorization": "#datasetOwner || #userIsAdmin",
-      "variables" : {
+      "variables": {
         "doi": "#PublishedData0Doi",
-        "status" : "#PublishedData[0]Field[status]"
+        "status": "#PublishedData[0]Field[status]"
       },
       "headers": {
         "Content-Type": "application/json",
@@ -347,13 +347,13 @@
       "label": "Register",
       "type": "xhr",
       "mat_icon": "publish",
-      "method" : "POST",
+      "method": "POST",
       "url": "/api/v4/publisheddata/{{ @doi }}/register",
       "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"published\")",
       "authorization": "#datasetOwner && #userIsAdmin",
-      "variables" : {
+      "variables": {
         "doi": "#PublishedData0Doi",
-        "status" : "#PublishedData[0]Field[status]"
+        "status": "#PublishedData[0]Field[status]"
       },
       "headers": {
         "Content-Type": "application/json"
@@ -366,13 +366,13 @@
       "label": "Amend",
       "type": "xhr",
       "mat_icon": "publish",
-      "method" : "POST",
+      "method": "POST",
       "url": "/api/v4/publisheddata/{{ @doi }}/amend",
       "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"registered\")",
       "authorization": "true",
-      "variables" : {
+      "variables": {
         "doi": "#PublishedData0Doi",
-        "status" : "#PublishedData[0]Field[status]"
+        "status": "#PublishedData[0]Field[status]"
       },
       "headers": {
         "Content-Type": "application/json"
