@@ -129,10 +129,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     jsonObject: ActionItems,
     selector: string,
   ): string | string[] | number | number[] {
-    if (!jsonObject.datasets?.length) {
-      console.warn("No datasets available");
-      return undefined;
-    }
     // Map of static patterns to processing functions
     const keywordMap: { [pattern: string]: (RegExpMatchArray) => any } = {
       "#Dataset0Pid": (m) => jsonObject.datasets[0]?.pid,
@@ -195,6 +191,13 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       // eslint-disable-next-line no-useless-escape
       "#DatasetsField\\[(\\w+)\\]": (m) =>
         jsonObject.datasets?.map((i) => i[m[1]]),
+      "#PublishedData0Doi": (m) => jsonObject.publisheddata[0]?.doi,
+      "#PublishedData0Status": (m) => jsonObject.publisheddata[0]?.status,
+      "#PublishedData\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) => {
+        if (jsonObject.publisheddata?.[Number(m[1])]) {
+          return jsonObject.publisheddata?.[Number(m[1])][m[2]];
+        }
+      },
       "#Instruments\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) => {
         if (jsonObject.instruments?.[Number(m[1])]) {
           return jsonObject.instruments?.[Number(m[1])][m[2]];

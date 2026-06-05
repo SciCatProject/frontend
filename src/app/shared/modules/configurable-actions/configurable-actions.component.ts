@@ -16,7 +16,7 @@ export class ConfigurableActionsComponent {
   constructor(public appConfigService: AppConfigService) {}
 
   get visible(): boolean {
-    return this.appConfigService.getConfig().datafilesActionsEnabled;
+    return this.actionsConfig?.length > 0;
   }
 
   get maxFileSize(): number {
