@@ -1,10 +1,3 @@
-
-<configurable-actions
-  *ngIf="appConfig.publishedDataActionsEnabled"
-  [actionsConfig]="appConfig.publishedDataActions"
-  [actionItems]="actionItems">
-</configurable-actions>
-
 <div fxLayout="row" fxLayout.xs="column" *ngIf="publishedData">
   <div fxFlex="80">
 
@@ -33,6 +26,13 @@
           </ng-template>
         </table>
       </mat-card-content>
+      <mat-card-actions>
+        <configurable-actions
+          *ngIf="appConfig.publishedDataActionsEnabled"
+          [actionsConfig]="appConfig.publishedDataActions"
+          [actionItems]="actionItems">
+        </configurable-actions>
+      </mat-card-actions>
     </mat-card>
 
     <mat-card>
