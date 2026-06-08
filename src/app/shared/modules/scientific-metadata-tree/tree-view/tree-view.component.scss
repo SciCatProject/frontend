@@ -84,7 +84,6 @@ mat-tree:first-child {
 
 mat-form-field {
   width: 40%;
-  // padding-left: 40px;
 }
 .tool-bar {
   display: flex;
@@ -118,4 +117,5 @@ section {
 .value-cell {
   grid-column: 3;
   word-wrap: break-word;
+  min-width: 2rem;
 }
