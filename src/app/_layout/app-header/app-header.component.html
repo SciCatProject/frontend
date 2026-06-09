@@ -187,6 +187,9 @@
           [matMenuTriggerFor]="userMenu"
         >
           <img class="user-image" src="{{ profileImage$ | async }}" />
+          <div color="primary" class="large-screen-text">
+            {{ username$ | async }}
+          </div>
         </button>
       </span>
     </span>
@@ -194,8 +197,8 @@
       <h6>
         <button
           mat-icon-button
-          (click)="login()"
           aria-label="Sign in to your account"
+          (click)="login()"
           [matTooltip]="'Sign in to your account'"
           [matTooltipShowDelay]="500"
           data-cy="login-button"
