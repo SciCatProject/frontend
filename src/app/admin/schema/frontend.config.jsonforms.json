@@ -350,6 +350,9 @@
             },
             "filename": {
               "type": "string"
+            },
+            "alertMessage": {
+              "type": "string"
             }
           }
         }
