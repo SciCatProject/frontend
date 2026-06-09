@@ -141,7 +141,6 @@
           [routerLink]="['/help']"
         >
           <mat-icon color="primary"> help </mat-icon>
-          <span class="large-screen-text">Help</span>
         </button>
       </h6>
     </span>
@@ -188,9 +187,6 @@
           [matMenuTriggerFor]="userMenu"
         >
           <img class="user-image" src="{{ profileImage$ | async }}" />
-          <div color="primary" class="large-screen-text">
-            {{ username$ | async }}
-          </div>
         </button>
       </span>
     </span>
