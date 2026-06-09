@@ -30,7 +30,6 @@ import {
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
-import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
 import { combineLatest, Subscription, lastValueFrom } from "rxjs";
 import {
   selectProfile,
@@ -46,6 +45,8 @@ import {
 import { loadDefaultSettings } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 import { IngestorCreationComponent } from "ingestor/ingestor-page/ingestor-creation.component";
+import { EventsService } from "shared/events.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "dashboard",
@@ -58,6 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readyToFetch$ = this.store
     .select(selectHasPrefilledFilters)
     .pipe(filter((has) => has));
+
   loggedIn$ = this.store.select(selectIsLoggedIn);
   selectedSets$ = this.store.select(selectSelectedDatasets);
   selectColumns$ = this.store.select(selectColumns);
@@ -78,11 +80,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     public appConfigService: AppConfigService,
+    private eventsService: EventsService,
     private actionsSubj: ActionsSubject,
     public dialog: MatDialog,
     private store: Store,
     private router: Router,
     private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
   ) {}
 
   onTextChange(term: string) {
@@ -113,8 +117,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.eventsService.connect();
+
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction({}));
+
+    this.subscriptions.push(
+      this.eventsService.message$
+        .pipe(
+          filter((payload) => {
+            return payload.type === "dataset.updated";
+          }),
+        )
+        .subscribe((payload: Record<string, any>) => {
+          this.snackBar.open(
+            `Some DATA has been updated dataset name: ${payload.data.datasetName}, pid:${payload.data.pid}`,
+            "Close",
+            {
+              duration: 5000,
+            },
+          );
+          this.store.dispatch(fetchDatasetsAction());
+        }),
+    );
 
     this.subscriptions.push(
       combineLatest([
@@ -231,6 +256,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.eventsService.disconnect();
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
