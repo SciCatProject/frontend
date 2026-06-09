@@ -12,3 +12,16 @@
     {{ actionConfig.label }}
   </button>
 </ng-template>
+
+<div class="popup-backdrop" *ngIf="showPopup" (click)="closePopup()"></div>
+<div class="popup" *ngIf="showPopup" [class.show]="showPopup">
+  <div class="popup-content">
+    <p>{{ actionConfig.alertMessage }}</p>
+    <div class="popup-actions">
+      <button mat-raised-button color="primary" (click)="confirmAction()">
+        Confirm
+      </button>
+      <button mat-raised-button (click)="closePopup()">Cancel</button>
+    </div>
+  </div>
+</div>

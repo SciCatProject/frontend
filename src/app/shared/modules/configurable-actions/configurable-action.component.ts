@@ -42,6 +42,9 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
   form: HTMLFormElement = null;
 
+  showPopup = false;
+  pendingAction: (() => void) | null = null;
+
   subscriptions: Subscription[] = [];
 
   userProfile: any = {};
@@ -379,7 +382,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return input;
   }
 
-  perform_action() {
+  execute_action() {
     const action_type = this.actionConfig.type || "form";
     switch (action_type) {
       case "json-download":
@@ -391,6 +394,28 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       case "form":
       default:
         return this.type_form();
+    }
+  }
+
+  perform_action() {
+    if (this.actionConfig.alertMessage) {
+      this.pendingAction = () => this.execute_action();
+      this.showPopup = true;
+      return;
+    }
+    this.execute_action();
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.pendingAction = null;
+  }
+
+  confirmAction() {
+    this.showPopup = false;
+    if (this.pendingAction) {
+      this.pendingAction();
+      this.pendingAction = null;
     }
   }
 
@@ -606,7 +631,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         //     property: JSON.parse(this.actionConfig.payload),
         //   }),
         // );
-        alert("Transfer requested!");        
         return response;
       })
       .catch((error) => {

@@ -22,6 +22,7 @@ export interface ActionConfig {
   variables?: Record<string, string>;
   inputs?: Record<string, string>;
   headers?: Record<string, string>;
+  alertMessage?: string;
 }
 
 // export interface ActionItem {

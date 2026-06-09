@@ -318,7 +318,8 @@
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
-      }
+      },
+      "alertMessage": "Are you sure you want to make this published data record private?"
     },
     {
       "id": "publish",
@@ -338,7 +339,8 @@
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
-      }
+      },
+      "alertMessage": "Are you sure you want to publish this record locally?"
     },
     {
       "id": "register",
@@ -357,7 +359,8 @@
       },
       "headers": {
         "Content-Type": "application/json"
-      }
+      },
+      "alertMessage": "Are you sure you want to register this published data with DataCite? No further changes can be made after this action."
     },
     {
       "id": "amend",
@@ -376,7 +379,8 @@
       },
       "headers": {
         "Content-Type": "application/json"
-      }
+      },
+      "alertMessage": "Are you sure you want to amend this published data record?"
     }
   ],
   "selectionActionsEnabled": true,
