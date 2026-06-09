@@ -29,7 +29,7 @@ import {
   CreateAttachmentV3Dto,
   DatasetClass,
   OutputAttachmentV3Dto,
-  OutputDatasetObsoleteDto,
+  PartialOutputDatasetDto,
   ReturnedUserDto,
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -86,7 +86,7 @@ export class SampleDetailComponent
     private store: Store,
   ) {}
 
-  formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
+  formatTableData(datasets: PartialOutputDatasetDto[]): TableData[] {
     let tableData: TableData[] = [];
     if (datasets) {
       tableData = datasets.map((dataset: any) => ({

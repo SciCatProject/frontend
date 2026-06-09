@@ -6,11 +6,10 @@ import {
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
 import { createMock, mockAttachment as attachment } from "shared/MockStubs";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
-const derivedDataset = createMock<OutputDatasetObsoleteDto>({
+const derivedDataset = createMock<OutputDatasetDto>({
   pid: "testPid",
-  investigator: "",
   inputDatasets: [],
   usedSoftware: [],
   owner: "",
@@ -19,21 +18,21 @@ const derivedDataset = createMock<OutputDatasetObsoleteDto>({
   creationTime: new Date().toString(),
   type: "derived",
   ownerGroup: "",
+  datasetName: "test name",
   numberOfFilesArchived: 0,
   accessGroups: [],
   createdAt: "",
   createdBy: "",
   creationLocation: "",
-  principalInvestigator: "",
+  principalInvestigators: [],
   updatedAt: "",
   updatedBy: "",
-  attachments: [],
 });
 
-const dataset = createMock<OutputDatasetObsoleteDto>({
+const dataset = createMock<OutputDatasetDto>({
   ...derivedDataset,
   type: "raw",
-  origdatablocks: undefined,
+  datasetName: "test name",
 });
 
 describe("DatasetsReducer", () => {

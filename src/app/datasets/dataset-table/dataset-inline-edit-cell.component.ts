@@ -11,7 +11,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { Subscription } from "rxjs";
 import { get as lodashGet, set as lodashSet } from "lodash-es";
 import { AppConfigService } from "app-config.service";
@@ -43,7 +43,7 @@ export class DatasetInlineEditCellComponent
   private isAdmin = false;
   private appConfig = this.appConfigService.getConfig();
 
-  @Input() row: OutputDatasetObsoleteDto;
+  @Input() row: OutputDatasetDto;
   @Input() column: TableField<any>;
   @Input() parent: DynamicMatTableComponent<any>;
   @Input() onRowEvent = null;

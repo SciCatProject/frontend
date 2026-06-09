@@ -42,12 +42,12 @@ import { Message, MessageType } from "state-management/models";
 import { DOCUMENT } from "@angular/common";
 import {
   Instrument,
-  OutputDatasetObsoleteDto,
   ProposalClass,
   ReturnedUserDto,
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 /**
  * Component to show details for a data set, using the
@@ -74,7 +74,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
 
   localization = "dataset";
-  dataset: OutputDatasetObsoleteDto | undefined;
+  dataset: CurrentDataset | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);

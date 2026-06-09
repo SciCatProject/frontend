@@ -38,9 +38,8 @@ import {
   selectCurrentUser,
 } from "state-management/selectors/user.selectors";
 import {
-  DatasetClass,
-  OutputDatasetObsoleteDto,
   Instrument,
+  PartialOutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -99,17 +98,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   );
   instruments$ = this.store.select(selectInstruments);
 
-  @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
+  @Input() selectedSets: PartialOutputDatasetDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
     pageIndex: number;
     pageSize: number;
   }>();
 
-  datasets: OutputDatasetObsoleteDto[] = [];
+  datasets: PartialOutputDatasetDto[] = [];
   instruments: Instrument[] = [];
   instrumentMap: Map<string, Instrument> = new Map();
 
-  @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
+  @Output() rowClick = new EventEmitter<PartialOutputDatasetDto>();
   @Output() textSearch = new EventEmitter<string>();
 
   tableDefaultSettingsConfig: ITableSetting = {
@@ -139,8 +138,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   paginationMode: TablePaginationMode = "server-side";
 
-  dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
-    OutputDatasetObsoleteDto[]
+  dataSource: BehaviorSubject<PartialOutputDatasetDto[]> = new BehaviorSubject<
+    PartialOutputDatasetDto[]
   >([]);
 
   pagination: TablePagination = {};
@@ -264,7 +263,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowEvent({ event, sender }: IRowEvent<OutputDatasetObsoleteDto>) {
+  onRowEvent({ event, sender }: IRowEvent<PartialOutputDatasetDto>) {
     if (event === RowEventType.RowClick) {
       const dataset = sender.row;
       this.rowClick.emit(dataset);
@@ -301,7 +300,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSelect(event: MatCheckboxChange, dataset: OutputDatasetObsoleteDto): void {
+  onSelect(event: MatCheckboxChange, dataset: PartialOutputDatasetDto): void {
     if (event.checked) {
       this.store.dispatch(selectDatasetAction({ dataset }));
     } else {
