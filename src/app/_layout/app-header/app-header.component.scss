@@ -62,12 +62,6 @@
   background-color: var(--theme-header-3-default);
 }
 
-@media only screen and (max-width: 1279px) {
-  .large-screen-text {
-    display: none;
-  }
-}
-
 ::ng-deep .custom-menu .mat-mdc-menu-content:not(:empty) {
   padding-top: 1px;
   padding-bottom: 1px;
