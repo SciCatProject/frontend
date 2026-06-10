@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { PublishedDataState } from "state-management/state/published-data.store";
+import { selectSettings } from "./user.selectors";
 
 const selectPublishedDataState =
   createFeatureSelector<PublishedDataState>("publishedData");
@@ -45,12 +46,23 @@ export const selectPublishedDataDashboardPageViewModel = createSelector(
   selectPage,
   selectPublishedDataPerPage,
   selectFilters,
-  (publishedData, count, currentPage, publishedDataPerPage, filters) => ({
+  selectSettings,
+  (
     publishedData,
     count,
     currentPage,
     publishedDataPerPage,
     filters,
+    settings,
+  ) => ({
+    publishedData,
+    count,
+    currentPage,
+    publishedDataPerPage,
+    filters,
+    tablesSettings: {
+      columns: settings.fe_publisheddata_table_columns,
+    },
   }),
 );
 

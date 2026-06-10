@@ -79,6 +79,7 @@ export const initialUserState: UserState = {
     fe_sample_table_conditions: [],
     fe_instrument_table_columns: [],
     fe_file_table_columns: [],
+    fe_publisheddata_table_columns: [],
   }, // TODO sync with server settings?
 
   message: undefined,
