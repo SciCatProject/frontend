@@ -476,7 +476,7 @@ Cypress.Commands.add("removeSamples", () => {
 Cypress.Commands.add("removeJobs", () => {
   cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getToken().then((token) => {
-    const fields = { type: "embargo_period" };
+    const fields = { type: "all_access" };
     const limits = { limit: 10, skip: 0, sort: { type: "asc" } };
 
     cy.request({
