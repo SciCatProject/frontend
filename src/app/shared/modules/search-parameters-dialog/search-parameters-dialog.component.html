@@ -109,6 +109,12 @@
           "
         ></tr>
       </table>
+      <app-empty-content
+        *ngIf="!parameterKeys?.length"
+        message="No metadata keys found."
+        icon="folder"
+      >
+      </app-empty-content>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions [attr.align]="'end'">
