@@ -499,9 +499,16 @@ describe("Datasets general", () => {
     });
 
     it("should automatically apply pre-configured filters from config", () => {
-      cy.contains("Type").should("exist");
+      cy.get('[data-cy="shared-filter-form"]').should("contain", "Type");
+      cy.get('[data-cy="shared-filter-form"]').should(
+        "not.contain",
+        "Location",
+      );
+    });
 
-      cy.contains("Location").should("not.exist");
+    it("should hide disabled filters in the list", () => {
+      cy.get('[data-cy="shared-filter-form"]').should("not.contain", "Keyword");
+      cy.get('[data-cy="shared-filter-form"]').should("contain", "Type");
     });
   });
 
@@ -803,7 +810,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
-  
+
   describe("Auto apply filters", () => {
     beforeEach(() => {
       cy.clearLocalStorage();
@@ -879,7 +886,7 @@ describe("Datasets general", () => {
         .type("{enter}");
     });
   });
-  
+
   describe("Sorting datasets by a column from config", () => {
     beforeEach(() => {
       cy.createDataset({
@@ -921,7 +928,9 @@ describe("Datasets general", () => {
     });
 
     it("should sort datasets by datasetName in asc order from config", () => {
-      cy.get(".dataset-table mat-row").first().should("contain", "A DatasetName");
+      cy.get(".dataset-table mat-row")
+        .first()
+        .should("contain", "A DatasetName");
     });
   });
 });

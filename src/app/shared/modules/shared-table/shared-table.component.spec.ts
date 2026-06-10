@@ -200,4 +200,32 @@ describe("SharedTableComponent", () => {
   describe("#getFilterColumns()", () => {
     xit("should ...", () => {});
   });
+
+  describe("#ngAfterViewInit()", () => {
+    it("should add the sort/paginator merge subscription to the tracked list", () => {
+      const pushSpy = spyOn(
+        (component as any).subscriptions,
+        "push",
+      ).and.callThrough();
+
+      component.ngAfterViewInit();
+
+      // sort-reset subscription + merge subscription
+      expect(pushSpy).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe("#ngOnDestroy()", () => {
+    it("should call unsubscribe() on every tracked subscription", () => {
+      const spy = jasmine.createSpy("unsubscribe");
+      (component as any).subscriptions = [
+        { unsubscribe: spy },
+        { unsubscribe: spy },
+      ];
+
+      component.ngOnDestroy();
+
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+  });
 });
