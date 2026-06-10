@@ -176,7 +176,7 @@ export const testData = {
   },
   job: {
     emailJobInitiator: "user@example.com",
-    type: "embargo_period",
+    type: "all_access",
     jobParams: { dataset: "scicat_testing/6ED35C17-EDD4-4CD4-B917-4E49698F7532" },
     datasetList: [
       { pid: "scicat_testing/6ED35C17-EDD4-4CD4-B917-4E49698F7532", files: [] },

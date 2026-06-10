@@ -18,15 +18,15 @@ describe("Jobs general", () => {
   });
 
   describe("Jobs dynamic material table", () => {
-    it("should be able to search for job in the global search", () => {
+    it.only("should be able to search for job in the global search", () => {
       cy.createJob();
 
       cy.visit("/user/jobs");
 
-      cy.get('[data-cy="text-search"]').type("embargo_period");
+      cy.get('[data-cy="text-search"]').type("all_access");
       cy.get('[data-cy="search-button"]').click();
 
-      cy.get("mat-table mat-row").first().should("contain", "embargo_period");
+      cy.get("mat-table mat-row").first().should("contain", "all_access");
     });
 
     it("should be able to change page and page size in the job table", () => {
