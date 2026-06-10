@@ -128,6 +128,13 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.sessionTimeoutAction,
+    (): UserState => ({
+      ...initialUserState,
+    }),
+  ),
+
+  on(
     fromActions.addCustomColumnsAction,
     (state, { names, scope }): UserState => {
       const key = getSettingKey(scope, "columns");
