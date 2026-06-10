@@ -15,7 +15,7 @@ export class AboutComponent implements OnInit {
 
   constructor(
     public appConfigService: AppConfigService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {

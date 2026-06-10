@@ -289,10 +289,13 @@ export class AppConfigService {
     if (!config.aboutHtmlContent) {
       try {
         config.aboutHtmlContent = await firstValueFrom(
-          this.http.get(config.infoHtmlFile,{ responseType: 'text' }).pipe(timeout(2000)),
+          this.http
+            .get(config.infoHtmlFile, { responseType: "text" })
+            .pipe(timeout(2000)),
         );
       } catch (err) {
-        config.aboutHtmlContent = "Here goes your SciCat Info page!!<br>For more information, please read the documentation available on the <a href=\"https://scicatproject.org\">SciCat Website</a>"
+        config.aboutHtmlContent =
+          'Here goes your SciCat Info page!!<br>For more information, please read the documentation available on the <a href=\"https://scicatproject.org\">SciCat Website</a>';
       }
     }
 
