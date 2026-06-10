@@ -217,6 +217,8 @@ describe("0040: Dataset datafiles", () => {
 
       cy.get(".mat-mdc-tab-link").contains("Datafiles").click();
 
+      cy.finishedLoading();
+
       cy.get(".mdc-checkbox__native-control").eq(1).check();
 
       cy.window().then((win) => {
