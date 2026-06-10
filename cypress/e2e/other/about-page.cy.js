@@ -16,9 +16,6 @@ describe("About configuration", () => {
       cy.updateFrontendConfig({
         aboutEnabled: false,
       });
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
     });
 
     it("should not show about icons in header when disabled", () => {
