@@ -1,15 +1,13 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { HelpComponent } from "./help.component";
 import { MatCardModule } from "@angular/material/card";
-import { AppConfigService, HelpMessages } from "app-config.service";
+import { AppConfigService } from "app-config.service";
 
 const getConfig = () => ({
   facility: "ESS",
-  gettingStarted: true,
-  ingestManual: true,
+  helpEnabled: true,
+  helpHtmlContent: "<p>Default help content</p>",
 });
-
-const helpMessages = new HelpMessages();
 
 describe("HelpComponent", () => {
   let component: HelpComponent;
@@ -45,46 +43,22 @@ describe("HelpComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should have default messages", () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.innerHTML).toContain(helpMessages.gettingStarted);
-    expect(compiled.innerHTML).toContain(helpMessages.ingestManual);
+  it("should display htmlContent when helpEnabled is true", () => {
+    expect(component.htmlContent).toContain("Default help content");
   });
 
-  describe("should have custom messages", () => {
-    let customHelpMessages: HelpMessages;
-    beforeEach(() => {
-      fixture = TestBed.createComponent(HelpComponent);
-      component = fixture.componentInstance;
-      customHelpMessages = {
-        gettingStarted: "someGettingStart",
-        ingestManual: "someOtherIngest",
-      };
-      component.appConfig.helpMessages = customHelpMessages;
-      fixture.detectChanges();
-    });
-
-    it("should have custom messages", () => {
-      const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.innerHTML).toContain(customHelpMessages.gettingStarted);
-      expect(compiled.innerHTML).toContain(customHelpMessages.ingestManual);
-    });
+  it("should display disabled message when helpEnabled is false", () => {
+    component.appConfig.helpEnabled = false;
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.htmlContent).toBe("Help page is disabled");
   });
 
-  describe("should set only one custom message", () => {
-    let customHelpMessages: HelpMessages;
-    beforeEach(() => {
-      fixture = TestBed.createComponent(HelpComponent);
-      component = fixture.componentInstance;
-      customHelpMessages = new HelpMessages("someGettingStart");
-      component.appConfig.helpMessages = customHelpMessages;
-      fixture.detectChanges();
-    });
-
-    it("should set only one custom message", () => {
-      const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.innerHTML).toContain(customHelpMessages.gettingStarted);
-      expect(compiled.innerHTML).toContain(helpMessages.ingestManual);
-    });
+  it("should update htmlContent when helpHtmlContent changes", () => {
+    const compare = component.htmlContent;
+    component.appConfig.helpHtmlContent = "<p>Updated help content</p>";
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.htmlContent).not.toEqual(compare);
   });
 });
