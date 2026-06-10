@@ -72,7 +72,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   actionItems: ActionItems = {
     datasets: [],
     instruments: undefined,
-    publisheddata: []
+    publisheddata: [],
   };
 
   constructor(

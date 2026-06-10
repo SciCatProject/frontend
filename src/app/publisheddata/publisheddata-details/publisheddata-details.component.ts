@@ -18,9 +18,7 @@ import {
   selectIsAdmin,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import {
-  ActionItems,
-} from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { ActionItems } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "publisheddata-details",
@@ -41,7 +39,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
 
   actionItems: ActionItems = {
     datasets: [],
-    publisheddata: []
+    publisheddata: [],
   };
   constructor(
     private appConfigService: AppConfigService,

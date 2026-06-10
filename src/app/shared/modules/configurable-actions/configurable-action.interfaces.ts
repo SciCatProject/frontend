@@ -48,5 +48,4 @@ export interface ActionItems {
   datasets: ActionItemDataset[];
   instruments?: Instrument[];
   publisheddata: ActionItemPublishedData[];
-
 }

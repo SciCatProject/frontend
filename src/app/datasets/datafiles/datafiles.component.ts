@@ -77,7 +77,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   datasetPid = "";
   actionItems: ActionItems = {
     datasets: [],
-    publisheddata: []
+    publisheddata: [],
   };
 
   count = 0;
