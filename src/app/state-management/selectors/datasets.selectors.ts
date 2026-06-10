@@ -315,3 +315,19 @@ export const selectRelatedDatasetsPerPage = createSelector(
   selectRelatedDatasetsFilters,
   (filters) => filters.limit,
 );
+
+export const selectCurrentOrigDatablocksCount = createSelector(
+  selectDatasetState,
+  (state) => state.origDatablocksCount ?? 0,
+);
+
+export const selectDatafilesPageViewModel = createSelector(
+  selectCurrentOrigDatablocks,
+  selectCurrentOrigDatablocksCount,
+  selectCurrentDataset,
+  (datablocks, totalCount, dataset) => ({
+    datablocks,
+    totalCount,
+    dataset,
+  }),
+);

@@ -151,7 +151,7 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
 
       const userTableConfigColumns =
         this.datasetsListService.convertSavedDatasetColumns(
-          defaultTableColumns.columns,
+          defaultTableColumns.columns ?? [],
         );
 
       this.tableDefaultSettingsConfig.settingList[0].columnSetting =
@@ -183,9 +183,13 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
     settingConfig: ITableSetting,
     paginationConfig: TablePagination,
   ): void {
-    const currentColumnSetting = settingConfig.settingList.find(
+    let currentColumnSetting = settingConfig.settingList.find(
       (s) => s.isCurrentSetting,
     )?.columnSetting;
+
+    if (!currentColumnSetting && settingConfig.settingList.length > 0) {
+      currentColumnSetting = settingConfig.settingList[0].columnSetting;
+    }
 
     this.columns = currentColumnSetting;
     this.setting = settingConfig;
@@ -193,7 +197,7 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription?.unsubscribe();
   }
 
   formatTableData(

@@ -42,6 +42,8 @@ export interface DatasetState {
   batch: OutputDatasetObsoleteDto[];
 
   openwhiskResult: Record<string, unknown> | undefined;
+
+  origDatablocksCount?: number;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -87,4 +89,6 @@ export const initialDatasetState: DatasetState = {
   batch: [],
 
   openwhiskResult: undefined,
+
+  origDatablocksCount: 0,
 };

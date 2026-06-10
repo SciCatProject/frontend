@@ -13,6 +13,7 @@ import { Store } from "@ngrx/store";
 import {
   selectCurrentOrigDatablocks,
   selectCurrentDataset,
+  selectDatafilesPageViewModel,
 } from "state-management/selectors/datasets.selectors";
 import {
   selectIsLoading,
@@ -47,6 +48,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "datafiles",
@@ -57,6 +59,7 @@ import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/defau
 export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
   @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
+  vm$ = this.store.select(selectDatafilesPageViewModel);
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
   dataset$ = this.store.select(selectCurrentDataset);
   loading$ = this.store.select(selectIsLoading);
@@ -110,7 +113,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
       name: "time",
       header: "Time",
       type: "date",
-      format: "yyyy-MM-dd HH:mm",
+      format: this.appConfig.dateFormat || "yyyy-MM-dd HH:mm",
     },
   ];
 
@@ -137,7 +140,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     DataFiles_File[]
   >([]);
 
-  paginationMode: TablePaginationMode = "client-side";
+  paginationMode: TablePaginationMode = "server-side";
 
   pagination: TablePagination = {
     pageSizeOptions: [5, 10, 25, 50, 100],
@@ -227,39 +230,45 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
     return warning;
   }
-  //ngAfterViewInit() {
+
   ngOnInit() {
     this.setting = this.tableDefaultSettingsConfig;
     this.subscriptions.push(
-      this.dataset$.subscribe((dataset) => {
+      this.vm$.subscribe(({ datablocks, totalCount, dataset }) => {
         if (dataset) {
+          this.datasetPid = dataset.pid;
           this.actionItems.datasets = <ActionItemDataset[]>[dataset];
+
+          if (!this.files.length) {
+            this.store.dispatch(
+              fetchOrigDatablocksAction({
+                pid: dataset.pid,
+                filters: { skip: 0, limit: this.pagination.pageSize },
+              }),
+            );
+          }
         }
-      }),
-    );
-    this.subscriptions.push(
-      this.datablocks$.subscribe((datablocks) => {
+
         if (datablocks) {
           this.totalFileSize = 0;
           const files: DataFiles_File[] = [];
           datablocks.forEach((block) => {
-            block.dataFileList.map((file: DataFiles_File) => {
-              this.totalFileSize += file.size;
-              file.selected = false;
+            if (block.dataFileList && !Array.isArray(block.dataFileList)) {
+              const file = block.dataFileList as DataFiles_File;
+              this.totalFileSize += file.size || 0;
               files.push(file);
-            });
+            }
           });
           this.count = files.length;
           this.files = files;
 
           this.pagination = {
             ...this.pagination,
-            pageIndex: 0,
-            length: files.length,
-            pageSize: this.pagination.pageSize || 25,
+            length: totalCount,
           };
 
-          this.applyPagination();
+          this.dataSource.next(this.files);
+
           this.tooLargeFile = this.hasTooLargeFiles(this.files);
           if (this.actionItems.datasets.length > 0) {
             this.actionItems.datasets[0].files = files;
@@ -291,20 +300,13 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     }
   }
 
-  applyPagination() {
-    const start = this.pagination.pageIndex * this.pagination.pageSize;
-    const end = start + this.pagination.pageSize;
-    this.dataSource.next(this.files.slice(start, end));
-  }
-
   onPaginationChange({ pageIndex, pageSize }: TablePagination) {
-    this.pagination = {
-      ...this.pagination,
-      pageIndex,
-      pageSize,
-      length: this.files.length,
-    };
-    this.applyPagination();
+    this.store.dispatch(
+      fetchOrigDatablocksAction({
+        pid: this.datasetPid,
+        filters: { skip: pageIndex * pageSize, limit: pageSize },
+      }),
+    );
   }
 
   ngOnDestroy() {
