@@ -172,10 +172,10 @@ export interface AppConfigInterface {
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
   autoApplyFilters?: boolean;
-  helpEnabled: boolean;
-  helpHtmlContent: string;
-  aboutEnabled: boolean;
-  aboutHtmlContent: string;
+  helpEnabled?: boolean;
+  helpHtmlContent?: string;
+  aboutEnabled?: boolean;
+  aboutHtmlContent?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -283,6 +283,14 @@ export class AppConfigService {
 
     if (!config.datasetPageSizeOptions?.length) {
       config.datasetPageSizeOptions = [5, 10, 25, 100];
+    }
+
+    if (config.helpEnabled == null) {
+      config.helpEnabled = false;
+    }
+
+    if (config.aboutEnabled == null) {
+      config.aboutEnabled = false;
     }
 
     if (!config.aboutHtmlContent) {
