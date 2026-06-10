@@ -238,15 +238,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
         if (dataset) {
           this.datasetPid = dataset.pid;
           this.actionItems.datasets = <ActionItemDataset[]>[dataset];
-
-          if (!this.files.length) {
-            this.store.dispatch(
-              fetchOrigDatablocksAction({
-                pid: dataset.pid,
-                filters: { skip: 0, limit: this.pagination.pageSize },
-              }),
-            );
-          }
         }
 
         if (datablocks) {
