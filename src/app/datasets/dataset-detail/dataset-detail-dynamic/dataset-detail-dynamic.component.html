@@ -16,6 +16,7 @@
     <configurable-actions
       [actionsConfig]="appConfig.datasetActions"
       [actionItems]="actionItems"
+      (actionPerformed)="onActionPerformed()"
     ></configurable-actions>
   </div>
   <div style="clear: both"></div>

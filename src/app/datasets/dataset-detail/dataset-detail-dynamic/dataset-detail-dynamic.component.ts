@@ -34,6 +34,7 @@ import {
   ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -289,6 +290,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       );
     }
     return true;
+  }
+
+  onActionPerformed() {
+    if (this.dataset?.pid) {
+      this.store.dispatch(fetchDatasetAction({ pid: this.dataset.pid }));
+    }
   }
 
   ngOnDestroy() {

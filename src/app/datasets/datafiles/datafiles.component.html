@@ -35,6 +35,7 @@
     <configurable-actions
       [actionsConfig]="appConfig.datafilesActions"
       [actionItems]="actionItems"
+      (actionPerformed)="onActionPerformed()"
     ></configurable-actions>
   </div>
 

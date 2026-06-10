@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
@@ -30,6 +32,7 @@ import { Subscription } from "rxjs";
 export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
   @Input({ required: true }) actionItems: ActionItems;
+  @Output() actionPerformed = new EventEmitter<void>();
   //@Input() files?: DataFiles_File[];
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
@@ -570,7 +573,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         if (response.ok) {
           return response.blob();
         } else {
-          // http error
           return Promise.reject(
             new Error(`HTTP Error code: ${response.status}`),
           );
@@ -583,6 +585,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         a.download = filename;
         a.click();
         URL.revokeObjectURL(url);
+        this.actionPerformed.emit();
       })
       .catch((error) => {
         this.snackBar.open(
@@ -621,16 +624,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
             new Error(`HTTP Error code: ${response.status}`),
           );
         }
-
-        // specific only for datasets
-        // cannot be used
-        // this.store.dispatch(
-        //   updatePropertyAction({
-        //     method: this.actionConfig.method,
-        //     pid: element.pid,
-        //     property: JSON.parse(this.actionConfig.payload),
-        //   }),
-        // );
+        this.actionPerformed.emit();
         return response;
       })
       .catch((error) => {

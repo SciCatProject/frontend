@@ -41,6 +41,10 @@ import {
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
+import {
+  fetchDatasetAction,
+  fetchDatablocksAction,
+} from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "datafiles",
@@ -249,10 +253,18 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     return warning;
   }
   //ngAfterViewInit() {
+  onActionPerformed() {
+    if (this.datasetPid) {
+      this.store.dispatch(fetchDatasetAction({ pid: this.datasetPid }));
+      this.store.dispatch(fetchDatablocksAction({ pid: this.datasetPid }));
+    }
+  }
+
   ngOnInit() {
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
+          this.datasetPid = dataset.pid;
           this.actionItems.datasets = <ActionItemDataset[]>[dataset];
         }
       }),

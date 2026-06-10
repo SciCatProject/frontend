@@ -266,6 +266,7 @@ export const mockActionItems: ActionItems = {
       ],
     },
   ],
+  publisheddata: [],
 };
 
 /*
@@ -289,15 +290,19 @@ function filesSelection(
 
 export const mockActionItemsDatafilesNofiles = {
   datasets: filesSelection(mockActionItems.datasets.slice(0, 1), []),
+  publisheddata: [],
 };
 export const mockActionItemsDatafilesFile1 = {
   datasets: filesSelection(mockActionItems.datasets.slice(0, 1), [1]),
+  publisheddata: [],
 };
 export const mockActionItemsDatafilesFile2 = {
   datasets: filesSelection(mockActionItems.datasets.slice(0, 1), [2]),
+  publisheddata: [],
 };
 export const mockActionItemsDatafilesAllfiles = {
   datasets: filesSelection(mockActionItems.datasets.slice(0, 1), [1, 2, 3]),
+  publisheddata: [],
 };
 
 export const lowerMaxFileSizeLimit = 5000;

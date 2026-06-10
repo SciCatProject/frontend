@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 
 import { AppConfigService } from "app-config.service";
@@ -12,6 +12,7 @@ import { AppConfigService } from "app-config.service";
 export class ConfigurableActionsComponent {
   @Input({ required: true }) actionsConfig: ActionConfig[] = [];
   @Input({ required: true }) actionItems: ActionItems;
+  @Output() actionPerformed = new EventEmitter<void>();
 
   constructor(public appConfigService: AppConfigService) {}
 

@@ -30,7 +30,8 @@
         <configurable-actions
           *ngIf="appConfig.publishedDataActionsEnabled"
           [actionsConfig]="appConfig.publishedDataActions"
-          [actionItems]="actionItems">
+          [actionItems]="actionItems"
+          (actionPerformed)="onActionPerformed()">
         </configurable-actions>
       </mat-card-actions>
     </mat-card>

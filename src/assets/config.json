@@ -330,7 +330,7 @@
       "mat_icon": "publish",
       "method": "POST",
       "url": "/api/v4/publisheddata/{{ @doi }}/publish",
-      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"private\")",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == 'private')",
       "authorization": "#datasetOwner || #userIsAdmin",
       "variables": {
         "doi": "#PublishedData0Doi",
@@ -351,7 +351,7 @@
       "mat_icon": "publish",
       "method": "POST",
       "url": "/api/v4/publisheddata/{{ @doi }}/register",
-      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"published\")",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == 'published')",
       "authorization": "#datasetOwner && #userIsAdmin",
       "variables": {
         "doi": "#PublishedData0Doi",
@@ -371,7 +371,7 @@
       "mat_icon": "publish",
       "method": "POST",
       "url": "/api/v4/publisheddata/{{ @doi }}/amend",
-      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"registered\")",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == 'registered')",
       "authorization": "true",
       "variables": {
         "doi": "#PublishedData0Doi",

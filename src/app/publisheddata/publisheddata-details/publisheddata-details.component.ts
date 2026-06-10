@@ -77,6 +77,10 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
+  onActionPerformed() {
+    this.store.dispatch(fetchPublishedDataAction({ id: this.doi }));
+  }
+
   onRegisterClick(doi: string) {
     if (
       confirm(
