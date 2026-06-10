@@ -175,7 +175,6 @@ export interface AppConfigInterface {
   helpEnabled: boolean;
   helpHtmlContent: string;
   aboutEnabled: boolean;
-  infoHtmlFile: string;
   aboutHtmlContent: string;
 }
 
@@ -287,16 +286,13 @@ export class AppConfigService {
     }
 
     if (!config.aboutHtmlContent) {
-      try {
-        config.aboutHtmlContent = await firstValueFrom(
-          this.http
-            .get(config.infoHtmlFile, { responseType: "text" })
-            .pipe(timeout(2000)),
-        );
-      } catch (err) {
-        config.aboutHtmlContent =
-          'Here goes your SciCat Info page!!<br>For more information, please read the documentation available on the <a href=\"https://scicatproject.org\">SciCat Website</a>';
-      }
+      config.aboutHtmlContent =
+        'Here goes your SciCat About page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>';
+    }
+
+    if (!config.helpHtmlContent) {
+      config.helpHtmlContent =
+        'Here goes your SciCat Help page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>';
     }
 
     this.appConfig = config;
