@@ -36,6 +36,7 @@
     </ng-template>
     <ng-container *ngFor="let filter of filtersList">
       <shared-filter
+        *ngIf="filter.enabled"
         [key]="filter.key"
         [label]="filter.label"
         [clear]="clearSearchBar"

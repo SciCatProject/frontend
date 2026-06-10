@@ -73,6 +73,7 @@ export const testData = {
     },
   },
   sample: {
+    sampleName: "Cypress Sample",
     ownerGroup: "ess",
     accessGroups: ["string"],
     instrumentGroup: "string",
