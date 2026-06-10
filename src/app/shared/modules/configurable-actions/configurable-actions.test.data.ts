@@ -189,7 +189,7 @@ export const mockActionsConfig: ActionConfig[] = [
     enabled: "(#datasetOwner || #userIsAdmin) && !@isPublished",
     authorization: ["#datasetOwner && !@isPublished"],
     variables: {
-      pid: "@Dataset0Pid",
+      pid: "#Dataset0Pid",
       isPublished: "#Dataset[0]Field[isPublished]",
     },
     payload: '{"isPublished":"true"}',
