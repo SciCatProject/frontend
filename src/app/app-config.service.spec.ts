@@ -19,6 +19,7 @@ const appConfig: AppConfigInterface = {
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
+  datasetRelationshipsEnabled: true,
   datasetJsonScientificMetadata: true,
   datasetPageSizeOptions: [5, 10, 25, 100],
   editDatasetEnabled: true,

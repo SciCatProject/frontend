@@ -14,8 +14,6 @@ import { RelatedIdentifierCellComponent } from "./related-identifier-cell/relate
   standalone: false,
 })
 export class RelationshipsComponent implements OnInit, OnDestroy {
-  constructor(private store: Store) {}
-
   relationships$ = this.store.select(selectCurrentRelationships);
 
   dataSource = new BehaviorSubject<CreateRelationshipDto[]>([]);
@@ -33,6 +31,8 @@ export class RelationshipsComponent implements OnInit, OnDestroy {
   paginationConfig: TablePagination = {};
 
   subscription: Subscription;
+
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.subscription = this.relationships$.subscribe({
