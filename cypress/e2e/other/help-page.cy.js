@@ -37,6 +37,8 @@ describe("Help configuration", () => {
         helpEnabled: true,
         helpHtmlContent: testHelpContent,
       });
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+      cy.visit("/");
       cy.get(".user-button").click();
       cy.get("[data-cy=logout-button]").click();
       cy.finishedLoading();

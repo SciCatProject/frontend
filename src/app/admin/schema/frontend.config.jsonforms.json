@@ -991,12 +991,12 @@
                   {
                     "type": "Control",
                     "scope": "#/properties/aboutEnabled",
-                    "label": "Info Enabled"
+                    "label": "About Enabled"
                   },
                   {
                     "type": "Control",
                     "scope": "#/properties/aboutHtmlContent",
-                    "label": "Info HTML Content",
+                    "label": "About HTML Content",
                     "options": {
                       "multi": true,
                       "rows": 5
