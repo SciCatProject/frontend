@@ -48,7 +48,7 @@ Variables (defined in the `variables` object) are user-defined values which use 
 - System information, like user authentication token (`#jwt`, `#tokenBearer`) or auto generated uuid and more.
 
 Entries under the `inputs` field define the form fields that are dynamically created on the form that it is than submitted when the action is triggered.
-The `payload` field contains what is sent as body of the POST request when an XHR or json-download action is triggered. 
+The `payload` field contains what is sent as body of the POST request when an XHR or json-download action is triggered.
 User defined variables can be injected in the inputs and payload by including the variable name enclosed in double curly braces `{{ ... }}`.
 __Example__:
 Given the following configuration:
@@ -99,7 +99,7 @@ Both configuration support logical operators and variables injection. More infor
 }
 ```
 
-This example action configures a button with label "Download All" and icon mat-icon `download`. The action is of type `form` which by default will submit a form with method POST. Internally, it defines 4 variables with name `pid`, `files`, `totalSize`, and `folder` with their values depending from the dataset fields. The variables are used to define the fields of the form.  
+This example action configures a button with label "Download All" and icon mat-icon `download`. The action is of type `form` which by default will submit a form with method POST. Internally, it defines 4 variables with name `pid`, `files`, `totalSize`, and `folder` with their values depending from the dataset fields. The variables are used to define the fields of the form.
 When the user clicks the button, the FE creates a form with the listed fields and submits it to the specified URL as a POST, then shows the reply in a new browser tab.
 
 ## Configuration Options Reference
@@ -127,9 +127,9 @@ When the user clicks the button, the FE creates a form with the listed fields an
 ## Available operators and system variables
 This section list all the default values and operators that are available when configuring the configurable actions.
 
-| Operator | Type | Description | 
+| Operator | Type | Description |
 |----------|------|-------------|
-| #Dataset0Pid | string | The pid of the first dataset passed to the action | 
+| #Dataset0Pid | string | The pid of the first dataset passed to the action |
 | #Dataset0FilesPath | [string] | The list of all the path for all the files in the first dataset passed to the action |
 | #Dataset0FilesTotalSize | integer | The total size of all the files of the first dataset passed to the action |
 | #Dataset0SourceFolder | string | The source folder indicated in the related field of the first dataset passed to the action |
@@ -137,7 +137,7 @@ This section list all the default values and operators that are available when c
 | #Dataset0SelectedFilesCount | integer | The number of selected files of the first dataset passed to the action |
 | #Dataset0SelectedFilesTotalSize | integer | The total size of all the selected files of the first dataset passed to the action |
 | #Dataset[i]Field[f] | any | The value of field `f` of the `i`-th dataset passed to the action |
-| #DatasetsPid | [string] | The list of pids of the all datasets passed to the action | 
+| #DatasetsPid | [string] | The list of pids of the all datasets passed to the action |
 | #DatasetsFilesPath | [string] | The list of all the paths for all the files of all the datasets passed to the action |
 | #DatasetsFilesTotalSize | integer | The total size of all the files of all the datasets passed to the action |
 | #DatasetsSourceFolder | [string] | The list of source folders indicated in the related field of all the datasets passed to the action |
@@ -150,7 +150,7 @@ This section list all the default values and operators that are available when c
 | #uuid | string | A v4 uuid generated on the fly |
 | #Username | string | The currently logged in user's username |
 | #UserEmail | string | email address of the user |
-| @variable | any | replace the string with the valu eof the variable defined in the action variable |
+| @variable | any | replace the string with the value of the variable defined in the action variable |
 
 ## How to Configure
 
