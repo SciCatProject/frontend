@@ -23,7 +23,7 @@ describe("Help configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/help']").should("not.exist");
+      cy.get("button.header-help-button").should("not.exist");
 
       cy.get("mat-icon").contains("help").should("not.exist");
     });
@@ -45,7 +45,7 @@ describe("Help configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/help']").should("exist");
+      cy.get("button.header-help-button").should("exist");
     });
 
     it("should navigate to help page and display custom content", () => {
@@ -53,7 +53,7 @@ describe("Help configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/help']").click();
+      cy.get("button.header-help-button").click();
       cy.finishedLoading();
       cy.url().should("include", "/help");
 
@@ -80,7 +80,7 @@ describe("Help configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/help']").should("exist");
+      cy.get("button.header-help-button").should("exist");
     });
 
     it("should show help icon with default page content", () => {
@@ -88,9 +88,9 @@ describe("Help configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/help']").should("exist");
+      cy.get("button.header-help-button").should("exist");
 
-      cy.get("button[routerLink='/help']").click();
+      cy.get("button.header-help-button").click();
       cy.finishedLoading();
 
       cy.url().should("include", "/help");

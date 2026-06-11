@@ -19,6 +19,7 @@ describe("About configuration", () => {
     });
 
     it("should not show about icons in header when disabled", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
@@ -34,18 +35,16 @@ describe("About configuration", () => {
         aboutEnabled: true,
         aboutHtmlContent: testAboutContent,
       });
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
     });
 
     afterEach(() => {
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
+      // cy.get(".user-button").click();
+      // cy.get("[data-cy=logout-button]").click();
+      // cy.finishedLoading();
     });
 
     it("should show about icon in header when enabled", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
@@ -53,6 +52,7 @@ describe("About configuration", () => {
     });
 
     it("should navigate to about page and display custom content", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
@@ -71,18 +71,16 @@ describe("About configuration", () => {
         aboutEnabled: true,
         aboutHtmlContent: "",
       });
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
     });
 
     afterEach(() => {
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
+      // cy.get(".user-button").click();
+      // cy.get("[data-cy=logout-button]").click();
+      // cy.finishedLoading();
     });
 
     it("should show about icon in header when enabled", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
@@ -90,6 +88,7 @@ describe("About configuration", () => {
     });
 
     it("should show about icon with default page content", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
