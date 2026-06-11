@@ -95,7 +95,7 @@ Cypress.Commands.add("getFrontendConfig", () => {
   cy.getToken().then((token) => {
     return cy.request({
       method: "GET",
-      url: lbBaseUrl + "/api/v3/runtime-config/frontendConfig",
+      url: lbBaseUrl + "/runtime-config/frontendConfig",
       headers: {
         Authorization: token,
         Accept: "application/json",
