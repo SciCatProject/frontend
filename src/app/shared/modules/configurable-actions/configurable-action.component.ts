@@ -7,7 +7,10 @@ import {
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 
-import { UsersService, UserProfile } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  UsersService,
+  UserProfile,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
