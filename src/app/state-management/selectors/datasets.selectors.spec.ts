@@ -129,8 +129,8 @@ describe("test dataset selectors", () => {
   describe("selectCurrentRelationships", () => {
     it("should select the relationships from the current dataset", () => {
       expect(
-        fromDatasetSelectors.selectCurrentAttachments.projector(dataset),
-      ).toEqual(dataset.attachments);
+        fromDatasetSelectors.selectCurrentRelationships.projector(dataset),
+      ).toEqual([]);
     });
   });
 
