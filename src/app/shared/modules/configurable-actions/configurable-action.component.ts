@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 
-import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
+import { UsersService, UserProfile } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
@@ -44,7 +44,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
   subscriptions: Subscription[] = [];
 
-  userProfile: any = {};
+  userProfile: UserProfile | null = null;
   isAdmin = false;
 
   constructor(
@@ -127,7 +127,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
   private processSelector(
     jsonObject: ActionItems,
-    userObject: any,
+    userObject: UserProfile,
     selector: string,
   ): string | string[] | number | number[] {
     if (!jsonObject.datasets?.length) {
@@ -285,7 +285,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
           return value;
         },
       );
-      return this.processSelector(this.actionItems, this.userProfile, resolved);
+      return this.processSelector(
+        this.actionItems,
+        this.userProfile ?? { email: "", username: "", accessGroups: [] },
+        resolved,
+      );
     };
 
     for (const key of Object.keys(this.actionConfig.variables ?? {})) {
