@@ -2,7 +2,7 @@ describe("Help configuration", () => {
   const testHelpContent = "<p class=\"scicat_e2e_test\">SciCat E2E Test Help Content</p>";
 
   beforeEach(() => {
-    cy.login(Cypress.env("adminUsername"), Cypress.env("adminPassword"));
+    cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
   afterEach(() => {
@@ -69,7 +69,7 @@ describe("Help configuration", () => {
 
   describe("Help Icon enabled with default content", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("adminUsername"), Cypress.env("adminPassword"));
+      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.updateFrontendConfig({
         helpEnabled: true,
         helpHtmlContent: "",

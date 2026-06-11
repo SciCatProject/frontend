@@ -2,7 +2,7 @@ describe("About configuration", () => {
   const testAboutContent = "<p class=\"scicat_e2e_test\">SciCat E2E Test About Content</p>";
 
   beforeEach(() => {
-      cy.login(Cypress.env("adminUsername"), Cypress.env("adminPassword"));
+      cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
   afterEach(() => {
@@ -66,7 +66,7 @@ describe("About configuration", () => {
 
   describe("About Icon enabled with default content", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("adminUsername"), Cypress.env("adminPassword"));
+      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.updateFrontendConfig({
         aboutEnabled: true,
         aboutHtmlContent: "",
