@@ -16,9 +16,6 @@ describe("Help configuration", () => {
       cy.updateFrontendConfig({
         helpEnabled: false,
       });
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
     });
 
     it("should not show help icon in header when disabled", () => {
@@ -37,17 +34,9 @@ describe("Help configuration", () => {
         helpEnabled: true,
         helpHtmlContent: testHelpContent,
       });
-      cy.login(Cypress.env("username"), Cypress.env("password"));
-      cy.visit("/");
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
     });
 
     afterEach(() => {
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
     });
 
     it("should show help icons in header when enabled", () => {
@@ -71,20 +60,16 @@ describe("Help configuration", () => {
 
   describe("Help Icon enabled with default content", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.updateFrontendConfig({
         helpEnabled: true,
         helpHtmlContent: "",
       });
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
     });
 
     afterEach(() => {
-      cy.get(".user-button").click();
-      cy.get("[data-cy=logout-button]").click();
-      cy.finishedLoading();
+      // cy.get(".user-button").click();
+      // cy.get("[data-cy=logout-button]").click();
+      // cy.finishedLoading();
     });
 
     it("should show help icon in header when enabled", () => {
