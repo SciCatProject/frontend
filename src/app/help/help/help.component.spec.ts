@@ -44,7 +44,7 @@ describe("HelpComponent", () => {
   });
 
   it("should display htmlContent when helpEnabled is true", () => {
-    expect(component.htmlContent).toContain("Default help content");
+    expect(component.htmlContent).toContain("SciCat Help page");
   });
 
   it("should display disabled message when helpEnabled is false", () => {

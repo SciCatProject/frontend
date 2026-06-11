@@ -224,6 +224,10 @@ const appConfig: AppConfigInterface = {
   ingestorComponent: {
     ingestorEnabled: true,
   },
+  helpEnabled: false,
+  helpHtmlContent: "This is not my help",
+  aboutEnabled: false,
+  aboutHtmlContent: "This is not my about",
 };
 
 describe("AppConfigService", () => {

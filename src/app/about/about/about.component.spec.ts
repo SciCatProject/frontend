@@ -45,6 +45,10 @@ describe("AboutComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("should display htmlContent when aboutEnabled is true", () => {
+    expect(component.htmlContent).toContain("SciCat About page");
+  });
+
   it("should create about for ESS", () => {
     const compare = component.htmlContent;
     component.appConfig.aboutHtmlContent = "ESS about content";
