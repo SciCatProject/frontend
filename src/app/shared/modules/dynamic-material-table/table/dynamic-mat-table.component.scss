@@ -421,7 +421,41 @@ cdk-virtual-scroll-viewport {
     white-space: nowrap;
     min-width: fit-content;
   }
+
+  .paginator-container {
+    display: flex;
+    flex: 1;
+  }
 }
+.paginator-container.is-loading {
+  ::ng-deep .mat-mdc-paginator-range-label {
+    position: relative;
+    color: transparent;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--theme-primary-default, rgba(0, 0, 0, 0.6));
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: paginator-range-spin 0.8s linear infinite;
+    }
+  }
+}
+
+@keyframes paginator-range-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 @media (max-width: 1340px) {
   .table-header-controls .global-search-wrapper {
     max-width: 100%;
