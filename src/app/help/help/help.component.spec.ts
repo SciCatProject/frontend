@@ -44,7 +44,9 @@ describe("HelpComponent", () => {
   });
 
   it("should display htmlContent when helpEnabled is true", () => {
-    expect(component.htmlContent).toContain("SciCat Help page");
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.innerHTML).toContain('Default help content');
   });
 
   it("should display disabled message when helpEnabled is false", () => {

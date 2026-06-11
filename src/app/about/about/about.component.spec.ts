@@ -46,7 +46,9 @@ describe("AboutComponent", () => {
   });
 
   it("should display htmlContent when aboutEnabled is true", () => {
-    expect(component.htmlContent).toContain("SciCat About page");
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.innerHTML).toContain('Default about content');
   });
 
   it("should create about for ESS", () => {
