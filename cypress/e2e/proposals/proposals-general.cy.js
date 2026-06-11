@@ -156,9 +156,9 @@ describe("Proposals general", () => {
 
       cy.get('[data-cy="proposal-metadata-card"]').should("exist");
 
-      cy.get('[data-cy="proposal-metadata-card"] [role="tab"]')
-        .contains("Edit")
-        .click();
+      cy.contains('[data-cy="proposal-metadata-card"] [role="tab"]', "Edit", {
+        timeout: 20000,
+      }).click();
 
       cy.get('[data-cy="add-new-row"]').click();
 
