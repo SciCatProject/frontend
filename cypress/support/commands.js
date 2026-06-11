@@ -109,9 +109,10 @@ Cypress.Commands.add("updateFrontendConfig", (updates) => {
     const currentConfig = configResponse.body;
     const mergedData = { ...currentConfig.data, ...updates };
 
+    cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.getToken().then((token) => {
       cy.request({
-        method: "POST",
+        method: "PUT",
         url: lbBaseUrl + "/runtime-config/frontendConfig",
         headers: {
           Authorization: token,
