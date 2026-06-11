@@ -126,6 +126,14 @@ describe("test dataset selectors", () => {
     });
   });
 
+  describe("selectCurrentRelationships", () => {
+    it("should select the relationships from the current dataset", () => {
+      expect(
+        fromDatasetSelectors.selectCurrentAttachments.projector(dataset),
+      ).toEqual(dataset.attachments);
+    });
+  });
+
   describe("selectFilters", () => {
     it("should select the dataset filters", () => {
       const filters = initialDatasetState.filters;
