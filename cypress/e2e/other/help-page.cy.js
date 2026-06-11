@@ -19,6 +19,7 @@ describe("Help configuration", () => {
     });
 
     it("should not show help icon in header when disabled", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
@@ -40,6 +41,7 @@ describe("Help configuration", () => {
     });
 
     it("should show help icons in header when enabled", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
@@ -47,6 +49,7 @@ describe("Help configuration", () => {
     });
 
     it("should navigate to help page and display custom content", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
@@ -73,6 +76,7 @@ describe("Help configuration", () => {
     });
 
     it("should show help icon in header when enabled", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
@@ -80,6 +84,7 @@ describe("Help configuration", () => {
     });
 
     it("should show help icon with default page content", () => {
+      cy.reload();
       cy.visit("/");
       cy.finishedLoading();
 
