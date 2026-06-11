@@ -112,7 +112,7 @@ Cypress.Commands.add("updateFrontendConfig", (updates) => {
     cy.getToken().then((token) => {
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/api/v3/runtime-config/frontendConfig",
+        url: lbBaseUrl + "/runtime-config/frontendConfig",
         headers: {
           Authorization: token,
           "Content-Type": "application/json",

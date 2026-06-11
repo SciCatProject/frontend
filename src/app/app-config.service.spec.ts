@@ -304,9 +304,11 @@ describe("AppConfigService", () => {
         mainMenu: { nonAuthenticatedUser: { files: true } },
         oAuth2Endpoints: [],
         helpEnabled: false,
-        helpHtmlContent: "This is the mockConfigResponses config.override.json help",
+        helpHtmlContent:
+          "This is the mockConfigResponses config.override.json help",
         aboutEnabled: false,
-        aboutHtmlContent: "This is the mockConfigResponses config.override.json about",
+        aboutHtmlContent:
+          "This is the mockConfigResponses config.override.json about",
       },
     };
 
@@ -325,9 +327,11 @@ describe("AppConfigService", () => {
       dateFormat: "yyyy-MM-dd HH:mm",
       timezone: "UTC",
       helpEnabled: false,
-      helpHtmlContent: "This is the mockConfigResponses config.override.json help",
+      helpHtmlContent:
+        "This is the mockConfigResponses config.override.json help",
       aboutEnabled: false,
-      aboutHtmlContent: "This is the mockConfigResponses config.override.json about",
+      aboutHtmlContent:
+        "This is the mockConfigResponses config.override.json about",
     };
 
     const mockHttpGet = (
