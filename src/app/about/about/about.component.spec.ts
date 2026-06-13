@@ -11,6 +11,8 @@ describe("AboutComponent", () => {
 
   const getConfig = () => ({
     facility: "",
+    aboutEnabled: true,
+    aboutHtmlContent: "Default about content",
   });
 
   beforeEach(waitForAsync(() => {
@@ -43,27 +45,36 @@ describe("AboutComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should create about for ESS", () => {
-    const compare = component.aboutText;
-    component.appConfig.facility = "ESS";
-    component.ngOnInit();
+  it("should display htmlContent when aboutEnabled is true", () => {
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.innerHTML).toContain("Default about content");
+  });
 
-    expect(component.aboutText).not.toEqual(compare);
+  it("should create about for ESS", () => {
+    const compare = component.htmlContent;
+    component.appConfig.aboutHtmlContent = "ESS about content";
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    expect(component.htmlContent).not.toEqual(compare);
   });
 
   it("should create about for PSI", () => {
-    const compare = component.aboutText;
-    component.appConfig.facility = "PSI";
+    const compare = component.htmlContent;
+    component.appConfig.aboutHtmlContent = "PSI about content";
     component.ngOnInit();
+    fixture.detectChanges();
 
-    expect(component.aboutText).not.toEqual(compare);
+    expect(component.htmlContent).not.toEqual(compare);
   });
 
   it("should create about for MAX IV", () => {
-    const compare = component.aboutText;
-    component.appConfig.facility = "MAX IV";
+    const compare = component.htmlContent;
+    component.appConfig.aboutHtmlContent = "MAX IV about content";
     component.ngOnInit();
+    fixture.detectChanges();
 
-    expect(component.aboutText).not.toEqual(compare);
+    expect(component.htmlContent).not.toEqual(compare);
   });
 });

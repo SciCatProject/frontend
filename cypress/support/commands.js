@@ -90,6 +90,40 @@ Cypress.Commands.add("removePolicies", () => {
     });
   });
 });
+
+Cypress.Commands.add("getFrontendConfig", () => {
+  return cy.getToken().then((token) => {
+    return cy.request({
+      method: "GET",
+      url: lbBaseUrl + "/runtime-config/frontendConfig",
+      headers: {
+        Authorization: token,
+        Accept: "application/json",
+      },
+    });
+  });
+});
+
+Cypress.Commands.add("updateFrontendConfig", (updates) => {
+  cy.getFrontendConfig().then((configResponse) => {
+    const currentConfig = configResponse.body;
+    const mergedData = { ...currentConfig.data, ...updates };
+
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+    cy.getToken().then((token) => {
+      cy.request({
+        method: "PUT",
+        url: lbBaseUrl + "/runtime-config/frontendConfig",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: { data: mergedData },
+      });
+    });
+  });
+});
 Cypress.Commands.add("finishedLoading", (type) => {
   cy.contains("Loading")
     .should("not.exist")

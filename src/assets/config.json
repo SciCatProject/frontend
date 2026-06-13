@@ -939,5 +939,9 @@
       "publishedData": true,
       "samples": true
     }
-  }
+  },
+  "helpEnabled": false,
+  "helpHtmlContent": "Here you can place your custom help content",
+  "aboutEnabled": false,
+  "aboutHtmlContent": "Here you can place your custom info/about content"
 }

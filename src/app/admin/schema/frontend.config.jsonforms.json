@@ -104,6 +104,10 @@
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
+      "helpEnabled": { "type": "boolean" },
+      "helpHtmlContent": { "type": "string" },
+      "aboutEnabled": { "type": "boolean" },
+      "aboutHtmlContent": { "type": "string" },
       "datafilesActionsEnabled": { "type": "boolean" },
       "statusBannerMessage": { "type": "string" },
       "statusBannerCode": {
@@ -945,6 +949,58 @@
                   {
                     "type": "Control",
                     "scope": "#/properties/mainMenu/properties/authenticatedUser"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Header",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/helpEnabled",
+                    "label": "Help Enabled"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/helpHtmlContent",
+                    "label": "Help HTML Content",
+                    "options": {
+                      "multi": true,
+                      "rows": 5
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/aboutEnabled",
+                    "label": "About Enabled"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/aboutHtmlContent",
+                    "label": "About HTML Content",
+                    "options": {
+                      "multi": true,
+                      "rows": 5
+                    }
                   }
                 ]
               }
