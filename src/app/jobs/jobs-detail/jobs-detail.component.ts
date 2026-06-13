@@ -35,7 +35,7 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
     });
     this.job$.subscribe((job) => {
       this.hasJobResultObject =
-        Object.keys(job.jobResultObject || {}).length > 0;
+        Object.keys(job?.jobResultObject || {}).length > 0;
     });
   }
 
