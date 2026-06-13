@@ -92,7 +92,7 @@ Cypress.Commands.add("removePolicies", () => {
 });
 
 Cypress.Commands.add("getFrontendConfig", () => {
-  cy.getToken().then((token) => {
+  return cy.getToken().then((token) => {
     return cy.request({
       method: "GET",
       url: lbBaseUrl + "/runtime-config/frontendConfig",
