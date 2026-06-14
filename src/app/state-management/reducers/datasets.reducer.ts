@@ -70,13 +70,16 @@ const reducer = createReducer(
 
   on(
     fromActions.fetchOrigDatablocksCompleteAction,
-    (state, { origdatablocks }) => {
+    (state, { origdatablocks, totalCount }) => {
       return {
         ...state,
-        currentSet: {
-          ...state.currentSet,
-          origdatablocks,
-        },
+        currentSet: state.currentSet
+          ? {
+              ...state.currentSet,
+              origdatablocks,
+            }
+          : state.currentSet,
+        origDatablocksCount: totalCount ?? 0,
       };
     },
   ),

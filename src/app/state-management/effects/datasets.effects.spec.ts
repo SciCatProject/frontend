@@ -22,6 +22,7 @@ import {
   DatasetsControllerCreateV3Request,
   DatasetsService,
   OutputDatasetObsoleteDto,
+  OrigdatablocksV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import {
@@ -57,6 +58,7 @@ describe("DatasetEffects", () => {
   let actions: TestObservable;
   let effects: DatasetEffects;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
+  let origdatablocksApi: jasmine.SpyObj<OrigdatablocksV4Service>;
 
   const getConfig = () => ({});
 
@@ -99,12 +101,19 @@ describe("DatasetEffects", () => {
             "datasetsControllerCountV3",
           ]),
         },
+        {
+          provide: OrigdatablocksV4Service,
+          useValue: jasmine.createSpyObj("origdatablocksService", [
+            "origDatablocksV4ControllerFindAllFilesV4",
+          ]),
+        },
         { provide: AppConfigService, useValue: { getConfig } },
       ],
     });
 
     effects = TestBed.inject(DatasetEffects);
     datasetApi = injectedStub(DatasetsService);
+    origdatablocksApi = injectedStub(OrigdatablocksV4Service);
   });
 
   const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
