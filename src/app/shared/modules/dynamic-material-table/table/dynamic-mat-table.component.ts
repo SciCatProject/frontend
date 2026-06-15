@@ -190,6 +190,7 @@ export const expandAnimation = trigger("detailExpand", [
   standalone: false,
   host: {
     "[class.disable-border]": "disableBorder",
+    "[class.live-border]": "realTimeEnabled",
   },
 })
 export class DynamicMatTableComponent<T extends TableRow>

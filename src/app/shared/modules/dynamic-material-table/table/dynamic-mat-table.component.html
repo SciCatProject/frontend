@@ -2,6 +2,17 @@
   class="table-header-controls"
   [class.with-side-filter]="sideFilterCollapsed"
 >
+  <div class="real-time-toggle-wrapper" *ngIf="showRealTimeToggle">
+    <mat-slide-toggle
+      [checked]="realTimeEnabled"
+      (change)="realTimeEnabledChange.emit($event.checked)"
+      matTooltip="When on, the table watches for new or changed datasets and shows a notice when updates arrive. Your current page, sorting, and filters stay until you reload."
+      matTooltipPosition="above"
+      data-cy="real-time-toggle"
+    >
+      Live updates
+    </mat-slide-toggle>
+  </div>
   <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
     <mat-form-field>
       <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
@@ -428,6 +439,7 @@
       [class.row-selection]="
         rowSelectionModel ? rowSelectionModel.isSelected(row) : false
       "
+      [class.row-highlight]="row._id === latestUpdatedId"
       (contextmenu)="onContextMenu($event, null, row)"
     >
     </mat-row>

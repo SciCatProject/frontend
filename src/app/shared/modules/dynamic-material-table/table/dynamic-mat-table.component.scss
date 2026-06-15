@@ -17,6 +17,36 @@
     box-shadow: none;
     border: none;
   }
+
+  &.live-border {
+    position: relative;
+    border-radius: 4px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 2px; // border thickness
+      border-radius: inherit;
+      pointer-events: none;
+      // A bright segment over a faint base; rotating the angle makes the
+      // segment travel from one corner all the way around and repeat.
+      background: conic-gradient(
+        from var(--live-angle),
+        rgba(64, 174, 44, 0.12) 0deg 230deg,
+        rgb(64, 174, 44, 0.75) 310deg 330deg,
+        rgba(64, 174, 44, 0.12) 360deg
+      );
+      // The mask keeps only the border ring, so the gradient never covers
+      // the table content underneath.
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: live-border-travel 10s linear infinite;
+    }
+  }
 }
 
 ::ng-deep .mat-mdc-header-cell .mat-sort-header-content {
@@ -377,6 +407,10 @@ cdk-virtual-scroll-viewport {
     margin-left: 3rem;
   }
 
+  .real-time-toggle-wrapper {
+    margin-left: 1rem;
+  }
+
   .global-search-wrapper {
     padding: 0 20px;
     flex: 1 1 auto;
@@ -447,6 +481,36 @@ cdk-virtual-scroll-viewport {
       border-radius: 50%;
       animation: paginator-range-spin 0.8s linear infinite;
     }
+  }
+}
+
+.row-highlight,
+.row-highlight .mat-mdc-cell {
+  animation: row-highlight-fade 2s ease-out forwards;
+}
+
+// Animating a conic-gradient angle needs a typed custom property,
+@property --live-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes row-highlight-fade {
+  0% {
+    background-color: #a9e49d;
+  }
+  50% {
+    background-color: #defcd8;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes live-border-travel {
+  to {
+    --live-angle: 360deg;
   }
 }
 

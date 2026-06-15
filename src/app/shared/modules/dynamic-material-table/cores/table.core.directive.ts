@@ -75,6 +75,10 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() globalTextSearchPlaceholder = "Search...";
   @Input() selectionIds = [];
   @Input() disableBorder: boolean;
+  @Input() showRealTimeToggle = false;
+  @Input() latestUpdatedId: string | null = null;
+  @Input() realTimeEnabled = false;
+  @Output() realTimeEnabledChange = new EventEmitter<boolean>();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix

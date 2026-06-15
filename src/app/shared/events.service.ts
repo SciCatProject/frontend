@@ -2,7 +2,15 @@ import { Injectable, NgZone } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
-import { distinctUntilChanged, map, Subject, Subscription } from "rxjs";
+import {
+  distinctUntilChanged,
+  map,
+  startWith,
+  Subject,
+  Subscription,
+  switchMap,
+  timer,
+} from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
@@ -11,6 +19,16 @@ export class EventsService {
   private messageSubject = new Subject<Record<string, unknown>>();
 
   message$ = this.messageSubject.asObservable();
+
+  latestUpdatedId$ = this.messageSubject.pipe(
+    switchMap((m) => {
+      const id = (m["data"] as { _id: string })._id;
+      return timer(3000).pipe(
+        map(() => null),
+        startWith(id),
+      );
+    }),
+  );
 
   constructor(
     private ngZone: NgZone,
