@@ -362,15 +362,29 @@ export const testConfig = {
       helpEnabled: false,
     },
     enabledWithCustomText:{
-      helpEnabled: false,
+      helpEnabled: true,
       helpHtmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test Help Content</p>",
+      helpInnerHtmlContent: "SciCat E2E Test Help Content",
     },
     enabledWithDefaultText:{
-      helpEnabled: false,
+      helpEnabled: true,
       helpHtmlContent: "",
     }
-  }
-};
+  },
+  aboutSettings:{
+    disabled:{
+      aboutEnabled: false,
+    },
+    enabledWithCustomText:{
+      aboutEnabled: true,
+      aboutHtmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test About Content</p>",
+      aboutInnerHtmlContent: "SciCat E2E Test About Content",
+    },
+    enabledWithDefaultText:{
+      aboutEnabled: true,
+      aboutHtmlContent: "",
+    }
+  },};
 
 export const defaultDatasetsColumnsList = [
   "PID",

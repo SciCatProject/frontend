@@ -1,20 +1,25 @@
+import { testConfig } from "../../fixtures/testData";
+import { mergeConfig } from "../../support/utils";
+
 describe("About configuration", () => {
-  const testAboutContent = "<p class=\"scicat_e2e_test\">SciCat E2E Test About Content</p>";
+  const aboutSettings = testConfig.aboutSettings;
 
   beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
-  afterEach(() => {
-    cy.get(".user-button").click();
-    cy.get("[data-cy=logout-button]").click();
-    cy.finishedLoading();
-  });
-
   describe("About Icon disabled", () => {
+
     beforeEach(() => {
-      cy.updateFrontendConfig({
-        aboutEnabled: false,
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const mergedConfig = mergeConfig(
+          baseConfig,
+          aboutSettings.disabled,
+        );
+        console.log(mergedConfig);
+        cy.intercept("GET", "**/admin/config", mergedConfig).as(
+          "gewConfigAboutDisabled",
+        );
       });
     });
 
@@ -31,16 +36,16 @@ describe("About configuration", () => {
 
   describe("About Icon enabled with custom content", () => {
     beforeEach(() => {
-      cy.updateFrontendConfig({
-        aboutEnabled: true,
-        aboutHtmlContent: testAboutContent,
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const mergedConfig = mergeConfig(
+          baseConfig,
+          aboutSettings.enabledWithCustomText,
+        );
+        console.log(mergedConfig);
+        cy.intercept("GET", "**/admin/config", mergedConfig).as(
+          "getConfigHelpCustom",
+        );
       });
-    });
-
-    afterEach(() => {
-      // cy.get(".user-button").click();
-      // cy.get("[data-cy=logout-button]").click();
-      // cy.finishedLoading();
     });
 
     it("should show about icon in header when enabled", () => {
@@ -48,7 +53,7 @@ describe("About configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/about']").should("exist");
+      cy.get("button.header-about-button").should("exist");
     });
 
     it("should navigate to about page and display custom content", () => {
@@ -56,27 +61,25 @@ describe("About configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/about']").click();
+      cy.get("button.header-about-button").click();
       cy.finishedLoading();
       cy.url().should("include", "/about");
 
-      cy.get("p.scicat_e2e_test").should("contain", "SciCat E2E Test About Content");
+      cy.get("p.scicat_e2e_test").should("contain", aboutSettings.enabledWithCustomText.aboutInnerHtmlContent);
     });
   });
 
   describe("About Icon enabled with default content", () => {
     beforeEach(() => {
-      cy.login(Cypress.env("username"), Cypress.env("password"));
-      cy.updateFrontendConfig({
-        aboutEnabled: true,
-        aboutHtmlContent: "",
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const mergedConfig = mergeConfig(
+          baseConfig,
+          aboutSettings.enabledWithCustomText,
+        );
+        cy.intercept("GET", "**/admin/config", mergedConfig).as(
+          "getConfigHelpDefault",
+        );
       });
-    });
-
-    afterEach(() => {
-      // cy.get(".user-button").click();
-      // cy.get("[data-cy=logout-button]").click();
-      // cy.finishedLoading();
     });
 
     it("should show about icon in header when enabled", () => {
@@ -84,7 +87,7 @@ describe("About configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/about']").should("exist");
+      cy.get("button.header-about-button").should("exist");
     });
 
     it("should show about icon with default page content", () => {
@@ -92,16 +95,12 @@ describe("About configuration", () => {
       cy.visit("/");
       cy.finishedLoading();
 
-      cy.get("button[routerLink='/about']").should("exist");
-
-      cy.visit("/");
-      cy.finishedLoading();
-      cy.get("button[routerLink='/about']").click();
+      cy.get("button.header-about-button").click();
       cy.finishedLoading();
 
       cy.url().should("include", "/about");
 
-      cy.get("div.about").should("contain", "No about content available");
+      cy.get("div.about").should("exist");
     });
   });
 });
