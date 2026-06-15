@@ -37,6 +37,7 @@ services:
     environment:
       - DOI_USERNAME=${DOI_USERNAME}
       - DOI_PASSWORD=${DOI_PASSWORD}
+      - JOB_CONFIGURATION_FILE=/home/node/app/jobconfig.yaml
     depends_on:
       mongodb:
         condition: service_healthy
