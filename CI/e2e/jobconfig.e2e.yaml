@@ -1,0 +1,111 @@
+configVersion: v1.0 2024-03-01 6f3f38
+jobs:
+  - jobType: all_access
+    create:
+      auth: "#all"
+      actions:
+        - actionType: log
+    update:
+      auth: "#all"
+  - jobType: public_access
+    create:
+      auth: "#datasetPublic"
+    update:
+      auth: "#all"
+  - jobType: authenticated_access
+    create:
+      auth: "#authenticated"
+    update:
+      auth: "#all"
+  - jobType: dataset_access
+    create:
+      auth: "#datasetAccess"
+    update:
+      auth: "#jobOwnerGroup"
+  - jobType: owner_access
+    create:
+      auth: "#datasetOwner"
+    update:
+      auth: "#jobOwnerUser"
+  - jobType: user_access
+    create:
+      auth: user5.1
+    update:
+      auth: user5.1
+  - jobType: group_access
+    create:
+      auth: "@group5"
+    update:
+      auth: "@group5"
+  - jobType: job_admin
+    create:
+      auth: "#jobAdmin"
+    update:
+      auth: "#jobAdmin"
+  - jobType: archive
+    create:
+      auth: "#all"
+      actions:
+        - actionType: validate
+          datasets:
+            datasetlifecycle.archivable:
+              const: true
+    update:
+      auth: "#all"
+  - jobType: retrieve
+    create:
+      auth: "#all"
+      actions:
+        - actionType: validate
+          datasets:
+            datasetlifecycle.retrievable:
+              const: true
+    update:
+      auth: "#all"
+  - jobType: public
+    create:
+      auth: "#all"
+      actions:
+        - actionType: validate
+          datasets:
+            isPublished:
+              const: true
+    update:
+      auth: "#all"
+  - jobType: validate
+    create:
+      auth: admin
+      actions:
+        - actionType: validate
+          request:
+            jobParams.requiredParam:
+              type: string
+            jobParams.arrayOfStrings:
+              type: array
+              items:
+                type: string
+          datasets:
+            datasetlifecycle.archivable:
+              const: true
+    update:
+      auth: admin
+      actions:
+        - actionType: validate
+          request:
+            $:
+              $schema: http://json-schema.org/draft-07/schema#
+              required:
+                - jobResultObject
+              properties:
+                jobResultObject:
+                  type: object
+                  required:
+                    - requiredParam
+                    - arrayOfStrings
+                  properties:
+                    requiredParam:
+                      type: string
+                    arrayOfStrings:
+                      type: array
+                      items:
+                        type: string
