@@ -16,7 +16,6 @@ describe("Help configuration", () => {
           baseConfig,
           helpSettings.disabled,
         );
-        console.log(mergedConfig);
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
           "gewConfigHelpDisabled",
         );
@@ -41,7 +40,6 @@ describe("Help configuration", () => {
           baseConfig,
           helpSettings.enabledWithCustomText,
         );
-        console.log(mergedConfig);
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
           "getConfigHelpCustom",
         );

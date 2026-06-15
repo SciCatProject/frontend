@@ -16,7 +16,6 @@ describe("About configuration", () => {
           baseConfig,
           aboutSettings.disabled,
         );
-        console.log(mergedConfig);
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
           "gewConfigAboutDisabled",
         );
@@ -41,7 +40,6 @@ describe("About configuration", () => {
           baseConfig,
           aboutSettings.enabledWithCustomText,
         );
-        console.log(mergedConfig);
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
           "getConfigHelpCustom",
         );
