@@ -8,4 +8,5 @@ export interface TablePagination {
   pageSize?: number;
   pageSizeOptions?: number[];
   showFirstLastButtons?: boolean;
+  isLoading?: boolean;
 }
