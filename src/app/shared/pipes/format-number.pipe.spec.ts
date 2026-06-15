@@ -96,9 +96,7 @@ describe("FormatNumberPipe", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
       const value = [1, 2, 3];
-      const formatted = pipe.transform(
-        value as unknown as string | number | null | undefined,
-      );
+      const formatted = pipe.transform(value);
       expect(formatted).toEqual("1,2,3");
     });
 
@@ -106,9 +104,7 @@ describe("FormatNumberPipe", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
       const value = [1, 2, "4", null, 3];
-      const formatted = pipe.transform(
-        value as unknown as string | number | null | undefined,
-      );
+      const formatted = pipe.transform(value as unknown as (string | number)[]);
       expect(formatted).toEqual("1,2,4,3");
     });
 
@@ -116,19 +112,22 @@ describe("FormatNumberPipe", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
       const value = BigInt(123);
-      const formatted = pipe.transform(
-        value as unknown as string | number | null | undefined,
-      );
+      const formatted = pipe.transform(value);
       expect(formatted).toEqual("123");
     });
 
-    it("returns empty string when value is a boolean", () => {
+    it("returns string when value is true", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
-      const formatted = pipe.transform(
-        true as unknown as string | number | null | undefined,
-      );
-      expect(formatted).toEqual("");
+      const formatted = pipe.transform(true);
+      expect(formatted).toEqual("true");
+    });
+
+    it("returns string when value is false", () => {
+      setConfig({ enabled: false });
+      const pipe = new FormatNumberPipe(mockConfigService);
+      const formatted = pipe.transform(false);
+      expect(formatted).toEqual("false");
     });
 
     it("returns string when number is a string", () => {
@@ -151,10 +150,16 @@ describe("FormatNumberPipe", () => {
       setConfig({ enabled: false });
       const pipe = new FormatNumberPipe(mockConfigService);
       const value = [1, 2, { value: "4", unit: "unit" }, 3];
-      const formatted = pipe.transform(
-        value as unknown as string | number | null | undefined,
-      );
+      const formatted = pipe.transform(value);
       expect(formatted).toEqual("1,2,4 unit,3");
+    });
+
+    it("returns concatenated string when value is an array with booleans", () => {
+      setConfig({ enabled: false });
+      const pipe = new FormatNumberPipe(mockConfigService);
+      const value = [true, false, { value: true, unit: "" }];
+      const formatted = pipe.transform(value);
+      expect(formatted).toEqual("true,false,true ");
     });
   });
 
@@ -179,6 +184,13 @@ describe("FormatNumberPipe", () => {
       const pipe = new FormatNumberPipe(mockConfigService);
       expect(pipe.transform("abc")).toBe("abc");
       expect(pipe.transform("")).toBe("");
+    });
+
+    it("should return string representation for boolean values", () => {
+      setConfig();
+      const pipe = new FormatNumberPipe(mockConfigService);
+      expect(pipe.transform(true)).toBe("true");
+      expect(pipe.transform(false)).toBe("false");
     });
 
     it("should return string representation for non-finite numbers", () => {

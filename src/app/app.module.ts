@@ -28,6 +28,7 @@ import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
+import { AuthInterceptor } from "shared/interceptors/auth.interceptor";
 import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
 import { CookieService } from "ngx-cookie-service";
@@ -110,6 +111,11 @@ const apiConfigurationFn = (
     {
       provide: HTTP_INTERCEPTORS,
       useClass: SnackbarInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
       multi: true,
     },
     {

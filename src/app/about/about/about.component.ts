@@ -66,7 +66,8 @@ export class AboutComponent implements OnInit {
     } else if (this.facility === "MAX IV") {
       this.aboutText =
         "Scicat allows users to access data and metadata from experiments at MAX IV.";
-      this.accessText = "Users must comply with access policy of instruments";
+      this.accessText =
+        'Users must comply with access policy of instruments and MAX IV <a href="https://www.maxiv.lu.se/user-access/practical-information/user-policies/">Experimental data policy</a>.';
       this.termsText = "Data can be used freely under the CC-BY-4.0 licence";
     }
   }
