@@ -357,6 +357,19 @@ export const testConfig = {
       conditions: [],
     },
   },
+  helpSettings:{
+    disabled:{
+      helpEnabled: false,
+    },
+    enabledWithCustomText:{
+      helpEnabled: false,
+      helpHtmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test Help Content</p>",
+    },
+    enabledWithDefaultText:{
+      helpEnabled: false,
+      helpHtmlContent: "",
+    }
+  }
 };
 
 export const defaultDatasetsColumnsList = [

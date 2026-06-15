@@ -1,5 +1,8 @@
+import { testConfig } from "../../fixtures/testData";
+import { mergeConfig } from "../../support/utils";
+
 describe("Help configuration", () => {
-  const testHelpContent = "<p class=\"scicat_e2e_test\">SciCat E2E Test Help Content</p>";
+  const helpSettings = testConfig.helpSettings;
 
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
@@ -13,9 +16,18 @@ describe("Help configuration", () => {
 
   describe("Help Icon disabled", () => {
     beforeEach(() => {
-      cy.updateFrontendConfig({
-        helpEnabled: false,
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const mergedConfig = mergeConfig(
+          baseConfig,
+          helpSettings.disabled,
+        );
+        cy.intercept("GET", "**/admin/config", mergedConfig).as(
+          "getFrontendConfig",
+        );
       });
+      // cy.updateFrontendConfig({
+      //   helpEnabled: false,
+      // });
     });
 
     it("help settings are correct (enabled should be set to false)", () => {
@@ -23,7 +35,6 @@ describe("Help configuration", () => {
       // Fetch the runtime config from the BE endpoint
       cy.getFrontendConfig().then((response) => {
         // Access the response body, status, etc.
-        console.log(response.body); // The JSON response
         expect(response.status).to.eq(200);
         expect(response.body).to.have.property("data");
 
@@ -45,10 +56,20 @@ describe("Help configuration", () => {
 
   describe("Help Icon enabled with custom content", () => {
     beforeEach(() => {
-      cy.updateFrontendConfig({
-        helpEnabled: true,
-        helpHtmlContent: testHelpContent,
+      // cy.updateFrontendConfig({
+      //   helpEnabled: true,
+      //   helpHtmlContent: testHelpContent,
+      // });
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const mergedConfig = mergeConfig(
+          baseConfig,
+          helpSettings.enabledWithCustomText,
+        );
+        cy.intercept("GET", "**/admin/config", mergedConfig).as(
+          "getFrontendConfig",
+        );
       });
+
     });
 
     afterEach(() => {
@@ -94,9 +115,18 @@ describe("Help configuration", () => {
 
   describe("Help Icon enabled with default content", () => {
     beforeEach(() => {
-      cy.updateFrontendConfig({
-        helpEnabled: true,
-        helpHtmlContent: "",
+      // cy.updateFrontendConfig({
+      //   helpEnabled: true,
+      //   helpHtmlContent: "",
+      // });
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const mergedConfig = mergeConfig(
+          baseConfig,
+          helpSettings.enabledWithDefaultText,
+        );
+        cy.intercept("GET", "**/admin/config", mergedConfig).as(
+          "getFrontendConfig",
+        );
       });
     });
 
