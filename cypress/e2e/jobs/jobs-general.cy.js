@@ -7,7 +7,7 @@ describe("Jobs general", () => {
       type: "raw",
       dataFileSize: "small",
       datasetName: "Jobs Dataset",
-      pid: "scicat_testing/6ED35C17-EDD4-4CD4-B917-4E49698F7532",
+      pid: "20.500.12269/6ED35C17-EDD4-4CD4-B917-4E49698F7532",
       isPublished: true,
     });
   });
