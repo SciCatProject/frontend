@@ -142,7 +142,6 @@
           class="header-help-button"
         >
           <mat-icon color="primary"> help </mat-icon>
-          <span class="large-screen-text">Help</span>
         </button>
       </h6>
     </span>
@@ -200,13 +199,13 @@
       <h6>
         <button
           mat-icon-button
+          aria-label="Sign in to your account"
           (click)="login()"
           [matTooltip]="'Sign in to your account'"
           [matTooltipShowDelay]="500"
           data-cy="login-button"
         >
           <mat-icon color="primary"> account_circle </mat-icon>
-          <span class="large-screen-text">Sign in</span>
         </button>
       </h6>
     </ng-template>
