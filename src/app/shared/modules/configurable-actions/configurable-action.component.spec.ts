@@ -79,7 +79,7 @@ describe("1000: ConfigurableActionComponent", () => {
 
   beforeAll(() => {
     htmlForm = document.createElement("form");
-    (htmlForm as HTMLFormElement).submit = () => { };
+    (htmlForm as HTMLFormElement).submit = () => {};
     htmlInput = document.createElement("input");
   });
 
@@ -1089,8 +1089,13 @@ describe("1000: ConfigurableActionComponent", () => {
     const requestOptions = opts as RequestInit;
     expect(requestOptions.method).toBe("POST");
 
-    const body = JSON.parse(String(requestOptions.body)) as Record<string, unknown>;
-    expect(body["dataset"]).toBe(mockActionItemsDatafilesNofiles.datasets[0].pid);
+    const body = JSON.parse(String(requestOptions.body)) as Record<
+      string,
+      unknown
+    >;
+    expect(body["dataset"]).toBe(
+      mockActionItemsDatafilesNofiles.datasets[0].pid,
+    );
     expect(body["reason"]).toBe("integration-test");
   });
 
