@@ -60,7 +60,8 @@ describe("HelpComponent", () => {
 
   it("should update htmlContent when helpHtmlContent changes", () => {
     const compare = component.htmlContent;
-    component.appConfig.helpSettings.htmlContent = "<p>Updated help content</p>";
+    component.appConfig.helpSettings.htmlContent =
+      "<p>Updated help content</p>";
     component.ngOnInit();
     fixture.detectChanges();
     expect(component.htmlContent).not.toEqual(compare);
