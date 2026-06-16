@@ -104,8 +104,8 @@ export class ConfigurableActionComponent
   private variableHandler(selector: unknown): unknown {
     if (typeof selector !== "string") return selector;
 
-    const processedSelector = this.interpolateCrossReferences(selector);
-
+    let processedSelector = this.interpolateCrossReferences(selector);
+    processedSelector = this.parseVariableTokens(processedSelector);
     const dynamicKey = Object.keys(this.actionItems).find((key) =>
       processedSelector.startsWith(`#${key}`),
     );
@@ -129,6 +129,19 @@ export class ConfigurableActionComponent
     if (selector === `#${dynamicKey}`) return this.actionItems[dynamicKey];
     const path = selector.slice(dynamicKey.length + 2);
     return _.get(this.actionItems[dynamicKey], path);
+  }
+
+  private parseVariableTokens(selector: string): string {
+    if (!selector.includes("#date_format")) return selector;
+
+    return selector.replace(
+      /#date_format\(([^,]+),\s*([^)]+)\)/g,
+      (_, dateInput, format) => {
+        const date = new Date(dateInput.trim());
+        if (isNaN(date.getTime())) return "";
+        return this.datePipe.transform(date, format.trim()) || "";
+      },
+    );
   }
 
   private fieldMatch(selector: string): unknown {
@@ -223,17 +236,6 @@ export class ConfigurableActionComponent
       /#MaxDownloadableSize\((.*?)\)/g,
       "$1 <= context.maxSize",
     );
-
-    if (expr.includes("#date_format")) {
-      expr = expr.replace(
-        /#date_format\(([^,]+),\\s*([^)]+)\)/g,
-        (_, dateInput, format) => {
-          const date = new Date(dateInput.trim());
-          if (isNaN(date.getTime())) return "''";
-          return `'${this.datePipe.transform(date, format.trim())}'`;
-        },
-      );
-    }
 
     return expr;
   }
