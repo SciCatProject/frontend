@@ -21,7 +21,7 @@ export interface DynamicDialogData {
     options: DialogOptionData[];
   };
   additionalFields?: { [key: string]: DynamicField };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 @Component({

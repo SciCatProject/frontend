@@ -39,7 +39,7 @@
           [(ngModel)]="data[field.key]" [name]="field.key"
           [required]="field.value.required">
 
-        <mat-error>This field is required</mat-error>
+        <mat-error>The field {{ field.value.label }} is required</mat-error>
       </mat-form-field>
     </div>
   </form>

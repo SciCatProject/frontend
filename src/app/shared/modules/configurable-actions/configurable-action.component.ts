@@ -400,9 +400,11 @@ export class ConfigurableActionComponent
   }
 
   private typeDialog() {
+    const dialogData = this.prepareDialogData();
+    if (!dialogData) return;
     const dialogRef = this.dialog.open(DialogComponent, {
       width: this.actionConfig.dialog?.width || "450px",
-      data: this.prepareDialogData(),
+      data: dialogData,
     });
 
     dialogRef
@@ -419,14 +421,23 @@ export class ConfigurableActionComponent
         });
         this.variables["dialog"] = dialogRes;
         if (this.actionConfig.onSuccess)
-          this.executeNextStep(this.actionConfig.onSuccess);
+          try {
+            this.executeNextStep(this.actionConfig.onSuccess);
+          } catch (error) {
+            console.error("Configurable action error on dialog success", error);
+          }
       });
   }
 
   private executeNextStep(nextStep: ActionType) {
-    if (nextStep === "xhr") this.typeXhr();
-    if (nextStep === "form") this.typeForm();
-    if (nextStep === "json-download") this.typeJsonToDownload();
+    try {
+      if (nextStep === "xhr") this.typeXhr();
+      if (nextStep === "form") this.typeForm();
+      if (nextStep === "json-download") this.typeJsonToDownload();
+      else console.warn("Unsupported onSuccess action type:", nextStep);
+    } catch (error) {
+      console.error("Configurable action error on execute next step", error);
+    }
   }
 
   private addInputElement(name: string, value: string): HTMLInputElement {
@@ -437,8 +448,9 @@ export class ConfigurableActionComponent
     return input;
   }
 
-  private prepareDialogData(): DynamicDialogData {
-    const conf = this.actionConfig.dialog!;
+  private prepareDialogData(): DynamicDialogData | null {
+    const conf = this.actionConfig.dialog;
+    if (!conf) return null;
     const data: DynamicDialogData = {
       title: conf.title || "Confirm",
       question: conf.description || "",

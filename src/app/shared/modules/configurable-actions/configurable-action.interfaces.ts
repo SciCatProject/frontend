@@ -32,8 +32,8 @@ export interface ActionConfig {
   payload?: string;
   filename?: string;
   hidden?: string;
-  variables?: Record<string, string>;
   inputs?: Record<string, string>;
+  variables?: Record<string, unknown>;
   headers?: Record<string, string>;
   onSuccess?: ActionType;
   dialog?: DialogConfig;
