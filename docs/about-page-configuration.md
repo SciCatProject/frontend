@@ -196,7 +196,7 @@ if (!config.aboutHtmlContent) {
 
 **Result**:
 - About icon is hidden from header
-- Direct access to `/about` shows "Info page is disabled"
+- If user appends `/about` the main URL, the FE will show "Info page is disabled"
 
 ### Best Practices for Content
 

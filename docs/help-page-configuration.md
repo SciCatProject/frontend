@@ -55,9 +55,11 @@ The Help page serves as:
 
 ### Configuration Locations
 
-#### Primary Configuration File
+#### Reference Configuration File
 
-The frontend ships with a local configuration file, which is used for testing and reference
+The frontend ships with a reference configuration file `src/assets/config.json`, 
+which is used only for testing and as a reference.
+The help can be configured by modifying the `helpSettings` section.
 
 **File**: `src/assets/config.json`
 
@@ -70,12 +72,15 @@ The frontend ships with a local configuration file, which is used for testing an
 }
 ```
 
-#### Backend Configuration
+#### Runtime Configuration
 
 Most deployments rely on the backend to provide the frontend configuration.
-This configuration takes priority.
+The FE make a GET call to the backend to retrieve its configuration.
+This configuration must be configured in the BE deployment
 
 **Endpoint**: `GET /api/v3/runtime-config/frontendConfig`
+**Legacy Endpoint**: `GET /api/v3/admin/config`
+
 
 ### Admin Interface
 
@@ -102,16 +107,11 @@ export interface AppConfigInterface {
 
 ### Default Values
 
-If not specified in configuration:
+If help settings are not specified in configuration, the FE use the follow default values:
 
 ```typescript
-// Applied in AppConfigService.loadAppConfig()
-if (!config.helpSettings) {
-  config.helpSettings = {
-    enabled: false,
-    htmlContent: 'Here goes your SciCat Help page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
-  };
-}
+  enabled: false,
+  htmlContent: 'Here goes your SciCat Help page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
 ```
 
 ---
@@ -175,7 +175,7 @@ if (!config.helpSettings) {
 {
   "helpSettings": {
     "enabled": true,
-    "htmlContent": "<h2>Feature Tutorials</h2><div style='display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;'><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Datasets</h4><p>Browse and search for datasets. Use filters to narrow down results.</p></div><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Shopping Cart</h4><p>Add files to your cart and download them in a single ZIP archive.</p></div><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Metadata</h4><p>View and edit scientific metadata for your datasets.</p></div></div>"
+    "htmlContent": "<h2>Feature Tutorials</h2><div style='display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;'><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Datasets</h4><p>Browse and search for datasets. Use filters to narrow down results.</p></div><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Selection</h4><p>Add files to your cart and download them in a single ZIP archive.</p></div><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Metadata</h4><p>View and edit scientific metadata for your datasets.</p></div></div>"
   }
 }
 ```
@@ -243,11 +243,12 @@ console.log(config.helpSettings?.enabled); // Should be true
 **Solutions**:
 
 1. **Verify configuration**
+   Configuration should contain the following:
    ```json
-   // In config.json or config.override.json
    {
      "helpSettings": {
-       "enabled": true
+       "enabled": true,
+       "htmlContent": "Your help here"
      }
    }
    ```
@@ -285,25 +286,12 @@ console.log(config.helpSettings?.enabled); // Should be true
 - Not showing custom HTML content
 
 **Diagnosis**:
-
-```typescript
-const config = this.appConfigService.getConfig();
-console.log(config.helpSettings?.htmlContent); // Should contain your HTML
-```
+- Retrieve your FE config file
+- Check the value for entry `helpSettings.htmlContent`
 
 **Solutions**:
 
 1. **Verify configuration**
-   ```json
-   {
-     "helpSettings": {
-       "enabled": true,
-       "htmlContent": "<p>Your help content here</p>"
-     }
-   }
-   ```
-
-2. **Check configuration**
    - Open browser console
    - Use backend swagger API to retrieve frontend configuration through the runtime-config/frontendConfig endpoint
    - Verify that option `helpSettings.htmlContent` is set to the correct HTML string
@@ -317,7 +305,7 @@ console.log(config.helpSettings?.htmlContent); // Should contain your HTML
 | Forgetting to enable the feature | Set `helpSettings.enabled: true` |
 | Using invalid JSON in config | Validate JSON syntax |
 | Using JavaScript in HTML content | Use static HTML only |
-| Assuming images are in the right location | Use `/assets/images/` path |
+| Assuming images are in the correct location | Use `/assets/images/` path |
 | Not restarting app after config changes | Restart required |
 | Typo in configuration keys | Check key names carefully |
 | Expecting Angular directives to work in HTML content | Use standard HTML |
