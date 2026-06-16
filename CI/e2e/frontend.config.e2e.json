@@ -299,6 +299,91 @@
   "datasetDetailsActions": [],
   "selectionActionsEnabled": true,
   "selectionActions": [],
+  "publishedDataActionsEnabled": true,
+  "publishedDataActions": [
+    {
+      "id": "private",
+      "description": "This action makes a published data record private.",
+      "order": 1,
+      "label": "Private",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method": "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/private",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"published\")",
+      "authorization": "#datasetOwner || #userIsAdmin",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      },
+      "alertMessage": "Are you sure you want to make this published data record private?"
+    },
+    {
+      "id": "publish",
+      "description": "This publishes the record locally.",
+      "order": 1,
+      "label": "publish",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method": "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/publish",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == 'private')",
+      "authorization": "#datasetOwner || #userIsAdmin",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      },
+      "alertMessage": "Are you sure you want to publish this record locally?"
+    },
+    {
+      "id": "register",
+      "description": "This action register the published data record with datacite.",
+      "order": 2,
+      "label": "Register",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method": "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/register",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == 'published')",
+      "authorization": "#datasetOwner && #userIsAdmin",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "alertMessage": "Are you sure you want to register this published data with DataCite? No further changes can be made after this action."
+    },
+    {
+      "id": "amend",
+      "description": "This action amend the published data record.",
+      "order": 3,
+      "label": "Amend",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method": "POST",
+      "url": "/api/v4/publisheddata/{{ @doi }}/amend",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == 'registered')",
+      "authorization": "true",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "alertMessage": "Are you sure you want to amend this published data record?"
+    }
+  ],
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",

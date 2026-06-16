@@ -203,9 +203,14 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="status"]').contains("private");
 
-      cy.get('[data-cy="publishButton"]').click();
+      cy.contains("button", "publish").click();
 
-      cy.get("simple-snack-bar").should("contain", "Publishing Failed.");
+      cy.contains("mat-dialog-container button", "Confirm").click();
+
+      cy.get("simple-snack-bar", { timeout: 10000 }).should(
+        "contain",
+        "Publishing Failed.",
+      );
     });
 
     it("admins should be able to edit their private published data", () => {
@@ -360,9 +365,11 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="status"]').contains("private");
 
-      cy.get('[data-cy="publishButton"]').click();
+      cy.contains("button", "publish").click();
 
-      cy.get('[data-cy="status"]').contains("public");
+      cy.contains("mat-dialog-container button", "Confirm").click();
+
+      cy.get('[data-cy="status"]').contains("public", { timeout: 15000 });
     });
 
     it("should not be able to edit dataset list on a published data that is public", () => {
@@ -428,7 +435,9 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="status"]').contains("public");
 
-      cy.get('[data-cy="registerButton"]').click();
+      cy.contains("button", "Register").click();
+
+      cy.contains("mat-dialog-container button", "Confirm").click();
 
       cy.get('[data-cy="status"]').contains("registered");
     });
@@ -517,9 +526,11 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="status"]').contains("private");
 
-      cy.get('[data-cy="publishButton"]').click();
+      cy.contains("button", "publish").click();
 
-      cy.get('[data-cy="status"]').contains("public");
+      cy.contains("mat-dialog-container button", "Confirm").click();
+
+      cy.get('[data-cy="status"]').contains("public", { timeout: 15000 });
 
       cy.get("#editBtn").should("not.exist");
     });
