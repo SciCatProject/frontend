@@ -26,16 +26,16 @@
       content: "";
       position: absolute;
       inset: 0;
-      padding: 2px; // border thickness
+      padding: 2px;
       border-radius: inherit;
       pointer-events: none;
       // A bright segment over a faint base; rotating the angle makes the
       // segment travel from one corner all the way around and repeat.
       background: conic-gradient(
         from var(--live-angle),
-        rgba(64, 174, 44, 0.12) 0deg 230deg,
-        rgb(64, 174, 44, 0.75) 310deg 330deg,
-        rgba(64, 174, 44, 0.12) 360deg
+        rgba(64, 174, 44, 0.27) 0deg 200deg,
+        rgba(64, 174, 44, 0.9) 320deg 340deg,
+        rgba(64, 174, 44, 0.27) 360deg
       );
       // The mask keeps only the border ring, so the gradient never covers
       // the table content underneath.
