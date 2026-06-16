@@ -292,7 +292,7 @@ export class ConfigurableActionComponent
     return _.some(datasets, (d) => userGroups.includes(d.ownerGroup));
   }
 
-  buildDependenciesGraph(
+  private buildDependenciesGraph(
     variables: Record<string, unknown>,
   ): Record<string, Set<string>> {
     /**

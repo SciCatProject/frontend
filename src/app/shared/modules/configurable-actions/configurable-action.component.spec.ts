@@ -1000,7 +1000,7 @@ describe("1000: ConfigurableActionComponent", () => {
       copy: "@first",
     };
 
-    const graph = component.buildDependenciesGraph(variables);
+    const graph = component["buildDependenciesGraph"](variables);
 
     expect(graph["files"]).toEqual(new Set<string>());
     expect(graph["first"]).toEqual(new Set<string>(["files"]));
@@ -1014,7 +1014,7 @@ describe("1000: ConfigurableActionComponent", () => {
       c: "@a",
     };
 
-    const graph = component.buildDependenciesGraph(variables);
+    const graph = component["buildDependenciesGraph"](variables);
 
     expect(graph["a"]).toEqual(new Set<string>(["b"]));
     expect(graph["b"]).toEqual(new Set<string>(["c"]));
