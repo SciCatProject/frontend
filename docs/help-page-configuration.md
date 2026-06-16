@@ -50,8 +50,8 @@ The Help page serves as:
 
 | Key | Type | Required | Default | Description |
 |-----|------|----------|---------|-------------|
-| `helpEnabled` | boolean | No | `false` | Enables/disables the Help page feature |
-| `helpHtmlContent` | string | No | Default message | HTML content to display on the Help page |
+| `helpSettings.enabled` | boolean | No | `false` | Enables/disables the Help page feature |
+| `helpSettings.htmlContent` | string | No | Default message | HTML content to display on the Help page |
 
 ### Configuration Locations
 
@@ -63,8 +63,10 @@ The frontend ships with a local configuration file, which is used for testing an
 
 ```json
 {
-  "helpEnabled": true,
-  "helpHtmlContent": "<h1>Help Center</h1><p>Get assistance here</p>"
+  "helpSettings": {
+    "enabled": true,
+    "htmlContent": "<h1>Help Center</h1><p>Get assistance here</p>"
+  }
 }
 ```
 
@@ -80,17 +82,21 @@ This configuration takes priority.
 **Path**: Admin Settings > Frontend Config > Header section
 
 The admin UI provides form controls:
-- **Help Enabled**: Toggle switch for `helpEnabled`
-- **Help HTML Content**: Textarea (5 rows) for `helpHtmlContent`
+- **Help Enabled**: Toggle switch for `helpSettings.enabled`
+- **Help HTML Content**: Textarea (5 rows) for `helpSettings.htmlContent`
 
 ### TypeScript Interface
 
 **File**: `src/app/app-config.service.ts`
 
 ```typescript
+export interface HelpSettings {
+  enabled?: boolean;
+  htmlContent?: string;
+}
+
 export interface AppConfigInterface {
-  helpEnabled?: boolean;
-  helpHtmlContent?: string;
+  helpSettings?: HelpSettings;
 }
 ```
 
@@ -100,13 +106,11 @@ If not specified in configuration:
 
 ```typescript
 // Applied in AppConfigService.loadAppConfig()
-if (config.helpEnabled == null) {
-  config.helpEnabled = false;
-}
-
-if (!config.helpHtmlContent) {
-  config.helpHtmlContent = 
-    'Here goes your SciCat Help page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>';
+if (!config.helpSettings) {
+  config.helpSettings = {
+    enabled: false,
+    htmlContent: 'Here goes your SciCat Help page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
+  };
 }
 ```
 
@@ -119,7 +123,9 @@ if (!config.helpHtmlContent) {
 **Configuration**:
 ```json
 {
-  "helpEnabled": true
+  "helpSettings": {
+    "enabled": true
+  }
 }
 ```
 
@@ -135,8 +141,10 @@ if (!config.helpHtmlContent) {
 **Configuration**:
 ```json
 {
-  "helpEnabled": true,
-  "helpHtmlContent": "<h1>User Guide</h1><p>Welcome to our data catalog.</p>"
+  "helpSettings": {
+    "enabled": true,
+    "htmlContent": "<h1>User Guide</h1><p>Welcome to our data catalog.</p>"
+  }
 }
 ```
 
@@ -151,8 +159,10 @@ if (!config.helpHtmlContent) {
 **Configuration**:
 ```json
 {
-  "helpEnabled": true,
-  "helpHtmlContent": "<div style='padding: 20px;'><h2>SciCat Help Center</h2><section style='margin-bottom: 30px;'><h3>Getting Started</h3><p>New to SciCat? Follow these steps to begin:</p><ol><li><strong>Login</strong> with your facility credentials</li><li><strong>Explore</strong> datasets using the search interface</li><li><strong>View</strong> dataset details by clicking on any result</li><li><strong>Download</strong> files individually or in bulk</li></ol></section><section style='margin-bottom: 30px;'><h3>Searching Datasets</h3><p>Use the search page to find datasets by:</p><ul><li>Dataset name or PID</li><li>Owner or group</li><li>Creation date range</li><li>Scientific metadata</li></ul></section><section><h3>Need More Help?</h3><p>Contact our support team:</p><p><strong>Email:</strong> <a href='mailto:support@facility.org'>support@facility.org</a></p><p><strong>Phone:</strong> +1 (555) 123-4567</p></section></div>"
+  "helpSettings": {
+    "enabled": true,
+    "htmlContent": "<div style='padding: 20px;'><h2>SciCat Help Center</h2><section style='margin-bottom: 30px;'><h3>Getting Started</h3><p>New to SciCat? Follow these steps to begin:</p><ol><li><strong>Login</strong> with your facility credentials</li><li><strong>Explore</strong> datasets using the search interface</li><li><strong>View</strong> dataset details by clicking on any result</li><li><strong>Download</strong> files individually or in bulk</li></ol></section><section style='margin-bottom: 30px;'><h3>Searching Datasets</h3><p>Use the search page to find datasets by:</p><ul><li>Dataset name or PID</li><li>Owner or group</li><li>Creation date range</li><li>Scientific metadata</li></ul></section><section><h3>Need More Help?</h3><p>Contact our support team:</p><p><strong>Email:</strong> <a href='mailto:support@facility.org'>support@facility.org</a></p><p><strong>Phone:</strong> +1 (555) 123-4567</p></section></div>"
+  }
 }
 ```
 
@@ -163,8 +173,10 @@ if (!config.helpHtmlContent) {
 **Configuration**:
 ```json
 {
-  "helpEnabled": true,
-  "helpHtmlContent": "<h2>Feature Tutorials</h2><div style='display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;'><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Datasets</h4><p>Browse and search for datasets. Use filters to narrow down results.</p></div><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Shopping Cart</h4><p>Add files to your cart and download them in a single ZIP archive.</p></div><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Metadata</h4><p>View and edit scientific metadata for your datasets.</p></div></div>"
+  "helpSettings": {
+    "enabled": true,
+    "htmlContent": "<h2>Feature Tutorials</h2><div style='display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;'><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Datasets</h4><p>Browse and search for datasets. Use filters to narrow down results.</p></div><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Shopping Cart</h4><p>Add files to your cart and download them in a single ZIP archive.</p></div><div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'><h4>Metadata</h4><p>View and edit scientific metadata for your datasets.</p></div></div>"
+  }
 }
 ```
 
@@ -175,8 +187,10 @@ if (!config.helpHtmlContent) {
 **Configuration**:
 ```json
 {
-  "helpEnabled": true,
-  "helpHtmlContent": "<h2>Help Resources</h2><p>Explore these resources to learn more about using SciCat:</p><ul style='list-style: none; padding: 0;'><li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'><strong><a href='https://docs.scicatproject.org/user-guide' target='_blank' rel='noopener noreferrer'>User Guide</a></strong><br><span style='color: #666;'>Complete user documentation</span></li><li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'><strong><a href='https://docs.scicatproject.org/api' target='_blank' rel='noopener noreferrer'>API Documentation</a></strong><br><span style='color: #666;'>REST API reference</span></li><li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'><strong><a href='https://forum.scicatproject.org' target='_blank' rel='noopener noreferrer'>Community Forum</a></strong><br><span style='color: #666;'>Ask questions and share knowledge</span></li><li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'><strong><a href='https://github.com/scicatproject/scicat' target='_blank' rel='noopener noreferrer'>GitHub Repository</a></strong><br><span style='color: #666;'>Source code and issue tracking</span></li></ul>"
+  "helpSettings": {
+    "enabled": true,
+    "htmlContent": "<h2>Help Resources</h2><p>Explore these resources to learn more about using SciCat:</p><ul style='list-style: none; padding: 0;'><li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'><strong><a href='https://docs.scicatproject.org/user-guide' target='_blank' rel='noopener noreferrer'>User Guide</a></strong><br><span style='color: #666;'>Complete user documentation</span></li><li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'><strong><a href='https://docs.scicatproject.org/api' target='_blank' rel='noopener noreferrer'>API Documentation</a></strong><br><span style='color: #666;'>REST API reference</span></li><li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'><strong><a href='https://forum.scicatproject.org' target='_blank' rel='noopener noreferrer'>Community Forum</a></strong><br><span style='color: #666;'>Ask questions and share knowledge</span></li><li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'><strong><a href='https://github.com/scicatproject/scicat' target='_blank' rel='noopener noreferrer'>GitHub Repository</a></strong><br><span style='color: #666;'>Source code and issue tracking</span></li></ul>"
+  }
 }
 ```
 
@@ -187,7 +201,9 @@ if (!config.helpHtmlContent) {
 **Configuration**:
 ```json
 {
-  "helpEnabled": false
+  "helpSettings": {
+    "enabled": false
+  }
 }
 ```
 
@@ -221,7 +237,7 @@ if (!config.helpHtmlContent) {
 ```typescript
 // Check if feature is enabled
 const config = this.appConfigService.getConfig();
-console.log(config.helpEnabled); // Should be true
+console.log(config.helpSettings?.enabled); // Should be true
 ```
 
 **Solutions**:
@@ -230,14 +246,16 @@ console.log(config.helpEnabled); // Should be true
    ```json
    // In config.json or config.override.json
    {
-     "helpEnabled": true
+     "helpSettings": {
+       "enabled": true
+     }
    }
    ```
 
 2. **Check configuration**
    - Open browser console
    - Use backend swagger API to retrieve frontend configuration through the runtime-config/frontendConfig endpoint
-   - Verify that option `htlpEnabled`  is set to true
+   - Verify that option `helpSettings.enabled` is set to true
 
 ---
 
@@ -247,12 +265,14 @@ console.log(config.helpEnabled); // Should be true
 - Icon is visible but page shows disabled message
 - Or: Direct navigation to `/help` shows disabled message
 
-**Cause**: `helpEnabled` is `false` or `null`
+**Cause**: `helpSettings.enabled` is `false` or `null`
 
 **Solution**:
 ```json
 {
-  "helpEnabled": true
+  "helpSettings": {
+    "enabled": true
+  }
 }
 ```
 
@@ -268,7 +288,7 @@ console.log(config.helpEnabled); // Should be true
 
 ```typescript
 const config = this.appConfigService.getConfig();
-console.log(config.helpHtmlContent); // Should contain your HTML
+console.log(config.helpSettings?.htmlContent); // Should contain your HTML
 ```
 
 **Solutions**:
@@ -276,15 +296,17 @@ console.log(config.helpHtmlContent); // Should contain your HTML
 1. **Verify configuration**
    ```json
    {
-     "helpEnabled": true,
-     "helpHtmlContent": "<p>Your help content here</p>"
+     "helpSettings": {
+       "enabled": true,
+       "htmlContent": "<p>Your help content here</p>"
+     }
    }
    ```
 
 2. **Check configuration**
    - Open browser console
    - Use backend swagger API to retrieve frontend configuration through the runtime-config/frontendConfig endpoint
-   - Verify that option `helpHtmlContent`  is set to the correct HMTL string
+   - Verify that option `helpSettings.htmlContent` is set to the correct HTML string
 
 ---
 
@@ -292,7 +314,7 @@ console.log(config.helpHtmlContent); // Should contain your HTML
 
 | Pitfall | Solution |
 |---------|----------|
-| Forgetting to enable the feature | Set `helpEnabled: true` |
+| Forgetting to enable the feature | Set `helpSettings.enabled: true` |
 | Using invalid JSON in config | Validate JSON syntax |
 | Using JavaScript in HTML content | Use static HTML only |
 | Assuming images are in the right location | Use `/assets/images/` path |
@@ -319,7 +341,7 @@ console.log(config.helpHtmlContent); // Should contain your HTML
 
 ### Q: How do I completely remove the Help page feature?
 
-**A**: Set `helpEnabled: false` or simply don't include the configuration keys. The feature is disabled by default.
+**A**: Set `helpSettings.enabled: false` or simply don't include the configuration keys. The feature is disabled by default.
 
 ### Q: Can I use Angular components or directives in the HTML content?
 
@@ -368,12 +390,12 @@ constructor(private appConfigService: AppConfigService) {}
 
 ngOnInit() {
   const config = this.appConfigService.getConfig();
-  const isEnabled = config.helpEnabled;
-  const content = config.helpHtmlContent;
+  const isEnabled = config.helpSettings?.enabled;
+  const content = config.helpSettings?.htmlContent;
 }
 ```
 
-### Q: What's the difference between `helpHtmlContent` being empty string vs. undefined?
+### Q: What's the difference between `helpSettings.htmlContent` being empty string vs. undefined?
 
 **A**: 
 - `undefined` or `null`: Falls back to default content
@@ -400,7 +422,10 @@ ngOnInit() {
 
 ```json
 {
-  "helpHtmlContent": "<p>Contact: support@example.com &copy; 2024 | &reg; My Facility</p>"
+  "helpSettings": {
+    "enabled": true,
+    "htmlContent": "<p>Contact: support@example.com &copy; 2024 | &reg; My Facility</p>"
+  }
 }
 ```
 
@@ -439,7 +464,10 @@ ngOnInit() {
 
 ```json
 {
-  "helpHtmlContent": "<img src='/assets/images/screenshot1.png' alt='Search interface' style='max-width: 100%; margin: 20px 0; border: 1px solid #ddd; border-radius: 4px;'>"
+  "helpSettings": {
+    "enabled": true,
+    "htmlContent": "<img src='/assets/images/screenshot1.png' alt='Search interface' style='max-width: 100%; margin: 20px 0; border: 1px solid #ddd; border-radius: 4px;'>"
+  }
 }
 ```
 
@@ -447,7 +475,10 @@ ngOnInit() {
 
 ```json
 {
-  "helpHtmlContent": "<figure style='text-align: center; margin: 20px 0;'><img src='/assets/images/screenshot1.png' alt='Search interface' style='max-width: 100%; border: 1px solid #ddd; border-radius: 4px;'><figcaption style='margin-top: 10px; font-style: italic; color: #666;'>Figure 1: Dataset search interface</figcaption></figure>"
+  "helpSettings": {
+    "enabled": true,
+    "htmlContent": "<figure style='text-align: center; margin: 20px 0;'><img src='/assets/images/screenshot1.png' alt='Search interface' style='max-width: 100%; border: 1px solid #ddd; border-radius: 4px;'><figcaption style='margin-top: 10px; font-style: italic; color: #666;'>Figure 1: Dataset search interface</figcaption></figure>"
+  }
 }
 ```
 

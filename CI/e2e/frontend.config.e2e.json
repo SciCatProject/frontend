@@ -940,8 +940,12 @@
   "defaultTab": {
     "proposal": "details"
   },
-  "helpEnabled": false,
-  "helpHtmlContent": "Here you can place your custom help content for CI testing",
-  "aboutEnabled": false,
-  "aboutHtmlContent": "Here you can place your custom info/about content for CI testing"
+  "helpSettings": {
+    "enabled": false,
+    "htmlContent": "Here you can place your custom help content for CI testing"
+  },
+  "aboutSettings": {
+    "enabled": false,
+    "htmlContent": "Here you can place your custom info/about content for CI testing"
+  }
 }

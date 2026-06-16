@@ -17,7 +17,7 @@ describe("Help configuration", () => {
           helpSettings.disabled,
         );
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
-          "gewConfigHelpDisabled",
+          "getConfigHelpDisabled",
         );
       });
     });

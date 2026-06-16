@@ -48,8 +48,8 @@ The About page serves as:
 
 | Key | Type | Required | Default | Description |
 |-----|------|----------|---------|-------------|
-| `aboutEnabled` | boolean | No | `false` | Enables/disables the About page feature |
-| `aboutHtmlContent` | string | No | Default message | HTML content to display on the About page |
+| `aboutSettings.enabled` | boolean | No | `false` | Enables/disables the About page feature |
+| `aboutSettings.htmlContent` | string | No | Default message | HTML content to display on the About page |
 
 ### Configuration Locations
 

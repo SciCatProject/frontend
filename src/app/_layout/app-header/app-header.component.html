@@ -132,7 +132,7 @@
     <span class="title">
       <h3>{{ siteTitle }}</h3>
     </span>
-    <span *ngIf="config.helpEnabled">
+    <span *ngIf="config.helpSettings?.enabled">
       <h6>
         <button
           mat-icon-button
@@ -145,7 +145,7 @@
         </button>
       </h6>
     </span>
-    <span *ngIf="config.aboutEnabled">
+    <span *ngIf="config.aboutSettings?.enabled">
       <h6>
         <button
           mat-icon-button

@@ -11,8 +11,10 @@ describe("AboutComponent", () => {
 
   const getConfig = () => ({
     facility: "",
-    aboutEnabled: true,
-    aboutHtmlContent: "Default about content",
+    aboutSettings: {
+      enabled: true,
+      htmlContent: "Default about content",
+    },
   });
 
   beforeEach(waitForAsync(() => {
@@ -53,7 +55,7 @@ describe("AboutComponent", () => {
 
   it("should create about for ESS", () => {
     const compare = component.htmlContent;
-    component.appConfig.aboutHtmlContent = "ESS about content";
+    component.appConfig.aboutSettings.htmlContent = "ESS about content";
     component.ngOnInit();
     fixture.detectChanges();
 
@@ -62,7 +64,7 @@ describe("AboutComponent", () => {
 
   it("should create about for PSI", () => {
     const compare = component.htmlContent;
-    component.appConfig.aboutHtmlContent = "PSI about content";
+    component.appConfig.aboutSettings.htmlContent = "PSI about content";
     component.ngOnInit();
     fixture.detectChanges();
 
@@ -71,7 +73,7 @@ describe("AboutComponent", () => {
 
   it("should create about for MAX IV", () => {
     const compare = component.htmlContent;
-    component.appConfig.aboutHtmlContent = "MAX IV about content";
+    component.appConfig.aboutSettings.htmlContent = "MAX IV about content";
     component.ngOnInit();
     fixture.detectChanges();
 

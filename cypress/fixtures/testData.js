@@ -358,32 +358,42 @@ export const testConfig = {
       conditions: [],
     },
   },
-  helpSettings:{
-    disabled:{
-      helpEnabled: false,
+  helpSettings: {
+    disabled: {
+      helpSettings: {
+        enabled: false,
+      }
     },
-    enabledWithCustomText:{
-      helpEnabled: true,
-      helpHtmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test Help Content</p>",
-      helpInnerHtmlContent: "SciCat E2E Test Help Content",
+    enabledWithCustomText: {
+      helpSettings: {
+        enabled: true,
+        htmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test Help Content</p>",
+      }
     },
-    enabledWithDefaultText:{
-      helpEnabled: true,
-      helpHtmlContent: "",
+    enabledWithDefaultText: {
+      helpSettings: {
+        enabled: true,
+        htmlContent: "",
+      }
     }
   },
-  aboutSettings:{
-    disabled:{
-      aboutEnabled: false,
+  aboutSettings: {
+    disabled: {
+      aboutSettings: {
+        enabled: false,
+      }
     },
-    enabledWithCustomText:{
-      aboutEnabled: true,
-      aboutHtmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test About Content</p>",
-      aboutInnerHtmlContent: "SciCat E2E Test About Content",
+    enabledWithCustomText: {
+      aboutSettings: {
+        enabled: true,
+        htmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test About Content</p>",
+      }
     },
-    enabledWithDefaultText:{
-      aboutEnabled: true,
-      aboutHtmlContent: "",
+    enabledWithDefaultText: {
+      aboutSettings: {
+        enabled: true,
+        htmlContent: "",
+      }
     }
   },};
 

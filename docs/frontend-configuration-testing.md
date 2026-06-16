@@ -158,11 +158,15 @@ describe("Feature Configuration Tests", () => {
 export const testConfig = {
   helpSettings: {
     disabled: {
-      helpEnabled: false,
+      helpSettings: {
+        enabled: false,
+      }
     },
     enabledWithCustomText: {
-      helpEnabled: true,
-      helpHtmlContent: "<p>Custom help content</p>",
+      helpSettings: {
+        enabled: true,
+        htmlContent: "<p>Custom help content</p>",
+      }
     },
   },
 };

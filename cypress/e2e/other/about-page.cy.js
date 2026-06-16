@@ -17,7 +17,7 @@ describe("About configuration", () => {
           aboutSettings.disabled,
         );
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
-          "gewConfigAboutDisabled",
+          "getConfigAboutDisabled",
         );
       });
     });

@@ -19,8 +19,8 @@ export class AboutComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.appConfig.aboutEnabled) {
-      const html = this.appConfig.aboutHtmlContent;
+    if (this.appConfig.aboutSettings?.enabled) {
+      const html = this.appConfig.aboutSettings?.htmlContent;
       console.log(html);
       if (html) {
         this.htmlContent = this.sanitizer.bypassSecurityTrustHtml(html);

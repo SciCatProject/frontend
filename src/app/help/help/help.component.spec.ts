@@ -5,8 +5,10 @@ import { AppConfigService } from "app-config.service";
 
 const getConfig = () => ({
   facility: "ESS",
-  helpEnabled: true,
-  helpHtmlContent: "<p>Default help content</p>",
+  helpSettings: {
+    enabled: true,
+    htmlContent: "<p>Default help content</p>",
+  },
 });
 
 describe("HelpComponent", () => {
@@ -50,7 +52,7 @@ describe("HelpComponent", () => {
   });
 
   it("should display disabled message when helpEnabled is false", () => {
-    component.appConfig.helpEnabled = false;
+    component.appConfig.helpSettings.enabled = false;
     component.ngOnInit();
     fixture.detectChanges();
     expect(component.htmlContent).toBe("Help page is disabled");
@@ -58,7 +60,7 @@ describe("HelpComponent", () => {
 
   it("should update htmlContent when helpHtmlContent changes", () => {
     const compare = component.htmlContent;
-    component.appConfig.helpHtmlContent = "<p>Updated help content</p>";
+    component.appConfig.helpSettings.htmlContent = "<p>Updated help content</p>";
     component.ngOnInit();
     fixture.detectChanges();
     expect(component.htmlContent).not.toEqual(compare);
