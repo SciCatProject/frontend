@@ -80,13 +80,15 @@ describe("1010: ConfigurableActionsComponent", () => {
     }
   });
 
-  it("0020: actions should be not visible when disabled in configuration", () => {
-    mockAppConfigService.appConfig.datafilesActionsEnabled = false;
+  it("0020: actions should be not visible when no actions are configured", () => {
+    component.actionsConfig = [];
+    fixture.detectChanges();
     expect(component.visible).toEqual(false);
   });
 
-  it("0030: actions should be visible when enabled in configuration", () => {
-    mockAppConfigService.appConfig.datafilesActionsEnabled = true;
+  it("0030: actions should be visible when actions are configured", () => {
+    component.actionsConfig = mockActionsConfig;
+    fixture.detectChanges();
     expect(component.visible).toEqual(true);
   });
 

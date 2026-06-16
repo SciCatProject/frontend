@@ -2,9 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { PublisheddataDetailsComponent } from "./publisheddata-details.component";
 import {
   MockActivatedRoute,
+  MockAuthService,
   MockPublishedDataApi,
   MockRouter,
+  MockUserApi,
 } from "shared/MockStubs";
+import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
+import { AuthService } from "shared/services/auth/auth.service";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 import { provideMockStore, MockStore } from "@ngrx/store/testing";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -28,6 +36,15 @@ const getConfig = () => ({
   editMetadataEnabled: true,
   editPublishedData: true,
   jsonMetadataEnabled: true,
+  publishedDataActionsEnabled: true,
+  publishedDataActions: [
+    {
+      id: "test-action",
+      label: "Test Action",
+      type: "link",
+      url: "https://example.com",
+    },
+  ],
 });
 
 const createPublishedData = (status: string) =>
@@ -55,10 +72,13 @@ describe("PublisheddataDetailsComponent", () => {
         SharedScicatFrontendModule,
       ],
       providers: [
+        provideHttpClient(withInterceptorsFromDi()),
         provideMockStore(),
         { provide: Router, useClass: MockRouter },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: PublishedDataService, useClass: MockPublishedDataApi },
+        { provide: UsersService, useClass: MockUserApi },
+        { provide: AuthService, useClass: MockAuthService },
         { provide: AppConfigService, useValue: { getConfig } },
       ],
     }).compileComponents();
@@ -82,21 +102,10 @@ describe("PublisheddataDetailsComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("login state", () => {
-    it("should hide status actions when the user is not logged in", () => {
+  describe("configurable actions", () => {
+    it("should render configurable-actions element when publishedDataActions are configured", () => {
       const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector('[data-cy="registerButton"]')).toBeNull();
-    });
-
-    it("should show status actions when the user is logged in", () => {
-      store.overrideSelector(selectIsLoggedIn, true);
-      store.refreshState();
-      fixture.detectChanges();
-
-      const compiled = fixture.debugElement.nativeElement;
-      expect(
-        compiled.querySelector('[data-cy="registerButton"]'),
-      ).not.toBeNull();
+      expect(compiled.querySelector("configurable-actions")).not.toBeNull();
     });
   });
 
