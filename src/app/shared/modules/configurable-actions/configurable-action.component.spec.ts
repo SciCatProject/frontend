@@ -1001,7 +1001,7 @@ describe("1000: ConfigurableActionComponent", () => {
       },
     } as unknown as ActionConfig;
 
-    component.resolveVariableContext();
+    component["resolveVariableContext"]();
 
     expect(component.variables["files"]).toEqual([
       "/file/1",
@@ -1021,7 +1021,7 @@ describe("1000: ConfigurableActionComponent", () => {
       },
     } as unknown as ActionConfig;
 
-    component.resolveVariableContext();
+    component["resolveVariableContext"]();
 
     expect(component.variables["copy"]).toBe("/file/1");
   });
@@ -1033,7 +1033,7 @@ describe("1000: ConfigurableActionComponent", () => {
       },
     } as unknown as ActionConfig;
 
-    component.resolveVariableContext();
+    component["resolveVariableContext"]();
 
     expect(component.variables["year"]).toBe("2026");
   });
