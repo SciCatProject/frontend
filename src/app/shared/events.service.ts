@@ -15,7 +15,7 @@ import {
 @Injectable({ providedIn: "root" })
 export class EventsService {
   private eventSource: EventSource | null = null;
-  private tokenSub: Subscription | null = null;
+  private connectionSub: Subscription | null = null;
   private messageSubject = new Subject<Record<string, unknown>>();
 
   message$ = this.messageSubject.asObservable();
@@ -36,11 +36,11 @@ export class EventsService {
   ) {}
 
   connect() {
-    if (this.tokenSub) return;
+    if (this.connectionSub) return;
 
     this.store.dispatch(fetchScicatTokenAction());
 
-    this.tokenSub = this.store
+    this.connectionSub = this.store
       .select(selectUserSettingsPageViewModel)
       .pipe(
         map((vm) => vm?.scicatToken),
@@ -72,7 +72,7 @@ export class EventsService {
 
   disconnect() {
     this.closeConnection();
-    this.tokenSub?.unsubscribe();
-    this.tokenSub = null;
+    this.connectionSub?.unsubscribe();
+    this.connectionSub = null;
   }
 }
