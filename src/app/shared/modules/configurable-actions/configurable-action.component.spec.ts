@@ -1096,7 +1096,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.variables["year"]).toBe("2026");
   });
 
-  it("1170: dialog action should open dialog with configured data", () => {
+  it("1200: dialog action should open dialog with configured data", () => {
     selectTestCase({
       test: "n/a",
       action: actionSelectorType.dialog_open,
@@ -1114,7 +1114,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.dialog.open).toHaveBeenCalled();
   });
 
-  it("1180: dialog action should execute xhr on close using dialog variables", () => {
+  it("1210: dialog action should execute xhr on close using dialog variables", () => {
     selectTestCase({
       test: "n/a",
       action: actionSelectorType.dialog_xhr,
@@ -1157,7 +1157,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(body["reason"]).toBe("integration-test");
   });
 
-  it("1152: #datasetOwner token should enable action for owner", () => {
+  it("1220: #datasetOwner token should enable action for owner", () => {
     store.overrideSelector(selectProfile, mockUserProfiles[1]);
     store.overrideSelector(selectIsAdmin, false);
     store.refreshState();
@@ -1173,7 +1173,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1153: #userIsAdmin token should enable action for admin", () => {
+  it("1230: #userIsAdmin token should enable action for admin", () => {
     store.overrideSelector(selectProfile, mockUserProfiles[2]);
     store.overrideSelector(selectIsAdmin, true);
     store.refreshState();
@@ -1189,7 +1189,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1154: #isPublished token should follow dataset publish status", () => {
+  it("1240: #isPublished token should follow dataset publish status", () => {
     const publishedItems: ActionItems = {
       datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
     };
@@ -1206,7 +1206,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1155: #!isPublished token should follow dataset publish status", () => {
+  it("1250: #!isPublished token should follow dataset publish status", () => {
     const unpublishedItems: ActionItems = {
       datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
     };
@@ -1223,7 +1223,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1156: #Length should evaluate selected file list length", () => {
+  it("1260: #Length should evaluate selected file list length", () => {
     const lengthConfig: ActionConfig = {
       ...mockActionsConfig[0],
       id: "length-enabled-test",
@@ -1240,7 +1240,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1157: #MaxDownloadableSize should compare against configured max size", () => {
+  it("1270: #MaxDownloadableSize should compare against configured max size", () => {
     mockAppConfigService.appConfig.maxDirectDownloadSize =
       lowerMaxFileSizeLimit;
 
@@ -1262,7 +1262,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1158: hidden expression should hide action when condition is true", () => {
+  it("1280: hidden expression should hide action when condition is true", () => {
     const hiddenConfig: ActionConfig = {
       ...mockActionsConfig[0],
       id: "hidden-test",
@@ -1405,7 +1405,7 @@ describe("1000: ConfigurableActionComponent", () => {
   ];
 
   allKeywordMapSelectors.forEach((testCase) => {
-    it(`1160: ${testCase.name} selector should resolve`, () => {
+    it(`1290: ${testCase.name} selector should resolve`, () => {
       const selectorConfig: ActionConfig = {
         ...mockActionsConfig[0],
         id: `selector-${testCase.name}`,
