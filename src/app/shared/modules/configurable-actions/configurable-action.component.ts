@@ -14,6 +14,8 @@ import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "./confirmation-dialog/confirmation-dialog.component";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
@@ -45,9 +47,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
   form: HTMLFormElement = null;
 
-  showPopup = false;
-  pendingAction: (() => void) | null = null;
-
   subscriptions: Subscription[] = [];
 
   userProfile: any = {};
@@ -61,6 +60,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     private store: Store,
     private router: Router,
     private datePipe: DatePipe,
+    private dialog: MatDialog,
   ) {
     this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
       this.jwt = jwt.jwt;
@@ -137,22 +137,22 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   ): string | string[] | number | number[] {
     // Map of static patterns to processing functions
     const keywordMap: { [pattern: string]: (RegExpMatchArray) => any } = {
-      "#Dataset0Pid": (m) => jsonObject.datasets[0]?.pid,
+      "#Dataset0Pid": (m) => jsonObject.datasets?.[0]?.pid,
       "#Dataset0FilesPath": (m) =>
-        jsonObject.datasets[0]?.files?.map((i) => i.path),
+        jsonObject.datasets?.[0]?.files?.map((i) => i.path),
       "#Dataset0FilesTotalSize": (m) =>
-        jsonObject.datasets[0]?.files
+        jsonObject.datasets?.[0]?.files
           ?.map((i) => Number(i.size))
           .reduce((acc, val) => acc + val, 0),
-      "#Dataset0SourceFolder": (m) => jsonObject.datasets[0]?.sourceFolder,
+      "#Dataset0SourceFolder": (m) => jsonObject.datasets?.[0]?.sourceFolder,
       "#Dataset0SelectedFilesPath": (m) =>
-        jsonObject.datasets[0]?.files
+        jsonObject.datasets?.[0]?.files
           ?.filter((i) => i.selected)
           .map((i) => i.path),
       "#Dataset0SelectedFilesCount": (m) =>
-        jsonObject.datasets[0]?.files?.filter((i) => i.selected).length,
+        jsonObject.datasets?.[0]?.files?.filter((i) => i.selected).length,
       "#Dataset0SelectedFilesTotalSize": (m) =>
-        jsonObject.datasets[0]?.files
+        jsonObject.datasets?.[0]?.files
           ?.filter((i) => i.selected)
           .map((i) => Number(i.size))
           .reduce((acc, val) => acc + val, 0),
@@ -402,24 +402,19 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
   perform_action() {
     if (this.actionConfig.alertMessage) {
-      this.pendingAction = () => this.execute_action();
-      this.showPopup = true;
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: { message: this.actionConfig.alertMessage },
+        ariaLabel: "Confirmation dialog",
+      });
+
+      dialogRef.afterClosed().subscribe((confirmed) => {
+        if (confirmed) {
+          this.execute_action();
+        }
+      });
       return;
     }
     this.execute_action();
-  }
-
-  closePopup() {
-    this.showPopup = false;
-    this.pendingAction = null;
-  }
-
-  confirmAction() {
-    this.showPopup = false;
-    if (this.pendingAction) {
-      this.pendingAction();
-      this.pendingAction = null;
-    }
   }
 
   get_value_from_definition(definition: string) {

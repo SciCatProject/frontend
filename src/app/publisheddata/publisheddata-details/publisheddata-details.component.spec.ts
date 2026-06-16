@@ -23,7 +23,6 @@ import {
   selectIsAdmin,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { ConfigurableActionsComponent } from "shared/modules/configurable-actions/configurable-actions.component";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -60,7 +59,6 @@ describe("PublisheddataDetailsComponent", () => {
         { provide: Router, useClass: MockRouter },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: PublishedDataService, useClass: MockPublishedDataApi },
-        { provide: ConfigurableActionsComponent },
         { provide: AppConfigService, useValue: { getConfig } },
       ],
     }).compileComponents();
