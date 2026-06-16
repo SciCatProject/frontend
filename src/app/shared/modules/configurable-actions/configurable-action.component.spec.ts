@@ -993,7 +993,40 @@ describe("1000: ConfigurableActionComponent", () => {
     );
   });
 
-  it("1140: should resolve dependent variables with array index extraction", () => {
+  it("1140: should build dependency graph", () => {
+    const variables: Record<string, unknown> = {
+      files: "#Dataset0FilesPath",
+      first: "@files[0]",
+      copy: "@first",
+    };
+
+    const graph = component.buildDependenciesGraph(variables);
+
+    expect(graph["files"]).toEqual(new Set<string>());
+    expect(graph["first"]).toEqual(new Set<string>(["files"]));
+    expect(graph["copy"]).toEqual(new Set<string>(["first"]));
+  });
+
+  it("1150: should support multiple dependencies", () => {
+    const variables: Record<string, unknown> = {
+      a: "@b",
+      b: "@c",
+      c: "@a",
+    };
+
+    const graph = component.buildDependenciesGraph(variables);
+
+    expect(graph["a"]).toEqual(new Set<string>(["b"]));
+    expect(graph["b"]).toEqual(new Set<string>(["c"]));
+    expect(graph["c"]).toEqual(new Set<string>(["a"]));
+  });
+
+  it("1160: should resolve dependent variables with array index extraction", () => {
+    // Mock the static dataset handler to return the files array when requested
+    spyOn(component as any, "buildDatasetStaticMap").and.returnValue({
+      "#Dataset0FilesPath": () => ["/file/1", "/file/2", "/file/3"],
+    });
+
     component.actionConfig = {
       variables: {
         files: "#Dataset0FilesPath",
@@ -1008,11 +1041,14 @@ describe("1000: ConfigurableActionComponent", () => {
       "/file/2",
       "/file/3",
     ]);
-
     expect(component.variables["first"]).toBe("/file/1");
   });
 
-  it("1150: should resolve chained configuration aliases", () => {
+  it("1170: should resolve chained dependencies", () => {
+    spyOn(component as any, "buildDatasetStaticMap").and.returnValue({
+      "#Dataset0FilesPath": () => ["/file/1", "/file/2", "/file/3"],
+    });
+
     component.actionConfig = {
       variables: {
         files: "#Dataset0FilesPath",
@@ -1026,7 +1062,29 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.variables["copy"]).toBe("/file/1");
   });
 
-  it("1160: should resolve selectors after variable substitution", () => {
+  it("1180: should detect cyclic dependencies", () => {
+    spyOn(console, "error");
+
+    component.actionConfig = {
+      variables: {
+        a: "@b",
+        b: "@a",
+      },
+    } as unknown as ActionConfig;
+
+    component["resolveVariableContext"]();
+
+    expect(console.error).toHaveBeenCalledWith(
+      jasmine.stringContaining("Cyclic dependency detected in variable"),
+    );
+  });
+
+  it("1190: should resolve selectors after variable substitution", () => {
+    // Mock datePipe transform response
+    (component as any).datePipe = {
+      transform: (date: Date, format: string) => "2026",
+    };
+
     component.actionConfig = {
       variables: {
         year: "#date_format(2026-05-12T14:53:45Z, yyyy)",

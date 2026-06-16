@@ -292,12 +292,66 @@ export class ConfigurableActionComponent
     return _.some(datasets, (d) => userGroups.includes(d.ownerGroup));
   }
 
-  private resolveVariableContext() {
-    Object.entries(this.actionConfig.variables ?? {}).forEach(
-      ([key, selector]) => {
-        this.variables[key] = this.variableHandler(selector);
-      },
-    );
+  buildDependenciesGraph(
+    variables: Record<string, unknown>,
+  ): Record<string, Set<string>> {
+    /**
+     * Builds a dependency graph for configured variables.
+     *
+     * Each graph entry maps a variable name to the set of other variables it
+     * references with `@variableName` syntax. The graph is later used to resolve
+     * variables in dependency order.
+     */
+    const graph: Record<string, Set<string>> = {};
+    Object.entries(variables).forEach(([key, value]) => {
+      const deps: string[] = [];
+      if (typeof value === "string") {
+        const matches = value.matchAll(/@(\w+)/g);
+        for (const match of matches) {
+          deps.push(match[1]);
+        }
+      }
+      graph[key] = new Set(deps);
+    });
+    return graph;
+  }
+
+  private resolveVariableContext(): void {
+    /**
+     * Resolves all variables declared in the action configuration.
+     *
+     * Variable definitions can reference other variables with `@name` and can
+     * read array entries with `@name[index]`. Dependencies are resolved first,
+     * then the final value is passed through variableHandler so configured
+     * selectors are converted cleanly.
+     */
+    const variablesConfig = this.actionConfig.variables ?? {};
+    const depsGraph = this.buildDependenciesGraph(variablesConfig);
+    const visited: Set<string> = new Set();
+
+    const resolveVariable = (varKey: string): unknown => {
+      const deps = depsGraph[varKey] ?? new Set<string>();
+
+      for (const dep of deps) {
+        if (!(dep in this.variables)) {
+          if (visited.has(dep)) {
+            console.error(`Cyclic dependency detected in variable ${dep}`);
+            continue;
+          }
+          visited.add(dep);
+          this.variables[dep] = resolveVariable(dep);
+        }
+      }
+
+      const varDef = variablesConfig[varKey];
+      return this.variableHandler(varDef);
+    };
+
+    Object.keys(variablesConfig).forEach((key) => {
+      if (!(key in this.variables)) {
+        this.variables[key] = resolveVariable(key);
+      }
+    });
   }
 
   private typeXhr() {
