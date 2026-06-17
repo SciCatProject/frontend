@@ -337,17 +337,14 @@ export class ConfigurableActionComponent
       }
 
       const deps = depsGraph[key] ?? new Set<string>();
-      deps.forEach((dep) => {
-        resolvedConfig[dep] = resolve(dep, [...currentPath, key]);
-      });
-
-      return this.variableHandler(variablesConfig[key]);
+      deps.forEach((dep) => resolve(dep, [...currentPath, key]));
+      const finalValue = this.variableHandler(variablesConfig[key]);
+      resolvedConfig[key] = finalValue;
+      this.variables[key] = finalValue;
+      return finalValue;
     };
 
-    Object.keys(variablesConfig).forEach((key) => {
-      resolvedConfig[key] = resolve(key);
-    });
-
+    Object.keys(variablesConfig).forEach((key) => resolve(key));
     this.variables = { ...this.variables, ...resolvedConfig };
   }
 
