@@ -177,6 +177,9 @@ Supported selector patterns:
 | `#DatasetsField[fieldName]` | Values of `fieldName` from all datasets |
 | `#Instruments[n]Field[fieldName]` | Value of `fieldName` from instrument `n` |
 | `#date_format(value, format)` | Date formatted with Angular `DatePipe` format syntax |
+| `#DatasetsPidEmptyFilesMap` | JSON string with all dataset PIDs and empty files arrays |
+| `#DatasetsTotalSize` | Sum of `size` across all datasets |
+| `#DatasetsTotalPackedSize` | Sum of `packedSize` across all datasets |
 
 Indexes are zero-based. If a selector cannot be resolved, the resulting value can be empty or undefined depending on the selector and the available action items.
 
