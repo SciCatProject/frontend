@@ -32,7 +32,6 @@ import { TranslateService } from "@ngx-translate/core";
 import { translateComponentLabel } from "shared/pipes/component-translate.pipe";
 import {
   ActionButtonStyle,
-  ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
@@ -60,7 +59,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   datasetList: OutputDatasetObsoleteDto[] = [];
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
-  actionItems: ActionItems;
+  actionItems: ActionItems = { datasets: [] };
   actionButtonsStyle: ActionButtonStyle = { raised: false, color: "primary" };
 
   constructor(

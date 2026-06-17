@@ -22,7 +22,6 @@ import { AppConfigService } from "app-config.service";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   ActionButtonStyle,
-  ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
@@ -36,7 +35,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
   actionButtonsStyle: ActionButtonStyle = { raised: false, color: "primary" };
-  actionItems: ActionItems;
+  actionItems: ActionItems = { datasets: [] };
   userProfile$ = this.store.select(selectProfile);
   selectSelectedDatasets$ = this.store.select(selectSelectedDatasets);
   selectIsBatchNonEmpty$ = this.store.select(selectIsBatchNonEmpty);
