@@ -7,7 +7,7 @@ describe("Jobs general", () => {
       type: "raw",
       dataFileSize: "small",
       datasetName: "Jobs Dataset",
-      pid: "6ED35C17-EDD4-4CD4-B917-4E49698F7532",
+      pid: "scicat_testing/6ED35C17-EDD4-4CD4-B917-4E49698F7532",
       isPublished: true,
     });
   });
@@ -19,6 +19,7 @@ describe("Jobs general", () => {
 
   describe("Jobs dynamic material table", () => {
     it("should be able to search for job in the global search", () => {
+      cy.removeJobs();
       cy.createJob();
 
       cy.visit("/user/jobs");
