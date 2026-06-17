@@ -327,31 +327,28 @@ export class ConfigurableActionComponent
      */
     const variablesConfig = this.actionConfig.variables ?? {};
     const depsGraph = this.buildDependenciesGraph(variablesConfig);
-    const visited: Set<string> = new Set();
+    const resolvedConfig: Record<string, unknown> = {};
 
-    const resolveVariable = (varKey: string): unknown => {
-      const deps = depsGraph[varKey] ?? new Set<string>();
-
-      for (const dep of deps) {
-        if (!(dep in this.variables)) {
-          if (visited.has(dep)) {
-            console.error(`Cyclic dependency detected in variable ${dep}`);
-            continue;
-          }
-          visited.add(dep);
-          this.variables[dep] = resolveVariable(dep);
-        }
+    const resolve = (key: string, currentPath: string[] = []): unknown => {
+      if (key in resolvedConfig) return resolvedConfig[key];
+      if (currentPath.includes(key)) {
+        console.error(`Cyclic dependency detected in variable ${key}`);
+        return undefined;
       }
 
-      const varDef = variablesConfig[varKey];
-      return this.variableHandler(varDef);
+      const deps = depsGraph[key] ?? new Set<string>();
+      deps.forEach((dep) => {
+        resolvedConfig[dep] = resolve(dep, [...currentPath, key]);
+      });
+
+      return this.variableHandler(variablesConfig[key]);
     };
 
     Object.keys(variablesConfig).forEach((key) => {
-      if (!(key in this.variables)) {
-        this.variables[key] = resolveVariable(key);
-      }
+      resolvedConfig[key] = resolve(key);
     });
+
+    this.variables = { ...this.variables, ...resolvedConfig };
   }
 
   private typeXhr() {
