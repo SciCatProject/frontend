@@ -309,7 +309,7 @@
       "mat_icon": "publish",
       "method": "POST",
       "url": "/api/v4/publisheddata/{{ @doi }}/private",
-      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == \"published\")",
+      "enabled": "(#datasetOwner || #userIsAdmin) && (@status == 'public')",
       "authorization": "#datasetOwner || #userIsAdmin",
       "variables": {
         "doi": "#PublishedData0Doi",
