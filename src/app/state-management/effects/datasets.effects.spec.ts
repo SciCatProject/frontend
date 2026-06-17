@@ -117,7 +117,7 @@ describe("DatasetEffects", () => {
           provide: MetadataKeysV4Service,
           useValue: jasmine.createSpyObj("metadataKeysApi", [
             "metadataKeysV4ControllerFindAllV4",
-            ]),
+          ]),
         },
         { provide: AppConfigService, useValue: { getConfig } },
         provideHttpClient(withInterceptorsFromDi()),
