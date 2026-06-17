@@ -94,9 +94,11 @@ export class SearchParametersDialogComponent {
   }
 
   ngOnInit(): void {
-    this.store.select(selectMetadataKeys).subscribe((keys) => {
-      this.parameterKeys = keys;
-    });
+    this.subscription = this.store
+      .select(selectMetadataKeys)
+      .subscribe((keys) => {
+        this.parameterKeys = keys;
+      });
   }
 
   add = (): void => {
