@@ -19,7 +19,6 @@ describe("Jobs general", () => {
 
   describe("Jobs dynamic material table", () => {
     it("should be able to search for job in the global search", () => {
-      cy.removeJobs();
       cy.createJob();
 
       cy.visit("/user/jobs");
