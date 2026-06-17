@@ -10,6 +10,7 @@ import {
   OutputDatasetObsoleteDto,
   UpdateAttachmentV3Dto,
   OrigdatablocksV4Service,
+  MetadataKeysV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
@@ -128,15 +129,30 @@ export class DatasetEffects {
   fetchMetadataKeys$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([, params]) => params),
-      mergeMap(({ query }) => {
-        return this.datasetsService
-          .datasetsControllerMetadataKeysV3(JSON.stringify(query))
+      switchMap(({ searchTerm }) => {
+        const filter = {
+          where: {},
+          fields: ["key", "humanReadableName"],
+        };
+
+        if (searchTerm && searchTerm.trim()) {
+          filter.where = {
+            $or: [
+              { key: { $regex: searchTerm, $options: "i" } },
+              { humanReadableName: { $regex: searchTerm, $options: "i" } },
+            ],
+          };
+        }
+
+        return this.metadataKeysV4Service
+          .metadataKeysV4ControllerFindAllV4(JSON.stringify(filter))
           .pipe(
-            map((metadataKeys) =>
-              fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
-            ),
+            map((metadataKeys) => {
+              const keys = metadataKeys.map((dto) => dto.key);
+              return fromActions.fetchMetadataKeysCompleteAction({
+                metadataKeys: keys,
+              });
+            }),
             catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
           );
       }),
@@ -159,7 +175,7 @@ export class DatasetEffects {
         fromActions.removeScientificConditionAction,
         fromActions.clearFacetsAction,
       ),
-      map(() => fromActions.fetchMetadataKeysAction()),
+      map(() => fromActions.fetchMetadataKeysAction({})),
     );
   });
 
@@ -550,6 +566,7 @@ export class DatasetEffects {
     private origdatablocksService: OrigdatablocksV4Service,
     private store: Store,
     private appConfigService: AppConfigService,
+    private metadataKeysV4Service: MetadataKeysV4Service,
   ) {}
 
   private storeBatch(batch: OutputDatasetObsoleteDto[], userId: string) {
