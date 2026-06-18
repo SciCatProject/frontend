@@ -99,6 +99,7 @@ export class SearchParametersDialogComponent {
       .subscribe((keys) => {
         this.parameterKeys = keys;
       });
+    this.store.dispatch(fetchMetadataKeysAction({ searchTerm: "" }));
   }
 
   add = (): void => {
@@ -125,7 +126,6 @@ export class SearchParametersDialogComponent {
   };
 
   cancel = (): void => {
-    this.store.dispatch(fetchMetadataKeysAction({ searchTerm: "" }));
     this.dialogRef.close();
   };
 
