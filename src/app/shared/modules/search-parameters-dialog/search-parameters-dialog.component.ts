@@ -99,6 +99,7 @@ export class SearchParametersDialogComponent {
       .subscribe((keys) => {
         this.parameterKeys = keys;
       });
+    this.store.dispatch(fetchMetadataKeysAction({ searchTerm: "" }));
   }
 
   add = (): void => {
@@ -124,7 +125,9 @@ export class SearchParametersDialogComponent {
     this.dialogRef.close({ data: { lhs: metadataKey, relation, rhs, unit } });
   };
 
-  cancel = (): void => this.dialogRef.close();
+  cancel = (): void => {
+    this.dialogRef.close();
+  };
 
   searchMetadataKeys = (): void => {
     const searchTerm = this.parametersForm.get("lhs")?.value || "";
