@@ -11,9 +11,7 @@ import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
-import {
-  selectIsAdmin,
-} from "state-management/selectors/user.selectors";
+import { selectIsAdmin } from "state-management/selectors/user.selectors";
 import { ActionItems } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
