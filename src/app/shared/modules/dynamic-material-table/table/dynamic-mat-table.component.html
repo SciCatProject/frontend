@@ -6,7 +6,7 @@
     <mat-slide-toggle
       [checked]="realTimeEnabled"
       (change)="realTimeEnabledChange.emit($event.checked)"
-      matTooltip="When on, the table watches for new or changed datasets and shows a notice when updates arrive. Your current page, sorting, and filters stay until you reload."
+      matTooltip="When on, the table watches for new datasets and shows a notice when updates arrive."
       matTooltipPosition="above"
       data-cy="real-time-toggle"
     >
