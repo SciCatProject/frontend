@@ -1,5 +1,9 @@
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
-import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  DatasetClass,
+  Instrument,
+  PublishedData,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { DynamicField } from "../dialog/dialog.component";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -112,6 +116,7 @@ export interface ActionItemDataset extends OutputDatasetObsoleteDto {
 
 export interface ActionItems {
   datasets: ActionItemDataset[];
+  publisheddata?: PublishedData[];
   instruments?: Instrument[];
   [key: string]: unknown;
 }
