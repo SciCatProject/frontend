@@ -295,6 +295,70 @@
       "target": "_blank"
     }
   ],
+  "publishedDataActionsEnabled": true,
+  "publishedDataActions": [
+    {
+      "id": "publish-published-data",
+      "description": "Publish published data",
+      "order": 1,
+      "label": "Publish",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method": "PATCH",
+      "url": "http://localhost:3000/api/v3/publisheddata/{{ @doi }}/",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData0Status"
+      },
+      "enabled": "@status === 'private'",
+      "payload": "{\"isPublished\":\"true\"}",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      },
+      "authorization": ["true"]
+    },
+    {
+      "id": "register-published-data",
+      "description": "Register published data",
+      "order": 2,
+      "label": "Register",
+      "type": "xhr",
+      "mat_icon": "registration",
+      "method": "PATCH",
+      "url": "http://localhost:3000/api/v3/publisheddata/{{ @doi }}/",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData0Status"
+      },
+      "enabled": "@status === 'public'",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      },
+      "authorization": ["true"]
+    },
+    {
+      "id": "amend-published-data",
+      "description": "Amend published data",
+      "order": 3,
+      "label": "Amend",
+      "type": "xhr",
+      "mat_icon": "edit",
+      "method": "PATCH",
+      "url": "http://localhost:3000/api/v3/publisheddata/{{ @doi }}/",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData0Status"
+      },
+      "enabled": "@status === 'registered'",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      },
+      "authorization": ["true"]
+    }
+  ],
   "datasetDetailsActionsEnabled": false,
   "datasetDetailsActions": [],
   "selectionActionsEnabled": true,
