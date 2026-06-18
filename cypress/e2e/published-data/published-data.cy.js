@@ -203,9 +203,12 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="status"]').contains("private");
 
-      cy.get('[data-cy="publishButton"]').click();
+      cy.get("configurable-action button").contains("Publish").click();
 
-      cy.get("simple-snack-bar").should("contain", "Publishing Failed.");
+      cy.get("simple-snack-bar").should(
+        "contain",
+        "error performing the action",
+      );
     });
 
     it("admins should be able to edit their private published data", () => {
@@ -360,7 +363,7 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="status"]').contains("private");
 
-      cy.get('[data-cy="publishButton"]').click();
+      cy.get("configurable-action button").contains("Publish").click();
 
       cy.get('[data-cy="status"]').contains("public");
     });
@@ -428,7 +431,7 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="status"]').contains("public");
 
-      cy.get('[data-cy="registerButton"]').click();
+      cy.get("configurable-action button").contains("Register").click();
 
       cy.get('[data-cy="status"]').contains("registered");
     });
@@ -517,7 +520,7 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="status"]').contains("private");
 
-      cy.get('[data-cy="publishButton"]').click();
+      cy.get("configurable-action button").contains("Publish").click();
 
       cy.get('[data-cy="status"]').contains("public");
 
