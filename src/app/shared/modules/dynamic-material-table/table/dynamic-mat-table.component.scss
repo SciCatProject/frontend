@@ -280,6 +280,25 @@ cdk-virtual-scroll-viewport {
   display: flex;
   justify-content: center;
   width: 100%;
+
+  &.pinned {
+    .mat-icon {
+      position: relative;
+
+      &::after {
+        content: "push_pin";
+        color: var(--mat-table-row-item-label-text-color);
+        font-size: 12px;
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+      }
+    }
+  }
+
+  &.not-pinned {
+    opacity: 0.5;
+  }
 }
 
 .footer-column {
@@ -333,18 +352,36 @@ cdk-virtual-scroll-viewport {
 .hover-card {
   min-width: 300px;
   max-width: 620px;
+  max-height: min(70vh, 640px);
+  display: flex;
+  flex-direction: column;
+}
+
+.metadata-hover-card {
+  max-width: calc(100vw - 32px);
+
+  &.pinned-card {
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .hover-icon {
   color: var(--theme-primary-default);
+  cursor: pointer;
 }
 
 .hover-card-title {
   padding: 0 16px;
   font-size: 14px;
   border-radius: 4px 4px 0 0;
-  color: white;
+  color: var(--theme-header-1-lighter-contrast);
   background: var(--theme-header-1-lighter);
+
+  .pinned-icon {
+    font-size: inherit;
+    line-height: inherit;
+    vertical-align: top;
+  }
 }
 
 .hover-card-content {
@@ -354,6 +391,22 @@ cdk-virtual-scroll-viewport {
   border-radius: 0 0 4px 4px;
   white-space: pre-line;
   word-wrap: break-word;
+  overflow: auto;
+  flex: 1 1 auto;
+  max-height: min(60vh, 560px);
+}
+
+.scientific-metadata-hover-content {
+  width: 100%;
+  min-width: min(40vw, 720px);
+}
+
+.hover-card-empty {
+  padding: 4px 0;
+}
+
+.icon-wrapper {
+  display: inline-flex;
 }
 
 /* zebra stripes */

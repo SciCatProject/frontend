@@ -20,6 +20,7 @@ import {
   OnChanges,
   ViewContainerRef,
   SimpleChanges,
+  HostListener,
 } from "@angular/core";
 import { TableCoreDirective } from "../cores/table.core.directive";
 import { TableService } from "./dynamic-mat-table.service";
@@ -78,6 +79,7 @@ import {
 import { TableDataSource } from "../cores/table-data-source";
 import { DatePipe } from "@angular/common";
 import { AppConfigService } from "app-config.service";
+import { get as lodashGet } from "lodash-es";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -204,6 +206,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   globalSearchUpdate = new Subject<string>();
   init = false;
   hoverKey: string | null = null;
+  pinnedHoverKey: string | null = null;
   currentContextMenuSender: any = {};
 
   @HostBinding("style.height.px") height = null;
@@ -259,16 +262,16 @@ export class DynamicMatTableComponent<T extends TableRow>
   /** Overlay positions for metadata hover */
   metadataOverlayPositions: ConnectedPosition[] = [
     {
-      originX: "end",
+      originX: "center",
       originY: "center",
-      overlayX: "start",
+      overlayX: "center",
       overlayY: "center",
       offsetX: 8,
     },
     {
-      originX: "start",
+      originX: "center",
       originY: "center",
-      overlayX: "end",
+      overlayX: "center",
       overlayY: "center",
       offsetX: -8,
     },
@@ -388,7 +391,116 @@ export class DynamicMatTableComponent<T extends TableRow>
       });
   }
 
+  private getScientificMetadataColumnName(column?: TableField<T>) {
+    return (column?.name || "").trim();
+  }
+
   makeKey = (row: any, col: any) => (row?.id ?? row) + "::" + col?.name;
+
+  @HostListener("document:click")
+  onDocumentClick() {
+    if (this.pinnedHoverKey) {
+      this.closePinnedHoverCard();
+    }
+  }
+
+  @HostListener("document:keydown.escape")
+  onEscapeKey() {
+    if (this.pinnedHoverKey) {
+      this.closePinnedHoverCard();
+    }
+  }
+
+  isHoverCardOpen(row: any, column: TableField<T>) {
+    const key = this.makeKey(row, column);
+    return this.hoverKey === key || this.pinnedHoverKey === key;
+  }
+
+  isHoverCardPinned(row: any, column: TableField<T>) {
+    return this.pinnedHoverKey === this.makeKey(row, column);
+  }
+
+  onHoverCardTriggerEnter(row: any, column: TableField<T>) {
+    const key = this.makeKey(row, column);
+    if (this.pinnedHoverKey && this.pinnedHoverKey !== key) {
+      return;
+    }
+
+    this.hoverKey = key;
+  }
+
+  onHoverCardTriggerLeave(row: any, column: TableField<T>) {
+    const key = this.makeKey(row, column);
+    if (this.pinnedHoverKey === key) {
+      return;
+    }
+
+    if (this.hoverKey === key) {
+      this.hoverKey = null;
+    }
+  }
+
+  onHoverCardContentEnter(row: any, column: TableField<T>) {
+    this.hoverKey = this.makeKey(row, column);
+  }
+
+  onHoverCardContentLeave(row: any, column: TableField<T>) {
+    this.onHoverCardTriggerLeave(row, column);
+  }
+
+  togglePinnedHoverCard(event: MouseEvent, row: any, column: TableField<T>) {
+    event.preventDefault();
+    this.stopEventPropagation(event);
+
+    const key = this.makeKey(row, column);
+    if (this.pinnedHoverKey === key) {
+      this.closePinnedHoverCard();
+      return;
+    }
+
+    this.pinnedHoverKey = key;
+    this.hoverKey = key;
+  }
+
+  closePinnedHoverCard() {
+    this.pinnedHoverKey = null;
+    this.hoverKey = null;
+  }
+
+  stopEventPropagation(event: Event) {
+    event.stopPropagation();
+  }
+
+  isScientificMetadataColumn(column: TableField<T>) {
+    const name = this.getScientificMetadataColumnName(column);
+    return (
+      name === "scientificMetadata" || name.startsWith("scientificMetadata.")
+    );
+  }
+
+  getScientificMetadata(row: Record<string, unknown>, column?: TableField<T>) {
+    const metadata = row?.scientificMetadata as Record<string, unknown>;
+    const name = this.getScientificMetadataColumnName(column);
+
+    if (
+      !name ||
+      name === "scientificMetadata" ||
+      !name.startsWith("scientificMetadata.")
+    ) {
+      return metadata;
+    }
+
+    return lodashGet(row, name);
+  }
+
+  hasScientificMetadata(row: Record<string, unknown>, column?: TableField<T>) {
+    const metadata = this.getScientificMetadata(row, column);
+    return (
+      !!metadata &&
+      typeof metadata === "object" &&
+      Object.keys(metadata).length > 0
+    );
+  }
 
   ngAfterViewInit(): void {
     this.standardDataSource.paginator = this.paginator;
@@ -507,6 +619,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
     }
+    this.closePinnedHoverCard();
+    this.closeTooltip();
   }
 
   public refreshUI() {
