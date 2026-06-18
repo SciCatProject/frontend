@@ -171,6 +171,15 @@ export class ConfigurableActionComponent
       return _.get(this.actionItems, `instruments[${index}].${field}`);
     }
 
+    const publishedDataFieldMatch = selector.match(
+      /^#PublishedData\[(\d+)\]Field\[(\w+)\]$/,
+    );
+    if (publishedDataFieldMatch) {
+      const index = Number(publishedDataFieldMatch[1]);
+      const field = publishedDataFieldMatch[2];
+      return _.get(this.actionItems, `publisheddata[${index}].${field}`);
+    }
+
     return undefined;
   }
 
@@ -218,6 +227,10 @@ export class ConfigurableActionComponent
       "#DatasetsTotalSize": () => _(datasets).sumBy((d) => d.size || 0),
       "#DatasetsTotalPackedSize": () =>
         _(datasets).sumBy((d) => d.packedSize || 0),
+      "#PublishedData0Doi": () =>
+        _.get(this.actionItems, "publisheddata[0].doi"),
+      "#PublishedData0Status": () =>
+        _.get(this.actionItems, "publisheddata[0].status"),
     };
     return staticMap;
   }
