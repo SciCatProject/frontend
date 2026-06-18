@@ -3,12 +3,9 @@ import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
-  amendPublishedDataAction,
   deletePublishedDataAction,
   fetchPublishedDataAction,
   fetchRelatedDatasetsAndAddToBatchAction,
-  publishPublishedDataAction,
-  registerPublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
@@ -16,8 +13,8 @@ import { selectCurrentPublishedData } from "state-management/selectors/published
 import { AppConfigService } from "app-config.service";
 import {
   selectIsAdmin,
-  selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
+import { ActionItems } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "publisheddata-details",
@@ -30,11 +27,15 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   isAdmin$ = this.store.select(selectIsAdmin);
   publishedData: PublishedData & { metadata?: any };
   subscriptions: Subscription[] = [];
-  isLoggedIn$ = this.store.select(selectIsLoggedIn);
   appConfig = this.appConfigService.getConfig();
   show = false;
   landingPageUrl = "";
   doi = "";
+
+  actionItems: ActionItems = {
+    datasets: [],
+    publisheddata: [],
+  };
 
   constructor(
     private appConfigService: AppConfigService,
@@ -55,6 +56,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       this.currentData$.subscribe((data) => {
         if (data) {
           this.publishedData = data;
+          this.actionItems.publisheddata[0] = data;
 
           if (this.appConfig.landingPage) {
             this.landingPageUrl =
@@ -69,28 +71,16 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  onRegisterClick(doi: string) {
-    if (
-      confirm(
-        "Are you sure you want to register this published data? Keep in mind that no further changes can be made after this action.",
-      )
-    ) {
-      this.store.dispatch(registerPublishedDataAction({ doi }));
+  onActionFinished(event: { success: boolean }) {
+    if (event.success) {
+      this.store.dispatch(fetchPublishedDataAction({ id: this.doi }));
     }
-  }
-
-  onAmendClick(doi: string) {
-    this.store.dispatch(amendPublishedDataAction({ doi }));
   }
 
   onDeleteClick(doi: string) {
     if (confirm("Are you sure you want to delete this published data?")) {
       this.store.dispatch(deletePublishedDataAction({ doi }));
     }
-  }
-
-  onPublishClick(doi: string) {
-    this.store.dispatch(publishPublishedDataAction({ doi }));
   }
 
   onEditClick() {
