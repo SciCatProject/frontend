@@ -2,6 +2,7 @@ import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
   Instrument,
   PartialOutputDatasetDto,
+  PublishedData,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { DynamicField } from "../dialog/dialog.component";
 
@@ -114,6 +115,7 @@ export interface ActionItemDataset extends PartialOutputDatasetDto {
 
 export interface ActionItems {
   datasets: ActionItemDataset[];
+  publisheddata?: PublishedData[];
   instruments?: Instrument[];
   [key: string]: unknown;
 }

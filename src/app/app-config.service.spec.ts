@@ -97,6 +97,8 @@ const appConfig: AppConfigInterface = {
   datasetSelectionActions: [],
   batchActionsEnabled: true,
   batchActions: [],
+  publishedDataActionsEnabled: false,
+  publishedDataActions: [],
   defaultDatasetsListSettings: {
     columns: [
       {
