@@ -140,7 +140,6 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
     private eventsService: EventsService,
-    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -152,13 +151,6 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
           }),
         )
         .subscribe((payload: Record<string, any>) => {
-          this.snackBar.open(
-            `new dataset ${payload.data.datasetName} is added`,
-            "Close",
-            {
-              duration: 5000,
-            },
-          );
           this.store.dispatch(
             fetchProposalDatasetsAction({
               proposalId: this.proposalId,
