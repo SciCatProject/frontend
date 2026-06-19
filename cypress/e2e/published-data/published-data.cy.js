@@ -205,10 +205,7 @@ describe("Datasets general", () => {
 
       cy.get("configurable-action button").contains("Publish").click();
 
-      cy.get("simple-snack-bar").should(
-        "contain",
-        "error performing the action",
-      );
+      cy.get("simple-snack-bar").should("contain", "Action failed");
     });
 
     it("admins should be able to edit their private published data", () => {
