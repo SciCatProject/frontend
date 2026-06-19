@@ -300,6 +300,87 @@
   "datasetDetailsActions": [],
   "selectionActionsEnabled": true,
   "selectionActions": [],
+  "publishedDataActionsEnabled": true,
+  "publishedDataActions": [
+    {
+      "id": "3a954df5-6a4b-4159-ad95-4d9717891932",
+      "description": "Make a published data record private",
+      "order": 1,
+      "label": "Private",
+      "type": "xhr",
+      "mat_icon": "public_off",
+      "method": "PATCH",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}",
+      "payload": "{\"status\": \"private\"}",
+      "enabled": "@status == 'public'",
+      "authorization": "#datasetOwner || #userIsAdmin",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData[0]Field[status]"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      }
+    },
+    {
+      "id": "9a67e562-2f08-4637-a8e4-a36cd6cfe6a1",
+      "description": "Publish published data",
+      "order": 2,
+      "label": "Publish",
+      "type": "xhr",
+      "mat_icon": "publish",
+      "method": "POST",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/publish",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData[0]Field[status]"
+      },
+      "enabled": "@status === 'private'",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      }
+    },
+    {
+      "id": "5d6f59b4-11c4-4a52-b21c-92fc5834c2ed",
+      "description": "Register published data",
+      "order": 3,
+      "label": "Register",
+      "type": "xhr",
+      "mat_icon": "registration",
+      "method": "POST",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/register",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData[0]Field[status]"
+      },
+      "enabled": "@status === 'public'",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      }
+    },
+    {
+      "id": "b3a11f37-aed5-466a-87b4-4e66dd488621",
+      "description": "Amend published data",
+      "order": 4,
+      "label": "Amend",
+      "type": "xhr",
+      "mat_icon": "edit",
+      "method": "POST",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/amend",
+      "variables": {
+        "doi": "#PublishedData0Doi",
+        "status": "#PublishedData[0]Field[status]"
+      },
+      "enabled": "@status === 'registered'",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      }
+    }
+  ],
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",
