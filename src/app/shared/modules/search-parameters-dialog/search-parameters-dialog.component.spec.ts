@@ -18,6 +18,7 @@ import { AppConfigService } from "app-config.service";
 
 import { SearchParametersDialogComponent } from "./search-parameters-dialog.component";
 import { ScientificCondition } from "../../../state-management/models";
+import { StoreModule } from "@ngrx/store";
 
 const getConfig = () => ({
   scienceSearchUnitsEnabled: true,
@@ -39,6 +40,7 @@ describe("SearchParametersDialogComponent", () => {
         MatInputModule,
         MatOptionModule,
         MatSelectModule,
+        StoreModule.forRoot({}),
       ],
       declarations: [SearchParametersDialogComponent],
     });
