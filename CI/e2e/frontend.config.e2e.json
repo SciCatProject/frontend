@@ -304,8 +304,8 @@
       "label": "Publish",
       "type": "xhr",
       "mat_icon": "publish",
-      "method": "PATCH",
-      "url": "http://localhost:3000/api/v3/publisheddata/{{ @doi }}/",
+      "method": "POST",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/publish",
       "variables": {
         "doi": "#PublishedData0Doi",
         "status": "#PublishedData0Status"
@@ -315,8 +315,7 @@
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
-      },
-      "authorization": ["true"]
+      }
     },
     {
       "id": "register-published-data",
@@ -325,8 +324,8 @@
       "label": "Register",
       "type": "xhr",
       "mat_icon": "registration",
-      "method": "PATCH",
-      "url": "http://localhost:3000/api/v3/publisheddata/{{ @doi }}/",
+      "method": "POST",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/register",
       "variables": {
         "doi": "#PublishedData0Doi",
         "status": "#PublishedData0Status"
@@ -335,8 +334,7 @@
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
-      },
-      "authorization": ["true"]
+      }
     },
     {
       "id": "amend-published-data",
@@ -345,8 +343,8 @@
       "label": "Amend",
       "type": "xhr",
       "mat_icon": "edit",
-      "method": "PATCH",
-      "url": "http://localhost:3000/api/v3/publisheddata/{{ @doi }}/",
+      "method": "POST",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/amend",
       "variables": {
         "doi": "#PublishedData0Doi",
         "status": "#PublishedData0Status"
@@ -355,8 +353,7 @@
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
-      },
-      "authorization": ["true"]
+      }
     }
   ],
   "datasetDetailsActionsEnabled": false,
