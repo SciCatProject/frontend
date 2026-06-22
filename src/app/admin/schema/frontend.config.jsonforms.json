@@ -467,6 +467,7 @@
           { "type": "Control", "scope": "#/properties/statusBannerMessage" },
           { "type": "Control", "scope": "#/properties/statusBannerCode" },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
+          { "type": "Control", "scope": "#/properties/tableSciDataEnabled" },
           {
             "type": "Control",
             "scope": "#/properties/skipSciCatLoginPageEnabled"
