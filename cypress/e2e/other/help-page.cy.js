@@ -63,7 +63,7 @@ describe("Help configuration", () => {
       cy.finishedLoading();
       cy.url().should("include", "/help");
 
-      cy.get("p.scicat_e2e_test").should("contain", helpSettings.enabledWithCustomText.helpInnerHtmlContent);
+      cy.get("p.scicat_e2e_test").should("contain", helpSettings.enabledWithCustomText.helpSettings.helpInnerHtmlContent);
     });
   });
 

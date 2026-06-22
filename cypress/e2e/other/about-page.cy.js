@@ -63,7 +63,7 @@ describe("About configuration", () => {
       cy.finishedLoading();
       cy.url().should("include", "/about");
 
-      cy.get("p.scicat_e2e_test").should("contain", aboutSettings.enabledWithCustomText.aboutInnerHtmlContent);
+      cy.get("p.scicat_e2e_test").should("contain", aboutSettings.enabledWithCustomText.aboutSettings.aboutInnerHtmlContent);
     });
   });
 
