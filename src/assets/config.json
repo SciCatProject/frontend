@@ -37,7 +37,7 @@
   "jsonMetadataEnabled": true,
   "JupyterHubUrl": "",
   "landingPage": "doi.ess.eu/detail/",
-  "lbBaseURL": "http://127.0.0.1:3000",
+  "lbBaseURL": "http://backend.localhost",
   "ingestorComponent": {
     "ingestorEnabled": false,
     "ingestorAutodiscoveryOptions": [
@@ -730,7 +730,7 @@
   "dateFormat": "yyyy-MM-dd HH:mm",
   "timezone": "UTC",
   "datasetDetailComponent": {
-    "enableCustomizedComponent": false,
+    "enableCustomizedComponent": true,
     "customization": [
       {
         "type": "regular",
@@ -871,6 +871,11 @@
             "element": "internalLink",
             "source": "creationLocation",
             "order": 4
+          },
+          {
+            "element": "tag",
+            "source": "relationships",
+            "order": 5
           }
         ]
       },

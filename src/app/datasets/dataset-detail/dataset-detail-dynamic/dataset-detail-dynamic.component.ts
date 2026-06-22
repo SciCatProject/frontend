@@ -222,6 +222,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       return this.instrument.name || "-";
     }
 
+    if (path === "relationships") {
+      return obj.relationships?.map(r => r.identifier);
+    }
+
     return path
       .split(".")
       .reduce((prev, curr) => (prev != null ? prev[curr] : undefined), obj);
