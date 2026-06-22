@@ -39,7 +39,6 @@ import {
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { EventsService } from "shared/events.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 export interface TableData {
   pid: string;
@@ -151,6 +150,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
           }),
         )
         .subscribe((payload: Record<string, any>) => {
+          if (!payload.data.proposalIds.includes(this.proposalId)) return;
           this.store.dispatch(
             fetchProposalDatasetsAction({
               proposalId: this.proposalId,
