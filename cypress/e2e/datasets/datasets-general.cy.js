@@ -400,7 +400,6 @@ describe("Datasets general", () => {
       
       cy.get('[data-cy="remove-condition-button"]').click();
     });
-  });
 
     it("should search a metadata key when pressing Enter", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
