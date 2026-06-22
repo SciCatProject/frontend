@@ -114,7 +114,7 @@ describe("Datasets general", () => {
             unit: "celsius",
             human_name: "Temperature Human Name",
           },
-          test_number: { type: "number", value: 5, unit: "" },
+          test_number: { type: "number", value: 5, unit: "km" },
           test_string: { type: "string", value: "hello", unit: "" },
         },
         isPublished: true,
@@ -295,6 +295,7 @@ describe("Datasets general", () => {
         .first()
         .within(() => {
           cy.get("input[matInput]").eq(0).clear().type("5");
+          cy.get("input[matInput]").eq(1).clear().type("km");
         });
 
       cy.get(".condition-panel")
@@ -356,6 +357,42 @@ describe("Datasets general", () => {
         .should("contain", "6")
         .and("contain", "<->")
         .and("contain", "10");
+
+      cy.get('[data-cy="filter-search-button"]').click();
+
+      cy.get(".dataset-table mat-table").should("exist");
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+
+    it("should be able to add a condition with range values that contains decimals", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("temperature");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("mat-select").click();
+        });
+
+      cy.get("mat-option").contains("is in range").click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("24.5");
+          cy.get("input[matInput]").eq(1).clear().type("25.5");
+          cy.get("input[matInput]").eq(2).clear().type("celcius");
+        });
 
       cy.get('[data-cy="filter-search-button"]').click();
 
@@ -527,8 +564,7 @@ describe("Datasets general", () => {
       cy.finishedLoading();
     });
 
-    it.skip("should check if pre-configured conditions are applied", () => {
-      // fails because scientific search is not currently supported in backend for V4 findAll
+    it("should check if pre-configured conditions are applied", () => {
       cy.scrollTo("bottom");
       cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel')
         .should("contain.text", "extra_entry_end_time")
