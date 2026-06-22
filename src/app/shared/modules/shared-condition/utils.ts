@@ -49,8 +49,6 @@ export function conditionToMongoQuery(
   let queryValue = rhs;
   let queryUnit = unit;
 
-  console.log("DEBUG unit: ", unit, "lhs: ", lhs, "rhs: ", rhs);
-
   if (unit) {
     const converted = convertToSIUnit(lhs, rhs, unit);
     queryValue = converted.value;
@@ -106,10 +104,8 @@ export function conditionToMongoQuery(
   }
 
   if (queryUnit) {
-    console.log("DEBUG adding unit to query: ", queryUnit);
     query[`scientificMetadata.${lhs}.unitSI`] = { $eq: queryUnit };
   }
-  console.log("DEBUG generated query: ", query);
   return query;
 }
 
