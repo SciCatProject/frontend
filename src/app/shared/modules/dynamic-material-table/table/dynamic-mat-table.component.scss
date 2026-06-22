@@ -419,17 +419,100 @@ cdk-virtual-scroll-viewport {
     }
   }
 
-  mat-paginator {
-    flex: 1 1 auto;
-    white-space: nowrap;
-    min-width: fit-content;
+}
+
+
+// Root level paginator container (bottom of table)
+mat-paginator {
+  //flex: 1 1 auto;
+  white-space: nowrap;
+  //min-width: fit-content;
+}
+
+::ng-deep mat-paginator.mat-mdc-paginator {
+  border: 1px solid var(--theme-hover-lighter);
+  border-radius: 24px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+
+  //html body.mat-typography app-root app-app-layout.ng-star-inserted div.anonymous-site div.main
+  //app-main-app-layout.ng-star-inserted div.main-app dashboard.ng-star-inserted div.dashboard-main
+  //mat-sidenav-container.mat-drawer-container.mat-sidenav-container.mat-drawer-transition
+  //mat-sidenav-content.mat-drawer-content.mat-sidenav-content div div.table-column dataset-table
+  //dynamic-mat-table.mat-elevation-z2.dataset-table.ng-tns-c3025886189-0.ng-star-inserted.ng-tns-c3025886189-1
+  //div.table-header-controls.ng-tns-c3025886189-1 div.paginator-container.ng-tns-c3025886189-1
+  //mat-paginator.mat-mdc-paginator.ng-tns-c3025886189-1.ng-star-inserted
+  //div.mat-mdc-paginator-outer-container div.mat-mdc-paginator-container
+  //div.mat-mdc-paginator-page-size.ng-star-inserted
+  //mat-form-field.mat-mdc-form-field.mat-mdc-paginator-page-size-select.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-primary.ng-star-inserted.mat-form-field-animations-enabled
+  /* Target the paginator's form field */
+  mat-form-field.mat-mdc-form-field.mat-mdc-paginator-page-size-select {
+    height: 30px !important;
+    /* Your desired height */
+    min-height: 30px !important;
   }
 
-  .paginator-container {
-    display: flex;
-    flex: 1;
+  /* Align the label vertically */
+  .mat-mdc-paginator-page-size-label {
+    line-height: 30px;
+    /* Match the form field height */
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  /* Align the select value text vertically */
+  .mat-mdc-select-value-text {
+    line-height: 30px;
+    /* Match the form field height */
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .mat-mdc-select-value {
+    line-height: 30px !important;
+    /* Match the form field height */
+  }
+
+  /* Ensure the select trigger fills the height */
+  .mat-mdc-select-trigger {
+    height: 100%;
+  }
+
+  /* Adjust the text field wrapper height */
+  .mat-mdc-text-field-wrapper {
+    height: 100%;
+    min-height: 100% !important;
+  }
+
+  /* Remove extra padding from the form field infix */
+  //html body.mat-typography app-root app-app-layout.ng-star-inserted div.anonymous-site div.main
+  //app-main-app-layout.ng-star-inserted div.main-app dashboard.ng-star-inserted div.dashboard-main
+  //mat-sidenav-container.mat-drawer-container.mat-sidenav-container.mat-drawer-transition
+  //mat-sidenav-content.mat-drawer-content.mat-sidenav-content div div.table-column dataset-table
+  //dynamic-mat-table.mat-elevation-z2.dataset-table.ng-tns-c3025886189-0.ng-star-inserted.ng-tns-c3025886189-1
+  //div.table-header-controls.ng-tns-c3025886189-1 div.paginator-container.ng-tns-c3025886189-1
+  // mat-paginator.mat-mdc-paginator.ng-tns-c3025886189-1.ng-star-inserted
+  // div.mat-mdc-paginator-outer-container div.mat-mdc-paginator-container
+  // div.mat-mdc-paginator-page-size.ng-star-inserted
+  // mat-form-field.mat-mdc-form-field.mat-mdc-paginator-page-size-select.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-primary.ng-star-inserted.mat-form-field-animations-enabled
+  // div.mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--outlined.mdc-text-field--no-label
+  // div.mat-mdc-form-field-flex div.mat-mdc-form-field-infix
+  .mat-mdc-form-field-infix {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 }
+
+.paginator-container {
+  display: flex;
+  flex: 1;
+  height: 48px;
+  //border: 1px solid var(--theme-hover-lighter);
+  //border-radius: 24px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .paginator-container.is-loading {
   ::ng-deep .mat-mdc-paginator-range-label {
     position: relative;
@@ -447,6 +530,38 @@ cdk-virtual-scroll-viewport {
       border-radius: 50%;
       animation: paginator-range-spin 0.8s linear infinite;
     }
+  }
+}
+
+// Paginator element reordering
+// Reorder: Items per page -> Previous -> Page info -> Next
+::ng-deep .paginator-container mat-paginator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .mat-mdc-paginator-page-size {
+    order: 1;
+    margin-right: auto;
+  }
+
+  .mat-mdc-paginator-range-actions {
+    order: 1;
+  }
+
+  .mat-mdc-paginator-navigation-previous,
+  .mat-mdc-paginator-navigation-first {
+    order: 1;
+  }
+
+  .mat-mdc-paginator-range-label {
+    order: 2;
+    margin: 0;
+  }
+
+  .mat-mdc-paginator-navigation-next,
+  .mat-mdc-paginator-navigation-last {
+    order: 3;
   }
 }
 
