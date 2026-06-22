@@ -41,6 +41,7 @@ export interface DatasetState {
   totalCount: number;
 
   facetCounts: FacetCounts;
+  facetCountsIsLoading: boolean;
   metadataKeys: string[];
   hasPrefilledFilters: boolean;
   searchTerms: string;
@@ -69,6 +70,7 @@ export const initialDatasetState: DatasetState = {
   totalCount: 0,
 
   facetCounts: {},
+  facetCountsIsLoading: false,
   metadataKeys: [],
   hasPrefilledFilters: false,
   searchTerms: "",

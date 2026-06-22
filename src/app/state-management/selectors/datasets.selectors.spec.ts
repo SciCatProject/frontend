@@ -13,6 +13,7 @@ const initialDatasetState: DatasetState = {
   totalCount: 0,
 
   facetCounts: {},
+  facetCountsIsLoading: false,
   metadataKeys: ["test"],
   hasPrefilledFilters: false,
   searchTerms: "run",

@@ -381,6 +381,7 @@
                   <tree-view
                     *ngSwitchCase="'tree'"
                     [metadata]="dataset['scientificMetadata']"
+                    [allowAddAsColumn]="true"
                   ></tree-view>
                   <metadata-view
                     *ngSwitchDefault

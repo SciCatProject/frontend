@@ -24,6 +24,7 @@ import {
   OutputDatasetDto,
   DatasetsV4Service,
   DatasetsPublicV4Service,
+  MetadataKeysV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import {
@@ -67,6 +68,7 @@ describe("DatasetEffects", () => {
   let datasetApi: jasmine.SpyObj<DatasetsService>;
   let datasetsV4Service: jasmine.SpyObj<DatasetsV4Service>;
   let datasetsPublicV4Service: jasmine.SpyObj<DatasetsPublicV4Service>;
+  let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
 
   const getConfig = () => ({});
 
@@ -125,6 +127,12 @@ describe("DatasetEffects", () => {
             "datasetsPublicV4ControllerFullfacetV4",
           ]),
         },
+        {
+          provide: MetadataKeysV4Service,
+          useValue: jasmine.createSpyObj("metadataKeysApi", [
+            "metadataKeysV4ControllerFindAllV4",
+          ]),
+        },
         { provide: AppConfigService, useValue: { getConfig } },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
@@ -135,6 +143,7 @@ describe("DatasetEffects", () => {
     datasetApi = injectedStub(DatasetsService);
     datasetsV4Service = injectedStub(DatasetsV4Service);
     datasetsPublicV4Service = injectedStub(DatasetsPublicV4Service);
+    metadataKeysApi = injectedStub(MetadataKeysV4Service);
   });
 
   const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
@@ -221,26 +230,31 @@ describe("DatasetEffects", () => {
   describe("fetchMetadataKeys$", () => {
     it("should result in a fetchMetadataKeysCompleteAction", () => {
       const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysAction();
+      const action = fromActions.fetchMetadataKeysAction({});
       const outcome = fromActions.fetchMetadataKeysCompleteAction({
         metadataKeys,
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: metadataKeys });
-      datasetApi.datasetsControllerMetadataKeysV3.and.returnValue(response);
-
+      const response = cold("-a|", {
+        a: [{ key: "test", humanReadable: "Test" }],
+      });
+      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
+        response,
+      );
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
     });
 
     it("should result in a fetchMetadataKeysFailedAction", () => {
-      const action = fromActions.fetchMetadataKeysAction();
+      const action = fromActions.fetchMetadataKeysAction({});
       const outcome = fromActions.fetchMetadataKeysFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerMetadataKeysV3.and.returnValue(response);
+      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
@@ -272,7 +286,7 @@ describe("DatasetEffects", () => {
           unit: "s",
         };
         const action = fromActions.addScientificConditionAction({ condition });
-        const outcome = fromActions.fetchMetadataKeysAction();
+        const outcome = fromActions.fetchMetadataKeysAction({});
 
         actions = hot("-a", { a: action });
 
@@ -292,7 +306,7 @@ describe("DatasetEffects", () => {
         const action = fromActions.removeScientificConditionAction({
           condition,
         });
-        const outcome = fromActions.fetchMetadataKeysAction();
+        const outcome = fromActions.fetchMetadataKeysAction({});
 
         actions = hot("-a", { a: action });
 
@@ -304,7 +318,7 @@ describe("DatasetEffects", () => {
     describe("ofType clearFacetsAction", () => {
       it("should result in a fetchMetadataKeysAction", () => {
         const action = fromActions.clearFacetsAction();
-        const outcome = fromActions.fetchMetadataKeysAction();
+        const outcome = fromActions.fetchMetadataKeysAction({});
 
         actions = hot("-a", { a: action });
 
@@ -705,7 +719,7 @@ describe("DatasetEffects", () => {
 
     describe("ofType fetchMetadataKeysAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.fetchMetadataKeysAction();
+        const action = fromActions.fetchMetadataKeysAction({});
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });

@@ -20,6 +20,11 @@ export const selectMetadataKeys = createSelector(
   (state) => state.metadataKeys,
 );
 
+export const selectDatasetsFacetCountsIsLoading = createSelector(
+  selectDatasetState,
+  (state) => state.facetCountsIsLoading,
+);
+
 export const selectCurrentDataset = createSelector(
   selectDatasetState,
   (state) => state.currentSet,

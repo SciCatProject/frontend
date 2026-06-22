@@ -11,11 +11,16 @@ import { DateTimeService } from "shared/services/date-time.service";
 import { UnitsService } from "shared/services/units.service";
 import { AppConfigService } from "app-config.service";
 
+export const DEFAULT_METADATA_PATH = "scientificMetadata";
+
 export class TreeNode {
   children: TreeNode[];
   key: string;
   value: any;
   unit: string;
+  path: string;
+  columnName: string;
+  human_name?: string;
 }
 export class FlatNode {
   key: string;
@@ -24,6 +29,9 @@ export class FlatNode {
   level: number;
   expandable: boolean;
   visible: boolean;
+  path: string;
+  columnName: string;
+  human_name?: string;
 }
 @Component({
   template: "",
@@ -50,20 +58,34 @@ export class TreeBaseComponent {
     this.formatNumberPipe = new FormatNumberPipe(this.configService);
     this.dateTimeService = new DateTimeService();
   }
-  buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
+  buildDataTree(
+    obj: { [key: string]: any },
+    level: number,
+    parentPath = DEFAULT_METADATA_PATH,
+  ): TreeNode[] {
     return Object.keys(obj).reduce<TreeNode[]>((accumulator, key) => {
       const value = obj[key];
       const node = new TreeNode();
+      const path = parentPath ? `${parentPath}.${key}` : key;
       node.key = key;
+      node.path = path;
+      node.columnName = path;
+      node.human_name =
+        value !== null && typeof value === "object"
+          ? value["human_name"]
+          : undefined;
       // suport both {value: any, unit: string} and {v: any , u: string}
       if (value?.unit || value?.unit === "" || value?.u || value?.u === "") {
         node.unit = value.unit || value.u || undefined;
         node.value = value.value ?? value.v;
+        if ("value" in value) {
+          node.columnName = `${path}.value`;
+        }
       } else {
         node.value = value;
       }
       if (node.value && typeof node.value === "object") {
-        node.children = this.buildDataTree(node.value, level + 1);
+        node.children = this.buildDataTree(node.value, level + 1, path);
         if (!Array.isArray(node.value)) {
           node.value = undefined;
         }

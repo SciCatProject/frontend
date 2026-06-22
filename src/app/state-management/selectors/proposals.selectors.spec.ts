@@ -48,6 +48,7 @@ const initialProposalsState: ProposalsState = {
   proposalsCount: 0,
   datasetsCount: 0,
   facetCounts: {},
+  facetCountsIsLoading: false,
 
   hasPrefilledFilters: true,
 
