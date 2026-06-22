@@ -147,7 +147,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       this.eventsService.message$
         .pipe(
           filter((payload) => {
-            return payload.type === "dataset.created";
+            return payload.type === "Dataset.created";
           }),
         )
         .subscribe((payload: Record<string, any>) => {
