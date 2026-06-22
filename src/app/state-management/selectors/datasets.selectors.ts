@@ -1,6 +1,7 @@
 import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { selectFilters as selectUserFilters } from "state-management/selectors/user.selectors";
+import { scientificConditionsToQuery } from "shared/modules/shared-condition/utils";
 
 const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
 
@@ -186,8 +187,16 @@ export const selectFullqueryParams = createSelector(
     const filter = state.filters;
     const pagination = state.pagination;
     // don't query with modeToggle, it's only in filters for persistent routing
-    const { text, skip, limit, sortField, modeToggle, mode, ...theRest } =
-      filter;
+    const {
+      text,
+      skip,
+      limit,
+      sortField,
+      modeToggle,
+      mode,
+      scientific,
+      ...theRest
+    } = filter;
 
     const [sortKey, sortDirection] = sortField.split(":");
 
@@ -202,9 +211,15 @@ export const selectFullqueryParams = createSelector(
         ? { datasetName: { $regex: text, $options: "i" } }
         : {};
 
+    const scientificQuery =
+      scientific && scientific.length > 0
+        ? scientificConditionsToQuery(scientific)
+        : {};
+
     const query = {
       ...baseQuery,
       ...textQuery,
+      ...scientificQuery,
     };
 
     return { query, limits };
