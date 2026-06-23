@@ -167,6 +167,62 @@
           }
         }
       },
+      "publishedDataActionsEnabled": { "type": "boolean" },
+      "publishedDataActions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": { "type": "string" },
+            "id": { "type": "string" },
+            "description": { "type": "string" },
+            "order": { "type": "number" },
+            "mat_icon": { "type": "string" },
+            "url": { "type": "string" },
+            "target": { "type": "string" },
+            "enabled": { "type": "string" },
+            "authorization": { "type": "array", "items": { "type": "string" } },
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "value": { "type": "string" }
+                }
+              }
+            },
+            "variables": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "value": { "type": "string" }
+                }
+              }
+            },
+            "headers": {
+              "type": "object",
+              "properties": {
+                "content-type": { "type": "string" },
+                "Authorization": { "type": "string" }
+              }
+            },
+            "method": {
+              "type": "string",
+              "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+            },
+            "type": {
+              "type": "string",
+              "enum": ["form", "xhr", "link", "json-download"]
+            },
+            "icon": { "type": "string" },
+            "payload": { "type": "string" },
+            "filename": { "type": "string" }
+          }
+        }
+      },
 
       "defaultDatasetsListSettings": {
         "type": "object",
@@ -630,6 +686,97 @@
                   },
                   { "type": "Control", "scope": "#/properties/order" },
                   { "type": "Control", "scope": "#/properties/files" },
+                  { "type": "Control", "scope": "#/properties/mat_icon" },
+                  { "type": "Control", "scope": "#/properties/url" },
+                  { "type": "Control", "scope": "#/properties/target" },
+                  { "type": "Control", "scope": "#/properties/enabled" },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/method"
+                  },
+                  { "type": "Control", "scope": "#/properties/type" },
+                  { "type": "Control", "scope": "#/properties/icon" },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/payload",
+                    "options": { "multi": true }
+                  },
+                  { "type": "Control", "scope": "#/properties/filename" },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/authorization"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/variables",
+                    "options": {
+                      "detail": {
+                        "type": "HorizontalLayout",
+                        "elements": [
+                          { "type": "Control", "scope": "#/properties/key" },
+                          { "type": "Control", "scope": "#/properties/value" }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/inputs",
+                    "options": {
+                      "detail": {
+                        "type": "HorizontalLayout",
+                        "elements": [
+                          { "type": "Control", "scope": "#/properties/key" },
+                          { "type": "Control", "scope": "#/properties/value" }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "Group",
+                    "label": "Headers",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/headers/properties/content-type"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/headers/properties/Authorization"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Published Data Actions",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/publishedDataActionsEnabled"
+          },
+          {
+            "type": "ListWithDetail",
+            "scope": "#/properties/publishedDataActions",
+            "options": {
+              "detail": {
+                "type": "VerticalLayout",
+                "elements": [
+                  { "type": "Control", "scope": "#/properties/label" },
+                  { "type": "Control", "scope": "#/properties/id" },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/description"
+                  },
+                  { "type": "Control", "scope": "#/properties/order" },
                   { "type": "Control", "scope": "#/properties/mat_icon" },
                   { "type": "Control", "scope": "#/properties/url" },
                   { "type": "Control", "scope": "#/properties/target" },

@@ -5,7 +5,6 @@ import {
   AppConfigService,
   HelpMessages,
 } from "app-config.service";
-import { time } from "node:console";
 import { Observable, of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
@@ -94,6 +93,8 @@ const appConfig: AppConfigInterface = {
   datafilesActions: [],
   datasetSelectionActionsEnabled: false,
   datasetSelectionActions: [],
+  publishedDataActionsEnabled: false,
+  publishedDataActions: [],
   defaultDatasetsListSettings: {
     columns: [
       {
