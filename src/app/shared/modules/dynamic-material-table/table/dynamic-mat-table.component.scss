@@ -435,16 +435,6 @@ mat-paginator {
   margin-right: 10px;
   margin-bottom: 5px;
 
-  //html body.mat-typography app-root app-app-layout.ng-star-inserted div.anonymous-site div.main
-  //app-main-app-layout.ng-star-inserted div.main-app dashboard.ng-star-inserted div.dashboard-main
-  //mat-sidenav-container.mat-drawer-container.mat-sidenav-container.mat-drawer-transition
-  //mat-sidenav-content.mat-drawer-content.mat-sidenav-content div div.table-column dataset-table
-  //dynamic-mat-table.mat-elevation-z2.dataset-table.ng-tns-c3025886189-0.ng-star-inserted.ng-tns-c3025886189-1
-  //div.table-header-controls.ng-tns-c3025886189-1 div.paginator-container.ng-tns-c3025886189-1
-  //mat-paginator.mat-mdc-paginator.ng-tns-c3025886189-1.ng-star-inserted
-  //div.mat-mdc-paginator-outer-container div.mat-mdc-paginator-container
-  //div.mat-mdc-paginator-page-size.ng-star-inserted
-  //mat-form-field.mat-mdc-form-field.mat-mdc-paginator-page-size-select.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-primary.ng-star-inserted.mat-form-field-animations-enabled
   /* Target the paginator's form field */
   mat-form-field.mat-mdc-form-field.mat-mdc-paginator-page-size-select {
     height: 30px !important;
@@ -485,18 +475,6 @@ mat-paginator {
   }
 
   /* Remove extra padding from the form field infix */
-  //html body.mat-typography app-root app-app-layout.ng-star-inserted div.anonymous-site div.main
-  //app-main-app-layout.ng-star-inserted div.main-app dashboard.ng-star-inserted div.dashboard-main
-  //mat-sidenav-container.mat-drawer-container.mat-sidenav-container.mat-drawer-transition
-  //mat-sidenav-content.mat-drawer-content.mat-sidenav-content div div.table-column dataset-table
-  //dynamic-mat-table.mat-elevation-z2.dataset-table.ng-tns-c3025886189-0.ng-star-inserted.ng-tns-c3025886189-1
-  //div.table-header-controls.ng-tns-c3025886189-1 div.paginator-container.ng-tns-c3025886189-1
-  // mat-paginator.mat-mdc-paginator.ng-tns-c3025886189-1.ng-star-inserted
-  // div.mat-mdc-paginator-outer-container div.mat-mdc-paginator-container
-  // div.mat-mdc-paginator-page-size.ng-star-inserted
-  // mat-form-field.mat-mdc-form-field.mat-mdc-paginator-page-size-select.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-primary.ng-star-inserted.mat-form-field-animations-enabled
-  // div.mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--outlined.mdc-text-field--no-label
-  // div.mat-mdc-form-field-flex div.mat-mdc-form-field-infix
   .mat-mdc-form-field-infix {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
