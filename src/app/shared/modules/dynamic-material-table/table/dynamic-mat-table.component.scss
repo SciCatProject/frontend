@@ -487,7 +487,7 @@ cdk-virtual-scroll-viewport {
 
 .row-highlight,
 .row-highlight .mat-mdc-cell {
-  animation: row-highlight-fade 2s ease-out forwards;
+  animation: row-highlight-fade 6s ease-out forwards;
 }
 
 // Animating a conic-gradient angle needs a typed custom property,
@@ -499,10 +499,13 @@ cdk-virtual-scroll-viewport {
 
 @keyframes row-highlight-fade {
   0% {
-    background-color: #a9e49d;
+    background-color: #5fc64a;
   }
-  50% {
-    background-color: #defcd8;
+  40% {
+    background-color: #69d354;
+  }
+  80% {
+    background-color: #d9fed1;
   }
   100% {
     background-color: transparent;
