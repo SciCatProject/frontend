@@ -322,7 +322,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   @Input() emptyIcon = "info";
   @Input() sideFilterCollapsed = false;
   @Input() set latestUpdatedId(id: string) {
-    if (this.highlighted.has(id)) return;
+    if (!id || this.highlighted.has(id)) return;
     this.highlighted.add(id);
     timer(10000).subscribe(() => {
       this.highlighted.delete(id);
