@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { fetchScicatTokenAction } from "state-management/actions/user.actions";
-import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
+import { selectScicatToken } from "state-management/selectors/user.selectors";
 import {
   distinctUntilChanged,
   map,
@@ -35,11 +35,8 @@ export class EventsService {
     this.store.dispatch(fetchScicatTokenAction());
 
     this.connectionSub = this.store
-      .select(selectUserSettingsPageViewModel)
-      .pipe(
-        map((vm) => vm?.scicatToken),
-        distinctUntilChanged(),
-      )
+      .select(selectScicatToken)
+      .pipe(distinctUntilChanged())
       .subscribe((token) => {
         if (token) {
           this.openConnection(token);
@@ -47,6 +44,12 @@ export class EventsService {
           this.closeConnection();
         }
       });
+  }
+
+  disconnect() {
+    this.closeConnection();
+    this.connectionSub?.unsubscribe();
+    this.connectionSub = null;
   }
 
   private openConnection(token: string) {
@@ -62,11 +65,5 @@ export class EventsService {
   private closeConnection() {
     this.eventSource?.close();
     this.eventSource = null;
-  }
-
-  disconnect() {
-    this.closeConnection();
-    this.connectionSub?.unsubscribe();
-    this.connectionSub = null;
   }
 }
