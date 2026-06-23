@@ -4,17 +4,16 @@ import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 import { selectScicatToken } from "state-management/selectors/user.selectors";
 import {
   distinctUntilChanged,
+  EMPTY,
   map,
-  startWith,
+  Observable,
   Subject,
   Subscription,
   switchMap,
-  timer,
 } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
-  private eventSource: EventSource | null = null;
   private connectionSub: Subscription | null = null;
   private messageSubject = new Subject<Record<string, unknown>>();
 
@@ -29,21 +28,24 @@ export class EventsService {
     private store: Store,
   ) {}
 
-  private openConnection(token: string) {
-    this.closeConnection();
+  private createEventStream(
+    token: string,
+  ): Observable<Record<string, unknown>> {
+    return new Observable<Record<string, unknown>>((observer) => {
+      const es = new EventSource(`/api/v3/events/stream?token=${token}`);
 
-    this.eventSource = new EventSource(`/api/v3/events/stream?token=${token}`);
-    this.eventSource.onmessage = (event) => {
-      this.ngZone.run(() => this.messageSubject.next(JSON.parse(event.data)));
-    };
-    this.eventSource.onerror = () => this.closeConnection();
+      es.onmessage = (event) => {
+        this.ngZone.run(() => observer.next(JSON.parse(event.data)));
+      };
+
+      es.onerror = () => {
+        es.close();
+        observer.complete();
+      };
+
+      return () => es.close();
+    });
   }
-
-  private closeConnection() {
-    this.eventSource?.close();
-    this.eventSource = null;
-  }
-
   connect() {
     if (this.connectionSub) return;
 
@@ -51,18 +53,14 @@ export class EventsService {
 
     this.connectionSub = this.store
       .select(selectScicatToken)
-      .pipe(distinctUntilChanged())
-      .subscribe((token) => {
-        if (token) {
-          this.openConnection(token);
-        } else {
-          this.closeConnection();
-        }
-      });
+      .pipe(
+        distinctUntilChanged(),
+        switchMap((token) => (token ? this.createEventStream(token) : EMPTY)),
+      )
+      .subscribe((msg) => this.messageSubject.next(msg));
   }
 
   disconnect() {
-    this.closeConnection();
     this.connectionSub?.unsubscribe();
     this.connectionSub = null;
   }
