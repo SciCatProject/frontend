@@ -439,7 +439,7 @@
       [class.row-selection]="
         rowSelectionModel ? rowSelectionModel.isSelected(row) : false
       "
-      [class.row-highlight]="row._id === latestUpdatedId"
+      [class.row-highlight]="highlighted.has(row._id)"
       (contextmenu)="onContextMenu($event, null, row)"
     >
     </mat-row>

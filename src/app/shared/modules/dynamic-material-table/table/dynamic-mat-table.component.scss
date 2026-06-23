@@ -487,7 +487,7 @@ cdk-virtual-scroll-viewport {
 
 .row-highlight,
 .row-highlight .mat-mdc-cell {
-  animation: row-highlight-fade 6s ease-out forwards;
+  animation: row-flash 5s ease-out forwards;
 }
 
 // Animating a conic-gradient angle needs a typed custom property,
@@ -497,18 +497,12 @@ cdk-virtual-scroll-viewport {
   inherits: false;
 }
 
-@keyframes row-highlight-fade {
-  0% {
-    background-color: #5fc64a;
+@keyframes row-flash {
+  from {
+    box-shadow: inset 0 0 0 9999px rgba(66, 184, 70, 0.95);
   }
-  40% {
-    background-color: #69d354;
-  }
-  80% {
-    background-color: #d9fed1;
-  }
-  100% {
-    background-color: transparent;
+  to {
+    box-shadow: inset 0 0 0 9999px rgba(76, 175, 80, 0);
   }
 }
 

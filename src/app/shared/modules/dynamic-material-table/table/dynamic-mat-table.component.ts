@@ -50,7 +50,7 @@ import {
   distinctUntilChanged,
   filter,
 } from "rxjs/operators";
-import { Subject, Subscription } from "rxjs";
+import { Subject, Subscription, timer } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
 import {
@@ -206,6 +206,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   init = false;
   hoverKey: string | null = null;
   currentContextMenuSender: any = {};
+  highlighted = new Set<string>();
 
   @HostBinding("style.height.px") height = null;
 
@@ -320,6 +321,13 @@ export class DynamicMatTableComponent<T extends TableRow>
   @Input() emptyMessage = "No data available";
   @Input() emptyIcon = "info";
   @Input() sideFilterCollapsed = false;
+  @Input() set latestUpdatedId(id: string) {
+    if (this.highlighted.has(id)) return;
+    this.highlighted.add(id);
+    timer(10000).subscribe(() => {
+      this.highlighted.delete(id);
+    });
+  }
 
   appConfig = this.appConfigService.getConfig();
 
@@ -404,7 +412,6 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.dataSource.subscribe((x) => {
       x = x || [];
       this.rowSelectionModel.clear();
-      this.standardDataSource.data = [];
       this.initSystemField(x);
       this.standardDataSource.data = x;
       this.refreshUI();
@@ -496,8 +503,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     return {};
   }
 
-  indexTrackFn = (index: number) => {
-    return index;
+  indexTrackFn = (index: number, row: any) => {
+    return row?._id ?? index;
   };
 
   trackColumn(index: number, item: TableField<T>): string {

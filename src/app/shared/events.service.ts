@@ -21,13 +21,7 @@ export class EventsService {
   message$ = this.messageSubject.asObservable();
 
   latestUpdatedId$ = this.messageSubject.pipe(
-    switchMap((m) => {
-      const id = (m["data"] as { _id: string })._id;
-      return timer(3000).pipe(
-        map(() => null),
-        startWith(id),
-      );
-    }),
+    map((m) => (m["data"] as { _id: string })._id),
   );
 
   constructor(
