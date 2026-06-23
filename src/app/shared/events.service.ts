@@ -29,6 +29,21 @@ export class EventsService {
     private store: Store,
   ) {}
 
+  private openConnection(token: string) {
+    this.closeConnection();
+
+    this.eventSource = new EventSource(`/api/v3/events/stream?token=${token}`);
+    this.eventSource.onmessage = (event) => {
+      this.ngZone.run(() => this.messageSubject.next(JSON.parse(event.data)));
+    };
+    this.eventSource.onerror = () => this.closeConnection();
+  }
+
+  private closeConnection() {
+    this.eventSource?.close();
+    this.eventSource = null;
+  }
+
   connect() {
     if (this.connectionSub) return;
 
@@ -50,20 +65,5 @@ export class EventsService {
     this.closeConnection();
     this.connectionSub?.unsubscribe();
     this.connectionSub = null;
-  }
-
-  private openConnection(token: string) {
-    this.closeConnection();
-
-    this.eventSource = new EventSource(`/api/v3/events/stream?token=${token}`);
-    this.eventSource.onmessage = (event) => {
-      this.ngZone.run(() => this.messageSubject.next(JSON.parse(event.data)));
-    };
-    this.eventSource.onerror = () => this.closeConnection();
-  }
-
-  private closeConnection() {
-    this.eventSource?.close();
-    this.eventSource = null;
   }
 }
