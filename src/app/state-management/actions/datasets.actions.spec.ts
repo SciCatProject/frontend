@@ -10,10 +10,7 @@ import {
   createMock,
   mockAttachment as attachment,
 } from "shared/MockStubs";
-import {
-  CreateDatasetDto,
-  OutputDatasetDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("Dataset Actions", () => {
   const datasets = [dataset];
@@ -273,11 +270,11 @@ describe("Dataset Actions", () => {
   describe("addDatasetAction", () => {
     it("should create an action", () => {
       const action = fromActions.addDatasetAction({
-        dataset: dataset as CreateDatasetDto,
+        dataset: dataset as OutputDatasetDto,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Dataset",
-        dataset: dataset as CreateDatasetDto,
+        dataset: dataset as OutputDatasetDto,
       });
     });
   });

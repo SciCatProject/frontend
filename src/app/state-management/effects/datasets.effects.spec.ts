@@ -419,7 +419,7 @@ describe("DatasetEffects", () => {
   describe("addDataset$", () => {
     it("should result in an addDatasetCompleteAction, a fetchDatasetsAction and a fetchDatasetAction", () => {
       const action = fromActions.addDatasetAction({
-        dataset: derivedDataset as CreateDatasetDto,
+        dataset: derivedDataset as OutputDatasetDto,
       });
       const outcome1 = fromActions.addDatasetCompleteAction({
         dataset: derivedDataset,
@@ -443,7 +443,7 @@ describe("DatasetEffects", () => {
 
     it("should result in an addDatasetFailedAction", () => {
       const action = fromActions.addDatasetAction({
-        dataset: derivedDataset as CreateDatasetDto,
+        dataset: derivedDataset as OutputDatasetDto,
       });
       const outcome = fromActions.addDatasetFailedAction();
 
@@ -745,7 +745,7 @@ describe("DatasetEffects", () => {
     describe("ofType addDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
         const action = fromActions.addDatasetAction({
-          dataset: derivedDataset as CreateDatasetDto,
+          dataset: derivedDataset as OutputDatasetDto,
         });
         const outcome = loadingAction();
 
