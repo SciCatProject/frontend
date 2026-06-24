@@ -186,6 +186,10 @@ export const expandAnimation = trigger("detailExpand", [
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  host: {
+    "[class.disable-border]": "disableBorder",
+    "[class.live-border]": "realTimeEnabled && liveBorder",
+  },
 })
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
@@ -194,6 +198,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   // Private fields
   private dragDropData = { dragColumnIndex: -1, dropColumnIndex: -1 };
   private eventsSubscription: Subscription;
+  private liveConnectionErrSub?: Subscription;
 
   // Public fields
   globalSearchUpdate = new Subject<string>();
@@ -201,6 +206,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   hoverKey: string | null = null;
   currentContextMenuSender: any = {};
   highlighted = new Set<string>();
+  liveBorder = false;
 
   @HostBinding("style.height.px") height = null;
 
@@ -510,6 +516,9 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
     }
+    if (this.liveConnectionErrSub) {
+      this.liveConnectionErrSub.unsubscribe();
+    }
   }
 
   public refreshUI() {
@@ -540,6 +549,12 @@ export class DynamicMatTableComponent<T extends TableRow>
         }
       });
     }
+
+    this.liveConnectionErrSub = this.eventsService.connectionError$.subscribe(
+      (hasError) => {
+        this.liveBorder = !hasError;
+      },
+    );
   }
 
   public get inverseOfTranslation(): number {

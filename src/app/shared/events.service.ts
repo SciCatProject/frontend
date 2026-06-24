@@ -39,19 +39,16 @@ export class EventsService {
     return new Observable<Record<string, unknown>>((observer) => {
       const es = new EventSource(`/api/v3/events/stream?token=${token}`);
 
+      es.onopen = () =>
+        this.ngZone.run(() => this.connectionErrorSubject.next(false));
+
       es.onmessage = (event) => {
         this.ngZone.run(() => observer.next(JSON.parse(event.data)));
       };
 
-      es.onerror = (error) => {
+      es.onerror = () => {
         es.close();
-        this.ngZone.run(() =>
-          observer.error(
-            new Error(
-              `SSE connection failed with error: ${JSON.stringify(error)}`,
-            ),
-          ),
-        );
+        this.ngZone.run(() => this.connectionErrorSubject.next(true));
       };
 
       return () => es.close();
@@ -66,18 +63,11 @@ export class EventsService {
       .select(selectScicatToken)
       .pipe(
         distinctUntilChanged(),
-        switchMap((token) =>
-          token
-            ? this.createEventStream(token).pipe(
-                catchError(() => {
-                  this.connectionErrorSubject.next(true);
-                  return EMPTY;
-                }),
-              )
-            : EMPTY,
-        ),
+        switchMap((token) => (token ? this.createEventStream(token) : EMPTY)),
       )
-      .subscribe((msg) => this.messageSubject.next(msg));
+      .subscribe((msg) => {
+        return this.messageSubject.next(msg);
+      });
   }
 
   disconnect() {
