@@ -95,9 +95,18 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
     length: 0,
   };
 
+  private scicatColumnsDef =
+    this.tableDefaultSettingsConfig.settingList[0]?.columnSetting?.map((c) => ({
+      id: c.name,
+      label: c.header ?? c.name,
+      hideOrder: c.index ?? 0,
+      canSort: true,
+      matchMode: c.type === "date" ? "between" : "contains",
+    })) ?? [];
+
   tableDefinition = {
     collection: "Jobs",
-    columns: this.columns,
+    columns: this.scicatColumnsDef,
   };
 
   dataSource: BehaviorSubject<OutputJobV3Dto[]> = new BehaviorSubject<
@@ -145,9 +154,9 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
               vm.tableSettings?.columns || [],
             );
 
-          const currentColumnSetting = tableSettingsConfig.settingList.find(
-            (s) => s.isCurrentSetting,
-          )?.columnSetting;
+          const currentColumnSetting =
+            tableSettingsConfig.settingList.find((s) => s.isCurrentSetting)
+              ?.columnSetting ?? [];
 
           this.columns = currentColumnSetting;
           this.setting = tableSettingsConfig;
@@ -251,6 +260,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
 
     this.loadData(newFilters, 0, this.pagination.pageSize);
     this.currentFilters = newFilters;
+    this.pagination = { ...this.pagination, pageIndex: 0 };
   }
 
   ngOnDestroy() {
