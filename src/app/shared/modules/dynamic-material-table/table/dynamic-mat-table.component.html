@@ -1,17 +1,31 @@
 <div
   class="table-header-controls"
   [class.with-side-filter]="sideFilterCollapsed"
+  [class.disable-border]="disableBorder"
+  [class.live-border]="!(eventsService.connectionError$ | async)"
 >
-  <div class="real-time-toggle-wrapper" *ngIf="showRealTimeToggle">
+  <div
+    class="real-time-toggle-wrapper"
+    *ngIf="showRealTimeToggle && appConfig?.realTimeUpdatesEnabled"
+  >
     <mat-slide-toggle
       [checked]="realTimeEnabled"
       (change)="realTimeEnabledChange.emit($event.checked)"
-      matTooltip="When on, the table watches for new entries and shows a notice."
-      matTooltipPosition="above"
       data-cy="real-time-toggle"
     >
       Live updates
     </mat-slide-toggle>
+
+    <mat-icon
+      *ngIf="realTimeEnabled && eventsService.connectionError$ | async"
+      class="connection-error-icon"
+      matTooltip="Live updates are currently unavailable. Please check with your administrator."
+      matTooltipPosition="above"
+      aria-label="Live updates are currently unavailable. Please check with your administrator."
+      data-cy="live-updates-error"
+    >
+      cloud_off
+    </mat-icon>
   </div>
   <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
     <mat-form-field>

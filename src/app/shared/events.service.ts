@@ -3,6 +3,8 @@ import { Store } from "@ngrx/store";
 import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 import { selectScicatToken } from "state-management/selectors/user.selectors";
 import {
+  BehaviorSubject,
+  catchError,
   distinctUntilChanged,
   EMPTY,
   map,
@@ -16,6 +18,9 @@ import {
 export class EventsService {
   private connectionSub: Subscription | null = null;
   private messageSubject = new Subject<Record<string, unknown>>();
+  private connectionErrorSubject = new BehaviorSubject<boolean>(false);
+
+  connectionError$ = this.connectionErrorSubject.asObservable();
 
   message$ = this.messageSubject.asObservable();
 
@@ -38,9 +43,15 @@ export class EventsService {
         this.ngZone.run(() => observer.next(JSON.parse(event.data)));
       };
 
-      es.onerror = () => {
+      es.onerror = (error) => {
         es.close();
-        observer.complete();
+        this.ngZone.run(() =>
+          observer.error(
+            new Error(
+              `SSE connection failed with error: ${JSON.stringify(error)}`,
+            ),
+          ),
+        );
       };
 
       return () => es.close();
@@ -55,7 +66,16 @@ export class EventsService {
       .select(selectScicatToken)
       .pipe(
         distinctUntilChanged(),
-        switchMap((token) => (token ? this.createEventStream(token) : EMPTY)),
+        switchMap((token) =>
+          token
+            ? this.createEventStream(token).pipe(
+                catchError(() => {
+                  this.connectionErrorSubject.next(true);
+                  return EMPTY;
+                }),
+              )
+            : EMPTY,
+        ),
       )
       .subscribe((msg) => this.messageSubject.next(msg));
   }

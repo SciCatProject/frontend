@@ -226,7 +226,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     this.pagination = paginationConfig;
   }
 
-  onRealTimeToggle = (enabled: boolean) => {
+  onRealTimeToggle(enabled: boolean) {
     this.realTimeEnabled = enabled;
     if (enabled) {
       this.eventsService.connect();
@@ -242,7 +242,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     } else {
       this.eventsService.disconnect();
     }
-  };
+  }
 
   formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
     let tableData: TableData[] = [];

@@ -176,6 +176,7 @@ export interface AppConfigInterface {
   autoApplyFilters?: boolean;
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
+  realTimeUpdatesEnabled?: boolean;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

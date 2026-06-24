@@ -410,6 +410,14 @@ cdk-virtual-scroll-viewport {
 
   .real-time-toggle-wrapper {
     margin-left: 1rem;
+    .connection-error-icon {
+      color: var(--theme-warn-darker);
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
   }
 
   .global-search-wrapper {
@@ -465,6 +473,16 @@ cdk-virtual-scroll-viewport {
     flex: 1;
   }
 }
+
+.connection-error-icon {
+  color: var(--warn-color, #d32f2f);
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  cursor: default;
+  vertical-align: middle;
+}
+
 .paginator-container.is-loading {
   ::ng-deep .mat-mdc-paginator-range-label {
     position: relative;

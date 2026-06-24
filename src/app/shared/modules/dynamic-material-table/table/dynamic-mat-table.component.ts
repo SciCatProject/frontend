@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   AfterViewInit,
-  QueryList,
   ElementRef,
   ViewChild,
   TemplateRef,
@@ -10,7 +9,6 @@ import {
   ChangeDetectorRef,
   Input,
   OnDestroy,
-  ContentChildren,
   Injector,
   ComponentRef,
   HostBinding,
@@ -24,7 +22,6 @@ import {
 import { TableCoreDirective } from "../cores/table.core.directive";
 import { TableService } from "./dynamic-mat-table.service";
 import { TableField } from "../models/table-field.model";
-import { AbstractFilter } from "./extensions/filter/compare/abstract-filter";
 import { MatDialog } from "@angular/material/dialog";
 import {
   trigger,
@@ -78,6 +75,7 @@ import {
 import { TableDataSource } from "../cores/table-data-source";
 import { DatePipe } from "@angular/common";
 import { AppConfigService } from "app-config.service";
+import { EventsService } from "shared/events.service";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -188,10 +186,6 @@ export const expandAnimation = trigger("detailExpand", [
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
-  host: {
-    "[class.disable-border]": "disableBorder",
-    "[class.live-border]": "realTimeEnabled",
-  },
 })
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
@@ -342,6 +336,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     public readonly config: TableSetting,
     private datePipe: DatePipe,
     public appConfigService: AppConfigService,
+    public eventsService: EventsService,
   ) {
     super(tableService, cdr, config);
 
