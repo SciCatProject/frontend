@@ -95,7 +95,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
     length: 0,
   };
 
-  private scicatColumnsDef =
+  scicatColumnsDef =
     this.tableDefaultSettingsConfig.settingList[0]?.columnSetting?.map((c) => ({
       id: c.name,
       label: c.header ?? c.name,
