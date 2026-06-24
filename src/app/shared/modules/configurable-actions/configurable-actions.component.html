@@ -4,6 +4,8 @@
       *ngFor="let actionConfig of sortedActionsConfig"
       [actionConfig]="actionConfig"
       [actionItems]="actionItems"
+      [buttonStyle]="buttonsStyle"
+      (actionFinished)="actionFinished.emit($event)"
     >
     </configurable-action>
   </div>

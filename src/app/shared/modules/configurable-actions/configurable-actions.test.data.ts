@@ -223,6 +223,43 @@ export const mockActionsConfig: ActionConfig[] = [
   },
 ];
 
+mockActionsConfig.push({
+  ...mockActionsConfig[0],
+  order: 9,
+  id: "6a4d5226-1cf8-4dbf-a7db-9a4a16b1f523",
+  label: "Dialog Action",
+  type: "dialog",
+  dialog: {
+    title: "Confirm",
+    description: "Why?",
+    width: "500px",
+    fields: [{ key: "reason", label: "Reason", type: "text" }],
+  },
+});
+
+mockActionsConfig.push({
+  ...mockActionsConfig[0],
+  order: 10,
+  id: "4fcf5658-95f4-4fbd-99fd-8df4bb4bf0d0",
+  label: "Dialog XHR",
+  type: "dialog",
+  method: "POST",
+  url: "https://example.org/action",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  variables: {
+    pid: "#Dataset0Pid",
+  },
+  payload: '{"dataset":"{{ @pid }}","reason":"{{ @dialog.reason }}"}',
+  onSuccess: "xhr",
+  dialog: {
+    title: "Confirm",
+    description: "Why?",
+    fields: [{ key: "reason", label: "Reason", type: "text" }],
+  },
+});
+
 export const mockActionItems: ActionItems = {
   datasets: [
     {
@@ -250,7 +287,7 @@ export const mockActionItems: ActionItems = {
           time: "2019-09-06T13:11:37.102Z",
         },
       ],
-    },
+    } as ActionItemDataset,
     {
       pid: "48217db2-bee2-11f0-ace4-b7a1618f0eba",
       sourceFolder: "/source/folder/2",
@@ -264,7 +301,7 @@ export const mockActionItems: ActionItems = {
           time: "2019-09-06T13:11:37.102Z",
         },
       ],
-    },
+    } as ActionItemDataset,
   ],
 };
 
