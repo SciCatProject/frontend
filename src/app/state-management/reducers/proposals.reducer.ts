@@ -47,6 +47,7 @@ const reducer = createReducer(
     (state, { proposal }): ProposalsState => ({
       ...state,
       currentProposal: proposal,
+      currentProposals: [...(state.currentProposals || []), proposal],
     }),
   ),
 
@@ -63,6 +64,7 @@ const reducer = createReducer(
     (state): ProposalsState => ({
       ...state,
       currentProposal: null,
+      currentProposals: [],
     }),
   ),
 
@@ -139,6 +141,7 @@ const reducer = createReducer(
     (state): ProposalsState => ({
       ...state,
       currentProposal: undefined,
+      currentProposals: [],
     }),
   ),
 

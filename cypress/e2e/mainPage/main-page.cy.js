@@ -7,14 +7,14 @@ describe("Main Page", () => {
       type: "raw",
       dataFileSize: "small",
       datasetName: "Main Page Dataset Public",
-      proposalId: "20150729",
+      proposalIds: ["20150729"],
       isPublished: true,
     });
     cy.createDataset({
       type: "raw",
       dataFileSize: "small",
       datasetName: "Main Page Dataset Non Public",
-      proposalId: "20150729",
+      proposalIds: ["20150729"],
       isPublished: true,
     });
   });

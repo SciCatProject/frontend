@@ -250,38 +250,44 @@
 
         <mat-card-content>
           <table>
-            <tr *ngIf="dataset['proposalId'] && proposal">
-              <th>{{ "Proposal" | translate: localization }}</th>
+            <tr *ngIf="dataset.proposalIds?.length > 0 && proposals.length > 0">
+              <th>{{ "Proposals" | translate: localization }}</th>
               <td>
-                <a (click)="onClickProposal(proposal.proposalId)">{{
-                  proposal.title
-                }}</a>
+                <div *ngFor="let p of proposals">
+                  <a (click)="onClickProposal(p.proposalId)">{{
+                    p.title || p.proposalId
+                  }}</a>
+                </div>
               </td>
             </tr>
             <tr
               *ngIf="
-                dataset['proposalId'] &&
-                !proposal &&
+                dataset.proposalIds?.length > 0 &&
+                !proposals &&
                 appConfig.datasetDetailsShowMissingProposalId
               "
             >
-              <th>{{ "Proposal Id" | translate: localization }}</th>
-              <td>{{ dataset["proposalId"] }}</td>
+              <th>{{ "Proposal Ids" | translate: localization }}</th>
+              <td>{{ dataset["proposalIds"] }}</td>
             </tr>
-            <tr *ngIf="dataset['sampleId'] && sample">
+            <tr *ngIf="dataset.sampleIds?.length > 0 && samples.length > 0">
               <th>{{ "Sample" | translate: localization }}</th>
               <td>
-                <a (click)="onClickSample(sample.sampleId)">
-                  <span>{{ sample.description }}</span>
-                </a>
+                <div *ngFor="let s of samples">
+                  <a (click)="onClickSample(s.sampleId)">{{ s.description }}</a>
+                </div>
               </td>
             </tr>
-            <tr *ngIf="dataset['instrumentId'] && instrument">
+            <tr
+              *ngIf="
+                dataset.instrumentIds?.length > 0 && instruments.length > 0
+              "
+            >
               <th>{{ "Instrument" | translate: localization }}</th>
               <td>
-                <a (click)="onClickInstrument(instrument.pid)">
-                  {{ instrument.name }}
-                </a>
+                <div *ngFor="let inst of instruments">
+                  <a (click)="onClickInstrument(inst.pid)">{{ inst.name }}</a>
+                </div>
               </td>
             </tr>
             <tr *ngIf="dataset['creationLocation'] as value">

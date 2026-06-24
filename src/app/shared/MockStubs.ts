@@ -12,7 +12,6 @@ import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
   Instrument,
   OutputJobV3Dto,
-  OutputDatasetObsoleteDto,
   ProposalClass,
   PublishedData,
   OutputSampleDto,
@@ -27,6 +26,7 @@ import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/inges
 import { MethodItem } from "./sdk/models/ingestor/methodItem";
 import { FolderNode } from "./sdk/models/ingestor/folderNode";
 import { APIInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 export class MockUserApi {
   getCurrentId() {
@@ -337,7 +337,7 @@ export function createMock<T>(data?: Partial<T>): T {
   return data as T;
 }
 
-export const mockDataset = createMock<OutputDatasetObsoleteDto>({});
+export const mockDataset = createMock<CurrentDataset>({});
 export const mockAttachment = createMock<OutputAttachmentV3Dto>({});
 export const mockSample = createMock<OutputSampleDto>({});
 export const mockProposal = createMock<ProposalClass>({});
