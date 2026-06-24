@@ -6,6 +6,7 @@ import {
   CreateDatasetDto,
   OutputAttachmentV3Dto,
   PartialOutputDatasetDto,
+  OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
@@ -141,11 +142,11 @@ export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
 export const addDatasetAction = createAction(
   "[Dataset] Add Dataset",
-  props<{ dataset: CreateDatasetDto }>(),
+  props<{ dataset: OutputDatasetDto }>(),
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",
-  props<{ dataset: CreateDatasetDto }>(),
+  props<{ dataset: OutputDatasetDto }>(),
 );
 export const addDatasetFailedAction = createAction(
   "[Dataset] Add Dataset Failed",

@@ -53,7 +53,7 @@ export class SharedConditionComponent implements OnDestroy {
 
   humanNameMap: { [key: string]: string } = {};
   tempConditionValues: string[] = [];
-  tempConditionRangeValues: { [index: number]: [string, string] } = {};
+  tempConditionRangeValues: Record<string, [string, string]> = {};
   hoverKey: string | null = null;
   overlayPositions: ConnectedPosition[] = [
     {
@@ -447,8 +447,12 @@ export class SharedConditionComponent implements OnDestroy {
                 ...baseCondition,
                 rhs: Array.isArray(rhs)
                   ? [
-                      rhs[0] ? Number(rhs[0]) : undefined,
-                      rhs[1] ? Number(rhs[1]) : undefined,
+                      rhs[0] !== "" && rhs[0] !== null
+                        ? Number(rhs[0])
+                        : undefined,
+                      rhs[1] !== "" && rhs[1] !== null
+                        ? Number(rhs[1])
+                        : undefined,
                     ]
                   : rhs,
               },

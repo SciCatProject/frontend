@@ -90,10 +90,10 @@ export function conditionToMongoQuery(
           queryUnit = convertToSIUnit(lhs, min, unit).siUnit;
         }
 
-        if (convertedMin) {
+        if (convertedMin !== null && convertedMin !== undefined) {
           query[valuePath] = { ...query[valuePath], $gte: convertedMin };
         }
-        if (convertedMax) {
+        if (convertedMax !== null && convertedMax !== undefined) {
           query[valuePath] = { ...query[valuePath], $lte: convertedMax };
         }
       }

@@ -391,7 +391,7 @@ describe("Datasets general", () => {
         .within(() => {
           cy.get("input[matInput]").eq(0).clear().type("24.5");
           cy.get("input[matInput]").eq(1).clear().type("25.5");
-          cy.get("input[matInput]").eq(2).clear().type("celcius");
+          cy.get("input[matInput]").eq(2).clear().type("celsius");
         });
 
       cy.get('[data-cy="filter-search-button"]').click();

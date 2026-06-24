@@ -9,6 +9,7 @@ export interface SampleState {
   samples: OutputSampleDto[];
   attachments: OutputAttachmentV3Dto[];
   currentSample: OutputSampleDto | undefined;
+  currentSamples: OutputSampleDto[];
   datasets: PartialOutputDatasetDto[];
   metadataKeys: string[];
 
@@ -25,6 +26,7 @@ export const initialSampleState: SampleState = {
   samples: [],
   attachments: [],
   currentSample: undefined,
+  currentSamples: [],
   datasets: [],
   metadataKeys: [],
 

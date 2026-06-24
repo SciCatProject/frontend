@@ -43,7 +43,10 @@ import {
 } from "state-management/actions/samples.actions";
 import { MatDialog } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
-import { fetchInstrumentAction } from "state-management/actions/instruments.actions";
+import {
+  fetchInstrumentAction,
+  clearCurrentInstrumentStateAction,
+} from "state-management/actions/instruments.actions";
 import { CurrentDataset } from "state-management/state/datasets.store";
 
 export interface JWT {
@@ -279,10 +282,10 @@ export class DatasetDetailsDashboardComponent
 
   fetchDatasetRelatedDocuments(): void {
     if (this.dataset) {
-      if (
-        "proposalIds" in this.dataset &&
-        this.dataset.proposalIds.length > 0
-      ) {
+      this.store.dispatch(clearCurrentProposalStateAction());
+      this.store.dispatch(clearCurrentSampleStateAction());
+      this.store.dispatch(clearCurrentInstrumentStateAction());
+      if (this.dataset.proposalIds?.length > 0) {
         this.dataset.proposalIds.forEach((proposalId) => {
           this.store.dispatch(
             fetchProposalAction({
@@ -293,15 +296,12 @@ export class DatasetDetailsDashboardComponent
       } else {
         this.store.dispatch(clearLogbookAction());
       }
-      if ("sampleIds" in this.dataset && this.dataset.sampleIds.length > 0) {
+      if (this.dataset.sampleIds?.length > 0) {
         this.dataset.sampleIds.forEach((sampleId) => {
           this.store.dispatch(fetchSampleAction({ sampleId: sampleId }));
         });
       }
-      if (
-        "instrumentIds" in this.dataset &&
-        this.dataset.instrumentIds.length > 0
-      ) {
+      if (this.dataset.instrumentIds?.length > 0) {
         this.dataset.instrumentIds.forEach((instrumentId) => {
           this.store.dispatch(
             fetchInstrumentAction({
