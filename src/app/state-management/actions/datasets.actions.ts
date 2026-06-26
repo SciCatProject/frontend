@@ -79,7 +79,7 @@ export const fetchOrigDatablocksAction = createAction(
 );
 export const fetchOrigDatablocksCompleteAction = createAction(
   "[Dataset] Fetch Origin Datablocks Complete",
-  props<{ origdatablocks: OrigDatablock[] }>(),
+  props<{ origdatablocks: OrigDatablock[]; totalCount?: number }>(),
 );
 export const fetchOrigDatablocksFailedAction = createAction(
   "[Dataset] Fetch Origin Datablocks Failed",

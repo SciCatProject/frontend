@@ -9,6 +9,7 @@ import {
   OrigDatablock,
   OutputDatasetObsoleteDto,
   UpdateAttachmentV3Dto,
+  OrigdatablocksV4Service,
   MetadataKeysV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
@@ -28,7 +29,7 @@ import {
   tap,
   filter,
 } from "rxjs/operators";
-import { of } from "rxjs";
+import { of, forkJoin } from "rxjs";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
@@ -192,9 +193,9 @@ export class DatasetEffects {
   fetchDatablocksOfDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatablocksAction),
-      switchMap(({ pid, filters }) => {
+      switchMap(({ pid }) => {
         return this.datasetsService
-          .datasetsControllerFindAllDatablocksV3(pid, filters)
+          .datasetsControllerFindAllDatablocksV3(pid)
           .pipe(
             map((datablocks: Datablock[]) =>
               fromActions.fetchDatablocksCompleteAction({ datablocks }),
@@ -208,15 +209,37 @@ export class DatasetEffects {
   fetchOrigDatablocksOfDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksAction),
-      switchMap(({ pid }) => {
-        return this.datasetsService
-          .datasetsControllerFindAllOrigDatablocksV3(pid)
-          .pipe(
-            map((origdatablocks: OrigDatablock[]) =>
-              fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
+      switchMap(({ pid, filters }) => {
+        const paginatedQuery = {
+          where: { datasetId: pid },
+          limits: {
+            skip: filters?.skip || 0,
+            limit: filters?.limit || 5,
+          },
+        };
+
+        const allFilesQuery = {
+          where: { datasetId: pid },
+        };
+
+        return forkJoin({
+          paginated:
+            this.origdatablocksService.origDatablocksV4ControllerFindAllFilesV4(
+              JSON.stringify(paginatedQuery),
             ),
-            catchError(() => of(fromActions.fetchOrigDatablocksFailedAction())),
-          );
+          all: this.origdatablocksService.origDatablocksV4ControllerFindAllFilesV4(
+            JSON.stringify(allFilesQuery),
+          ),
+        }).pipe(
+          map(({ paginated, all }) => {
+            const totalCount = all?.length || 0;
+            return fromActions.fetchOrigDatablocksCompleteAction({
+              origdatablocks: paginated as any as OrigDatablock[],
+              totalCount,
+            });
+          }),
+          catchError(() => of(fromActions.fetchOrigDatablocksFailedAction())),
+        );
       }),
     );
   });
@@ -540,6 +563,7 @@ export class DatasetEffects {
   constructor(
     private actions$: Actions,
     private datasetsService: DatasetsService,
+    private origdatablocksService: OrigdatablocksV4Service,
     private store: Store,
     private appConfigService: AppConfigService,
     private metadataKeysV4Service: MetadataKeysV4Service,

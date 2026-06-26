@@ -37,12 +37,10 @@ const tableDefaultSettingsConfig: ITableSetting = {
         {
           name: "uniqueName",
           header: "Unique Name",
-          icon: "scanner",
         },
         {
           name: "name",
           header: "Name",
-          icon: "fingerprint",
         },
       ],
     },

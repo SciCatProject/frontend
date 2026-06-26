@@ -8,17 +8,13 @@ import {
   ViewChild,
   ElementRef,
 } from "@angular/core";
-import { Subscription } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   selectCurrentOrigDatablocks,
   selectCurrentDataset,
+  selectDatafilesPageViewModel,
 } from "state-management/selectors/datasets.selectors";
-import {
-  TableColumn,
-  PageChangeEvent,
-  CheckboxEvent,
-} from "shared/modules/table/table.component";
 import {
   selectIsLoading,
   selectIsLoggedIn,
@@ -29,7 +25,6 @@ import {
   CreateJobDtoV3,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
 import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/public-download-dialog.component";
 import { submitJobAction } from "state-management/actions/jobs.actions";
@@ -41,6 +36,19 @@ import {
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
+import {
+  TablePagination,
+  TablePaginationMode,
+} from "shared/modules/dynamic-material-table/models/table-pagination.model";
+import {
+  IRowEvent,
+  RowEventType,
+  TableSelectionMode,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
+import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "datafiles",
@@ -51,6 +59,7 @@ import { AuthService } from "shared/services/auth/auth.service";
 export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
   @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
+  vm$ = this.store.select(selectDatafilesPageViewModel);
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
   dataset$ = this.store.select(selectCurrentDataset);
   loading$ = this.store.select(selectIsLoading);
@@ -64,9 +73,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   totalFileSize = 0;
   selectedFileSize = 0;
 
-  areAllSelected = false;
-  isNoneSelected = true;
-
   subscriptions: Subscription[] = [];
 
   files: Array<DataFiles_File> = [];
@@ -76,8 +82,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   };
 
   count = 0;
-  pageSize = 25;
-  currentPage = 0;
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   fileserverBaseURL: string | undefined = this.appConfig.fileserverBaseURL;
@@ -94,29 +98,60 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   jwt: CreateUserJWT;
   auth_token: string;
 
-  tableColumns: TableColumn[] = [
+  tableColumns: TableField<any>[] = [
     {
       name: "path",
-      icon: "save",
-      sort: false,
-      inList: true,
+      header: "Path",
     },
     {
       name: "size",
-      icon: "save",
-      sort: false,
-      inList: true,
-      pipe: FileSizePipe,
+      header: "Size",
+      customRender: (_column, row: DataFiles_File) =>
+        this.fileSizePipe.transform(row.size),
     },
     {
       name: "time",
-      icon: "access_time",
-      sort: false,
-      inList: true,
-      dateFormat: "yyyy-MM-dd HH:mm",
+      header: "Time",
+      type: "date",
+      format: this.appConfig.dateFormat || "yyyy-MM-dd HH:mm",
     },
   ];
-  tableData: DataFiles_File[] = [];
+
+  setting: ITableSetting = {};
+
+  tableDefaultSettingsConfig: ITableSetting = {
+    visibleActionMenu: actionMenu,
+    saveSettingMode: "none",
+    settingList: [
+      {
+        visibleActionMenu: actionMenu,
+        saveSettingMode: "none",
+        isDefaultSetting: true,
+        isCurrentSetting: true,
+        columnSetting: [],
+      },
+    ],
+    rowStyle: {
+      "border-bottom": "1px solid #d2d2d2",
+    },
+  };
+
+  dataSource: BehaviorSubject<DataFiles_File[]> = new BehaviorSubject<
+    DataFiles_File[]
+  >([]);
+
+  paginationMode: TablePaginationMode = "server-side";
+
+  pagination: TablePagination = {
+    pageSizeOptions: [5, 10, 25, 50, 100],
+    pageIndex: 0,
+    pageSize: 25,
+    length: 0,
+  };
+
+  rowSelectionMode: TableSelectionMode = this.fileDownloadEnabled
+    ? "multi"
+    : "none";
 
   constructor(
     public appConfigService: AppConfigService,
@@ -128,80 +163,28 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     private fileSizePipe: FileSizePipe,
   ) {}
 
-  onPageChange(event: PageChangeEvent) {
-    const { pageIndex, pageSize } = event;
-    this.currentPage = pageIndex;
-    this.pageSize = pageSize;
-    const skip = this.currentPage * this.pageSize;
-    const end = skip + this.pageSize;
-    this.tableData = this.files.slice(skip, end);
-  }
-
-  getAreAllSelected() {
-    return this.tableData.reduce((accum, curr) => accum && curr.selected, true);
-  }
-
-  getIsNoneSelected() {
-    return this.tableData.reduce(
-      (accum, curr) => accum && !curr.selected,
-      true,
-    );
-  }
-
   getAllFiles() {
-    if (!this.tableData) {
-      return [];
-    }
-    return this.tableData.map((file) => file.path);
+    return this.files.map((file) => file.path);
   }
 
   getSelectedFiles() {
-    if (!this.tableData) {
-      return [];
+    return this.files.filter((file) => file.selected).map((file) => file.path);
+  }
+
+  onRowEvent({ event, sender }: IRowEvent<DataFiles_File>) {
+    if (event === RowEventType.RowSelectionChange && sender.row) {
+      sender.row.selected = sender.checked;
     }
-    return this.tableData
+
+    if (event === RowEventType.MasterSelectionChange && sender.selectionModel) {
+      this.files.forEach((file) => {
+        file.selected = sender.selectionModel.isSelected(file);
+      });
+    }
+
+    this.selectedFileSize = this.files
       .filter((file) => file.selected)
-      .map((file) => file.path);
-  }
-
-  updateSelectionStatus() {
-    this.areAllSelected = this.getAreAllSelected();
-    this.isNoneSelected = this.getIsNoneSelected();
-    this.updateSelectedInFiles();
-  }
-
-  updateSelectedInFiles() {
-    const selected = this.tableData
-      .filter((item) => item.selected)
-      .map((item) => item.path);
-    const files = this.files.map((item) => {
-      item.selected = selected.includes(item.path);
-      return item;
-    });
-    this.files = [...files];
-  }
-
-  onSelectOne(checkboxEvent: CheckboxEvent) {
-    const { event, row } = checkboxEvent;
-    row.selected = event.checked;
-    if (event.checked) {
-      this.selectedFileSize += row.size;
-    } else {
-      this.selectedFileSize -= row.size;
-    }
-    this.updateSelectionStatus();
-  }
-
-  onSelectAll(event: MatCheckboxChange) {
-    this.tableData.forEach((file) => {
-      file.selected = event.checked;
-      if (event.checked) {
-        this.selectedFileSize += file.size;
-      } else {
-        this.selectedFileSize = 0;
-      }
-    });
-    this.updateSelectionStatus();
+      .reduce((sum, file) => sum + file.size, 0);
   }
 
   hasTooLargeFiles(files: any[]) {
@@ -247,31 +230,40 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
     return warning;
   }
-  //ngAfterViewInit() {
+
   ngOnInit() {
+    this.setting = this.tableDefaultSettingsConfig;
     this.subscriptions.push(
-      this.dataset$.subscribe((dataset) => {
+      this.vm$.subscribe(({ datablocks, totalCount, dataset }) => {
         if (dataset) {
+          this.datasetPid = dataset.pid;
           this.actionItems.datasets = <ActionItemDataset[]>[dataset];
         }
-      }),
-    );
-    this.subscriptions.push(
-      this.datablocks$.subscribe((datablocks) => {
+
         if (datablocks) {
+          this.totalFileSize = 0;
           const files: DataFiles_File[] = [];
           datablocks.forEach((block) => {
-            block.dataFileList.map((file: DataFiles_File) => {
-              this.totalFileSize += file.size;
-              file.selected = false;
+            if (block.dataFileList && !Array.isArray(block.dataFileList)) {
+              const file = block.dataFileList as DataFiles_File;
+              this.totalFileSize += file.size || 0;
               files.push(file);
-            });
+            }
           });
           this.count = files.length;
-          this.tableData = files.slice(0, this.pageSize);
           this.files = files;
+
+          this.pagination = {
+            ...this.pagination,
+            length: totalCount,
+          };
+
+          this.dataSource.next(this.files);
+
           this.tooLargeFile = this.hasTooLargeFiles(this.files);
-          this.actionItems.datasets[0].files = files;
+          if (this.actionItems.datasets.length > 0) {
+            this.actionItems.datasets[0].files = files;
+          }
         }
       }),
     );
@@ -297,6 +289,15 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     } else {
       this[`${form}Element`].nativeElement.submit();
     }
+  }
+
+  onPaginationChange({ pageIndex, pageSize }: TablePagination) {
+    this.store.dispatch(
+      fetchOrigDatablocksAction({
+        pid: this.datasetPid,
+        filters: { skip: pageIndex * pageSize, limit: pageSize },
+      }),
+    );
   }
 
   ngOnDestroy() {
