@@ -173,7 +173,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]').clear().type(title);
+      cy.get('[data-cy="text-search"]').clear().type(title);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -192,7 +193,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]').clear().type(title);
+      cy.get('[data-cy="text-search"]').clear().type(title);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -221,7 +223,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]').clear().type(title);
+      cy.get('[data-cy="text-search"]').clear().type(title);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -298,7 +301,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]').clear().type(title);
+      cy.get('[data-cy="text-search"]').clear().type(title);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -349,7 +353,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]').clear().type(title);
+      cy.get('[data-cy="text-search"]').clear().type(title);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -374,7 +379,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]').clear().type(title);
+      cy.get('[data-cy="text-search"]').clear().type(title);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -398,7 +404,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]').clear().type(title);
+      cy.get('[data-cy="text-search"]').clear().type(title);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -417,7 +424,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]').clear().type(title);
+      cy.get('[data-cy="text-search"]').clear().type(title);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -534,9 +542,11 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[formcontrolname="globalSearch"]')
+      cy.get('[data-cy="text-search"]')
         .clear()
         .type(userPublishedDataTitle);
+
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
