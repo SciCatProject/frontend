@@ -33,9 +33,11 @@ services:
       - "./CI/e2e/frontend.config.e2e.json:/home/node/app/dist/config/frontend.config.json"
       - "./CI/e2e/frontend.theme.e2e.json:/home/node/app/dist/config/frontend.theme.json"
       - "./CI/e2e/publishedDataConfig.e2e.json:/home/node/app/publishedDataConfig.json"
+      - "./CI/e2e/jobconfig.e2e.yaml:/home/node/app/jobconfig.yaml"
     environment:
       - DOI_USERNAME=${DOI_USERNAME}
       - DOI_PASSWORD=${DOI_PASSWORD}
+      - JOB_CONFIGURATION_FILE=/home/node/app/jobconfig.yaml
     depends_on:
       mongodb:
         condition: service_healthy
