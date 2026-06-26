@@ -939,5 +939,13 @@
       "publishedData": true,
       "samples": true
     }
+  },
+  "helpSettings": {
+    "enabled": false,
+    "htmlContent": "Here you can place your custom help content"
+  },
+  "aboutSettings": {
+    "enabled": false,
+    "htmlContent": "Here you can place your custom info/about content"
   }
 }

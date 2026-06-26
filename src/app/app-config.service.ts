@@ -78,6 +78,16 @@ export class DefaultTab {
   proposal: string;
 }
 
+export interface HelpSettings {
+  enabled?: boolean;
+  htmlContent?: string;
+}
+
+export interface AboutSettings {
+  enabled?: boolean;
+  htmlContent?: string;
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   addScientificMetadataKeysAsColumn?: boolean;
@@ -174,6 +184,8 @@ export interface AppConfigInterface {
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
   autoApplyFilters?: boolean;
+  helpSettings?: HelpSettings;
+  aboutSettings?: AboutSettings;
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
 }
@@ -283,6 +295,22 @@ export class AppConfigService {
 
     if (!config.datasetPageSizeOptions?.length) {
       config.datasetPageSizeOptions = [5, 10, 25, 100];
+    }
+
+    if (!config.helpSettings) {
+      config.helpSettings = {
+        enabled: false,
+        htmlContent:
+          'Here goes your SciCat Help page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
+      };
+    }
+
+    if (!config.aboutSettings) {
+      config.aboutSettings = {
+        enabled: false,
+        htmlContent:
+          'Here goes your SciCat About page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
+      };
     }
 
     this.appConfig = config;

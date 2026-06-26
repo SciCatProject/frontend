@@ -104,6 +104,20 @@
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
+      "helpSettings": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "htmlContent": { "type": "string" }
+        }
+      },
+      "aboutSettings": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "htmlContent": { "type": "string" }
+        }
+      },
       "datafilesActionsEnabled": { "type": "boolean" },
       "statusBannerMessage": { "type": "string" },
       "statusBannerCode": {
@@ -946,6 +960,58 @@
                   {
                     "type": "Control",
                     "scope": "#/properties/mainMenu/properties/authenticatedUser"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Header",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/helpSettings/properties/enabled",
+                    "label": "Help Enabled"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/helpSettings/properties/htmlContent",
+                    "label": "Help HTML Content",
+                    "options": {
+                      "multi": true,
+                      "rows": 5
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/aboutSettings/properties/enabled",
+                    "label": "About Enabled"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/aboutSettings/properties/htmlContent",
+                    "label": "About HTML Content",
+                    "options": {
+                      "multi": true,
+                      "rows": 5
+                    }
                   }
                 ]
               }

@@ -224,6 +224,14 @@ const appConfig: AppConfigInterface = {
   ingestorComponent: {
     ingestorEnabled: true,
   },
+  helpSettings: {
+    enabled: false,
+    htmlContent: "This is not my help",
+  },
+  aboutSettings: {
+    enabled: false,
+    htmlContent: "This is not my about",
+  },
 };
 
 describe("AppConfigService", () => {
@@ -288,6 +296,14 @@ describe("AppConfigService", () => {
             authURL: "abcd",
           },
         ],
+        helpSettings: {
+          enabled: false,
+          htmlContent: "This is the mockConfigResponses config.json help",
+        },
+        aboutSettings: {
+          enabled: false,
+          htmlContent: "This is the mockConfigResponses config.json about",
+        },
       },
       "/assets/config.override.json": {
         accessTokenPrefix: "Bearer ",
@@ -295,6 +311,16 @@ describe("AppConfigService", () => {
         addDatasetEnabled: true,
         mainMenu: { nonAuthenticatedUser: { files: true } },
         oAuth2Endpoints: [],
+        helpSettings: {
+          enabled: false,
+          htmlContent:
+            "This is the mockConfigResponses config.override.json help",
+        },
+        aboutSettings: {
+          enabled: false,
+          htmlContent:
+            "This is the mockConfigResponses config.override.json about",
+        },
       },
     };
 
@@ -312,6 +338,16 @@ describe("AppConfigService", () => {
       oAuth2Endpoints: [],
       dateFormat: "yyyy-MM-dd HH:mm",
       timezone: "UTC",
+      helpSettings: {
+        enabled: false,
+        htmlContent:
+          "This is the mockConfigResponses config.override.json help",
+      },
+      aboutSettings: {
+        enabled: false,
+        htmlContent:
+          "This is the mockConfigResponses config.override.json about",
+      },
     };
 
     const mockHttpGet = (
