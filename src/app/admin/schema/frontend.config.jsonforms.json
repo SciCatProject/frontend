@@ -25,6 +25,7 @@
       "addDatasetEnabled": { "type": "boolean" },
       "archiveWorkflowEnabled": { "type": "boolean" },
       "datasetReduceEnabled": { "type": "boolean" },
+      "datasetRelationshipsEnabled": { "type": "boolean" },
       "datasetJsonScientificMetadata": { "type": "boolean" },
       "datasetPageSizeOptions": {
         "type": "array",
@@ -461,6 +462,7 @@
           { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
+          { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },
           {
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"

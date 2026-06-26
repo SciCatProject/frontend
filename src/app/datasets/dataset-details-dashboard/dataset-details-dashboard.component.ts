@@ -61,6 +61,7 @@ enum TAB {
   jsonScientificMetadata = "Scientific Metadata (JSON)",
   datafiles = "Datafiles",
   relatedDatasets = "Related Datasets",
+  relationships = "Relationships",
   reduce = "Reduce",
   logbook = "Logbook",
   attachments = "Attachments",
@@ -183,6 +184,12 @@ export class DatasetDetailsDashboardComponent
               label: TAB.relatedDatasets,
               icon: "folder",
               enabled: true,
+            },
+            {
+              location: "./relationships",
+              label: TAB.relationships,
+              icon: "device_hub",
+              enabled: this.appConfig.datasetRelationshipsEnabled,
             },
             {
               location: "./reduce",

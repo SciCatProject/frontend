@@ -5,6 +5,7 @@
   "allowConfigOverrides": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
+  "datasetRelationshipsEnabled": true,
   "datasetJsonScientificMetadata": true,
   "datasetPageSizeOptions": [
     5,
