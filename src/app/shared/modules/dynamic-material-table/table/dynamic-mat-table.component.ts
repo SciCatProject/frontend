@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   AfterViewInit,
-  QueryList,
   ElementRef,
   ViewChild,
   TemplateRef,
@@ -10,7 +9,6 @@ import {
   ChangeDetectorRef,
   Input,
   OnDestroy,
-  ContentChildren,
   Injector,
   ComponentRef,
   HostBinding,
@@ -24,7 +22,6 @@ import {
 import { TableCoreDirective } from "../cores/table.core.directive";
 import { TableService } from "./dynamic-mat-table.service";
 import { TableField } from "../models/table-field.model";
-import { AbstractFilter } from "./extensions/filter/compare/abstract-filter";
 import { MatDialog } from "@angular/material/dialog";
 import {
   trigger,
@@ -50,7 +47,7 @@ import {
   distinctUntilChanged,
   filter,
 } from "rxjs/operators";
-import { Subject, Subscription } from "rxjs";
+import { Subject, Subscription, timer } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
 import {
@@ -78,6 +75,7 @@ import {
 import { TableDataSource } from "../cores/table-data-source";
 import { DatePipe } from "@angular/common";
 import { AppConfigService } from "app-config.service";
+import { EventsService } from "shared/events.service";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -190,6 +188,7 @@ export const expandAnimation = trigger("detailExpand", [
   standalone: false,
   host: {
     "[class.disable-border]": "disableBorder",
+    "[class.live-border]": "realTimeEnabled && liveBorder",
   },
 })
 export class DynamicMatTableComponent<T extends TableRow>
@@ -199,12 +198,15 @@ export class DynamicMatTableComponent<T extends TableRow>
   // Private fields
   private dragDropData = { dragColumnIndex: -1, dropColumnIndex: -1 };
   private eventsSubscription: Subscription;
+  private liveConnectionErrSub?: Subscription;
 
   // Public fields
   globalSearchUpdate = new Subject<string>();
   init = false;
   hoverKey: string | null = null;
   currentContextMenuSender: any = {};
+  highlighted = new Set<string>();
+  liveBorder = false;
 
   @HostBinding("style.height.px") height = null;
 
@@ -319,6 +321,13 @@ export class DynamicMatTableComponent<T extends TableRow>
   @Input() emptyMessage = "No data available";
   @Input() emptyIcon = "info";
   @Input() sideFilterCollapsed = false;
+  @Input() set latestUpdatedId(id: string) {
+    if (!id || this.highlighted.has(id)) return;
+    this.highlighted.add(id);
+    timer(10000).subscribe(() => {
+      this.highlighted.delete(id);
+    });
+  }
 
   appConfig = this.appConfigService.getConfig();
 
@@ -333,6 +342,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     public readonly config: TableSetting,
     private datePipe: DatePipe,
     public appConfigService: AppConfigService,
+    public eventsService: EventsService,
   ) {
     super(tableService, cdr, config);
 
@@ -403,7 +413,6 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.dataSource.subscribe((x) => {
       x = x || [];
       this.rowSelectionModel.clear();
-      this.standardDataSource.data = [];
       this.initSystemField(x);
       this.standardDataSource.data = x;
       this.refreshUI();
@@ -495,8 +504,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     return {};
   }
 
-  indexTrackFn = (index: number) => {
-    return index;
+  indexTrackFn = (index: number, row: any) => {
+    return row?._id ?? index;
   };
 
   trackColumn(index: number, item: TableField<T>): string {
@@ -506,6 +515,9 @@ export class DynamicMatTableComponent<T extends TableRow>
   ngOnDestroy(): void {
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
+    }
+    if (this.liveConnectionErrSub) {
+      this.liveConnectionErrSub.unsubscribe();
     }
   }
 
@@ -537,6 +549,12 @@ export class DynamicMatTableComponent<T extends TableRow>
         }
       });
     }
+
+    this.liveConnectionErrSub = this.eventsService.connectionError$.subscribe(
+      (hasError) => {
+        this.liveBorder = !hasError;
+      },
+    );
   }
 
   public get inverseOfTranslation(): number {

@@ -30,7 +30,6 @@ import {
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
-import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
 import { combineLatest, Subscription, lastValueFrom } from "rxjs";
 import {
   selectProfile,
@@ -58,6 +57,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readyToFetch$ = this.store
     .select(selectHasPrefilledFilters)
     .pipe(filter((has) => has));
+
   loggedIn$ = this.store.select(selectIsLoggedIn);
   selectedSets$ = this.store.select(selectSelectedDatasets);
   selectColumns$ = this.store.select(selectColumns);

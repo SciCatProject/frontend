@@ -2,6 +2,29 @@
   class="table-header-controls"
   [class.with-side-filter]="sideFilterCollapsed"
 >
+  <div
+    class="real-time-toggle-wrapper"
+    *ngIf="showRealTimeToggle && appConfig?.realTimeUpdatesEnabled"
+  >
+    <mat-slide-toggle
+      [checked]="realTimeEnabled"
+      (change)="realTimeEnabledChange.emit($event.checked)"
+      data-cy="real-time-toggle"
+    >
+      Live updates
+    </mat-slide-toggle>
+
+    <mat-icon
+      *ngIf="realTimeEnabled && eventsService.connectionError$ | async"
+      class="connection-error-icon"
+      matTooltip="Live updates are currently unavailable. Please check with your administrator."
+      matTooltipPosition="above"
+      aria-label="Live updates are currently unavailable. Please check with your administrator."
+      data-cy="live-updates-error"
+    >
+      cloud_off
+    </mat-icon>
+  </div>
   <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
     <mat-form-field>
       <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
@@ -428,6 +451,7 @@
       [class.row-selection]="
         rowSelectionModel ? rowSelectionModel.isSelected(row) : false
       "
+      [class.row-highlight]="highlighted.has(row._id)"
       (contextmenu)="onContextMenu($event, null, row)"
     >
     </mat-row>

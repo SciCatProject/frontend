@@ -24,6 +24,7 @@
       "accessTokenPrefix": { "type": "string" },
       "addDatasetEnabled": { "type": "boolean" },
       "archiveWorkflowEnabled": { "type": "boolean" },
+      "realTimeUpdatesEnabled": { "type": "boolean" },
       "datasetReduceEnabled": { "type": "boolean" },
       "datasetJsonScientificMetadata": { "type": "boolean" },
       "datasetPageSizeOptions": {
@@ -480,7 +481,8 @@
           { "type": "Control", "scope": "#/properties/logbookEnabled" },
           { "type": "Control", "scope": "#/properties/loginFormEnabled" },
           { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" },
-          { "type": "Control", "scope": "#/properties/autoApplyFilters" }
+          { "type": "Control", "scope": "#/properties/autoApplyFilters" },
+          { "type": "Control", "scope": "#/properties/realTimeUpdatesEnabled" }
         ]
       },
       {
