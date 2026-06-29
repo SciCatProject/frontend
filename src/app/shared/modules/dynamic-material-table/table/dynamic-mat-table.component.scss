@@ -301,7 +301,10 @@ cdk-virtual-scroll-viewport {
 
 .general-warning {
   cursor: pointer;
-  padding-right: 0.5em;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  font-size: 18px;
 }
 
 ::ng-deep .active-sort .mat-sort-header-arrow svg {
