@@ -1,0 +1,2263 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../frontend-configuration-testing/">
+      
+      
+        <link rel="next" href="../about/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Help Page Configuration - SciCat Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#help-page-configuration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="SciCat Documentation" class="md-header__button md-logo" aria-label="SciCat Documentation" data-md-component="logo">
+      
+  <img src="../assets/SciCat-logo-icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SciCat Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Help Page Configuration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SciCat Documentation" class="md-nav__button md-logo" aria-label="SciCat Documentation" data-md-component="logo">
+      
+  <img src="../assets/SciCat-logo-icon.png" alt="logo">
+
+    </a>
+    SciCat Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about-page-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Page Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend-configuration-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend Configuration Testing with Cypress Intercept
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Help Page Configuration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Help Page Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-help-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the Help Page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-audience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Audience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Configuration Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Configuration Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Locations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Locations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reference-configuration-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Configuration File
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typescript-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default Values
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-enable-with-default-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1: Enable with Default Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-enable-with-custom-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 2: Enable with Custom HTML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-comprehensive-help-center" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3: Comprehensive Help Center
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-4-help-with-feature-tutorials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 4: Help with Feature Tutorials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-5-help-with-external-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 5: Help with External Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-6-disabled-default-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 6: Disabled (Default State)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices-for-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices for Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-troubleshooting-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Troubleshooting Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Troubleshooting Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-help-icon-not-visible-in-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Help Icon Not Visible in Header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-help-page-shows-help-page-is-disabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Help Page Shows "Help page is disabled"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-help-page-shows-no-help-content-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Help Page Shows "No help content available"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Pitfalls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-faq-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. FAQ Section
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. FAQ Section">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-i-dont-configure-the-help-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What happens if I don't configure the Help page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-why-does-the-help-icon-show-help-text-on-some-screens-but-not-others" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Why does the Help icon show "Help" text on some screens but not others?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-the-help-page-without-the-header-icon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use the Help page without the header icon?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-completely-remove-the-help-page-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I completely remove the Help page feature?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-angular-components-or-directives-in-the-html-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use Angular components or directives in the HTML content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-is-the-html-content-sanitized-for-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Is the HTML content sanitized for security?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-external-css-or-javascript-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use external CSS or JavaScript files?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-a-link-to-the-help-page-from-other-parts-of-my-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I add a link to the Help page from other parts of my app?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-customize-the-help-icon-in-the-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I customize the Help icon in the header?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-access-the-help-page-configuration-programmatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I access the Help page configuration programmatically?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-difference-between-helpsettingshtmlcontent-being-empty-string-vs-undefined" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the difference between helpSettings.htmlContent being empty string vs. undefined?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-the-configuration-override-file-without-affecting-other-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use the configuration override file without affecting other settings?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-test-my-help-page-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I test my Help page configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-html-entities-in-the-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use HTML entities in the content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-maximum-size-for-the-html-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the maximum size for the HTML content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-iframes-in-the-help-page-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use iframes in the Help page content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-the-help-page-to-my-custom-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I add the Help page to my custom menu?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-translate-the-help-page-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I translate the Help page content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-include-screenshots-in-the-help-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I include screenshots in the Help page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-bootstrap-or-other-css-frameworks-in-the-help-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use Bootstrap or other CSS frameworks in the Help content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About SciCat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contributors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributors/datafiles-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datafiles Action Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributors/default-list-settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Default List Settings (Frontend)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theme/color-theme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theme System Overview &amp; New Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user/customize_datasets_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customize Datasets List
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-help-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the Help Page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-audience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Audience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Configuration Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Configuration Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Locations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Locations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reference-configuration-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Configuration File
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typescript-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default Values
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-enable-with-default-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1: Enable with Default Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-enable-with-custom-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 2: Enable with Custom HTML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-comprehensive-help-center" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3: Comprehensive Help Center
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-4-help-with-feature-tutorials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 4: Help with Feature Tutorials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-5-help-with-external-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 5: Help with External Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-6-disabled-default-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 6: Disabled (Default State)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices-for-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices for Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-troubleshooting-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Troubleshooting Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Troubleshooting Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-help-icon-not-visible-in-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Help Icon Not Visible in Header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-help-page-shows-help-page-is-disabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Help Page Shows "Help page is disabled"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-help-page-shows-no-help-content-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Help Page Shows "No help content available"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Pitfalls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-faq-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. FAQ Section
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. FAQ Section">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-i-dont-configure-the-help-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What happens if I don't configure the Help page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-why-does-the-help-icon-show-help-text-on-some-screens-but-not-others" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Why does the Help icon show "Help" text on some screens but not others?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-the-help-page-without-the-header-icon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use the Help page without the header icon?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-completely-remove-the-help-page-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I completely remove the Help page feature?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-angular-components-or-directives-in-the-html-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use Angular components or directives in the HTML content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-is-the-html-content-sanitized-for-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Is the HTML content sanitized for security?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-external-css-or-javascript-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use external CSS or JavaScript files?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-a-link-to-the-help-page-from-other-parts-of-my-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I add a link to the Help page from other parts of my app?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-customize-the-help-icon-in-the-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I customize the Help icon in the header?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-access-the-help-page-configuration-programmatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I access the Help page configuration programmatically?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-difference-between-helpsettingshtmlcontent-being-empty-string-vs-undefined" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the difference between helpSettings.htmlContent being empty string vs. undefined?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-the-configuration-override-file-without-affecting-other-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use the configuration override file without affecting other settings?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-test-my-help-page-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I test my Help page configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-html-entities-in-the-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use HTML entities in the content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-maximum-size-for-the-html-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the maximum size for the HTML content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-iframes-in-the-help-page-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use iframes in the Help page content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-the-help-page-to-my-custom-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I add the Help page to my custom menu?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-translate-the-help-page-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I translate the Help page content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-include-screenshots-in-the-help-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I include screenshots in the Help page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-bootstrap-or-other-css-frameworks-in-the-help-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use Bootstrap or other CSS frameworks in the Help content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="help-page-configuration">Help Page Configuration<a class="headerlink" href="#help-page-configuration" title="Permanent link">¶</a></h1>
+<h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">¶</a></h2>
+<h3 id="what-is-the-help-page">What is the Help Page?<a class="headerlink" href="#what-is-the-help-page" title="Permanent link">¶</a></h3>
+<p>The Help page is a user assistance page in SciCat Frontend that displays customizable HTML content to provide guidance, documentation, and support information to users.</p>
+<h3 id="target-audience">Target Audience<a class="headerlink" href="#target-audience" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Administrators</strong>: Configure and customize the Help page content</li>
+<li><strong>Developers</strong>: Integrate or extend the Help page functionality</li>
+<li><strong>End Users</strong>: Access help and documentation through the Help page</li>
+</ul>
+<h3 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">¶</a></h3>
+<p>The Help page serves as:
+- User guide and documentation hub
+- Getting started instructions
+- Feature explanations
+- Support information center
+- FAQ and troubleshooting reference</p>
+<h3 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">¶</a></h3>
+<ul>
+<li>Enable/disable via configuration</li>
+<li>Custom HTML content support</li>
+<li>Header icon with tooltip</li>
+<li>Responsive design</li>
+<li>Default fallback content</li>
+<li>Optional "Help" text label on larger screens</li>
+</ul>
+<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h3>
+<ul>
+<li>SciCat Frontend application deployed</li>
+<li>Access to configuration files or admin interface</li>
+<li>Basic HTML knowledge (for custom content)</li>
+</ul>
+<h3 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">¶</a></h3>
+<ul>
+<li>Angular <code>DomSanitizer</code> for HTML rendering</li>
+<li><code>AppConfigService</code> for configuration management</li>
+<li>Flex Layout (<code>fxFlex</code>) for responsive design</li>
+</ul>
+<hr>
+<h2 id="2-configuration-options">2. Configuration Options<a class="headerlink" href="#2-configuration-options" title="Permanent link">¶</a></h2>
+<h3 id="configuration-keys">Configuration Keys<a class="headerlink" href="#configuration-keys" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>helpSettings.enabled</code></td>
+<td>boolean</td>
+<td>No</td>
+<td><code>false</code></td>
+<td>Enables/disables the Help page feature</td>
+</tr>
+<tr>
+<td><code>helpSettings.htmlContent</code></td>
+<td>string</td>
+<td>No</td>
+<td>Default message</td>
+<td>HTML content to display on the Help page</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configuration-locations">Configuration Locations<a class="headerlink" href="#configuration-locations" title="Permanent link">¶</a></h3>
+<h4 id="reference-configuration-file">Reference Configuration File<a class="headerlink" href="#reference-configuration-file" title="Permanent link">¶</a></h4>
+<p>The frontend ships with a reference configuration file <code>src/assets/config.json</code>, 
+which is used only for testing and as a reference.
+The help can be configured by modifying the <code>helpSettings</code> section.</p>
+<p><strong>File</strong>: <code>src/assets/config.json</code></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h1&gt;Help Center&lt;/h1&gt;&lt;p&gt;Get assistance here&lt;/p&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="runtime-configuration">Runtime Configuration<a class="headerlink" href="#runtime-configuration" title="Permanent link">¶</a></h4>
+<p>Most deployments rely on the backend to provide the frontend configuration.
+The FE make a GET call to the backend to retrieve its configuration.
+This configuration must be configured in the BE deployment</p>
+<p><strong>Endpoint</strong>: <code>GET /api/v3/runtime-config/frontendConfig</code>
+<strong>Legacy Endpoint</strong>: <code>GET /api/v3/admin/config</code></p>
+<h3 id="admin-interface">Admin Interface<a class="headerlink" href="#admin-interface" title="Permanent link">¶</a></h3>
+<p><strong>Path</strong>: Admin Settings &gt; Frontend Config &gt; Header section</p>
+<p>The admin UI provides form controls:
+- <strong>Help Enabled</strong>: Toggle switch for <code>helpSettings.enabled</code>
+- <strong>Help HTML Content</strong>: Textarea (5 rows) for <code>helpSettings.htmlContent</code></p>
+<h3 id="typescript-interface">TypeScript Interface<a class="headerlink" href="#typescript-interface" title="Permanent link">¶</a></h3>
+<p><strong>File</strong>: <code>src/app/app-config.service.ts</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">HelpSettings</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">enabled?</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">htmlContent?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">AppConfigInterface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">helpSettings?</span><span class="o">:</span><span class="w"> </span><span class="kt">HelpSettings</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="default-values">Default Values<a class="headerlink" href="#default-values" title="Permanent link">¶</a></h3>
+<p>If help settings are not specified in configuration, the FE use the follow default values:</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nx">enabled</span><span class="o">:</span><span class="w"> </span><span class="kt">false</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">htmlContent</span><span class="o">:</span><span class="w"> </span><span class="s1">'Here goes your SciCat Help page!!&lt;br&gt;For more information, please read the documentation available on the &lt;a href="https://scicatproject.org"&gt;SciCat Website&lt;/a&gt;'</span><span class="p">,</span>
+</code></pre></div>
+<hr>
+<h2 id="3-usage-examples">3. Usage Examples<a class="headerlink" href="#3-usage-examples" title="Permanent link">¶</a></h2>
+<h3 id="example-1-enable-with-default-content">Example 1: Enable with Default Content<a class="headerlink" href="#example-1-enable-with-default-content" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>:
+- Help icon (?) appears in header
+- On larger screens, "Help" text appears next to icon
+- Page shows default SciCat message with link to scicatproject.org</p>
+<hr>
+<h3 id="example-2-enable-with-custom-html">Example 2: Enable with Custom HTML<a class="headerlink" href="#example-2-enable-with-custom-html" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h1&gt;User Guide&lt;/h1&gt;&lt;p&gt;Welcome to our data catalog.&lt;/p&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>:
+- Help icon appears in header
+- Page displays custom HTML content</p>
+<hr>
+<h3 id="example-3-comprehensive-help-center">Example 3: Comprehensive Help Center<a class="headerlink" href="#example-3-comprehensive-help-center" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div style='padding: 20px;'&gt;&lt;h2&gt;SciCat Help Center&lt;/h2&gt;&lt;section style='margin-bottom: 30px;'&gt;&lt;h3&gt;Getting Started&lt;/h3&gt;&lt;p&gt;New to SciCat? Follow these steps to begin:&lt;/p&gt;&lt;ol&gt;&lt;li&gt;&lt;strong&gt;Login&lt;/strong&gt; with your facility credentials&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Explore&lt;/strong&gt; datasets using the search interface&lt;/li&gt;&lt;li&gt;&lt;strong&gt;View&lt;/strong&gt; dataset details by clicking on any result&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Download&lt;/strong&gt; files individually or in bulk&lt;/li&gt;&lt;/ol&gt;&lt;/section&gt;&lt;section style='margin-bottom: 30px;'&gt;&lt;h3&gt;Searching Datasets&lt;/h3&gt;&lt;p&gt;Use the search page to find datasets by:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Dataset name or PID&lt;/li&gt;&lt;li&gt;Owner or group&lt;/li&gt;&lt;li&gt;Creation date range&lt;/li&gt;&lt;li&gt;Scientific metadata&lt;/li&gt;&lt;/ul&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;Need More Help?&lt;/h3&gt;&lt;p&gt;Contact our support team:&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; &lt;a href='mailto:support@facility.org'&gt;support@facility.org&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Phone:&lt;/strong&gt; +1 (555) 123-4567&lt;/p&gt;&lt;/section&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<hr>
+<h3 id="example-4-help-with-feature-tutorials">Example 4: Help with Feature Tutorials<a class="headerlink" href="#example-4-help-with-feature-tutorials" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h2&gt;Feature Tutorials&lt;/h2&gt;&lt;div style='display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;'&gt;&lt;div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'&gt;&lt;h4&gt;Datasets&lt;/h4&gt;&lt;p&gt;Browse and search for datasets. Use filters to narrow down results.&lt;/p&gt;&lt;/div&gt;&lt;div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'&gt;&lt;h4&gt;Selection&lt;/h4&gt;&lt;p&gt;Add files to your cart and download them in a single ZIP archive.&lt;/p&gt;&lt;/div&gt;&lt;div style='border: 1px solid #ddd; padding: 15px; border-radius: 5px;'&gt;&lt;h4&gt;Metadata&lt;/h4&gt;&lt;p&gt;View and edit scientific metadata for your datasets.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<hr>
+<h3 id="example-5-help-with-external-resources">Example 5: Help with External Resources<a class="headerlink" href="#example-5-help-with-external-resources" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h2&gt;Help Resources&lt;/h2&gt;&lt;p&gt;Explore these resources to learn more about using SciCat:&lt;/p&gt;&lt;ul style='list-style: none; padding: 0;'&gt;&lt;li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'&gt;&lt;strong&gt;&lt;a href='https://docs.scicatproject.org/user-guide' target='_blank' rel='noopener noreferrer'&gt;User Guide&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;&lt;span style='color: #666;'&gt;Complete user documentation&lt;/span&gt;&lt;/li&gt;&lt;li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'&gt;&lt;strong&gt;&lt;a href='https://docs.scicatproject.org/api' target='_blank' rel='noopener noreferrer'&gt;API Documentation&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;&lt;span style='color: #666;'&gt;REST API reference&lt;/span&gt;&lt;/li&gt;&lt;li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'&gt;&lt;strong&gt;&lt;a href='https://forum.scicatproject.org' target='_blank' rel='noopener noreferrer'&gt;Community Forum&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;&lt;span style='color: #666;'&gt;Ask questions and share knowledge&lt;/span&gt;&lt;/li&gt;&lt;li style='margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px;'&gt;&lt;strong&gt;&lt;a href='https://github.com/scicatproject/scicat' target='_blank' rel='noopener noreferrer'&gt;GitHub Repository&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;&lt;span style='color: #666;'&gt;Source code and issue tracking&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<hr>
+<h3 id="example-6-disabled-default-state">Example 6: Disabled (Default State)<a class="headerlink" href="#example-6-disabled-default-state" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>:
+- Help icon is hidden from header
+- Direct access to <code>/help</code> shows "Help page is disabled"</p>
+<h3 id="best-practices-for-content">Best Practices for Content<a class="headerlink" href="#best-practices-for-content" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>Organize by sections</strong>: Use clear headings to separate different help topics</li>
+<li><strong>Start with basics</strong>: Include a "Getting Started" or "Quick Start" section</li>
+<li><strong>Use bullet points</strong>: Make information scannable with lists</li>
+<li><strong>Include screenshots</strong>: Visual aids help users understand features</li>
+<li><strong>Provide contact info</strong>: Always include support contact information</li>
+<li><strong>Link to external docs</strong>: Reference comprehensive documentation</li>
+<li><strong>Keep it updated</strong>: Regularly review and update help content</li>
+<li><strong>Test on mobile</strong>: Ensure help content is readable on small screens</li>
+</ol>
+<hr>
+<h2 id="4-troubleshooting-guide">4. Troubleshooting Guide<a class="headerlink" href="#4-troubleshooting-guide" title="Permanent link">¶</a></h2>
+<h3 id="issue-help-icon-not-visible-in-header">Issue: Help Icon Not Visible in Header<a class="headerlink" href="#issue-help-icon-not-visible-in-header" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>: 
+- No help (?) icon in the header toolbar
+- Cannot navigate to Help page via UI</p>
+<p><strong>Diagnosis</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Check if feature is enabled</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">appConfigService</span><span class="p">.</span><span class="nx">getConfig</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">helpSettings</span><span class="o">?</span><span class="p">.</span><span class="nx">enabled</span><span class="p">);</span><span class="w"> </span><span class="c1">// Should be true</span>
+</code></pre></div>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Verify configuration</strong>
+   Configuration should contain the following:
+   </p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your help here"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+</li>
+<li>
+<p><strong>Check configuration</strong></p>
+</li>
+<li>Open browser console</li>
+<li>Use backend swagger API to retrieve frontend configuration through the runtime-config/frontendConfig endpoint</li>
+<li>Verify that option <code>helpSettings.enabled</code> is set to true</li>
+</ol>
+<hr>
+<h3 id="issue-help-page-shows-help-page-is-disabled">Issue: Help Page Shows "Help page is disabled"<a class="headerlink" href="#issue-help-page-shows-help-page-is-disabled" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>:
+- Icon is visible but page shows disabled message
+- Or: Direct navigation to <code>/help</code> shows disabled message</p>
+<p><strong>Cause</strong>: <code>helpSettings.enabled</code> is <code>false</code> or <code>null</code></p>
+<p><strong>Solution</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<hr>
+<h3 id="issue-help-page-shows-no-help-content-available">Issue: Help Page Shows "No help content available"<a class="headerlink" href="#issue-help-page-shows-no-help-content-available" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>:
+- Page loads but shows placeholder message
+- Not showing custom HTML content</p>
+<p><strong>Diagnosis</strong>:
+- Retrieve your FE config file
+- Check the value for entry <code>helpSettings.htmlContent</code></p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Verify configuration</strong></li>
+<li>Open browser console</li>
+<li>Use backend swagger API to retrieve frontend configuration through the runtime-config/frontendConfig endpoint</li>
+<li>Verify that option <code>helpSettings.htmlContent</code> is set to the correct HTML string</li>
+</ol>
+<hr>
+<h3 id="common-pitfalls">Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forgetting to enable the feature</td>
+<td>Set <code>helpSettings.enabled: true</code></td>
+</tr>
+<tr>
+<td>Using invalid JSON in config</td>
+<td>Validate JSON syntax</td>
+</tr>
+<tr>
+<td>Using JavaScript in HTML content</td>
+<td>Use static HTML only</td>
+</tr>
+<tr>
+<td>Assuming images are in the correct location</td>
+<td>Use <code>/assets/images/</code> path</td>
+</tr>
+<tr>
+<td>Not restarting app after config changes</td>
+<td>Restart required</td>
+</tr>
+<tr>
+<td>Typo in configuration keys</td>
+<td>Check key names carefully</td>
+</tr>
+<tr>
+<td>Expecting Angular directives to work in HTML content</td>
+<td>Use standard HTML</td>
+</tr>
+<tr>
+<td>Very long content causing layout issues</td>
+<td>Keep content concise</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-faq-section">5. FAQ Section<a class="headerlink" href="#5-faq-section" title="Permanent link">¶</a></h2>
+<h3 id="q-what-happens-if-i-dont-configure-the-help-page">Q: What happens if I don't configure the Help page?<a class="headerlink" href="#q-what-happens-if-i-dont-configure-the-help-page" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The Help page is <strong>disabled by default</strong>. If you don't add any configuration, the Help icon won't appear in the header, and users cannot access the page through the UI.</p>
+<h3 id="q-why-does-the-help-icon-show-help-text-on-some-screens-but-not-others">Q: Why does the Help icon show "Help" text on some screens but not others?<a class="headerlink" href="#q-why-does-the-help-icon-show-help-text-on-some-screens-but-not-others" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The Help button includes a <code>large-screen-text</code> class. On larger screens, the "Help" text label appears next to the icon. On smaller screens (mobile), only the icon is shown to save space.</p>
+<h3 id="q-can-i-use-the-help-page-without-the-header-icon">Q: Can I use the Help page without the header icon?<a class="headerlink" href="#q-can-i-use-the-help-page-without-the-header-icon" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes, but users would need to know the direct URL (<code>/help</code>). The header icon is the primary way users discover and access the page. Consider keeping it visible for discoverability.</p>
+<h3 id="q-how-do-i-completely-remove-the-help-page-feature">Q: How do I completely remove the Help page feature?<a class="headerlink" href="#q-how-do-i-completely-remove-the-help-page-feature" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Set <code>helpSettings.enabled: false</code> or simply don't include the configuration keys. The feature is disabled by default.</p>
+<h3 id="q-can-i-use-angular-components-or-directives-in-the-html-content">Q: Can I use Angular components or directives in the HTML content?<a class="headerlink" href="#q-can-i-use-angular-components-or-directives-in-the-html-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: No. The HTML content is rendered using <code>[innerHTML]</code>, which only processes raw HTML. Angular directives like <code>*ngIf</code>, <code>*ngFor</code>, <code>routerLink</code>, etc. will not work. Use standard HTML elements and attributes.</p>
+<h3 id="q-is-the-html-content-sanitized-for-security">Q: Is the HTML content sanitized for security?<a class="headerlink" href="#q-is-the-html-content-sanitized-for-security" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The component uses Angular's <code>DomSanitizer.bypassSecurityTrustHtml()</code>, which means <strong>the HTML is trusted and rendered as-is</strong>. This is a security consideration:</p>
+<ul>
+<li>Only administrators should be able to modify the configuration</li>
+<li>Ensure HTML content comes from trusted sources</li>
+<li>Avoid including user-generated content in the configuration</li>
+<li>Be cautious with scripts and event handlers</li>
+</ul>
+<h3 id="q-can-i-use-external-css-or-javascript-files">Q: Can I use external CSS or JavaScript files?<a class="headerlink" href="#q-can-i-use-external-css-or-javascript-files" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: External CSS via <code>&lt;link&gt;</code> tags may work, but external JavaScript via <code>&lt;script&gt;</code> tags <strong>will not execute</strong> due to Angular's security model and CSP (Content Security Policy) restrictions. Use inline styles instead.</p>
+<h3 id="q-how-do-i-add-a-link-to-the-help-page-from-other-parts-of-my-app">Q: How do I add a link to the Help page from other parts of my app?<a class="headerlink" href="#q-how-do-i-add-a-link-to-the-help-page-from-other-parts-of-my-app" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Use the Angular router:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// In a component</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">navigate</span><span class="p">([</span><span class="s1">'/help'</span><span class="p">]);</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!-- In a template --&gt;</span>
+<span class="p">&lt;</span><span class="nt">a</span> <span class="na">routerLink</span><span class="o">=</span><span class="s">"/help"</span><span class="p">&gt;</span>Help<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">button</span> <span class="err">[</span><span class="na">routerLink</span><span class="err">]="['/</span><span class="na">help</span><span class="err">']"</span><span class="p">&gt;</span>Get Help<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="q-can-i-customize-the-help-icon-in-the-header">Q: Can I customize the Help icon in the header?<a class="headerlink" href="#q-can-i-customize-the-help-icon-in-the-header" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The icon is currently hardcoded as <code>mat-icon color="primary"&gt; help &lt;/mat-icon&gt;</code>. To customize, you would need to modify the header component template in <code>src/app/_layout/app-header/app-header.component.html</code>.</p>
+<h3 id="q-how-do-i-access-the-help-page-configuration-programmatically">Q: How do I access the Help page configuration programmatically?<a class="headerlink" href="#q-how-do-i-access-the-help-page-configuration-programmatically" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Inject <code>AppConfigService</code> and access the configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">AppConfigService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'app-config.service'</span><span class="p">;</span>
+
+<span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">appConfigService</span><span class="o">:</span><span class="w"> </span><span class="kt">AppConfigService</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="nx">ngOnInit</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">appConfigService</span><span class="p">.</span><span class="nx">getConfig</span><span class="p">();</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">isEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">helpSettings</span><span class="o">?</span><span class="p">.</span><span class="nx">enabled</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">helpSettings</span><span class="o">?</span><span class="p">.</span><span class="nx">htmlContent</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="q-whats-the-difference-between-helpsettingshtmlcontent-being-empty-string-vs-undefined">Q: What's the difference between <code>helpSettings.htmlContent</code> being empty string vs. undefined?<a class="headerlink" href="#q-whats-the-difference-between-helpsettingshtmlcontent-being-empty-string-vs-undefined" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+- <code>undefined</code> or <code>null</code>: Falls back to default content
+- Empty string <code>""</code>: Shows "No help content available" message
+- Non-empty string: Shows the provided HTML content</p>
+<h3 id="q-can-i-use-the-configuration-override-file-without-affecting-other-settings">Q: Can I use the configuration override file without affecting other settings?<a class="headerlink" href="#q-can-i-use-the-configuration-override-file-without-affecting-other-settings" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes. The override file (<code>config.override.json</code>) only needs to contain the keys you want to override. Other settings remain as configured in the primary config file.</p>
+<h3 id="q-how-do-i-test-my-help-page-configuration">Q: How do I test my Help page configuration?<a class="headerlink" href="#q-how-do-i-test-my-help-page-configuration" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+1. Make changes to config file
+2. Restart the application
+3. Navigate to <code>/help</code> or click the help icon
+4. Verify content displays correctly
+5. Check browser console for errors
+6. Test on different screen sizes</p>
+<h3 id="q-can-i-use-html-entities-in-the-content">Q: Can I use HTML entities in the content?<a class="headerlink" href="#q-can-i-use-html-entities-in-the-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes, HTML entities work fine:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;p&gt;Contact: support@example.com &amp;copy; 2024 | &amp;reg; My Facility&lt;/p&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="q-whats-the-maximum-size-for-the-html-content">Q: What's the maximum size for the HTML content?<a class="headerlink" href="#q-whats-the-maximum-size-for-the-html-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The upper limit is around 15Mb, but it is suggested that you limit the About Html Content to few KB.</p>
+<h3 id="q-can-i-use-iframes-in-the-help-page-content">Q: Can I use iframes in the Help page content?<a class="headerlink" href="#q-can-i-use-iframes-in-the-help-page-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Technically yes, but:
+- Security restrictions (CSP) may block iframes
+- Consider the user experience (iframes may not work on mobile)
+- Consider the security implications of embedded content
+- Prefer linking to external content instead</p>
+<h3 id="q-how-do-i-add-the-help-page-to-my-custom-menu">Q: How do I add the Help page to my custom menu?<a class="headerlink" href="#q-how-do-i-add-the-help-page-to-my-custom-menu" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The Help page is automatically available at <code>/help</code> route. If you have a custom menu, add:</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">button</span> <span class="na">mat-menu-item</span> <span class="na">routerLink</span><span class="o">=</span><span class="s">"/help"</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">mat-icon</span><span class="p">&gt;</span>help<span class="p">&lt;/</span><span class="nt">mat-icon</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>Help<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="q-can-i-translate-the-help-page-content">Q: Can I translate the Help page content?<a class="headerlink" href="#q-can-i-translate-the-help-page-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes, provide translated HTML content in your configuration. You could also use a dynamic approach by loading different content based on language, but this would require custom development beyond the standard configuration.</p>
+<h3 id="q-how-do-i-include-screenshots-in-the-help-page">Q: How do I include screenshots in the Help page?<a class="headerlink" href="#q-how-do-i-include-screenshots-in-the-help-page" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+1. Place screenshot images in <code>src/assets/images/</code>
+2. Reference them with absolute paths:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;img src='/assets/images/screenshot1.png' alt='Search interface' style='max-width: 100%; margin: 20px 0; border: 1px solid #ddd; border-radius: 4px;'&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ol>
+<li>Consider adding captions:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"helpSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"htmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;figure style='text-align: center; margin: 20px 0;'&gt;&lt;img src='/assets/images/screenshot1.png' alt='Search interface' style='max-width: 100%; border: 1px solid #ddd; border-radius: 4px;'&gt;&lt;figcaption style='margin-top: 10px; font-style: italic; color: #666;'&gt;Figure 1: Dataset search interface&lt;/figcaption&gt;&lt;/figure&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="q-can-i-use-bootstrap-or-other-css-frameworks-in-the-help-content">Q: Can I use Bootstrap or other CSS frameworks in the Help content?<a class="headerlink" href="#q-can-i-use-bootstrap-or-other-css-frameworks-in-the-help-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Only if the framework is already loaded in your application. The Help page doesn't automatically include any CSS frameworks. Use inline styles or your application's existing styles.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["instant"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

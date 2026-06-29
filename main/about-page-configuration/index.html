@@ -1,0 +1,2130 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../frontend-configuration-testing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>About Page Configuration - SciCat Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#about-page-configuration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="SciCat Documentation" class="md-header__button md-logo" aria-label="SciCat Documentation" data-md-component="logo">
+      
+  <img src="../assets/SciCat-logo-icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SciCat Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              About Page Configuration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SciCat Documentation" class="md-nav__button md-logo" aria-label="SciCat Documentation" data-md-component="logo">
+      
+  <img src="../assets/SciCat-logo-icon.png" alt="logo">
+
+    </a>
+    SciCat Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Page Configuration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Page Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-about-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the About Page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-audience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Audience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Configuration Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Configuration Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Locations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Locations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration File
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typescript-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default Values
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-enable-with-default-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1: Enable with Default Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-enable-with-custom-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 2: Enable with Custom HTML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-rich-html-with-styling-and-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3: Rich HTML with Styling and Images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-4-html-with-links-and-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 4: HTML with Links and Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-5-minimal-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 5: Minimal Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-6-disabled-default-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 6: Disabled (Default State)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices-for-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices for Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-troubleshooting-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Troubleshooting Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Troubleshooting Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-about-icon-not-visible-in-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: About Icon Not Visible in Header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-about-page-shows-info-page-is-disabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: About Page Shows "Info page is disabled"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-about-page-shows-no-about-content-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: About Page Shows "No about content available"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Pitfalls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-faq-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. FAQ Section
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. FAQ Section">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-i-dont-configure-the-about-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What happens if I don't configure the About page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-the-about-page-without-the-header-icon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use the About page without the header icon?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-completely-remove-the-about-page-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I completely remove the About page feature?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-angular-components-or-directives-in-the-html-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use Angular components or directives in the HTML content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-is-the-html-content-sanitized-for-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Is the HTML content sanitized for security?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-external-css-or-javascript-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use external CSS or JavaScript files?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-a-link-to-the-about-page-from-other-parts-of-my-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I add a link to the About page from other parts of my app?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-customize-the-about-icon-in-the-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I customize the About icon in the header?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-access-the-about-page-configuration-programmatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I access the About page configuration programmatically?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-difference-between-abouthtmlcontent-being-empty-string-vs-undefined" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the difference between aboutHtmlContent being empty string vs. undefined?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-test-my-about-page-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I test my About page configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-html-entities-in-the-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use HTML entities in the content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-maximum-size-for-the-html-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the maximum size for the HTML content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-iframes-in-the-about-page-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use iframes in the About page content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-the-about-page-to-my-custom-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I add the About page to my custom menu?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-translate-the-about-page-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I translate the About page content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend-configuration-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend Configuration Testing with Cypress Intercept
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../help-page-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Help Page Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About SciCat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contributors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributors/datafiles-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datafiles Action Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributors/default-list-settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Default List Settings (Frontend)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theme/color-theme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theme System Overview &amp; New Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user/customize_datasets_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customize Datasets List
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-about-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the About Page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-audience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Audience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Configuration Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Configuration Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Locations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Locations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration File
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typescript-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default Values
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-enable-with-default-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1: Enable with Default Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-enable-with-custom-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 2: Enable with Custom HTML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-rich-html-with-styling-and-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3: Rich HTML with Styling and Images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-4-html-with-links-and-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 4: HTML with Links and Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-5-minimal-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 5: Minimal Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-6-disabled-default-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 6: Disabled (Default State)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices-for-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices for Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-troubleshooting-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Troubleshooting Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Troubleshooting Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-about-icon-not-visible-in-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: About Icon Not Visible in Header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-about-page-shows-info-page-is-disabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: About Page Shows "Info page is disabled"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-about-page-shows-no-about-content-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: About Page Shows "No about content available"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Pitfalls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-faq-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. FAQ Section
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. FAQ Section">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-i-dont-configure-the-about-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What happens if I don't configure the About page?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-the-about-page-without-the-header-icon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use the About page without the header icon?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-completely-remove-the-about-page-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I completely remove the About page feature?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-angular-components-or-directives-in-the-html-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use Angular components or directives in the HTML content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-is-the-html-content-sanitized-for-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Is the HTML content sanitized for security?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-external-css-or-javascript-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use external CSS or JavaScript files?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-a-link-to-the-about-page-from-other-parts-of-my-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I add a link to the About page from other parts of my app?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-customize-the-about-icon-in-the-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I customize the About icon in the header?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-access-the-about-page-configuration-programmatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I access the About page configuration programmatically?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-difference-between-abouthtmlcontent-being-empty-string-vs-undefined" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the difference between aboutHtmlContent being empty string vs. undefined?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-test-my-about-page-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I test my About page configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-html-entities-in-the-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use HTML entities in the content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-maximum-size-for-the-html-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the maximum size for the HTML content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-iframes-in-the-about-page-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use iframes in the About page content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-the-about-page-to-my-custom-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I add the About page to my custom menu?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-translate-the-about-page-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I translate the About page content?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="about-page-configuration">About Page Configuration<a class="headerlink" href="#about-page-configuration" title="Permanent link">¶</a></h1>
+<h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">¶</a></h2>
+<h3 id="what-is-the-about-page">What is the About Page?<a class="headerlink" href="#what-is-the-about-page" title="Permanent link">¶</a></h3>
+<p>The About page is an informational page in SciCat Frontend that displays customizable HTML content to users. It's typically used to provide information about your facility, organization, or the SciCat deployment itself.</p>
+<h3 id="target-audience">Target Audience<a class="headerlink" href="#target-audience" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Administrators</strong>: Configure and customize the About page content</li>
+<li><strong>Developers</strong>: Integrate or extend the About page functionality</li>
+<li><strong>End Users</strong>: View facility information through the About page</li>
+</ul>
+<h3 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">¶</a></h3>
+<p>The About page serves as:
+- Facility/organization information hub
+- Documentation entry point
+- Contact information center
+- Custom informational content display</p>
+<h3 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">¶</a></h3>
+<ul>
+<li>Enable/disable via configuration</li>
+<li>Custom HTML content support</li>
+<li>Header icon with tooltip</li>
+<li>Responsive design</li>
+<li>Default fallback content</li>
+</ul>
+<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h3>
+<ul>
+<li>SciCat Frontend application deployed</li>
+<li>Access to configuration files or admin interface</li>
+<li>Basic HTML knowledge (for custom content)</li>
+</ul>
+<h3 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">¶</a></h3>
+<ul>
+<li>Angular <code>DomSanitizer</code> for HTML rendering</li>
+<li><code>AppConfigService</code> for configuration management</li>
+<li>Flex Layout (<code>fxFlex</code>) for responsive design</li>
+</ul>
+<hr>
+<h2 id="2-configuration-options">2. Configuration Options<a class="headerlink" href="#2-configuration-options" title="Permanent link">¶</a></h2>
+<h3 id="configuration-keys">Configuration Keys<a class="headerlink" href="#configuration-keys" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aboutSettings.enabled</code></td>
+<td>boolean</td>
+<td>No</td>
+<td><code>false</code></td>
+<td>Enables/disables the About page feature</td>
+</tr>
+<tr>
+<td><code>aboutSettings.htmlContent</code></td>
+<td>string</td>
+<td>No</td>
+<td>Default message</td>
+<td>HTML content to display on the About page</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configuration-locations">Configuration Locations<a class="headerlink" href="#configuration-locations" title="Permanent link">¶</a></h3>
+<h4 id="configuration-file">Configuration File<a class="headerlink" href="#configuration-file" title="Permanent link">¶</a></h4>
+<p>The frontend ships with a local configuration file, which is used for testing and reference</p>
+<p><strong>File</strong>: <code>src/assets/config.json</code></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"aboutHtmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h1&gt;About Our Facility&lt;/h1&gt;&lt;p&gt;Custom content here&lt;/p&gt;"</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="backend-configuration">Backend Configuration<a class="headerlink" href="#backend-configuration" title="Permanent link">¶</a></h4>
+<p>Most deployments rely on the backend to provide the frontend configuration.
+This configuration takes priority.</p>
+<p><strong>Endpoint</strong>: <code>GET /api/v3/runtime-config/frontendConfig</code></p>
+<h3 id="admin-interface">Admin Interface<a class="headerlink" href="#admin-interface" title="Permanent link">¶</a></h3>
+<p><strong>Path</strong>: Admin Settings &gt; Frontend Config &gt; Header section</p>
+<p>The admin UI provides form controls:
+- <strong>About Enabled</strong>: Toggle switch for <code>aboutEnabled</code>
+- <strong>About HTML Content</strong>: Textarea (5 rows) for <code>aboutHtmlContent</code></p>
+<h3 id="typescript-interface">TypeScript Interface<a class="headerlink" href="#typescript-interface" title="Permanent link">¶</a></h3>
+<p><strong>File</strong>: <code>src/app/app-config.service.ts</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">AppConfigInterface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">aboutEnabled?</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">aboutHtmlContent?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="default-values">Default Values<a class="headerlink" href="#default-values" title="Permanent link">¶</a></h3>
+<p>If not specified in configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Applied in AppConfigService.loadAppConfig()</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">aboutEnabled</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">config</span><span class="p">.</span><span class="nx">aboutEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">config</span><span class="p">.</span><span class="nx">aboutHtmlContent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">config</span><span class="p">.</span><span class="nx">aboutHtmlContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="s1">'Here goes your SciCat About page!!&lt;br&gt;For more information, please read the documentation available on the &lt;a href="https://scicatproject.org"&gt;SciCat Website&lt;/a&gt;'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr>
+<h2 id="3-usage-examples">3. Usage Examples<a class="headerlink" href="#3-usage-examples" title="Permanent link">¶</a></h2>
+<h3 id="example-1-enable-with-default-content">Example 1: Enable with Default Content<a class="headerlink" href="#example-1-enable-with-default-content" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>:
+- About icon (info) appears in header
+- Page shows default SciCat message with link to scicatproject.org</p>
+<hr>
+<h3 id="example-2-enable-with-custom-html">Example 2: Enable with Custom HTML<a class="headerlink" href="#example-2-enable-with-custom-html" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"aboutHtmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h1&gt;My Facility Data Catalog&lt;/h1&gt;&lt;p&gt;Welcome to our scientific data management platform.&lt;/p&gt;"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>:
+- About icon appears in header
+- Page displays custom HTML content</p>
+<hr>
+<h3 id="example-3-rich-html-with-styling-and-images">Example 3: Rich HTML with Styling and Images<a class="headerlink" href="#example-3-rich-html-with-styling-and-images" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"aboutHtmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div style='text-align: center; padding: 20px;'&gt;&lt;img src='/assets/images/facility-logo.png' alt='Logo' style='max-width: 200px; margin-bottom: 20px;'&gt;&lt;h2&gt;National Research Facility&lt;/h2&gt;&lt;p style='font-size: 16px; line-height: 1.6;'&gt;The National Research Facility provides cutting-edge scientific instruments and data management solutions for researchers worldwide.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Contact:&lt;/strong&gt; &lt;a href='mailto:data@facility.org'&gt;data@facility.org&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;em&gt;Version 2.1.0&lt;/em&gt;&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>:
+- Centered layout with logo
+- Facility description
+- Contact email link
+- Version information</p>
+<hr>
+<h3 id="example-4-html-with-links-and-lists">Example 4: HTML with Links and Lists<a class="headerlink" href="#example-4-html-with-links-and-lists" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"aboutHtmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h2&gt;About This Deployment&lt;/h2&gt;&lt;p&gt;This SciCat instance is configured for the Physics Department.&lt;/p&gt;&lt;h3&gt;Key Features&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Custom dataset metadata schema&lt;/li&gt;&lt;li&gt;Integrated with local authentication&lt;/li&gt;&lt;li&gt;Connected to department storage&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Learn More&lt;/h3&gt;&lt;p&gt;&lt;a href='https://physics.university.edu/scicat' target='_blank' rel='noopener noreferrer'&gt;Physics Department SciCat Guide&lt;/a&gt;&lt;/p&gt;"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<hr>
+<h3 id="example-5-minimal-configuration">Example 5: Minimal Configuration<a class="headerlink" href="#example-5-minimal-configuration" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"aboutHtmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;p&gt;About page content&lt;/p&gt;"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<hr>
+<h3 id="example-6-disabled-default-state">Example 6: Disabled (Default State)<a class="headerlink" href="#example-6-disabled-default-state" title="Permanent link">¶</a></h3>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>:
+- About icon is hidden from header
+- If user appends <code>/about</code> the main URL, the FE will show "Info page is disabled"</p>
+<h3 id="best-practices-for-content">Best Practices for Content<a class="headerlink" href="#best-practices-for-content" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>Keep it concise</strong>: Users expect quick information, not a novel</li>
+<li><strong>Use semantic HTML</strong>: Proper heading hierarchy (<code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, etc.)</li>
+<li><strong>Make it scannable</strong>: Use lists, short paragraphs, clear sections</li>
+<li><strong>Include contact information</strong>: Help users know who to reach out to</li>
+<li><strong>Link to external resources</strong>: Documentation, user guides, etc.</li>
+<li><strong>Test responsiveness</strong>: Content should work on mobile and desktop</li>
+<li><strong>Avoid JavaScript</strong>: Custom JS in HTML content may not execute properly</li>
+</ol>
+<hr>
+<h2 id="4-troubleshooting-guide">4. Troubleshooting Guide<a class="headerlink" href="#4-troubleshooting-guide" title="Permanent link">¶</a></h2>
+<h3 id="issue-about-icon-not-visible-in-header">Issue: About Icon Not Visible in Header<a class="headerlink" href="#issue-about-icon-not-visible-in-header" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>: 
+- No info icon in the header toolbar
+- Cannot navigate to About page via UI</p>
+<p><strong>Diagnosis</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Check if feature is enabled</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">appConfigService</span><span class="p">.</span><span class="nx">getConfig</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">aboutEnabled</span><span class="p">);</span><span class="w"> </span><span class="c1">// Should be true</span>
+</code></pre></div>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Verify configuration</strong>
+   </p><div class="highlight"><pre><span></span><code><span class="c1">// In config.json or config.override.json</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+</li>
+<li>
+<p><strong>Check configuration</strong></p>
+</li>
+<li>Open browser console</li>
+<li>Use backend swagger API to retrieve frontend configuration through the runtime-config/frontendConfig endpoint</li>
+<li>Verify that option <code>aboutEnabled</code>  is set to true</li>
+</ol>
+<hr>
+<h3 id="issue-about-page-shows-info-page-is-disabled">Issue: About Page Shows "Info page is disabled"<a class="headerlink" href="#issue-about-page-shows-info-page-is-disabled" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>:
+- Icon is visible but page shows disabled message
+- Or: Direct navigation to <code>/about</code> shows disabled message</p>
+<p><strong>Cause</strong>: <code>aboutEnabled</code> is <code>false</code> or <code>null</code></p>
+<p><strong>Solution</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<hr>
+<h3 id="issue-about-page-shows-no-about-content-available">Issue: About Page Shows "No about content available"<a class="headerlink" href="#issue-about-page-shows-no-about-content-available" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>:
+- Page loads but shows placeholder message
+- Not showing custom HTML content</p>
+<p><strong>Diagnosis</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">appConfigService</span><span class="p">.</span><span class="nx">getConfig</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">aboutHtmlContent</span><span class="p">);</span><span class="w"> </span><span class="c1">// Should contain your HTML</span>
+</code></pre></div>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Verify configuration</strong>
+   </p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"aboutHtmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;p&gt;Your content here&lt;/p&gt;"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+</li>
+<li>
+<p><strong>Check configuration</strong></p>
+</li>
+<li>Open browser console</li>
+<li>Use backend swagger API to retrieve frontend configuration through the runtime-config/frontendConfig endpoint</li>
+<li>Verify that option <code>aboutHtmlContent</code>  is set to the correct HMTL string</li>
+</ol>
+<hr>
+<h3 id="common-pitfalls">Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forgetting to enable the feature</td>
+<td>Set <code>aboutEnabled: true</code></td>
+</tr>
+<tr>
+<td>Using invalid JSON in config</td>
+<td>Validate JSON syntax</td>
+</tr>
+<tr>
+<td>Using JavaScript in HTML content</td>
+<td>Use static HTML only</td>
+</tr>
+<tr>
+<td>Assuming images are in the right location</td>
+<td>Use <code>/assets/images/</code> path</td>
+</tr>
+<tr>
+<td>Not restarting app after config changes</td>
+<td>Restart required</td>
+</tr>
+<tr>
+<td>Typo in configuration keys</td>
+<td>Check key names carefully</td>
+</tr>
+<tr>
+<td>Expecting Angular directives to work in HTML content</td>
+<td>Use standard HTML</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-faq-section">5. FAQ Section<a class="headerlink" href="#5-faq-section" title="Permanent link">¶</a></h2>
+<h3 id="q-what-happens-if-i-dont-configure-the-about-page">Q: What happens if I don't configure the About page?<a class="headerlink" href="#q-what-happens-if-i-dont-configure-the-about-page" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The About page is <strong>disabled by default</strong>. If you don't add any configuration, the About icon won't appear in the header, and users cannot access the page through the UI.</p>
+<h3 id="q-can-i-use-the-about-page-without-the-header-icon">Q: Can I use the About page without the header icon?<a class="headerlink" href="#q-can-i-use-the-about-page-without-the-header-icon" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes, but users would need to know the direct URL (<code>/about</code>). The header icon is the primary way users discover and access the page. Consider keeping it visible for discoverability.</p>
+<h3 id="q-how-do-i-completely-remove-the-about-page-feature">Q: How do I completely remove the About page feature?<a class="headerlink" href="#q-how-do-i-completely-remove-the-about-page-feature" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Set <code>aboutEnabled: false</code> or simply don't include the configuration keys. The feature is disabled by default.</p>
+<h3 id="q-can-i-use-angular-components-or-directives-in-the-html-content">Q: Can I use Angular components or directives in the HTML content?<a class="headerlink" href="#q-can-i-use-angular-components-or-directives-in-the-html-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: No. The HTML content is rendered using <code>[innerHTML]</code>, which only processes raw HTML. Angular directives like <code>*ngIf</code>, <code>*ngFor</code>, <code>routerLink</code>, etc. will not work. Use standard HTML elements and attributes.</p>
+<h3 id="q-is-the-html-content-sanitized-for-security">Q: Is the HTML content sanitized for security?<a class="headerlink" href="#q-is-the-html-content-sanitized-for-security" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The component uses Angular's <code>DomSanitizer.bypassSecurityTrustHtml()</code>, which means <strong>the HTML is trusted and rendered as-is</strong>. This is a security consideration:</p>
+<ul>
+<li>Only administrators should be able to modify the configuration</li>
+<li>Ensure HTML content comes from trusted sources</li>
+<li>Avoid including user-generated content in the configuration</li>
+</ul>
+<h3 id="q-can-i-use-external-css-or-javascript-files">Q: Can I use external CSS or JavaScript files?<a class="headerlink" href="#q-can-i-use-external-css-or-javascript-files" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: External CSS via <code>&lt;link&gt;</code> tags may work, but external JavaScript via <code>&lt;script&gt;</code> tags <strong>will not execute</strong> due to Angular's security model. Use inline styles instead.</p>
+<h3 id="q-how-do-i-add-a-link-to-the-about-page-from-other-parts-of-my-app">Q: How do I add a link to the About page from other parts of my app?<a class="headerlink" href="#q-how-do-i-add-a-link-to-the-about-page-from-other-parts-of-my-app" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Use the Angular router:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// In a component</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">navigate</span><span class="p">([</span><span class="s1">'/about'</span><span class="p">]);</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!-- In a template --&gt;</span>
+<span class="p">&lt;</span><span class="nt">a</span> <span class="na">routerLink</span><span class="o">=</span><span class="s">"/about"</span><span class="p">&gt;</span>About<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">button</span> <span class="err">[</span><span class="na">routerLink</span><span class="err">]="['/</span><span class="na">about</span><span class="err">']"</span><span class="p">&gt;</span>Learn More<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="q-can-i-customize-the-about-icon-in-the-header">Q: Can I customize the About icon in the header?<a class="headerlink" href="#q-can-i-customize-the-about-icon-in-the-header" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The icon is currently hardcoded as <code>mat-icon color="primary"&gt; info &lt;/mat-icon&gt;</code>. To customize, you would need to modify the header component template in <code>src/app/_layout/app-header/app-header.component.html</code>.</p>
+<h3 id="q-how-do-i-access-the-about-page-configuration-programmatically">Q: How do I access the About page configuration programmatically?<a class="headerlink" href="#q-how-do-i-access-the-about-page-configuration-programmatically" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Inject <code>AppConfigService</code> and access the configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">AppConfigService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'app-config.service'</span><span class="p">;</span>
+
+<span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">appConfigService</span><span class="o">:</span><span class="w"> </span><span class="kt">AppConfigService</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="nx">ngOnInit</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">appConfigService</span><span class="p">.</span><span class="nx">getConfig</span><span class="p">();</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">isEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">aboutEnabled</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">aboutHtmlContent</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="q-whats-the-difference-between-abouthtmlcontent-being-empty-string-vs-undefined">Q: What's the difference between <code>aboutHtmlContent</code> being empty string vs. undefined?<a class="headerlink" href="#q-whats-the-difference-between-abouthtmlcontent-being-empty-string-vs-undefined" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+- <code>undefined</code> or <code>null</code>: Falls back to default content
+- Empty string <code>""</code>: Shows "No about content available" message
+- Non-empty string: Shows the provided HTML content</p>
+<h3 id="q-how-do-i-test-my-about-page-configuration">Q: How do I test my About page configuration?<a class="headerlink" href="#q-how-do-i-test-my-about-page-configuration" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+1. Make changes to config file
+2. Restart the application
+3. Navigate to <code>/about</code> or click the info icon
+4. Verify content displays correctly
+5. Check browser console for errors</p>
+<h3 id="q-can-i-use-html-entities-in-the-content">Q: Can I use HTML entities in the content?<a class="headerlink" href="#q-can-i-use-html-entities-in-the-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes, HTML entities work fine:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"aboutHtmlContent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;p&gt;Contact: support@example.com &amp;copy; 2024&lt;/p&gt;"</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="q-whats-the-maximum-size-for-the-html-content">Q: What's the maximum size for the HTML content?<a class="headerlink" href="#q-whats-the-maximum-size-for-the-html-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The upper limit is around 15Mb, but it is suggested that you limit the About Html Content to few KB.</p>
+<h3 id="q-can-i-use-iframes-in-the-about-page-content">Q: Can I use iframes in the About page content?<a class="headerlink" href="#q-can-i-use-iframes-in-the-about-page-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Technically yes, but:
+- Security restrictions may apply
+- Consider the user experience (iframes may not work on mobile)
+- Prefer linking to external content instead</p>
+<h3 id="q-how-do-i-add-the-about-page-to-my-custom-menu">Q: How do I add the About page to my custom menu?<a class="headerlink" href="#q-how-do-i-add-the-about-page-to-my-custom-menu" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The About page is automatically available at <code>/about</code> route. If you have a custom menu, add:</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">button</span> <span class="na">mat-menu-item</span> <span class="na">routerLink</span><span class="o">=</span><span class="s">"/about"</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">mat-icon</span><span class="p">&gt;</span>info<span class="p">&lt;/</span><span class="nt">mat-icon</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>About<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="q-can-i-translate-the-about-page-content">Q: Can I translate the About page content?<a class="headerlink" href="#q-can-i-translate-the-about-page-content" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes, provide translated HTML content in your configuration. You could also use a dynamic approach by loading different content based on language, but this would require custom development beyond the standard configuration.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["instant"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
