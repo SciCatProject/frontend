@@ -80,15 +80,12 @@ const reducer = createReducer(
       };
     },
   ),
-  on(
-    fromActions.fetchOrigDatablocksCountCompleteAction,
-    (state, { count }) => {
-      return {
-        ...state,
-        origDatablocksCount: count,
-      };
-    },
-  ),
+  on(fromActions.fetchOrigDatablocksCountCompleteAction, (state, { count }) => {
+    return {
+      ...state,
+      origDatablocksCount: count,
+    };
+  }),
   on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) => {
     return {
       ...state,

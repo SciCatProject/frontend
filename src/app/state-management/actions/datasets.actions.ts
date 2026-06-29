@@ -87,7 +87,7 @@ export const fetchOrigDatablocksFailedAction = createAction(
 export const fetchOrigDatablocksCountAction = createAction(
   "[Dataset] Fetch Origin Datablocks Count",
   props<{ pid: string; filters?: any }>(),
-)
+);
 export const fetchOrigDatablocksCountCompleteAction = createAction(
   "[Dataset] Fetch Origin Datablocks Count Complete",
   props<{ count: number }>(),

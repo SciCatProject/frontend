@@ -48,7 +48,10 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import { fetchOrigDatablocksAction, fetchOrigDatablocksCountAction } from "state-management/actions/datasets.actions";
+import {
+  fetchOrigDatablocksAction,
+  fetchOrigDatablocksCountAction,
+} from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "datafiles",
