@@ -63,7 +63,10 @@ describe("Help configuration", () => {
       cy.finishedLoading();
       cy.url().should("include", "/help");
 
-      cy.get("p.scicat_e2e_test").should("contain", helpSettings.enabledWithCustomText.helpSettings.helpInnerHtmlContent);
+      cy.get("div.help")
+        .should("exist")
+        .should("have.html", helpSettings.enabledWithCustomText.helpSettings.htmlContent);
+      cy.get("p.scicat_e2e_test").should("exist");
     });
   });
 
