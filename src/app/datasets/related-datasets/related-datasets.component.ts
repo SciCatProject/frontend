@@ -12,6 +12,7 @@ import {
   selectRelatedDatasetsCurrentPage,
   selectRelatedDatasetsPageViewModel,
   selectRelatedDatasetsPerPage,
+  selectRelatedDatasetsCountIsLoading,
 } from "state-management/selectors/datasets.selectors";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import { BehaviorSubject, Subscription, take, combineLatest } from "rxjs";
@@ -47,6 +48,8 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   );
   currentPage$ = this.store.select(selectRelatedDatasetsCurrentPage);
   datasetsPerPage$ = this.store.select(selectRelatedDatasetsPerPage);
+
+  isLoading$ = this.store.select(selectRelatedDatasetsCountIsLoading);
 
   subscription: Subscription;
 
@@ -142,41 +145,45 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
       this.selectColumnsWithFetchedSettings$.pipe(take(1)),
       this.currentPage$,
       this.datasetsPerPage$,
-    ]).subscribe(([vm, defaultTableColumns, currentPage, datasetsPerPage]) => {
-      this.dataSource.next(vm.relatedDatasets);
-      this.pending = false;
+      this.isLoading$,
+    ]).subscribe(
+      ([vm, defaultTableColumns, currentPage, datasetsPerPage, isLoading]) => {
+        this.dataSource.next(vm.relatedDatasets);
+        this.pending = false;
 
-      const defaultConfigColumns =
-        this.appConfig?.defaultDatasetsListSettings?.columns || [];
+        const defaultConfigColumns =
+          this.appConfig?.defaultDatasetsListSettings?.columns || [];
 
-      const userTableConfigColumns =
-        this.datasetsListService.convertSavedDatasetColumns(
-          defaultTableColumns.columns ?? [],
-        );
+        const userTableConfigColumns =
+          this.datasetsListService.convertSavedDatasetColumns(
+            defaultTableColumns.columns ?? [],
+          );
 
-      this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-        this.datasetsListService.convertSavedDatasetColumns(
-          defaultConfigColumns as TableColumn[],
-        );
+        this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+          this.datasetsListService.convertSavedDatasetColumns(
+            defaultConfigColumns as TableColumn[],
+          );
 
-      const tableSettingsConfig =
-        this.tableConfigService.getTableSettingsConfig(
-          this.tableName,
-          this.tableDefaultSettingsConfig,
-          userTableConfigColumns,
-        );
+        const tableSettingsConfig =
+          this.tableConfigService.getTableSettingsConfig(
+            this.tableName,
+            this.tableDefaultSettingsConfig,
+            userTableConfigColumns,
+          );
 
-      const paginationConfig = {
-        pageSizeOptions: [5, 10, 25, 100],
-        pageIndex: currentPage || 0,
-        pageSize: datasetsPerPage || 10,
-        length: vm.relatedDatasetsCount || 0,
-      };
+        const paginationConfig = {
+          pageSizeOptions: [5, 10, 25, 100],
+          pageIndex: currentPage || 0,
+          pageSize: datasetsPerPage || 10,
+          length: vm.relatedDatasetsCount || 0,
+          isLoading,
+        };
 
-      if (tableSettingsConfig?.settingList.length) {
-        this.initTable(tableSettingsConfig, paginationConfig);
-      }
-    });
+        if (tableSettingsConfig?.settingList.length) {
+          this.initTable(tableSettingsConfig, paginationConfig);
+        }
+      },
+    );
   }
 
   initTable(

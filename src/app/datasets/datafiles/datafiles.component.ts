@@ -237,7 +237,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   ngOnInit() {
     this.setting = this.tableDefaultSettingsConfig;
     this.subscriptions.push(
-      this.vm$.subscribe(({ datablocks, totalCount, dataset }) => {
+      this.vm$.subscribe(({ datablocks, totalCount, dataset, isLoading }) => {
         if (dataset) {
           this.datasetPid = dataset.pid;
           this.actionItems.datasets = <ActionItemDataset[]>[dataset];
@@ -259,6 +259,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
           this.pagination = {
             ...this.pagination,
             length: totalCount,
+            isLoading,
           };
 
           this.dataSource.next(this.files);

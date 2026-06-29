@@ -118,6 +118,10 @@ export const fetchRelatedDatasetsFailedAction = createAction(
   "[Datasets] Fetch Related Datasets Failed",
 );
 
+export const fetchRelatedDatasetsCountAction = createAction(
+  "[Dataset] Fetch Related Datasets Count",
+);
+
 export const fetchRelatedDatasetsCountCompleteAction = createAction(
   "[Dataset] Fetch Related Datasets Count Complete",
   props<{ count: number }>(),
