@@ -161,6 +161,12 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
           this.columns = currentColumnSetting;
           this.setting = tableSettingsConfig;
 
+          this.subscriptions.push(
+            this.scicatDataSource.loading$.subscribe((loading) => {
+              this.pagination = { ...this.pagination, isLoading: loading };
+            }),
+          );
+
           this.pagination = {
             ...this.pagination,
             length: vm.count,
