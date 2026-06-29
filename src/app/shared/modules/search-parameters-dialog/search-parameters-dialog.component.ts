@@ -10,6 +10,7 @@ import { ConnectedPosition } from "@angular/cdk/overlay";
 import { Store } from "@ngrx/store";
 import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { fetchMetadataKeysAction } from "state-management/actions/datasets.actions";
+import { Subscription } from "rxjs";
 
 export interface SearchParametersDialogData {
   parameterKeys: string[];
@@ -26,6 +27,7 @@ export interface SearchParametersDialogData {
   standalone: false,
 })
 export class SearchParametersDialogComponent {
+  subscription: Subscription;
   appConfig = this.appConfigService.getConfig();
   unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
 
@@ -92,9 +94,12 @@ export class SearchParametersDialogComponent {
   }
 
   ngOnInit(): void {
-    this.store.select(selectMetadataKeys).subscribe((keys) => {
-      this.parameterKeys = keys;
-    });
+    this.subscription = this.store
+      .select(selectMetadataKeys)
+      .subscribe((keys) => {
+        this.parameterKeys = keys;
+      });
+    this.store.dispatch(fetchMetadataKeysAction({ searchTerm: "" }));
   }
 
   add = (): void => {
@@ -120,7 +125,9 @@ export class SearchParametersDialogComponent {
     this.dialogRef.close({ data: { lhs: metadataKey, relation, rhs, unit } });
   };
 
-  cancel = (): void => this.dialogRef.close();
+  cancel = (): void => {
+    this.dialogRef.close();
+  };
 
   searchMetadataKeys = (): void => {
     const searchTerm = this.parametersForm.get("lhs")?.value || "";
@@ -149,5 +156,9 @@ export class SearchParametersDialogComponent {
 
   getHumanName(key: string): string {
     return this.humanNameMap[key] || "";
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

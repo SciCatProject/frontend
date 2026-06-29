@@ -32,12 +32,13 @@ Below are supported configuration properties, their types, and descriptions.
 
 ### 5. `type`
 - **Type:** `string`
-- **Accepted values:** `form`, `link`, `json-download`, `xhr`
+- **Accepted values:** `form`, `link`, `json-download`, `xhr`, `dialog`
 - **Description:** Action execution mode:
     - `form`: Submits a hidden HTML form to `url`.
     - `link`: Opens URL in new tab/window.
     - `json-download`: Fetches data and starts file download.
     - `xhr`: Makes an XHR/fetch API call, optionally updating local state.
+    - `dialog`: Opens a configurable dialog before running a follow-up action.
 
 ### 6. `method`
 - **Type:** `string`
@@ -114,6 +115,33 @@ Below are supported configuration properties, their types, and descriptions.
 - **Type:** `string`
 - **Description:** *(json-download only)*. Name for downloaded file (can use template, eg: `{{ #uuid }}.ipynb`).
 
+### 21. `onSuccess`
+- **Type:** `object` (ActionConfig)
+- **Description:** *(dialog only)*. A nested, secondary execution action object evaluated immediately after the dialog closes with valid user inputs.
+- **Safety Interceptor:** If the child configuration contains an unsupported or unmapped action execution type (e.g., misspelled), the engine handles the issue via an explicit `default` fallback catch to prevent sequential pipeline stalls.
+
+### 22. `dialog`
+- **Type:** `object`
+- **Description:** *(dialog only)* Defines dialog UI properties.
+  
+  **Supported Properties:**
+  - `title`: Dialog modal header title (Defaults to `"Confirm"`).
+  - `description`: Secondary instruction text or question.
+  - `width`: Structural modal width (e.g., `"450px"`).
+  - `fields`: Array of form field definitions (`key`, `label`, `type`, `required`, `options[]`).
+    - *Note on `options`*: Supports both primitive flat string arrays and complex metadata option objects containing optional helper configurations:
+      ```json
+      { 
+        "option": "value", 
+        "tooltip": "Optional contextual helper tip", 
+        "thumbnail": "/path/to/img.png" 
+      }
+      ```
+
+### 23. `actionFinished`
+- **Type:** `EventEmitter<unknown>`
+- **Description:** Component Output Event. Dispatched instantly when a running action completes its terminal step or downstream `onSuccess` pipeline loop to allow parent wrappers to refresh views.
+
 ---
 
 ## Supported Selectors in `variables`
@@ -135,10 +163,17 @@ Below are supported configuration properties, their types, and descriptions.
 - `#DatasetsSelectedFilesCount`: Total number selected files
 - `#DatasetsSelectedFilesTotalSize`: Total selected files size
 - `#DatasetsField[fieldName]`: Array; `fieldName` in all datasets
+- `#Instruments[n]Field[fieldName]`: Arbitrary field `fieldName` from instrument[n]
+- `#date_format(value, format)`: Formatted date string using format template
 
 **Other runtime keywords:**
 - `#token`, `#tokenBearer`, `#jwt`, `#uuid`: Various tokens and a random UUID.
 - `@<variable>`: Variable defined in `variables` mapping.
+
+### Variable Dependency Engine Constraints
+Variables support multi-tier evaluation chains via cross-reference pointers (e.g., `"first": "@files[0]"`). Before evaluation begins, the engine passes configurations through a dedicated topological sorter (`buildDependenciesGraph`) to evaluate keys in sequential dependency order.
+
+* **Circular Reference Guard:** If an infinite circular reference path is identified (e.g., `a` references `@b` while `b` references `@a`), the execution engine breaks out of the loop instantly to avoid browser thread lockups, logs a clear `Cyclic dependency detected` trace to the console, and alerts the UI with an error message boundary.
 
 ---
 

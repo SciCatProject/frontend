@@ -31,6 +31,7 @@ import {
   selectTotalSets,
   selectDatasetsInBatch,
   selectDatasetsFacetCountsIsLoading,
+  selectTextFilter,
 } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
 import {
@@ -65,6 +66,7 @@ import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { DatasetsListService } from "shared/services/datasets-list.service";
 import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.component";
+import { Router } from "@angular/router";
 
 export interface SortChangeEvent {
   active: string;
@@ -159,6 +161,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
+    private router: Router,
   ) {}
 
   private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
@@ -395,10 +398,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         ),
     );
     this.subscriptions.push(
-      this.route.queryParams.subscribe((queryParams) => {
-        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
-        this.globalTextSearch = searchQuery.text || "";
-      }),
+      this.route.queryParams
+        .pipe(combineLatestWith(this.store.select(selectTextFilter)))
+        .subscribe(([queryParams, storeSearchTerm]) => {
+          const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+          this.globalTextSearch = searchQuery.text || storeSearchTerm || "";
+        }),
     );
   }
 
@@ -406,6 +411,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.globalTextSearch = term;
     this.store.dispatch(setSearchTermsAction({ terms: term }));
     this.store.dispatch(setTextFilterAction({ text: term }));
+
+    const { queryParams } = this.route.snapshot;
+    const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+
+    this.router.navigate([], {
+      queryParams: {
+        searchQuery: JSON.stringify({
+          ...searchQuery,
+          text: term,
+        }),
+      },
+      queryParamsHandling: "merge",
+    });
   }
 
   onTextSearchAction() {
