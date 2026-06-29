@@ -30,6 +30,7 @@ import {
   fetchDatablocksAction,
   fetchDatasetAction,
   fetchOrigDatablocksAction,
+  fetchOrigDatablocksCountAction,
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import {
@@ -258,6 +259,16 @@ export class DatasetDetailsDashboardComponent
               this.store.dispatch(action(args));
               this.fetchDataActions[TAB.attachments].loaded = true;
             }
+          }
+          break;
+        case TAB.datafiles:
+          {
+            this.store.dispatch(
+              fetchOrigDatablocksAction(args as { pid: string }),
+            );
+            this.store.dispatch(
+              fetchOrigDatablocksCountAction(args as { pid: string }),
+            );
           }
           break;
         case TAB.logbook:

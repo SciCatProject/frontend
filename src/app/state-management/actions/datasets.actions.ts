@@ -79,10 +79,21 @@ export const fetchOrigDatablocksAction = createAction(
 );
 export const fetchOrigDatablocksCompleteAction = createAction(
   "[Dataset] Fetch Origin Datablocks Complete",
-  props<{ origdatablocks: OrigDatablock[]; totalCount?: number }>(),
+  props<{ origdatablocks: OrigDatablock[]; count?: number }>(),
 );
 export const fetchOrigDatablocksFailedAction = createAction(
   "[Dataset] Fetch Origin Datablocks Failed",
+);
+export const fetchOrigDatablocksCountAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Count",
+  props<{ pid: string; filters?: any }>(),
+)
+export const fetchOrigDatablocksCountCompleteAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Count Complete",
+  props<{ count: number }>(),
+);
+export const fetchOrigDatablocksCountFailedAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Count Failed",
 );
 export const fetchAttachmentsAction = createAction(
   "[Dataset] Fetch Attachments",

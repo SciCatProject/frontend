@@ -48,7 +48,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
+import { fetchOrigDatablocksAction, fetchOrigDatablocksCountAction } from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "datafiles",
@@ -145,7 +145,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   pagination: TablePagination = {
     pageSizeOptions: [5, 10, 25, 50, 100],
     pageIndex: 0,
-    pageSize: 25,
+    pageSize: 5,
     length: 0,
   };
 
@@ -296,6 +296,11 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
       fetchOrigDatablocksAction({
         pid: this.datasetPid,
         filters: { skip: pageIndex * pageSize, limit: pageSize },
+      }),
+    );
+    this.store.dispatch(
+      fetchOrigDatablocksCountAction({
+        pid: this.datasetPid,
       }),
     );
   }
