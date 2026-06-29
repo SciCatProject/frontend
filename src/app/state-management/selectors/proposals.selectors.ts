@@ -51,9 +51,14 @@ export const selectProposalsCount = createSelector(
   (state) => state.proposalsCount,
 );
 
-export const selectProposalsfacetCounts = createSelector(
+export const selectProposalsFacetCounts = createSelector(
   selectProposalsState,
   (state) => state.facetCounts,
+);
+
+export const selectProposalsFacetCountsIsLoading = createSelector(
+  selectProposalsState,
+  (state) => state.facetCountsIsLoading,
 );
 
 export const selectDatasetsCount = createSelector(
@@ -211,7 +216,7 @@ export const selectProposalsWithCountAndTableSettings = createSelector(
 );
 
 export const selectProposalsFacetCountsWithInstrumentName = createSelector(
-  selectProposalsfacetCounts,
+  selectProposalsFacetCounts,
   selectInstrumentWithIdAndLabel,
   (facets, instruments) => {
     const instrumentIds = instruments.map((inst) => {

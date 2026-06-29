@@ -49,15 +49,16 @@
       </button>
     </mat-form-field>
   </div>
-  <mat-paginator
-    [pageSizeOptions]="pagination.pageSizeOptions"
-    [pageIndex]="pagination.pageIndex"
-    [length]="pagination.length"
-    [pageSize]="pagination.pageSize"
-    (page)="pagination_onChange($event)"
-    *ngIf="pagination"
-  >
-  </mat-paginator>
+  <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
+    <mat-paginator
+      [pageSizeOptions]="pagination.pageSizeOptions"
+      [pageIndex]="pagination.pageIndex"
+      [length]="pagination.length"
+      [pageSize]="pagination.pageSize"
+      (page)="pagination_onChange($event)"
+      *ngIf="pagination"
+    ></mat-paginator>
+  </div>
 </div>
 <div
   #tbl
@@ -128,7 +129,7 @@
         cdkDragBoundary="mat-header-row"
         cdkDropListLockAxis="x"
         [ngClass]="headerClass(column)"
-        [cdkDragData]="{ name: column.name, columnIndex: i }"
+        [cdkDragData]="{ name: column.name }"
         [ngStyle]="column.style"
         [class.active-resize]="resizeColumn.columnIndex === i"
         [class.active-sort]="sort.direction && sort.active === column.name"
@@ -467,15 +468,17 @@
     </app-empty-content>
   </ng-container>
 </div>
-<mat-paginator
-  [pageSizeOptions]="pagination.pageSizeOptions"
-  [pageIndex]="pagination.pageIndex"
-  [length]="pagination.length"
-  [pageSize]="pagination.pageSize"
-  (page)="pagination_onChange($event)"
-  *ngIf="pagination"
->
-</mat-paginator>
+<div class="paginator-container" [class.is-loading]="pagination?.isLoading">
+  <mat-paginator
+    [pageSizeOptions]="pagination.pageSizeOptions"
+    [pageIndex]="pagination.pageIndex"
+    [length]="pagination.length"
+    [pageSize]="pagination.pageSize"
+    (page)="pagination_onChange($event)"
+    *ngIf="pagination"
+  >
+  </mat-paginator>
+</div>
 <!-- Context Menu -->
 <div
   style="visibility: hidden; position: fixed"

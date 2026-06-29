@@ -5,6 +5,7 @@ import {
   showMessageAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
+import { getSettingKey } from "state-management/models";
 import {
   selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
@@ -131,7 +132,7 @@ describe("ScientificMetadataColumnsService", () => {
     expect(store.dispatch.calls.argsFor(0)[0]).toEqual(
       updateUserSettingsAction({
         property: {
-          columns: [
+          [getSettingKey("dataset", "columns")]: [
             {
               name: "datasetName",
               order: 0,

@@ -10,7 +10,7 @@
   $header-3: map.get($color-config, "header-3");
   $header-4: map.get($color-config, "header-4");
   $warn: map.get($color-config, "warn");
-
+  $warn-2: map.get($color-config, "warn-2");
   .dynamic-template-general-header {
     background-color: mat.m2-get-color-from-palette($primary, "lighter");
   }
@@ -23,7 +23,7 @@
   }
 
   .general-warning {
-    color: mat.m2-get-color-from-palette($warn, "default");
+    color: mat.m2-get-color-from-palette($warn-2, "darker");
     font-weight: bold;
   }
 }

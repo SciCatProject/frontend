@@ -73,6 +73,7 @@ export const testData = {
     },
   },
   sample: {
+    sampleName: "Cypress Sample",
     ownerGroup: "ess",
     accessGroups: ["string"],
     instrumentGroup: "string",
@@ -366,7 +367,7 @@ export const defaultDatasetsColumnsList = [
   "Size",
   "Creation Time",
   "Image",
-  "Proposal Id"
+  "Proposal Id",
 ];
 
 export const personalizedDatasetsColumnsList = [
@@ -377,5 +378,5 @@ export const personalizedDatasetsColumnsList = [
   "Creation Time",
   "Proposal Id",
   "Start Time",
-  "End Time"
+  "End Time",
 ];

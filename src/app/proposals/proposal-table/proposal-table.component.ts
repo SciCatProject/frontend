@@ -27,10 +27,10 @@ import { Store } from "@ngrx/store";
 import {
   selectProposalsWithCountAndTableSettings,
   selectDefaultProposalColumns,
+  selectProposalsFacetCountsIsLoading,
 } from "state-management/selectors/proposals.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
-  Instrument,
   OutputDatasetObsoleteDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -54,6 +54,9 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     selectProposalsWithCountAndTableSettings,
   );
   defaultStoreColumns$ = this.store.select(selectDefaultProposalColumns);
+  isFacetCountsLoading$ = this.store.select(
+    selectProposalsFacetCountsIsLoading,
+  );
   appConfig = this.appConfigService.getConfig();
 
   tableDefaultSettingsConfig: ITableSetting = {
@@ -117,36 +120,47 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.proposalsWithCountAndTableSettings$
-        .pipe(filter(({ hasFetchedSettings }) => hasFetchedSettings))
-        .subscribe(async ({ proposals, count, tablesSettings }) => {
-          this.dataSource.next(proposals);
-          this.pending = false;
+        .pipe(
+          filter(({ hasFetchedSettings }) => hasFetchedSettings),
+          combineLatestWith(this.isFacetCountsLoading$),
+        )
+        .subscribe(
+          async ([
+            { proposals, count, tablesSettings },
+            isFacetCountsLoading,
+          ]) => {
+            this.dataSource.next(proposals);
+            this.pending = false;
 
-          const defaultConfigColumns =
-            this.appConfig?.defaultProposalsListSettings?.columns;
+            const defaultConfigColumns =
+              this.appConfig?.defaultProposalsListSettings?.columns;
 
-          const userConfigColumns = tablesSettings?.columns || [];
+            const userConfigColumns = tablesSettings?.columns || [];
 
-          const userTableConfigColumns =
-            this.convertSavedColumns(userConfigColumns);
+            const userTableConfigColumns =
+              this.convertSavedColumns(userConfigColumns);
 
-          this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-            this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
+            this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+              this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
 
-          const tableSort = this.getTableSort();
-          const paginationConfig = this.getTablePaginationConfig(count);
-          const tableSettingsConfig =
-            this.tableConfigService.getTableSettingsConfig(
-              this.tableName,
-              this.tableDefaultSettingsConfig,
-              userTableConfigColumns,
-              tableSort,
+            const tableSort = this.getTableSort();
+            const paginationConfig = this.getTablePaginationConfig(
+              count,
+              isFacetCountsLoading,
             );
+            const tableSettingsConfig =
+              this.tableConfigService.getTableSettingsConfig(
+                this.tableName,
+                this.tableDefaultSettingsConfig,
+                userTableConfigColumns,
+                tableSort,
+              );
 
-          if (tableSettingsConfig?.settingList.length) {
-            this.initTable(tableSettingsConfig, paginationConfig);
-          }
-        }),
+            if (tableSettingsConfig?.settingList.length) {
+              this.initTable(tableSettingsConfig, paginationConfig);
+            }
+          },
+        ),
     );
 
     this.subscriptions.push(
@@ -170,7 +184,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  getTablePaginationConfig(dataCount = 0): TablePagination {
+  getTablePaginationConfig(dataCount = 0, isLoading = false): TablePagination {
     const { queryParams } = this.route.snapshot;
 
     return {
@@ -178,6 +192,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
       pageIndex: queryParams.pageIndex,
       pageSize: queryParams.pageSize || this.defaultPageSize,
       length: dataCount,
+      isLoading,
     };
   }
 

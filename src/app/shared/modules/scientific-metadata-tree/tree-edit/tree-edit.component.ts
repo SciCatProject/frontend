@@ -38,6 +38,9 @@ export class FlatNodeEdit implements FlatNode {
   level: number;
   expandable: boolean;
   visible: boolean;
+  path: string;
+  columnName: string;
+  human_name?: string;
   editing: boolean;
   editable: boolean;
 }
@@ -114,6 +117,9 @@ export class TreeEditComponent
     flatNode.value = node.value;
     flatNode.expandable = node.children?.length > 0;
     flatNode.unit = node.unit;
+    flatNode.path = node.path;
+    flatNode.columnName = node.columnName;
+    flatNode.human_name = node.human_name;
     if (!existingNode) {
       // Important only set for new node
       flatNode.editing = node.key === "" ? true : false;

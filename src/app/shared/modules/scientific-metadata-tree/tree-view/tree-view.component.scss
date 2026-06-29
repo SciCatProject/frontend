@@ -1,3 +1,39 @@
+.treeView {
+  &-add-column-enabled {
+    .menu-cell {
+      padding-right: 0;
+      box-sizing: border-box;
+    }
+
+    section {
+      margin: 0;
+    }
+
+    .menu-cell row-menu {
+      justify-content: flex-start;
+      width: 24px;
+      min-width: 24px;
+    }
+
+    .menu-cell .menu-spacer {
+      width: 24px;
+      min-width: 24px;
+      height: 24px;
+      display: inline-block;
+    }
+
+    .menu-cell ::ng-deep row-menu .clear {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+    }
+
+    .menu-cell ::ng-deep row-menu .clear mat-icon {
+      color: rgba(0, 0, 0, 0.25);
+    }
+  }
+}
+
 .container {
   margin: 1em;
 
@@ -61,18 +97,25 @@ mat-form-field {
 }
 section {
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: auto minmax(0, 40%) minmax(0, 1fr);
   gap: 1em;
   width: 100%;
   margin: 0 2em;
+  align-items: center;
+}
+
+.menu-cell {
+  grid-column: 1;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .key-cell {
-  grid-column: 1;
+  grid-column: 2;
   word-wrap: break-word;
 }
 
 .value-cell {
-  grid-column: 2;
+  grid-column: 3;
   word-wrap: break-word;
 }

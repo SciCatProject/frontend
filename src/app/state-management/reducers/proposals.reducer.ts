@@ -17,11 +17,28 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchFacetCountsAction,
+    (state): ProposalsState => ({
+      ...state,
+      facetCountsIsLoading: true,
+    }),
+  ),
+
+  on(
     fromActions.fetchFacetCountsCompleteAction,
     (state, { facetCounts, allCounts }): ProposalsState => ({
       ...state,
       facetCounts,
       proposalsCount: allCounts,
+      facetCountsIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchFacetCountsFailedAction,
+    (state): ProposalsState => ({
+      ...state,
+      facetCountsIsLoading: false,
     }),
   ),
 

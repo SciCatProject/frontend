@@ -59,6 +59,7 @@ export interface ProposalsState {
   proposalsCount: number;
   datasetsCount: number;
   facetCounts: FacetCounts;
+  facetCountsIsLoading: boolean;
 
   hasPrefilledFilters: boolean;
   proposalFilters: ProposalFilters;
@@ -80,6 +81,7 @@ export const initialProposalsState: ProposalsState = {
   datasets: [],
 
   facetCounts: {},
+  facetCountsIsLoading: false,
 
   proposalsCount: 0,
   datasetsCount: 0,

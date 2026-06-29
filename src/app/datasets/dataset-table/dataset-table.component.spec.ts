@@ -1,14 +1,10 @@
 /* eslint @typescript-eslint/no-empty-function:0 */
+/// <reference types="jasmine" />
 
-import {
-  DatasetTableComponent,
-  SortChangeEvent,
-} from "./dataset-table.component";
 import {
   MockStore,
   MockDatasetApi,
   mockDataset,
-  createMock,
   MockActivatedRoute,
   MockDatasetsListService,
 } from "shared/MockStubs";
@@ -42,19 +38,17 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigInterface, AppConfigService } from "app-config.service";
-import {
-  DatasetClass,
-  DatasetsService,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ActivatedRoute } from "@angular/router";
-import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
-import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { TranslateService } from "@ngx-translate/core";
 import { DatasetsListService } from "shared/services/datasets-list.service";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  DatasetTableComponent,
+  SortChangeEvent,
+} from "./dataset-table.component";
 
 const auditFields = {
   createdAt: "",
@@ -148,9 +142,9 @@ describe("DatasetTableComponent", () => {
       fixture = TestBed.createComponent(DatasetTableComponent);
       component = fixture.componentInstance;
 
-      expect(component.getTablePaginationConfig().pageSizeOptions).toEqual([
-        10, 20, 50,
-      ]);
+      expect(
+        component.getTablePaginationConfig(0, false).pageSizeOptions,
+      ).toEqual([10, 20, 50]);
     });
   });
 

@@ -246,6 +246,27 @@ export class UserEffects {
     );
   });
 
+  sessionTimeout$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.sessionTimeoutAction),
+      filter(() => this.authService.isAuthenticated()),
+      switchMap(() => {
+        this.authService.clear();
+        return of(
+          clearDatasetsStateAction(),
+          clearInstrumentsStateAction(),
+          clearJobsStateAction(),
+          clearLogbooksStateAction(),
+          clearPoliciesStateAction(),
+          clearProposalsStateAction(),
+          clearPublishedDataStateAction(),
+          clearSamplesStateAction(),
+          fromActions.logoutCompleteAction({ logoutURL: "/login" }),
+        );
+      }),
+    );
+  });
+
   logoutNavigate$ = createEffect(
     () => {
       return this.actions$.pipe(
