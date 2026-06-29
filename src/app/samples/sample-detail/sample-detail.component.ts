@@ -97,8 +97,8 @@ export class SampleDetailComponent
     },
   };
 
-  dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
-    OutputDatasetObsoleteDto[]
+  dataSource: BehaviorSubject<PartialOutputDatasetDto[]> = new BehaviorSubject<
+    PartialOutputDatasetDto[]
   >([]);
 
   paginationMode: TablePaginationMode = "server-side";
@@ -183,7 +183,7 @@ export class SampleDetailComponent
     );
   }
 
-  onRowEvent(event: IRowEvent<OutputDatasetObsoleteDto>) {
+  onRowEvent(event: IRowEvent<PartialOutputDatasetDto>) {
     if (event.event === RowEventType.RowClick) {
       const id = encodeURIComponent(event.sender.row.pid);
       this.router.navigateByUrl("/datasets/" + id);
