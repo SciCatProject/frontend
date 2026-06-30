@@ -44,6 +44,11 @@ export const selectDatasetsCount = createSelector(
   (state) => state.datasetsCount,
 );
 
+export const selectDatasetsCountIsLoading = createSelector(
+  selectSampleState,
+  (state) => state.datasetsCountIsLoading,
+);
+
 export const selectHasPrefilledFilters = createSelector(
   selectSampleState,
   (state) => state.hasPrefilledFilters,
@@ -157,6 +162,7 @@ export const selectSampleDetailPageViewModel = createSelector(
   selectDatasetsPerPage,
   selectDatasetsPage,
   selectDatasetsCount,
+  selectDatasetsCountIsLoading,
   selectCurrentAttachments,
   selectCurrentUser,
   (
@@ -165,6 +171,7 @@ export const selectSampleDetailPageViewModel = createSelector(
     datasetsPerPage,
     datasetsPage,
     datasetsCount,
+    isLoading,
     attachments,
     user,
   ) => ({
@@ -173,6 +180,7 @@ export const selectSampleDetailPageViewModel = createSelector(
     datasetsPerPage,
     datasetsPage,
     datasetsCount,
+    isLoading,
     attachments,
     user,
   }),
