@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 import { showMessageAction } from "state-management/actions/user.actions";
 import {
@@ -10,7 +11,7 @@ import {
   selectCurrentDataset,
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
-import { selectIsLoading } from "state-management/selectors/user.selectors";
+import { selectIsLoading, selectProfile } from "state-management/selectors/user.selectors";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 
 import { AppConfigService } from "app-config.service";
@@ -50,7 +51,7 @@ import {
 export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  datasetView: CustomizationItem[];
+  datasetView$: Observable<CustomizationItem[]>;
   form: FormGroup;
   cols = 10;
   gutterSize = 12;
@@ -64,6 +65,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);
   show = false;
+
+  userGroups$: Observable<string[]>;
 
   instrument: Instrument | undefined;
   dataset: OutputDatasetObsoleteDto | undefined;
@@ -83,7 +86,11 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-  ) {}
+  ) {
+    this.userGroups$ = this.store.select(selectProfile).pipe(
+      map((profile) => profile?.accessGroups || [])
+    );
+  }
 
   ngOnInit() {
     this.form = this.fb.group({});
@@ -97,7 +104,13 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.datasetView = sortedDatasetView;
+    this.datasetView$ = this.userGroups$.pipe(
+      map((userGroups) =>
+        sortedDatasetView.filter((section) =>
+          this.canViewBlock(section.authorization, userGroups)
+        )
+      )
+    );
 
     this.subscriptions.push(
       this.store.select(selectCurrentInstrument).subscribe((instrument) => {
@@ -118,6 +131,29 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         this.dataset = dataset;
       }),
     );
+  }
+
+  /**
+   * Checks if the current user can view a block based on authorization
+   * @param blockAuthorization - Optional array of group names from block.authorization
+   * @param userGroups - Array of groups the current user belongs to
+   * @returns true if user can view the block
+   */
+  canViewBlock(
+    blockAuthorization: string[] | undefined,
+    userGroups: string[]
+  ): boolean {
+    const auth = blockAuthorization || ["#all"];
+
+    if (auth.includes("#all")) {
+      return true;
+    }
+
+    if (auth.length === 0) {
+      return false;
+    }
+
+    return auth.some((group) => userGroups.includes(group));
   }
 
   onCopy(value: string) {
