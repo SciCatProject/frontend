@@ -16,10 +16,27 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchCountAction,
+    (state): FilesState => ({
+      ...state,
+      filesCountIsLoading: true,
+    }),
+  ),
+
+  on(
     fromActions.fetchCountCompleteAction,
     (state, { count }): FilesState => ({
       ...state,
       totalCount: count,
+      filesCountIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchCountFailedAction,
+    (state): FilesState => ({
+      ...state,
+      filesCountIsLoading: false,
     }),
   ),
 
