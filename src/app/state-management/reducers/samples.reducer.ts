@@ -24,10 +24,27 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchSamplesCountAction,
+    (state): SampleState => ({
+      ...state,
+      samplesCountIsLoading: true,
+    }),
+  ),
+
+  on(
     fromActions.fetchSamplesCountCompleteAction,
     (state, { count }): SampleState => ({
       ...state,
       samplesCount: count,
+      samplesCountIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchSamplesCountFailedAction,
+    (state): SampleState => ({
+      ...state,
+      samplesCountIsLoading: false,
     }),
   ),
 

@@ -13,6 +13,7 @@ export interface SampleState {
   metadataKeys: string[];
 
   samplesCount: number;
+  samplesCountIsLoading: boolean;
   datasetsCount: number;
 
   hasPrefilledFilters: boolean;
@@ -29,6 +30,7 @@ export const initialSampleState: SampleState = {
   metadataKeys: [],
 
   samplesCount: 0,
+  samplesCountIsLoading: false,
   datasetsCount: 0,
 
   hasPrefilledFilters: false,

@@ -34,6 +34,11 @@ export const selectSamplesCount = createSelector(
   (state) => state.samplesCount,
 );
 
+export const selectSamplesCountIsLoading = createSelector(
+  selectSampleState,
+  (state) => state.samplesCountIsLoading,
+);
+
 export const selectDatasetsCount = createSelector(
   selectSampleState,
   (state) => state.datasetsCount,
@@ -116,6 +121,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
   selectSettings,
   selectSamplesCount,
   selectHasAppliedFilters,
+  selectSamplesCountIsLoading,
   (
     samples,
     samplesPagination,
@@ -127,6 +133,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     settings,
     count,
     hasAppliedFilters,
+    isLoading,
   ) => ({
     samples,
     samplesPagination,
@@ -140,6 +147,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     },
     count,
     hasAppliedFilters,
+    isLoading,
   }),
 );
 
