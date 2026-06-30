@@ -83,6 +83,7 @@ export interface CustomizationItem {
   source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
+  authorization?: string[];
 }
 
 export interface Field {

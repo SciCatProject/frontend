@@ -28,7 +28,7 @@
     *ngIf="dataset$ | async as dataset"
   >
     <!-- Iterate over each section in datasetView -->
-    <ng-container *ngFor="let section of datasetView">
+    <ng-container *ngFor="let section of datasetView$ | async">
       <ng-container [ngSwitch]="section.type">
         <!-- Regular Section -->
         <div
@@ -40,7 +40,7 @@
           <mat-card>
             <!-- Section Header -->
             <mat-card-header
-              class="dynamic-template-general-header sticky-header"
+              class="dynamic-template-tile-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
@@ -160,7 +160,7 @@
           <ng-container *ngIf="emptyMetadataTable()">
             <mat-card>
               <mat-card-header
-                class="scientific-header sticky-header"
+                class="dynamic-template-tile-header sticky-header"
                 data-cy="section-label"
               >
                 <div mat-card-avatar class="section-icon">
@@ -218,7 +218,7 @@
         >
           <mat-card>
             <mat-card-header
-              class="dynamic-template-attachments-header sticky-header"
+              class="dynamic-template-tile-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
@@ -285,7 +285,7 @@
         >
           <mat-card>
             <mat-card-header
-              class="dynamic-template-json-view-header sticky-header"
+              class="dynamic-template-tile-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
