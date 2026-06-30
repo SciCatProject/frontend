@@ -80,8 +80,28 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchProposalDatasetsCountAction,
+    (state): ProposalsState => ({
+      ...state,
+      datasetsCountIsLoading: true,
+    }),
+  ),
+
+  on(
     fromActions.fetchProposalDatasetsCountCompleteAction,
-    (state, { count }): ProposalsState => ({ ...state, datasetsCount: count }),
+    (state, { count }): ProposalsState => ({
+      ...state,
+      datasetsCount: count,
+      datasetsCountIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchProposalDatasetsCountFailedAction,
+    (state): ProposalsState => ({
+      ...state,
+      datasetsCountIsLoading: false,
+    }),
   ),
 
   on(
@@ -151,10 +171,27 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchRelatedProposalsCountAction,
+    (state): ProposalsState => ({
+      ...state,
+      relatedProposalsCountIsLoading: true,
+    }),
+  ),
+
+  on(
     fromActions.fetchRelatedProposalsCountCompleteAction,
     (state, { count }): ProposalsState => ({
       ...state,
       relatedProposalsCount: count,
+      relatedProposalsCountIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchRelatedProposalsCountFailedAction,
+    (state): ProposalsState => ({
+      ...state,
+      relatedProposalsCountIsLoading: false,
     }),
   ),
 
