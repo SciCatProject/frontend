@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
-import { Store } from "@ngrx/store";
+import { createSelector, Store } from "@ngrx/store";
 import { Subscription, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
@@ -11,7 +11,10 @@ import {
   selectCurrentDataset,
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
-import { selectIsLoading, selectProfile } from "state-management/selectors/user.selectors";
+import {
+  selectIsLoading,
+  selectProfile,
+} from "state-management/selectors/user.selectors";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 
 import { AppConfigService } from "app-config.service";
@@ -35,6 +38,12 @@ import {
   ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
+
+// profile.selectors.ts
+export const selectProfileAccessGroups = createSelector(
+  selectProfile,
+  (profile) => profile?.accessGroups || [],
+);
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -87,9 +96,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
   ) {
-    this.userGroups$ = this.store.select(selectProfile).pipe(
-      map((profile) => profile?.accessGroups || [])
-    );
+    this.userGroups$ = this.store.select(selectProfileAccessGroups);
   }
 
   ngOnInit() {
@@ -107,9 +114,9 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     this.datasetView$ = this.userGroups$.pipe(
       map((userGroups) =>
         sortedDatasetView.filter((section) =>
-          this.canViewBlock(section.authorization, userGroups)
-        )
-      )
+          this.canViewBlock(section.authorization, userGroups),
+        ),
+      ),
     );
 
     this.subscriptions.push(
@@ -141,7 +148,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
    */
   canViewBlock(
     blockAuthorization: string[] | undefined,
-    userGroups: string[]
+    userGroups: string[],
   ): boolean {
     const auth = blockAuthorization || ["#all"];
 
