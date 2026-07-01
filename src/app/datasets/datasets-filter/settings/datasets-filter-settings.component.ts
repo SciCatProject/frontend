@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -16,7 +16,7 @@ import { FilterConfig } from "state-management/state/user.store";
   styleUrls: [`./datasets-filter-settings.component.scss`],
   standalone: false,
 })
-export class DatasetsFilterSettingsComponent {
+export class DatasetsFilterSettingsComponent implements OnInit {
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
   appConfig = this.appConfigService.getConfig();
