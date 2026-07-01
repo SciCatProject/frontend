@@ -25,6 +25,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import { RowMenuModule } from "shared/modules/dynamic-material-table/table/extensions/row-menu/row-menu.module";
 import {
   NgxMatDatepickerActions,
   NgxMatDatepickerApply,
@@ -65,6 +66,7 @@ import {
     MatMenuModule,
     MatSnackBarModule,
     MatDatepickerModule,
+    RowMenuModule,
     NgxMatDatetimepicker,
     NgxMatDatepickerInput,
     NgxMatDatepickerActions,

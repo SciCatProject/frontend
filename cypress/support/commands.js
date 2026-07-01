@@ -90,6 +90,7 @@ Cypress.Commands.add("removePolicies", () => {
     });
   });
 });
+
 Cypress.Commands.add("finishedLoading", (type) => {
   cy.contains("Loading")
     .should("not.exist")

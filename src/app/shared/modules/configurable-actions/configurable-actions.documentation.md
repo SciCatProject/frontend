@@ -120,7 +120,14 @@ Please review the offical documentation for this attribute https://www.w3schools
   - _Example_: "{{ uuid }}.ipynb"
   - _Keywords_: The string can contain any of the following keywords. They are substituted with the value indicated.
     - {{ uuid }}: random uuid v4 generated for each request.
-
+- __dialog__: configuration for a confirmation or parameters dialog modal to be prompted to the user before the action is executed.
+  - _Type_: object
+  - _Optional_: true
+  - _Fields_:
+    - `title` (string): Header text displayed at the top of the dialog modal.
+    - `description` (string): Explanatory prompt message shown below the title.
+    - `width` (string): CSS width dimension value for formatting the window layout container bounds.
+    - `fields` (object[]): Form element configurations layout array mapping user selections to context variables.
 
 ## Variable and selector resolution
 Configurable actions can define a `variables` object. Each entry is resolved before the action condition and request data are evaluated. This makes it possible to extract values from datasets, reuse them in other variables, and inject them into action configuration fields.
@@ -191,7 +198,9 @@ The configuration below will create the following 5 buttons under the "Datafiles
 5. Donwload ASll  
    Triggers the download of a zip file containing all the dataset files
    The zip file is created by an external service, which needs to be properly configured.
-
+6. Custom Action with Dialog  
+   Triggers a custom processing workflow by showing a UI configuration modal window first. The captured values from user selection elements and configuration inputs are then processed dynamically when executing the command pipeline sequence.
+  
 Configuration
 ```
 {
@@ -255,6 +264,38 @@ Configuration
       "target": "_blank",
       "enabled": "#Selected",
       "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "b18274d0-bfd8-4a5c-89a1-026859336ab2",
+      "order": 6,
+      "label": "Custom Action with Dialog",
+      "files": "selected",
+      "mat_icon": "settings",
+      "type": "json-download",
+      "url": "https://api.scicatproject.org/actions/process",
+      "target": "_blank",
+      "enabled": "#Selected",
+      "authorization": ["#datasetAccess"],
+      "dialog": {
+        "title": "Configure Download Parameters",
+        "description": "Please select the processing cluster and format options for your download.",
+        "width": "500px",
+        "fields": [
+          {
+            "id": "cluster",
+            "label": "Target Cluster",
+            "type": "select",
+            "required": true,
+            "options": ["Cluster-A", "Cluster-B", "Cluster-C"]
+          },
+          {
+            "id": "compress",
+            "label": "Enable Compression",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      }
     }
   ]
 }
