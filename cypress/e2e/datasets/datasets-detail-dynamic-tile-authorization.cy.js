@@ -36,7 +36,7 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
           order: 3,
           row: 1,
           col: 10,
-          authorization: ["archiveManager"],
+          authorization: ["archivemanager"],
           fields: [
             { element: "text", source: "type", order: 0 },
             { element: "date", source: "creationTime", order: 1 },
@@ -56,7 +56,7 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
   beforeEach(() => {
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
       const mergedConfig = mergeConfig(baseConfig, authTestConfig);
-      cy.intercept("GET", "**/runtime-config/frontendConfig", mergedConfig).as(
+      cy.intercept("GET", "**/admin/config", mergedConfig).as(
         "getFrontendConfig",
       );
     });
@@ -86,7 +86,11 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
     // Admin user should see all sections
     cy.get('[data-cy="section-label"]').should("contain", "Admin Only Section");
     cy.get('[data-cy="section-label"]').should("contain", "Public Section");
-    cy.get('[data-cy="section-label"]').should("contain", "Archive Manager Section");
+    // But NOT archiv3e manager only section
+    cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
+      "not.exist",
+    );
+
   });
 
   it("should hide admin-only tile from archiveManager user", () => {
