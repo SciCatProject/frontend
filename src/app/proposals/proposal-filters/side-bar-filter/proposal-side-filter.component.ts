@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+} from "@angular/core";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
@@ -27,7 +34,7 @@ import { FilterConfig } from "state-management/state/user.store";
   styleUrls: ["./proposal-side-filter.component.scss"],
   standalone: false,
 })
-export class ProposalSideFilterComponent implements OnInit {
+export class ProposalSideFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   appConfig = this.appConfigService.getConfig();
   activeFilters: Record<string, string[] | DateRange> = {};
