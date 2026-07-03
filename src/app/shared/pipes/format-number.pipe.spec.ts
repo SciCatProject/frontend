@@ -172,10 +172,7 @@ describe("FormatNumberPipe", () => {
       expect(pipe.transform(undefined)).toBe("");
       expect(
         pipe.transform({ x: 1 } as unknown as
-          | string
-          | number
-          | null
-          | undefined),
+          string | number | null | undefined),
       ).toBe("");
     });
 

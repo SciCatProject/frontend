@@ -94,10 +94,7 @@ export interface Field {
 
 // Type alias for allowed customization types
 type CustomizationType =
-  | "regular"
-  | "scientificMetadata"
-  | "datasetJsonView"
-  | "attachments";
+  "regular" | "scientificMetadata" | "datasetJsonView" | "attachments";
 
 // Type alias for allowed field types
 type FieldType = "text" | "copy" | "linky" | "tag" | "date";
@@ -223,11 +220,7 @@ export const SETTINGS_CONFIG = [
 ];
 
 export type SettingScope =
-  | "dataset"
-  | "proposal"
-  | "sample"
-  | "instrument"
-  | "file";
+  "dataset" | "proposal" | "sample" | "instrument" | "file";
 export type SettingKind = "columns" | "filters" | "conditions";
 
 export const getSettingKey = (

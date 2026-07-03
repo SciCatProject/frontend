@@ -24,15 +24,12 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.loginAction,
-    (state): UserState => ({
-      ...state,
-      isLoggingIn: true,
-      isLoggedIn: false,
-      hasFetchedSettings: false,
-    }),
-  ),
+  on(fromActions.loginAction, (state): UserState => ({
+    ...state,
+    isLoggingIn: true,
+    isLoggedIn: false,
+    hasFetchedSettings: false,
+  })),
 
   on(
     fromActions.loginCompleteAction,
@@ -45,14 +42,11 @@ const reducer = createReducer(
       hasFetchedSettings: false,
     }),
   ),
-  on(
-    fromActions.loginFailedAction,
-    (state): UserState => ({
-      ...state,
-      isLoggingIn: false,
-      isLoggedIn: false,
-    }),
-  ),
+  on(fromActions.loginFailedAction, (state): UserState => ({
+    ...state,
+    isLoggingIn: false,
+    isLoggedIn: false,
+  })),
 
   on(
     fromActions.fetchCurrentUserCompleteAction,
@@ -113,26 +107,17 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.logoutAction,
-    (): UserState => ({
-      ...initialUserState,
-    }),
-  ),
+  on(fromActions.logoutAction, (): UserState => ({
+    ...initialUserState,
+  })),
 
-  on(
-    fromActions.logoutCompleteAction,
-    (): UserState => ({
-      ...initialUserState,
-    }),
-  ),
+  on(fromActions.logoutCompleteAction, (): UserState => ({
+    ...initialUserState,
+  })),
 
-  on(
-    fromActions.sessionTimeoutAction,
-    (): UserState => ({
-      ...initialUserState,
-    }),
-  ),
+  on(fromActions.sessionTimeoutAction, (): UserState => ({
+    ...initialUserState,
+  })),
 
   on(
     fromActions.addCustomColumnsAction,
@@ -216,43 +201,28 @@ const reducer = createReducer(
     },
   ),
 
-  on(
-    fromActions.showMessageAction,
-    (state, { message }): UserState => ({
-      ...state,
-      message,
-    }),
-  ),
-  on(
-    fromActions.clearMessageAction,
-    (state): UserState => ({
-      ...state,
-      message: initialUserState.message,
-    }),
-  ),
+  on(fromActions.showMessageAction, (state, { message }): UserState => ({
+    ...state,
+    message,
+  })),
+  on(fromActions.clearMessageAction, (state): UserState => ({
+    ...state,
+    message: initialUserState.message,
+  })),
 
-  on(
-    fromActions.saveSettingsAction,
-    (state, { settings }): UserState => ({
-      ...state,
-      settings,
-    }),
-  ),
+  on(fromActions.saveSettingsAction, (state, { settings }): UserState => ({
+    ...state,
+    settings,
+  })),
 
-  on(
-    fromActions.loadingAction,
-    (state): UserState => ({
-      ...state,
-      isLoading: true,
-    }),
-  ),
-  on(
-    fromActions.loadingCompleteAction,
-    (state): UserState => ({
-      ...state,
-      isLoading: false,
-    }),
-  ),
+  on(fromActions.loadingAction, (state): UserState => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(fromActions.loadingCompleteAction, (state): UserState => ({
+    ...state,
+    isLoading: false,
+  })),
   on(
     fromActions.updateFilterConfigs,
     (state, { filterConfigs, scope }): UserState => ({
