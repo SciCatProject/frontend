@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { AppConfigService, HelpMessages } from "app-config.service";
 
 @Component({
@@ -9,23 +10,24 @@ import { AppConfigService, HelpMessages } from "app-config.service";
 })
 export class HelpComponent implements OnInit {
   appConfig = this.appConfigService.getConfig();
-  facility: string | null = null;
-  ingestManual: string | null = null;
-  gettingStarted: string | null = null;
-  shoppingCartEnabled = false;
-  helpMessages: HelpMessages;
-  supportEmail: string | undefined;
-  constructor(public appConfigService: AppConfigService) {}
+
+  htmlContent: SafeHtml | string = "No help content available.";
+
+  constructor(
+    public appConfigService: AppConfigService,
+    private sanitizer: DomSanitizer,
+  ) {}
 
   ngOnInit() {
-    this.facility = this.appConfig.facility;
-    this.ingestManual = this.appConfig.ingestManual;
-    this.helpMessages = new HelpMessages(
-      this.appConfig.helpMessages?.gettingStarted,
-      this.appConfig.helpMessages?.ingestManual,
-    );
-    this.gettingStarted = this.appConfig.gettingStarted;
-    this.shoppingCartEnabled = this.appConfig.shoppingCartEnabled;
-    this.supportEmail = this.appConfig.supportEmail;
+    if (this.appConfig.helpSettings?.enabled) {
+      const html = this.appConfig.helpSettings?.htmlContent;
+      console.log(html);
+      if (html) {
+        this.htmlContent = this.sanitizer.bypassSecurityTrustHtml(html);
+      }
+      console.log(this.htmlContent);
+    } else {
+      this.htmlContent = "Help page is disabled";
+    }
   }
 }

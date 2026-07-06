@@ -7,6 +7,7 @@ import {
   Output,
   OnChanges,
   SimpleChanges,
+  OnInit,
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
@@ -27,7 +28,7 @@ type FacetItem = { _id: string; label?: string; count: number };
   styleUrls: ["./shared-filter.component.scss"],
   standalone: false,
 })
-export class SharedFilterComponent implements OnChanges {
+export class SharedFilterComponent implements OnChanges, OnInit {
   private readonly CHECKBOX_DISPLAY_LIMIT = 10;
   private readonly CHECKBOX_SEARCH_THRESHOLD = 10;
   private dateRange: DateRange = {
@@ -73,12 +74,7 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   @Input() filterValue:
-    | string[]
-    | string
-    | INumericRange
-    | DateRange
-    | undefined
-    | null;
+    string[] | string | INumericRange | DateRange | undefined | null;
   @Input() collapsible = false;
   collapsed = false;
 
