@@ -32,7 +32,7 @@ import { AuthInterceptor } from "shared/interceptors/auth.interceptor";
 import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
 import { CookieService } from "ngx-cookie-service";
-import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { provideTranslateService, TranslateLoader } from "@ngx-translate/core";
 import { CustomTranslateLoader } from "shared/loaders/custom-translate.loader";
 import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 import { RouteTrackerService } from "shared/services/route-tracker.service";
@@ -62,13 +62,6 @@ const apiConfigurationFn = (
   imports: [
     AppConfigModule,
     AppRoutingModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useClass: CustomTranslateLoader,
-        deps: [AppConfigService],
-      },
-    }),
     BrowserAnimationsModule,
     BrowserModule,
     LayoutModule,
@@ -106,6 +99,13 @@ const apiConfigurationFn = (
     }),
     provideAppInitializer(() => {
       inject(RouteTrackerService);
+    }),
+    provideTranslateService({
+      loader: {
+        provide: TranslateLoader,
+        useClass: CustomTranslateLoader,
+        deps: [AppConfigService],
+      },
     }),
     provideRouter(routes),
     {
