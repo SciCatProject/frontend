@@ -4,7 +4,6 @@ import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 import { selectScicatToken } from "state-management/selectors/user.selectors";
 import {
   BehaviorSubject,
-  catchError,
   distinctUntilChanged,
   EMPTY,
   map,
