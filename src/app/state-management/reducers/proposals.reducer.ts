@@ -16,13 +16,10 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.fetchFacetCountsAction,
-    (state): ProposalsState => ({
-      ...state,
-      facetCountsIsLoading: true,
-    }),
-  ),
+  on(fromActions.fetchFacetCountsAction, (state): ProposalsState => ({
+    ...state,
+    facetCountsIsLoading: true,
+  })),
 
   on(
     fromActions.fetchFacetCountsCompleteAction,
@@ -34,13 +31,10 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.fetchFacetCountsFailedAction,
-    (state): ProposalsState => ({
-      ...state,
-      facetCountsIsLoading: false,
-    }),
-  ),
+  on(fromActions.fetchFacetCountsFailedAction, (state): ProposalsState => ({
+    ...state,
+    facetCountsIsLoading: false,
+  })),
 
   on(
     fromActions.fetchProposalCompleteAction,
@@ -59,14 +53,11 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.clearCurrentProposalAction,
-    (state): ProposalsState => ({
-      ...state,
-      currentProposal: null,
-      currentProposals: [],
-    }),
-  ),
+  on(fromActions.clearCurrentProposalAction, (state): ProposalsState => ({
+    ...state,
+    currentProposal: null,
+    currentProposals: [],
+  })),
 
   on(
     fromActions.fetchProposalDatasetsCompleteAction,
@@ -129,21 +120,15 @@ const reducer = createReducer(
     },
   ),
 
-  on(
-    fromActions.clearProposalsStateAction,
-    (): ProposalsState => ({
-      ...initialProposalsState,
-    }),
-  ),
+  on(fromActions.clearProposalsStateAction, (): ProposalsState => ({
+    ...initialProposalsState,
+  })),
 
-  on(
-    fromActions.clearCurrentProposalStateAction,
-    (state): ProposalsState => ({
-      ...state,
-      currentProposal: undefined,
-      currentProposals: [],
-    }),
-  ),
+  on(fromActions.clearCurrentProposalStateAction, (state): ProposalsState => ({
+    ...state,
+    currentProposal: undefined,
+    currentProposals: [],
+  })),
 
   on(
     fromActions.fetchRelatedProposalsCompleteAction,
@@ -161,16 +146,13 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.clearProposalsFiltersAction,
-    (state): ProposalsState => ({
-      ...state,
-      proposalFilters: {
-        ...state.proposalFilters,
-        fields: { text: state.proposalFilters.fields.text },
-      },
-    }),
-  ),
+  on(fromActions.clearProposalsFiltersAction, (state): ProposalsState => ({
+    ...state,
+    proposalFilters: {
+      ...state.proposalFilters,
+      fields: { text: state.proposalFilters.fields.text },
+    },
+  })),
 
   on(fromActions.setInitialProposalsFiltersAction, (state, { fields }) => ({
     ...state,
