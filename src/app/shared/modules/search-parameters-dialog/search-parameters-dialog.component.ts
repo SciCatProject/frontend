@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
@@ -26,7 +26,7 @@ export interface SearchParametersDialogData {
   styleUrls: ["./search-parameters-dialog.component.scss"],
   standalone: false,
 })
-export class SearchParametersDialogComponent {
+export class SearchParametersDialogComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   appConfig = this.appConfigService.getConfig();
   unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;

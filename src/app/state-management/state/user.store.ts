@@ -5,11 +5,7 @@ import { Observable } from "rxjs";
 import { FacetCount } from "./datasets.store";
 
 export type FilterType =
-  | "text"
-  | "dateRange"
-  | "multiSelect"
-  | "number"
-  | "checkbox";
+  "text" | "dateRange" | "multiSelect" | "number" | "checkbox";
 
 export interface FilterConfig {
   key: string;
