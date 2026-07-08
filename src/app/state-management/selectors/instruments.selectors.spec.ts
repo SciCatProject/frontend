@@ -14,6 +14,7 @@ const instrumentFilters: GenericFilters = {
 const initialInstrumentState: InstrumentState = {
   instruments: [],
   currentInstrument: instrument,
+  currentInstruments: [],
   totalCount: 0,
 
   filters: instrumentFilters,

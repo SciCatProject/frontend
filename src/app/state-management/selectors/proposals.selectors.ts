@@ -30,6 +30,11 @@ export const selectCurrentProposal = createSelector(
   (state) => state.currentProposal,
 );
 
+export const selectCurrentProposals = createSelector(
+  selectProposalsState,
+  (state) => state.currentProposals,
+);
+
 export const selectParentProposal = createSelector(
   selectProposalsState,
   (state) => state.parentProposal,

@@ -9,7 +9,7 @@ Cypress.Commands.add("getToken", () => {
 });
 
 Cypress.Commands.add("login", (username, password) => {
-  cy.request("POST", lbBaseUrl + loginEndpoint, {
+  cy.request("POST", lbBaseUrl + "/v3" + loginEndpoint, {
     username,
     password,
     rememberMe: true,
@@ -37,7 +37,7 @@ Cypress.Commands.add("createPolicy", (ownerGroup) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/Policies",
+        url: lbBaseUrl + "/v3/Policies",
         headers: {
           Authorization: token,
           Accept: "application/json",
@@ -58,7 +58,7 @@ Cypress.Commands.add("removePolicies", () => {
       method: "GET",
       url:
         lbBaseUrl +
-        "/Policies?filter=" +
+        "/v3/Policies?filter=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
@@ -78,7 +78,7 @@ Cypress.Commands.add("removePolicies", () => {
         policies.forEach((policy) => {
           cy.request({
             method: "DELETE",
-            url: lbBaseUrl + "/Policies/" + encodeURIComponent(policy.id),
+            url: lbBaseUrl + "/v3/Policies/" + encodeURIComponent(policy.id),
             headers: {
               Authorization: token,
               Accept: "application/json",
@@ -127,7 +127,7 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
 
         cy.request({
           method: "POST",
-          url: lbBaseUrl + "/datasets",
+          url: lbBaseUrl + "/v4/datasets",
           headers: {
             Authorization: token,
             Accept: "application/json",
@@ -143,7 +143,7 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
 
           cy.request({
             method: "POST",
-            url: lbBaseUrl + `/OrigDatablocks`,
+            url: lbBaseUrl + `/v3/OrigDatablocks`,
             headers: {
               Authorization: token,
               Accept: "application/json",
@@ -163,7 +163,7 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
 
         cy.request({
           method: "POST",
-          url: lbBaseUrl + "/datasets",
+          url: lbBaseUrl + "/v4/datasets",
           headers: {
             Authorization: token,
             Accept: "application/json",
@@ -189,7 +189,7 @@ Cypress.Commands.add("createProposal", (overwrites = {}) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/Proposals",
+        url: lbBaseUrl + "/v3/Proposals",
         headers: {
           Authorization: token,
           Accept: "application/json",
@@ -211,7 +211,7 @@ Cypress.Commands.add("createInstrument", (instrument) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/Instruments",
+        url: lbBaseUrl + "/v3/Instruments",
         headers: {
           Authorization: token,
           Accept: "application/json",
@@ -233,7 +233,7 @@ Cypress.Commands.add("createSample", (sample) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/Samples",
+        url: lbBaseUrl + "/v3/Samples",
         headers: {
           Authorization: token,
           Accept: "application/json",
@@ -257,7 +257,7 @@ Cypress.Commands.add("updateProposal", (proposalId, updateProposalDto) => {
 
       cy.request({
         method: "PATCH",
-        url: `${lbBaseUrl}/Proposals/${encodeURIComponent(proposalId)}`,
+        url: `${lbBaseUrl}/v3/Proposals/${encodeURIComponent(proposalId)}`,
         headers: {
           Authorization: token,
           Accept: "application/json",
@@ -273,7 +273,7 @@ Cypress.Commands.add("deleteProposal", (id) => {
   cy.getToken().then((token) => {
     cy.request({
       method: "DELETE",
-      url: lbBaseUrl + `/Proposals/${encodeURIComponent(id)}`,
+      url: lbBaseUrl + `/v3/Proposals/${encodeURIComponent(id)}`,
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -288,13 +288,13 @@ Cypress.Commands.add("removeDatasets", () => {
   cy.log("Loggin in as " + Cypress.env("secondaryUsername"));
   cy.login(Cypress.env("secondaryUsername"), Cypress.env("secondaryPassword"));
   cy.getToken().then((token) => {
-    const filter = { where: { } };
+    const filter = { where: {} };
 
     cy.request({
       method: "GET",
       url:
         lbBaseUrl +
-        "/datasets?filter=" +
+        "/v4/datasets?filter=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
@@ -309,7 +309,7 @@ Cypress.Commands.add("removeDatasets", () => {
       datasets.forEach((dataset) => {
         cy.request({
           method: "DELETE",
-          url: lbBaseUrl + "/datasets/" + encodeURIComponent(dataset.pid),
+          url: lbBaseUrl + "/v4/datasets/" + encodeURIComponent(dataset.pid),
           headers: {
             Authorization: token,
             Accept: "application/json",
@@ -330,7 +330,7 @@ Cypress.Commands.add("removeProposals", () => {
       method: "GET",
       url:
         lbBaseUrl +
-        "/proposals?filters=" +
+        "/v3/proposals?filters=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
@@ -352,7 +352,7 @@ Cypress.Commands.add("removeProposals", () => {
             method: "DELETE",
             url:
               lbBaseUrl +
-              "/proposals/" +
+              "/v3/proposals/" +
               encodeURIComponent(proposal.proposalId),
             headers: {
               Authorization: token,
@@ -371,7 +371,7 @@ Cypress.Commands.add("removeInstruments", () => {
   cy.getToken().then((token) => {
     cy.request({
       method: "GET",
-      url: lbBaseUrl + "/instruments",
+      url: lbBaseUrl + "/v3/instruments",
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -391,7 +391,9 @@ Cypress.Commands.add("removeInstruments", () => {
           cy.request({
             method: "DELETE",
             url:
-              lbBaseUrl + "/instruments/" + encodeURIComponent(instrument.pid),
+              lbBaseUrl +
+              "/v3/instruments/" +
+              encodeURIComponent(instrument.pid),
             headers: {
               Authorization: token,
               Accept: "application/json",
@@ -413,7 +415,7 @@ Cypress.Commands.add("removeSamples", () => {
       method: "GET",
       url:
         lbBaseUrl +
-        "/Samples?filter=" +
+        "/v3/Samples?filter=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
@@ -433,7 +435,7 @@ Cypress.Commands.add("removeSamples", () => {
         samples.forEach((sample) => {
           cy.request({
             method: "DELETE",
-            url: lbBaseUrl + "/Samples/" + sample.sampleId,
+            url: lbBaseUrl + "/v3/Samples/" + sample.sampleId,
             headers: {
               Authorization: token,
               Accept: "application/json",
@@ -451,7 +453,8 @@ Cypress.Commands.add("initializeElasticSearch", (index) => {
   cy.getToken().then((token) => {
     cy.request({
       method: "POST",
-      url: lbBaseUrl + "/elastic-search" + "/create-index" + "?index=" + index,
+      url:
+        lbBaseUrl + "/v3/elastic-search" + "/create-index" + "?index=" + index,
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -461,7 +464,11 @@ Cypress.Commands.add("initializeElasticSearch", (index) => {
       cy.request({
         method: "POST",
         url:
-          lbBaseUrl + "/elastic-search" + "/sync-database" + "?index=" + index,
+          lbBaseUrl +
+          "/v3/elastic-search" +
+          "/sync-database" +
+          "?index=" +
+          index,
         headers: {
           Authorization: token,
           Accept: "application/json",
@@ -484,7 +491,7 @@ Cypress.Commands.add("createDatasetForElasticSearch", (datasetName) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/datasets",
+        url: lbBaseUrl + "/v4/datasets",
         headers: {
           Authorization: token,
           Accept: "application/json",
@@ -501,7 +508,8 @@ Cypress.Commands.add("removeElasticSearchIndex", (index) => {
   cy.getToken().then((token) => {
     cy.request({
       method: "POST",
-      url: lbBaseUrl + "/elastic-search" + "/delete-index" + "?index=" + index,
+      url:
+        lbBaseUrl + "/v3/elastic-search" + "/delete-index" + "?index=" + index,
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -545,7 +553,7 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
       method: "GET",
       url:
         lbBaseUrl +
-        "/datasets?filter=" +
+        "/v4/datasets?filter=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
@@ -565,7 +573,7 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
         datasets.forEach((dataset) => {
           cy.request({
             method: "DELETE",
-            url: lbBaseUrl + "/datasets/" + encodeURIComponent(dataset.pid),
+            url: lbBaseUrl + "/v4/datasets/" + encodeURIComponent(dataset.pid),
             headers: {
               Authorization: token,
               Accept: "application/json",

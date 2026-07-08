@@ -10,15 +10,11 @@ import {
   createMock,
   mockAttachment as attachment,
 } from "shared/MockStubs";
-import {
-  DatasetsControllerCreateV3Request,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("Dataset Actions", () => {
   const datasets = [dataset];
-  const derivedDataset = createMock<OutputDatasetObsoleteDto>({
-    investigator: "",
+  const derivedDataset = createMock<OutputDatasetDto>({
     inputDatasets: [],
     usedSoftware: [],
     owner: "",
@@ -26,13 +22,13 @@ describe("Dataset Actions", () => {
     sourceFolder: "",
     creationTime: "",
     ownerGroup: "",
-    datasetName: "",
+    datasetName: "test name",
     type: "derived",
     numberOfFilesArchived: 0,
     createdAt: "",
     createdBy: "",
     creationLocation: "",
-    principalInvestigator: "",
+    principalInvestigators: [],
     updatedAt: "",
     updatedBy: "",
   });
@@ -274,11 +270,11 @@ describe("Dataset Actions", () => {
   describe("addDatasetAction", () => {
     it("should create an action", () => {
       const action = fromActions.addDatasetAction({
-        dataset: dataset as DatasetsControllerCreateV3Request,
+        dataset: dataset as OutputDatasetDto,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Dataset",
-        dataset: dataset as DatasetsControllerCreateV3Request,
+        dataset: dataset as OutputDatasetDto,
       });
     });
   });

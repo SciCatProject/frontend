@@ -26,7 +26,6 @@ import {
 
 import { AttachmentService } from "shared/services/attachment.service";
 import { DatePipe } from "@angular/common";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -34,6 +33,7 @@ import {
   ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -66,7 +66,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   show = false;
 
   instrument: Instrument | undefined;
-  dataset: OutputDatasetObsoleteDto | undefined;
+  dataset: CurrentDataset | undefined;
 
   actionItems: ActionItems = {
     datasets: [],
@@ -207,10 +207,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   getThumbnailSize(value: string): string {
     return value ? `thumbnail-image--${value}` : "";
   }
-  getNestedValue(
-    obj: OutputDatasetObsoleteDto,
-    path: string,
-  ): string | string[] {
+  getNestedValue(obj: CurrentDataset, path: string): string | string[] {
     if (!path) {
       return "field source is missing";
     }
@@ -227,7 +224,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       .reduce((prev, curr) => (prev != null ? prev[curr] : undefined), obj);
   }
 
-  getInternalLinkValue(obj: OutputDatasetObsoleteDto, path: string): string {
+  getInternalLinkValue(obj: CurrentDataset, path: string): string {
     // For instrumentName internal links, return the instrument ID instead of the name
     if (path === "instrumentName" && this.instrument) {
       return this.instrument.pid || "";
@@ -262,10 +259,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     }
   }
 
-  getScientificMetadata(
-    dataset: OutputDatasetObsoleteDto,
-    source?: string,
-  ): any {
+  getScientificMetadata(dataset: CurrentDataset, source?: string): any {
     const meta = dataset?.scientificMetadata;
     if (!meta) return null;
     if (!source) return meta;

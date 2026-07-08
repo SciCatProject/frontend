@@ -1,5 +1,5 @@
 import {
-  OutputDatasetObsoleteDto,
+  PartialOutputDatasetDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
@@ -50,10 +50,11 @@ export interface ProposalDatesetFilters {
 export interface ProposalsState {
   proposals: ProposalClass[];
   currentProposal: ProposalClass | undefined;
+  currentProposals: ProposalClass[];
   parentProposal: ProposalClass | undefined;
   relatedProposals: (ProposalClass & { relation: string })[];
   relatedProposalsCount: number;
-  datasets: OutputDatasetObsoleteDto[];
+  datasets: PartialOutputDatasetDto[];
 
   columns: TableField<any>[];
   proposalsCount: number;
@@ -75,6 +76,7 @@ export interface ProposalsState {
 export const initialProposalsState: ProposalsState = {
   proposals: [],
   currentProposal: undefined,
+  currentProposals: [],
   parentProposal: undefined,
   relatedProposals: [],
   relatedProposalsCount: 0,

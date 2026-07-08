@@ -4,7 +4,7 @@ import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Sort } from "@angular/material/sort";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { AppConfigService } from "app-config.service";
 import { BehaviorSubject, lastValueFrom, Subscription, take } from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
@@ -78,8 +78,8 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   //dataSource: BehaviorSubject<TableData[]> = new BehaviorSubject<TableData[]>(
   //  [],
   //);
-  dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
-    OutputDatasetObsoleteDto[]
+  dataSource: BehaviorSubject<PartialOutputDatasetDto[]> = new BehaviorSubject<
+    PartialOutputDatasetDto[]
   >([]);
 
   pagination: TablePagination = {};
@@ -191,7 +191,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     this.pagination = paginationConfig;
   }
 
-  formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
+  formatTableData(datasets: PartialOutputDatasetDto[]): TableData[] {
     let tableData: TableData[] = [];
     if (datasets) {
       tableData = datasets.map((dataset) => ({
@@ -261,7 +261,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(event: IRowEvent<OutputDatasetObsoleteDto>) {
+  onRowClick(event: IRowEvent<PartialOutputDatasetDto>) {
     if (event.event === RowEventType.RowClick) {
       const pid = encodeURIComponent(event.sender.row.pid);
       this.router.navigateByUrl("/datasets/" + pid);

@@ -3,10 +3,7 @@ import { Store } from "@ngrx/store";
 import { FileObject } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
-import {
-  CreateJobDtoV3,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { CreateJobDtoV3 } from "@scicatproject/scicat-sdk-ts-angular";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentDatablocks,
@@ -17,6 +14,7 @@ import {
   selectIsAdmin,
   selectIsLoading,
 } from "state-management/selectors/user.selectors";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 @Component({
   selector: "app-admin-tab",
@@ -26,7 +24,7 @@ import {
 })
 export class AdminTabComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  dataset: OutputDatasetObsoleteDto | undefined;
+  dataset: CurrentDataset | undefined;
   datablocks$ = this.store.select(selectCurrentDatablocks);
   isAdmin$ = this.store.select(selectIsAdmin);
   loading$ = this.store.select(selectIsLoading);

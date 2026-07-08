@@ -19,9 +19,11 @@ import {
 import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
 import {
-  DatasetsControllerCreateV3Request,
+  CreateDatasetDto,
   DatasetsService,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
+  DatasetsV4Service,
+  DatasetsPublicV4Service,
   MetadataKeysV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
@@ -31,14 +33,14 @@ import {
   mockDataset,
 } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
-import { provideHttpClientTesting } from "@angular/common/http/testing";
 
-const derivedData = createMock<OutputDatasetObsoleteDto>({
-  investigator: "",
+const derivedData = createMock<OutputDatasetDto>({
   inputDatasets: [],
   usedSoftware: [],
   owner: "",
@@ -47,21 +49,25 @@ const derivedData = createMock<OutputDatasetObsoleteDto>({
   creationTime: new Date().toString(),
   type: "derived",
   ownerGroup: "",
+  datasetName: "test name",
   createdAt: "",
   createdBy: "",
   creationLocation: "",
   numberOfFilesArchived: 0,
-  principalInvestigator: "",
+  principalInvestigators: [],
   updatedAt: "",
   updatedBy: "",
 });
 const derivedDataset = { pid: "testPid", ...derivedData };
-const dataset = { pid: "testPid", ...mockDataset };
+
+const dataset = { pid: "testPid", datasetName: "test name", ...mockDataset };
 
 describe("DatasetEffects", () => {
   let actions: TestObservable;
   let effects: DatasetEffects;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
+  let datasetsV4Service: jasmine.SpyObj<DatasetsV4Service>;
+  let datasetsPublicV4Service: jasmine.SpyObj<DatasetsPublicV4Service>;
   let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
 
   const getConfig = () => ({});
@@ -81,28 +87,44 @@ describe("DatasetEffects", () => {
             {
               selector: selectFullqueryParams,
               value: {
-                query: JSON.stringify({ isPublished: false }),
-                limits: { skip: 0, limit: 25, order: "test asc" },
+                query: {},
+                limits: { skip: 0, limit: 25, sort: {} },
               },
             },
             { selector: selectFullfacetParams, value: {} },
+            { selector: selectCurrentUser, value: { id: "testUser" } },
           ],
         }),
         {
           provide: DatasetsService,
           useValue: jasmine.createSpyObj("datasetApi", [
-            "datasetsControllerCreateV3",
-            "datasetsControllerFullqueryV3",
             "datasetsControllerFullfacetV3",
             "datasetsControllerMetadataKeysV3",
-            "datasetsControllerFindAllV3",
-            "datasetsControllerFindByIdV3",
             "datasetsControllerFindByIdAndUpdateV3",
             "datasetsControllerCreateAttachmentV3",
             "datasetsControllerFindOneAttachmentAndUpdateV3",
             "datasetsControllerFindOneAttachmentAndRemoveV3",
             "datasetsControllerAppendToArrayFieldV3",
-            "datasetsControllerCountV3",
+          ]),
+        },
+        {
+          provide: DatasetsV4Service,
+          useValue: jasmine.createSpyObj("datasetsV4Service", [
+            "datasetsV4ControllerFindAllV4",
+            "datasetsV4ControllerFindByIdV4",
+            "datasetsV4ControllerCreateV4",
+            "datasetsV4ControllerCountV4",
+            "datasetsV4ControllerFullfacetV4",
+            "datasetsV4ControllerFindByIdAndUpdateV4",
+          ]),
+        },
+        {
+          provide: DatasetsPublicV4Service,
+          useValue: jasmine.createSpyObj("datasetsPublicV4Service", [
+            "datasetsPublicV4ControllerFindAllPublicV4",
+            "datasetsPublicV4ControllerFindByIdPublicV4",
+            "datasetsPublicV4ControllerCountPublicV4",
+            "datasetsPublicV4ControllerFullfacetV4",
           ]),
         },
         {
@@ -119,6 +141,8 @@ describe("DatasetEffects", () => {
 
     effects = TestBed.inject(DatasetEffects);
     datasetApi = injectedStub(DatasetsService);
+    datasetsV4Service = injectedStub(DatasetsV4Service);
+    datasetsPublicV4Service = injectedStub(DatasetsPublicV4Service);
     metadataKeysApi = injectedStub(MetadataKeysV4Service);
   });
 
@@ -133,7 +157,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: datasets });
-      datasetApi.datasetsControllerFullqueryV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
@@ -145,7 +169,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFullqueryV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
@@ -180,7 +204,9 @@ describe("DatasetEffects", () => {
       ];
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: responseArray });
-      datasetApi.datasetsControllerFullfacetV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
@@ -192,7 +218,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFullfacetV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
@@ -309,7 +337,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.datasetsControllerFindByIdV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindByIdV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDataset$).toBeObservable(expected);
@@ -321,7 +351,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindByIdV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindByIdV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDataset$).toBeObservable(expected);
@@ -338,7 +370,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: relatedDatasets });
-      datasetApi.datasetsControllerFindAllV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasets$).toBeObservable(expected);
@@ -349,7 +381,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindAllV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasets$).toBeObservable(expected);
@@ -366,7 +398,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { count } });
-      datasetApi.datasetsControllerCountV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerCountV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
@@ -377,7 +409,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerCountV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerCountV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
@@ -387,7 +419,7 @@ describe("DatasetEffects", () => {
   describe("addDataset$", () => {
     it("should result in an addDatasetCompleteAction, a fetchDatasetsAction and a fetchDatasetAction", () => {
       const action = fromActions.addDatasetAction({
-        dataset: derivedDataset as DatasetsControllerCreateV3Request,
+        dataset: derivedDataset as OutputDatasetDto,
       });
       const outcome1 = fromActions.addDatasetCompleteAction({
         dataset: derivedDataset,
@@ -399,7 +431,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: derivedDataset });
-      datasetApi.datasetsControllerCreateV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerCreateV4.and.returnValue(response);
 
       const expected = cold("--(bcd)", {
         b: outcome1,
@@ -411,13 +443,13 @@ describe("DatasetEffects", () => {
 
     it("should result in an addDatasetFailedAction", () => {
       const action = fromActions.addDatasetAction({
-        dataset: derivedDataset as DatasetsControllerCreateV3Request,
+        dataset: derivedDataset as OutputDatasetDto,
       });
       const outcome = fromActions.addDatasetFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerCreateV3.and.returnValue(response);
+      datasetsV4Service.datasetsV4ControllerCreateV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.addDataset$).toBeObservable(expected);
@@ -437,7 +469,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerFindByIdAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -454,7 +486,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerFindByIdAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -476,7 +508,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerFindByIdAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -493,7 +525,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerFindByIdAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -713,7 +745,7 @@ describe("DatasetEffects", () => {
     describe("ofType addDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
         const action = fromActions.addDatasetAction({
-          dataset: derivedDataset as DatasetsControllerCreateV3Request,
+          dataset: derivedDataset as OutputDatasetDto,
         });
         const outcome = loadingAction();
 

@@ -9,10 +9,8 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { RetrieveDestinations } from "app-config.service";
-import {
-  OutputDatasetObsoleteDto,
-  ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 @Injectable()
 export class ArchivingService {
@@ -23,7 +21,7 @@ export class ArchivingService {
 
   private createJob(
     user: ReturnedUserDto,
-    datasets: OutputDatasetObsoleteDto[],
+    datasets: CurrentDataset[],
     archive: boolean,
     destinationPath?: Record<string, string>,
     // Do not specify tape copies here
@@ -53,7 +51,7 @@ export class ArchivingService {
   }
 
   private archiveOrRetrieve(
-    datasets: OutputDatasetObsoleteDto[],
+    datasets: CurrentDataset[],
     archive: boolean,
     destPath?: Record<string, string>,
   ): Observable<void> {
@@ -80,12 +78,12 @@ export class ArchivingService {
     );
   }
 
-  public archive(datasets: OutputDatasetObsoleteDto[]): Observable<void> {
+  public archive(datasets: CurrentDataset[]): Observable<void> {
     return this.archiveOrRetrieve(datasets, true);
   }
 
   public retrieve(
-    datasets: OutputDatasetObsoleteDto[],
+    datasets: CurrentDataset[],
     destinationPath: Record<string, string>,
   ): Observable<void> {
     return this.archiveOrRetrieve(datasets, false, destinationPath);

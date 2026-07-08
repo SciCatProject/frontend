@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import {
   OutputAttachmentV3Dto,
-  OutputDatasetObsoleteDto,
+  PartialOutputDatasetDto,
   PartialUpdateProposalDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -91,7 +91,7 @@ export const fetchProposalDatasetsAction = createAction(
 export const fetchProposalDatasetsCompleteAction = createAction(
   "[Proposal] Fetch Datasets Complete",
   props<{
-    datasets: OutputDatasetObsoleteDto[];
+    datasets: PartialOutputDatasetDto[];
     limit: number;
     skip: number;
   }>(),

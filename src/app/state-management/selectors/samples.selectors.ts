@@ -19,6 +19,11 @@ export const selectCurrentSample = createSelector(
   (state) => state.currentSample,
 );
 
+export const selectCurrentSamples = createSelector(
+  selectSampleState,
+  (state) => state.currentSamples,
+);
+
 export const selectCurrentAttachments = createSelector(
   selectSampleState,
   (state) => state.attachments,

@@ -69,7 +69,7 @@ describe("Datasets general", () => {
       cy.createDataset({
         type: "raw",
         dataFileSize: "small",
-        proposalId,
+        proposalIds: [proposalId],
       });
       cy.visit("/datasets");
 
@@ -114,7 +114,7 @@ describe("Datasets general", () => {
             unit: "celsius",
             human_name: "Temperature Human Name",
           },
-          test_number: { type: "number", value: 5, unit: "" },
+          test_number: { type: "number", value: 5, unit: "km" },
           test_string: { type: "string", value: "hello", unit: "" },
         },
         isPublished: true,
@@ -295,6 +295,7 @@ describe("Datasets general", () => {
         .first()
         .within(() => {
           cy.get("input[matInput]").eq(0).clear().type("5");
+          cy.get("input[matInput]").eq(1).clear().type("km");
         });
 
       cy.get(".condition-panel")
@@ -361,6 +362,42 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-table").should("exist");
 
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+     
+    it("should be able to add a condition with range values that contains decimals", () => {
+      cy.visit("/datasets");
+      
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+      
+      cy.get('input[name="lhs"]').type("temperature");
+      
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+      
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("mat-select").click();
+        });
+
+      cy.get("mat-option").contains("is in range").click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("24.5");
+          cy.get("input[matInput]").eq(1).clear().type("25.5");
+          cy.get("input[matInput]").eq(2).clear().type("celsius");
+        });
+
+      cy.get('[data-cy="filter-search-button"]').click();
+
+      cy.get(".dataset-table mat-table").should("exist");
+      
       cy.get('[data-cy="remove-condition-button"]').click();
     });
 

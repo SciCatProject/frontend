@@ -3,7 +3,7 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import { Observable, of, throwError } from "rxjs";
 import { IngestorEffects } from "state-management/effects/ingestor.effects";
 import { Ingestor } from "shared/sdk/apis/ingestor.service";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
+import { DatasetsV4Service } from "@scicatproject/scicat-sdk-ts-angular";
 import { provideMockStore, MockStore } from "@ngrx/store/testing";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { showMessageAction } from "state-management/actions/user.actions";
@@ -15,7 +15,7 @@ describe("IngestorEffects", () => {
   let actions$: Observable<any>;
   let effects: IngestorEffects;
   let ingestorService: jasmine.SpyObj<Ingestor>;
-  let datasetsService: jasmine.SpyObj<DatasetsService>;
+  let datasetsV4Service: jasmine.SpyObj<DatasetsV4Service>;
   let store: MockStore;
 
   const mockVersionResponse = { version: "1.0.0" };
@@ -34,8 +34,8 @@ describe("IngestorEffects", () => {
       "cancelTransfer",
     ]);
 
-    const datasetsSpy = jasmine.createSpyObj("DatasetsService", [
-      "datasetsControllerCreateV3",
+    const datasetsSpy = jasmine.createSpyObj("DatasetsV4Service", [
+      "datasetsV4ControllerCreateV4",
     ]);
 
     TestBed.configureTestingModule({
@@ -50,15 +50,15 @@ describe("IngestorEffects", () => {
           },
         }),
         { provide: Ingestor, useValue: ingestorSpy },
-        { provide: DatasetsService, useValue: datasetsSpy },
+        { provide: DatasetsV4Service, useValue: datasetsSpy },
       ],
     });
 
     effects = TestBed.inject(IngestorEffects);
     ingestorService = TestBed.inject(Ingestor) as jasmine.SpyObj<Ingestor>;
-    datasetsService = TestBed.inject(
-      DatasetsService,
-    ) as jasmine.SpyObj<DatasetsService>;
+    datasetsV4Service = TestBed.inject(
+      DatasetsV4Service,
+    ) as jasmine.SpyObj<DatasetsV4Service>;
     store = TestBed.inject(MockStore);
   });
 
@@ -458,7 +458,9 @@ describe("IngestorEffects", () => {
   describe("createDataset$", () => {
     it("should dispatch success actions on successful creation", (done) => {
       const dataset = { pid: "123", datasetName: "Test" } as any;
-      datasetsService.datasetsControllerCreateV3.and.returnValue(of(dataset));
+      datasetsV4Service.datasetsV4ControllerCreateV4.and.returnValue(
+        of(dataset),
+      );
 
       actions$ = of(fromActions.createDatasetAction({ dataset }));
 
@@ -477,7 +479,7 @@ describe("IngestorEffects", () => {
 
     it("should dispatch failure actions on error", (done) => {
       const error = new Error("Create failed");
-      datasetsService.datasetsControllerCreateV3.and.returnValue(
+      datasetsV4Service.datasetsV4ControllerCreateV4.and.returnValue(
         throwError(() => error),
       );
 
