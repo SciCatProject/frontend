@@ -98,6 +98,7 @@ export interface AppConfigInterface {
   datasetJsonScientificMetadata: boolean;
   datasetPageSizeOptions?: number[];
   datasetReduceEnabled: boolean;
+  datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetActionsEnabled: boolean;
   datasetActions: ActionConfig[];
