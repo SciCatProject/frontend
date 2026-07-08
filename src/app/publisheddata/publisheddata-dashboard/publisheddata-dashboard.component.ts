@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
 import { BehaviorSubject, Subscription, take } from "rxjs";
 import { AppConfigService } from "app-config.service";
@@ -93,6 +93,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     private dataService: ScicatDataService,
     private exportService: ExportExcelService,
     private tableConfigService: TableConfigService,
+    private route: ActivatedRoute,
   ) {
     this.scicatDataSource = new SciCatDataSource(
       this.appConfigService,
@@ -106,10 +107,6 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.vm$.pipe(take(1)).subscribe((vm) => {
         this.currentFilters = vm.filters;
-        const { skip, limit } = vm.filters;
-        const pageIndex = skip / limit;
-
-        this.loadData(vm.filters, pageIndex, limit);
 
         const tableSettingsConfig =
           this.tableConfigService.getTableSettingsConfig(
@@ -125,18 +122,36 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
         this.columns = currentColumnSetting;
         this.setting = tableSettingsConfig;
 
-        this.subscriptions.push(
-          this.scicatDataSource.loading$.subscribe((loading) => {
-            this.pagination = { ...this.pagination, isLoading: loading };
-          }),
-        );
-
         this.pagination = {
           ...this.pagination,
           length: vm.count,
-          pageIndex,
-          pageSize: limit,
         };
+      }),
+    );
+
+    this.subscriptions.push(
+      this.scicatDataSource.loading$.subscribe((loading) => {
+        this.pagination = { ...this.pagination, isLoading: loading };
+      }),
+    );
+
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        const pageIndex = +queryParams.pageIndex || 0;
+        const pageSize = +queryParams.pageSize || this.pagination.pageSize;
+        const globalSearch = queryParams.textSearch || undefined;
+
+        const filters = {
+          ...this.currentFilters,
+          skip: pageIndex * pageSize,
+          limit: pageSize,
+          globalSearch,
+        };
+        this.currentFilters = filters;
+        this.globalTextSearch = globalSearch || "";
+        this.pagination = { ...this.pagination, pageIndex, pageSize };
+
+        this.loadData(filters, pageIndex, pageSize);
       }),
     );
 
@@ -161,15 +176,13 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChange(pagination: TablePagination) {
-    const pageIndex = pagination.pageIndex;
-    const pageSize = pagination.pageSize;
-    const newFilters = {
-      ...this.currentFilters,
-      skip: pageIndex * pageSize,
-      limit: pageSize,
-    };
-
-    this.loadData(newFilters, pageIndex, pageSize);
+    this.router.navigate([], {
+      queryParams: {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+      },
+      queryParamsHandling: "merge",
+    });
   }
 
   saveTableSettings(setting: ITableSetting) {
@@ -203,15 +216,13 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   }
 
   onGlobalTextSearchAction() {
-    const newFilters = {
-      ...this.currentFilters,
-      skip: 0,
-      limit: this.pagination.pageSize,
-      globalSearch: this.globalTextSearch || undefined,
-    };
-
-    this.loadData(newFilters, 0, this.pagination.pageSize);
-    this.currentFilters = newFilters;
+    this.router.navigate([], {
+      queryParams: {
+        textSearch: this.globalTextSearch || undefined,
+        pageIndex: 0,
+      },
+      queryParamsHandling: "merge",
+    });
   }
 
   getSort(filters: any) {
