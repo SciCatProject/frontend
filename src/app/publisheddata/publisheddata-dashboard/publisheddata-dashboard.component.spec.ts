@@ -6,10 +6,15 @@ import {
 } from "@angular/core/testing";
 
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard.component";
-import { MockStore, createMock, mockPublishedData } from "shared/MockStubs";
+import {
+  MockActivatedRoute,
+  MockStore,
+  createMock,
+  mockPublishedData,
+} from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { StoreModule, Store } from "@ngrx/store";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -54,6 +59,7 @@ describe("PublisheddataDashboardComponent", () => {
           },
           { provide: ScicatDataService, useValue: {} },
           { provide: ExportExcelService, useValue: {} },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
         ],
       },
     });
