@@ -148,7 +148,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   pagination: TablePagination = {
     pageSizeOptions: [5, 10, 25, 50, 100],
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 10,
     length: 0,
   };
 
@@ -242,7 +242,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
           this.datasetPid = dataset.pid;
           this.actionItems.datasets = <ActionItemDataset[]>[dataset];
         }
-
         if (datablocks) {
           this.totalFileSize = 0;
           const files: DataFiles_File[] = [];
@@ -256,12 +255,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
           this.count = files.length;
           this.files = files;
 
-          this.pagination = {
-            ...this.pagination,
-            length: totalCount,
-            isLoading,
-          };
-
           this.dataSource.next(this.files);
 
           this.tooLargeFile = this.hasTooLargeFiles(this.files);
@@ -269,6 +262,11 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
             this.actionItems.datasets[0].files = files;
           }
         }
+        this.pagination = {
+          ...this.pagination,
+          length: totalCount,
+          isLoading,
+        };
       }),
     );
   }
