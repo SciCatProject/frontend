@@ -220,7 +220,7 @@ export class DatasetEffects {
           },
         };
 
-        const apiCall$ = user
+        const apiCall$ = user?.id
           ? this.origdatablocksService.origDatablocksV4ControllerFindAllFilesV4(
               JSON.stringify(filter),
             )
@@ -251,7 +251,7 @@ export class DatasetEffects {
           },
         };
 
-        const apiCall$ = user
+        const apiCall$ = user?.id
           ? this.origdatablocksService.origDatablocksV4ControllerCountFilesV4(
               JSON.stringify(filter),
             )
