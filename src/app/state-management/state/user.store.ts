@@ -5,11 +5,7 @@ import { Observable } from "rxjs";
 import { FacetCount } from "./datasets.store";
 
 export type FilterType =
-  | "text"
-  | "dateRange"
-  | "multiSelect"
-  | "number"
-  | "checkbox";
+  "text" | "dateRange" | "multiSelect" | "number" | "checkbox";
 
 export interface FilterConfig {
   key: string;
@@ -80,6 +76,7 @@ export const initialUserState: UserState = {
     fe_instrument_table_columns: [],
     fe_file_table_columns: [],
     fe_job_table_columns: [],
+    fe_publisheddata_table_columns: [],
   }, // TODO sync with server settings?
 
   message: undefined,
