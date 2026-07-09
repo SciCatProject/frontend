@@ -138,8 +138,6 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(fetchRelatedDatasetsAction());
-
     this.subscription = combineLatest([
       this.vm$,
       this.selectColumnsWithFetchedSettings$.pipe(take(1)),

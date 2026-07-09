@@ -297,12 +297,13 @@ export class DatasetEffects {
         this.relatedDatasetsFilters$,
       ]),
       switchMap(([, dataset, filters]) => {
+        const sortTieBreaker = "pid:asc";
         const queryFilter = {
           where: {},
           limits: {
             skip: filters.skip,
             limit: filters.limit,
-            order: filters.sortField,
+            order: filters.sortField + "," + sortTieBreaker,
           },
         };
         if (dataset.type === "raw") {
