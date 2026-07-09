@@ -16,14 +16,25 @@ const reducer = createReducer(
     }),
   ),
 
+  on(fromActions.fetchFacetCountsAction, (state): DatasetState => ({
+    ...state,
+    facetCountsIsLoading: true,
+  })),
+
   on(
     fromActions.fetchFacetCountsCompleteAction,
     (state, { facetCounts, allCounts }): DatasetState => ({
       ...state,
       facetCounts,
       totalCount: allCounts,
+      facetCountsIsLoading: false,
     }),
   ),
+
+  on(fromActions.fetchFacetCountsFailedAction, (state): DatasetState => ({
+    ...state,
+    facetCountsIsLoading: false,
+  })),
 
   on(
     fromActions.fetchMetadataKeysCompleteAction,
@@ -131,10 +142,10 @@ const reducer = createReducer(
     );
     return { ...state, batch };
   }),
-  on(
-    fromActions.clearBatchAction,
-    (state): DatasetState => ({ ...state, batch: [] }),
-  ),
+  on(fromActions.clearBatchAction, (state): DatasetState => ({
+    ...state,
+    batch: [],
+  })),
 
   on(
     fromActions.addDatasetCompleteAction,
@@ -188,21 +199,15 @@ const reducer = createReducer(
     },
   ),
 
-  on(
-    fromActions.clearDatasetsStateAction,
-    (): DatasetState => ({
-      ...initialDatasetState,
-    }),
-  ),
+  on(fromActions.clearDatasetsStateAction, (): DatasetState => ({
+    ...initialDatasetState,
+  })),
 
-  on(
-    fromActions.clearCurrentDatasetStateAction,
-    (state): DatasetState => ({
-      ...state,
-      currentSet: undefined,
-      relatedDatasets: [],
-    }),
-  ),
+  on(fromActions.clearCurrentDatasetStateAction, (state): DatasetState => ({
+    ...state,
+    currentSet: undefined,
+    relatedDatasets: [],
+  })),
 
   on(fromActions.selectDatasetAction, (state, { dataset }) => {
     const alreadySelected = state.selectedSets.find(
@@ -228,20 +233,14 @@ const reducer = createReducer(
     return { ...state, selectedSets };
   }),
 
-  on(
-    fromActions.selectAllDatasetsAction,
-    (state): DatasetState => ({
-      ...state,
-      selectedSets: [...state.datasets],
-    }),
-  ),
-  on(
-    fromActions.clearSelectionAction,
-    (state): DatasetState => ({
-      ...state,
-      selectedSets: [],
-    }),
-  ),
+  on(fromActions.selectAllDatasetsAction, (state): DatasetState => ({
+    ...state,
+    selectedSets: [...state.datasets],
+  })),
+  on(fromActions.clearSelectionAction, (state): DatasetState => ({
+    ...state,
+    selectedSets: [],
+  })),
 
   on(
     fromActions.setDatasetsLimitFilterAction,
@@ -264,20 +263,14 @@ const reducer = createReducer(
       return { ...state, filters };
     },
   ),
-  on(
-    fromActions.setSearchTermsAction,
-    (state, { terms }): DatasetState => ({
-      ...state,
-      searchTerms: terms,
-    }),
-  ),
-  on(
-    fromActions.setPidTermsAction,
-    (state, { pid }): DatasetState => ({
-      ...state,
-      pidTerms: pid,
-    }),
-  ),
+  on(fromActions.setSearchTermsAction, (state, { terms }): DatasetState => ({
+    ...state,
+    searchTerms: terms,
+  })),
+  on(fromActions.setPidTermsAction, (state, { pid }): DatasetState => ({
+    ...state,
+    pidTerms: pid,
+  })),
 
   on(
     fromActions.setArchiveViewModeAction,

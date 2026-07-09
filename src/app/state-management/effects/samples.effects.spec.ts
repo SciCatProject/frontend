@@ -75,6 +75,7 @@ describe("SampleEffects", () => {
           provide: DatasetsService,
           useValue: jasmine.createSpyObj("datasetApi", [
             "datasetsControllerFindAllV3",
+            "datasetsControllerCountV3",
           ]),
         },
       ],
@@ -285,16 +286,14 @@ describe("SampleEffects", () => {
     const sampleId = "testId";
 
     it("should result in a fetchSampleDatasetsCountCompleteAction", () => {
-      const count = 1;
-      const datasets = [dataset];
       const action = fromActions.fetchSampleDatasetsCountAction({ sampleId });
       const outcome = fromActions.fetchSampleDatasetsCountCompleteAction({
-        count,
+        count: 1,
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: datasets });
-      datasetApi.datasetsControllerFindAllV3.and.returnValue(response);
+      const response = cold("-a|", { a: { count: 1 } });
+      datasetApi.datasetsControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchSampleDatasetsCount$).toBeObservable(expected);
@@ -306,7 +305,7 @@ describe("SampleEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindAllV3.and.returnValue(response);
+      datasetApi.datasetsControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchSampleDatasetsCount$).toBeObservable(expected);

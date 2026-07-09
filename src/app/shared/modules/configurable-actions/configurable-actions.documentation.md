@@ -74,6 +74,19 @@ Please review the offical documentation for this attribute https://www.w3schools
   - _Allowed values_: 
     - "#datasetAccess": users that have access to the dataset
     - "#datasetPublic": if the dataset is public
+- __variables__: values calculated from the current action context before the action is triggered.  
+  Variables can be selectors, static strings, or references to other variables.
+  They can then be reused in conditions and inputs with the `@variableName` syntax, or in templated fields with `{{ @variableName }}` where templating is supported.
+  - _Type_: object
+  - _Optional_: true
+  - _Example_:
+    ```
+    {
+      "datasetPid": "#Dataset0Pid",
+      "filesPath": "#Dataset0SelectedFilesPath",
+      "firstFile": "@filesPath[0]"
+    }
+    ```
 - __payload__: json string to be send in the request body when the action is triggered. 
   Make sure that the string is properly escaped
   - _Type_: string
@@ -107,7 +120,65 @@ Please review the offical documentation for this attribute https://www.w3schools
   - _Example_: "{{ uuid }}.ipynb"
   - _Keywords_: The string can contain any of the following keywords. They are substituted with the value indicated.
     - {{ uuid }}: random uuid v4 generated for each request.
+- __dialog__: configuration for a confirmation or parameters dialog modal to be prompted to the user before the action is executed.
+  - _Type_: object
+  - _Optional_: true
+  - _Fields_:
+    - `title` (string): Header text displayed at the top of the dialog modal.
+    - `description` (string): Explanatory prompt message shown below the title.
+    - `width` (string): CSS width dimension value for formatting the window layout container bounds.
+    - `fields` (object[]): Form element configurations layout array mapping user selections to context variables.
 
+## Variable and selector resolution
+Configurable actions can define a `variables` object. Each entry is resolved before the action condition and request data are evaluated. This makes it possible to extract values from datasets, reuse them in other variables, and inject them into action configuration fields.
+
+Variable resolution follows this order:
+1. The component reads every `@variableName` reference and builds a dependency graph.
+2. Variables that are referenced by other variables are resolved first.
+3. References like `@variableName` are replaced with the resolved value.
+4. References to array values can use `@variableName[index]`, for example `@filesPath[0]`.
+5. The final value is checked against the supported selector patterns below.
+6. If no selector pattern matches, the value is kept as-is.
+
+Cyclic dependencies should be avoided. If one is detected, the component logs an error and continues resolving the remaining variables.
+
+For example:
+```
+"variables": {
+  "filesPath": "#Dataset0SelectedFilesPath",
+  "firstFile": "@filesPath[0]",
+  "datasetPid": "#Dataset0Pid",
+  "creationTime": "#Dataset[0]Field[creationTime]",
+  "creationDate": "#date_format(@creationTime, yyyy-MM-dd)"
+}
+```
+
+In this example, `filesPath` is resolved first as an array of selected file paths. `firstFile` then reads the first entry from that array. `creationDate` first substitutes `@creationTime`, then formats the resulting date value.
+
+Supported selector patterns:
+
+| Selector | Result |
+| --- | --- |
+| `#Dataset0Pid` | PID of the first dataset |
+| `#Dataset0FilesPath` | Paths of all files in the first dataset |
+| `#Dataset0FilesTotalSize` | Total size of all files in the first dataset |
+| `#Dataset0SourceFolder` | Source folder of the first dataset |
+| `#Dataset0SelectedFilesPath` | Paths of selected files in the first dataset |
+| `#Dataset0SelectedFilesCount` | Number of selected files in the first dataset |
+| `#Dataset0SelectedFilesTotalSize` | Total size of selected files in the first dataset |
+| `#Dataset[n]Field[fieldName]` | Value of `fieldName` from dataset `n` |
+| `#DatasetsPid` | PIDs of all datasets |
+| `#DatasetsFilesPath` | Paths of all files from all datasets |
+| `#DatasetsFilesTotalSize` | Total size of all files from all datasets |
+| `#DatasetsSourceFolder` | Source folders of all datasets |
+| `#DatasetsSelectedFilesPath` | Paths of all selected files from all datasets |
+| `#DatasetsSelectedFilesCount` | Total number of selected files from all datasets |
+| `#DatasetsSelectedFilesTotalSize` | Total size of all selected files from all datasets |
+| `#DatasetsField[fieldName]` | Values of `fieldName` from all datasets |
+| `#Instruments[n]Field[fieldName]` | Value of `fieldName` from instrument `n` |
+| `#date_format(value, format)` | Date formatted with Angular `DatePipe` format syntax |
+
+Indexes are zero-based. If a selector cannot be resolved, the resulting value can be empty or undefined depending on the selector and the available action items.
 
 ## Example
 The following is the configuration example provided together with the code.
@@ -127,7 +198,9 @@ The configuration below will create the following 5 buttons under the "Datafiles
 5. Donwload ASll  
    Triggers the download of a zip file containing all the dataset files
    The zip file is created by an external service, which needs to be properly configured.
-
+6. Custom Action with Dialog  
+   Triggers a custom processing workflow by showing a UI configuration modal window first. The captured values from user selection elements and configuration inputs are then processed dynamically when executing the command pipeline sequence.
+  
 Configuration
 ```
 {
@@ -191,6 +264,38 @@ Configuration
       "target": "_blank",
       "enabled": "#Selected",
       "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "b18274d0-bfd8-4a5c-89a1-026859336ab2",
+      "order": 6,
+      "label": "Custom Action with Dialog",
+      "files": "selected",
+      "mat_icon": "settings",
+      "type": "json-download",
+      "url": "https://api.scicatproject.org/actions/process",
+      "target": "_blank",
+      "enabled": "#Selected",
+      "authorization": ["#datasetAccess"],
+      "dialog": {
+        "title": "Configure Download Parameters",
+        "description": "Please select the processing cluster and format options for your download.",
+        "width": "500px",
+        "fields": [
+          {
+            "id": "cluster",
+            "label": "Target Cluster",
+            "type": "select",
+            "required": true,
+            "options": ["Cluster-A", "Cluster-B", "Cluster-C"]
+          },
+          {
+            "id": "compress",
+            "label": "Enable Compression",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      }
     }
   ]
 }

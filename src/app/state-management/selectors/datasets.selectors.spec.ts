@@ -13,6 +13,7 @@ const initialDatasetState: DatasetState = {
   totalCount: 0,
 
   facetCounts: {},
+  facetCountsIsLoading: false,
   metadataKeys: ["test"],
   hasPrefilledFilters: false,
   searchTerms: "run",
@@ -122,6 +123,14 @@ describe("test dataset selectors", () => {
       expect(
         fromDatasetSelectors.selectCurrentAttachments.projector(dataset),
       ).toEqual(dataset.attachments);
+    });
+  });
+
+  describe("selectCurrentRelationships", () => {
+    it("should select the relationships from the current dataset", () => {
+      expect(
+        fromDatasetSelectors.selectCurrentRelationships.projector(dataset),
+      ).toEqual([]);
     });
   });
 

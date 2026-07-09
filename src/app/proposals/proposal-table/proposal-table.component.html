@@ -9,19 +9,17 @@
   [rowSelectionMode]="rowSelectionMode"
   [showGlobalTextSearch]="true"
   [globalTextSearch]="globalTextSearch"
-  (globalTextSearchChange)="onTextSearchChange($event)"
-  (globalTextSearchApply)="onTextSearchAction()"
+  (globalTextSearchChange)="onGlobalTextSearchChange($event)"
+  (globalTextSearchApply)="onGlobalTextSearchAction()"
   [globalTextSearchPlaceholder]="'Proposal id, Title, Abstract...'"
   [localization]="localization"
-  [sideFilterCollapsed] = "sideFilterCollapsed"
+  [sideFilterCollapsed]="sideFilterCollapsed"
   (paginationChange)="onPageChange($event)"
   (onRowEvent)="onRowClick($event)"
   (settingChange)="onSettingChange($event)"
   (onTableEvent)="onTableEvent($event)"
   class="mat-elevation-z2"
-  [emptyMessage]="
-    'No proposals available. Please reset the filters and try again'
-  "
+  [emptyMessage]="'No proposals available. Please reset the filters and try again'"
   [emptyIcon]="'folder'"
 >
 </dynamic-mat-table>

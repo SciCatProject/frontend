@@ -120,7 +120,7 @@
 
   <ng-container *ngIf="emptyMetadataTable()">
     <mat-card
-      *ngIf="appConfig.jsonMetadataEnabled"
+      *ngIf="appConfig.tableSciDataEnabled"
       data-cy="proposal-metadata-card"
     >
       <mat-card-header class="scientific-header">
@@ -131,7 +131,7 @@
       </mat-card-header>
       <mat-card-content>
         <ng-template
-          [ngIf]="appConfig.tableSciDataEnabled"
+          [ngIf]="!appConfig.jsonMetadataEnabled"
           [ngIfElse]="jsonView"
         >
           <ng-template #metadataView>

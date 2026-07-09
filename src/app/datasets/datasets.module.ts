@@ -92,6 +92,8 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
+import { RelationshipsComponent } from "./relationships/relationships.component";
+import { RelatedIdentifierCellComponent } from "./relationships/related-identifier-cell/related-identifier-cell.component";
 
 @NgModule({
   imports: [
@@ -186,6 +188,8 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     DatasetFileUploaderComponent,
     AdminTabComponent,
     RelatedDatasetsComponent,
+    RelationshipsComponent,
+    RelatedIdentifierCellComponent,
     DatasetsFilterSettingsComponent,
   ],
   providers: [

@@ -221,8 +221,8 @@ describe("Datasets general", () => {
         .find(".condition-panel")
         .should("have.length", 0);
     });
-    // skipping for now but will be relevant when we can fetch human-readable names from metadataKeys endpoint in the future
-    it.skip("should search by human name", () => {
+
+    it("should search by human name", () => {
       cy.visit("/datasets");
 
       cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
@@ -363,6 +363,32 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="remove-condition-button"]').click();
     });
+
+    it("should search a metadata key when pressing Enter", () => {
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          autoApplyFilters: true,
+        };
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.visit("/datasets");
+      cy.wait("@getConfig", { timeout: 20000 });
+      cy.finishedLoading();
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("extra_entry_end_time{enter}");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
   });
 
   describe("Units options in condition panel units dropdown", () => {
@@ -473,9 +499,16 @@ describe("Datasets general", () => {
     });
 
     it("should automatically apply pre-configured filters from config", () => {
-      cy.contains("Type").should("exist");
+      cy.get('[data-cy="shared-filter-form"]').should("contain", "Type");
+      cy.get('[data-cy="shared-filter-form"]').should(
+        "not.contain",
+        "Location",
+      );
+    });
 
-      cy.contains("Location").should("not.exist");
+    it("should hide disabled filters in the list", () => {
+      cy.get('[data-cy="shared-filter-form"]').should("not.contain", "Keyword");
+      cy.get('[data-cy="shared-filter-form"]').should("contain", "Type");
     });
   });
 
@@ -777,7 +810,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
-  
+
   describe("Auto apply filters", () => {
     beforeEach(() => {
       cy.clearLocalStorage();
@@ -853,7 +886,7 @@ describe("Datasets general", () => {
         .type("{enter}");
     });
   });
-  
+
   describe("Sorting datasets by a column from config", () => {
     beforeEach(() => {
       cy.createDataset({
@@ -895,7 +928,9 @@ describe("Datasets general", () => {
     });
 
     it("should sort datasets by datasetName in asc order from config", () => {
-      cy.get(".dataset-table mat-row").first().should("contain", "A DatasetName");
+      cy.get(".dataset-table mat-row")
+        .first()
+        .should("contain", "A DatasetName");
     });
   });
 });

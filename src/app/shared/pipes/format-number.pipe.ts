@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { AppConfigService } from "app-config.service";
 
-type ValueWithUnit = { value: number | string | bigint; unit?: string };
+type FormattableScalar = string | number | bigint | boolean;
+type ValueWithUnit = { value: FormattableScalar; unit?: string };
 
 @Pipe({
   name: "formatNumber",
@@ -31,15 +32,22 @@ export class FormatNumberPipe implements PipeTransform {
       typeof value === "object" &&
       value !== null &&
       "value" in value &&
-      (typeof value.value === "number" ||
-        typeof value.value === "string" ||
-        typeof value.value === "bigint")
+      this.isFormattableScalar(value.value)
+    );
+  }
+
+  private isFormattableScalar(value: unknown): value is FormattableScalar {
+    return (
+      typeof value === "number" ||
+      typeof value === "bigint" ||
+      typeof value === "string" ||
+      typeof value === "boolean"
     );
   }
 
   private formatValueUnitObj(
-    value: string | number | bigint | ValueWithUnit,
-  ): string | number | bigint {
+    value: FormattableScalar | ValueWithUnit,
+  ): FormattableScalar {
     return this.isValueWithUnit(value)
       ? `${value.value} ${value.unit ?? ""}`
       : value;
@@ -47,38 +55,26 @@ export class FormatNumberPipe implements PipeTransform {
 
   transform(
     value:
-      | string
-      | number
+      | FormattableScalar
       | null
       | undefined
-      | bigint
       | ValueWithUnit
-      | (string | number | bigint | ValueWithUnit)[],
+      | (FormattableScalar | ValueWithUnit)[],
   ): string {
     if (Array.isArray(value))
       return String(
         value
-          .filter(
-            (v) =>
-              typeof v === "number" ||
-              typeof v === "bigint" ||
-              typeof v === "string" ||
-              this.isValueWithUnit(v),
-          )
+          .filter((v) => this.isFormattableScalar(v) || this.isValueWithUnit(v))
           .map((v) => this.formatValueUnitObj(v)),
       );
     const innerValue = this.formatValueUnitObj(value);
-    if (
-      typeof innerValue !== "string" &&
-      typeof innerValue !== "number" &&
-      typeof innerValue !== "bigint"
-    )
-      return "";
+    if (!this.isFormattableScalar(innerValue)) return "";
 
     // use old way if not enabled
     if (!this.enabled) {
       if (
         typeof innerValue === "number" &&
+        innerValue !== 0 &&
         (innerValue >= 1e5 || innerValue <= 1e-5)
       ) {
         return innerValue.toExponential();

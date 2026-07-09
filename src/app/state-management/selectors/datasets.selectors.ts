@@ -19,6 +19,11 @@ export const selectMetadataKeys = createSelector(
   (state) => state.metadataKeys,
 );
 
+export const selectDatasetsFacetCountsIsLoading = createSelector(
+  selectDatasetState,
+  (state) => state.facetCountsIsLoading,
+);
+
 export const selectCurrentDataset = createSelector(
   selectDatasetState,
   (state) => state.currentSet,
@@ -58,6 +63,11 @@ export const selectCurrentDatablocks = createSelector(
 export const selectCurrentAttachments = createSelector(
   selectCurrentDataset,
   (dataset) => (dataset ? dataset.attachments : []),
+);
+
+export const selectCurrentRelationships = createSelector(
+  selectCurrentDataset,
+  (dataset) => dataset?.relationships ?? [],
 );
 
 export const selectPagination = createSelector(
