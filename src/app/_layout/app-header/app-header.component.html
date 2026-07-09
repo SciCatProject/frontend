@@ -132,25 +132,27 @@
     <span class="title">
       <h3>{{ siteTitle }}</h3>
     </span>
-    <span>
+    <span *ngIf="config.helpSettings?.enabled">
       <h6>
         <button
           mat-icon-button
           [matTooltip]="'Help'"
           [matTooltipShowDelay]="500"
           [routerLink]="['/help']"
+          class="header-help-button"
         >
           <mat-icon color="primary"> help </mat-icon>
         </button>
       </h6>
     </span>
-    <span>
+    <span *ngIf="config.aboutSettings?.enabled">
       <h6>
         <button
           mat-icon-button
           [matTooltip]="'Info'"
           [matTooltipShowDelay]="500"
           [routerLink]="['/about']"
+          class="header-about-button"
         >
           <mat-icon color="primary"> info </mat-icon>
         </button>

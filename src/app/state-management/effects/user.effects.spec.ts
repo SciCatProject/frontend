@@ -619,6 +619,7 @@ describe("UserEffects", () => {
           fe_sample_table_conditions: [],
           fe_instrument_table_columns: [],
           fe_file_table_columns: [],
+          fe_publisheddata_table_columns: [],
         },
       } as unknown as UserSettings;
       const action = fromActions.fetchUserSettingsAction({ id });

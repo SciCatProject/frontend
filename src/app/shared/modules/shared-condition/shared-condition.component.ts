@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Output,
   OnDestroy,
+  OnInit,
 } from "@angular/core";
 import { take } from "rxjs/operators";
 import { ConditionConfig } from "state-management/state/user.store";
@@ -36,7 +37,7 @@ import { selectConditions } from "state-management/selectors/user.selectors";
   styleUrl: "./shared-condition.component.scss",
   standalone: false,
 })
-export class SharedConditionComponent implements OnDestroy {
+export class SharedConditionComponent implements OnDestroy, OnInit {
   private subscriptions: Subscription[] = [];
   // Condition filter inputs
   @Input() showConditions = false;

@@ -226,16 +226,6 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onGlobalTextSearchChange(text: string) {
-    this.router.navigate([], {
-      queryParams: {
-        textSearch: text || undefined,
-        pageIndex: 0,
-      },
-      queryParamsHandling: "merge",
-    });
-  }
-
   convertSavedColumns(columns: TableColumn[]): TableField<any>[] {
     return columns.map((column) => {
       const convertedColumn: TableField<any> = {
@@ -310,7 +300,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onTextSearchChange(term: string) {
+  onGlobalTextSearchChange(term: string) {
     this.globalTextSearch = term;
   }
 
@@ -321,7 +311,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     return searchQuery.text;
   }
 
-  onTextSearchAction() {
+  onGlobalTextSearchAction() {
     const { queryParams } = this.route.snapshot;
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
     this.router.navigate([], {
