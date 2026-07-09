@@ -48,12 +48,9 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.clearOrigDatablockStateAction,
-    (): FilesState => ({
-      ...initialFilesState,
-    }),
-  ),
+  on(fromActions.clearOrigDatablockStateAction, (): FilesState => ({
+    ...initialFilesState,
+  })),
 );
 
 export const filesReducer = (state: FilesState | undefined, action: Action) => {

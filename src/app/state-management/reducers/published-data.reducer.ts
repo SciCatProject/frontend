@@ -74,12 +74,9 @@ const reducer = createReducer(
     },
   ),
 
-  on(
-    fromActions.clearPublishedDataStateAction,
-    (): PublishedDataState => ({
-      ...initialPublishedDataState,
-    }),
-  ),
+  on(fromActions.clearPublishedDataStateAction, (): PublishedDataState => ({
+    ...initialPublishedDataState,
+  })),
 );
 
 export const publishedDataReducer = (

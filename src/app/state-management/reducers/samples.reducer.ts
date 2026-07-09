@@ -178,13 +178,10 @@ const reducer = createReducer(
     return { ...state, sampleFilters, hasPrefilledFilters: true };
   }),
 
-  on(
-    fromActions.setTextFilterAction,
-    (state, { text }): SampleState => ({
-      ...state,
-      sampleFilters: { ...state.sampleFilters, text },
-    }),
-  ),
+  on(fromActions.setTextFilterAction, (state, { text }): SampleState => ({
+    ...state,
+    sampleFilters: { ...state.sampleFilters, text },
+  })),
 
   on(
     fromActions.addCharacteristicsFilterAction,
