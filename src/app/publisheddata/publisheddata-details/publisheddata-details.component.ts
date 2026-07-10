@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  PublishedData,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
@@ -7,12 +10,18 @@ import {
   fetchPublishedDataAction,
   fetchRelatedDatasetsAndAddToBatchAction,
 } from "state-management/actions/published-data.actions";
-import { Subscription } from "rxjs";
+import { Subscription, combineLatest } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
-import { selectIsAdmin } from "state-management/selectors/user.selectors";
-import { ActionItems } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import {
+  selectCurrentUser,
+  selectIsAdmin,
+} from "state-management/selectors/user.selectors";
+import {
+  ActionItems,
+  ActionButtonStyle,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "publisheddata-details",
@@ -27,6 +36,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   appConfig = this.appConfigService.getConfig();
   show = false;
+  user: ReturnedUserDto | undefined;
   landingPageUrl = "";
   doi = "";
 
@@ -34,6 +44,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     datasets: [],
     publisheddata: [],
   };
+  actionButtonsStyle: ActionButtonStyle = { raised: true, color: "accent" };
 
   constructor(
     private appConfigService: AppConfigService,
@@ -51,10 +62,19 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.currentData$.subscribe((data) => {
+      combineLatest([
+        this.store.select(selectCurrentUser),
+        this.currentData$,
+      ]).subscribe(([user, data]) => {
+        this.user = user;
         if (data) {
           this.publishedData = data;
-          this.actionItems.publisheddata[0] = data;
+          this.actionItems = {
+            datasets: [],
+            publisheddata: [data],
+            encodedDoi: encodeURIComponent(data.doi),
+            user,
+          };
 
           if (this.appConfig.landingPage) {
             this.landingPageUrl =
