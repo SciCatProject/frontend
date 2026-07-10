@@ -31,6 +31,7 @@
           *ngIf="appConfig.publishedDataActionsEnabled"
           [actionsConfig]="appConfig.publishedDataActions"
           [actionItems]="actionItems"
+          [buttonsStyle]="actionButtonsStyle"
           (actionFinished)="onActionFinished($event)">
         </configurable-actions>
       </mat-card-actions>
