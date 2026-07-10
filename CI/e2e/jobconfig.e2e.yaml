@@ -1,0 +1,13 @@
+configVersion: v1.0 2024-03-01 6f3f38
+jobs:
+- jobType: ui_test
+  create:
+    auth: "#all"
+    actions:
+    - actionType: log
+      perform: "Test job {{{ job.id }}} created"
+  update:
+    auth: "#all"
+    actions:
+    - actionType: log
+      perform: "Test job {{{ job.id }}} updated to {{{ job.statusCode }}}"
