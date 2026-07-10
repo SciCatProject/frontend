@@ -6,3 +6,8 @@ jobs:
     actions:
     - actionType: log
       perform: "Test job {{{ job.id }}} created"
+  update:
+    auth: "#all"
+    actions:
+    - actionType: log
+      perform: "Test job {{{ job.id }}} updated to {{{ job.statusCode }}}"
