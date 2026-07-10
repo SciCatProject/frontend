@@ -2,6 +2,7 @@ import { testData } from "../fixtures/testData";
 import { getHeader } from "./utils";
 
 const lbBaseUrl = Cypress.env("baseUrl");
+const lbBaseUrlV4 = Cypress.env("baseUrlV4");
 const loginEndpoint = Cypress.env("loginEndpoint");
 const accessTokenPrefix = Cypress.env("tokenPrefix");
 
@@ -222,7 +223,7 @@ Cypress.Commands.add("createJob", (overwrites = {}) => {
 
       cy.request({
         method: "POST",
-        url: "http://localhost:3000/api/v4" + "/jobs",
+        url: lbBaseUrlV4 + "/jobs",
         headers: getHeader(token),
         body: job,
       });
