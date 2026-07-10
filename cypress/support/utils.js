@@ -10,3 +10,11 @@ export const getFormattedFileNamingDate = () => {
 
   return y + "-" + m + "-" + d;
 };
+
+export const getHeader = (token) => {
+  return {
+    Authorization: token,
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+};
