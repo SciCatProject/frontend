@@ -28,6 +28,13 @@ export class ConfigurableActionsComponent {
 
   constructor(public appConfigService: AppConfigService) {}
 
+  get visible(): boolean {
+    return (
+      this.appConfigService.getConfig().datafilesActionsEnabled ||
+      this.actionsConfig.length > 0
+    );
+  }
+
   get maxFileSize(): number {
     return this.appConfigService.getConfig().maxDirectDownloadSize || 0;
   }
