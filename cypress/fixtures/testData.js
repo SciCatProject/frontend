@@ -176,14 +176,9 @@ export const testData = {
     ],
   },
   job: {
-    emailJobInitiator: "user@example.com",
-    type: "all_access",
-    jobParams: { dataset: "6ED35C17-EDD4-4CD4-B917-4E49698F7532" },
-    datasetList: [
-      { pid: "6ED35C17-EDD4-4CD4-B917-4E49698F7532", files: [] },
-    ],
-    jobStatusMessage: "jobSubmitted",
-    jobResultObject: {},
+    contactEmail: "test@example.com",
+    type: "ui_test",
+    jobParams: {},
   },
 };
 
@@ -372,40 +367,43 @@ export const testConfig = {
     disabled: {
       helpSettings: {
         enabled: false,
-      }
+      },
     },
     enabledWithCustomText: {
       helpSettings: {
         enabled: true,
-        htmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test Help Content</p>",
-      }
+        htmlContent:
+          '<p class="scicat_e2e_test">SciCat E2E Test Help Content</p>',
+      },
     },
     enabledWithDefaultText: {
       helpSettings: {
         enabled: true,
         htmlContent: "",
-      }
-    }
+      },
+    },
   },
   aboutSettings: {
     disabled: {
       aboutSettings: {
         enabled: false,
-      }
+      },
     },
     enabledWithCustomText: {
       aboutSettings: {
         enabled: true,
-        htmlContent: "<p class=\"scicat_e2e_test\">SciCat E2E Test About Content</p>",
-      }
+        htmlContent:
+          '<p class="scicat_e2e_test">SciCat E2E Test About Content</p>',
+      },
     },
     enabledWithDefaultText: {
       aboutSettings: {
         enabled: true,
         htmlContent: "",
-      }
-    }
-  },};
+      },
+    },
+  },
+};
 
 export const defaultDatasetsColumnsList = [
   "PID",

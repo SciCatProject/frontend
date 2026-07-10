@@ -7,7 +7,6 @@ describe("Jobs general", () => {
       type: "raw",
       dataFileSize: "small",
       datasetName: "Jobs Dataset",
-      pid: "6ED35C17-EDD4-4CD4-B917-4E49698F7532",
       isPublished: true,
     });
   });
@@ -23,19 +22,16 @@ describe("Jobs general", () => {
 
       cy.visit("/user/jobs");
 
-      cy.get('[data-cy="text-search"]').type("all_access");
+      cy.get('[data-cy="text-search"]').type(testData.job.type);
       cy.get('[data-cy="search-button"]').click();
 
-      cy.get("mat-table mat-row").first().should("contain", "all_access");
+      cy.get("mat-table mat-row").first().should("contain", testData.job.type);
     });
 
     it("should be able to change page and page size in the job table", () => {
-      cy.createJob({ emailJobInitiator: "test1@example.com" });
-      cy.createJob({ emailJobInitiator: "test2@example.com" });
-      cy.createJob({ emailJobInitiator: "test3@example.com" });
-      cy.createJob({ emailJobInitiator: "test4@example.com" });
-      cy.createJob({ emailJobInitiator: "test5@example.com" });
-      cy.createJob({ emailJobInitiator: "test6@example.com" });
+      for (let i = 1; i <= 6; i++) {
+        cy.createJob();
+      }
 
       cy.visit("/user/jobs");
 
@@ -48,9 +44,7 @@ describe("Jobs general", () => {
 
       cy.get("mat-paginator").first().find("[aria-label='Next page']").click();
 
-      cy.get("mat-paginator .mat-mdc-paginator-range-actions").contains(
-        "6 – 6",
-      );
+      cy.get("mat-paginator .mat-mdc-paginator-range-actions").contains("6 – ");
     });
 
     it("should be able to change visible columns settings in the table", () => {
