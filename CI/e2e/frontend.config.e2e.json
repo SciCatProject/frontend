@@ -306,10 +306,10 @@
       "type": "xhr",
       "mat_icon": "publish",
       "method": "POST",
-      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/publish",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @encodedDoi }}/publish",
       "variables": {
-        "doi": "#PublishedData0Doi",
-        "status": "#PublishedData0Status"
+        "encodedDoi": "#encodedDoi",
+        "status": "#publisheddata[0].status"
       },
       "enabled": "@status === 'private'",
       "payload": "{\"isPublished\":\"true\"}",
@@ -326,10 +326,10 @@
       "type": "xhr",
       "mat_icon": "registration",
       "method": "POST",
-      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/register",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @encodedDoi }}/register",
       "variables": {
-        "doi": "#PublishedData0Doi",
-        "status": "#PublishedData0Status"
+        "encodedDoi": "#encodedDoi",
+        "status": "#publisheddata[0].status"
       },
       "enabled": "@status === 'public'",
       "headers": {
@@ -345,10 +345,10 @@
       "type": "xhr",
       "mat_icon": "edit",
       "method": "POST",
-      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}/amend",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @encodedDoi }}/amend",
       "variables": {
-        "doi": "#PublishedData0Doi",
-        "status": "#PublishedData0Status"
+        "encodedDoi": "#encodedDoi",
+        "status": "#publisheddata[0].status"
       },
       "enabled": "@status === 'registered'",
       "headers": {
