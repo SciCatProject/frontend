@@ -30,8 +30,8 @@ export class ConfigurableActionsComponent {
 
   get visible(): boolean {
     return (
-      this.appConfigService.getConfig().datafilesActionsEnabled ||
-      this.actionsConfig.length > 0
+      this.appConfigService.getConfig().datafilesActionsEnabled &&
+      (this.actionsConfig?.length ?? 0) > 0
     );
   }
 
