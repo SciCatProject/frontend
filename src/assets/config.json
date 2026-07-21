@@ -330,8 +330,7 @@
       "method": "PATCH",
       "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}",
       "payload": "{\"status\": \"private\"}",
-      "enabled": "@status == 'public'",
-      "authorization": "#datasetOwner || #userIsAdmin",
+      "enabled": "(#publishedDataOwner || #userIsAdmin) && @status === 'public'",
       "variables": {
         "doi": "#PublishedData0Doi",
         "status": "#PublishedData[0]Field[status]"
@@ -354,7 +353,7 @@
         "encodedDoi": "#encodedDoi",
         "status": "#publisheddata[0].status"
       },
-      "enabled": "@status === 'private'",
+      "enabled": "(#publishedDataOwner || #userIsAdmin) && @status === 'private'",
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
@@ -373,7 +372,7 @@
         "encodedDoi": "#encodedDoi",
         "status": "#publisheddata[0].status"
       },
-      "enabled": "@status === 'public'",
+      "enabled": "(#publishedDataOwner || #userIsAdmin) && @status === 'public'",
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
@@ -392,7 +391,7 @@
         "encodedDoi": "#encodedDoi",
         "status": "#publisheddata[0].status"
       },
-      "enabled": "@status === 'registered'",
+      "enabled": "(#publishedDataOwner || #userIsAdmin) && @status === 'registered'",
       "headers": {
         "Content-Type": "application/json",
         "Authorization": "#tokenBearer"
