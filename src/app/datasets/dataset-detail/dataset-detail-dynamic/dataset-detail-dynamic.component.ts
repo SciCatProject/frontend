@@ -12,6 +12,7 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 
 import { AppConfigService } from "app-config.service";
 
@@ -116,6 +117,14 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
           this.actionItems.datasets = <ActionItemDataset[]>[dataset];
         }
         this.dataset = dataset;
+      }),
+    );
+
+    this.subscriptions.push(
+      this.store.select(selectCurrentUser).subscribe((user) => {
+        if (user) {
+          this.actionItems.user = user;
+        }
       }),
     );
   }
