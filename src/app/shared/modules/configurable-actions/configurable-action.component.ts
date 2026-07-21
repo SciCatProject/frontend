@@ -11,6 +11,7 @@ import {
 import { DatePipe } from "@angular/common";
 import {
   DatasetClass,
+  PublishedData,
   UsersService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -233,6 +234,7 @@ export class ConfigurableActionComponent
     let expr = condition;
     const symbols: Record<string, string> = {
       "#datasetOwner": "context.isOwner",
+      "#publishedDataOwner": "context.isPublishedDataOwner",
       "#userIsAdmin": "context.isAdmin",
       "#isPublished": String(
         this.actionItems.datasets?.[0]?.isPublished === true,
@@ -288,6 +290,7 @@ export class ConfigurableActionComponent
         context: {
           isAdmin: this.isAdmin,
           isOwner: this.isDatasetOwner,
+          isPublishedDataOwner: this.isPublishedDataOwner,
           maxSize: this.configService.getConfig().maxDirectDownloadSize,
         },
       };
@@ -303,6 +306,16 @@ export class ConfigurableActionComponent
     const datasets = _.get(this.actionItems, "datasets", []) as DatasetClass[];
     const userGroups = _.get(this.userProfile, "accessGroups", []) as string[];
     return _.some(datasets, (d) => userGroups.includes(d.ownerGroup));
+  }
+
+  private get isPublishedDataOwner(): boolean {
+    const publishedData = _.get(
+      this.actionItems,
+      "publisheddata",
+      [],
+    ) as PublishedData[];
+    const username = _.get(this.actionItems, "user.username") as string;
+    return _.some(publishedData, (pd) => pd.createdBy === username);
   }
 
   private buildDependenciesGraph(
