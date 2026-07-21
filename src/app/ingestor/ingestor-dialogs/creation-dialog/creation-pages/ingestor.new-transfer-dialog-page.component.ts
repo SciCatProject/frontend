@@ -70,6 +70,7 @@ export class IngestorNewTransferDialogPageComponent
   extractionMethodsInitialized = false;
 
   userProfile: ReturnedUserDto | null = null;
+  groups: string[] = [];
   uiNextButtonReady = false;
 
   renderView$ = this.store.select(selectIngestorRenderView);
@@ -98,6 +99,7 @@ export class IngestorNewTransferDialogPageComponent
     this.subscriptions.push(
       this.vm$.subscribe((settings) => {
         this.userProfile = settings.user;
+        this.groups = settings.profile?.accessGroups ?? [];
       }),
     );
 
@@ -231,7 +233,8 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["license"] = "MIT License";
     this.createNewTransferData.scicatHeader["type"] = "raw";
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
-    this.createNewTransferData.scicatHeader["owner"] = "User";
+    this.createNewTransferData.scicatHeader["ownerGroup"] = this.groups.length > 0 ? this.groups[0] : undefined;
+    this.createNewTransferData.scicatHeader["owner"] = this.userProfile.username;
 
     this.createNewTransferData.scicatHeader["principalInvestigator"] =
       this.userProfile.username;
