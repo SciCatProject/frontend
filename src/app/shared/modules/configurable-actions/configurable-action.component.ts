@@ -240,7 +240,7 @@ export class ConfigurableActionComponent
   private viewHandlers(condition: string): string {
     let expr = condition;
     const symbols: Record<string, string> = {
-      "#datasetOwner": "context.isOwner",
+      "#datasetOwner": "context.isDatasetOwner",
       "#publishedDataOwner": "context.isPublishedDataOwner",
       "#userIsAdmin": "context.isAdmin",
       "#isPublished": String(
@@ -296,7 +296,7 @@ export class ConfigurableActionComponent
         variables: this.variables,
         context: {
           isAdmin: this.isAdmin,
-          isOwner: this.isDatasetOwner,
+          isDatasetOwner: this.isDatasetOwner,
           isPublishedDataOwner: this.isPublishedDataOwner,
           maxSize: this.configService.getConfig().maxDirectDownloadSize,
         },
