@@ -14,6 +14,7 @@
       </a>
     </div>
     <configurable-actions
+      *ngIf="appConfig.datasetActionsEnabled"
       [actionsConfig]="appConfig.datasetActions"
       [actionItems]="actionItems"
     ></configurable-actions>
