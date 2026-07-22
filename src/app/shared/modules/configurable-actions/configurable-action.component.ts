@@ -11,6 +11,7 @@ import {
 import { DatePipe } from "@angular/common";
 import {
   DatasetClass,
+  PublishedData,
   UsersService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -170,6 +171,15 @@ export class ConfigurableActionComponent
       return _.get(this.actionItems, `instruments[${index}].${field}`);
     }
 
+    const publishedDataFieldMatch = selector.match(
+      /^#PublishedData\[(\d+)\]Field\[(\w+)\]$/,
+    );
+    if (publishedDataFieldMatch) {
+      const index = Number(publishedDataFieldMatch[1]);
+      const field = publishedDataFieldMatch[2];
+      return _.get(this.actionItems, `publisheddata[${index}].${field}`);
+    }
+
     return undefined;
   }
 
@@ -212,6 +222,10 @@ export class ConfigurableActionComponent
           .flatMap("files")
           .filter("selected")
           .sumBy((f) => Number(f.size || 0)),
+      "#PublishedData0Doi": () =>
+        _.get(this.actionItems, "publisheddata[0].doi"),
+      "#PublishedData0Status": () =>
+        _.get(this.actionItems, "publisheddata[0].status"),
     };
     return staticMap;
   }
@@ -220,6 +234,7 @@ export class ConfigurableActionComponent
     let expr = condition;
     const symbols: Record<string, string> = {
       "#datasetOwner": "context.isOwner",
+      "#publishedDataOwner": "context.isPublishedDataOwner",
       "#userIsAdmin": "context.isAdmin",
       "#isPublished": String(
         this.actionItems.datasets?.[0]?.isPublished === true,
@@ -275,6 +290,7 @@ export class ConfigurableActionComponent
         context: {
           isAdmin: this.isAdmin,
           isOwner: this.isDatasetOwner,
+          isPublishedDataOwner: this.isPublishedDataOwner,
           maxSize: this.configService.getConfig().maxDirectDownloadSize,
         },
       };
@@ -290,6 +306,16 @@ export class ConfigurableActionComponent
     const datasets = _.get(this.actionItems, "datasets", []) as DatasetClass[];
     const userGroups = _.get(this.userProfile, "accessGroups", []) as string[];
     return _.some(datasets, (d) => userGroups.includes(d.ownerGroup));
+  }
+
+  private get isPublishedDataOwner(): boolean {
+    const publishedData = _.get(
+      this.actionItems,
+      "publisheddata",
+      [],
+    ) as PublishedData[];
+    const username = _.get(this.actionItems, "user.username") as string;
+    return _.some(publishedData, (pd) => pd.createdBy === username);
   }
 
   private buildDependenciesGraph(

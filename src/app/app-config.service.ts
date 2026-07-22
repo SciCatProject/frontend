@@ -108,6 +108,8 @@ export interface AppConfigInterface {
   datasetDetailsActions: ActionConfig[];
   datasetSelectionActionsEnabled: boolean;
   datasetSelectionActions: ActionConfig[];
+  publishedDataActions: ActionConfig[];
+  publishedDataActionsEnabled: boolean;
   editDatasetEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
