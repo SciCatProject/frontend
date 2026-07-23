@@ -5,8 +5,10 @@ import {
   setArchiveViewModeAction,
   clearSelectionAction,
   addToBatchAction,
+  clearBatchAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, Subscription } from "rxjs";
+import { distinctUntilChanged } from "rxjs/operators";
 import {
   selectArchiveViewMode,
   selectIsBatchNonEmpty,
@@ -21,6 +23,7 @@ import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 import { AppConfigService } from "app-config.service";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
+  ActionConfig,
   ActionButtonStyle,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
@@ -39,6 +42,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   userProfile$ = this.store.select(selectProfile);
   selectSelectedDatasets$ = this.store.select(selectSelectedDatasets);
   selectIsBatchNonEmpty$ = this.store.select(selectIsBatchNonEmpty);
+  batchActionsConfig: ActionConfig[] = this.appConfig.batchActions || [];
 
   selectedSets: OutputDatasetObsoleteDto[] | null = [];
 
@@ -63,6 +67,18 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     private store: Store,
   ) {}
 
+  private buildBatchActionsConfig(isBatchNonEmpty: boolean): ActionConfig[] {
+    const batchActions = this.appConfig.batchActions || [];
+    if (!isBatchNonEmpty) {
+      return batchActions;
+    }
+
+    return batchActions.map((action) => ({
+      ...action,
+      disabled: true,
+    }));
+  }
+
   /**
    * Handle changing of view mode and disabling selected rows
    * @param mode
@@ -83,25 +99,29 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store
-        .select(selectArchiveViewMode)
-        .subscribe((mode: ArchViewMode) => {
-          this.currentArchViewMode = mode;
+      this.selectIsBatchNonEmpty$
+        .pipe(distinctUntilChanged())
+        .subscribe((isBatchNonEmpty) => {
+          this.batchActionsConfig =
+            this.buildBatchActionsConfig(isBatchNonEmpty);
         }),
     );
 
     this.subscriptions.push(
-      this.store.select(selectSubmitError).subscribe((err) => {
-        if (!err) {
-          this.store.dispatch(clearSelectionAction());
-        }
-      }),
+      this.store
+        .select(selectSubmitError)
+        .pipe(distinctUntilChanged())
+        .subscribe((err) => {
+          if (!err) {
+            this.store.dispatch(clearSelectionAction());
+          }
+        }),
     );
     this.subscriptions.push(
       combineLatest([
-        this.userProfile$,
-        this.store.select(selectArchiveViewMode),
-        this.selectSelectedDatasets$,
+        this.userProfile$.pipe(distinctUntilChanged()),
+        this.store.select(selectArchiveViewMode).pipe(distinctUntilChanged()),
+        this.selectSelectedDatasets$.pipe(distinctUntilChanged()),
       ]).subscribe(([profile, mode, datasets]) => {
         this.selectedSets = datasets;
         this.currentArchViewMode = mode;
@@ -115,7 +135,9 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   }
 
   onActionFinished(event: { success: boolean }) {
-    if (event.success) this.store.dispatch(clearSelectionAction());
+    if (!event.success) return;
+    this.store.dispatch(clearSelectionAction());
+    this.store.dispatch(clearBatchAction());
   }
 
   ngOnDestroy() {

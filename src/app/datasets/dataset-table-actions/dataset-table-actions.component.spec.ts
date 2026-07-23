@@ -15,6 +15,7 @@ import { ArchViewMode } from "state-management/models";
 import {
   setArchiveViewModeAction,
   addToBatchAction,
+  clearBatchAction,
   clearSelectionAction,
 } from "state-management/actions/datasets.actions";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -143,12 +144,14 @@ describe("DatasetTableActionsComponent", () => {
   });
 
   describe("#onActionFinished()", () => {
-    it("should clear selection when action succeeded", () => {
+    it("should clear selection and batch when action succeeded", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.onActionFinished({ success: true });
 
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(clearSelectionAction());
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(clearBatchAction());
     });
 
     it("should not dispatch when action failed", () => {

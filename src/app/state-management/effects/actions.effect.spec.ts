@@ -34,7 +34,7 @@ describe("ActionEffects", () => {
   it("should use default success message when success message is missing", () => {
     const action = fromActions.actionSuccessAction();
     const outcome = showMessageAction({
-      message: new Message("Success!", MessageType.Success, 5000),
+      message: new Message("Success", MessageType.Success, 5000),
     });
 
     actions = hot("-a", { a: action });
@@ -58,7 +58,11 @@ describe("ActionEffects", () => {
   it("should use default error message when failure message is missing", () => {
     const action = fromActions.actionFailureAction();
     const outcome = showMessageAction({
-      message: new Message("An error occurred.", MessageType.Error, 5000),
+      message: new Message(
+        "Request failed. Please try again or contact support.",
+        MessageType.Error,
+        5000,
+      ),
     });
 
     actions = hot("-a", { a: action });

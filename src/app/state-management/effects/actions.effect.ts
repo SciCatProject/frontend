@@ -14,7 +14,7 @@ export class ActionEffects {
         if (action.type === fromActions.actionSuccessAction.type) {
           return showMessageAction({
             message: new Message(
-              action.message || "Success!",
+              action.message || "Success",
               MessageType.Success,
               5000,
             ),
@@ -22,7 +22,8 @@ export class ActionEffects {
         } else {
           return showMessageAction({
             message: new Message(
-              action.message || "An error occurred.",
+              action.message ||
+                "Request failed. Please try again or contact support.",
               MessageType.Error,
               5000,
             ),

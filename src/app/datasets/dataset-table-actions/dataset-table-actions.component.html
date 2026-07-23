@@ -17,11 +17,10 @@
 <div class="action-container" [class.hidden]="loading$ | async">
   <configurable-actions
     *ngIf="appConfig.batchActionsEnabled"
-    [actionsConfig]="appConfig.batchActions"
+    [actionsConfig]="batchActionsConfig"
     [actionItems]="actionItems"
     [buttonsStyle]="actionButtonsStyle"
     (actionFinished)="onActionFinished($event)"
-    [hidden]="selectIsBatchNonEmpty$ | async"
   >
   </configurable-actions>
 

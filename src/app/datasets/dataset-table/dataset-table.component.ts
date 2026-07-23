@@ -9,7 +9,13 @@ import {
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { BehaviorSubject, Subscription, combineLatestWith, filter } from "rxjs";
+import {
+  BehaviorSubject,
+  Subscription,
+  combineLatest,
+  combineLatestWith,
+  filter,
+} from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   clearSelectionAction,
@@ -29,10 +35,10 @@ import {
   selectDatasetsPerPage,
   selectPage,
   selectTotalSets,
+  selectSelectedDatasets,
   selectDatasetsInBatch,
   selectDatasetsFacetCountsIsLoading,
   selectTextFilter,
-  selectSelectedDatasets,
 } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
 import {
@@ -96,6 +102,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   currentUser$ = this.store.select(selectCurrentUser);
   datasets$ = this.store.select(selectDatasets);
   selectedDatasets$ = this.store.select(selectDatasetsInBatch);
+  selectedRows$ = this.store.select(selectSelectedDatasets);
   selectColumnsWithFetchedSettings$ = this.store.select(
     selectColumnsWithHasFetchedSettings,
   );
@@ -331,21 +338,25 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
 
     this.subscriptions.push(
-      this.store.select(selectSelectedDatasets).subscribe((datasets) => {
-        if (datasets.length === 0) {
-          this.selectionIds = [];
-          this.datasetTable?.clearSelection();
-        }
-      }),
-    );
-
-    this.subscriptions.push(
       this.selectedDatasets$.subscribe((datasets) => {
         // NOTE: In the selectionIds we are storing either _id or pid. Dynamic material table works only with these two.
         this.selectionIds = datasets.map((dataset) => {
           return dataset.pid;
         });
       }),
+    );
+
+    this.subscriptions.push(
+      combineLatest([this.selectedRows$, this.selectedDatasets$]).subscribe(
+        ([selectedRows, datasetsInBatch]) => {
+          // Only clear internal selection when neither active selection nor
+          // cart membership remains; this preserves indeterminate header state
+          // after "Add to Selection" while still resetting after submit success.
+          if (selectedRows.length === 0 && datasetsInBatch.length === 0) {
+            this.datasetTable?.clearSelection();
+          }
+        },
+      ),
     );
 
     this.subscriptions.push(
