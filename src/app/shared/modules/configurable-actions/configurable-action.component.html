@@ -17,3 +17,73 @@
     {{ actionConfig.label }}
   </button>
 </ng-template>
+
+<ng-container *ngIf="iframeEnabled">
+  <div
+    *ngIf="iframeVisible"
+    class="configurable-action-iframe-backdrop"
+    (click)="closeIframe()"
+  ></div>
+
+  <section
+    *ngIf="iframeVisible"
+    class="configurable-action-iframe-panel mat-elevation-z8"
+    [style.width]="iframeWidth"
+    [style.height]="iframeHeight"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="iframeTitle"
+  >
+    <header class="configurable-action-iframe-header">
+      <span class="configurable-action-iframe-title">{{ iframeTitle }}</span>
+      <div class="configurable-action-iframe-actions">
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Open iframe in a new tab"
+          title="Open in new tab"
+          (click)="openIframeInNewTab()"
+        >
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Close iframe"
+          title="Close"
+          (click)="closeIframe()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </header>
+    <div class="configurable-action-iframe-content">
+      <iframe
+        class="configurable-action-iframe"
+        [attr.name]="iframeName"
+        [attr.title]="iframeTitle"
+        (load)="onIframeLoad($event)"
+      ></iframe>
+
+      <div
+        *ngIf="iframeLoading"
+        class="configurable-action-iframe-loading"
+        aria-live="polite"
+      >
+        <mat-progress-spinner
+          color="primary"
+          diameter="40"
+          mode="indeterminate"
+        ></mat-progress-spinner>
+        <span>Loading...</span>
+      </div>
+    </div>
+  </section>
+
+  <iframe
+    *ngIf="!iframeVisible"
+    class="configurable-action-hidden-iframe"
+    [attr.name]="iframeName"
+    [attr.title]="iframeTitle"
+  ></iframe>
+</ng-container>
