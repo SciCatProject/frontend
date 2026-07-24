@@ -7,6 +7,13 @@ import { DynamicField } from "../dialog/dialog.component";
 
 export type DialogField = { key: string } & DynamicField;
 
+export interface IframeConfig {
+  name?: string;
+  hidden?: boolean;
+  width?: string;
+  height?: string;
+}
+
 export interface DialogConfig {
   title?: string;
   description?: string;
@@ -50,6 +57,7 @@ export interface ActionConfig {
   type?: ActionType;
   url: string;
   target?: "_blank" | "_self" | "_parent" | "_top";
+  iframe?: boolean | IframeConfig;
   authorization: string[];
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   // all conditions of an array must hold
