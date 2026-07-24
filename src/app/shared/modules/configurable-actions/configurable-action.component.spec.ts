@@ -30,6 +30,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 //import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AppConfigService } from "app-config.service";
 //import { boolean } from "mathjs";
@@ -114,6 +115,7 @@ describe("1000: ConfigurableActionComponent", () => {
         ReactiveFormsModule,
         MatDialogModule,
         MatSnackBarModule,
+        MatProgressSpinnerModule,
         RouterModule,
         RouterModule.forRoot([]),
         StoreModule.forRoot({}),
@@ -817,6 +819,70 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(selectedFiles.length).toEqual(1);
     const selectedFilePath = selectedFiles[0].path;
     expect(formFilePath).toEqual(selectedFilePath);
+  });
+
+  it("1065: Form submission should target a configured iframe", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "iframe-form",
+      type: "form",
+      iframe: {
+        name: "download-frame",
+        hidden: false,
+        width: "50%",
+        height: "300px",
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.target).toBe("download-frame");
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.iframeName).toBe("download-frame");
+    expect(component.iframeTitle).toBe("download-frame");
+    expect(component.iframeWidth).toBe("50%");
+    expect(component.iframeHeight).toBe("300px");
+    expect(component.iframeLoading).toBeTrue();
+
+    component.onIframeLoad({
+      target: {
+        contentWindow: {
+          location: {
+            href: "about:blank",
+          },
+        },
+      },
+    } as unknown as Event);
+
+    expect(component.iframeLoading).toBeTrue();
+
+    component.onIframeLoad({
+      target: {
+        contentWindow: {
+          location: {
+            href: "https://example.com/viewer",
+          },
+        },
+      },
+    } as unknown as Event);
+
+    expect(component.iframeLoading).toBeFalse();
+
+    const submitSpy = spyOn(component.form, "submit").and.callFake(function (
+      this: HTMLFormElement,
+    ) {
+      expect(this.target).toBe("_blank");
+    });
+
+    component.openIframeInNewTab();
+
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+    expect(component.form.target).toBe("download-frame");
   });
 
   it("1070: Download All action button should contain the correct label", () => {
