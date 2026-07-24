@@ -7,6 +7,7 @@ import {
   Output,
   SimpleChanges,
   OnDestroy,
+  ChangeDetectorRef,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import {
@@ -76,6 +77,14 @@ export class ConfigurableActionComponent
   isAdmin = false;
   subscriptions: Subscription[] = [];
   form: HTMLFormElement | null = null;
+  iframeEnabled = false;
+  iframeVisible = false;
+  iframeName = "";
+  iframeTitle = "";
+  iframeWidth = "100%";
+  iframeHeight = "400px";
+  iframeLoading = false;
+  private iframeLoadArmed = false;
 
   constructor(
     private usersService: UsersService,
@@ -84,6 +93,7 @@ export class ConfigurableActionComponent
     private snackBar: MatSnackBar,
     private store: Store,
     private datePipe: DatePipe,
+    private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
   ) {
     this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
@@ -379,7 +389,7 @@ export class ConfigurableActionComponent
   private typeForm() {
     if (this.form) document.body.removeChild(this.form);
     this.form = document.createElement("form");
-    this.form.target = this.actionConfig.target || "_self";
+    this.form.target = this.getFormTarget();
     this.form.method = this.actionConfig.method || "POST";
     this.form.action = this.actionConfig.url;
     this.form.style.display = "none";
@@ -400,8 +410,71 @@ export class ConfigurableActionComponent
     });
 
     document.body.appendChild(this.form);
+    this.iframeLoadArmed = this.iframeVisible;
     this.form.submit();
     return true;
+  }
+
+  private getFormTarget(): string {
+    if (!this.actionConfig.iframe) return this.actionConfig.target || "_self";
+
+    return this.ensureIframeTarget();
+  }
+
+  private ensureIframeTarget(): string {
+    const config =
+      typeof this.actionConfig.iframe === "object"
+        ? this.actionConfig.iframe
+        : {};
+    const name = config.name || `configurable-action-${this.actionConfig.id}`;
+
+    this.iframeEnabled = true;
+    this.iframeVisible = config.hidden === false;
+    this.iframeName = name;
+    this.iframeTitle = name;
+    this.iframeWidth = config.width || (this.iframeVisible ? "90vw" : "100%");
+    this.iframeHeight =
+      config.height || (this.iframeVisible ? "70vh" : "400px");
+    this.iframeLoading = this.iframeVisible;
+    this.iframeLoadArmed = false;
+    this.cdRef.detectChanges();
+
+    return name;
+  }
+
+  closeIframe() {
+    this.iframeVisible = false;
+    this.iframeLoading = false;
+    this.iframeLoadArmed = false;
+  }
+
+  openIframeInNewTab() {
+    if (!this.form) return;
+
+    const currentTarget = this.form.target;
+    this.form.target = "_blank";
+    try {
+      this.form.submit();
+    } finally {
+      this.form.target = currentTarget;
+    }
+  }
+
+  onIframeLoad(event: Event) {
+    if (!this.iframeLoadArmed) return;
+    if (this.isIframeAboutBlank(event.target as HTMLIFrameElement | null))
+      return;
+
+    this.iframeLoading = false;
+    this.iframeLoadArmed = false;
+  }
+
+  private isIframeAboutBlank(iframe: HTMLIFrameElement | null): boolean {
+    try {
+      return iframe?.contentWindow?.location.href === "about:blank";
+    } catch {
+      return false;
+    }
   }
 
   private preparePayload(): string {
@@ -444,7 +517,10 @@ export class ConfigurableActionComponent
   }
 
   private typeLink() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+    window.open(
+      this.interpolate(this.actionConfig.url),
+      this.actionConfig.target || "_self",
+    );
   }
 
   private typeDialog() {
@@ -585,6 +661,7 @@ export class ConfigurableActionComponent
 
   ngOnDestroy() {
     this.subscriptions.forEach((s) => s.unsubscribe());
+    if (this.form?.parentNode) this.form.parentNode.removeChild(this.form);
   }
 
   performAction() {
