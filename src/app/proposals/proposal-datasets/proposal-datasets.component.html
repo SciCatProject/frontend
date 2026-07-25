@@ -22,5 +22,9 @@
   class="mat-elevation-z2 proposal-dataset-table"
   [emptyMessage]="'No datasets available'"
   [emptyIcon]="'folder'"
+  [showRealTimeToggle]="isLoggedIn$ | async"
+  [latestUpdatedId]="latestUpdatedId$ | async"
+  [realTimeEnabled]="realTimeEnabled"
+  (realTimeEnabledChange)="onRealTimeToggle($event)"
 >
 </dynamic-mat-table>
