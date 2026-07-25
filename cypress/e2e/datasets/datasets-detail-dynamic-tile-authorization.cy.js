@@ -157,6 +157,8 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
         "not.exist",
       );
+      // Lock icons should not appear anywhere when feature is disabled
+      cy.get(".restricted-indicator").should("not.exist");
     });
   })
 
@@ -200,6 +202,19 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
         "not.exist",
       );
 
+      // Lock icons should appear on restricted tiles
+      cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator mat-icon").should("exist").and("contain", "lock_outline");
+        });
+      // Public section with ["#all"] should NOT have lock icon
+      cy.get('[data-cy="section-label"]:contains("Public Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator").should("not.exist");
+        });
+
     });
 
     it("should hide admin-only tile from archiveManager user", () => {
@@ -225,6 +240,18 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
         "not.exist",
       );
+      // Archive Manager Section should have lock icon (restricted)
+      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator mat-icon").should("exist").and("contain", "lock_outline");
+        });
+      // Public section should NOT have lock icon
+      cy.get('[data-cy="section-label"]:contains("Public Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator").should("not.exist");
+        });
     });
 
     it("should only show public tile to guest user", () => {
@@ -252,6 +279,12 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
         "not.exist",
       );
+      // Public section should NOT have lock icon (has ["#all"] authorization)
+      cy.get('[data-cy="section-label"]:contains("Public Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator").should("not.exist");
+        });
     });
   })
 });
