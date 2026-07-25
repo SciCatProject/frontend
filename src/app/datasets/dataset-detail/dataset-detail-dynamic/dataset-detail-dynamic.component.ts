@@ -76,11 +76,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   loading$ = this.store.select(selectIsLoading);
   show = false;
 
-<<<<<<< HEAD
   userGroups$ = this.store.select(selectProfileAccessGroups);
-=======
-  userGroups$: Observable<string[]>;
->>>>>>> 3d03bee46b4895e79c2f7797d9fb4dd58f5f6c71
 
   instrument: Instrument | undefined;
   dataset: OutputDatasetObsoleteDto | undefined;
@@ -101,13 +97,9 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
   ) {
-<<<<<<< HEAD
     this.showRestrictedTilesIndicator =
       this.appConfig.datasetDetailComponent?.showRestrictedTilesIndicator ??
       false;
-=======
-    this.userGroups$ = this.store.select(selectProfileAccessGroups);
->>>>>>> 3d03bee46b4895e79c2f7797d9fb4dd58f5f6c71
   }
 
   ngOnInit() {
@@ -180,7 +172,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     return auth.some((group) => userGroups.includes(group));
   }
 
-<<<<<<< HEAD
   /**
    * Checks if a section has restricted access and should show the lock icon
    * @param section - The customization item/section to check
@@ -199,8 +190,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     return section.authorization.length > 0;
   }
 
-=======
->>>>>>> 3d03bee46b4895e79c2f7797d9fb4dd58f5f6c71
   onCopy(value: string) {
     navigator.clipboard.writeText(value).then(
       () => {
