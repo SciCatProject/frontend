@@ -108,12 +108,18 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     const sortedDatasetView = (
       this.appConfig.datasetDetailComponent?.customization || []
-    ).sort((a, b) => a.order - b.order);
-    sortedDatasetView.forEach((section) => {
-      if (section.fields && Array.isArray(section.fields)) {
-        section.fields.sort((a, b) => a.order - b.order);
-      }
-    });
+    )
+      .sort((a, b) => a.order - b.order)
+      .map((section) => ({
+        ...section,
+        authorization: section.authorization
+          ? [...section.authorization]
+          : ["#all"],
+        fields:
+          section.fields && Array.isArray(section.fields)
+            ? [...section.fields].sort((a, b) => a.order - b.order)
+            : section.fields,
+      }));
 
     this.datasetView$ = this.userGroups$.pipe(
       map((userGroups) =>
