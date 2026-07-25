@@ -730,6 +730,7 @@
   "timezone": "UTC",
   "datasetDetailComponent": {
     "enableCustomizedComponent": false,
+    "showRestrictedTilesIndicator": false,
     "customization": [
       {
         "type": "regular",

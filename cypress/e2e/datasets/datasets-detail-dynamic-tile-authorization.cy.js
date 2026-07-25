@@ -105,6 +105,19 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
         "not.exist",
       );
 
+      // Admin only section should NOT have lock icon
+      cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator").should("not.exist");
+        });
+      // Public section with ["#all"] should NOT have lock icon
+      cy.get('[data-cy="section-label"]:contains("Public Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator").should("not.exist");
+        });
+
     });
 
     it("should hide admin-only tile from archiveManager user", () => {
@@ -130,6 +143,20 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
         "not.exist",
       );
+
+      // Archive Manager only section should NOT have lock icon
+      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator").should("not.exist");
+        });
+      // Public section with ["#all"] should NOT have lock icon
+      cy.get('[data-cy="section-label"]:contains("Public Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator").should("not.exist");
+        });
+
     });
 
     it("should only show public tile to guest user", () => {
@@ -157,8 +184,13 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
         "not.exist",
       );
-      // Lock icons should not appear anywhere when feature is disabled
-      cy.get(".restricted-indicator").should("not.exist");
+
+      // Public section with ["#all"] should NOT have lock icon
+      cy.get('[data-cy="section-label"]:contains("Public Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator").should("not.exist");
+        });
     });
   })
 

@@ -73,7 +73,8 @@ The dataset detail component can optionally display a visual indicator (lock ico
 ```
 
 **Behavior:**
-- Tiles with `authorization: ["#all"]` or no authorization → No lock icon (visible to all)
+- Tiles with no `authorization` keys is equivalend to set `authorization: ["#all"]` → No lock icon (visible to all)
+- Tiles with `authorization: ["#all"]`, aka no restriction → No lock icon (visible to all)
 - Tiles with `authorization: ["group1", "group2"]` → Lock icon displayed (restricted)
 - Tiles with `authorization: []` → Lock icon displayed (hidden from all)
 

@@ -76,7 +76,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   loading$ = this.store.select(selectIsLoading);
   show = false;
 
-  userGroups$: Observable<string[]>;
+  userGroups$ = this.store.select(selectProfileAccessGroups);
 
   instrument: Instrument | undefined;
   dataset: OutputDatasetObsoleteDto | undefined;
@@ -97,7 +97,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
   ) {
-    this.userGroups$ = this.store.select(selectProfileAccessGroups);
     this.showRestrictedTilesIndicator =
       this.appConfig.datasetDetailComponent?.showRestrictedTilesIndicator ??
       false;
