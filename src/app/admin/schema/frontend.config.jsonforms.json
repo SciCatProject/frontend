@@ -333,6 +333,11 @@
         "type": "object",
         "properties": {
           "enableCustomizedComponent": { "type": "boolean" },
+          "showRestrictedTilesIndicator": {
+            "type": "boolean",
+            "title": "Show Restricted Tiles Indicator",
+            "description": "Display a lock icon on tiles with restricted access"
+          },
           "customization": {
             "type": "array",
             "items": {

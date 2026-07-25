@@ -68,6 +68,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
 
   localization = "dataset";
+  showRestrictedTilesIndicator: boolean;
 
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
@@ -97,6 +98,9 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
   ) {
     this.userGroups$ = this.store.select(selectProfileAccessGroups);
+    this.showRestrictedTilesIndicator =
+      this.appConfig.datasetDetailComponent?.showRestrictedTilesIndicator ??
+      false;
   }
 
   ngOnInit() {
@@ -161,6 +165,24 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     }
 
     return auth.some((group) => userGroups.includes(group));
+  }
+
+  /**
+   * Checks if a section has restricted access and should show the lock icon
+   * @param section - The customization item/section to check
+   * @returns true if the section is restricted and the feature is enabled
+   */
+  isSectionRestricted(section: CustomizationItem): boolean {
+    if (!this.showRestrictedTilesIndicator) {
+      return false;
+    }
+    if (!section.authorization) {
+      return false;
+    }
+    if (section.authorization.includes("#all")) {
+      return false;
+    }
+    return section.authorization.length > 0;
   }
 
   onCopy(value: string) {

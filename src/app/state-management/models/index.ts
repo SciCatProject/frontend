@@ -43,6 +43,7 @@ export interface LabelsLocalization {
 export interface DatasetDetailComponentConfig {
   enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
+  showRestrictedTilesIndicator?: boolean;
 }
 
 export interface IngestorComponentConfig {

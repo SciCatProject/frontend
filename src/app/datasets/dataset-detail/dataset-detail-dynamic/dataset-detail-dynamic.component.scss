@@ -141,3 +141,22 @@ mat-card {
   justify-content: flex-end;
   margin-top: 8px;
 }
+
+/* Restricted access indicator */
+.restricted-indicator {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    opacity: 0.7;
+    cursor: default;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
