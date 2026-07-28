@@ -444,7 +444,10 @@ export class ConfigurableActionComponent
   }
 
   private typeLink() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+    window.open(
+      this.interpolate(this.actionConfig.url),
+      this.actionConfig.target || "_self",
+    );
   }
 
   private typeDialog() {
