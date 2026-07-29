@@ -1,4 +1,10 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  flushMicrotasks,
+  waitForAsync,
+} from "@angular/core/testing";
 
 import { ConfigurableActionComponent } from "./configurable-action.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -10,7 +16,7 @@ import { DatePipe } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
-import { StoreModule } from "@ngrx/store";
+import { Store, StoreModule } from "@ngrx/store";
 import {
   MockAuthService,
   MockHtmlElement,
@@ -18,7 +24,10 @@ import {
   MockUserApi,
 } from "shared/MockStubs";
 //import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
-import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  Configuration as ApiConfiguration,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 //import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
@@ -43,7 +52,16 @@ import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
+import {
+  ActionConfig,
+  ActionItemDataset,
+  ActionItems,
+} from "./configurable-action.interfaces";
+import {
+  actionFailureAction,
+  actionSuccessAction,
+} from "state-management/actions/actions.actions";
+import { buildDefaultBatchActions } from "./configurable-actions.defaults";
 
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
@@ -117,6 +135,10 @@ describe("1000: ConfigurableActionComponent", () => {
             useValue: mockAuthService,
           },
           { provide: AppConfigService, useValue: mockAppConfigService },
+          {
+            provide: ApiConfiguration,
+            useValue: { basePath: mockAppConfigService.appConfig.lbBaseURL },
+          },
           //{ provide: Store, useClass: MockStore }
         ],
       },
@@ -125,6 +147,15 @@ describe("1000: ConfigurableActionComponent", () => {
 
     store = TestBed.inject(MockStore);
   }));
+
+  // Narrow, structural views onto private members, used only to spy on/stub
+  // them in tests without resorting to `any`.
+  type ComponentWithBuildDatasetStaticMap = {
+    buildDatasetStaticMap: () => Record<string, () => unknown>;
+  };
+  type ComponentWithDatePipe = {
+    datePipe: { transform: (date: Date, format: string) => string };
+  };
 
   function createComponent(
     componentActionConfig: ActionConfig,
@@ -1023,7 +1054,10 @@ describe("1000: ConfigurableActionComponent", () => {
 
   it("1160: should resolve dependent variables with array index extraction", () => {
     // Mock the static dataset handler to return the files array when requested
-    spyOn(component as any, "buildDatasetStaticMap").and.returnValue({
+    spyOn(
+      component as unknown as ComponentWithBuildDatasetStaticMap,
+      "buildDatasetStaticMap",
+    ).and.returnValue({
       "#Dataset0FilesPath": () => ["/file/1", "/file/2", "/file/3"],
     });
 
@@ -1045,7 +1079,10 @@ describe("1000: ConfigurableActionComponent", () => {
   });
 
   it("1170: should resolve chained dependencies", () => {
-    spyOn(component as any, "buildDatasetStaticMap").and.returnValue({
+    spyOn(
+      component as unknown as ComponentWithBuildDatasetStaticMap,
+      "buildDatasetStaticMap",
+    ).and.returnValue({
       "#Dataset0FilesPath": () => ["/file/1", "/file/2", "/file/3"],
     });
 
@@ -1081,8 +1118,8 @@ describe("1000: ConfigurableActionComponent", () => {
 
   it("1190: should resolve selectors after variable substitution", () => {
     // Mock datePipe transform response
-    (component as any).datePipe = {
-      transform: (date: Date, format: string) => "2026",
+    (component as unknown as ComponentWithDatePipe).datePipe = {
+      transform: () => "2026",
     };
 
     component.actionConfig = {
@@ -1156,6 +1193,69 @@ describe("1000: ConfigurableActionComponent", () => {
     );
     expect(body["reason"]).toBe("integration-test");
   });
+
+  it("1211: executeNextStep should not warn about unsupported type when onSuccess is xhr or form", () => {
+    const consoleWarnSpy = spyOn(console, "warn");
+    const typeXhrSpy = spyOn<any>(component, "typeXhr");
+    const typeFormSpy = spyOn<any>(component, "typeForm");
+    const typeJsonToDownloadSpy = spyOn<any>(component, "typeJsonToDownload");
+
+    component["executeNextStep"]("xhr");
+    component["executeNextStep"]("form");
+    component["executeNextStep"]("json-download");
+
+    expect(typeXhrSpy).toHaveBeenCalledTimes(1);
+    expect(typeFormSpy).toHaveBeenCalledTimes(1);
+    expect(typeJsonToDownloadSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+
+  it("1212: executeNextStep should warn once about a genuinely unsupported onSuccess type", () => {
+    const consoleWarnSpy = spyOn(console, "warn");
+    const typeXhrSpy = spyOn<any>(component, "typeXhr");
+    const typeFormSpy = spyOn<any>(component, "typeForm");
+
+    component["executeNextStep"]("link");
+
+    expect(consoleWarnSpy).toHaveBeenCalledOnceWith(
+      "Unsupported onSuccess action type:",
+      "link",
+    );
+    expect(typeXhrSpy).not.toHaveBeenCalled();
+    expect(typeFormSpy).not.toHaveBeenCalled();
+  });
+
+  it("1151: xhr action should dispatch actionFailureAction when request fails", fakeAsync(() => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    } as TestCase);
+
+    component.actionConfig = {
+      ...mockActionsConfig[0],
+      id: "xhr-failure-test",
+      label: "XHR",
+      type: "xhr",
+      url: "https://example.org/action",
+      method: "POST",
+      payload: "#empty",
+      variables: {},
+      enabled: "true",
+    };
+
+    const error = new Error("Network failure");
+    const componentStore = component["store"] as Store;
+    const storeDispatchSpy = spyOn(componentStore, "dispatch");
+    spyOn(window, "fetch").and.returnValue(Promise.reject(error));
+
+    component["typeXhr"]();
+    flushMicrotasks();
+
+    expect(storeDispatchSpy).toHaveBeenCalledWith(actionFailureAction());
+  }));
 
   it("1220: #datasetOwner token should enable action for owner", () => {
     store.overrideSelector(selectProfile, mockUserProfiles[1]);
@@ -1277,6 +1377,38 @@ describe("1000: ConfigurableActionComponent", () => {
 
     createComponent(hiddenConfig, mockActionItemsDatafilesFile1);
     expect(component.visible).toBeTrue();
+  });
+
+  it("1285: disabled should return boolean disabled config directly", () => {
+    const disabledBooleanConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "disabled-boolean-test",
+      disabled: true,
+      variables: {},
+    };
+
+    createComponent(disabledBooleanConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeTrue();
+
+    disabledBooleanConfig.disabled = false;
+    createComponent(disabledBooleanConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1286: disabled should invert boolean enabled config directly", () => {
+    const enabledBooleanConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "enabled-boolean-test",
+      enabled: true,
+      variables: {},
+    };
+
+    createComponent(enabledBooleanConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeFalse();
+
+    enabledBooleanConfig.enabled = false;
+    createComponent(enabledBooleanConfig, mockActionItemsDatafilesNofiles);
+    expect(component.disabled).toBeTrue();
   });
 
   interface SelectorCoverageCase {
@@ -1402,6 +1534,33 @@ describe("1000: ConfigurableActionComponent", () => {
       selector: "#prop1",
       expected: "prop1Value",
     },
+    {
+      name: "DatasetsPidEmptyFilesMap",
+      selector: "#DatasetsPidEmptyFilesMap",
+      expected: JSON.stringify(
+        mockActionItems.datasets.map((d) => ({ pid: d.pid, files: [] })),
+      ),
+    },
+    {
+      name: "DatasetsField",
+      selector: "#DatasetsField[sourceFolder]",
+      expected: mockActionItems.datasets.map((d) => d.sourceFolder),
+    },
+    {
+      name: "DatasetsTotalSize",
+      selector: "#DatasetsTotalSize",
+      expected: 0,
+    },
+    {
+      name: "DatasetsTotalPackedSize",
+      selector: "#DatasetsTotalPackedSize",
+      expected: 0,
+    },
+    {
+      name: "apiBaseUrl",
+      selector: "#apiBaseUrl",
+      expected: mockAppConfigService.appConfig.lbBaseURL,
+    },
   ];
 
   allKeywordMapSelectors.forEach((testCase) => {
@@ -1420,6 +1579,384 @@ describe("1000: ConfigurableActionComponent", () => {
         prop1: "prop1Value",
       });
       expect(component.variables["value"]).toEqual(testCase.expected);
+    });
+  });
+
+  describe("1300: xhr action failures with different HTTP status codes", () => {
+    const xhrFailureStatusCodes = [400, 404, 500, 503];
+
+    xhrFailureStatusCodes.forEach((status) => {
+      it(`1300: xhr action should dispatch actionFailureAction with HTTP ${status} when the server responds with a non-ok status`, fakeAsync(() => {
+        selectTestCase({
+          test: "n/a",
+          action: actionSelectorType.download_all,
+          limit: maxSizeType.higher,
+          actionItems: mockActionItemsDatafilesNofiles,
+          result: true,
+        } as TestCase);
+
+        component.actionConfig = {
+          ...mockActionsConfig[0],
+          id: `xhr-status-${status}-test`,
+          label: "XHR",
+          type: "xhr",
+          url: "https://example.org/action",
+          method: "POST",
+          payload: "#empty",
+          variables: {},
+          enabled: "true",
+        };
+
+        const componentStore = component["store"] as Store;
+        const storeDispatchSpy = spyOn(componentStore, "dispatch");
+        const actionFinishedSpy = jasmine.createSpy("actionFinished");
+        component.actionFinished.subscribe(actionFinishedSpy);
+
+        spyOn(window, "fetch").and.returnValue(
+          Promise.resolve(new Response(null, { status, statusText: "Error" })),
+        );
+
+        component["typeXhr"]();
+        flushMicrotasks();
+
+        expect(storeDispatchSpy).toHaveBeenCalledWith(actionFailureAction());
+        expect(actionFinishedSpy).toHaveBeenCalledWith(
+          jasmine.objectContaining({ success: false }),
+        );
+      }));
+    });
+  });
+
+  it("1305: xhr action should dispatch actionFailureAction when an ok response has a non-JSON body, instead of a false success", async () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    } as TestCase);
+
+    component.actionConfig = {
+      ...mockActionsConfig[0],
+      id: "xhr-malformed-json-test",
+      label: "XHR",
+      type: "xhr",
+      url: "https://example.org/action",
+      method: "POST",
+      payload: "#empty",
+      variables: {},
+      enabled: "true",
+    };
+
+    const componentStore = component["store"] as Store;
+    const storeDispatchSpy = spyOn(componentStore, "dispatch");
+    const actionFinishedSpy = jasmine.createSpy("actionFinished");
+    component.actionFinished.subscribe(actionFinishedSpy);
+
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        text: () => Promise.resolve("<html>not json</html>"),
+      } as Response),
+    );
+
+    component["typeXhr"]();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(storeDispatchSpy).not.toHaveBeenCalledWith(actionSuccessAction());
+    expect(storeDispatchSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({ type: actionFailureAction.type }),
+    );
+    expect(actionFinishedSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({ success: false }),
+    );
+    expect(actionFinishedSpy).not.toHaveBeenCalledWith(
+      jasmine.objectContaining({ success: true }),
+    );
+  });
+
+  it("1310: xhr action should dispatch actionSuccessAction and emit the response payload on success", async () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    } as TestCase);
+
+    component.actionConfig = {
+      ...mockActionsConfig[0],
+      id: "xhr-success-test",
+      label: "XHR",
+      type: "xhr",
+      url: "https://example.org/action",
+      method: "POST",
+      payload: "#empty",
+      variables: {},
+      enabled: "true",
+    };
+
+    const componentStore = component["store"] as Store;
+    const storeDispatchSpy = spyOn(componentStore, "dispatch");
+    const actionFinishedSpy = jasmine.createSpy("actionFinished");
+    component.actionFinished.subscribe(actionFinishedSpy);
+
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        text: () => Promise.resolve(JSON.stringify({ ok: true })),
+      } as Response),
+    );
+
+    component["typeXhr"]();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(storeDispatchSpy).toHaveBeenCalledWith(actionSuccessAction());
+    expect(actionFinishedSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({ success: true, result: { ok: true } }),
+    );
+  });
+
+  it("1315: xhr action url should interpolate a #apiBaseUrl-derived variable from the API configuration", async () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    } as TestCase);
+
+    component.actionConfig = {
+      ...mockActionsConfig[0],
+      id: "xhr-apiBaseUrl-test",
+      label: "XHR",
+      type: "xhr",
+      url: "{{ @baseUrl }}/api/v3/jobs",
+      method: "POST",
+      payload: "#empty",
+      variables: { baseUrl: "#apiBaseUrl" },
+      enabled: "true",
+    };
+
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        text: () => Promise.resolve(""),
+      } as Response),
+    );
+
+    component["resolveVariableContext"]();
+    component["typeXhr"]();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const fetchSpy = window.fetch as jasmine.Spy;
+    expect(fetchSpy.calls.mostRecent().args[0]).toBe(
+      `${mockAppConfigService.appConfig.lbBaseURL}/api/v3/jobs`,
+    );
+  });
+
+  it("1320: should detect longer cyclic dependency chains (a -> b -> c -> a)", () => {
+    spyOn(console, "error");
+
+    component.actionConfig = {
+      variables: {
+        a: "@b",
+        b: "@c",
+        c: "@a",
+      },
+    } as unknown as ActionConfig;
+
+    component["resolveVariableContext"]();
+
+    expect(console.error).toHaveBeenCalledWith(
+      jasmine.stringContaining("Cyclic dependency detected in variable"),
+    );
+    // Each link in the cycle ends up interpolating a reference to a variable
+    // that was never set (because the recursion that would set it was cut
+    // short by the cycle check), so all three resolve to "" rather than
+    // throwing or hanging.
+    expect(component.variables["a"]).toBe("");
+    expect(component.variables["b"]).toBe("");
+    expect(component.variables["c"]).toBe("");
+  });
+
+  it("1330: should still resolve unrelated variables when a cyclic dependency is present", () => {
+    spyOn(console, "error");
+
+    component.actionConfig = {
+      variables: {
+        a: "@b",
+        b: "@a",
+        independent: "#Dataset0Pid",
+      },
+    } as unknown as ActionConfig;
+
+    component["resolveVariableContext"]();
+
+    expect(component.variables["independent"]).toBe(
+      mockActionItems.datasets[0].pid,
+    );
+  });
+
+  it("1340: DatasetsTotalSize and DatasetsTotalPackedSize should sum size/packedSize across datasets", () => {
+    const actionItemsWithSizes: ActionItems = {
+      datasets: [
+        {
+          ...mockActionItems.datasets[0],
+          size: 100,
+          packedSize: 10,
+        } as ActionItemDataset,
+        {
+          ...mockActionItems.datasets[1],
+          size: 250,
+          packedSize: 25,
+        } as ActionItemDataset,
+      ],
+    };
+
+    const selectorConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "selector-DatasetsTotalSize-nonzero",
+      type: "link",
+      variables: {
+        totalSize: "#DatasetsTotalSize",
+        totalPackedSize: "#DatasetsTotalPackedSize",
+      },
+    };
+
+    createComponent(selectorConfig, actionItemsWithSizes);
+
+    expect(component.variables["totalSize"]).toBe(350);
+    expect(component.variables["totalPackedSize"]).toBe(35);
+  });
+
+  it("1350: concurrently triggered xhr actions should each fire their own independent request", async () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    } as TestCase);
+
+    component.actionConfig = {
+      ...mockActionsConfig[0],
+      id: "xhr-concurrent-test",
+      label: "XHR",
+      type: "xhr",
+      url: "https://example.org/action",
+      method: "POST",
+      payload: "#empty",
+      variables: {},
+      enabled: "true",
+    };
+
+    const componentStore = component["store"] as Store;
+    const storeDispatchSpy = spyOn(componentStore, "dispatch");
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        text: () => Promise.resolve(""),
+      } as Response),
+    );
+
+    component["typeXhr"]();
+    component["typeXhr"]();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const fetchSpy = window.fetch as jasmine.Spy;
+    expect(fetchSpy.calls.count()).toBe(2);
+    expect(storeDispatchSpy.calls.count()).toBe(2);
+    expect(storeDispatchSpy.calls.argsFor(0)[0]).toEqual(actionSuccessAction());
+    expect(storeDispatchSpy.calls.argsFor(1)[0]).toEqual(actionSuccessAction());
+  });
+
+  it("1360: destroying the component while an xhr request is in flight does not cancel the request or throw", async () => {
+    selectTestCase({
+      test: "n/a",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    } as TestCase);
+
+    component.actionConfig = {
+      ...mockActionsConfig[0],
+      id: "xhr-cancellation-test",
+      label: "XHR",
+      type: "xhr",
+      url: "https://example.org/action",
+      method: "POST",
+      payload: "#empty",
+      variables: {},
+      enabled: "true",
+    };
+
+    const componentStore = component["store"] as Store;
+    const storeDispatchSpy = spyOn(componentStore, "dispatch");
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        text: () => Promise.resolve(""),
+      } as Response),
+    );
+
+    component["typeXhr"]();
+    component.ngOnDestroy();
+
+    // The component has no cancellation mechanism (no AbortController): the
+    // in-flight request still resolves and dispatches after destroy, and
+    // destroying the component does not throw while that happens.
+    await expectAsync(
+      new Promise((resolve) => setTimeout(resolve, 0)),
+    ).toBeResolved();
+    expect(storeDispatchSpy).toHaveBeenCalledWith(actionSuccessAction());
+  });
+
+  describe("1400: default batch actions (Archive/Retrieve) visibility", () => {
+    const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
+
+    it("1400: Archive should be visible in a batch-view/cart context, where currentArchViewMode is not provided", () => {
+      createComponent(archiveAction, mockActionItems);
+      expect(component.visible).toBeTrue();
+    });
+
+    it("1401: Retrieve should be visible in a batch-view/cart context, where currentArchViewMode is not provided", () => {
+      createComponent(retrieveAction, mockActionItems);
+      expect(component.visible).toBeTrue();
+    });
+
+    it("1402: on the dataset list page, Archive should be visible only in archivable mode", () => {
+      createComponent(archiveAction, {
+        ...mockActionItems,
+        currentArchViewMode: "archivable",
+      });
+      expect(component.visible).toBeTrue();
+
+      createComponent(archiveAction, {
+        ...mockActionItems,
+        currentArchViewMode: "retrievable",
+      });
+      expect(component.visible).toBeFalse();
+    });
+
+    it("1403: on the dataset list page, Retrieve should be visible only in retrievable mode", () => {
+      createComponent(retrieveAction, {
+        ...mockActionItems,
+        currentArchViewMode: "retrievable",
+      });
+      expect(component.visible).toBeTrue();
+
+      createComponent(retrieveAction, {
+        ...mockActionItems,
+        currentArchViewMode: "archivable",
+      });
+      expect(component.visible).toBeFalse();
     });
   });
 });

@@ -25,8 +25,15 @@ import {
   sortByColumnAction,
 } from "state-management/actions/datasets.actions";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
-import { provideMockStore } from "@ngrx/store/testing";
-import { selectDatasets } from "state-management/selectors/datasets.selectors";
+import {
+  MockStore as NgrxMockStore,
+  provideMockStore,
+} from "@ngrx/store/testing";
+import {
+  selectDatasets,
+  selectDatasetsInBatch,
+  selectSelectedDatasets,
+} from "state-management/selectors/datasets.selectors";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { MatTableModule } from "@angular/material/table";
 import {
@@ -87,6 +94,8 @@ describe("DatasetTableComponent", () => {
         provideMockStore({
           selectors: [
             { selector: selectDatasets, value: [] },
+            { selector: selectSelectedDatasets, value: [] },
+            { selector: selectDatasetsInBatch, value: [] },
             { selector: selectInstruments, value: [] },
           ],
         }),
@@ -214,6 +223,59 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+    });
+  });
+
+  describe("selectionIds (cart-membership greyed-out state)", () => {
+    it("should not be reset when the active checkbox selection becomes empty, so datasets already in the cart stay marked", () => {
+      const ngrxStore = store as unknown as NgrxMockStore;
+      ngrxStore.overrideSelector(selectDatasetsInBatch, [mockDataset]);
+      ngrxStore.refreshState();
+
+      expect(component.selectionIds).toEqual([mockDataset.pid]);
+
+      // Simulate what happens after "Add to Selection": the checkbox
+      // selection is cleared once the item has been moved to the cart.
+      ngrxStore.overrideSelector(selectSelectedDatasets, []);
+      ngrxStore.refreshState();
+
+      expect(component.selectionIds).toEqual([mockDataset.pid]);
+    });
+
+    it("should not clear table row selection model when selectedSets is empty but batch is non-empty", () => {
+      const clearSelection = jasmine.createSpy("clearSelection");
+      component.datasetTable = { clearSelection } as any;
+
+      const ngrxStore = store as unknown as NgrxMockStore;
+      ngrxStore.overrideSelector(selectDatasetsInBatch, [mockDataset]);
+      ngrxStore.overrideSelector(selectSelectedDatasets, [mockDataset]);
+      ngrxStore.refreshState();
+
+      clearSelection.calls.reset();
+
+      ngrxStore.overrideSelector(selectSelectedDatasets, []);
+      ngrxStore.refreshState();
+
+      expect(clearSelection).not.toHaveBeenCalled();
+    });
+
+    it("should clear table row selection model when both selectedSets and batch are empty", () => {
+      const clearSelection = jasmine.createSpy("clearSelection");
+      component.datasetTable = { clearSelection } as any;
+
+      const ngrxStore = store as unknown as NgrxMockStore;
+      ngrxStore.overrideSelector(selectDatasetsInBatch, [mockDataset]);
+      ngrxStore.overrideSelector(selectSelectedDatasets, [mockDataset]);
+      ngrxStore.refreshState();
+
+      clearSelection.calls.reset();
+
+      ngrxStore.overrideSelector(selectSelectedDatasets, []);
+      ngrxStore.refreshState();
+      ngrxStore.overrideSelector(selectDatasetsInBatch, []);
+      ngrxStore.refreshState();
+
+      expect(clearSelection).toHaveBeenCalled();
     });
   });
 
