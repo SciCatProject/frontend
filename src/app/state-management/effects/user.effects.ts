@@ -648,11 +648,7 @@ export class UserEffects {
               fromActions.setTableColumnsAction({
                 columns: columnsConfig,
                 scope: s.scope as
-                  | "dataset"
-                  | "proposal"
-                  | "sample"
-                  | "instrument"
-                  | "file",
+                  "dataset" | "proposal" | "sample" | "instrument" | "file",
               }),
             );
           },

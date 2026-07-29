@@ -65,6 +65,11 @@ export const selectCurrentAttachments = createSelector(
   (dataset) => (dataset ? dataset.attachments : []),
 );
 
+export const selectCurrentRelationships = createSelector(
+  selectCurrentDataset,
+  (dataset) => dataset?.relationships ?? [],
+);
+
 export const selectPagination = createSelector(
   selectDatasetState,
   (state) => state.pagination,
