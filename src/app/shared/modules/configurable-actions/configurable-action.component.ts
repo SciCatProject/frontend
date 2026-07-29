@@ -491,8 +491,8 @@ export class ConfigurableActionComponent
   private executeNextStep(nextStep: ActionType) {
     try {
       if (nextStep === "xhr") this.typeXhr();
-      if (nextStep === "form") this.typeForm();
-      if (nextStep === "json-download") this.typeJsonToDownload();
+      else if (nextStep === "form") this.typeForm();
+      else if (nextStep === "json-download") this.typeJsonToDownload();
       else console.warn("Unsupported onSuccess action type:", nextStep);
     } catch (error) {
       console.error("Configurable action error on execute next step", error);

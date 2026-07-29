@@ -1194,6 +1194,37 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(body["reason"]).toBe("integration-test");
   });
 
+  it("1211: executeNextStep should not warn about unsupported type when onSuccess is xhr or form", () => {
+    const consoleWarnSpy = spyOn(console, "warn");
+    const typeXhrSpy = spyOn<any>(component, "typeXhr");
+    const typeFormSpy = spyOn<any>(component, "typeForm");
+    const typeJsonToDownloadSpy = spyOn<any>(component, "typeJsonToDownload");
+
+    component["executeNextStep"]("xhr");
+    component["executeNextStep"]("form");
+    component["executeNextStep"]("json-download");
+
+    expect(typeXhrSpy).toHaveBeenCalledTimes(1);
+    expect(typeFormSpy).toHaveBeenCalledTimes(1);
+    expect(typeJsonToDownloadSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+
+  it("1212: executeNextStep should warn once about a genuinely unsupported onSuccess type", () => {
+    const consoleWarnSpy = spyOn(console, "warn");
+    const typeXhrSpy = spyOn<any>(component, "typeXhr");
+    const typeFormSpy = spyOn<any>(component, "typeForm");
+
+    component["executeNextStep"]("link");
+
+    expect(consoleWarnSpy).toHaveBeenCalledOnceWith(
+      "Unsupported onSuccess action type:",
+      "link",
+    );
+    expect(typeXhrSpy).not.toHaveBeenCalled();
+    expect(typeFormSpy).not.toHaveBeenCalled();
+  });
+
   it("1151: xhr action should dispatch actionFailureAction when request fails", fakeAsync(() => {
     selectTestCase({
       test: "n/a",
