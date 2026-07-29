@@ -180,6 +180,7 @@ export const testData = {
     type: "ui_test",
     jobParams: {},
   },
+  testImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNkYPhfz0AEYBxVSF+FAP5FDvcfRYWgAAAAAElFTkSuQmCC",
 };
 
 export const testConfig = {
@@ -425,3 +426,4 @@ export const personalizedDatasetsColumnsList = [
   "Start Time",
   "End Time",
 ];
+
