@@ -19,6 +19,18 @@ export const selectOrigDatablocksCount = createSelector(
   (state) => state.totalCount,
 );
 
+export const selectFilesFilters = createSelector(selectFilesState, (state) => {
+  const filters = state.filters;
+
+  const { sortField, skip, limit } = filters;
+
+  return {
+    sortField,
+    skip,
+    limit,
+  };
+});
+
 export const selectFilesWithCountAndTableSettings = createSelector(
   selectAllOrigDatablocks,
   selectOrigDatablocksCount,
