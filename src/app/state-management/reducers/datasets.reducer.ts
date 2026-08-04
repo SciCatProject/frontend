@@ -78,6 +78,7 @@ const reducer = createReducer(
     ...state,
     origDatablocksCountIsLoading: true,
   })),
+
   on(fromActions.fetchOrigDatablocksCountCompleteAction, (state, { count }) => {
     return {
       ...state,
@@ -109,10 +110,12 @@ const reducer = createReducer(
       relatedDatasets,
     }),
   ),
-  on(fromActions.fetchRelatedDatasetsAction, (state): DatasetState => ({
+
+  on(fromActions.fetchRelatedDatasetsCountAction, (state): DatasetState => ({
     ...state,
     relatedDatasetsCountIsLoading: true,
   })),
+
   on(
     fromActions.fetchRelatedDatasetsCountCompleteAction,
     (state, { count }): DatasetState => ({

@@ -32,6 +32,7 @@ import {
   fetchOrigDatablocksAction,
   fetchOrigDatablocksCountAction,
   fetchRelatedDatasetsAction,
+  fetchRelatedDatasetsCountAction,
 } from "state-management/actions/datasets.actions";
 import {
   clearLogbookAction,
@@ -237,8 +238,6 @@ export class DatasetDetailsDashboardComponent
             this.fetchDataForTab(TAB[tab]);
           })
           .unsubscribe();
-
-        this.fetchDatasetRelatedDocuments();
       }
     });
     this.subscriptions.push(datasetSub);
@@ -276,6 +275,12 @@ export class DatasetDetailsDashboardComponent
             this.store.dispatch(
               fetchOrigDatablocksCountAction(args as { pid: string }),
             );
+          }
+          break;
+        case TAB.relatedDatasets:
+          {
+            this.store.dispatch(fetchRelatedDatasetsAction());
+            this.store.dispatch(fetchRelatedDatasetsCountAction());
           }
           break;
         case TAB.logbook:

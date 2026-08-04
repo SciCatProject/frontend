@@ -344,7 +344,7 @@ export class DatasetEffects {
 
   fetchRelatedDatasetsCount$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.fetchRelatedDatasetsAction),
+      ofType(fromActions.fetchRelatedDatasetsCountAction),
       concatLatestFrom(() => [this.currentDataset$]),
       switchMap(([, dataset]) => {
         const queryFilter = {
