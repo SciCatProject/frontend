@@ -8,6 +8,7 @@ export const mockAppConfigService = {
   appConfig: {
     maxDirectDownloadSize: 0,
     datafilesActionsEnabled: true,
+    lbBaseURL: "https://example.org",
   },
   getConfig() {
     return this.appConfig;

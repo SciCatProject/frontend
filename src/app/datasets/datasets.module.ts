@@ -1,7 +1,6 @@
 import { DatasetEffects } from "./../state-management/effects/datasets.effects";
 import { EffectsModule } from "@ngrx/effects";
 import { LinkyModule } from "ngx-linky";
-import { ArchivingService } from "./archiving.service";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
@@ -93,6 +92,7 @@ import { OverlayModule } from "@angular/cdk/overlay";
 import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
 import { RelationshipsComponent } from "./relationships/relationships.component";
 import { RelatedIdentifierCellComponent } from "./relationships/related-identifier-cell/related-identifier-cell.component";
+import { ActionEffects } from "state-management/effects/actions.effect";
 
 @NgModule({
   imports: [
@@ -141,6 +141,7 @@ import { RelatedIdentifierCellComponent } from "./relationships/related-identifi
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
+      ActionEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
@@ -192,7 +193,6 @@ import { RelatedIdentifierCellComponent } from "./relationships/related-identifi
     DatasetsFilterSettingsComponent,
   ],
   providers: [
-    ArchivingService,
     AsyncPipe,
     JsonHeadPipe,
     ThumbnailPipe,
