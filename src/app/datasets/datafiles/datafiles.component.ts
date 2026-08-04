@@ -148,7 +148,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   pagination: TablePagination = {
     pageSizeOptions: [5, 10, 25, 50, 100],
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 25,
     length: 0,
   };
 
@@ -298,11 +298,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
       fetchOrigDatablocksAction({
         pid: this.datasetPid,
         filters: { skip: pageIndex * pageSize, limit: pageSize },
-      }),
-    );
-    this.store.dispatch(
-      fetchOrigDatablocksCountAction({
-        pid: this.datasetPid,
       }),
     );
   }

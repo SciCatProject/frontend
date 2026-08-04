@@ -39,6 +39,7 @@ import {
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
+import { selectFilesFilters } from "state-management/selectors/files.selectors";
 
 @Injectable()
 export class DatasetEffects {
@@ -46,6 +47,7 @@ export class DatasetEffects {
   relatedDatasetsFilters$ = this.store.select(selectRelatedDatasetsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   fullfacetParams$ = this.store.select(selectFullfacetParams);
+  filesFilters$ = this.store.select(selectFilesFilters);
   datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
   currentUser$ = this.store.select(selectCurrentUser);
 
@@ -210,13 +212,20 @@ export class DatasetEffects {
   fetchOrigDatablocksOfDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksAction),
-      concatLatestFrom(() => this.currentUser$),
-      switchMap(([{ pid, filters }, user]) => {
+      concatLatestFrom(() => [this.currentUser$, this.filesFilters$]),
+      switchMap(([{ pid, filters }, user, storeFilters]) => {
+        const {
+          skip = storeFilters.skip,
+          limit = storeFilters.limit,
+          sortField = storeFilters.sortField,
+        } = filters || {};
+
         const filter = {
           where: { datasetId: pid },
           limits: {
-            skip: filters?.skip || 0,
-            limit: filters?.limit || 5,
+            skip: skip,
+            limit: limit,
+            sort: sortField,
           },
         };
 

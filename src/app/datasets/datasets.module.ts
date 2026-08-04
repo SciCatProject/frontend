@@ -93,6 +93,7 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
 import { RelationshipsComponent } from "./relationships/relationships.component";
 import { RelatedIdentifierCellComponent } from "./relationships/related-identifier-cell/related-identifier-cell.component";
 import { ActionEffects } from "state-management/effects/actions.effect";
+import { filesReducer } from "state-management/reducers/files.reducer";
 
 @NgModule({
   imports: [
@@ -151,6 +152,7 @@ import { ActionEffects } from "state-management/effects/actions.effect";
     StoreModule.forFeature("publishedData", publishedDataReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
     StoreModule.forFeature("users", userReducer),
+    StoreModule.forFeature("files", filesReducer),
     LogbooksModule,
     MatMenuModule,
     CdkDropList,
