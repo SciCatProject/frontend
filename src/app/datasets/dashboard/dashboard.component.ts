@@ -68,6 +68,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: ReturnedUserDto;
   userGroups: string[] = [];
   clearColumnSearch = false;
+  filtersExpanded = false;
+  globalTextSearch = "";
 
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
   @ViewChild("ingestor") ingestor: IngestorCreationComponent;
@@ -106,6 +108,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.ingestor) {
       this.ingestor.onClickAddIngestion();
     }
+  }
+
+  toggleFilters(): void {
+    this.filtersExpanded = !this.filtersExpanded;
+  }
+
+  onGlobalTextSearchClear(): void {
+    this.globalTextSearch = "";
+    this.onTextChange("");
+    this.onSearchAction();
   }
 
   ngOnInit() {
@@ -160,6 +172,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters })),
         ),
+    );
+
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+        this.globalTextSearch = searchQuery.text || "";
+      }),
     );
 
     this.subscriptions.push(
