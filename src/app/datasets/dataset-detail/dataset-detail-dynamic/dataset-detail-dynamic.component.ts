@@ -68,7 +68,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
 
   localization = "dataset";
-  showRestrictedTilesIndicator: boolean;
+  tileRestrictedIconVisibility: boolean;
+  tileRestrictedIconGroups: string[];
 
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
@@ -97,9 +98,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
   ) {
-    this.showRestrictedTilesIndicator =
-      this.appConfig.datasetDetailComponent?.showRestrictedTilesIndicator ??
+    this.tileRestrictedIconVisibility =
+      this.appConfig.tileRestrictedIconVisibility ??
       false;
+    this.tileRestrictedIconGroups =
+      this.appConfig.tileRestrictedIconGroups ??
+      [];
   }
 
   ngOnInit() {
@@ -113,7 +117,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         ...section,
         authorization: section.authorization
           ? [...section.authorization]
-          : ["#all"],
+          : [],
+        visible: section.visible
+          ? section.visible
+          : true,
         fields:
           section.fields && Array.isArray(section.fields)
             ? [...section.fields].sort((a, b) => a.order - b.order)
@@ -122,9 +129,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     this.datasetView$ = this.userGroups$.pipe(
       map((userGroups) =>
-        sortedDatasetView.filter((section) =>
-          this.canViewBlock(section.authorization, userGroups),
-        ),
+        sortedDatasetView
+          .filter((section) => this.showTile(section, userGroups))
+          .map((section) => ({
+            ...section,
+            restrictedIconVisible: this.showRestrictedIcon(userGroups),
+          })),
       ),
     );
 
@@ -155,21 +165,19 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
    * @param userGroups - Array of groups the current user belongs to
    * @returns true if user can view the block
    */
-  canViewBlock(
-    blockAuthorization: string[] | undefined,
+  showTile(
+    section: CustomizationItem,
     userGroups: string[],
   ): boolean {
-    const auth = blockAuthorization || ["#all"];
+    if (!section.visible) {
+      return false
+    }
 
-    if (auth.includes("#all")) {
+    if (!section.authorization || section.authorization.length === 0) {
       return true;
     }
 
-    if (auth.length === 0) {
-      return false;
-    }
-
-    return auth.some((group) => userGroups.includes(group));
+    return section.authorization.some((group) => userGroups.includes(group));
   }
 
   /**
@@ -177,17 +185,19 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
    * @param section - The customization item/section to check
    * @returns true if the section is restricted and the feature is enabled
    */
-  isSectionRestricted(section: CustomizationItem): boolean {
-    if (!this.showRestrictedTilesIndicator) {
+  showRestrictedIcon(
+    userGroups: string[],
+  ): boolean {
+    if (!this.tileRestrictedIconVisibility) {
+      // the icon is disabled by configuration
       return false;
     }
-    if (!section.authorization) {
-      return false;
+    if (this.tileRestrictedIconGroups.length == 0) {
+      // the icon is visible to everybody
+      return true;
     }
-    if (section.authorization.includes("#all")) {
-      return false;
-    }
-    return section.authorization.length > 0;
+    // check if any of the user groups is listed in the group who can see the icon
+    return this.tileRestrictedIconGroups.some((group) => userGroups.includes(group));
   }
 
   onCopy(value: string) {

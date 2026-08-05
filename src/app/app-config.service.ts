@@ -174,6 +174,8 @@ export interface AppConfigInterface {
   defaultProposalsListSettings?: ListSettings;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
+  tileRestrictedIconVisibility?: boolean,
+  tileRestrictedIconGroups?: string[],
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
@@ -337,6 +339,18 @@ export class AppConfigService {
           'Here goes your SciCat About page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
       };
     }
+
+    config.tileRestrictedIconVisibility = (
+      !config.tileRestrictedIconVisibility
+      ? config.tileRestrictedIconVisibility
+      : false
+    )
+
+    config.tileRestrictedIconGroups = (
+      !config.tileRestrictedIconGroups
+      ? config.tileRestrictedIconGroups
+      : ["admin"]
+    )
 
     applyDefaultBatchActions(config);
     validateAllActionConfigsIn(config);

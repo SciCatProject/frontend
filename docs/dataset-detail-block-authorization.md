@@ -54,7 +54,7 @@ The authorization system consists of:
 
 **How It Works:**
 
-The dataset detail component can optionally display a visual indicator (lock icon) on tiles that have restricted access. This feature is controlled by the `showRestrictedTilesIndicator` configuration flag.
+The dataset detail component can optionally display a visual indicator (lock icon) on tiles that have restricted access. This feature is controlled by the `tileRestrictedIconVisibility` configuration flag.
 
 - When **enabled** (`true`), a lock icon (`lock_outline`) appears in the header of any tile that has restricted access
 - When **disabled** (`false` or undefined), no lock icons are displayed
@@ -66,7 +66,7 @@ The dataset detail component can optionally display a visual indicator (lock ico
 {
   "datasetDetailComponent": {
     "enableCustomizedComponent": true,
-    "showRestrictedTilesIndicator": true,
+    "tileRestrictedIconVisibility": true,
     "customization": [...]
   }
 }
@@ -147,7 +147,7 @@ Configured on each customization item within the `customization` array:
 |-----|------|----------|---------|-------------|
 | `datasetDetailComponent.authorization` | string[] | No | `null` | Global authorization for all blocks in the component |
 | `datasetDetailComponent.customization[].authorization` | string[] | No | `["#all"]` | Block-specific authorization |
-| `datasetDetailComponent.showRestrictedTilesIndicator` | boolean | No | `false` | Show lock icon on tiles with restricted access |
+| `datasetDetailComponent.tileRestrictedIconVisibility` | boolean | No | `false` | Show lock icon on tiles with restricted access |
 
 ### Configuration Locations
 
@@ -184,7 +184,7 @@ export interface DatasetDetailComponentConfig {
   enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
   authorization?: string[];  // Global authorization for all blocks
-  showRestrictedTilesIndicator?: boolean;  // Show lock icon on restricted tiles
+  tileRestrictedIconVisibility?: boolean;  // Show lock icon on restricted tiles
 }
 
 export interface CustomizationItem {
@@ -207,7 +207,7 @@ export interface CustomizationItem {
 
 The admin UI provides form controls through JSONForms:
 - **Enable Customized Component**: Toggle switch for `enableCustomizedComponent`
-- **Show Restricted Tiles Indicator**: Toggle switch for `showRestrictedTilesIndicator`
+- **Show Restricted Tiles Indicator**: Toggle switch for `tileRestrictedIconVisibility`
 - **Authorization**: Array of strings input for global block authorization
 - **Customization**: List with detail view for configuring individual blocks
 
@@ -290,7 +290,7 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
   "type": "object",
   "properties": {
     "enableCustomizedComponent": { "type": "boolean" },
-    "showRestrictedTilesIndicator": {
+    "tileRestrictedIconVisibility": {
       "type": "boolean",
       "title": "Show Restricted Tiles Indicator",
       "description": "Display a lock icon on tiles with restricted access"
@@ -797,12 +797,12 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ### Q: How do I show a lock icon on restricted tiles?
 
-**A**: Enable the `showRestrictedTilesIndicator` configuration flag:
+**A**: Enable the `tileRestrictedIconVisibility` configuration flag:
 ```json
 {
   "datasetDetailComponent": {
     "enableCustomizedComponent": true,
-    "showRestrictedTilesIndicator": true,
+    "tileRestrictedIconVisibility": true,
     "customization": [...]
   }
 }

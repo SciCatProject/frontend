@@ -334,7 +334,7 @@
         "type": "object",
         "properties": {
           "enableCustomizedComponent": { "type": "boolean" },
-          "showRestrictedTilesIndicator": {
+          "tileRestrictedIconVisibility": {
             "type": "boolean",
             "title": "Show Restricted Tiles Indicator",
             "description": "Display a lock icon on tiles with restricted access"

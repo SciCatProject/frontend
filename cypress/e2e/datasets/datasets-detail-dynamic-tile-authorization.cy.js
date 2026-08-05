@@ -44,7 +44,7 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
   const authTestConfigNoIndicator = {
     datasetDetailComponent: {
       enableCustomizedComponent: true,
-      showRestrictedTilesIndicator: false,
+      tileRestrictedIconVisibility: false,
       customization: baseCustomization,
     },
   };
@@ -52,7 +52,7 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
   const authTestConfigWithIndicator = {
     datasetDetailComponent: {
       enableCustomizedComponent: true,
-      showRestrictedTilesIndicator: true,
+      tileRestrictedIconVisibility: true,
       customization: baseCustomization,
     },
   };
