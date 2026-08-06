@@ -51,7 +51,7 @@
                 *ngIf="section.restrictedIconVisible"
                 class="restricted-indicator"
               >
-                <mat-icon matTooltip="Restricted access">lock_outline</mat-icon>
+                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
               </span>
             </mat-card-header>
             <!-- Section Content -->
@@ -177,7 +177,7 @@
                   *ngIf="section.restrictedIconVisible"
                   class="restricted-indicator"
                 >
-                  <mat-icon matTooltip="Restricted access">lock_outline</mat-icon>
+                  <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
                 </span>
               </mat-card-header>
               <mat-card-content class="scientific-metadata-content">
@@ -241,7 +241,7 @@
                 *ngIf="section.restrictedIconVisible"
                 class="restricted-indicator"
               >
-                <mat-icon matTooltip="Restricted access">lock_outline</mat-icon>
+                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
               </span>
             </mat-card-header>
             <mat-card-content>
@@ -314,7 +314,7 @@
                 *ngIf="section.restrictedIconVisible"
                 class="restricted-indicator"
               >
-                <mat-icon matTooltip="Restricted access">lock_outline</mat-icon>
+                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
               </span>
             </mat-card-header>
             <mat-card-content>

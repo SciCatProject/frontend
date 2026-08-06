@@ -65,11 +65,10 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
   };
 
   const authTestConfigWithIndicator = {
-    tileRestrictedIconVisibile: false,
-    tileRestrictedIconGroups: [],
+    tileRestrictedIconVisibile: true,
+    tileRestrictedIconGroups: ["admin"],
     datasetDetailComponent: {
       enableCustomizedComponent: true,
-      tileRestrictedIconVisibile: true,
       customization: baseCustomization,
     },
   };
@@ -121,6 +120,10 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
         "not.exist",
       );
+      // Invisible Section should not be visible to admin
+      cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
+        "not.exist",
+      );
 
       // Admin only section should NOT have lock icon
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
@@ -158,6 +161,10 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]').should("contain", "Archive Manager Section");
       // But NOT admin-only section
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
+        "not.exist",
+      );
+      // Invisible Section should not be visible to archiveManager
+      cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
         "not.exist",
       );
 
@@ -199,6 +206,10 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
         "not.exist",
       );
       cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
+        "not.exist",
+      );
+      // Invisible Section should not be visible to guest
+      cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
         "not.exist",
       );
 
@@ -328,11 +339,56 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
         "not.exist",
       );
-      // Public section should NOT have lock icon (has ["#all"] authorization)
+      // Public section should NOT have lock icon (has no authorization = public)
       cy.get('[data-cy="section-label"]:contains("Public Section")')
         .parent()
         .within(() => {
           cy.get(".restricted-indicator").should("not.exist");
+        });
+    });
+
+    it("should show authorization groups in tooltip on hover", () => {
+      cy.login(adminUsername, adminPassword);
+      cy.visit("/datasets");
+      cy.wait("@getFrontendConfig");
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.isLoading();
+
+      cy.get("mat-row").contains("Cypress Dataset").click();
+
+      cy.isLoading();
+
+      // Admin user should see Admin Only Section with tooltip showing "admin"
+      cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator mat-icon")
+            .should("exist")
+            .trigger('mouseover')
+            .then(() => {
+              cy.get('.mat-tooltip')
+                .should('be.visible')
+                .and('contain', 'admin');
+            });
+        });
+
+      // Archive Manager Section should show "archivemanager" in tooltip
+      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")')
+        .parent()
+        .within(() => {
+          cy.get(".restricted-indicator mat-icon")
+            .should("exist")
+            .trigger('mouseover')
+            .then(() => {
+              cy.get('.mat-tooltip')
+                .should('be.visible')
+                .and('contain', 'archivemanager');
+            });
         });
     });
   })

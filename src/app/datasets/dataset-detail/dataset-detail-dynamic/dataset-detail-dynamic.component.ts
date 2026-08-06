@@ -200,6 +200,20 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     return this.tileRestrictedIconGroups.some((group) => userGroups.includes(group));
   }
 
+  /**
+   * Formats authorization groups for tooltip display as a comma-separated list.
+   * Shows group names as they are defined in configuration.
+   * 
+   * @param groups - Array of group names with access, or undefined
+   * @returns Comma-separated string of group names, or empty string
+   */
+  formatAuthorizedGroups(groups: string[] | undefined): string {
+    if (!groups || groups.length === 0) {
+      return '';
+    }
+    return groups.join(', ');
+  }
+
   onCopy(value: string) {
     navigator.clipboard.writeText(value).then(
       () => {
