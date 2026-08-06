@@ -174,7 +174,7 @@ export interface AppConfigInterface {
   defaultProposalsListSettings?: ListSettings;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
-  tileRestrictedIconVisibility?: boolean,
+  tileRestrictedIconVisibile?: boolean,
   tileRestrictedIconGroups?: string[],
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
@@ -340,9 +340,9 @@ export class AppConfigService {
       };
     }
 
-    config.tileRestrictedIconVisibility = (
-      !config.tileRestrictedIconVisibility
-      ? config.tileRestrictedIconVisibility
+    config.tileRestrictedIconVisibile = (
+      !config.tileRestrictedIconVisibile
+      ? config.tileRestrictedIconVisibile
       : false
     )
 

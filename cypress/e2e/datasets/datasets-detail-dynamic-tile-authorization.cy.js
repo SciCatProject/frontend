@@ -9,6 +9,7 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       order: 1,
       row: 1,
       col: 10,
+      visibile: true,
       authorization: ["admin"],
       fields: [
         { element: "text", source: "datasetName", order: 0 },
@@ -21,7 +22,6 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       order: 2,
       row: 1,
       col: 10,
-      authorization: ["#all"],
       fields: [
         { element: "text", source: "ownerEmail", order: 0 },
         { element: "tag", source: "keywords", order: 1 },
@@ -33,7 +33,21 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       order: 3,
       row: 1,
       col: 10,
+      visible: true,
       authorization: ["archivemanager"],
+      fields: [
+        { element: "text", source: "type", order: 0 },
+        { element: "date", source: "creationTime", order: 1 },
+      ],
+    },
+    {
+      type: "regular",
+      label: "Invisible Section",
+      order: 4,
+      row: 1,
+      col: 10,
+      visible: false,
+      authorization: [],
       fields: [
         { element: "text", source: "type", order: 0 },
         { element: "date", source: "creationTime", order: 1 },
@@ -42,17 +56,20 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
   ];
 
   const authTestConfigNoIndicator = {
+    tileRestrictedIconVisibile: false,
+    tileRestrictedIconGroups: [],
     datasetDetailComponent: {
       enableCustomizedComponent: true,
-      tileRestrictedIconVisibility: false,
       customization: baseCustomization,
     },
   };
 
   const authTestConfigWithIndicator = {
+    tileRestrictedIconVisibile: false,
+    tileRestrictedIconGroups: [],
     datasetDetailComponent: {
       enableCustomizedComponent: true,
-      tileRestrictedIconVisibility: true,
+      tileRestrictedIconVisibile: true,
       customization: baseCustomization,
     },
   };

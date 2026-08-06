@@ -54,7 +54,7 @@ The authorization system consists of:
 
 **How It Works:**
 
-The dataset detail component can optionally display a visual indicator (lock icon) on tiles that have restricted access. This feature is controlled by the `tileRestrictedIconVisibility` configuration flag.
+The dataset detail component can optionally display a visual indicator (lock icon) on tiles that have restricted access. This feature is controlled by the `tileRestrictedIconVisibile` configuration flag.
 
 - When **enabled** (`true`), a lock icon (`lock_outline`) appears in the header of any tile that has restricted access
 - When **disabled** (`false` or undefined), no lock icons are displayed
@@ -64,7 +64,7 @@ The dataset detail component can optionally display a visual indicator (lock ico
 **Runtime Property:**
 
 Each section in the filtered `datasetView$` observable now includes a computed `restrictedIconVisible` property. This property is dynamically calculated at runtime based on:
-- The `tileRestrictedIconVisibility` configuration flag
+- The `tileRestrictedIconVisibile` configuration flag
 - The `tileRestrictedIconGroups` configuration (which user groups can see the icon)
 - The section's `authorization` array
 - The current user's groups
@@ -74,7 +74,7 @@ The `restrictedIconVisible` property is **not** a configuration option; it is co
 **Configuration:**
 ```json
 {
-  "tileRestrictedIconVisibility": true,
+  "tileRestrictedIconVisibile": true,
   "tileRestrictedIconGroups": ["admin", "scientists"],
   "datasetDetailComponent": {
     "enableCustomizedComponent": true,
@@ -158,7 +158,7 @@ Configured on each customization item within the `customization` array:
 | `datasetDetailComponent.authorization` | string[] | No | `null` | Global authorization for all blocks in the component |
 | `datasetDetailComponent.customization[].authorization` | string[] | No | `[]` | Block-specific authorization (empty array means no restriction) |
 | `datasetDetailComponent.customization[].visible` | boolean | No | `true` | Controls whether the block is visible (use `false` to hide) |
-| `tileRestrictedIconVisibility` | boolean | No | `false` | Show lock icon on tiles with restricted access |
+| `tileRestrictedIconVisibile` | boolean | No | `false` | Show lock icon on tiles with restricted access |
 | `tileRestrictedIconGroups` | string[] | No | `[]` | User groups that can see the restricted icon (empty array means all users) |
 
 ### Configuration Locations
@@ -199,7 +199,7 @@ export interface DatasetDetailComponentConfig {
 }
 
 export interface AppConfig {
-  tileRestrictedIconVisibility?: boolean;  // Show lock icon on restricted tiles
+  tileRestrictedIconVisibile?: boolean;  // Show lock icon on restricted tiles
   tileRestrictedIconGroups?: string[];  // User groups that can see the restricted icon
   datasetDetailComponent?: DatasetDetailComponentConfig;
 }
@@ -226,7 +226,7 @@ export interface CustomizationItem {
 
 The admin UI provides form controls through JSONForms:
 - **Enable Customized Component**: Toggle switch for `enableCustomizedComponent`
-- **Show Restricted Tiles Indicator**: Toggle switch for `tileRestrictedIconVisibility` (root-level config)
+- **Show Restricted Tiles Indicator**: Toggle switch for `tileRestrictedIconVisibile` (root-level config)
 - **Authorization**: Array of strings input for global block authorization
 - **Customization**: List with detail view for configuring individual blocks
 
@@ -305,7 +305,7 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
 #### Schema Section (datasetDetailComponent)
 
 ```json
-"tileRestrictedIconVisibility": {
+"tileRestrictedIconVisibile": {
   "type": "boolean",
   "title": "Show Restricted Tiles Indicator",
   "description": "Display a lock icon on tiles with restricted access"
@@ -817,10 +817,10 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ### Q: How do I show a lock icon on restricted tiles?
 
-**A**: Enable the `tileRestrictedIconVisibility` configuration flag at the root level:
+**A**: Enable the `tileRestrictedIconVisibile` configuration flag at the root level:
 ```json
 {
-  "tileRestrictedIconVisibility": true,
+  "tileRestrictedIconVisibile": true,
   "datasetDetailComponent": {
     "enableCustomizedComponent": true,
     "customization": [...]
