@@ -432,8 +432,8 @@ describe("AppConfigService", () => {
         htmlContent:
           "This is the mockConfigResponses config.override.json about",
       },
- 	    tileRestrictedIconVisibile: false,
-	    tileRestrictedIconGroups: ["admin"],
+      tileRestrictedIconVisibile: false,
+      tileRestrictedIconGroups: ["admin"],
     };
 
     const mockHttpGet = (
