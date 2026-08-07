@@ -99,11 +99,9 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
   ) {
     this.tileRestrictedIconVisibile =
-      this.appConfig.tileRestrictedIconVisibile ??
-      false;
+      this.appConfig.tileRestrictedIconVisibile ?? false;
     this.tileRestrictedIconGroups =
-      this.appConfig.tileRestrictedIconGroups ??
-      [];
+      this.appConfig.tileRestrictedIconGroups ?? [];
   }
 
   ngOnInit() {
@@ -115,12 +113,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       .sort((a, b) => a.order - b.order)
       .map((section) => ({
         ...section,
-        authorization: section.authorization
-          ? [...section.authorization]
-          : [],
-        visible: section.visible
-          ? section.visible
-          : true,
+        authorization: section.authorization ? [...section.authorization] : [],
+        visible: section.visible ? section.visible : true,
         fields:
           section.fields && Array.isArray(section.fields)
             ? [...section.fields].sort((a, b) => a.order - b.order)
@@ -165,12 +159,9 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
    * @param userGroups - Array of groups the current user belongs to
    * @returns true if user can view the block
    */
-  showTile(
-    section: CustomizationItem,
-    userGroups: string[],
-  ): boolean {
+  showTile(section: CustomizationItem, userGroups: string[]): boolean {
     if (!section.visible) {
-      return false
+      return false;
     }
 
     if (!section.authorization || section.authorization.length === 0) {
@@ -185,9 +176,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
    * @param section - The customization item/section to check
    * @returns true if the section is restricted and the feature is enabled
    */
-  showRestrictedIcon(
-    userGroups: string[],
-  ): boolean {
+  showRestrictedIcon(userGroups: string[]): boolean {
     if (!this.tileRestrictedIconVisibile) {
       // the icon is disabled by configuration
       return false;
@@ -197,21 +186,23 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       return true;
     }
     // check if any of the user groups is listed in the group who can see the icon
-    return this.tileRestrictedIconGroups.some((group) => userGroups.includes(group));
+    return this.tileRestrictedIconGroups.some((group) =>
+      userGroups.includes(group),
+    );
   }
 
   /**
    * Formats authorization groups for tooltip display as a comma-separated list.
    * Shows group names as they are defined in configuration.
-   * 
+   *
    * @param groups - Array of group names with access, or undefined
    * @returns Comma-separated string of group names, or empty string
    */
   formatAuthorizedGroups(groups: string[] | undefined): string {
     if (!groups || groups.length === 0) {
-      return '';
+      return "";
     }
-    return groups.join(', ');
+    return groups.join(", ");
   }
 
   onCopy(value: string) {
