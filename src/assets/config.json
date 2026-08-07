@@ -729,6 +729,8 @@
   },
   "dateFormat": "yyyy-MM-dd HH:mm",
   "timezone": "UTC",
+  "tileRestrictedIconVisibile": false,
+  "tileRestrictedIconGroups": ["admin"],
   "datasetDetailComponent": {
     "enableCustomizedComponent": false,
     "customization": [

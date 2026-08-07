@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
-import { Store } from "@ngrx/store";
-import { Subscription } from "rxjs";
+import { createSelector, Store } from "@ngrx/store";
+import { Subscription, Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 import { showMessageAction } from "state-management/actions/user.actions";
 import {
@@ -10,7 +11,10 @@ import {
   selectCurrentDataset,
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
-import { selectIsLoading } from "state-management/selectors/user.selectors";
+import {
+  selectIsLoading,
+  selectProfile,
+} from "state-management/selectors/user.selectors";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 
 import { AppConfigService } from "app-config.service";
@@ -35,6 +39,12 @@ import {
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
+// profile.selectors.ts
+export const selectProfileAccessGroups = createSelector(
+  selectProfile,
+  (profile) => profile?.accessGroups || [],
+);
+
 /**
  * Component to show customizable details for a dataset, using the
  * form component
@@ -50,7 +60,7 @@ import {
 export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  datasetView: CustomizationItem[];
+  datasetView$: Observable<CustomizationItem[]>;
   form: FormGroup;
   cols = 10;
   gutterSize = 12;
@@ -58,12 +68,16 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
 
   localization = "dataset";
+  tileRestrictedIconVisibile: boolean;
+  tileRestrictedIconGroups: string[];
 
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);
   show = false;
+
+  userGroups$ = this.store.select(selectProfileAccessGroups);
 
   instrument: Instrument | undefined;
   dataset: OutputDatasetObsoleteDto | undefined;
@@ -83,21 +97,40 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-  ) {}
+  ) {
+    this.tileRestrictedIconVisibile =
+      this.appConfig.tileRestrictedIconVisibile ?? false;
+    this.tileRestrictedIconGroups =
+      this.appConfig.tileRestrictedIconGroups ?? [];
+  }
 
   ngOnInit() {
     this.form = this.fb.group({});
 
     const sortedDatasetView = (
       this.appConfig.datasetDetailComponent?.customization || []
-    ).sort((a, b) => a.order - b.order);
-    sortedDatasetView.forEach((section) => {
-      if (section.fields && Array.isArray(section.fields)) {
-        section.fields.sort((a, b) => a.order - b.order);
-      }
-    });
+    )
+      .sort((a, b) => a.order - b.order)
+      .map((section) => ({
+        ...section,
+        authorization: section.authorization ? [...section.authorization] : [],
+        visible: section.visible ? section.visible : true,
+        fields:
+          section.fields && Array.isArray(section.fields)
+            ? [...section.fields].sort((a, b) => a.order - b.order)
+            : section.fields,
+      }));
 
-    this.datasetView = sortedDatasetView;
+    this.datasetView$ = this.userGroups$.pipe(
+      map((userGroups) =>
+        sortedDatasetView
+          .filter((section) => this.showTile(section, userGroups))
+          .map((section) => ({
+            ...section,
+            restrictedIconVisible: this.showRestrictedIcon(userGroups),
+          })),
+      ),
+    );
 
     this.subscriptions.push(
       this.store.select(selectCurrentInstrument).subscribe((instrument) => {
@@ -118,6 +151,58 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         this.dataset = dataset;
       }),
     );
+  }
+
+  /**
+   * Checks if the current user can view a block based on authorization
+   * @param blockAuthorization - Optional array of group names from block.authorization
+   * @param userGroups - Array of groups the current user belongs to
+   * @returns true if user can view the block
+   */
+  showTile(section: CustomizationItem, userGroups: string[]): boolean {
+    if (!section.visible) {
+      return false;
+    }
+
+    if (!section.authorization || section.authorization.length === 0) {
+      return true;
+    }
+
+    return section.authorization.some((group) => userGroups.includes(group));
+  }
+
+  /**
+   * Checks if a section has restricted access and should show the lock icon
+   * @param section - The customization item/section to check
+   * @returns true if the section is restricted and the feature is enabled
+   */
+  showRestrictedIcon(userGroups: string[]): boolean {
+    if (!this.tileRestrictedIconVisibile) {
+      // the icon is disabled by configuration
+      return false;
+    }
+    if (this.tileRestrictedIconGroups.length == 0) {
+      // the icon is visible to everybody
+      return true;
+    }
+    // check if any of the user groups is listed in the group who can see the icon
+    return this.tileRestrictedIconGroups.some((group) =>
+      userGroups.includes(group),
+    );
+  }
+
+  /**
+   * Formats authorization groups for tooltip display as a comma-separated list.
+   * Shows group names as they are defined in configuration.
+   *
+   * @param groups - Array of group names with access, or undefined
+   * @returns Comma-separated string of group names, or empty string
+   */
+  formatAuthorizedGroups(groups: string[] | undefined): string {
+    if (!groups || groups.length === 0) {
+      return "";
+    }
+    return groups.join(", ");
   }
 
   onCopy(value: string) {

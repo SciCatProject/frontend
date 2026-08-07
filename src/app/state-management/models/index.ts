@@ -85,6 +85,9 @@ export interface CustomizationItem {
   source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
+  authorization?: string[];
+  visible?: boolean;
+  restrictedIconVisible?: boolean;
 }
 
 export interface Field {

@@ -28,7 +28,7 @@
     *ngIf="dataset$ | async as dataset"
   >
     <!-- Iterate over each section in datasetView -->
-    <ng-container *ngFor="let section of datasetView">
+    <ng-container *ngFor="let section of datasetView$ | async">
       <ng-container [ngSwitch]="section.type">
         <!-- Regular Section -->
         <div
@@ -40,13 +40,19 @@
           <mat-card>
             <!-- Section Header -->
             <mat-card-header
-              class="dynamic-template-general-header sticky-header"
+              class="dynamic-template-tile-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
                 <mat-icon>description</mat-icon>
               </div>
-              {{ section.label | translate: localization }}
+              <span>{{ section.label | translate: localization }}</span>
+              <span
+                *ngIf="section.restrictedIconVisible"
+                class="restricted-indicator"
+              >
+                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+              </span>
             </mat-card-header>
             <!-- Section Content -->
             <mat-card-content>
@@ -160,13 +166,19 @@
           <ng-container *ngIf="emptyMetadataTable()">
             <mat-card>
               <mat-card-header
-                class="scientific-header sticky-header"
+                class="dynamic-template-tile-header sticky-header"
                 data-cy="section-label"
               >
                 <div mat-card-avatar class="section-icon">
                   <mat-icon>science</mat-icon>
                 </div>
                 <span>{{ section.label | translate: localization }}</span>
+                <span
+                  *ngIf="section.restrictedIconVisible"
+                  class="restricted-indicator"
+                >
+                  <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+                </span>
               </mat-card-header>
               <mat-card-content class="scientific-metadata-content">
                 <ng-container *ngIf="appConfig.tableSciDataEnabled">
@@ -218,13 +230,19 @@
         >
           <mat-card>
             <mat-card-header
-              class="dynamic-template-attachments-header sticky-header"
+              class="dynamic-template-tile-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
                 <mat-icon>photo_library</mat-icon>
               </div>
-              {{ section.label | translate: localization }}
+              <span>{{ section.label | translate: localization }}</span>
+              <span
+                *ngIf="section.restrictedIconVisible"
+                class="restricted-indicator"
+              >
+                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+              </span>
             </mat-card-header>
             <mat-card-content>
               <ng-container *ngIf="attachments$ | async as attachments">
@@ -285,13 +303,19 @@
         >
           <mat-card>
             <mat-card-header
-              class="dynamic-template-json-view-header sticky-header"
+              class="dynamic-template-tile-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
                 <mat-icon>data_object</mat-icon>
               </div>
-              {{ section.label | translate: localization }}
+              <span>{{ section.label | translate: localization }}</span>
+              <span
+                *ngIf="section.restrictedIconVisible"
+                class="restricted-indicator"
+              >
+                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+              </span>
             </mat-card-header>
             <mat-card-content>
               <ng-container *ngIf="appConfig.jsonMetadataEnabled">
