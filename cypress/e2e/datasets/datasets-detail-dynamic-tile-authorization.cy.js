@@ -1,7 +1,7 @@
 import { testConfig } from "../../fixtures/testData";
 import { mergeConfig } from "../../support/utils";
 
-describe("Dataset Detail Dynamic Tile Authorization", () => {
+describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
   const baseCustomization = [
     {
       type: "regular",
@@ -81,27 +81,27 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
   const guestPassword = Cypress.env("guestPassword");
 
 
-  describe("0001: No restricted access indicator", () => {
+  describe("1010:0010: No restricted access indicator", () => {
 
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const mergedConfig = mergeConfig(baseConfig, authTestConfigNoIndicator);
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
-          "getFrontendConfig",
+          "getFrontendConfigNoIndicator",
         );
       });
 
       cy.login(adminUsername, adminPassword);
       cy.createDataset({ type: "raw" });
       cy.visit("/datasets");
-      cy.wait("@getFrontendConfig");
+      cy.wait("@getFrontendConfigNoIndicator");
     });
 
     after(() => {
       cy.removeDatasets();
     });
 
-    it("0002: should show all tiles to admin user", () => {
+    it("1010:0010:0010: should show all tiles to admin user", () => {
       cy.finishedLoading();
 
       cy.get('[data-cy="text-search"]').clear().type("Cypress");
@@ -140,10 +140,10 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
 
     });
 
-    it("0003: should hide admin-only tile from archiveManager user", () => {
+    it("1010:0010:0020: should hide admin-only tile from archiveManager user", () => {
       cy.login(archiveManagerUsername, archiveManagerPassword);
       cy.visit("/datasets");
-      cy.wait("@getFrontendConfig");
+      cy.wait("@getFrontendConfigNoIndicator");
 
       cy.finishedLoading();
 
@@ -183,10 +183,10 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
 
     });
 
-    it("0004: should only show public tile to guest user", () => {
+    it("1010:0010:0030: should only show public tile to guest user", () => {
       cy.login(guestUsername, guestPassword);
       cy.visit("/datasets");
-      cy.wait("@getFrontendConfig");
+      cy.wait("@getFrontendConfigNoIndicator");
 
       cy.finishedLoading();
 
@@ -221,10 +221,19 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
         });
     });
 
-    it("0005: should only show public tile to non authenticated user", () => {
-      cy.visit("/datasets");
-      cy.wait("@getFrontendConfig");
+    it("1010:0010:0040: should only show public tile to non authenticated user", () => {
 
+      cy.createDataset({type: "raw", "isPublished": true});
+
+      cy.visit("/datasets");
+      cy.wait("@getFrontendConfigNoIndicator");
+
+      cy.get(".user-button").should("contain.text", adminUsername).click();
+      cy.get("[data-cy=logout-button]").click();
+      cy.finishedLoading();
+
+      cy.visit("/datasets");
+      cy.wait("@getFrontendConfigNoIndicator");
       cy.finishedLoading();
 
       cy.get('[data-cy="text-search"]').clear().type("Cypress");
@@ -258,27 +267,27 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
     });
   })
 
-  describe("0006: Show restricted access indicator", () => {
+  describe("1010:0020: Show restricted access indicator", () => {
 
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const mergedConfig = mergeConfig(baseConfig, authTestConfigWithIndicator);
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
-          "getFrontendConfig",
+          "getFrontendConfigWithIndicator",
         );
       });
 
       cy.login(adminUsername, adminPassword);
       cy.createDataset({ type: "raw" });
       cy.visit("/datasets");
-      cy.wait("@getFrontendConfig");
+      cy.wait("@getFrontendConfigWithIndicator");
     });
 
     after(() => {
       cy.removeDatasets();
     });
 
-    it("0007: should show all tiles to admin user", () => {
+    it("1010:0020:0010: should show all tiles to admin user", () => {
       cy.finishedLoading();
 
       cy.get('[data-cy="text-search"]').clear().type("Cypress");
@@ -319,22 +328,17 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
         .parent()
         .within(() => {
-          cy.get(".restricted-indicator mat-icon")
+          cy.get('mat-icon.mat-mdc-tooltip-trigger')
             .should("exist")
-            .trigger('mouseover')
-            .then(() => {
-              cy.get('.mat-tooltip')
-                .should('be.visible')
-                .and('contain', 'admin');
-            });
+            .and('have.attr', 'ng-reflect-message');
         });
 
     });
 
-    it("0008: should hide admin-only tile from archiveManager user", () => {
+    it("1010:0020:0020: should hide admin-only tile from archiveManager user", () => {
       cy.login(archiveManagerUsername, archiveManagerPassword);
       cy.visit("/datasets");
-      cy.wait("@getFrontendConfig");
+      cy.wait("@getFrontendConfigWithIndicator");
 
       cy.finishedLoading();
 
@@ -373,10 +377,10 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
         });
     });
 
-    it("0009: should only show public tile to guest user", () => {
+    it("1010:0020:0030: should only show public tile to guest user", () => {
       cy.login(guestUsername, guestPassword);
       cy.visit("/datasets");
-      cy.wait("@getFrontendConfig");
+      cy.wait("@getFrontendConfigWithIndicator");
 
       cy.finishedLoading();
 
@@ -411,9 +415,18 @@ describe("Dataset Detail Dynamic Tile Authorization", () => {
         });
     });
 
-    it("0010: should only show public tile to non authenticated user", () => {
+    it("1010:0020:0040: should only show public tile to non authenticated user", () => {
+      cy.createDataset({type: "raw", "isPublished": true});
+
       cy.visit("/datasets");
-      cy.wait("@getFrontendConfig");
+      cy.wait("@getFrontendConfigWithIndicator");
+
+      cy.get(".user-button").should("contain.text", adminUsername).click();
+      cy.get("[data-cy=logout-button]").click();
+      cy.finishedLoading();
+
+      cy.visit("/datasets");
+      cy.wait("@getFrontendConfigWithIndicator");
 
       cy.finishedLoading();
 

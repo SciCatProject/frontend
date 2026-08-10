@@ -12,6 +12,7 @@ import {
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
 import {
+  selectCurrentUser,
   selectIsLoading,
   selectProfile,
 } from "state-management/selectors/user.selectors";
@@ -31,7 +32,7 @@ import {
 import { AttachmentService } from "shared/services/attachment.service";
 import { DatePipe } from "@angular/common";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
-import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
+import { Instrument, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
@@ -79,6 +80,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   userGroups$ = this.store.select(selectProfileAccessGroups);
 
+  user: ReturnedUserDto | undefined;
+
   instrument: Instrument | undefined;
   dataset: OutputDatasetObsoleteDto | undefined;
 
@@ -107,6 +110,14 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = this.fb.group({});
 
+    this.subscriptions.push(
+      this.store.select(selectCurrentUser).subscribe((user) => {
+        if (user) {
+          this.user = user;
+        }
+      }),
+    );
+
     const sortedDatasetView = (
       this.appConfig.datasetDetailComponent?.customization || []
     )
@@ -114,7 +125,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       .map((section) => ({
         ...section,
         authorization: section.authorization ? [...section.authorization] : [],
-        visible: section.visible ? section.visible : true,
+        visible: section.visible ?? true,
         fields:
           section.fields && Array.isArray(section.fields)
             ? [...section.fields].sort((a, b) => a.order - b.order)
@@ -127,7 +138,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
           .filter((section) => this.showTile(section, userGroups))
           .map((section) => ({
             ...section,
-            restrictedIconVisible: this.showRestrictedIcon(userGroups),
+            restrictedIconVisible: this.showRestrictedIcon(section, userGroups),
           })),
       ),
     );
@@ -168,6 +179,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       return true;
     }
 
+    if (!this.user) {
+      return false;
+    }
+
     return section.authorization.some((group) => userGroups.includes(group));
   }
 
@@ -176,9 +191,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
    * @param section - The customization item/section to check
    * @returns true if the section is restricted and the feature is enabled
    */
-  showRestrictedIcon(userGroups: string[]): boolean {
+  showRestrictedIcon(section: CustomizationItem, userGroups: string[]): boolean {
     if (!this.tileRestrictedIconVisibile) {
       // the icon is disabled by configuration
+      return false;
+    }
+    if (!section.authorization || section.authorization.length === 0) {
       return false;
     }
     if (this.tileRestrictedIconGroups.length == 0) {
