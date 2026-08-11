@@ -50,6 +50,7 @@ import { of } from "rxjs";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import {
   selectIsAdmin,
+  selectIsLoggedIn,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import {
@@ -1288,6 +1289,57 @@ describe("1000: ConfigurableActionComponent", () => {
 
     createComponent(adminConfig, mockActionItemsDatafilesNofiles);
     expect(component.disabled).toBeFalse();
+  });
+
+  it("1235: !#userIsLoggedIn token should hide action when user is not logged in", () => {
+    store.overrideSelector(selectProfile, undefined);
+    store.overrideSelector(selectIsAdmin, false);
+    store.overrideSelector(selectIsLoggedIn, false);
+    store.refreshState();
+
+    const loginConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "login-hidden-test",
+      hidden: "!#userIsLoggedIn",
+      variables: {},
+    };
+
+    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
+    expect(component.visible).toBeFalse();
+  });
+
+  it("1236: !#userIsLoggedIn token should show action when user is logged in", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[0]);
+    store.overrideSelector(selectIsAdmin, false);
+    store.overrideSelector(selectIsLoggedIn, true);
+    store.refreshState();
+
+    const loginConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "login-visible-test",
+      hidden: "!#userIsLoggedIn",
+      variables: {},
+    };
+
+    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
+    expect(component.visible).toBeTrue();
+  });
+
+  it("1237: #userIsLoggedIn token should hide action when user is logged in", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[0]);
+    store.overrideSelector(selectIsAdmin, false);
+    store.overrideSelector(selectIsLoggedIn, true);
+    store.refreshState();
+
+    const loginConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "login-not-visible-test",
+      hidden: "#userIsLoggedIn",
+      variables: {},
+    };
+
+    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
+    expect(component.visible).toBeFalse();
   });
 
   it("1240: #publishedDataOwner token should enable action for creator", () => {
