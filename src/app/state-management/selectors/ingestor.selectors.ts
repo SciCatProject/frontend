@@ -49,6 +49,16 @@ export const selectIngestorExtractionMethods = createSelector(
   (state) => state.ingestorExtractionMethods,
 );
 
+export const selectIngestorConfiguration = createSelector(
+  selectIngestorState,
+  (state) => state.ingestorConfiguration,
+);
+
+export const selectIngestorCreationLocation = createSelector(
+  selectIngestorState,
+  (state) => state.ingestorConfiguration?.creationLocations ?? null,
+);
+
 export const selectIngestorBrowserActiveNode = createSelector(
   selectIngestorState,
   (state) => state.ingestorBrowserActiveNode,

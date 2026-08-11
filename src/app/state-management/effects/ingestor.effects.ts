@@ -157,6 +157,28 @@ export class IngestorEffects {
     );
   });
 
+  getConfiguration$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.getConfiguration),
+      switchMap(() =>
+        this.ingestor.getConfiguration().pipe(
+          map((configuration) =>
+            fromActions.getConfigurationSuccess({ configuration }),
+          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err }),
+              );
+            }
+
+            return of(fromActions.getConfigurationFailure({ err }));
+          }),
+        ),
+      ),
+    );
+  });
+
   getExtractionMethods$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.getExtractionMethods),

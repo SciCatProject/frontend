@@ -7,6 +7,27 @@ import {
 } from "shared/MockStubs";
 
 describe("IngestorReducer", () => {
+  describe("getConfigurationSuccess", () => {
+    it("should store configuration and set found to true", () => {
+      const action = fromActions.getConfigurationSuccess({
+        configuration: { creationLocations: ["PSI"] },
+      });
+      const result = ingestorReducer(undefined, action);
+  
+      expect(result.ingestorConfiguration).toEqual({ creationLocations: ["PSI"] });
+    });
+  });
+  
+  describe("getConfigurationFailure", () => {
+    it("should set error in state", () => {
+      const error = new Error("network error");
+      const action = fromActions.getConfigurationFailure({ err: error });
+      const result = ingestorReducer(undefined, action);
+  
+      expect(result.error).toBe(JSON.stringify(error));
+    });
+  });
+  
   describe("undefined action", () => {
     it("should return the default state", () => {
       const action = { type: "NOOP" } as any;

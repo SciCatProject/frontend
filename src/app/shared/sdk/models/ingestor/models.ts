@@ -15,3 +15,4 @@ export * from './postDatasetRequest';
 export * from './postDatasetResponse';
 export * from './transferItem';
 export * from './userInfo';
+export * from './configurationResponse';
