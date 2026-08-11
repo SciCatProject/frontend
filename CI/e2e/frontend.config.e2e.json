@@ -730,9 +730,101 @@
   },
   "dateFormat": "yyyy-MM-dd HH:mm",
   "timezone": "UTC",
+  "tileRestrictedIconVisibile": true,
+  "tileRestrictedIconGroups": [
+    "admin"
+  ],
   "datasetDetailComponent": {
     "enableCustomizedComponent": false,
     "customization": [
+      {
+        "type": "regular",
+        "label": "Admin Only Section",
+        "order": 1,
+        "row": 1,
+        "col": 10,
+        "visible": true,
+        "authorization": [
+          "admin"
+        ],
+        "fields": [
+          {
+            "element": "text",
+            "source": "datasetName",
+            "order": 0
+          },
+          {
+            "element": "copy",
+            "source": "description",
+            "order": 1
+          }
+        ]
+      },
+      {
+        "type": "regular",
+        "label": "Public Section",
+        "order": 2,
+        "row": 1,
+        "col": 10,
+        "visible": true,
+        "authorization": [],
+        "fields": [
+          {
+            "element": "text",
+            "source": "ownerEmail",
+            "order": 0
+          },
+          {
+            "element": "tag",
+            "source": "keywords",
+            "order": 1
+          }
+        ]
+      },
+      {
+        "type": "regular",
+        "label": "Archive Manager Section",
+        "order": 3,
+        "row": 1,
+        "col": 10,
+        "visible": true,
+        "authorization": [
+          "archivemanager"
+        ],
+        "fields": [
+          {
+            "element": "text",
+            "source": "type",
+            "order": 0
+          },
+          {
+            "element": "date",
+            "source": "creationTime",
+            "order": 1
+          }
+        ]
+      },
+      {
+        "type": "regular",
+        "label": "Invisible Section",
+        "order": 4,
+        "row": 1,
+        "col": 10,
+        "visible": false,
+        "authorization": [],
+        "fields": [
+          {
+            "element": "text",
+            "source": "type",
+            "order": 0
+          },
+          {
+            "element": "date",
+            "source": "creationTime",
+            "order": 1
+          }
+        ]
+      },
       {
         "type": "regular",
         "label": "General Information",
