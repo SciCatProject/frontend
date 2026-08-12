@@ -91,6 +91,17 @@ export interface AboutSettings {
   htmlContent?: string;
 }
 
+export interface DatasetStatusBannerMessageConfig {
+  message?: string;
+  code?: "INFO" | "WARN";
+}
+
+export interface DatasetStatusBannerConfig {
+  enabled?: boolean;
+  markedForDeletion?: DatasetStatusBannerMessageConfig;
+  deleted?: DatasetStatusBannerMessageConfig;
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   addScientificMetadataKeysAsColumn?: boolean;
@@ -183,6 +194,7 @@ export interface AppConfigInterface {
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
   hideEmptyMetadataTable?: boolean;
+  datasetStatusBanner?: DatasetStatusBannerConfig;
   ingestorComponent?: IngestorComponentConfig;
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
