@@ -18,8 +18,6 @@ describe("Datasets relationships tab", () => {
     ],
   };
 
-  // /admin/config must be stubbed in every test (even if the default response from backend is needed)
-  // Otherwise tests that need a stubbed response might fail, if /admin/config is found in browser cache 
   const stubFrontendConfig = (overrides = {}) =>
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
       cy.intercept(
@@ -30,6 +28,10 @@ describe("Datasets relationships tab", () => {
     });
 
   beforeEach(() => {
+    // /admin/config must be stubbed in every test (even if the default response from backend is needed)
+    // Otherwise tests that need a stubbed response might fail, if /admin/config is found in browser cache
+    stubFrontendConfig();
+
     cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.createDataset(relationships);
   });
@@ -39,8 +41,6 @@ describe("Datasets relationships tab", () => {
   });
 
   it("displays relationships table with correct values", () => {
-    stubFrontendConfig();
-
     cy.visit("/datasets");
     cy.wait("@getFrontendConfig");
     cy.get(".dataset-table mat-row").contains("Cypress Dataset").click();
@@ -49,11 +49,13 @@ describe("Datasets relationships tab", () => {
       .click();
     relationships.relationships.forEach((r, i) => {
       const vals = [
-        r.identifierType == "URL" && r.externalId ? r.externalId : r.identifier,
+        r.identifierType === "URL" && r.externalId
+          ? r.externalId
+          : r.identifier,
         r.entityType,
         r.identifierType,
       ];
-      Object.values(vals).forEach((v) => cy.get("mat-row").eq(i).contains(v));
+      vals.forEach((v) => cy.get("mat-row").eq(i).contains(v));
     });
   });
 
