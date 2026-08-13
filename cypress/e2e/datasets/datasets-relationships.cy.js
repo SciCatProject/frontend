@@ -48,10 +48,13 @@ describe("Datasets relationships tab", () => {
       const mergedConfig = mergeConfig(baseConfig, {
         datasetRelationshipsEnabled: false,
       });
-      cy.intercept("GET", "**/admin/config", mergedConfig);
+      cy.intercept("GET", "**/admin/config", mergedConfig).as(
+        "getFrontendConfig",
+      );
     });
 
     cy.visit("/datasets");
+    cy.wait("@getFrontendConfig");
     cy.get(".dataset-table mat-row").contains("Cypress Dataset").click();
     cy.get("[data-cy=dataset-dashboard-tabs]").should(
       "not.contain",
