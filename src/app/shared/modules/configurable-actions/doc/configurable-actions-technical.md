@@ -165,6 +165,9 @@ Below are supported configuration properties, their types, and descriptions.
 - `#DatasetsField[fieldName]`: Array; `fieldName` in all datasets
 - `#Instruments[n]Field[fieldName]`: Arbitrary field `fieldName` from instrument[n]
 - `#date_format(value, format)`: Formatted date string using format template
+- `#DatasetsPidEmptyFilesMap`: JSON string with all dataset PIDs and empty files arrays
+- `#DatasetsTotalSize`: Sum of `size` across all datasets
+- `#DatasetsTotalPackedSize`: Sum of `packedSize` across all datasets
 
 **Other runtime keywords:**
 - `#token`, `#tokenBearer`, `#jwt`, `#uuid`: Various tokens and a random UUID.

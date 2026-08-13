@@ -15,27 +15,14 @@
 </div>
 
 <div class="action-container" [class.hidden]="loading$ | async">
-  <button
-    mat-button
-    [disabled]="isEmptySelection()"
-    *ngIf="currentArchViewMode === viewModes.archivable"
-    class="archive-action-btn"
-    (click)="archiveClickHandle()"
-    color="primary"
+  <configurable-actions
+    *ngIf="appConfig.batchActionsEnabled"
+    [actionsConfig]="batchActionsConfig"
+    [actionItems]="actionItems"
+    [buttonsStyle]="actionButtonsStyle"
+    (actionFinished)="onActionFinished($event)"
   >
-    <mat-icon> archive </mat-icon> Archive
-  </button>
-
-  <button
-    mat-button
-    [disabled]="isEmptySelection()"
-    *ngIf="currentArchViewMode === viewModes.retrievable"
-    class="retrieve-action-btn"
-    (click)="retrieveClickHandle()"
-    color="primary"
-  >
-    <mat-icon> cloud_upload </mat-icon> Retrieve
-  </button>
+  </configurable-actions>
 
   <button
     id="addToBatchButton"
