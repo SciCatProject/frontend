@@ -18,6 +18,17 @@ describe("Datasets relationships tab", () => {
     ],
   };
 
+  // /admin/config must be stubbed in every test (even if the default response from backend is needed)
+  // Otherwise tests that need a stubbed response might fail, if /admin/config is found in browser cache 
+  const stubFrontendConfig = (overrides = {}) =>
+    cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+      cy.intercept(
+        "GET",
+        "**/admin/config",
+        mergeConfig(baseConfig, overrides),
+      ).as("getFrontendConfig");
+    });
+
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.createDataset(relationships);
@@ -28,7 +39,10 @@ describe("Datasets relationships tab", () => {
   });
 
   it("displays relationships table with correct values", () => {
+    stubFrontendConfig();
+
     cy.visit("/datasets");
+    cy.wait("@getFrontendConfig");
     cy.get(".dataset-table mat-row").contains("Cypress Dataset").click();
     cy.get("[data-cy=dataset-dashboard-tabs]")
       .contains("Relationships")
@@ -44,14 +58,7 @@ describe("Datasets relationships tab", () => {
   });
 
   it("does not display relationships tab when disabled by config", () => {
-    cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-      const mergedConfig = mergeConfig(baseConfig, {
-        datasetRelationshipsEnabled: false,
-      });
-      cy.intercept("GET", "**/admin/config", mergedConfig).as(
-        "getFrontendConfig",
-      );
-    });
+    stubFrontendConfig({ datasetRelationshipsEnabled: false });
 
     cy.visit("/datasets");
     cy.wait("@getFrontendConfig");
