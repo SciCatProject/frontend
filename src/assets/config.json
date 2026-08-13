@@ -82,14 +82,20 @@
   "hideEmptyMetadataTable": false,
   "datasetStatusBanner": {
     "enabled": true,
-    "markedForDeletion": {
-      "message": "This dataset is marked for deletion.",
-      "code": "WARN"
-    },
-    "deleted": {
-      "message": "This dataset has been deleted.",
-      "code": "WARN"
-    }
+    "rules": [
+      {
+        "field": "datasetlifecycle.archiveStatusMessage",
+        "value": "deleted",
+        "message": "This dataset has been deleted.",
+        "code": "WARN"
+      },
+      {
+        "field": "datasetlifecycle.archiveStatusMessage",
+        "value": "markedForDeletion",
+        "message": "This dataset is marked for deletion.",
+        "code": "WARN"
+      }
+    ]
   },
   "datafilesActionsEnabled": true,
   "datafilesActions": [
