@@ -1,5 +1,9 @@
-import { Component, Input } from "@angular/core";
-import { AppConfigService } from "app-config.service";
+import { Component, Input, OnChanges } from "@angular/core";
+import { get } from "lodash-es";
+import {
+  AppConfigService,
+  DatasetStatusBannerConfig,
+} from "app-config.service";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface DatasetStatusBannerContent {
@@ -20,19 +24,21 @@ export interface DatasetStatusBannerContent {
   styleUrls: ["./dataset-status-banner.component.scss"],
   standalone: false,
 })
-export class DatasetStatusBannerComponent {
+export class DatasetStatusBannerComponent implements OnChanges {
+  private readonly config: DatasetStatusBannerConfig | undefined;
   @Input() datasetItem: OutputDatasetObsoleteDto | undefined;
 
-  constructor(private appConfigService: AppConfigService) {}
+  banner: DatasetStatusBannerContent | undefined;
 
-  get banner(): DatasetStatusBannerContent | undefined {
-    const config = this.appConfigService.getConfig().datasetStatusBanner;
-    if (!config?.enabled || !this.datasetItem) {
-      return undefined;
-    }
+  constructor(private appConfigService: AppConfigService) {
+    this.config = this.appConfigService.getConfig().datasetStatusBanner;
+  }
 
-    const rule = (config.rules || []).find(
-      (candidate) => this.getFieldValue(candidate.field) === candidate.value,
+  private resolveBanner(): DatasetStatusBannerContent | undefined {
+    if (!this.config?.enabled || !this.datasetItem) return undefined;
+
+    const rule = (this.config.rules || []).find(
+      (candidate) => get(this.datasetItem, candidate.field) === candidate.value,
     );
 
     if (!rule) {
@@ -42,19 +48,7 @@ export class DatasetStatusBannerComponent {
     return { message: rule.message, code: rule.code || "WARN" };
   }
 
-  private getFieldValue(path: string): unknown {
-    if (!path) {
-      return undefined;
-    }
-
-    return path
-      .split(".")
-      .reduce<unknown>(
-        (value, key) =>
-          value && typeof value === "object"
-            ? (value as Record<string, unknown>)[key]
-            : undefined,
-        this.datasetItem,
-      );
+  ngOnChanges(): void {
+    this.banner = this.resolveBanner();
   }
 }

@@ -46,6 +46,7 @@ describe("DatasetStatusBannerComponent", () => {
     fixture = TestBed.createComponent(DatasetStatusBannerComponent);
     component = fixture.componentInstance;
     component.datasetItem = dataset as OutputDatasetObsoleteDto;
+    component.ngOnChanges();
     fixture.detectChanges();
   }
 

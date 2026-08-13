@@ -26,7 +26,8 @@ The banner is controlled by the **datasetStatusBanner** property in the frontend
     Enables or disables the feature. If omitted or `false`, no banner is ever shown.
   - **rules**  
     _Type: array of DatasetStatusBannerRule_  
-    The list of rules used to determine whether a banner is shown, and with which message/severity. Rules are evaluated in order and the **first matching rule wins**.
+    _Optional_  
+    The list of rules used to determine whether a banner is shown, and with which message/severity. Rules are evaluated in order and the **first matching rule wins**. If omitted, no rule can ever match, so no banner is shown.
 
 Each element of `rules` is a **DatasetStatusBannerRule**:
 
@@ -38,7 +39,7 @@ Each element of `rules` is a **DatasetStatusBannerRule**:
   The value the field must equal (as a string, using strict equality) for this rule to match.
 - **message**  
   _Type: string_  
-  The message shown in the banner when this rule matches. It is bound via `innerHTML`, so simple HTML markup is supported.
+  The message shown in the banner when this rule matches. It is rendered as plain text (not HTML), so no markup is interpreted and there is no risk of arbitrary HTML/script injection via configuration.
 - **code**  
   _Type: "INFO" | "WARN"_  
   _Optional_  
@@ -98,8 +99,8 @@ Note that the banner is currently only wired into the **dynamic** (customizable)
 
 ## Implementation
 
-- `DatasetStatusBannerComponent` (`src/app/datasets/dataset-detail/dataset-status-banner/`) receives the current dataset as `@Input() datasetItem` and exposes a `banner` getter that resolves the first matching rule (or `undefined` if the feature is disabled, no dataset is available, or no rule matches).
-- Field resolution walks the dot-path in `field` from the dataset root, returning `undefined` for any missing intermediate segment rather than throwing.
+- `DatasetStatusBannerComponent` (`src/app/datasets/dataset-detail/dataset-status-banner/`) receives the current dataset as `@Input() datasetItem`. On `ngOnChanges`, it resolves the first matching rule into a `banner` field (or `undefined` if the feature is disabled, no dataset is available, or no rule matches), so the lookup runs once per dataset change rather than on every change-detection cycle.
+- Field resolution uses lodash-es's `get` to walk the dot-path in `field` from the dataset root, returning `undefined` for any missing intermediate segment rather than throwing.
 - `DatasetDetailDynamicComponent` renders `<dataset-status-banner>` for any `statusBanner` section found in the configured `datasetView`, passing it the currently loaded dataset.
 
 ### Tests

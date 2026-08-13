@@ -104,7 +104,7 @@ export interface DatasetStatusBannerRule {
 export interface DatasetStatusBannerConfig {
   enabled?: boolean;
   // Evaluated in order; the first matching rule wins.
-  rules: DatasetStatusBannerRule[];
+  rules?: DatasetStatusBannerRule[];
 }
 
 export interface AppConfigInterface {
