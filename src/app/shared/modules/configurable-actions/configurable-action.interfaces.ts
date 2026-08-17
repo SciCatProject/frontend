@@ -51,6 +51,7 @@ export interface ActionConfig {
   inputs?: Record<string, string>;
   variables?: Record<string, unknown>;
   headers?: Record<string, string>;
+  once?: boolean;
   onSuccess?: ActionType;
   dialog?: DialogConfig;
 }
