@@ -56,19 +56,19 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
   ];
 
   const authTestConfigNoIndicator = {
-    tileRestrictedIconVisible: false,
-    tileRestrictedIconGroups: [],
     datasetDetailComponent: {
       enableCustomizedComponent: true,
+      tileRestrictedIconVisible: false,
+      tileRestrictedIconGroups: [],
       customization: baseCustomization,
     },
   };
 
   const authTestConfigWithIndicator = {
-    tileRestrictedIconVisible: true,
-    tileRestrictedIconGroups: ["admin"],
     datasetDetailComponent: {
       enableCustomizedComponent: true,
+      tileRestrictedIconVisible: true,
+      tileRestrictedIconGroups: ["admin"],
       customization: baseCustomization,
     },
   };

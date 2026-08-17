@@ -2,13 +2,14 @@ import { testConfig } from "../../fixtures/testData";
 import { mergeConfig } from "../../support/utils";
 
 describe("0050: Datasets Detail View Dynamic", () => {
-  const dynamicComponentConfig = testConfig.dynamicDetialViewComponent;
+  const dynamicComponentConfig = testConfig.dynamicDetailViewComponent;
   const customizedLabelSets = dynamicComponentConfig.labelsLocalization.dataset;
   const customizedComponents =
     dynamicComponentConfig.datasetDetailComponent.customization;
 
   beforeEach(() => {
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+      baseConfig.datasetDetailComponent.customization = [];
       const mergedConfig = mergeConfig(baseConfig, dynamicComponentConfig);
       cy.intercept("GET", "**/admin/config", mergedConfig).as(
         "getFrontendConfig",
