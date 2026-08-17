@@ -55,6 +55,7 @@ export interface ActionConfig {
   onSuccess?: ActionType;
   successMessage?: string;
   successRoute?: string;
+  successRouteLabel?: string;
   dialog?: DialogConfig;
 }
 

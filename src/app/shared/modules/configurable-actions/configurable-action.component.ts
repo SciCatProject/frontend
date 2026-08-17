@@ -411,13 +411,21 @@ export class ConfigurableActionComponent
         const data = text ? JSON.parse(text) : {};
 
         this.actionSucceeded = true;
+
+        let link: Record<string, string> | undefined;
+        if (this.actionConfig.successRoute) {
+          const route = this.actionConfig.successRoute.replace(
+            /\{\{\s*(\w+)\s*\}\}/g,
+            (_, key) => String((data as Record<string, unknown>)[key] ?? ""),
+          );
+          link = {
+            label: this.actionConfig.successRouteLabel || "View",
+            route,
+          };
+        }
+
         this.store.dispatch(
-          actionSuccessAction(
-            this.actionConfig.successMessage,
-            this.actionConfig.successRoute
-              ? { label: "View Jobs", route: this.actionConfig.successRoute }
-              : undefined,
-          ),
+          actionSuccessAction(this.actionConfig.successMessage, link),
         );
         this.actionFinishedEmit(true, data);
       })
