@@ -53,6 +53,8 @@ export interface ActionConfig {
   headers?: Record<string, string>;
   once?: boolean;
   onSuccess?: ActionType;
+  successMessage?: string;
+  successRoute?: string;
   dialog?: DialogConfig;
 }
 
