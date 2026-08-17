@@ -174,8 +174,6 @@ export interface AppConfigInterface {
   defaultProposalsListSettings?: ListSettings;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
-  tileRestrictedIconVisibile?: boolean;
-  tileRestrictedIconGroups?: string[];
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
@@ -340,12 +338,13 @@ export class AppConfigService {
       };
     }
 
-    config.tileRestrictedIconVisibile =
-      config.tileRestrictedIconVisibile ?? false;
+    if (config.datasetDetailComponent) {
+      config.datasetDetailComponent.tileRestrictedIconVisibile =
+        config.datasetDetailComponent.tileRestrictedIconVisibile ?? false;
 
-    config.tileRestrictedIconGroups = config.tileRestrictedIconGroups ?? [
-      "admin",
-    ];
+      config.datasetDetailComponent.tileRestrictedIconGroups = config
+        .datasetDetailComponent.tileRestrictedIconGroups ?? ["admin"];
+    }
 
     applyDefaultBatchActions(config);
     validateAllActionConfigsIn(config);

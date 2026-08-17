@@ -730,12 +730,12 @@
   },
   "dateFormat": "yyyy-MM-dd HH:mm",
   "timezone": "UTC",
-  "tileRestrictedIconVisibile": true,
-  "tileRestrictedIconGroups": [
-    "admin"
-  ],
   "datasetDetailComponent": {
     "enableCustomizedComponent": false,
+    "tileRestrictedIconVisibile": true,
+    "tileRestrictedIconGroups": [
+      "admin"
+    ],
     "customization": [
       {
         "type": "regular",

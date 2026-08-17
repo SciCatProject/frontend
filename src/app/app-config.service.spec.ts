@@ -234,8 +234,12 @@ const appConfig: AppConfigInterface = {
     enabled: false,
     htmlContent: "This is not my about",
   },
-  tileRestrictedIconVisibile: false,
-  tileRestrictedIconGroups: ["admin"],
+  datasetDetailComponent: {
+    enableCustomizedComponent: false,
+    customization: [],
+    tileRestrictedIconVisibile: false,
+    tileRestrictedIconGroups: ["admin"],
+  },
 };
 
 describe("AppConfigService", () => {
@@ -384,8 +388,12 @@ describe("AppConfigService", () => {
           enabled: false,
           htmlContent: "This is the mockConfigResponses config.json about",
         },
-        tileRestrictedIconVisibile: false,
-        tileRestrictedIconGroups: ["admin"],
+        datasetDetailComponent: {
+          enableCustomizedComponent: false,
+          customization: [],
+          tileRestrictedIconVisibile: false,
+          tileRestrictedIconGroups: ["admin"],
+        },
       },
       "/assets/config.override.json": {
         accessTokenPrefix: "Bearer ",
@@ -403,8 +411,12 @@ describe("AppConfigService", () => {
           htmlContent:
             "This is the mockConfigResponses config.override.json about",
         },
-        tileRestrictedIconVisibile: false,
-        tileRestrictedIconGroups: ["admin"],
+        datasetDetailComponent: {
+          enableCustomizedComponent: false,
+          customization: [],
+          tileRestrictedIconVisibile: false,
+          tileRestrictedIconGroups: ["admin"],
+        },
       },
     };
 
@@ -432,8 +444,12 @@ describe("AppConfigService", () => {
         htmlContent:
           "This is the mockConfigResponses config.override.json about",
       },
-      tileRestrictedIconVisibile: false,
-      tileRestrictedIconGroups: ["admin"],
+      datasetDetailComponent: {
+        enableCustomizedComponent: false,
+        customization: [],
+        tileRestrictedIconVisibile: false,
+        tileRestrictedIconGroups: ["admin"],
+      },
     };
 
     const mockHttpGet = (
