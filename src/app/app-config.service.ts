@@ -340,7 +340,8 @@ export class AppConfigService {
       };
     }
 
-    config.tileRestrictedIconVisibile = config.tileRestrictedIconVisibile ?? false;
+    config.tileRestrictedIconVisibile =
+      config.tileRestrictedIconVisibile ?? false;
 
     config.tileRestrictedIconGroups = !config.tileRestrictedIconGroups
       ? config.tileRestrictedIconGroups

@@ -32,7 +32,10 @@ import {
 import { AttachmentService } from "shared/services/attachment.service";
 import { DatePipe } from "@angular/common";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
-import { Instrument, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  Instrument,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
@@ -191,7 +194,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
    * @param section - The customization item/section to check
    * @returns true if the section is restricted and the feature is enabled
    */
-  showRestrictedIcon(section: CustomizationItem, userGroups: string[]): boolean {
+  showRestrictedIcon(
+    section: CustomizationItem,
+    userGroups: string[],
+  ): boolean {
     if (!this.tileRestrictedIconVisibile) {
       // the icon is disabled by configuration
       return false;
