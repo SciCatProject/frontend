@@ -9,7 +9,7 @@
 		"ghcr.io/devcontainers-extra/features/opencode:1": {}
 	},
 	"remoteEnv": {
-		"OPENCODE_CONFIG": "/workspaces/scicat-frontend/.devcontainer/opencode.json",
+		"OPENCODE_CONFIG": "${containerWorkspaceFolder}/.devcontainer/opencode.json",
 		"DESY_ASSISTANT_API_KEY": "${localEnv:DESY_ASSISTANT_API_KEY}"
 	},
 	"customizations": {
