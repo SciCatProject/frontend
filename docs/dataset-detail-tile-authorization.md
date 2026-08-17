@@ -18,7 +18,8 @@
 
 ### What is Dataset Detail Tile Authorization?
 
-The Dataset Detail Tile Authorization feature allows administrators to control which user groups can view specific sections (tiles) within the dataset detail page. This enables fine-grained UI customization on how to present the  dataset information, ensuring  a better UX.
+The Dataset Detail Tile Authorization feature allows administrators to control which user groups can view specific sections (tiles) within the dataset detail page. 
+This enables fine-grained UI customization on how to present the  dataset information, ensuring  a better UX.
 
 ### Target Audience
 
