@@ -339,6 +339,12 @@
             "title": "Show Restricted Tiles Indicator",
             "description": "Display a lock icon on tiles with restricted access"
           },
+          "tileRestrictedIconGroups": {
+            "type": "array",
+            "title": "Restricted Icon Groups",
+            "description": "List of user groups that can see the Restricted Icon on dataset tiles",
+            "items": { "type": "string" }
+          },
           "customization": {
             "type": "array",
             "items": {
@@ -757,6 +763,14 @@
           {
             "type": "Control",
             "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconVisibile"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconGroups"
           },
           {
             "type": "ListWithDetail",

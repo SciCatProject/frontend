@@ -343,9 +343,9 @@ export class AppConfigService {
     config.tileRestrictedIconVisibile =
       config.tileRestrictedIconVisibile ?? false;
 
-    config.tileRestrictedIconGroups = !config.tileRestrictedIconGroups
-      ? config.tileRestrictedIconGroups
-      : ["admin"];
+    config.tileRestrictedIconGroups = config.tileRestrictedIconGroups ?? [
+      "admin",
+    ];
 
     applyDefaultBatchActions(config);
     validateAllActionConfigsIn(config);
