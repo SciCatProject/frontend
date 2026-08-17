@@ -79,6 +79,7 @@ export class ConfigurableActionComponent
   useIcon = false;
 
   variables: Record<string, unknown> = {};
+  actionSucceeded = false;
   userProfile: Record<string, unknown> = {};
   isAdmin = false;
   isLoggedIn = false;
@@ -410,6 +411,7 @@ export class ConfigurableActionComponent
         const text = await r.text();
         const data = text ? JSON.parse(text) : {};
 
+        this.actionSucceeded = true;
         this.store.dispatch(actionSuccessAction());
         this.actionFinishedEmit(true, data);
       })
@@ -590,6 +592,7 @@ export class ConfigurableActionComponent
   }
 
   get disabled(): boolean {
+    if (this.actionConfig.once && this.actionSucceeded) return true;
     if (typeof this.actionConfig.disabled === "boolean")
       return this.actionConfig.disabled;
     if (typeof this.actionConfig.enabled === "boolean")
