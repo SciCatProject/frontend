@@ -18,7 +18,7 @@
 
 ### What is Dataset Detail Tile Authorization?
 
-The Dataset Detail Tile Authorization feature allows administrators to control which user groups can view specific sections (tiles) within the dataset detail page. This enables fine-grained access control over dataset information, ensuring sensitive data is only visible to authorized users.
+The Dataset Detail Tile Authorization feature allows administrators to control which user groups can view specific sections (tiles) within the dataset detail page. This enables fine-grained UI customization on how to present the  dataset information, ensuring  a better UX.
 
 ### Target Audience
 
@@ -59,7 +59,7 @@ The dataset detail component can optionally display a visual indicator (lock ico
 - When **enabled** (`true`), a lock icon (`lock_outline`) appears in the header of any tile that has restricted access
 - When **disabled** (`false` or undefined), no lock icons are displayed
 - A tile is considered "restricted" if it has a non-empty `authorization` array defined
-- The lock icon includes a tooltip with the text "Restricted access"
+- The lock icon includes a tooltip listing the groups authorized to view the tile
 
 **Runtime Property:**
 
