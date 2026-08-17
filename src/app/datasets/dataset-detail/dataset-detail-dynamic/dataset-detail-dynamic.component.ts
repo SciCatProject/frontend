@@ -72,7 +72,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
 
   localization = "dataset";
-  tileRestrictedIconVisibile: boolean;
+  tileRestrictedIconVisible: boolean;
   tileRestrictedIconGroups: string[];
 
   dataset$ = this.store.select(selectCurrentDataset);
@@ -104,8 +104,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
   ) {
-    this.tileRestrictedIconVisibile =
-      this.appConfig.datasetDetailComponent?.tileRestrictedIconVisibile ??
+    this.tileRestrictedIconVisible =
+      this.appConfig.datasetDetailComponent?.tileRestrictedIconVisible ??
       false;
     this.tileRestrictedIconGroups =
       this.appConfig.datasetDetailComponent?.tileRestrictedIconGroups ?? [];
@@ -199,7 +199,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     section: CustomizationItem,
     userGroups: string[],
   ): boolean {
-    if (!this.tileRestrictedIconVisibile) {
+    if (!this.tileRestrictedIconVisible) {
       // the icon is disabled by configuration
       return false;
     }

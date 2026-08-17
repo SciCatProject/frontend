@@ -732,7 +732,7 @@
   "timezone": "UTC",
   "datasetDetailComponent": {
     "enableCustomizedComponent": false,
-    "tileRestrictedIconVisibile": true,
+    "tileRestrictedIconVisible": true,
     "tileRestrictedIconGroups": [
       "admin"
     ],

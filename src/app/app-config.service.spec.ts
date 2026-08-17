@@ -237,7 +237,7 @@ const appConfig: AppConfigInterface = {
   datasetDetailComponent: {
     enableCustomizedComponent: false,
     customization: [],
-    tileRestrictedIconVisibile: false,
+    tileRestrictedIconVisible: false,
     tileRestrictedIconGroups: ["admin"],
   },
 };
@@ -391,7 +391,7 @@ describe("AppConfigService", () => {
         datasetDetailComponent: {
           enableCustomizedComponent: false,
           customization: [],
-          tileRestrictedIconVisibile: false,
+          tileRestrictedIconVisible: false,
           tileRestrictedIconGroups: ["admin"],
         },
       },
@@ -414,7 +414,7 @@ describe("AppConfigService", () => {
         datasetDetailComponent: {
           enableCustomizedComponent: false,
           customization: [],
-          tileRestrictedIconVisibile: false,
+          tileRestrictedIconVisible: false,
           tileRestrictedIconGroups: ["admin"],
         },
       },
@@ -447,7 +447,7 @@ describe("AppConfigService", () => {
       datasetDetailComponent: {
         enableCustomizedComponent: false,
         customization: [],
-        tileRestrictedIconVisibile: false,
+        tileRestrictedIconVisible: false,
         tileRestrictedIconGroups: ["admin"],
       },
     };

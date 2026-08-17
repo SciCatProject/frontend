@@ -1,4 +1,4 @@
-# Dataset Detail Block Authorization
+# Dataset Detail Tile Authorization
 
 ## Table of Contents
 
@@ -16,19 +16,19 @@
 
 ## 1. Overview
 
-### What is Dataset Detail Block Authorization?
+### What is Dataset Detail Tile Authorization?
 
-The Dataset Detail Block Authorization feature allows administrators to control which user groups can view specific sections (blocks) within the dataset detail page. This enables fine-grained access control over dataset information, ensuring sensitive data is only visible to authorized users.
+The Dataset Detail Tile Authorization feature allows administrators to control which user groups can view specific sections (tiles) within the dataset detail page. This enables fine-grained access control over dataset information, ensuring sensitive data is only visible to authorized users.
 
 ### Target Audience
 
-- **Administrators**: Configure block-level authorization through the Admin Dashboard
+- **Administrators**: Configure tile-level authorization through the Admin Dashboard
 - **Developers**: Understand the schema and integration points
-- **End Users**: View only the blocks they have permission to see
+- **End Users**: View only the tiles they have permission to see
 
 ### Purpose
 
-Dataset Detail Block Authorization serves as:
+Dataset Detail Tile Authorization serves as:
 - Access control mechanism for sensitive dataset metadata
 - Customizable information visibility per user group
 - Compliance with data governance policies
@@ -36,7 +36,7 @@ Dataset Detail Block Authorization serves as:
 
 ### Key Features
 
-- Block-level authorization for dataset detail components
+- Tile-level authorization for dataset detail components
 - Group-based access control using user's `accessGroups`
 - Empty authorization array means public access (no restriction)
 - Configurable through Admin Dashboard or configuration files
@@ -48,13 +48,13 @@ The authorization system consists of:
 1. **Frontend Configuration**: Defined in `frontend.config.jsonforms.json`
 2. **Admin Dashboard**: Visual configuration interface at `/admin/config-edit`
 3. **Runtime Configuration**: Loaded from backend endpoint `/api/v3/runtime-config/frontendConfig` or local `config.json`
-4. **Dataset Detail Component**: Renders blocks based on user authorization
+4. **Dataset Detail Component**: Renders tiles based on user authorization
 
 ### Restricted Tiles Indicator
 
 **How It Works:**
 
-The dataset detail component can optionally display a visual indicator (lock icon) on tiles that have restricted access. This feature is controlled by the `tileRestrictedIconVisibile` configuration flag.
+The dataset detail component can optionally display a visual indicator (lock icon) on tiles that have restricted access. This feature is controlled by the `tileRestrictedIconVisible` configuration flag.
 
 - When **enabled** (`true`), a lock icon (`lock_outline`) appears in the header of any tile that has restricted access
 - When **disabled** (`false` or undefined), no lock icons are displayed
@@ -64,7 +64,7 @@ The dataset detail component can optionally display a visual indicator (lock ico
 **Runtime Property:**
 
 Each section in the filtered `datasetView$` observable now includes a computed `restrictedIconVisible` property. This property is dynamically calculated at runtime based on:
-- The `tileRestrictedIconVisibile` configuration flag
+- The `tileRestrictedIconVisible` configuration flag
 - The `tileRestrictedIconGroups` configuration (which user groups can see the icon)
 - The section's `authorization` array
 - The current user's groups
@@ -74,10 +74,10 @@ The `restrictedIconVisible` property is **not** a configuration option; it is co
 **Configuration:**
 ```json
 {
-  "tileRestrictedIconVisibile": true,
-  "tileRestrictedIconGroups": ["admin", "scientists"],
   "datasetDetailComponent": {
     "enableCustomizedComponent": true,
+    "tileRestrictedIconVisible": true,
+    "tileRestrictedIconGroups": ["admin", "scientists"],
     "customization": [...]
   }
 }
@@ -89,11 +89,12 @@ The `restrictedIconVisible` property is **not** a configuration option; it is co
 - To hide a tile, set `visible: false`
 
 **Files Involved:**
-- `src/app/state-management/models/index.ts` - Configuration interface (includes `restrictedIconVisible?: boolean`)
-- `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.ts` - Logic (computes `restrictedIconVisible`)
+- `src/app/state-management/models/index.ts` - Configuration interface (includes `DatasetDetailComponentConfig` with `tileRestrictedIconVisible` and `tileRestrictedIconGroups`)
+- `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.ts` - Logic (computes `restrictedIconVisible` at runtime)
 - `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.html` - Template
 - `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.scss` - Styling
 - `src/app/admin/schema/frontend.config.jsonforms.json` - Admin UI schema
+- `src/app/app-config.service.ts` - Configuration service
 
 ---
 
@@ -117,9 +118,9 @@ Added to `datasetDetailComponent` object itself:
 }
 ```
 
-When set at this level, **all blocks** within the dataset detail component require the specified authorization to be visible.
+When set at this level, **all tiles** within the dataset detail component require the specified authorization to be visible.
 
-#### Level 2: Individual Block Authorization
+#### Level 2: Individual Tile Authorization
 
 Configured on each customization item within the `customization` array:
 
@@ -155,11 +156,11 @@ Configured on each customization item within the `customization` array:
 
 | Key | Type | Required | Default | Description |
 |-----|------|----------|---------|-------------|
-| `datasetDetailComponent.authorization` | string[] | No | `null` | Global authorization for all blocks in the component |
-| `datasetDetailComponent.customization[].authorization` | string[] | No | `[]` | Block-specific authorization (empty array means no restriction) |
-| `datasetDetailComponent.customization[].visible` | boolean | No | `true` | Controls whether the block is visible (use `false` to hide) |
-| `tileRestrictedIconVisibile` | boolean | No | `false` | Show lock icon on tiles with restricted access |
-| `tileRestrictedIconGroups` | string[] | No | `[]` | User groups that can see the restricted icon (empty array means all users) |
+| `datasetDetailComponent.authorization` | string[] | No | `null` | Global authorization for all tiles in the component |
+| `datasetDetailComponent.customization[].authorization` | string[] | No | `[]` | Tile-specific authorization (empty array means no restriction) |
+| `datasetDetailComponent.customization[].visible` | boolean | No | `true` | Controls whether the tile is visible (use `false` to hide) |
+| `datasetDetailComponent.tileRestrictedIconVisible` | boolean | No | `false` | Show lock icon on tiles with restricted access |
+| `datasetDetailComponent.tileRestrictedIconGroups` | string[] | No | `[]` | User groups that can see the restricted icon (empty array means all users) |
 
 ### Configuration Locations
 
@@ -195,12 +196,12 @@ Used for environment-specific overrides without modifying the main configuration
 export interface DatasetDetailComponentConfig {
   enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
-  authorization?: string[];  // Global authorization for all blocks
+  authorization?: string[];  // Global authorization for all tiles
+  tileRestrictedIconVisible?: boolean;  // Show lock icon on restricted tiles
+  tileRestrictedIconGroups?: string[];  // User groups that can see the restricted icon
 }
 
 export interface AppConfig {
-  tileRestrictedIconVisibile?: boolean;  // Show lock icon on restricted tiles
-  tileRestrictedIconGroups?: string[];  // User groups that can see the restricted icon
   datasetDetailComponent?: DatasetDetailComponentConfig;
 }
 
@@ -214,7 +215,7 @@ export interface CustomizationItem {
   source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
-  authorization?: string[];  // Block-specific authorization (empty array means no restriction)
+  authorization?: string[];  // Tile-specific authorization (empty array means no restriction)
   visible?: boolean;  // Controls visibility (defaults to true)
   restrictedIconVisible?: boolean;  // Computed at runtime, indicates if lock icon should be shown
 }
@@ -226,9 +227,10 @@ export interface CustomizationItem {
 
 The admin UI provides form controls through JSONForms:
 - **Enable Customized Component**: Toggle switch for `enableCustomizedComponent`
-- **Show Restricted Tiles Indicator**: Toggle switch for `tileRestrictedIconVisibile` (root-level config)
-- **Authorization**: Array of strings input for global block authorization
-- **Customization**: List with detail view for configuring individual blocks
+- **Show Restricted Tiles Indicator**: Toggle switch for `datasetDetailComponent.tileRestrictedIconVisible`
+- **Restricted Icon Groups**: Array of strings input for `datasetDetailComponent.tileRestrictedIconGroups`
+- **Authorization**: Array of strings input for global tile authorization
+- **Customization**: List with detail view for configuring individual tiles
 
 ---
 
@@ -252,9 +254,9 @@ The Admin Dashboard uses JSONForms with Angular Material renderers to provide a 
 
 | Field | Type | Description |
 |-------|------|-------------|
-| Enable Customized Component | Toggle | Enables/disables custom block configuration |
-| Authorization | Array Input | Global authorization groups for all blocks |
-| Customization Configuration | List Editor | Configure individual blocks with their own authorization |
+| Enable Customized Component | Toggle | Enables/disables custom tile configuration |
+| Authorization | Array Input | Global authorization groups for all tiles |
+| Customization Configuration | List Editor | Configure individual tiles with their own authorization |
 
 #### Adding Global Authorization
 
@@ -266,23 +268,23 @@ The Admin Dashboard uses JSONForms with Angular Material renderers to provide a 
 
 ![Authorization Array Input](images/admin-authorization-array-input.png)
 
-#### Configuring Block-Specific Authorization
+#### Configuring Tile-Specific Authorization
 
 1. In the **Customization Configuration** list
-2. Expand or add a new block configuration
-3. Locate the **Authorization** field for that block
+2. Expand or add a new tile configuration
+3. Locate the **Authorization** field for that tile
 4. Add the desired groups
 5. Save the configuration
 
-![Block Authorization Configuration](images/admin-block-authorization.png)
+![Tile Authorization Configuration](images/admin-tile-authorization.png)
 
 ### Available Control Types
 
-The Dataset Detail Component supports the following block types:
+The Dataset Detail Component supports the following tile types:
 
 | Type | Description | Authorization Supported |
 |------|-------------|----------------------|
-| `regular` | Custom fields block | Yes |
+| `regular` | Custom fields tile | Yes |
 | `scientificMetadata` | Scientific metadata viewer | Yes |
 | `datasetJsonView` | JSON view of dataset | Yes |
 | `attachments` | Attachments section | Yes |
@@ -305,17 +307,6 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
 #### Schema Section (datasetDetailComponent)
 
 ```json
-"tileRestrictedIconVisibile": {
-  "type": "boolean",
-  "title": "Show Restricted Tiles Indicator",
-  "description": "Display a lock icon on tiles with restricted access"
-},
-"tileRestrictedIconGroups": {
-  "type": "array",
-  "items": { "type": "string" },
-  "title": "Restricted Icon Groups",
-  "description": "User groups that can see the restricted tile icon"
-},
 "datasetDetailComponent": {
   "type": "object",
   "properties": {
@@ -323,6 +314,17 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
     "authorization": {
       "type": "array",
       "items": { "type": "string" }
+    },
+    "tileRestrictedIconVisible": {
+      "type": "boolean",
+      "title": "Show Restricted Tiles Indicator",
+      "description": "Display a lock icon on tiles with restricted access"
+    },
+    "tileRestrictedIconGroups": {
+      "type": "array",
+      "items": { "type": "string" },
+      "title": "Restricted Icon Groups",
+      "description": "User groups that can see the restricted tile icon"
     },
     "customization": {
       "type": "array",
@@ -394,6 +396,14 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
     },
     {
       "type": "Control",
+      "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconVisible"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconGroups"
+    },
+    {
+      "type": "Control",
       "scope": "#/properties/datasetDetailComponent/properties/authorization"
     },
     {
@@ -462,7 +472,7 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 
 ## 5. Usage Examples
 
-### Example 1: Global Authorization for All Blocks
+### Example 1: Global Authorization for All Tiles
 
 **Use Case**: Restrict entire dataset detail component to specific groups
 
@@ -482,19 +492,19 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 }
 ```
 
-**Result**: All blocks in the dataset detail page are only visible to users in the "admin" or "data-managers" groups.
+**Result**: All tiles in the dataset detail page are only visible to users in the "admin" or "data-managers" groups.
 
 ---
 
-### Example 2: Block-Specific Authorization
+### Example 2: Tile-Specific Authorization
 
 **Use Case**: Show general info to everyone, but restrict scientific metadata to scientists
 
 **Configuration (Admin Dashboard)**:
 1. In Customization Configuration
-2. Add two blocks:
-   - Block 1: "General Information" with empty authorization `[]` (visible to all)
-   - Block 2: "Scientific Metadata" with authorization `["scientists", "admin"]`
+2. Add two tiles:
+   - Tile 1: "General Information" with empty authorization `[]` (visible to all)
+   - Tile 2: "Scientific Metadata" with authorization `["scientists", "admin"]`
 3. Save configuration
 
 **Configuration (JSON)**:
@@ -528,14 +538,14 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 ```
 
 **Result**: 
-- All users see "General Information" block
-- Only users in "scientists" or "admin" groups see "Scientific Metadata" block
+- All users see "General Information" tile
+- Only users in "scientists" or "admin" groups see "Scientific Metadata" tile
 
 ---
 
-### Example 3: Combined Global and Block Authorization
+### Example 3: Combined Global and Tile Authorization
 
-**Use Case**: Global restriction with block-level overrides
+**Use Case**: Global restriction with tile-level overrides
 
 **Configuration**:
 ```json
@@ -564,15 +574,15 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 ```
 
 **Result**:
-- "Public Summary" block: Visible to all users (block-level override)
-- "Detailed Metadata" block: Visible only to "admin" users (block-level restriction)
-- Other blocks: Follow global authorization (admin and scientists)
+- "Public Summary" tile: Visible to all users (tile-level override)
+- "Detailed Metadata" tile: Visible only to "admin" users (tile-level restriction)
+- Other tiles: Follow global authorization (admin and scientists)
 
 ---
 
-### Example 4: Hidden Block
+### Example 4: Hidden Tile
 
-**Use Case**: Hide a block from all users
+**Use Case**: Hide a tile from all users
 
 **Configuration**:
 ```json
@@ -585,13 +595,13 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 }
 ```
 
-**Result**: The "Internal Attachments" block is hidden from all users, including administrators.
+**Result**: The "Internal Attachments" tile is hidden from all users, including administrators.
 
 ---
 
 ### Example 5: Multiple Group Requirements
 
-**Use Case**: Block visible to users in any of multiple groups
+**Use Case**: Tile visible to users in any of multiple groups
 
 **Configuration**:
 ```json
@@ -603,7 +613,7 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 }
 ```
 
-**Result**: Block is visible to users who are members of **any** of the specified groups (OR logic).
+**Result**: Tile is visible to users who are members of **any** of the specified groups (OR logic).
 
 ---
 
@@ -613,13 +623,13 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 
 The authorization system follows this evaluation order:
 
-1. **Block-level authorization** (if present) takes precedence
+1. **Tile-level authorization** (if present) takes precedence
 2. **Global datasetDetailComponent authorization** (if present)
 3. **Default**: `[]` (visible to all authenticated users)
 
 ### Authorization Matching
 
-| User Groups | Block Authorization | Visible? |
+| User Groups | Tile Authorization | Visible? |
 |-------------|---------------------|----------|
 | `["user"]` | `[]` | Yes |
 | `["user"]` | `["admin"]` | No |
@@ -634,21 +644,21 @@ There are no special groups. Empty array `[]` means no restriction (visible to a
 ### Important Notes
 
 - The authorization check uses the user's `accessGroups` from their profile
-- If a user is not authenticated, they will not see any blocks
+- If a user is not authenticated, they will not see any tiles
 - Multiple groups can be specified; the user needs to be a member of **at least one** of them (OR logic)
 - Empty array `[]` means no restriction (visible to all)
-- To hide a block, set the `visible` property to `false`
-- This feature is fully backward compatible: existing configurations without `authorization` fields will continue to work, with all blocks visible to all users
+- To hide a tile, set the `visible` property to `false`
+- This feature is fully backward compatible: existing configurations without `authorization` fields will continue to work, with all tiles visible to all users
 
 ---
 
 ## 7. Troubleshooting
 
-### Issue: Blocks Not Visible to Expected Users
+### Issue: Tiles Not Visible to Expected Users
 
 **Symptoms**:
-- Authorized users cannot see blocks they should have access to
-- All blocks are hidden
+- Authorized users cannot see tiles they should have access to
+- All tiles are hidden
 
 **Diagnosis**:
 
@@ -742,11 +752,11 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ---
 
-### Issue: All Blocks Hidden After Adding Authorization
+### Issue: All Tiles Hidden After Adding Authorization
 
 **Symptoms**:
-- All blocks disappeared after adding authorization
-- Only administrators can see blocks
+- All tiles disappeared after adding authorization
+- Only administrators can see tiles
 
 **Cause**: Likely set global authorization without appropriate groups or with non-empty array.
 
@@ -772,8 +782,8 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 |---------|----------|
 | Case sensitivity in group names | Use exact case matching |
 | Forgetting to save configuration | Click "Save" button in admin dashboard |
-| Using `null` instead of `[]` for public blocks | Use empty array `[]` for no restriction |
-| To hide a block | Set `visible: false` |
+| Using `null` instead of `[]` for public tiles | Use empty array `[]` for no restriction |
+| To hide a tile | Set `visible: false` |
 | Expecting AND logic between groups | Authorization uses OR logic (any group matches) |
 
 ---
@@ -782,24 +792,24 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ### Q: What happens if I don't configure authorization?
 
-**A**: If you don't add any authorization configuration, all blocks are **visible to all authenticated users** by default. This maintains backward compatibility with existing deployments.
+**A**: If you don't add any authorization configuration, all tiles are **visible to all authenticated users** by default. This maintains backward compatibility with existing deployments.
 
 ### Q: Can I use authorization without enabling customized components?
 
-**A**: No. The `authorization` field is only applicable when `enableCustomizedComponent` is set to `true`. If customized components are disabled, the default dataset detail view is used, and block-level authorization does not apply.
+**A**: No. The `authorization` field is only applicable when `enableCustomizedComponent` is set to `true`. If customized components are disabled, the default dataset detail view is used, and tile-level authorization does not apply.
 
-### Q: Can I use both global and block-level authorization?
+### Q: Can I use both global and tile-level authorization?
 
 **A**: Yes. When both are configured:
-- Block-level authorization takes precedence for that specific block
-- Global authorization applies to blocks without their own authorization
-- This allows for a mix of globally restricted and block-specific access controls
+- Tile-level authorization takes precedence for that specific tile
+- Global authorization applies to tiles without their own authorization
+- This allows for a mix of globally restricted and tile-specific access controls
 
-### Q: How do I make a block visible to everyone?
+### Q: How do I make a tile visible to everyone?
 
-**A**: Use an empty array `[]` for the block's authorization, or omit the authorization field entirely (which defaults to `[]`).
+**A**: Use an empty array `[]` for the tile's authorization, or omit the authorization field entirely (which defaults to `[]`).
 
-### Q: How do I completely hide a block?
+### Q: How do I completely hide a tile?
 
 **A**: Set the `visible` property to `false`.
 
@@ -809,20 +819,21 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ### Q: How does authorization work with the backend permission system?
 
-**A**: The dataset detail block authorization is a **frontend-only** feature that controls UI visibility. It does not affect backend API access. Users with appropriate backend permissions can still access data through the API. This feature only controls what is displayed in the frontend UI.
+**A**: The dataset detail tile authorization is a **frontend-only** feature that controls UI visibility. It does not affect backend API access. Users with appropriate backend permissions can still access data through the API. This feature only controls what is displayed in the frontend UI.
 
 ### Q: Can I customize the "No authorization" message?
 
-**A**: Currently, blocks that a user is not authorized to see are simply hidden (not rendered). There is no visible message indicating that content is hidden. This is by design to avoid revealing the existence of sensitive content.
+**A**: Currently, tiles that a user is not authorized to see are simply hidden (not rendered). There is no visible message indicating that content is hidden. This is by design to avoid revealing the existence of sensitive content.
 
 ### Q: How do I show a lock icon on restricted tiles?
 
-**A**: Enable the `tileRestrictedIconVisibile` configuration flag at the root level:
+**A**: Enable the `tileRestrictedIconVisible` configuration flag under `datasetDetailComponent`:
 ```json
 {
-  "tileRestrictedIconVisibile": true,
   "datasetDetailComponent": {
     "enableCustomizedComponent": true,
+    "tileRestrictedIconVisible": true,
+    "tileRestrictedIconGroups": ["admin", "scientists"],
     "customization": [...]
   }
 }
@@ -834,13 +845,13 @@ When enabled, tiles with restricted access (non-empty authorization array define
 **A**: 
 1. Log in as different users with various group memberships
 2. Navigate to a dataset detail page
-3. Verify which blocks are visible for each user
+3. Verify which tiles are visible for each user
 4. Check browser console for any authorization-related errors
 5. Use the JSON Preview in the admin dashboard to verify your configuration
 
-### Q: Can I use this feature with custom blocks?
+### Q: Can I use this feature with custom tiles?
 
-**A**: Yes. Any custom block type (regular, scientificMetadata, datasetJsonView, attachments) supports the authorization field.
+**A**: Yes. Any custom tile type (regular, scientificMetadata, datasetJsonView, attachments) supports the authorization field.
 
 ### Q: What's the maximum number of groups I can specify?
 
@@ -848,12 +859,12 @@ When enabled, tiles with restricted access (non-empty authorization array define
 
 ### Q: Can I use this feature with the default (non-customized) dataset detail view?
 
-**A**: No. Authorization only works when `enableCustomizedComponent` is `true` and you have defined custom blocks in the `customization` array. The default dataset detail view does not support block-level authorization.
+**A**: No. Authorization only works when `enableCustomizedComponent` is `true` and you have defined custom tiles in the `customization` array. The default dataset detail view does not support tile-level authorization.
 
 ### Q: How do I migrate from an old configuration?
 
-**A**: Existing configurations without authorization fields will continue to work unchanged. All blocks will be visible to all authenticated users. To add authorization:
-1. Add the `authorization` field to `datasetDetailComponent` or individual blocks
+**A**: Existing configurations without authorization fields will continue to work unchanged. All tiles will be visible to all authenticated users. To add authorization:
+1. Add the `authorization` field to `datasetDetailComponent` or individual tiles
 2. Test with different user groups
 3. Gradually restrict access as needed
 
@@ -888,6 +899,6 @@ When enabled, tiles with restricted access (non-empty authorization array define
 
 ---
 
-*Last updated: August 5, 2026*
-*Documentation for SciCat Frontend Dataset Detail Block Authorization Feature*
+*Last updated: August 17, 2026*
+*Documentation for SciCat Frontend Dataset Detail Tile Authorization Feature*
 
