@@ -411,7 +411,14 @@ export class ConfigurableActionComponent
         const data = text ? JSON.parse(text) : {};
 
         this.actionSucceeded = true;
-        this.store.dispatch(actionSuccessAction());
+        this.store.dispatch(
+          actionSuccessAction(
+            this.actionConfig.successMessage,
+            this.actionConfig.successRoute
+              ? { label: "View Jobs", route: this.actionConfig.successRoute }
+              : undefined,
+          ),
+        );
         this.actionFinishedEmit(true, data);
       })
       .catch((err: Error) => {

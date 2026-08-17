@@ -117,13 +117,23 @@ export interface Message {
   content: string;
   type: MessageType;
   duration: number;
+  action?: string;
+  route?: string;
 }
 
 export class Message implements Message {
-  constructor(content: string, type: MessageType, duration: number) {
+  constructor(
+    content: string,
+    type: MessageType,
+    duration: number,
+    action?: string,
+    route?: string,
+  ) {
     this.content = content;
     this.type = type;
     this.duration = duration;
+    this.action = action;
+    this.route = route;
   }
 }
 
