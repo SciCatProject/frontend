@@ -338,14 +338,13 @@ export class AppConfigService {
       };
     }
 
-    if (!config.datasetDetailComponent) {
-      config.datasetDetailComponent = {};
-    }
-    config.datasetDetailComponent.tileRestrictedIconVisible =
-      config.datasetDetailComponent.tileRestrictedIconVisible ?? false;
+    if (config.datasetDetailComponent) {
+      config.datasetDetailComponent.tileRestrictedIconVisible =
+        config.datasetDetailComponent.tileRestrictedIconVisible ?? false;
 
-    config.datasetDetailComponent.tileRestrictedIconGroups =
-      config.datasetDetailComponent.tileRestrictedIconGroups ?? ["admin"];
+      config.datasetDetailComponent.tileRestrictedIconGroups = config
+        .datasetDetailComponent.tileRestrictedIconGroups ?? ["admin"];
+    }
 
     applyDefaultBatchActions(config);
     validateAllActionConfigsIn(config);

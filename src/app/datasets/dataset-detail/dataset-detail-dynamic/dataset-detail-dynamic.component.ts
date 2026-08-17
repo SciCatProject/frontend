@@ -105,8 +105,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
   ) {
     this.tileRestrictedIconVisible =
-      this.appConfig.datasetDetailComponent?.tileRestrictedIconVisible ??
-      false;
+      this.appConfig.datasetDetailComponent?.tileRestrictedIconVisible ?? false;
     this.tileRestrictedIconGroups =
       this.appConfig.datasetDetailComponent?.tileRestrictedIconGroups ?? [];
   }
