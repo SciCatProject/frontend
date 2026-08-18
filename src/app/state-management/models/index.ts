@@ -101,7 +101,11 @@ export interface Field {
 
 // Type alias for allowed customization types
 type CustomizationType =
-  "regular" | "scientificMetadata" | "datasetJsonView" | "attachments";
+  | "regular"
+  | "scientificMetadata"
+  | "datasetJsonView"
+  | "attachments"
+  | "statusBanner";
 
 // Type alias for allowed field types
 type FieldType = "text" | "copy" | "linky" | "tag" | "date";

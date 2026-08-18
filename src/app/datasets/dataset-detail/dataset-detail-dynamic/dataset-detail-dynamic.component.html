@@ -30,6 +30,16 @@
     <!-- Iterate over each section in datasetView -->
     <ng-container *ngFor="let section of datasetView$ | async">
       <ng-container [ngSwitch]="section.type">
+        <!-- Status Banner Section -->
+        <div
+          *ngSwitchCase="'statusBanner'"
+          class="card-container"
+          [style.gridColumn]="'span ' + (section.col || 10)"
+          [style.gridRow]="'span ' + (section.row || 1)"
+        >
+          <dataset-status-banner [datasetItem]="dataset"></dataset-status-banner>
+        </div>
+
         <!-- Regular Section -->
         <div
           *ngSwitchCase="'regular'"

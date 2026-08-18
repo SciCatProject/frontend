@@ -80,6 +80,23 @@
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,
   "hideEmptyMetadataTable": false,
+  "datasetStatusBanner": {
+    "enabled": true,
+    "rules": [
+      {
+        "field": "datasetlifecycle.archiveStatusMessage",
+        "value": "deleted",
+        "message": "This dataset has been deleted.",
+        "code": "WARN"
+      },
+      {
+        "field": "datasetlifecycle.archiveStatusMessage",
+        "value": "markedForDeletion",
+        "message": "This dataset is marked for deletion.",
+        "code": "WARN"
+      }
+    ]
+  },
   "datafilesActionsEnabled": true,
   "datafilesActions": [
     {
@@ -734,6 +751,13 @@
     "tileRestrictedIconVisible": false,
     "tileRestrictedIconGroups": ["admin"],
     "customization": [
+      {
+        "type": "statusBanner",
+        "label": "Status Banner",
+        "order": -1,
+        "row": 1,
+        "col": 10
+      },
       {
         "type": "regular",
         "label": "General Information",
