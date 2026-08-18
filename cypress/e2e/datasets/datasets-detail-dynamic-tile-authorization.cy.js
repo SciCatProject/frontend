@@ -85,6 +85,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        baseConfig.datasetDetailComponent.customization = [];
         const mergedConfig = mergeConfig(baseConfig, authTestConfigNoIndicator);
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
           "getFrontendConfigNoIndicator",
@@ -325,24 +326,28 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
         });
 
       // Admin user should see Admin Only Section with tooltip showing "admin"
+      // cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
+      //   .parent()
+      //   .within(() => {
+      //     cy.get('mat-icon.mat-mdc-tooltip-trigger', { timeout: 20000 })
+      //       .should("be.visible")
+      //       .then(($tooltip) => {
+      //         cy.log('Tooltip HTML:', $tooltip);
+      //       })
+      //     //  .and("have.attr", "aria-label", "admin");
+      //     // cy.get('mat-icon.mat-mdc-tooltip-trigger')
+      //     //   .should("exist")
+      //     //   .and('have.attr', 'ng-reflect-message');
+      //   });
+
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
         .parent()
-        .then(($parent) => {
-          cy.log('Parent HTML:', $parent.html());
-        })
-        .within(() => {
-          cy.get('mat-icon.mat-mdc-tooltip-trigger', { timeout: 20000 })
-            .trigger('mouseover')
-            .should("be.visible")
-            .then(($tooltip) => {
-              cy.log('Tooltip HTML:', $tooltip.html());
-              cy.log('Tooltip aria-label:', $tooltip.attr('aria-label'));
-            })
-            .and("have.attr", "aria-label", "admin");
-          // cy.get('mat-icon.mat-mdc-tooltip-trigger')
-          //   .should("exist")
-          //   .and('have.attr', 'ng-reflect-message');
-        });
+        .find("mat-icon.mat-mdc-tooltip-trigger")
+        .trigger("mouseenter");
+
+      // The tooltip renders in the CDK overlay at the end of body, so it can't be
+      // found inside the trigger's parent.
+      cy.get(".mat-mdc-tooltip").should("be.visible").and("contain.text", "admin");
 
     });
 
