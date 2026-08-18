@@ -12,6 +12,8 @@ The dataset status banner is a small, colored notice rendered above the dataset 
 
 This feature is unrelated to the existing global **statusBannerMessage** setting, which renders a single, static banner in the application header regardless of which page or dataset is being viewed. The dataset status banner described here is per-dataset and conditional, driven by rules evaluated against the dataset actually loaded.
 
+Both `datasetStatusBanner` and the `statusBanner` entry in `datasetDetailComponent.customization` (see [Placement](#placement-on-the-dataset-detail-page) below) are also editable through the Admin config editor, backed by `src/app/admin/schema/frontend.config.jsonforms.json`.
+
 ## Configuration
 
 The banner is controlled by the **datasetStatusBanner** property in the frontend configuration (`src/assets/config.json`):
