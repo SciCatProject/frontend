@@ -828,7 +828,7 @@
       {
         "type": "regular",
         "label": "General Information",
-        "order": 0,
+        "order": 5,
         "row": 1,
         "col": 8,
         "fields": [
@@ -867,7 +867,7 @@
       {
         "type": "attachments",
         "label": "Gallery",
-        "order": 1,
+        "order": 6,
         "col": 2,
         "row": 2,
         "options": {
@@ -878,7 +878,7 @@
       {
         "type": "regular",
         "label": "Contact Information",
-        "order": 2,
+        "order": 7,
         "col": 2,
         "row": 1,
         "fields": [
@@ -897,7 +897,7 @@
       {
         "type": "regular",
         "label": "Files Information",
-        "order": 3,
+        "order": 8,
         "col": 2,
         "row": 1,
         "fields": [
@@ -936,7 +936,7 @@
       {
         "type": "regular",
         "label": "Related Documents",
-        "order": 4,
+        "order": 9,
         "col": 4,
         "row": 1,
         "fields": [
@@ -970,7 +970,7 @@
       {
         "type": "attachments",
         "label": "Gallery",
-        "order": 5,
+        "order": 10,
         "col": 1,
         "row": 1,
         "options": {
@@ -982,7 +982,7 @@
         "type": "scientificMetadata",
         "label": "Scientific Metadata Table",
         "viewMode": "table",
-        "order": 6,
+        "order": 11,
         "col": 9,
         "row": 1
       },
@@ -990,18 +990,18 @@
         "type": "scientificMetadata",
         "label": "Scientific Metadata JSON",
         "viewMode": "json",
-        "order": 6
+        "order": 12
       },
       {
         "type": "scientificMetadata",
         "label": "Scientific Metadata Tree",
         "viewMode": "tree",
-        "order": 6
+        "order": 13
       },
       {
         "type": "datasetJsonView",
         "label": "Dataset Json View",
-        "order": 7,
+        "order": 14,
         "col": 10,
         "row": 2
       }

@@ -336,13 +336,13 @@
           "enableCustomizedComponent": { "type": "boolean" },
           "tileRestrictedIconVisible": {
             "type": "boolean",
-            "title": "Show Restricted Tiles Indicator",
-            "description": "Display a lock icon on tiles with restricted access"
+            "title": "Restricted Tiles Indicator Enabled",
+            "description": "Display a Restricted Tile Indicator (lock icon) on tiles with restricted access"
           },
           "tileRestrictedIconGroups": {
             "type": "array",
-            "title": "Restricted Icon Groups",
-            "description": "List of user groups that can see the Restricted Icon on dataset tiles",
+            "title": "Restricted Tiles Indicator Groups",
+            "description": "List of user groups that can see the Restricted Tile Icon on dataset tiles",
             "items": { "type": "string" }
           },
           "customization": {
