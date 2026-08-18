@@ -22,6 +22,8 @@ import {
   DatasetsControllerCreateV3Request,
   DatasetsService,
   OutputDatasetObsoleteDto,
+  OrigdatablocksV4Service,
+  OrigdatablocksPublicV4Service,
   MetadataKeysV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
@@ -62,6 +64,8 @@ describe("DatasetEffects", () => {
   let actions: TestObservable;
   let effects: DatasetEffects;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
+  let origdatablocksApi: jasmine.SpyObj<OrigdatablocksV4Service>;
+  let origdatablocksPublicApi: jasmine.SpyObj<OrigdatablocksPublicV4Service>;
   let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
 
   const getConfig = () => ({});
@@ -106,6 +110,20 @@ describe("DatasetEffects", () => {
           ]),
         },
         {
+          provide: OrigdatablocksV4Service,
+          useValue: jasmine.createSpyObj("origdatablocksService", [
+            "origDatablocksV4ControllerFindAllFilesV4",
+            "origDatablocksV4ControllerCountFilesV4",
+          ]),
+        },
+        {
+          provide: OrigdatablocksPublicV4Service,
+          useValue: jasmine.createSpyObj("origdatablocksPublicService", [
+            "origDatablocksPublicV4ControllerFindAllFilesPublicV4",
+            "origDatablocksPublicV4ControllerCountFilesPublicV4",
+          ]),
+        },
+        {
           provide: MetadataKeysV4Service,
           useValue: jasmine.createSpyObj("metadataKeysApi", [
             "metadataKeysV4ControllerFindAllV4",
@@ -119,6 +137,8 @@ describe("DatasetEffects", () => {
 
     effects = TestBed.inject(DatasetEffects);
     datasetApi = injectedStub(DatasetsService);
+    origdatablocksApi = injectedStub(OrigdatablocksV4Service);
+    origdatablocksPublicApi = injectedStub(OrigdatablocksPublicV4Service);
     metadataKeysApi = injectedStub(MetadataKeysV4Service);
   });
 

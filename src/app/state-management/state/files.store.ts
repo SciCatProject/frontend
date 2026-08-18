@@ -16,7 +16,7 @@ export const initialFilesState: FilesState = {
   totalCount: 0,
 
   filters: {
-    sortField: "createdAt desc",
+    sortField: "createdAt:desc",
     skip: 0,
     limit: 25,
   },
