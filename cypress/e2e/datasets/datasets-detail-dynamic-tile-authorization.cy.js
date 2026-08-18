@@ -327,10 +327,21 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       // Admin user should see Admin Only Section with tooltip showing "admin"
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
         .parent()
+        .then(($parent) => {
+          cy.log('Parent HTML:', $parent.html());
+        })
         .within(() => {
-          cy.get('mat-icon.mat-mdc-tooltip-trigger')
-            .should("exist")
-            .and('have.attr', 'ng-reflect-message');
+          cy.get('mat-icon.mat-mdc-tooltip-trigger', { timeout: 20000 })
+            .trigger('mouseover')
+            .should("be.visible")
+            .then(($tooltip) => {
+              cy.log('Tooltip HTML:', $tooltip.html());
+              cy.log('Tooltip aria-label:', $tooltip.attr('aria-label'));
+            })
+            .and("have.attr", "aria-label", "admin");
+          // cy.get('mat-icon.mat-mdc-tooltip-trigger')
+          //   .should("exist")
+          //   .and('have.attr', 'ng-reflect-message');
         });
 
     });
