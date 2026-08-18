@@ -1,7 +1,29 @@
 <mat-card>
   <mat-card-header class="section-container filters-header">
-    <mat-card-title>Filters</mat-card-title>
-    <div class="section-container" data-cy="more-filters-button">
+    <div style="display: flex; align-items: center; gap: 24px;">
+      <mat-card-title style="margin: 0;">Filters</mat-card-title>
+      <ng-template [ngIf]="this.loggedIn$ | async">
+        <div class="public-toggle" style="margin: 0;">
+          <button
+            mat-stroked-button
+            [class.active]="
+              currentPublicViewMode === '' || currentPublicViewMode === false
+            "
+            (click)="onViewPublicChange(false)"
+          >
+            My data
+          </button>
+          <button
+            mat-stroked-button
+            [class.active]="currentPublicViewMode === true"
+            (click)="onViewPublicChange(true)"
+          >
+            Public data
+          </button>
+        </div>
+      </ng-template>
+    </div>
+    <div class="section-container" data-cy="more-filters-button" style="margin: 0;">
       <button
         mat-icon-button
         class="settings-button"
@@ -34,43 +56,45 @@
         </button>
       </div>
     </ng-template>
-    <ng-container *ngFor="let filter of filtersList">
-      <shared-filter
-        *ngIf="filter.enabled"
-        [key]="filter.key"
-        [label]="filter.label"
-        [clear]="clearSearchBar"
-        [tooltip]="filter.description"
-        [filterType]="filter.type"
-        [prefilled]="activeFilters[filter.key] || null"
-        [currentFilter$]="getFilterByKey$(filter.key)"
-        [facetCounts$]="getFilterFacetCounts$(filter.key)"
-        (textChange)="setFilter(filter.key, $event)"
-        (dateRangeChange)="setDateFilter(filter.key, $event)"
-        (selectionChange)="selectionChange($event)"
-        (checkBoxChange)="setFilter(filter.key, $event)"
-        (numericRangeChange)="numericRangeChange(filter.key, $event)"
-        [filterValue]="activeFilters[filter.key]"
-        [collapsible]="filter.type === 'checkbox'"
-        (applyEnterKey)="applyFilters()"
-      ></shared-filter>
-    </ng-container>
+    <div class="filters-grid">
+      <ng-container *ngFor="let filter of filtersList">
+        <shared-filter
+          *ngIf="filter.enabled"
+          [key]="filter.key"
+          [label]="filter.label"
+          [clear]="clearSearchBar"
+          [tooltip]="filter.description"
+          [filterType]="filter.type"
+          [prefilled]="activeFilters[filter.key] || null"
+          [currentFilter$]="getFilterByKey$(filter.key)"
+          [facetCounts$]="getFilterFacetCounts$(filter.key)"
+          (textChange)="setFilter(filter.key, $event)"
+          (dateRangeChange)="setDateFilter(filter.key, $event)"
+          (selectionChange)="selectionChange($event)"
+          (checkBoxChange)="setFilter(filter.key, $event)"
+          (numericRangeChange)="numericRangeChange(filter.key, $event)"
+          [filterValue]="activeFilters[filter.key]"
+          [collapsible]="filter.type === 'checkbox'"
+          (applyEnterKey)="applyFilters()"
+        ></shared-filter>
+      </ng-container>
 
-    <shared-condition
-      #conditionFilter
-      *ngIf="appConfig.scienceSearchEnabled"
-      data-cy="scientific-condition-filter-list"
-      [showConditions]="true"
-      [metadataKeys]="metadataKeys$ | async"
-      [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
-      [showConditionToggle]="true"
-      [conditionSettingScope]="'dataset'"
-      [addConditionAction]="addCondition"
-      [removeConditionAction]="removeCondition"
-      [dialogTitle]="'Add Dataset Metadata Key'"
-    ></shared-condition>
+      <shared-condition
+        #conditionFilter
+        *ngIf="appConfig.scienceSearchEnabled"
+        data-cy="scientific-condition-filter-list"
+        [showConditions]="true"
+        [metadataKeys]="metadataKeys$ | async"
+        [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
+        [showConditionToggle]="true"
+        [conditionSettingScope]="'dataset'"
+        [addConditionAction]="addCondition"
+        [removeConditionAction]="removeCondition"
+        [dialogTitle]="'Add Dataset Metadata Key'"
+      ></shared-condition>
+    </div>
 
-    <div class="section-container">
+    <div class="section-container action-buttons">
       <button
         [disabled]="(hasAppliedFilters$ | async) === false"
         mat-raised-button
