@@ -142,14 +142,17 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptions.push(
       this.filesWithCountAndTableSettings$.subscribe(
-        ({ origDatablocks, count, tablesSettings }) => {
+        ({ origDatablocks, count, isLoading, tablesSettings }) => {
           this.tablesSettings = tablesSettings;
           this.dataSource.next(origDatablocks);
           this.pending = false;
 
           const savedTableConfigColumns = tablesSettings?.columns;
           const tableSort = this.getTableSort();
-          const paginationConfig = this.getTablePaginationConfig(count);
+          const paginationConfig = this.getTablePaginationConfig(
+            count,
+            isLoading,
+          );
 
           const tableSettingsConfig =
             this.tableConfigService.getTableSettingsConfig(
@@ -203,7 +206,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  getTablePaginationConfig(dataCount = 0): TablePagination {
+  getTablePaginationConfig(dataCount = 0, isLoading = false): TablePagination {
     const { queryParams } = this.route.snapshot;
 
     return {
@@ -211,6 +214,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
       pageIndex: queryParams.pageIndex,
       pageSize: queryParams.pageSize || this.defaultPageSize,
       length: dataCount,
+      isLoading: isLoading,
     };
   }
 
