@@ -170,6 +170,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
         pageIndex: data.currentPage || 0,
         pageSize: data.datasetsPerPage || this.defaultPageSize,
         length: data.datasetCount,
+        isLoading: data.isLoading,
       };
 
       if (tableSettingsConfig?.settingList.length) {
