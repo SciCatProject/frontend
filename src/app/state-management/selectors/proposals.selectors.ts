@@ -51,6 +51,11 @@ export const selectProposalsCount = createSelector(
   (state) => state.proposalsCount,
 );
 
+export const selectRelatedProposalsCountIsLoading = createSelector(
+  selectProposalsState,
+  (state) => state.relatedProposalsCountIsLoading,
+);
+
 export const selectProposalsFacetCounts = createSelector(
   selectProposalsState,
   (state) => state.facetCounts,
@@ -64,6 +69,11 @@ export const selectProposalsFacetCountsIsLoading = createSelector(
 export const selectDatasetsCount = createSelector(
   selectProposalsState,
   (state) => state.datasetsCount,
+);
+
+export const selectDatasetsCountIsLoading = createSelector(
+  selectProposalsState,
+  (state) => state.datasetsCountIsLoading,
 );
 
 export const selectHasPrefilledFilters = createSelector(
@@ -120,20 +130,31 @@ export const selectViewProposalPageViewModel = createSelector(
   selectDatasetsPage,
   selectDatasetsCount,
   selectDatasetsPerPage,
-  (proposal, datasets, currentPage, datasetCount, datasetsPerPage) => ({
+  selectDatasetsCountIsLoading,
+  (
     proposal,
     datasets,
     currentPage,
     datasetCount,
     datasetsPerPage,
+    isLoading,
+  ) => ({
+    proposal,
+    datasets,
+    currentPage,
+    datasetCount,
+    datasetsPerPage,
+    isLoading,
   }),
 );
 
 export const selectRelatedProposalsPageViewModel = createSelector(
   selectProposalsState,
-  ({ relatedProposals, relatedProposalsCount }) => ({
+  selectRelatedProposalsCountIsLoading,
+  ({ relatedProposals, relatedProposalsCount }, isLoading) => ({
     relatedProposals,
     relatedProposalsCount,
+    isLoading,
   }),
 );
 

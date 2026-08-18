@@ -5,6 +5,7 @@ export interface FilesState {
   currentOrigDatablock: object | undefined;
 
   totalCount: number;
+  filesCountIsLoading: boolean;
 
   filters: GenericFilters;
 }
@@ -14,6 +15,7 @@ export const initialFilesState: FilesState = {
   currentOrigDatablock: undefined,
 
   totalCount: 0,
+  filesCountIsLoading: false,
 
   filters: {
     sortField: "createdAt desc",
