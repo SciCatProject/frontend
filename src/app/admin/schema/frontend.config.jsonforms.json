@@ -26,6 +26,7 @@
       "archiveWorkflowEnabled": { "type": "boolean" },
       "realTimeUpdatesEnabled": { "type": "boolean" },
       "datasetReduceEnabled": { "type": "boolean" },
+      "datasetRelationshipsEnabled": { "type": "boolean" },
       "datasetJsonScientificMetadata": { "type": "boolean" },
       "datasetPageSizeOptions": {
         "type": "array",
@@ -105,6 +106,29 @@
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
+      "datasetStatusBanner": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": { "type": "string" },
+                "value": { "type": "string" },
+                "message": { "type": "string" },
+                "code": {
+                  "type": "string",
+                  "enum": ["INFO", "WARN"],
+                  "default": "WARN"
+                }
+              },
+              "required": ["field", "value", "message"]
+            }
+          }
+        }
+      },
       "helpSettings": {
         "type": "object",
         "properties": {
@@ -347,7 +371,8 @@
                     "scientificMetadata",
                     "attachments",
                     "datasetJsonView",
-                    "regular"
+                    "regular",
+                    "statusBanner"
                   ]
                 },
                 "order": { "type": "number" },
@@ -476,6 +501,7 @@
           { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
+          { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },
           {
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"
@@ -740,6 +766,45 @@
                 "scope": "#/properties/labelsLocalization/properties/proposal"
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Dataset Status Banner",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetStatusBanner/properties/enabled"
+          },
+          {
+            "type": "ListWithDetail",
+            "label": "Rules",
+            "scope": "#/properties/datasetStatusBanner/properties/rules",
+            "options": {
+              "labelRef": "#/items/properties/message",
+              "detail": {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      { "type": "Control", "scope": "#/properties/field" },
+                      { "type": "Control", "scope": "#/properties/value" },
+                      { "type": "Control", "scope": "#/properties/code" }
+                    ]
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/message",
+                    "options": { "multi": true }
+                  }
+                ]
+              }
+            }
           }
         ]
       },

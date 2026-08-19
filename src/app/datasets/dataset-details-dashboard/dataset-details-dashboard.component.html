@@ -17,7 +17,7 @@
       Add to Selection
     </button>
   </div>
-  <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+  <nav data-cy="dataset-dashboard-tabs" mat-tab-nav-bar [tabPanel]="tabPanel">
     <ng-container *ngFor="let link of navLinks">
       <a
         mat-tab-link

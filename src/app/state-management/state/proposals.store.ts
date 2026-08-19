@@ -53,11 +53,13 @@ export interface ProposalsState {
   parentProposal: ProposalClass | undefined;
   relatedProposals: (ProposalClass & { relation: string })[];
   relatedProposalsCount: number;
+  relatedProposalsCountIsLoading: boolean;
   datasets: OutputDatasetObsoleteDto[];
 
   columns: TableField<any>[];
   proposalsCount: number;
   datasetsCount: number;
+  datasetsCountIsLoading: boolean;
   facetCounts: FacetCounts;
   facetCountsIsLoading: boolean;
 
@@ -78,6 +80,7 @@ export const initialProposalsState: ProposalsState = {
   parentProposal: undefined,
   relatedProposals: [],
   relatedProposalsCount: 0,
+  relatedProposalsCountIsLoading: false,
   datasets: [],
 
   facetCounts: {},
@@ -85,6 +88,7 @@ export const initialProposalsState: ProposalsState = {
 
   proposalsCount: 0,
   datasetsCount: 0,
+  datasetsCountIsLoading: false,
 
   hasPrefilledFilters: false,
 

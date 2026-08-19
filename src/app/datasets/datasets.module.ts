@@ -1,7 +1,6 @@
 import { DatasetEffects } from "./../state-management/effects/datasets.effects";
 import { EffectsModule } from "@ngrx/effects";
 import { LinkyModule } from "ngx-linky";
-import { ArchivingService } from "./archiving.service";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
@@ -82,6 +81,7 @@ import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
+import { DatasetStatusBannerComponent } from "./dataset-detail/dataset-status-banner/dataset-status-banner.component";
 import { DatasetInlineEditCellComponent } from "./dataset-table/dataset-inline-edit-cell.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
@@ -89,9 +89,11 @@ import { IngestorModule } from "../ingestor/ingestor.module";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
-import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
+import { RelationshipsComponent } from "./relationships/relationships.component";
+import { RelatedIdentifierCellComponent } from "./relationships/related-identifier-cell/related-identifier-cell.component";
+import { ActionEffects } from "state-management/effects/actions.effect";
 
 @NgModule({
   imports: [
@@ -140,6 +142,7 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
+      ActionEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
@@ -171,6 +174,7 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     DatasetDetailWrapperComponent,
     DatasetDetailComponent,
     DatasetDetailDynamicComponent,
+    DatasetStatusBannerComponent,
     DatasetTableComponent,
     DatasetInlineEditCellComponent,
     DatasetsFilterComponent,
@@ -186,10 +190,11 @@ import { SharedConditionModule } from "shared/modules/shared-condition/shared-co
     DatasetFileUploaderComponent,
     AdminTabComponent,
     RelatedDatasetsComponent,
+    RelationshipsComponent,
+    RelatedIdentifierCellComponent,
     DatasetsFilterSettingsComponent,
   ],
   providers: [
-    ArchivingService,
     AsyncPipe,
     JsonHeadPipe,
     ThumbnailPipe,

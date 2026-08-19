@@ -19,6 +19,8 @@ export interface Settings {
   fe_sample_table_conditions?: ConditionConfig[];
   fe_instrument_table_columns?: TableColumn[];
   fe_file_table_columns?: TableColumn[];
+  fe_job_table_columns?: TableColumn[];
+  fe_publisheddata_table_columns?: TableColumn[];
 }
 
 export interface TableColumn {
@@ -94,7 +96,11 @@ export interface Field {
 
 // Type alias for allowed customization types
 type CustomizationType =
-  "regular" | "scientificMetadata" | "datasetJsonView" | "attachments";
+  | "regular"
+  | "scientificMetadata"
+  | "datasetJsonView"
+  | "attachments"
+  | "statusBanner";
 
 // Type alias for allowed field types
 type FieldType = "text" | "copy" | "linky" | "tag" | "date";
@@ -217,10 +223,22 @@ export const SETTINGS_CONFIG = [
     configKey: "columns",
   },
   { key: "fe_file_table_columns", scope: "file", configKey: "columns" },
+  { key: "fe_job_table_columns", scope: "job", configKey: "columns" },
+  {
+    key: "fe_publisheddata_table_columns",
+    scope: "publisheddata",
+    configKey: "columns",
+  },
 ];
 
 export type SettingScope =
-  "dataset" | "proposal" | "sample" | "instrument" | "file";
+  | "dataset"
+  | "proposal"
+  | "sample"
+  | "instrument"
+  | "file"
+  | "job"
+  | "publisheddata";
 export type SettingKind = "columns" | "filters" | "conditions";
 
 export const getSettingKey = (

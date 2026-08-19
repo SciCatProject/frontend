@@ -74,6 +74,7 @@
   </div>
   <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
     <mat-paginator
+      class="datasets-paginator datasets-header-paginator"
       [pageSizeOptions]="pagination.pageSizeOptions"
       [pageIndex]="pagination.pageIndex"
       [length]="pagination.length"
@@ -494,6 +495,7 @@
 </div>
 <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
   <mat-paginator
+    class="datasets-paginator datasets-footer-paginator"
     [pageSizeOptions]="pagination.pageSizeOptions"
     [pageIndex]="pagination.pageIndex"
     [length]="pagination.length"

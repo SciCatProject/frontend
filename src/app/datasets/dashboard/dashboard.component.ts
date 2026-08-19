@@ -11,7 +11,6 @@ import {
   fetchFacetCountsAction,
   prefillBatchAction,
   prefillFiltersAction,
-  addDatasetAction,
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
   changePageAction,
@@ -23,7 +22,6 @@ import {
 import {
   selectHasPrefilledFilters,
   selectCurrentDataset,
-  selectSelectedDatasets,
   selectPagination,
   selectIsBatchNonEmpty,
 } from "state-management/selectors/datasets.selectors";
@@ -59,7 +57,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     .pipe(filter((has) => has));
 
   loggedIn$ = this.store.select(selectIsLoggedIn);
-  selectedSets$ = this.store.select(selectSelectedDatasets);
   selectColumns$ = this.store.select(selectColumns);
   selectHasFetchedSettings$ = this.store.select(selectHasFetchedSettings);
 
