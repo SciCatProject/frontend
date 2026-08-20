@@ -60,9 +60,9 @@
     <div class="configurable-action-iframe-content">
       <iframe
         class="configurable-action-iframe"
-        [attr.name]="iframeName"
+        [name]="iframeName"
         [attr.title]="iframeTitle"
-        (load)="onIframeLoad($event)"
+        (load)="onIframeLoad()"
       ></iframe>
 
       <div
@@ -83,7 +83,7 @@
   <iframe
     *ngIf="!iframeVisible"
     class="configurable-action-hidden-iframe"
-    [attr.name]="iframeName"
+    [name]="iframeName"
     [attr.title]="iframeTitle"
   ></iframe>
 </ng-container>

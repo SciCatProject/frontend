@@ -21,6 +21,7 @@ import {
   ActionItems,
   ActionType,
   DialogField,
+  IframeConfig,
 } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 as uuidv4 } from "uuid";
@@ -391,7 +392,7 @@ export class ConfigurableActionComponent
     this.form = document.createElement("form");
     this.form.target = this.getFormTarget();
     this.form.method = this.actionConfig.method || "POST";
-    this.form.action = this.actionConfig.url;
+    this.form.action = this.interpolate(this.actionConfig.url);
     this.form.style.display = "none";
 
     Object.entries(this.actionConfig.inputs || {}).forEach(([input, def]) => {
@@ -411,35 +412,42 @@ export class ConfigurableActionComponent
 
     document.body.appendChild(this.form);
     this.iframeLoadArmed = this.iframeVisible;
+    this.syncIframeTargetWindowName();
     this.form.submit();
     return true;
   }
 
   private getFormTarget(): string {
-    if (!this.actionConfig.iframe) return this.actionConfig.target || "_self";
+    // pre-defined target (default: new tab)
+    if (this.actionConfig.target != "iframe")
+      return this.actionConfig.target || "_blank";
 
-    return this.ensureIframeTarget();
-  }
-
-  private ensureIframeTarget(): string {
-    const config =
-      typeof this.actionConfig.iframe === "object"
-        ? this.actionConfig.iframe
-        : {};
-    const name = config.name || `configurable-action-${this.actionConfig.id}`;
-
+    // Iframe Target
+    const config = this.actionConfig.iframeConfig || {
+      name: `configurable-action-${this.actionConfig.id}`,
+    };
     this.iframeEnabled = true;
-    this.iframeVisible = config.hidden === false;
-    this.iframeName = name;
-    this.iframeTitle = name;
-    this.iframeWidth = config.width || (this.iframeVisible ? "90vw" : "100%");
-    this.iframeHeight =
-      config.height || (this.iframeVisible ? "70vh" : "400px");
+    this.iframeVisible = (config.hidden ?? true) === false;
+    this.iframeName = config.name;
+    this.iframeTitle = config.title || config.name;
+    this.iframeWidth = config.width || "90vw";
+    this.iframeHeight = config.height || "70vh";
     this.iframeLoading = this.iframeVisible;
     this.iframeLoadArmed = false;
     this.cdRef.detectChanges();
+    return config.name;
+  }
 
-    return name;
+  private syncIframeTargetWindowName() {
+    // This is needed for chromium browser
+    // to link iframe content to the form submission
+    if (!this.form || this.actionConfig.target != "iframe") return;
+    const iframe = document.getElementById(
+      this.iframeName,
+    ) as HTMLIFrameElement | null;
+    if (iframe?.contentWindow) {
+      iframe.contentWindow.name = this.form.target;
+    }
   }
 
   closeIframe() {
@@ -450,7 +458,6 @@ export class ConfigurableActionComponent
 
   openIframeInNewTab() {
     if (!this.form) return;
-
     const currentTarget = this.form.target;
     this.form.target = "_blank";
     try {
@@ -460,21 +467,10 @@ export class ConfigurableActionComponent
     }
   }
 
-  onIframeLoad(event: Event) {
+  onIframeLoad() {
     if (!this.iframeLoadArmed) return;
-    if (this.isIframeAboutBlank(event.target as HTMLIFrameElement | null))
-      return;
-
     this.iframeLoading = false;
     this.iframeLoadArmed = false;
-  }
-
-  private isIframeAboutBlank(iframe: HTMLIFrameElement | null): boolean {
-    try {
-      return iframe?.contentWindow?.location.href === "about:blank";
-    } catch {
-      return false;
-    }
   }
 
   private preparePayload(): string {

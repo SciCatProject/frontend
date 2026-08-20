@@ -818,27 +818,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.iframeHeight).toBe("300px");
     expect(component.iframeLoading).toBeTrue();
 
-    component.onIframeLoad({
-      target: {
-        contentWindow: {
-          location: {
-            href: "about:blank",
-          },
-        },
-      },
-    } as unknown as Event);
-
-    expect(component.iframeLoading).toBeTrue();
-
-    component.onIframeLoad({
-      target: {
-        contentWindow: {
-          location: {
-            href: "https://example.com/viewer",
-          },
-        },
-      },
-    } as unknown as Event);
+    component.onIframeLoad();
 
     expect(component.iframeLoading).toBeFalse();
 
@@ -852,6 +832,32 @@ describe("1000: ConfigurableActionComponent", () => {
 
     expect(submitSpy).toHaveBeenCalledTimes(1);
     expect(component.form.target).toBe("download-frame");
+  });
+
+  it("1066: Form submission should interpolate configured URL", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "iframe-form-url",
+      type: "form",
+      url: "https://example.com/notebook/{{ @pid }}",
+      variables: {
+        pid: "#Dataset0Pid",
+      },
+      iframe: {
+        id: "download-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItems);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.action).toBe(
+      "https://example.com/notebook/40f3beec-bee2-11f0-8c47-4b68a24470e0",
+    );
   });
 
   it("1070: Download All action button should contain the correct label", () => {
