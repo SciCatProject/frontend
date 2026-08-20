@@ -8,7 +8,7 @@
   >
     <mat-slide-toggle
       [checked]="realTimeEnabled"
-      (change)="realTimeEnabledChange.emit($event.checked)"
+      (change)="realTimeToggle.emit($event.checked)"
       data-cy="real-time-toggle"
     >
       Live updates

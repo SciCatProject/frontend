@@ -25,6 +25,6 @@
   [showRealTimeToggle]="isLoggedIn$ | async"
   [latestUpdatedId]="latestUpdatedId$ | async"
   [realTimeEnabled]="realTimeEnabled"
-  (realTimeEnabledChange)="onRealTimeToggle($event)"
+  (realTimeToggle)="onRealTimeToggle($event)"
 >
 </dynamic-mat-table>
