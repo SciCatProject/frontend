@@ -15,13 +15,24 @@ const reducer = createReducer(
     }),
   ),
 
+  on(fromActions.fetchCountAction, (state): InstrumentState => ({
+    ...state,
+    instrumentsCountIsLoading: true,
+  })),
+
   on(
     fromActions.fetchCountCompleteAction,
     (state, { count }): InstrumentState => ({
       ...state,
       totalCount: count,
+      instrumentsCountIsLoading: false,
     }),
   ),
+
+  on(fromActions.fetchCountFailedAction, (state): InstrumentState => ({
+    ...state,
+    instrumentsCountIsLoading: false,
+  })),
 
   on(
     fromActions.fetchInstrumentCompleteAction,
@@ -39,12 +50,9 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.clearInstrumentsStateAction,
-    (): InstrumentState => ({
-      ...initialInstrumentState,
-    }),
-  ),
+  on(fromActions.clearInstrumentsStateAction, (): InstrumentState => ({
+    ...initialInstrumentState,
+  })),
 );
 
 export const instrumentsReducer = (

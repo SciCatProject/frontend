@@ -10,8 +10,8 @@ import {
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import {
+  Configuration as ApiConfiguration,
   DatasetClass,
-  UsersService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   ActionButtonStyle,
@@ -23,7 +23,6 @@ import {
 } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 as uuidv4 } from "uuid";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import {
@@ -34,6 +33,10 @@ import { Subscription } from "rxjs";
 import { DialogComponent, DynamicDialogData } from "../dialog/dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import _ from "lodash";
+import {
+  actionFailureAction,
+  actionSuccessAction,
+} from "state-management/actions/actions.actions";
 
 @Component({
   selector: "configurable-action",
@@ -78,17 +81,19 @@ export class ConfigurableActionComponent
   form: HTMLFormElement | null = null;
 
   constructor(
-    private usersService: UsersService,
     private authService: AuthService,
     private configService: AppConfigService,
-    private snackBar: MatSnackBar,
     private store: Store,
     private datePipe: DatePipe,
     public dialog: MatDialog,
-  ) {
-    this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
-      this.jwt = jwt.jwt;
-    });
+    private apiConfiguration: ApiConfiguration,
+  ) {}
+
+  private get contextItems(): ActionItems {
+    return {
+      ...this.actionItems,
+      apiBaseUrl: this.apiConfiguration.basePath,
+    };
   }
 
   private interpolateCrossReferences(selector: string): string {
@@ -106,7 +111,7 @@ export class ConfigurableActionComponent
 
     let processedSelector = this.interpolateCrossReferences(selector);
     processedSelector = this.parseVariableTokens(processedSelector);
-    const dynamicKey = Object.keys(this.actionItems).find((key) =>
+    const dynamicKey = Object.keys(this.contextItems).find((key) =>
       processedSelector.startsWith(`#${key}`),
     );
 
@@ -126,9 +131,9 @@ export class ConfigurableActionComponent
     selector: string,
     dynamicKey: string,
   ): unknown {
-    if (selector === `#${dynamicKey}`) return this.actionItems[dynamicKey];
+    if (selector === `#${dynamicKey}`) return this.contextItems[dynamicKey];
     const path = selector.slice(dynamicKey.length + 2);
-    return _.get(this.actionItems[dynamicKey], path);
+    return _.get(this.contextItems[dynamicKey], path);
   }
 
   private parseVariableTokens(selector: string): string {
@@ -145,11 +150,7 @@ export class ConfigurableActionComponent
   }
 
   private fieldMatch(selector: string): unknown {
-    const datasets = _.get(
-      this.actionItems,
-      "datasets",
-      [],
-    ) as ActionItemDataset[];
+    const datasets = _.get(this.actionItems, "datasets", []);
     const allFieldMatch = selector.match(/^#DatasetsField\[(\w+)\]$/);
     if (allFieldMatch) return _.map(datasets, allFieldMatch[1]);
     const datasetFieldMatch = selector.match(
@@ -174,11 +175,11 @@ export class ConfigurableActionComponent
   }
 
   private buildDatasetStaticMap() {
-    const datasets = _.get(
+    const datasets: ActionItemDataset[] = _.get(
       this.actionItems,
       "datasets",
       [],
-    ) as ActionItemDataset[];
+    );
     const ds0 = _.get(datasets, "[0]");
 
     const staticMap: Record<string, () => unknown> = {
@@ -212,6 +213,11 @@ export class ConfigurableActionComponent
           .flatMap("files")
           .filter("selected")
           .sumBy((f) => Number(f.size || 0)),
+      "#DatasetsPidEmptyFilesMap": () =>
+        JSON.stringify(_.map(datasets, (d) => ({ pid: d.pid, files: [] }))),
+      "#DatasetsTotalSize": () => _(datasets).sumBy((d) => d.size || 0),
+      "#DatasetsTotalPackedSize": () =>
+        _(datasets).sumBy((d) => d.packedSize || 0),
     };
     return staticMap;
   }
@@ -365,12 +371,17 @@ export class ConfigurableActionComponent
     })
       .then(async (r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const data = await r.json().catch(() => ({}));
+        // Only an empty body is treated as "no data"; a non-empty body that
+        // fails to parse as JSON is a real error and should not be silently
+        // swallowed into a false success.
+        const text = await r.text();
+        const data = text ? JSON.parse(text) : {};
 
+        this.store.dispatch(actionSuccessAction());
         this.actionFinishedEmit(true, data);
       })
       .catch((err: Error) => {
-        this.snackBar.open("Action failed", "Close", { duration: 2000 });
+        this.store.dispatch(actionFailureAction());
         this.actionFinishedEmit(false, err);
       });
     return true;
@@ -437,14 +448,17 @@ export class ConfigurableActionComponent
         a.click();
         URL.revokeObjectURL(url);
       })
-      .catch(() =>
-        this.snackBar.open("Download failed", "Close", { duration: 2000 }),
+      .catch((err: Error) =>
+        this.store.dispatch(actionFailureAction(err.message)),
       );
     return true;
   }
 
   private typeLink() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+    window.open(
+      this.interpolate(this.actionConfig.url),
+      this.actionConfig.target || "_self",
+    );
   }
 
   private typeDialog() {
@@ -480,8 +494,8 @@ export class ConfigurableActionComponent
   private executeNextStep(nextStep: ActionType) {
     try {
       if (nextStep === "xhr") this.typeXhr();
-      if (nextStep === "form") this.typeForm();
-      if (nextStep === "json-download") this.typeJsonToDownload();
+      else if (nextStep === "form") this.typeForm();
+      else if (nextStep === "json-download") this.typeJsonToDownload();
       else console.warn("Unsupported onSuccess action type:", nextStep);
     } catch (error) {
       console.error("Configurable action error on execute next step", error);
@@ -543,6 +557,10 @@ export class ConfigurableActionComponent
   }
 
   get disabled(): boolean {
+    if (typeof this.actionConfig.disabled === "boolean")
+      return this.actionConfig.disabled;
+    if (typeof this.actionConfig.enabled === "boolean")
+      return !this.actionConfig.enabled;
     try {
       this.resolveVariableContext();
       const raw = this.actionConfig.enabled
@@ -556,6 +574,7 @@ export class ConfigurableActionComponent
   }
 
   ngOnInit() {
+    this.jwt = this.authService.getAccessTokenId() || "";
     this.subscriptions.push(
       this.userProfile$.subscribe(
         (up) => up && (this.userProfile = up as Record<string, unknown>),

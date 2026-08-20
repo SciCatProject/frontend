@@ -93,7 +93,20 @@ export const testData = {
     endTime: "2019-10-31T14:44:46.143Z",
     creationLocation: "Cypress",
     dataFormat: "Nexus Version x.y",
-    scientificMetadata: {},
+    scientificMetadata: {
+      key_1:{
+        human_name: "Key 1",
+        value: "Value 1",
+        unit: ""
+      },
+      key_2: {
+        human_name: "Key 2",
+        value: 1,
+        unit: "mm",
+        valueSI: 0.01,
+        unitSI: "m"
+      }
+    },
     owner: "string",
     ownerEmail: "string@test.com",
     orcidOfOwner: "string",
@@ -175,10 +188,16 @@ export const testData = {
       },
     ],
   },
+  job: {
+    contactEmail: "test@example.com",
+    type: "ui_test",
+    jobParams: {},
+  },
+  testImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNkYPhfz0AEYBxVSF+FAP5FDvcfRYWgAAAAAElFTkSuQmCC",
 };
 
 export const testConfig = {
-  dynamicDetialViewComponent: {
+  dynamicDetailViewComponent: {
     labelsLocalization: {
       dataset: {
         datasetName: "Test String",
@@ -358,6 +377,46 @@ export const testConfig = {
       conditions: [],
     },
   },
+  helpSettings: {
+    disabled: {
+      helpSettings: {
+        enabled: false,
+      },
+    },
+    enabledWithCustomText: {
+      helpSettings: {
+        enabled: true,
+        htmlContent:
+          '<p class="scicat_e2e_test">SciCat E2E Test Help Content</p>',
+      },
+    },
+    enabledWithDefaultText: {
+      helpSettings: {
+        enabled: true,
+        htmlContent: "",
+      },
+    },
+  },
+  aboutSettings: {
+    disabled: {
+      aboutSettings: {
+        enabled: false,
+      },
+    },
+    enabledWithCustomText: {
+      aboutSettings: {
+        enabled: true,
+        htmlContent:
+          '<p class="scicat_e2e_test">SciCat E2E Test About Content</p>',
+      },
+    },
+    enabledWithDefaultText: {
+      aboutSettings: {
+        enabled: true,
+        htmlContent: "",
+      },
+    },
+  },
 };
 
 export const defaultDatasetsColumnsList = [
@@ -380,3 +439,4 @@ export const personalizedDatasetsColumnsList = [
   "Start Time",
   "End Time",
 ];
+

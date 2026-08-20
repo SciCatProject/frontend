@@ -5,6 +5,7 @@
   "allowConfigOverrides": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
+  "datasetRelationshipsEnabled": true,
   "datasetJsonScientificMetadata": true,
   "datasetPageSizeOptions": [
     5,
@@ -79,6 +80,23 @@
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,
   "hideEmptyMetadataTable": false,
+  "datasetStatusBanner": {
+    "enabled": true,
+    "rules": [
+      {
+        "field": "datasetlifecycle.archiveStatusMessage",
+        "value": "deleted",
+        "message": "This dataset has been deleted.",
+        "code": "WARN"
+      },
+      {
+        "field": "datasetlifecycle.archiveStatusMessage",
+        "value": "markedForDeletion",
+        "message": "This dataset is marked for deletion.",
+        "code": "WARN"
+      }
+    ]
+  },
   "datafilesActionsEnabled": true,
   "datafilesActions": [
     {
@@ -730,7 +748,16 @@
   "timezone": "UTC",
   "datasetDetailComponent": {
     "enableCustomizedComponent": false,
+    "tileRestrictedIconVisible": false,
+    "tileRestrictedIconGroups": ["admin"],
     "customization": [
+      {
+        "type": "statusBanner",
+        "label": "Status Banner",
+        "order": -1,
+        "row": 1,
+        "col": 10
+      },
       {
         "type": "regular",
         "label": "General Information",
@@ -939,5 +966,13 @@
       "publishedData": true,
       "samples": true
     }
+  },
+  "helpSettings": {
+    "enabled": false,
+    "htmlContent": "Here you can place your custom help content"
+  },
+  "aboutSettings": {
+    "enabled": false,
+    "htmlContent": "Here you can place your custom info/about content"
   }
 }

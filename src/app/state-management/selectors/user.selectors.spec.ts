@@ -296,6 +296,39 @@ describe("User Selectors", () => {
     });
   });
 
+  describe("selectColumnsWithHasFetchedSettings", () => {
+    it("should select columns and hasFetchedSettings", () => {
+      expect(
+        fromSelectors.selectColumnsWithHasFetchedSettings.projector(
+          initialUserState.settings.fe_dataset_table_columns,
+          initialUserState.hasFetchedSettings,
+        ),
+      ).toEqual({
+        columns: initialUserState.settings.fe_dataset_table_columns,
+        hasFetchedSettings: initialUserState.hasFetchedSettings,
+      });
+    });
+
+    it("should return the same result reference when only unrelated user state (e.g. a snackbar message) changes", () => {
+      // Unrelated user-state changes (like a snackbar message) must not
+      // invalidate this selector's memoization.
+      const stateBefore = { users: initialUserState };
+      const stateAfter = {
+        users: {
+          ...initialUserState,
+          message: { content: "Something happened", type: 0, duration: 5000 },
+        },
+      };
+
+      const resultBefore =
+        fromSelectors.selectColumnsWithHasFetchedSettings(stateBefore);
+      const resultAfter =
+        fromSelectors.selectColumnsWithHasFetchedSettings(stateAfter);
+
+      expect(resultAfter).toBe(resultBefore);
+    });
+  });
+
   describe("selectSampleDialogPageViewModel", () => {
     it("should select sample dialog page view model state", () => {
       expect(

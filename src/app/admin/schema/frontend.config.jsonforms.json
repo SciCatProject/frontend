@@ -25,6 +25,7 @@
       "addDatasetEnabled": { "type": "boolean" },
       "archiveWorkflowEnabled": { "type": "boolean" },
       "datasetReduceEnabled": { "type": "boolean" },
+      "datasetRelationshipsEnabled": { "type": "boolean" },
       "datasetJsonScientificMetadata": { "type": "boolean" },
       "datasetPageSizeOptions": {
         "type": "array",
@@ -104,6 +105,43 @@
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
+      "datasetStatusBanner": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": { "type": "string" },
+                "value": { "type": "string" },
+                "message": { "type": "string" },
+                "code": {
+                  "type": "string",
+                  "enum": ["INFO", "WARN"],
+                  "default": "WARN"
+                }
+              },
+              "required": ["field", "value", "message"]
+            }
+          }
+        }
+      },
+      "helpSettings": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "htmlContent": { "type": "string" }
+        }
+      },
+      "aboutSettings": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "htmlContent": { "type": "string" }
+        }
+      },
       "datafilesActionsEnabled": { "type": "boolean" },
       "statusBannerMessage": { "type": "string" },
       "statusBannerCode": {
@@ -125,7 +163,6 @@
             "url": { "type": "string" },
             "target": { "type": "string" },
             "enabled": { "type": "string" },
-            "authorization": { "type": "array", "items": { "type": "string" } },
             "inputs": {
               "type": "array",
               "items": {
@@ -320,6 +357,17 @@
         "type": "object",
         "properties": {
           "enableCustomizedComponent": { "type": "boolean" },
+          "tileRestrictedIconVisible": {
+            "type": "boolean",
+            "title": "Restricted Tiles Indicator Enabled",
+            "description": "Display a Restricted Tile Indicator (lock icon) on tiles with restricted access"
+          },
+          "tileRestrictedIconGroups": {
+            "type": "array",
+            "title": "Restricted Tiles Indicator Groups",
+            "description": "List of user groups that can see the Restricted Tile Icon on dataset tiles",
+            "items": { "type": "string" }
+          },
           "customization": {
             "type": "array",
             "items": {
@@ -332,7 +380,8 @@
                     "scientificMetadata",
                     "attachments",
                     "datasetJsonView",
-                    "regular"
+                    "regular",
+                    "statusBanner"
                   ]
                 },
                 "order": { "type": "number" },
@@ -341,6 +390,10 @@
                 "viewMode": {
                   "type": "string",
                   "enum": ["table", "json", "tree"]
+                },
+                "authorization": {
+                  "type": "array",
+                  "items": { "type": "string" }
                 },
 
                 "options": {
@@ -461,6 +514,7 @@
           { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
+          { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },
           {
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"
@@ -648,10 +702,6 @@
                   { "type": "Control", "scope": "#/properties/filename" },
                   {
                     "type": "Control",
-                    "scope": "#/properties/authorization"
-                  },
-                  {
-                    "type": "Control",
                     "scope": "#/properties/variables",
                     "options": {
                       "detail": {
@@ -729,6 +779,45 @@
       },
       {
         "type": "Group",
+        "label": "Dataset Status Banner",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetStatusBanner/properties/enabled"
+          },
+          {
+            "type": "ListWithDetail",
+            "label": "Rules",
+            "scope": "#/properties/datasetStatusBanner/properties/rules",
+            "options": {
+              "labelRef": "#/items/properties/message",
+              "detail": {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      { "type": "Control", "scope": "#/properties/field" },
+                      { "type": "Control", "scope": "#/properties/value" },
+                      { "type": "Control", "scope": "#/properties/code" }
+                    ]
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/message",
+                    "options": { "multi": true }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "Group",
         "label": "Dataset Detail Component",
         "options": {
           "expandable": true
@@ -737,6 +826,14 @@
           {
             "type": "Control",
             "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconVisible"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconGroups"
           },
           {
             "type": "ListWithDetail",
@@ -751,7 +848,11 @@
                     "elements": [
                       { "type": "Control", "scope": "#/properties/label" },
                       { "type": "Control", "scope": "#/properties/type" },
-                      { "type": "Control", "scope": "#/properties/order" },
+                      { "type": "Control", "scope": "#/properties/order" }]
+                  },
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
                       { "type": "Control", "scope": "#/properties/row" },
                       { "type": "Control", "scope": "#/properties/col" },
                       {
@@ -766,6 +867,15 @@
                             }
                           }
                         }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/authorization"
                       }
                     ]
                   },
@@ -946,6 +1056,58 @@
                   {
                     "type": "Control",
                     "scope": "#/properties/mainMenu/properties/authenticatedUser"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Header",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/helpSettings/properties/enabled",
+                    "label": "Help Enabled"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/helpSettings/properties/htmlContent",
+                    "label": "Help HTML Content",
+                    "options": {
+                      "multi": true,
+                      "rows": 5
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/aboutSettings/properties/enabled",
+                    "label": "About Enabled"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/aboutSettings/properties/htmlContent",
+                    "label": "About HTML Content",
+                    "options": {
+                      "multi": true,
+                      "rows": 5
+                    }
                   }
                 ]
               }

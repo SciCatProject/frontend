@@ -3,8 +3,11 @@ import { Injectable } from "@angular/core";
 import { mergeWith } from "lodash-es";
 import { firstValueFrom, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
-import { ActionConfig } from "shared/modules/configurable-actions/configurable-action.interfaces";
-import { DialogOptionData } from "shared/modules/dialog/dialog.component";
+import {
+  ActionConfig,
+  validateAllActionConfigsIn,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { buildDefaultBatchActions } from "shared/modules/configurable-actions/configurable-actions.defaults";
 import {
   DatasetDetailComponentConfig,
   IngestorComponentConfig,
@@ -78,6 +81,32 @@ export class DefaultTab {
   proposal: string;
 }
 
+export interface HelpSettings {
+  enabled?: boolean;
+  htmlContent?: string;
+}
+
+export interface AboutSettings {
+  enabled?: boolean;
+  htmlContent?: string;
+}
+
+export interface DatasetStatusBannerRule {
+  // Dot-path to the field to check, resolved from the dataset root,
+  // e.g. "datasetlifecycle.archiveStatusMessage".
+  field: string;
+  // Value the field must equal (as a string) for this rule to match.
+  value: string;
+  message: string;
+  code?: "INFO" | "WARN";
+}
+
+export interface DatasetStatusBannerConfig {
+  enabled?: boolean;
+  // Evaluated in order; the first matching rule wins.
+  rules?: DatasetStatusBannerRule[];
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   addScientificMetadataKeysAsColumn?: boolean;
@@ -88,6 +117,7 @@ export interface AppConfigInterface {
   datasetJsonScientificMetadata: boolean;
   datasetPageSizeOptions?: number[];
   datasetReduceEnabled: boolean;
+  datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetActionsEnabled: boolean;
   datasetActions: ActionConfig[];
@@ -169,11 +199,14 @@ export interface AppConfigInterface {
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
   hideEmptyMetadataTable?: boolean;
+  datasetStatusBanner?: DatasetStatusBannerConfig;
   ingestorComponent?: IngestorComponentConfig;
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
   statusBannerCode?: "INFO" | "WARN";
   autoApplyFilters?: boolean;
+  helpSettings?: HelpSettings;
+  aboutSettings?: AboutSettings;
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
 }
@@ -185,6 +218,27 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
     typeof obj === "object" &&
     validKeys.includes(obj.nonAuthenticatedUser) &&
     validKeys.includes(obj.authenticatedUser)
+  );
+}
+
+/**
+ * Deployments whose config predates batchActionsEnabled/batchActions never
+ * had a reason to set that flag, so a falsy batchActionsEnabled (missing, or
+ * explicitly false) is indistinguishable from "hasn't been configured yet".
+ * archiveWorkflowEnabled is the flag that gated the old hardcoded Archive/
+ * Retrieve buttons, so as long as it's true, default to the built-in
+ * Archive/Retrieve actions in that case, restoring the old behavior instead
+ * of silently losing it. Only an explicitly truthy batchActionsEnabled (a
+ * deployment that has set up its own batchActions) is left untouched.
+ */
+function applyDefaultBatchActions(config: AppConfigInterface): void {
+  if (!config.archiveWorkflowEnabled || config.batchActionsEnabled) return;
+  config.batchActionsEnabled = true;
+  config.batchActions = buildDefaultBatchActions(
+    (config.retrieveDestinations ?? []).map((destination) => ({
+      option: destination.option,
+      tooltip: destination.tooltip ?? undefined,
+    })),
   );
 }
 
@@ -284,6 +338,33 @@ export class AppConfigService {
     if (!config.datasetPageSizeOptions?.length) {
       config.datasetPageSizeOptions = [5, 10, 25, 100];
     }
+
+    if (!config.helpSettings) {
+      config.helpSettings = {
+        enabled: false,
+        htmlContent:
+          'Here goes your SciCat Help page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
+      };
+    }
+
+    if (!config.aboutSettings) {
+      config.aboutSettings = {
+        enabled: false,
+        htmlContent:
+          'Here goes your SciCat About page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
+      };
+    }
+
+    if (config.datasetDetailComponent) {
+      config.datasetDetailComponent.tileRestrictedIconVisible =
+        config.datasetDetailComponent.tileRestrictedIconVisible ?? false;
+
+      config.datasetDetailComponent.tileRestrictedIconGroups = config
+        .datasetDetailComponent.tileRestrictedIconGroups ?? ["admin"];
+    }
+
+    applyDefaultBatchActions(config);
+    validateAllActionConfigsIn(config);
 
     this.appConfig = config;
   }
