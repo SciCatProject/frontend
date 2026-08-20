@@ -22,6 +22,7 @@ import {
   ActionItems,
   ActionType,
   DialogField,
+  IframeConfig,
 } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 as uuidv4 } from "uuid";
@@ -49,6 +50,7 @@ import {
 export class ConfigurableActionComponent
   implements OnInit, OnChanges, OnDestroy
 {
+  private iframeLoadArmed = false;
   private authorizationTokens = {
     "#jwt": () => this.jwt,
     "#token": () => this.authService.getToken()?.id,
@@ -88,7 +90,6 @@ export class ConfigurableActionComponent
   iframeWidth = "100%";
   iframeHeight = "400px";
   iframeLoading = false;
-  private iframeLoadArmed = false;
 
   constructor(
     private usersService: UsersService,
@@ -400,11 +401,17 @@ export class ConfigurableActionComponent
   }
 
   private typeForm() {
-    if (this.form) document.body.removeChild(this.form);
+    if (this.actionConfig.target === "iframe") {
+      this.prepareIframe();
+      this.cdRef.detectChanges();
+    }
+    if (this.form?.parentNode) this.form.parentNode.removeChild(this.form);
     this.form = document.createElement("form");
-    this.form.target = this.getFormTarget();
+    this.form.id = this.actionConfig.id;
+    this.form.name = this.actionConfig.id;
+    this.form.target = this.getTarget();
     this.form.method = this.actionConfig.method || "POST";
-    this.form.action = this.actionConfig.url;
+    this.form.action = this.interpolate(this.actionConfig.url);
     this.form.style.display = "none";
 
     Object.entries(this.actionConfig.inputs || {}).forEach(([input, def]) => {
@@ -421,72 +428,48 @@ export class ConfigurableActionComponent
         this.form!.appendChild(this.addInputElement(input, String(value)));
       }
     });
-
     document.body.appendChild(this.form);
-    this.iframeLoadArmed = this.iframeVisible;
+    if (this.actionConfig.target === "iframe") {
+      this.iframeLoadArmed = this.iframeVisible;
+      this.syncIframeTargetWindowName();
+    }
     this.form.submit();
     return true;
   }
 
-  private getFormTarget(): string {
-    if (!this.actionConfig.iframe) return this.actionConfig.target || "_self";
+  private getTarget(): string {
+    // pre-defined target (default: new tab)
+    if (this.actionConfig.target !== "iframe")
+      return this.actionConfig.target || "_self";
 
-    return this.ensureIframeTarget();
+    // Iframe target
+    return this.iframeName;
   }
 
-  private ensureIframeTarget(): string {
-    const config =
-      typeof this.actionConfig.iframe === "object"
-        ? this.actionConfig.iframe
-        : {};
-    const name = config.name || `configurable-action-${this.actionConfig.id}`;
-
+  private prepareIframe() {
+    const config = this.actionConfig.iframeConfig || {
+      name: `configurable-action-${this.actionConfig.id}`,
+    };
     this.iframeEnabled = true;
-    this.iframeVisible = config.hidden === false;
-    this.iframeName = name;
-    this.iframeTitle = name;
-    this.iframeWidth = config.width || (this.iframeVisible ? "90vw" : "100%");
-    this.iframeHeight =
-      config.height || (this.iframeVisible ? "70vh" : "400px");
+    this.iframeVisible = (config.hidden ?? true) === false;
+    this.iframeName = config.name;
+    this.iframeTitle = config.title || config.name;
+    this.iframeWidth = config.width || "90vw";
+    this.iframeHeight = config.height || "70vh";
     this.iframeLoading = this.iframeVisible;
     this.iframeLoadArmed = false;
-    this.cdRef.detectChanges();
 
-    return name;
+    return config.name;
   }
 
-  closeIframe() {
-    this.iframeVisible = false;
-    this.iframeLoading = false;
-    this.iframeLoadArmed = false;
-  }
-
-  openIframeInNewTab() {
-    if (!this.form) return;
-
-    const currentTarget = this.form.target;
-    this.form.target = "_blank";
-    try {
-      this.form.submit();
-    } finally {
-      this.form.target = currentTarget;
-    }
-  }
-
-  onIframeLoad(event: Event) {
-    if (!this.iframeLoadArmed) return;
-    if (this.isIframeAboutBlank(event.target as HTMLIFrameElement | null))
-      return;
-
-    this.iframeLoading = false;
-    this.iframeLoadArmed = false;
-  }
-
-  private isIframeAboutBlank(iframe: HTMLIFrameElement | null): boolean {
-    try {
-      return iframe?.contentWindow?.location.href === "about:blank";
-    } catch {
-      return false;
+  private syncIframeTargetWindowName() {
+    // Make sure iframe target is correctly set
+    if (!this.form || this.actionConfig.target !== "iframe") return;
+    const iframe = document.getElementById(
+      this.iframeName,
+    ) as HTMLIFrameElement | null;
+    if (iframe?.contentWindow) {
+      iframe.contentWindow.name = this.form.target;
     }
   }
 
@@ -530,10 +513,7 @@ export class ConfigurableActionComponent
   }
 
   private typeLink() {
-    window.open(
-      this.interpolate(this.actionConfig.url),
-      this.actionConfig.target || "_self",
-    );
+    window.open(this.interpolate(this.actionConfig.url), this.getTarget());
   }
 
   private typeDialog() {
@@ -620,6 +600,50 @@ export class ConfigurableActionComponent
     });
   }
 
+  closeIframe() {
+    this.iframeVisible = false;
+    this.iframeLoading = false;
+    this.iframeLoadArmed = false;
+  }
+
+  openIframeInNewTab() {
+    if (this.form) {
+      const currentTarget = this.form.target;
+      this.form.target = "_blank";
+      try {
+        this.form.submit();
+      } finally {
+        this.form.target = currentTarget;
+      }
+    } else if (this.actionConfig.type === "link") {
+      window.open(this.interpolate(this.actionConfig.url), "_blank");
+    }
+  }
+
+  onIframeLoad() {
+    if (!this.iframeLoadArmed) return;
+    this.iframeLoading = false;
+    this.iframeLoadArmed = false;
+  }
+
+  performAction() {
+    this.resolveVariableContext();
+    const type = this.actionConfig.type || "form";
+    switch (type) {
+      case "json-download":
+        return this.typeJsonToDownload();
+      case "xhr":
+        return this.typeXhr();
+      case "link":
+        return this.typeLink();
+      case "dialog":
+        return this.typeDialog();
+      case "form":
+      default:
+        return this.typeForm();
+    }
+  }
+
   get visible(): boolean {
     try {
       this.resolveVariableContext();
@@ -682,23 +706,5 @@ export class ConfigurableActionComponent
   ngOnDestroy() {
     this.subscriptions.forEach((s) => s.unsubscribe());
     if (this.form?.parentNode) this.form.parentNode.removeChild(this.form);
-  }
-
-  performAction() {
-    this.resolveVariableContext();
-    const type = this.actionConfig.type || "form";
-    switch (type) {
-      case "json-download":
-        return this.typeJsonToDownload();
-      case "xhr":
-        return this.typeXhr();
-      case "link":
-        return this.typeLink();
-      case "dialog":
-        return this.typeDialog();
-      case "form":
-      default:
-        return this.typeForm();
-    }
   }
 }
