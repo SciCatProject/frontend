@@ -163,7 +163,6 @@
             "url": { "type": "string" },
             "target": { "type": "string" },
             "enabled": { "type": "string" },
-            "authorization": { "type": "array", "items": { "type": "string" } },
             "inputs": {
               "type": "array",
               "items": {
@@ -358,6 +357,17 @@
         "type": "object",
         "properties": {
           "enableCustomizedComponent": { "type": "boolean" },
+          "tileRestrictedIconVisible": {
+            "type": "boolean",
+            "title": "Restricted Tiles Indicator Enabled",
+            "description": "Display a Restricted Tile Indicator (lock icon) on tiles with restricted access"
+          },
+          "tileRestrictedIconGroups": {
+            "type": "array",
+            "title": "Restricted Tiles Indicator Groups",
+            "description": "List of user groups that can see the Restricted Tile Icon on dataset tiles",
+            "items": { "type": "string" }
+          },
           "customization": {
             "type": "array",
             "items": {
@@ -380,6 +390,10 @@
                 "viewMode": {
                   "type": "string",
                   "enum": ["table", "json", "tree"]
+                },
+                "authorization": {
+                  "type": "array",
+                  "items": { "type": "string" }
                 },
 
                 "options": {
@@ -688,10 +702,6 @@
                   { "type": "Control", "scope": "#/properties/filename" },
                   {
                     "type": "Control",
-                    "scope": "#/properties/authorization"
-                  },
-                  {
-                    "type": "Control",
                     "scope": "#/properties/variables",
                     "options": {
                       "detail": {
@@ -818,6 +828,14 @@
             "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
           },
           {
+            "type": "Control",
+            "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconVisible"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconGroups"
+          },
+          {
             "type": "ListWithDetail",
             "label": "Customization Configuration",
             "scope": "#/properties/datasetDetailComponent/properties/customization",
@@ -830,7 +848,11 @@
                     "elements": [
                       { "type": "Control", "scope": "#/properties/label" },
                       { "type": "Control", "scope": "#/properties/type" },
-                      { "type": "Control", "scope": "#/properties/order" },
+                      { "type": "Control", "scope": "#/properties/order" }]
+                  },
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
                       { "type": "Control", "scope": "#/properties/row" },
                       { "type": "Control", "scope": "#/properties/col" },
                       {
@@ -845,6 +867,15 @@
                             }
                           }
                         }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/authorization"
                       }
                     ]
                   },
