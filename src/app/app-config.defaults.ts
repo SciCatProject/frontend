@@ -6,6 +6,7 @@ export const DEFAULT_CONFIG: AppConfigInterface = {
   addDatasetEnabled: false,
   archiveWorkflowEnabled: false,
   datasetReduceEnabled: true,
+  datasetRelationshipsEnabled: true,
   datasetJsonScientificMetadata: true,
   editDatasetEnabled: true,
   editDatasetSampleEnabled: true,
@@ -235,7 +236,7 @@ export const DEFAULT_CONFIG: AppConfigInterface = {
       url: "http://localhost:3000/dataset/{{ @pid }}/",
       target: "_blank",
       enabled: "(#datasetOwner || #userIsAdmin) && !@isPublished",
-      authorization: "#datasetOwner && !@isPublished",
+      authorization: ["#datasetOwner && !@isPublished"],
       variables: {
         pid: "@Dataset0Pid",
         isPublished: "#Dataset[0]Field[isPublished]",
@@ -258,7 +259,7 @@ export const DEFAULT_CONFIG: AppConfigInterface = {
       url: "http://localhost:3000/dataset/{{ @pid }}/",
       target: "_blank",
       enabled: "(#datasetOwner || #userIsAdmin) && @isPublished",
-      authorization: "#datasetOwner && @isPublished",
+      authorization: ["#datasetOwner && @isPublished"],
       variables: {
         pid: "#Dataset0Pid",
         isPublished: "#Dataset[0]Field[isPublished]",
@@ -278,6 +279,7 @@ export const DEFAULT_CONFIG: AppConfigInterface = {
       icon: "/assets/icons/button_ess.png",
       url: "https://ess.eu",
       target: "_blank",
+      authorization: [],
     },
   ],
   datasetDetailsActionsEnabled: false,
@@ -965,7 +967,6 @@ export const DEFAULT_CONFIG: AppConfigInterface = {
     nonAuthenticatedUser: "DATASETS",
     authenticatedUser: "DATASETS",
   },
-  checkBoxFilterClickTrigger: false,
   mainMenu: {
     nonAuthenticatedUser: {
       datasets: true,

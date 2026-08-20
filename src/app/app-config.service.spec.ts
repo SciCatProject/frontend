@@ -5,6 +5,8 @@ import {
   AppConfigService,
   HelpMessages,
 } from "app-config.service";
+import { DEFAULT_CONFIG } from "app-config.defaults";
+import { cloneDeep } from "lodash-es";
 import { Observable, of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
@@ -28,6 +30,7 @@ const appConfig: AppConfigInterface = {
   addSampleEnabled: true,
   externalAuthEndpoint: "/auth/msad",
   facility: "ESS",
+  siteIcon: "site-icon.png",
   siteHeaderLogo: "site-header-logo.png",
   siteLoginLogo: "site-login-logo.png",
   siteLoginBackground: "site-login-background.png",
@@ -259,7 +262,11 @@ describe("AppConfigService", () => {
       spyOn(service["http"], "get").and.returnValue(of(appConfig));
       await service.loadAppConfig();
 
-      expect(service["appConfig"]).toEqual(appConfig);
+      const expectedConfig = service["mergeObjects"](
+        cloneDeep(DEFAULT_CONFIG),
+        appConfig,
+      );
+      expect(service["appConfig"]).toEqual(expectedConfig);
     });
 
     it("should default datasetPageSizeOptions when missing", async () => {
@@ -356,147 +363,86 @@ describe("AppConfigService", () => {
   });
 
   describe("#getConfig()", () => {
-    const mockConfigResponses: Record<string, object> = {
-      "/assets/config.json": {
-        accessTokenPrefix: "",
-        lbBaseURL: "http://127.0.0.1:3000",
-        gettingStarted: null,
-        datasetPageSizeOptions: [5, 10, 25, 100],
-        defaultMainPage: {
-          nonAuthenticatedUser: "DATASETS",
-          authenticatedUser: "DATASETS",
-        },
-        mainMenu: { nonAuthenticatedUser: { datasets: true } },
-        dateFormat: "yyyy-MM-dd HH:mm",
-        timezone: "UTC",
-        oAuth2Endpoints: [
-          {
-            authURL: "abcd",
-          },
-        ],
-        helpSettings: {
-          enabled: false,
-          htmlContent: "This is the mockConfigResponses config.json help",
-        },
-        aboutSettings: {
-          enabled: false,
-          htmlContent: "This is the mockConfigResponses config.json about",
-        },
-      },
-      "/assets/config.override.json": {
-        accessTokenPrefix: "Bearer ",
-        gettingStarted: "aGettingStarted",
-        addDatasetEnabled: true,
-        mainMenu: { nonAuthenticatedUser: { files: true } },
-        oAuth2Endpoints: [],
-        helpSettings: {
-          enabled: false,
-          htmlContent:
-            "This is the mockConfigResponses config.override.json help",
-        },
-        aboutSettings: {
-          enabled: false,
-          htmlContent:
-            "This is the mockConfigResponses config.override.json about",
-        },
-      },
-    };
-
-    const mergedConfig = {
-      accessTokenPrefix: "Bearer ",
-      lbBaseURL: "http://127.0.0.1:3000",
-      gettingStarted: "aGettingStarted",
-      datasetPageSizeOptions: [5, 10, 25, 100],
-      addDatasetEnabled: true,
-      defaultMainPage: {
-        nonAuthenticatedUser: "DATASETS",
-        authenticatedUser: "DATASETS",
-      },
-      mainMenu: { nonAuthenticatedUser: { datasets: true, files: true } },
-      oAuth2Endpoints: [],
-      dateFormat: "yyyy-MM-dd HH:mm",
-      timezone: "UTC",
-      helpSettings: {
-        enabled: false,
-        htmlContent:
-          "This is the mockConfigResponses config.override.json help",
-      },
-      aboutSettings: {
-        enabled: false,
-        htmlContent:
-          "This is the mockConfigResponses config.override.json about",
-      },
-    };
-
-    const mockHttpGet = (
-      configOverrideEnabled: boolean,
-      backendError = false,
-    ) => {
-      spyOn(service["http"], "get").and.callFake(
-        (url: string): Observable<any> => {
-          if (url === "/api/v3/admin/config") {
-            if (backendError) {
-              return new Observable((sub) =>
-                sub.error(new Error("No config in backend")),
-              );
-            }
-            return of(mergedConfig);
-          }
-          if (url === "/assets/config.json")
-            return of({
-              ...(mockConfigResponses[url] || {}),
-              allowConfigOverrides: configOverrideEnabled,
-            });
-          return of(mockConfigResponses[url] || {});
-        },
-      );
-    };
-
     it("should return the AppConfig object", async () => {
       spyOn(service["http"], "get").and.returnValue(of(appConfig));
       await service.loadAppConfig();
 
+      const expectedConfig = service["mergeObjects"](
+        cloneDeep(DEFAULT_CONFIG),
+        appConfig,
+      );
+      expect(service.getConfig()).toEqual(expectedConfig);
+    });
+
+    it("should layer additionalConfigs in order, with later sources overriding earlier ones", async () => {
+      const localConfig = {
+        addDatasetEnabled: true,
+        facility: "Local Facility",
+        mainMenu: { nonAuthenticatedUser: { datasets: true, files: false } },
+        additionalConfigs: ["/api/v3/admin/config"],
+      };
+      const backendConfig = {
+        addDatasetEnabled: false,
+        mainMenu: { nonAuthenticatedUser: { files: true } },
+      };
+      spyOn(service["http"], "get").and.callFake(
+        (url: string): Observable<any> => {
+          if (url === "/assets/config.json") return of(localConfig);
+          if (url === "/api/v3/admin/config") return of(backendConfig);
+          return of({});
+        },
+      );
+
+      await service.loadAppConfig();
       const config = service.getConfig();
 
-      expect(config).toEqual(appConfig);
+      // The backend response is merged in after the local config, so it wins.
+      expect(config.addDatasetEnabled).toBe(false);
+      // Only set locally; the backend response doesn't touch it.
+      expect(config.facility).toBe("Local Facility");
+      // Nested objects are merged key-by-key rather than fully replaced.
+      expect(config.mainMenu?.nonAuthenticatedUser?.datasets).toBe(true);
+      expect(config.mainMenu?.nonAuthenticatedUser?.files).toBe(true);
+
+      expect(service["http"].get).toHaveBeenCalledTimes(2);
+      expect(service["http"].get).toHaveBeenCalledWith("/assets/config.json");
+      expect(service["http"].get).toHaveBeenCalledWith("/api/v3/admin/config");
     });
 
-    [true, false].forEach((configOverrideEnabled) => {
-      it(`should merge ${configOverrideEnabled} multiple config JSONs`, async () => {
-        mockHttpGet(configOverrideEnabled);
-        const config = await service["mergeConfig"]();
-        expect(config).toEqual({
-          ...(configOverrideEnabled
-            ? mergedConfig
-            : mockConfigResponses["/assets/config.json"]),
-          allowConfigOverrides: configOverrideEnabled,
-        });
-      });
+    it("should not fetch the same additionalConfigs URL twice", async () => {
+      spyOn(service["http"], "get").and.callFake(
+        (url: string): Observable<any> => {
+          if (url === "/assets/config.json") {
+            return of({ additionalConfigs: ["/assets/config.json"] });
+          }
+          return of({});
+        },
+      );
+
+      await service.loadAppConfig();
+
+      expect(service["http"].get).toHaveBeenCalledTimes(1);
     });
 
-    [true, false].forEach((configOverrideEnabled) => {
-      it(`should return the merged ${configOverrideEnabled} appConfig`, async () => {
-        mockHttpGet(configOverrideEnabled, true);
-        await service.loadAppConfig();
+    it("should tolerate a failing additionalConfigs source and keep the rest of the config", async () => {
+      const localConfig = {
+        facility: "Local Facility",
+        additionalConfigs: ["/api/v3/admin/config"],
+      };
+      spyOn(service["http"], "get").and.callFake(
+        (url: string): Observable<any> => {
+          if (url === "/assets/config.json") return of(localConfig);
+          if (url === "/api/v3/admin/config")
+            return new Observable((sub) =>
+              sub.error(new Error("No config in backend")),
+            );
+          return of({});
+        },
+      );
 
-        expect(service["appConfig"]).toEqual({
-          ...(configOverrideEnabled
-            ? mergedConfig
-            : mockConfigResponses["/assets/config.json"]),
-          allowConfigOverrides: configOverrideEnabled,
-        });
-        expect(service["http"].get).toHaveBeenCalledTimes(
-          configOverrideEnabled ? 3 : 2,
-        );
-        expect(service["http"].get).toHaveBeenCalledWith(
-          "/api/v3/admin/config",
-        );
-        expect(service["http"].get).toHaveBeenCalledWith("/assets/config.json");
-        if (configOverrideEnabled)
-          expect(service["http"].get).toHaveBeenCalledWith(
-            "/assets/config.override.json",
-          );
-      });
+      await service.loadAppConfig();
+
+      expect(service.getConfig().facility).toBe("Local Facility");
     });
   });
 });

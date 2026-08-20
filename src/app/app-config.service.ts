@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { mergeWith } from "lodash-es";
+import { cloneDeep, mergeWith } from "lodash-es";
 import { firstValueFrom, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
 import {
@@ -259,24 +259,26 @@ export class AppConfigService {
   /**
    * Custom merge to replace arrays instead of merging them
    */
-  private mergeObjects(config: AppConfigInterface, overrides: Partial<AppConfigInterface>): AppConfigInterface {
-    return mergeWith(
-      config,
-      overrides,
-      (objVal, srcVal) =>
-        Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
+  private mergeObjects(
+    config: AppConfigInterface,
+    overrides: Partial<AppConfigInterface>,
+  ): AppConfigInterface {
+    return mergeWith(config, overrides, (objVal, srcVal) =>
+      Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
     );
   }
 
   private loadConfigFromUrl(url: string): Promise<Partial<AppConfigInterface>> {
     return firstValueFrom(
-      this.http.get<Partial<AppConfigInterface>>(url)
+      this.http
+        .get<Partial<AppConfigInterface>>(url)
         .pipe(timeout(2000))
-        .pipe(catchError(() => {
-          console.error(`Error loading config from ${url}`);
-          return of({} as Partial<AppConfigInterface>);
-        }),
-      ),
+        .pipe(
+          catchError(() => {
+            console.error(`Error loading config from ${url}`);
+            return of({} as Partial<AppConfigInterface>);
+          }),
+        ),
     );
   }
 
@@ -286,7 +288,9 @@ export class AppConfigService {
    * Only the first occurrence of each additional config URL will be merged to prevent
    * circular references.
    */
-  private async loadAdditionalConfigs(config: AppConfigInterface): Promise<AppConfigInterface> {
+  private async loadAdditionalConfigs(
+    config: AppConfigInterface,
+  ): Promise<AppConfigInterface> {
     if (!config.additionalConfigs) {
       return config;
     }
@@ -305,7 +309,7 @@ export class AppConfigService {
   async loadAppConfig(): Promise<void> {
     // Load config from the frontend
     // This is done first to provide lbBaseURL
-    let configObject = DEFAULT_CONFIG;
+    let configObject = cloneDeep(DEFAULT_CONFIG);
     configObject = await this.loadAdditionalConfigs(configObject);
 
     this.appConfig = Object.assign({}, this.appConfig, configObject);
