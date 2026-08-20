@@ -67,8 +67,8 @@ import { buildDefaultBatchActions } from "./configurable-actions.defaults";
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
   let fixture: ComponentFixture<ConfigurableActionComponent>;
-  let htmlForm: HTMLFormElement;
   let htmlInput: HTMLInputElement;
+  let createNativeElement: (tagName: string) => HTMLElement;
 
   let store: MockStore;
 
@@ -97,8 +97,7 @@ describe("1000: ConfigurableActionComponent", () => {
   // });
 
   beforeAll(() => {
-    htmlForm = document.createElement("form");
-    (htmlForm as HTMLFormElement).submit = () => {};
+    createNativeElement = document.createElement.bind(document);
     htmlInput = document.createElement("input");
   });
 
@@ -648,13 +647,14 @@ describe("1000: ConfigurableActionComponent", () => {
 
     switch (elementType) {
       case "form":
-        element = htmlForm.cloneNode(true) as HTMLElement;
+        element = createNativeElement("form");
+        (element as HTMLFormElement).submit = () => {};
         break;
       case "input":
         element = htmlInput.cloneNode(true) as HTMLElement;
         break;
       default:
-        element = null;
+        element = createNativeElement(elementType);
     }
     return element;
   }
@@ -828,7 +828,8 @@ describe("1000: ConfigurableActionComponent", () => {
       ),
       id: "iframe-form",
       type: "form",
-      iframe: {
+      target: "iframe",
+      iframeConfig: {
         name: "download-frame",
         hidden: false,
         width: "50%",
@@ -841,6 +842,7 @@ describe("1000: ConfigurableActionComponent", () => {
     component.performAction();
 
     expect(component.form.target).toBe("download-frame");
+    expect(component.form.parentNode).toBe(document.body);
     expect(component.iframeEnabled).toBeTrue();
     expect(component.iframeVisible).toBeTrue();
     expect(component.iframeName).toBe("download-frame");
@@ -848,28 +850,14 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.iframeWidth).toBe("50%");
     expect(component.iframeHeight).toBe("300px");
     expect(component.iframeLoading).toBeTrue();
+    const iframe = document.getElementById(
+      "download-frame",
+    ) as HTMLIFrameElement;
+    expect(iframe).not.toBeNull();
+    expect(iframe.name).toBe("download-frame");
+    expect(iframe.contentWindow?.name).toBe("download-frame");
 
-    component.onIframeLoad({
-      target: {
-        contentWindow: {
-          location: {
-            href: "about:blank",
-          },
-        },
-      },
-    } as unknown as Event);
-
-    expect(component.iframeLoading).toBeTrue();
-
-    component.onIframeLoad({
-      target: {
-        contentWindow: {
-          location: {
-            href: "https://example.com/viewer",
-          },
-        },
-      },
-    } as unknown as Event);
+    component.onIframeLoad();
 
     expect(component.iframeLoading).toBeFalse();
 
@@ -883,6 +871,83 @@ describe("1000: ConfigurableActionComponent", () => {
 
     expect(submitSpy).toHaveBeenCalledTimes(1);
     expect(component.form.target).toBe("download-frame");
+  });
+
+  it("1066: Hidden iframe form submission should still create a targetable iframe", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "hidden-iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "hidden-download-frame",
+        hidden: true,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.target).toBe("hidden-download-frame");
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeFalse();
+    expect(component.iframeLoading).toBeFalse();
+    expect(document.getElementById("hidden-download-frame")).not.toBeNull();
+  });
+
+  it("1067: Repeated iframe form submissions should clean up the previous form", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "repeat-iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "repeat-download-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+    const firstForm = component.form;
+
+    expect(() => component.performAction()).not.toThrow();
+    expect(firstForm.parentNode).toBeNull();
+    expect(component.form.parentNode).toBe(document.body);
+    expect(component.form.target).toBe("repeat-download-frame");
+  });
+
+  it("1068: Form submission should interpolate configured URL", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "iframe-form-url",
+      type: "form",
+      url: "https://example.com/notebook/{{ @pid }}",
+      variables: {
+        pid: "#Dataset0Pid",
+      },
+      target: "iframe",
+      iframeConfig: {
+        name: "download-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItems);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.action).toBe(
+      "https://example.com/notebook/40f3beec-bee2-11f0-8c47-4b68a24470e0",
+    );
   });
 
   it("1070: Download All action button should contain the correct label", () => {

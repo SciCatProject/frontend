@@ -1,17 +1,22 @@
 <ng-template [ngIf]="visible">
   <button
-    *ngIf="buttonStyle.raised" 
+    *ngIf="buttonStyle.raised"
     mat-raised-button
     (click)="performAction()"
-    [color]="buttonStyle.color" 
-    [disabled]="disabled">
+    [color]="buttonStyle.color"
+    [disabled]="disabled"
+  >
     <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
     <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
     {{ actionConfig.label }}
   </button>
-  <button *ngIf="!buttonStyle.raised" mat-button
-    [color]="buttonStyle.color" (click)="performAction()"
-    [disabled]="disabled">
+  <button
+    *ngIf="!buttonStyle.raised"
+    mat-button
+    (click)="performAction()"
+    [color]="buttonStyle.color"
+    [disabled]="disabled"
+  >
     <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
     <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
     {{ actionConfig.label }}
@@ -26,15 +31,20 @@
   ></div>
 
   <section
-    *ngIf="iframeVisible"
-    class="configurable-action-iframe-panel mat-elevation-z8"
+    class="configurable-action-iframe-host"
+    [class.configurable-action-iframe-panel]="iframeVisible"
+    [class.configurable-action-iframe-hidden-host]="!iframeVisible"
+    [class.mat-elevation-z8]="iframeVisible"
     [style.width]="iframeWidth"
     [style.height]="iframeHeight"
-    role="dialog"
-    aria-modal="true"
+    [attr.role]="iframeVisible ? 'dialog' : null"
+    [attr.aria-modal]="iframeVisible ? 'true' : null"
     [attr.aria-label]="iframeTitle"
   >
-    <header class="configurable-action-iframe-header">
+    <header
+      *ngIf="iframeVisible"
+      class="configurable-action-iframe-header"
+    >
       <span class="configurable-action-iframe-title">{{ iframeTitle }}</span>
       <div class="configurable-action-iframe-actions">
         <button
@@ -57,16 +67,20 @@
         </button>
       </div>
     </header>
-    <div class="configurable-action-iframe-content">
+    <div
+      class="configurable-action-iframe-content"
+      [class.configurable-action-iframe-hidden-content]="!iframeVisible"
+    >
       <iframe
         class="configurable-action-iframe"
-        [attr.name]="iframeName"
-        [attr.title]="iframeTitle"
-        (load)="onIframeLoad($event)"
+        [class.configurable-action-hidden-iframe]="!iframeVisible"
+        [name]="iframeName"
+        [id]="iframeName"
+        [title]="iframeTitle"
+        (load)="onIframeLoad()"
       ></iframe>
-
       <div
-        *ngIf="iframeLoading"
+        *ngIf="iframeVisible && iframeLoading"
         class="configurable-action-iframe-loading"
         aria-live="polite"
       >
@@ -79,11 +93,4 @@
       </div>
     </div>
   </section>
-
-  <iframe
-    *ngIf="!iframeVisible"
-    class="configurable-action-hidden-iframe"
-    [attr.name]="iframeName"
-    [attr.title]="iframeTitle"
-  ></iframe>
 </ng-container>
