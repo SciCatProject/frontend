@@ -45,6 +45,8 @@ export interface LabelsLocalization {
 export interface DatasetDetailComponentConfig {
   enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
+  tileRestrictedIconVisible?: boolean;
+  tileRestrictedIconGroups?: string[];
 }
 
 export interface IngestorComponentConfig {
@@ -85,6 +87,9 @@ export interface CustomizationItem {
   source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
+  authorization?: string[];
+  visible?: boolean;
+  restrictedIconVisible?: boolean;
 }
 
 export interface Field {

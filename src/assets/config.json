@@ -748,6 +748,8 @@
   "timezone": "UTC",
   "datasetDetailComponent": {
     "enableCustomizedComponent": false,
+    "tileRestrictedIconVisible": false,
+    "tileRestrictedIconGroups": ["admin"],
     "customization": [
       {
         "type": "statusBanner",
