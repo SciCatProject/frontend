@@ -1,0 +1,3283 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../about-page-configuration/">
+      
+      
+        <link rel="next" href="../frontend-configuration-testing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Dataset Detail Tile Authorization - SciCat Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dataset-detail-tile-authorization" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="SciCat Documentation" class="md-header__button md-logo" aria-label="SciCat Documentation" data-md-component="logo">
+      
+  <img src="../assets/SciCat-logo-icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SciCat Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dataset Detail Tile Authorization
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SciCat Documentation" class="md-nav__button md-logo" aria-label="SciCat Documentation" data-md-component="logo">
+      
+  <img src="../assets/SciCat-logo-icon.png" alt="logo">
+
+    </a>
+    SciCat Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about-page-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Page Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset Detail Tile Authorization
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset Detail Tile Authorization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-dataset-detail-tile-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Dataset Detail Tile Authorization?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-audience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Audience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restricted-tiles-indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restricted Tiles Indicator
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Configuration Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Configuration Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#level-1-global-dataset-detail-component-authorization-new" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 1: Global Dataset Detail Component Authorization (NEW)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-2-individual-tile-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 2: Individual Tile Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Locations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Locations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend-configuration-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend Configuration (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-configuration-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Configuration Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typescript-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-interface-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Interface Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-admin-dashboard-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Admin Dashboard Settings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Admin Dashboard Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accessing-the-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accessing the Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-dashboard-form-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Dashboard Form Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Admin Dashboard Form Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dataset-detail-component-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dataset Detail Component Section
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-global-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding Global Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuring-tile-specific-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuring Tile-Specific Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#available-control-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available Control Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-dashboard-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Dashboard Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-json-form-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. JSON Form Schema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. JSON Form Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schema-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema Definition
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schema Definition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schema-section-datasetdetailcomponent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema Section (datasetDetailComponent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-schema-section-dataset-detail-component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI Schema Section (Dataset Detail Component)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-renderers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Renderers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-global-authorization-for-all-tiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1: Global Authorization for All Tiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-tile-specific-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 2: Tile-Specific Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-combined-global-and-tile-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3: Combined Global and Tile Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-4-hidden-tile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 4: Hidden Tile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-5-multiple-group-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 5: Multiple Group Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-authorization-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Authorization Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Authorization Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorization-evaluation-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization Evaluation Logic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorization-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization Matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Special Groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Important Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-tiles-not-visible-to-expected-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Tiles Not Visible to Expected Users
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-no-applicable-renderer-found-error-in-admin-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: "No applicable renderer found!" Error in Admin Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-authorization-changes-not-applied" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Authorization Changes Not Applied
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-all-tiles-hidden-after-adding-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: All Tiles Hidden After Adding Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Pitfalls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. FAQ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-i-dont-configure-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What happens if I don't configure authorization?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-authorization-without-enabling-customized-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use authorization without enabling customized components?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-both-global-and-tile-level-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use both global and tile-level authorization?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-make-a-tile-visible-to-everyone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I make a tile visible to everyone?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-completely-hide-a-tile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I completely hide a tile?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-wildcards-or-patterns-in-group-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use wildcards or patterns in group names?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-does-authorization-work-with-the-backend-permission-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How does authorization work with the backend permission system?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-customize-the-no-authorization-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I customize the "No authorization" message?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-show-a-lock-icon-on-restricted-tiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I show a lock icon on restricted tiles?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-test-my-authorization-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I test my authorization configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-this-feature-with-custom-tiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use this feature with custom tiles?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-maximum-number-of-groups-i-can-specify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the maximum number of groups I can specify?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-this-feature-with-the-default-non-customized-dataset-detail-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use this feature with the default (non-customized) dataset detail view?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-migrate-from-an-old-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I migrate from an old configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-where-can-i-find-the-users-group-memberships" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Where can I find the user's group memberships?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-a-related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appendix A: Related Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-b-file-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appendix B: File References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend-configuration-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend Configuration Testing with Cypress Intercept
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../help-page-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Help Page Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About SciCat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7">
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contributors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributors/datafiles-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datafiles Action Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributors/dataset_banner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset Status Banner
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributors/default-list-settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Default List Settings (Frontend)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theme/color-theme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theme System Overview &amp; New Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9">
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user/customize_datasets_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customize Datasets List
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-dataset-detail-tile-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Dataset Detail Tile Authorization?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-audience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Audience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restricted-tiles-indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restricted Tiles Indicator
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Configuration Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Configuration Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#level-1-global-dataset-detail-component-authorization-new" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 1: Global Dataset Detail Component Authorization (NEW)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-2-individual-tile-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 2: Individual Tile Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Locations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Locations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend-configuration-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend Configuration (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-configuration-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Configuration Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typescript-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-interface-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Interface Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-admin-dashboard-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Admin Dashboard Settings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Admin Dashboard Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accessing-the-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accessing the Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-dashboard-form-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Dashboard Form Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Admin Dashboard Form Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dataset-detail-component-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dataset Detail Component Section
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-global-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding Global Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuring-tile-specific-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuring Tile-Specific Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#available-control-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available Control Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admin-dashboard-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin Dashboard Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-json-form-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. JSON Form Schema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. JSON Form Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schema-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema Definition
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schema Definition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schema-section-datasetdetailcomponent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema Section (datasetDetailComponent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-schema-section-dataset-detail-component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI Schema Section (Dataset Detail Component)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-renderers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Renderers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-global-authorization-for-all-tiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1: Global Authorization for All Tiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-tile-specific-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 2: Tile-Specific Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-combined-global-and-tile-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3: Combined Global and Tile Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-4-hidden-tile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 4: Hidden Tile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-5-multiple-group-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 5: Multiple Group Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-authorization-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Authorization Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Authorization Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorization-evaluation-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization Evaluation Logic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorization-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization Matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Special Groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Important Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-tiles-not-visible-to-expected-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Tiles Not Visible to Expected Users
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-no-applicable-renderer-found-error-in-admin-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: "No applicable renderer found!" Error in Admin Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-authorization-changes-not-applied" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Authorization Changes Not Applied
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-all-tiles-hidden-after-adding-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: All Tiles Hidden After Adding Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Pitfalls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. FAQ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-i-dont-configure-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What happens if I don't configure authorization?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-authorization-without-enabling-customized-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use authorization without enabling customized components?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-both-global-and-tile-level-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use both global and tile-level authorization?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-make-a-tile-visible-to-everyone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I make a tile visible to everyone?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-completely-hide-a-tile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I completely hide a tile?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-wildcards-or-patterns-in-group-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use wildcards or patterns in group names?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-does-authorization-work-with-the-backend-permission-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How does authorization work with the backend permission system?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-customize-the-no-authorization-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I customize the "No authorization" message?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-show-a-lock-icon-on-restricted-tiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I show a lock icon on restricted tiles?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-test-my-authorization-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I test my authorization configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-this-feature-with-custom-tiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use this feature with custom tiles?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-maximum-number-of-groups-i-can-specify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: What's the maximum number of groups I can specify?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-this-feature-with-the-default-non-customized-dataset-detail-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Can I use this feature with the default (non-customized) dataset detail view?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-migrate-from-an-old-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: How do I migrate from an old configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-where-can-i-find-the-users-group-memberships" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q: Where can I find the user's group memberships?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-a-related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appendix A: Related Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-b-file-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appendix B: File References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="dataset-detail-tile-authorization">Dataset Detail Tile Authorization<a class="headerlink" href="#dataset-detail-tile-authorization" title="Permanent link">¶</a></h1>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">¶</a></h2>
+<ol>
+<li><a href="#1-overview">Overview</a></li>
+<li><a href="#restricted-tiles-indicator">Restricted Tiles Indicator</a></li>
+<li><a href="#2-configuration-options">Configuration Options</a></li>
+<li><a href="#3-admin-dashboard-settings">Admin Dashboard Settings</a></li>
+<li><a href="#4-json-form-schema">JSON Form Schema</a></li>
+<li><a href="#5-usage-examples">Usage Examples</a></li>
+<li><a href="#6-authorization-rules">Authorization Rules</a></li>
+<li><a href="#7-troubleshooting">Troubleshooting</a></li>
+<li><a href="#8-faq">FAQ</a></li>
+</ol>
+<hr>
+<h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">¶</a></h2>
+<h3 id="what-is-dataset-detail-tile-authorization">What is Dataset Detail Tile Authorization?<a class="headerlink" href="#what-is-dataset-detail-tile-authorization" title="Permanent link">¶</a></h3>
+<p>The Dataset Detail Tile Authorization feature allows administrators to control which user groups can view specific sections (tiles) within the dataset detail page. 
+This enables fine-grained UI customization on how to present the  dataset information, ensuring  a better UX.</p>
+<h3 id="target-audience">Target Audience<a class="headerlink" href="#target-audience" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Administrators</strong>: Configure tile-level authorization through the Admin Dashboard</li>
+<li><strong>Developers</strong>: Understand the schema and integration points</li>
+<li><strong>End Users</strong>: View only the tiles they have permission to see</li>
+</ul>
+<h3 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">¶</a></h3>
+<p>Dataset Detail Tile Authorization serves as:
+- Access control mechanism for sensitive dataset metadata
+- Customizable information visibility per user group
+- Compliance with data governance policies
+- Flexible configuration without code changes</p>
+<h3 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">¶</a></h3>
+<ul>
+<li>Tile-level authorization for dataset detail components</li>
+<li>Group-based access control using user's <code>accessGroups</code></li>
+<li>Empty authorization array means public access (no restriction)</li>
+<li>Configurable through Admin Dashboard or configuration files</li>
+<li>Fully backward compatible with existing configurations</li>
+</ul>
+<h3 id="component-architecture">Component Architecture<a class="headerlink" href="#component-architecture" title="Permanent link">¶</a></h3>
+<p>The authorization system consists of:
+1. <strong>Frontend Configuration</strong>: Defined in <code>frontend.config.jsonforms.json</code>
+2. <strong>Admin Dashboard</strong>: Visual configuration interface at <code>/admin/config-edit</code>
+3. <strong>Runtime Configuration</strong>: Loaded from backend endpoint <code>/api/v3/runtime-config/frontendConfig</code> or local <code>config.json</code>
+4. <strong>Dataset Detail Component</strong>: Renders tiles based on user authorization</p>
+<h3 id="restricted-tiles-indicator">Restricted Tiles Indicator<a class="headerlink" href="#restricted-tiles-indicator" title="Permanent link">¶</a></h3>
+<p><strong>How It Works:</strong></p>
+<p>The dataset detail component can optionally display a visual indicator (lock icon) on tiles that have restricted access. This feature is controlled by the <code>tileRestrictedIconVisible</code> configuration flag.</p>
+<ul>
+<li>When <strong>enabled</strong> (<code>true</code>), a lock icon (<code>lock_outline</code>) appears in the header of any tile that has restricted access</li>
+<li>When <strong>disabled</strong> (<code>false</code> or undefined), no lock icons are displayed</li>
+<li>A tile is considered "restricted" if it has a non-empty <code>authorization</code> array defined</li>
+<li>The lock icon includes a tooltip listing the groups authorized to view the tile</li>
+</ul>
+<p><strong>Runtime Property:</strong></p>
+<p>Each section in the filtered <code>datasetView$</code> observable now includes a computed <code>restrictedIconVisible</code> property. This property is dynamically calculated at runtime based on:
+- The <code>tileRestrictedIconVisible</code> configuration flag
+- The <code>tileRestrictedIconGroups</code> configuration (which user groups can see the icon)
+- The section's <code>authorization</code> array
+- The current user's groups</p>
+<p>The <code>restrictedIconVisible</code> property is <strong>not</strong> a configuration option; it is computed and assigned to each section during the filtering process in <code>dataset-detail-dynamic.component.ts</code>.</p>
+<p><strong>Configuration:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"tileRestrictedIconVisible"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"tileRestrictedIconGroups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"admin"</span><span class="p">,</span><span class="w"> </span><span class="s2">"scientists"</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Behavior:</strong>
+- Tiles with no <code>authorization</code> keys or empty array <code>[]</code> → No lock icon (visible to all)
+- Tiles with <code>authorization: ["group1", "group2"]</code> → Lock icon displayed (restricted)
+- To hide a tile, set <code>visible: false</code></p>
+<p><strong>Files Involved:</strong>
+- <code>src/app/state-management/models/index.ts</code> - Configuration interface (includes <code>DatasetDetailComponentConfig</code> with <code>tileRestrictedIconVisible</code> and <code>tileRestrictedIconGroups</code>)
+- <code>src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.ts</code> - Logic (computes <code>restrictedIconVisible</code> at runtime)
+- <code>src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.html</code> - Template
+- <code>src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.scss</code> - Styling
+- <code>src/app/admin/schema/frontend.config.jsonforms.json</code> - Admin UI schema
+- <code>src/app/app-config.service.ts</code> - Configuration service</p>
+<hr>
+<h2 id="2-configuration-options">2. Configuration Options<a class="headerlink" href="#2-configuration-options" title="Permanent link">¶</a></h2>
+<h3 id="configuration-structure">Configuration Structure<a class="headerlink" href="#configuration-structure" title="Permanent link">¶</a></h3>
+<p>The authorization can be configured at <strong>two levels</strong>:</p>
+<h4 id="level-1-global-dataset-detail-component-authorization-new">Level 1: Global Dataset Detail Component Authorization (NEW)<a class="headerlink" href="#level-1-global-dataset-detail-component-authorization-new" title="Permanent link">¶</a></h4>
+<p>Added to <code>datasetDetailComponent</code> object itself:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"admin"</span><span class="p">,</span><span class="w"> </span><span class="s2">"scientists"</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>When set at this level, <strong>all tiles</strong> within the dataset detail component require the specified authorization to be visible.</p>
+<h4 id="level-2-individual-tile-authorization">Level 2: Individual Tile Authorization<a class="headerlink" href="#level-2-individual-tile-authorization" title="Permanent link">¶</a></h4>
+<p>Configured on each customization item within the <code>customization</code> array:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"regular"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"General Information"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"col"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">        </span><span class="nt">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scientificMetadata"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Scientific Metadata"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"col"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"scientists"</span><span class="p">,</span><span class="w"> </span><span class="s2">"admin"</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scientificMetadata"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="configuration-keys">Configuration Keys<a class="headerlink" href="#configuration-keys" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>datasetDetailComponent.authorization</code></td>
+<td>string[]</td>
+<td>No</td>
+<td><code>null</code></td>
+<td>Global authorization for all tiles in the component</td>
+</tr>
+<tr>
+<td><code>datasetDetailComponent.customization[].authorization</code></td>
+<td>string[]</td>
+<td>No</td>
+<td><code>[]</code></td>
+<td>Tile-specific authorization (empty array means no restriction)</td>
+</tr>
+<tr>
+<td><code>datasetDetailComponent.customization[].visible</code></td>
+<td>boolean</td>
+<td>No</td>
+<td><code>true</code></td>
+<td>Controls whether the tile is visible (use <code>false</code> to hide)</td>
+</tr>
+<tr>
+<td><code>datasetDetailComponent.tileRestrictedIconVisible</code></td>
+<td>boolean</td>
+<td>No</td>
+<td><code>false</code></td>
+<td>Show lock icon on tiles with restricted access</td>
+</tr>
+<tr>
+<td><code>datasetDetailComponent.tileRestrictedIconGroups</code></td>
+<td>string[]</td>
+<td>No</td>
+<td><code>[]</code></td>
+<td>User groups that can see the restricted icon (empty array means all users)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configuration-locations">Configuration Locations<a class="headerlink" href="#configuration-locations" title="Permanent link">¶</a></h3>
+<h4 id="backend-configuration-recommended">Backend Configuration (Recommended)<a class="headerlink" href="#backend-configuration-recommended" title="Permanent link">¶</a></h4>
+<p><strong>Endpoint</strong>: <code>GET /api/v3/runtime-config/frontendConfig</code></p>
+<p>The backend provides the frontend configuration. This is the primary configuration source in production deployments.</p>
+<h4 id="local-configuration-files">Local Configuration Files<a class="headerlink" href="#local-configuration-files" title="Permanent link">¶</a></h4>
+<p><strong>Primary File</strong>: <code>src/assets/config.json</code></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"admin"</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Override File</strong>: <code>src/assets/config.override.json</code> (requires <code>allowConfigOverrides: true</code>)</p>
+<p>Used for environment-specific overrides without modifying the main configuration.</p>
+<h3 id="typescript-interface">TypeScript Interface<a class="headerlink" href="#typescript-interface" title="Permanent link">¶</a></h3>
+<p><strong>File</strong>: <code>src/app/state-management/models/index.ts</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">DatasetDetailComponentConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">enableCustomizedComponent</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">customization</span><span class="o">:</span><span class="w"> </span><span class="kt">CustomizationItem</span><span class="p">[];</span>
+<span class="w">  </span><span class="nx">authorization?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span><span class="w">  </span><span class="c1">// Global authorization for all tiles</span>
+<span class="w">  </span><span class="nx">tileRestrictedIconVisible?</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w">  </span><span class="c1">// Show lock icon on restricted tiles</span>
+<span class="w">  </span><span class="nx">tileRestrictedIconGroups?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span><span class="w">  </span><span class="c1">// User groups that can see the restricted icon</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">AppConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">datasetDetailComponent?</span><span class="o">:</span><span class="w"> </span><span class="kt">DatasetDetailComponentConfig</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">CustomizationItem</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="nx">CustomizationType</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">label</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">order</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">row</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">col</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">fields?</span><span class="o">:</span><span class="w"> </span><span class="kt">Field</span><span class="p">[];</span>
+<span class="w">  </span><span class="nx">source?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">options?</span><span class="o">:</span><span class="w"> </span><span class="kt">AttachmentOptions</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">viewMode?</span><span class="o">:</span><span class="w"> </span><span class="kt">viewModeOptions</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">authorization?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span><span class="w">  </span><span class="c1">// Tile-specific authorization (empty array means no restriction)</span>
+<span class="w">  </span><span class="nx">visible?</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w">  </span><span class="c1">// Controls visibility (defaults to true)</span>
+<span class="w">  </span><span class="nx">restrictedIconVisible?</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w">  </span><span class="c1">// Computed at runtime, indicates if lock icon should be shown</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="admin-interface-configuration">Admin Interface Configuration<a class="headerlink" href="#admin-interface-configuration" title="Permanent link">¶</a></h3>
+<p><strong>Path</strong>: Admin Dashboard &gt; Frontend Config &gt; Dataset Detail Component section</p>
+<p>The admin UI provides form controls through JSONForms:
+- <strong>Enable Customized Component</strong>: Toggle switch for <code>enableCustomizedComponent</code>
+- <strong>Show Restricted Tiles Indicator</strong>: Toggle switch for <code>datasetDetailComponent.tileRestrictedIconVisible</code>
+- <strong>Restricted Icon Groups</strong>: Array of strings input for <code>datasetDetailComponent.tileRestrictedIconGroups</code>
+- <strong>Authorization</strong>: Array of strings input for global tile authorization
+- <strong>Customization</strong>: List with detail view for configuring individual tiles</p>
+<hr>
+<h2 id="3-admin-dashboard-settings">3. Admin Dashboard Settings<a class="headerlink" href="#3-admin-dashboard-settings" title="Permanent link">¶</a></h2>
+<h3 id="accessing-the-configuration">Accessing the Configuration<a class="headerlink" href="#accessing-the-configuration" title="Permanent link">¶</a></h3>
+<ol>
+<li>Navigate to <code>/admin</code> in your SciCat Frontend application</li>
+<li>Click on <strong>Frontend Config</strong> or <strong>Configuration Edit</strong></li>
+<li>Scroll to the <strong>Dataset Detail Component</strong> section</li>
+</ol>
+<h3 id="admin-dashboard-form-structure">Admin Dashboard Form Structure<a class="headerlink" href="#admin-dashboard-form-structure" title="Permanent link">¶</a></h3>
+<p>The Admin Dashboard uses JSONForms with Angular Material renderers to provide a user-friendly interface for configuration.</p>
+<h4 id="dataset-detail-component-section">Dataset Detail Component Section<a class="headerlink" href="#dataset-detail-component-section" title="Permanent link">¶</a></h4>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="images/admin-dashboard-dataset-detail-component.png" data-desc-position="bottom"><img alt="Admin Dashboard - Dataset Detail Component Section" src="images/admin-dashboard-dataset-detail-component.png"></a></p>
+<p><strong>Form Fields:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enable Customized Component</td>
+<td>Toggle</td>
+<td>Enables/disables custom tile configuration</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>Array Input</td>
+<td>Global authorization groups for all tiles</td>
+</tr>
+<tr>
+<td>Customization Configuration</td>
+<td>List Editor</td>
+<td>Configure individual tiles with their own authorization</td>
+</tr>
+</tbody>
+</table>
+<h4 id="adding-global-authorization">Adding Global Authorization<a class="headerlink" href="#adding-global-authorization" title="Permanent link">¶</a></h4>
+<ol>
+<li>In the <strong>Dataset Detail Component</strong> section</li>
+<li>Locate the <strong>Authorization</strong> field</li>
+<li>Click <strong>Add</strong> or start typing to add group names</li>
+<li>Press Enter or comma to add each group</li>
+<li>Save the configuration</li>
+</ol>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="images/admin-authorization-array-input.png" data-desc-position="bottom"><img alt="Authorization Array Input" src="images/admin-authorization-array-input.png"></a></p>
+<h4 id="configuring-tile-specific-authorization">Configuring Tile-Specific Authorization<a class="headerlink" href="#configuring-tile-specific-authorization" title="Permanent link">¶</a></h4>
+<ol>
+<li>In the <strong>Customization Configuration</strong> list</li>
+<li>Expand or add a new tile configuration</li>
+<li>Locate the <strong>Authorization</strong> field for that tile</li>
+<li>Add the desired groups</li>
+<li>Save the configuration</li>
+</ol>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="images/admin-tile-authorization.png" data-desc-position="bottom"><img alt="Tile Authorization Configuration" src="images/admin-tile-authorization.png"></a></p>
+<h3 id="available-control-types">Available Control Types<a class="headerlink" href="#available-control-types" title="Permanent link">¶</a></h3>
+<p>The Dataset Detail Component supports the following tile types:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Authorization Supported</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>regular</code></td>
+<td>Custom fields tile</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>scientificMetadata</code></td>
+<td>Scientific metadata viewer</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>datasetJsonView</code></td>
+<td>JSON view of dataset</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>attachments</code></td>
+<td>Attachments section</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="admin-dashboard-features">Admin Dashboard Features<a class="headerlink" href="#admin-dashboard-features" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Live Preview</strong>: Changes are reflected in the form immediately</li>
+<li><strong>JSON Preview</strong>: Click "Json Preview" button to see the raw JSON configuration</li>
+<li><strong>Export</strong>: Download the current configuration as a JSON file</li>
+<li><strong>Save</strong>: Persist changes to the backend</li>
+</ul>
+<hr>
+<h2 id="4-json-form-schema">4. JSON Form Schema<a class="headerlink" href="#4-json-form-schema" title="Permanent link">¶</a></h2>
+<h3 id="schema-definition">Schema Definition<a class="headerlink" href="#schema-definition" title="Permanent link">¶</a></h3>
+<p>The JSON Form Schema is defined in <code>src/app/admin/schema/frontend.config.jsonforms.json</code></p>
+<h4 id="schema-section-datasetdetailcomponent">Schema Section (datasetDetailComponent)<a class="headerlink" href="#schema-section-datasetdetailcomponent" title="Permanent link">¶</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"object"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"tileRestrictedIconVisible"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"boolean"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Show Restricted Tiles Indicator"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Display a lock icon on tiles with restricted access"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"tileRestrictedIconGroups"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Restricted Icon Groups"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User groups that can see the restricted tile icon"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"object"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"enum"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"scientificMetadata"</span><span class="p">,</span><span class="w"> </span><span class="s2">"attachments"</span><span class="p">,</span><span class="w"> </span><span class="s2">"datasetJsonView"</span><span class="p">,</span><span class="w"> </span><span class="s2">"regular"</span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">"row"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">"col"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">"viewMode"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"enum"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"table"</span><span class="p">,</span><span class="w"> </span><span class="s2">"json"</span><span class="p">,</span><span class="w"> </span><span class="s2">"tree"</span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"object"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">              </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">"enum"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"small"</span><span class="p">,</span><span class="w"> </span><span class="s2">"medium"</span><span class="p">,</span><span class="w"> </span><span class="s2">"large"</span><span class="p">]</span>
+<span class="w">              </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">"element"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="p">,</span><span class="w"> </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}],</span>
+<span class="w">            </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"object"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span>
+<span class="w">                  </span><span class="nt">"enum"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"text"</span><span class="p">,</span><span class="w"> </span><span class="s2">"copy"</span><span class="p">,</span><span class="w"> </span><span class="s2">"tag"</span><span class="p">,</span><span class="w"> </span><span class="s2">"linky"</span><span class="p">,</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w"> </span><span class="s2">"internalLink"</span><span class="p">]</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span><span class="w"> </span><span class="p">}</span>
+<span class="w">              </span><span class="p">},</span>
+<span class="w">              </span><span class="nt">"required"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"element"</span><span class="p">,</span><span class="w"> </span><span class="s2">"source"</span><span class="p">,</span><span class="w"> </span><span class="s2">"order"</span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w"> </span><span class="p">}</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="ui-schema-section-dataset-detail-component">UI Schema Section (Dataset Detail Component)<a class="headerlink" href="#ui-schema-section-dataset-detail-component" title="Permanent link">¶</a></h4>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Group"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dataset Detail Component"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"expandable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"elements"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/datasetDetailComponent/properties/enableCustomizedComponent"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/datasetDetailComponent/properties/tileRestrictedIconVisible"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/datasetDetailComponent/properties/tileRestrictedIconGroups"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/datasetDetailComponent/properties/authorization"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ListWithDetail"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customization Configuration"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/datasetDetailComponent/properties/customization"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VerticalLayout"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"elements"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HorizontalLayout"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"elements"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/label"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/type"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/order"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/row"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span><span class="w"> </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/col"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span>
+<span class="w">                  </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/viewMode"</span><span class="p">,</span>
+<span class="w">                  </span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">"effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SHOW"</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">"condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                      </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/type"</span><span class="p">,</span>
+<span class="w">                      </span><span class="nt">"schema"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">"const"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scientificMetadata"</span>
+<span class="w">                      </span><span class="p">}</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                  </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">              </span><span class="p">]</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VerticalLayout"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Attachments Options"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"elements"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span>
+<span class="w">              </span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fields"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/fields"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">              </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="custom-renderers">Custom Renderers<a class="headerlink" href="#custom-renderers" title="Permanent link">¶</a></h3>
+<p>The Admin Dashboard uses custom JSONForms renderers:</p>
+<ul>
+<li><code>AccordionArrayLayoutRendererComponent</code>: For expandable array sections</li>
+<li><code>ExpandGroupRendererComponent</code>: For expandable groups</li>
+<li><code>ArrayLayoutRendererCustom</code>: For custom array layouts</li>
+</ul>
+<p>These are registered in <code>src/app/admin/admin-config-edit/admin-config-edit.component.ts</code></p>
+<hr>
+<h2 id="5-usage-examples">5. Usage Examples<a class="headerlink" href="#5-usage-examples" title="Permanent link">¶</a></h2>
+<h3 id="example-1-global-authorization-for-all-tiles">Example 1: Global Authorization for All Tiles<a class="headerlink" href="#example-1-global-authorization-for-all-tiles" title="Permanent link">¶</a></h3>
+<p><strong>Use Case</strong>: Restrict entire dataset detail component to specific groups</p>
+<p><strong>Configuration (Admin Dashboard)</strong>:
+1. Navigate to Dataset Detail Component section
+2. Set <strong>Authorization</strong> to: <code>["admin", "data-managers"]</code>
+3. Save configuration</p>
+<p><strong>Configuration (JSON)</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"admin"</span><span class="p">,</span><span class="w"> </span><span class="s2">"data-managers"</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>: All tiles in the dataset detail page are only visible to users in the "admin" or "data-managers" groups.</p>
+<hr>
+<h3 id="example-2-tile-specific-authorization">Example 2: Tile-Specific Authorization<a class="headerlink" href="#example-2-tile-specific-authorization" title="Permanent link">¶</a></h3>
+<p><strong>Use Case</strong>: Show general info to everyone, but restrict scientific metadata to scientists</p>
+<p><strong>Configuration (Admin Dashboard)</strong>:
+1. In Customization Configuration
+2. Add two tiles:
+   - Tile 1: "General Information" with empty authorization <code>[]</code> (visible to all)
+   - Tile 2: "Scientific Metadata" with authorization <code>["scientists", "admin"]</code>
+3. Save configuration</p>
+<p><strong>Configuration (JSON)</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"regular"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"General Information"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"col"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">        </span><span class="nt">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scientificMetadata"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Scientific Metadata"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"col"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"scientists"</span><span class="p">,</span><span class="w"> </span><span class="s2">"admin"</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scientificMetadata"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"viewMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"table"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>: 
+- All users see "General Information" tile
+- Only users in "scientists" or "admin" groups see "Scientific Metadata" tile</p>
+<hr>
+<h3 id="example-3-combined-global-and-tile-authorization">Example 3: Combined Global and Tile Authorization<a class="headerlink" href="#example-3-combined-global-and-tile-authorization" title="Permanent link">¶</a></h3>
+<p><strong>Use Case</strong>: Global restriction with tile-level overrides</p>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"admin"</span><span class="p">,</span><span class="w"> </span><span class="s2">"scientists"</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"regular"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Public Summary"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">        </span><span class="nt">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scientificMetadata"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Detailed Metadata"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"admin"</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scientificMetadata"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>:
+- "Public Summary" tile: Visible to all users (tile-level override)
+- "Detailed Metadata" tile: Visible only to "admin" users (tile-level restriction)
+- Other tiles: Follow global authorization (admin and scientists)</p>
+<hr>
+<h3 id="example-4-hidden-tile">Example 4: Hidden Tile<a class="headerlink" href="#example-4-hidden-tile" title="Permanent link">¶</a></h3>
+<p><strong>Use Case</strong>: Hide a tile from all users</p>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"attachments"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Internal Attachments"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">  </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"attachments"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>: The "Internal Attachments" tile is hidden from all users, including administrators.</p>
+<hr>
+<h3 id="example-5-multiple-group-requirements">Example 5: Multiple Group Requirements<a class="headerlink" href="#example-5-multiple-group-requirements" title="Permanent link">¶</a></h3>
+<p><strong>Use Case</strong>: Tile visible to users in any of multiple groups</p>
+<p><strong>Configuration</strong>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"regular"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sensitive Data"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"group-a"</span><span class="p">,</span><span class="w"> </span><span class="s2">"group-b"</span><span class="p">,</span><span class="w"> </span><span class="s2">"group-c"</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p><strong>Result</strong>: Tile is visible to users who are members of <strong>any</strong> of the specified groups (OR logic).</p>
+<hr>
+<h2 id="6-authorization-rules">6. Authorization Rules<a class="headerlink" href="#6-authorization-rules" title="Permanent link">¶</a></h2>
+<h3 id="authorization-evaluation-logic">Authorization Evaluation Logic<a class="headerlink" href="#authorization-evaluation-logic" title="Permanent link">¶</a></h3>
+<p>The authorization system follows this evaluation order:</p>
+<ol>
+<li><strong>Tile-level authorization</strong> (if present) takes precedence</li>
+<li><strong>Global datasetDetailComponent authorization</strong> (if present)</li>
+<li><strong>Default</strong>: <code>[]</code> (visible to all authenticated users)</li>
+</ol>
+<h3 id="authorization-matching">Authorization Matching<a class="headerlink" href="#authorization-matching" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>User Groups</th>
+<th>Tile Authorization</th>
+<th>Visible?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>["user"]</code></td>
+<td><code>[]</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>["user"]</code></td>
+<td><code>["admin"]</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>["user", "scientist"]</code></td>
+<td><code>["scientist", "admin"]</code></td>
+<td>Yes (OR logic)</td>
+</tr>
+<tr>
+<td><code>["user"]</code></td>
+<td><code>null</code>/<code>undefined</code></td>
+<td>Yes (defaults to <code>[]</code>)</td>
+</tr>
+<tr>
+<td>Not authenticated</td>
+<td>Any</td>
+<td>No (requires authentication)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="special-groups">Special Groups<a class="headerlink" href="#special-groups" title="Permanent link">¶</a></h3>
+<p>There are no special groups. Empty array <code>[]</code> means no restriction (visible to all).</p>
+<h3 id="important-notes">Important Notes<a class="headerlink" href="#important-notes" title="Permanent link">¶</a></h3>
+<ul>
+<li>The authorization check uses the user's <code>accessGroups</code> from their profile</li>
+<li>If a user is not authenticated, they will not see any tiles</li>
+<li>Multiple groups can be specified; the user needs to be a member of <strong>at least one</strong> of them (OR logic)</li>
+<li>Empty array <code>[]</code> means no restriction (visible to all)</li>
+<li>To hide a tile, set the <code>visible</code> property to <code>false</code></li>
+<li>This feature is fully backward compatible: existing configurations without <code>authorization</code> fields will continue to work, with all tiles visible to all users</li>
+</ul>
+<hr>
+<h2 id="7-troubleshooting">7. Troubleshooting<a class="headerlink" href="#7-troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="issue-tiles-not-visible-to-expected-users">Issue: Tiles Not Visible to Expected Users<a class="headerlink" href="#issue-tiles-not-visible-to-expected-users" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>:
+- Authorized users cannot see tiles they should have access to
+- All tiles are hidden</p>
+<p><strong>Diagnosis</strong>:</p>
+<ol>
+<li>
+<p><strong>Check user's accessGroups</strong>:
+   </p><div class="highlight"><pre><span></span><code><span class="c1">// In browser console (after login)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">'currentUser'</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'User groups:'</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="o">?</span><span class="p">.</span><span class="nx">accessGroups</span><span class="p">);</span>
+</code></pre></div><p></p>
+</li>
+<li>
+<p><strong>Check active configuration</strong>:
+   </p><div class="highlight"><pre><span></span><code><span class="c1">// Inject AppConfigService</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">appConfigService</span><span class="p">.</span><span class="nx">getConfig</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Dataset Detail Config:'</span><span class="p">,</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">datasetDetailComponent</span><span class="p">);</span>
+</code></pre></div><p></p>
+</li>
+<li>
+<p><strong>Verify backend configuration</strong>:</p>
+</li>
+<li>Use Swagger UI or API client to call <code>/api/v3/runtime-config/frontendConfig</code></li>
+<li>Verify the <code>datasetDetailComponent</code> section is correct</li>
+</ol>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Verify user group membership</strong>:</li>
+<li>Ensure the user is assigned to the correct groups in the backend</li>
+<li>
+<p>Check with your administrator</p>
+</li>
+<li>
+<p><strong>Check configuration syntax</strong>:</p>
+</li>
+<li>Validate JSON syntax using a JSON validator</li>
+<li>
+<p>Ensure <code>authorization</code> is an array of strings</p>
+</li>
+<li>
+<p><strong>Verify configuration is loaded</strong>:</p>
+</li>
+<li>Check browser console for configuration load errors</li>
+<li>
+<p>Verify the backend endpoint is accessible</p>
+</li>
+<li>
+<p><strong>Check for typos</strong>:</p>
+</li>
+<li>Ensure group names match exactly (case-sensitive)</li>
+</ol>
+<hr>
+<h3 id="issue-no-applicable-renderer-found-error-in-admin-dashboard">Issue: "No applicable renderer found!" Error in Admin Dashboard<a class="headerlink" href="#issue-no-applicable-renderer-found-error-in-admin-dashboard" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>:
+- The authorization field shows "No applicable renderer found!" in the admin form
+- Cannot edit the authorization array</p>
+<p><strong>Cause</strong>: The JSONForms renderer doesn't have a default control for array of strings.</p>
+<p><strong>Solution</strong>: Update the uiSchema to use <code>ListWithDetail</code> for the authorization field:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ListWithDetail"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties/datasetDetailComponent/properties/authorization"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VerticalLayout"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"elements"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Control"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#/properties"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This change should be made in <code>src/app/admin/schema/frontend.config.jsonforms.json</code>.</p>
+<hr>
+<h3 id="issue-authorization-changes-not-applied">Issue: Authorization Changes Not Applied<a class="headerlink" href="#issue-authorization-changes-not-applied" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>:
+- Configuration saved but changes not reflected
+- Old authorization rules still in effect</p>
+<p><strong>Diagnosis</strong>:</p>
+<ol>
+<li>Check if configuration was saved successfully</li>
+<li>Verify the backend received the update</li>
+<li>Check if frontend configuration cache needs clearing</li>
+</ol>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Force refresh</strong>: Clear browser cache and reload</li>
+<li><strong>Check backend logs</strong>: Verify the configuration update was persisted</li>
+<li><strong>Verify endpoint</strong>: Ensure <code>/api/v3/runtime-config/frontendConfig</code> returns the updated configuration</li>
+<li><strong>Restart application</strong>: Some deployments may require application restart</li>
+</ol>
+<hr>
+<h3 id="issue-all-tiles-hidden-after-adding-authorization">Issue: All Tiles Hidden After Adding Authorization<a class="headerlink" href="#issue-all-tiles-hidden-after-adding-authorization" title="Permanent link">¶</a></h3>
+<p><strong>Symptoms</strong>:
+- All tiles disappeared after adding authorization
+- Only administrators can see tiles</p>
+<p><strong>Cause</strong>: Likely set global authorization without appropriate groups or with non-empty array.</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li>
+<p>Use an empty array <code>[]</code> to include all authenticated users:
+   </p><div class="highlight"><pre><span></span><code><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+</code></pre></div><p></p>
+</li>
+<li>
+<p>Or add the appropriate user groups:
+   </p><div class="highlight"><pre><span></span><code><span class="nt">"authorization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"users"</span><span class="p">,</span><span class="w"> </span><span class="s2">"scientists"</span><span class="p">,</span><span class="w"> </span><span class="s2">"admin"</span><span class="p">]</span>
+</code></pre></div><p></p>
+</li>
+<li>
+<p>Or remove the authorization field to revert to default behavior</p>
+</li>
+</ol>
+<hr>
+<h3 id="common-pitfalls">Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Case sensitivity in group names</td>
+<td>Use exact case matching</td>
+</tr>
+<tr>
+<td>Forgetting to save configuration</td>
+<td>Click "Save" button in admin dashboard</td>
+</tr>
+<tr>
+<td>Using <code>null</code> instead of <code>[]</code> for public tiles</td>
+<td>Use empty array <code>[]</code> for no restriction</td>
+</tr>
+<tr>
+<td>To hide a tile</td>
+<td>Set <code>visible: false</code></td>
+</tr>
+<tr>
+<td>Expecting AND logic between groups</td>
+<td>Authorization uses OR logic (any group matches)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-faq">8. FAQ<a class="headerlink" href="#8-faq" title="Permanent link">¶</a></h2>
+<h3 id="q-what-happens-if-i-dont-configure-authorization">Q: What happens if I don't configure authorization?<a class="headerlink" href="#q-what-happens-if-i-dont-configure-authorization" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: If you don't add any authorization configuration, all tiles are <strong>visible to all authenticated users</strong> by default. This maintains backward compatibility with existing deployments.</p>
+<h3 id="q-can-i-use-authorization-without-enabling-customized-components">Q: Can I use authorization without enabling customized components?<a class="headerlink" href="#q-can-i-use-authorization-without-enabling-customized-components" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: No. The <code>authorization</code> field is only applicable when <code>enableCustomizedComponent</code> is set to <code>true</code>. If customized components are disabled, the default dataset detail view is used, and tile-level authorization does not apply.</p>
+<h3 id="q-can-i-use-both-global-and-tile-level-authorization">Q: Can I use both global and tile-level authorization?<a class="headerlink" href="#q-can-i-use-both-global-and-tile-level-authorization" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes. When both are configured:
+- Tile-level authorization takes precedence for that specific tile
+- Global authorization applies to tiles without their own authorization
+- This allows for a mix of globally restricted and tile-specific access controls</p>
+<h3 id="q-how-do-i-make-a-tile-visible-to-everyone">Q: How do I make a tile visible to everyone?<a class="headerlink" href="#q-how-do-i-make-a-tile-visible-to-everyone" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Use an empty array <code>[]</code> for the tile's authorization, or omit the authorization field entirely (which defaults to <code>[]</code>).</p>
+<h3 id="q-how-do-i-completely-hide-a-tile">Q: How do I completely hide a tile?<a class="headerlink" href="#q-how-do-i-completely-hide-a-tile" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Set the <code>visible</code> property to <code>false</code>.</p>
+<h3 id="q-can-i-use-wildcards-or-patterns-in-group-names">Q: Can I use wildcards or patterns in group names?<a class="headerlink" href="#q-can-i-use-wildcards-or-patterns-in-group-names" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: No. Group names must match exactly. Wildcards, patterns, or regular expressions are not supported. The user must be a member of the exact group name specified.</p>
+<h3 id="q-how-does-authorization-work-with-the-backend-permission-system">Q: How does authorization work with the backend permission system?<a class="headerlink" href="#q-how-does-authorization-work-with-the-backend-permission-system" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: The dataset detail tile authorization is a <strong>frontend-only</strong> feature that controls UI visibility. It does not affect backend API access. Users with appropriate backend permissions can still access data through the API. This feature only controls what is displayed in the frontend UI.</p>
+<h3 id="q-can-i-customize-the-no-authorization-message">Q: Can I customize the "No authorization" message?<a class="headerlink" href="#q-can-i-customize-the-no-authorization-message" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Currently, tiles that a user is not authorized to see are simply hidden (not rendered). There is no visible message indicating that content is hidden. This is by design to avoid revealing the existence of sensitive content.</p>
+<h3 id="q-how-do-i-show-a-lock-icon-on-restricted-tiles">Q: How do I show a lock icon on restricted tiles?<a class="headerlink" href="#q-how-do-i-show-a-lock-icon-on-restricted-tiles" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Enable the <code>tileRestrictedIconVisible</code> configuration flag under <code>datasetDetailComponent</code>:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"datasetDetailComponent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enableCustomizedComponent"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"tileRestrictedIconVisible"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"tileRestrictedIconGroups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"admin"</span><span class="p">,</span><span class="w"> </span><span class="s2">"scientists"</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"customization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+When enabled, tiles with restricted access (non-empty authorization array defined) will display a lock icon (<code>lock_outline</code>) in their header with a "Restricted access" tooltip.<p></p>
+<h3 id="q-how-do-i-test-my-authorization-configuration">Q: How do I test my authorization configuration?<a class="headerlink" href="#q-how-do-i-test-my-authorization-configuration" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: 
+1. Log in as different users with various group memberships
+2. Navigate to a dataset detail page
+3. Verify which tiles are visible for each user
+4. Check browser console for any authorization-related errors
+5. Use the JSON Preview in the admin dashboard to verify your configuration</p>
+<h3 id="q-can-i-use-this-feature-with-custom-tiles">Q: Can I use this feature with custom tiles?<a class="headerlink" href="#q-can-i-use-this-feature-with-custom-tiles" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Yes. Any custom tile type (regular, scientificMetadata, datasetJsonView, attachments) supports the authorization field.</p>
+<h3 id="q-whats-the-maximum-number-of-groups-i-can-specify">Q: What's the maximum number of groups I can specify?<a class="headerlink" href="#q-whats-the-maximum-number-of-groups-i-can-specify" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: There is no hard limit on the number of groups. However, for performance and maintainability, it's recommended to keep the list reasonable (under 20 groups).</p>
+<h3 id="q-can-i-use-this-feature-with-the-default-non-customized-dataset-detail-view">Q: Can I use this feature with the default (non-customized) dataset detail view?<a class="headerlink" href="#q-can-i-use-this-feature-with-the-default-non-customized-dataset-detail-view" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: No. Authorization only works when <code>enableCustomizedComponent</code> is <code>true</code> and you have defined custom tiles in the <code>customization</code> array. The default dataset detail view does not support tile-level authorization.</p>
+<h3 id="q-how-do-i-migrate-from-an-old-configuration">Q: How do I migrate from an old configuration?<a class="headerlink" href="#q-how-do-i-migrate-from-an-old-configuration" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: Existing configurations without authorization fields will continue to work unchanged. All tiles will be visible to all authenticated users. To add authorization:
+1. Add the <code>authorization</code> field to <code>datasetDetailComponent</code> or individual tiles
+2. Test with different user groups
+3. Gradually restrict access as needed</p>
+<h3 id="q-where-can-i-find-the-users-group-memberships">Q: Where can I find the user's group memberships?<a class="headerlink" href="#q-where-can-i-find-the-users-group-memberships" title="Permanent link">¶</a></h3>
+<p><strong>A</strong>: User group memberships are managed in the backend user management system. In SciCat, users typically belong to groups defined in the backend configuration or database. Check with your system administrator for group management details.</p>
+<hr>
+<h2 id="appendix-a-related-documentation">Appendix A: Related Documentation<a class="headerlink" href="#appendix-a-related-documentation" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="../about-page-configuration/">About Page Configuration</a></li>
+<li><a href="../help-page-configuration/">Help Page Configuration</a></li>
+<li><a href="../frontend-configuration-testing/">Frontend Configuration Testing</a></li>
+</ul>
+<hr>
+<h2 id="appendix-b-file-references">Appendix B: File References<a class="headerlink" href="#appendix-b-file-references" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/app/admin/schema/frontend.config.jsonforms.json</code></td>
+<td>JSONForms schema and UI schema definition</td>
+</tr>
+<tr>
+<td><code>src/app/admin/admin-config-edit/admin-config-edit.component.ts</code></td>
+<td>Admin dashboard component</td>
+</tr>
+<tr>
+<td><code>src/app/admin/admin-config-edit/admin-config-edit.component.html</code></td>
+<td>Admin dashboard template</td>
+</tr>
+<tr>
+<td><code>src/app/app-config.service.ts</code></td>
+<td>Configuration service and interfaces</td>
+</tr>
+<tr>
+<td><code>src/app/state-management/models/index.ts</code></td>
+<td>TypeScript model interfaces</td>
+</tr>
+<tr>
+<td><code>src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.ts</code></td>
+<td>Dataset detail component logic</td>
+</tr>
+<tr>
+<td><code>src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.html</code></td>
+<td>Dataset detail component template</td>
+</tr>
+<tr>
+<td><code>src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.scss</code></td>
+<td>Dataset detail component styling</td>
+</tr>
+<tr>
+<td><code>src/assets/config.json</code></td>
+<td>Default frontend configuration</td>
+</tr>
+<tr>
+<td><code>src/assets/config.override.json</code></td>
+<td>Environment-specific configuration overrides</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><em>Last updated: August 17, 2026</em>
+<em>Documentation for SciCat Frontend Dataset Detail Tile Authorization Feature</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["instant"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
