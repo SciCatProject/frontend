@@ -108,10 +108,11 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       }),
     );
   }
-  onCopy(doi: string): void {
+
+  onCopyClick(doi: string): void {
     this.clipboardService.copyToClipboard(
       doi,
-      "Published data DOI has been copied to your clipboard",
+      "copied to your clipboard.",
     );
   }
 
