@@ -1,5 +1,9 @@
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
-import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  DatasetClass,
+  Instrument,
+  PublishedData,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { DynamicField } from "../dialog/dialog.component";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -47,7 +51,11 @@ export interface ActionConfig {
   inputs?: Record<string, string>;
   variables?: Record<string, unknown>;
   headers?: Record<string, string>;
+  once?: boolean;
   onSuccess?: ActionType;
+  successMessage?: string;
+  successRoute?: string;
+  successRouteLabel?: string;
   dialog?: DialogConfig;
 }
 
@@ -112,6 +120,7 @@ export interface ActionItemDataset extends OutputDatasetObsoleteDto {
 
 export interface ActionItems {
   datasets: ActionItemDataset[];
+  publisheddata?: PublishedData[];
   instruments?: Instrument[];
   [key: string]: unknown;
 }

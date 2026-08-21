@@ -12,6 +12,8 @@ import { DatePipe } from "@angular/common";
 import {
   Configuration as ApiConfiguration,
   DatasetClass,
+  PublishedData,
+  UsersService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   ActionButtonStyle,
@@ -27,6 +29,7 @@ import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import {
   selectIsAdmin,
+  selectIsLoggedIn,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
@@ -69,14 +72,17 @@ export class ConfigurableActionComponent
 
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
 
   jwt = "";
   useMatIcon = false;
   useIcon = false;
 
   variables: Record<string, unknown> = {};
+  actionSucceeded = false;
   userProfile: Record<string, unknown> = {};
   isAdmin = false;
+  isLoggedIn = false;
   subscriptions: Subscription[] = [];
   form: HTMLFormElement | null = null;
 
@@ -171,6 +177,15 @@ export class ConfigurableActionComponent
       return _.get(this.actionItems, `instruments[${index}].${field}`);
     }
 
+    const publishedDataFieldMatch = selector.match(
+      /^#PublishedData\[(\d+)\]Field\[(\w+)\]$/,
+    );
+    if (publishedDataFieldMatch) {
+      const index = Number(publishedDataFieldMatch[1]);
+      const field = publishedDataFieldMatch[2];
+      return _.get(this.actionItems, `publisheddata[${index}].${field}`);
+    }
+
     return undefined;
   }
 
@@ -218,6 +233,10 @@ export class ConfigurableActionComponent
       "#DatasetsTotalSize": () => _(datasets).sumBy((d) => d.size || 0),
       "#DatasetsTotalPackedSize": () =>
         _(datasets).sumBy((d) => d.packedSize || 0),
+      "#PublishedData0Doi": () =>
+        _.get(this.actionItems, "publisheddata[0].doi"),
+      "#PublishedData0Status": () =>
+        _.get(this.actionItems, "publisheddata[0].status"),
     };
     return staticMap;
   }
@@ -225,8 +244,10 @@ export class ConfigurableActionComponent
   private viewHandlers(condition: string): string {
     let expr = condition;
     const symbols: Record<string, string> = {
-      "#datasetOwner": "context.isOwner",
+      "#datasetOwner": "context.isDatasetOwner",
+      "#publishedDataOwner": "context.isPublishedDataOwner",
       "#userIsAdmin": "context.isAdmin",
+      "#userIsLoggedIn": "context.isLoggedIn",
       "#isPublished": String(
         this.actionItems.datasets?.[0]?.isPublished === true,
       ),
@@ -280,7 +301,9 @@ export class ConfigurableActionComponent
         variables: this.variables,
         context: {
           isAdmin: this.isAdmin,
-          isOwner: this.isDatasetOwner,
+          isLoggedIn: this.isLoggedIn,
+          isDatasetOwner: this.isDatasetOwner,
+          isPublishedDataOwner: this.isPublishedDataOwner,
           maxSize: this.configService.getConfig().maxDirectDownloadSize,
         },
       };
@@ -296,6 +319,16 @@ export class ConfigurableActionComponent
     const datasets = _.get(this.actionItems, "datasets", []) as DatasetClass[];
     const userGroups = _.get(this.userProfile, "accessGroups", []) as string[];
     return _.some(datasets, (d) => userGroups.includes(d.ownerGroup));
+  }
+
+  private get isPublishedDataOwner(): boolean {
+    const publishedData = _.get(
+      this.actionItems,
+      "publisheddata",
+      [],
+    ) as PublishedData[];
+    const username = _.get(this.actionItems, "user.username") as string;
+    return _.some(publishedData, (pd) => pd.createdBy === username);
   }
 
   private buildDependenciesGraph(
@@ -377,7 +410,23 @@ export class ConfigurableActionComponent
         const text = await r.text();
         const data = text ? JSON.parse(text) : {};
 
-        this.store.dispatch(actionSuccessAction());
+        this.actionSucceeded = true;
+
+        let link: Record<string, string> | undefined;
+        if (this.actionConfig.successRoute) {
+          const route = this.actionConfig.successRoute.replace(
+            /\{\{\s*(\w+)\s*\}\}/g,
+            (_, key) => String((data as Record<string, unknown>)[key] ?? ""),
+          );
+          link = {
+            label: this.actionConfig.successRouteLabel || "View",
+            route,
+          };
+        }
+
+        this.store.dispatch(
+          actionSuccessAction(this.actionConfig.successMessage, link),
+        );
         this.actionFinishedEmit(true, data);
       })
       .catch((err: Error) => {
@@ -495,6 +544,7 @@ export class ConfigurableActionComponent
     try {
       if (nextStep === "xhr") this.typeXhr();
       else if (nextStep === "form") this.typeForm();
+      else if (nextStep === "link") this.typeLink();
       else if (nextStep === "json-download") this.typeJsonToDownload();
       else console.warn("Unsupported onSuccess action type:", nextStep);
     } catch (error) {
@@ -557,6 +607,7 @@ export class ConfigurableActionComponent
   }
 
   get disabled(): boolean {
+    if (this.actionConfig.once && this.actionSucceeded) return true;
     if (typeof this.actionConfig.disabled === "boolean")
       return this.actionConfig.disabled;
     if (typeof this.actionConfig.enabled === "boolean")
@@ -582,6 +633,9 @@ export class ConfigurableActionComponent
     );
     this.subscriptions.push(
       this.isAdmin$.subscribe((ia) => (this.isAdmin = ia)),
+    );
+    this.subscriptions.push(
+      this.isLoggedIn$.subscribe((il) => (this.isLoggedIn = il)),
     );
     this.useMatIcon = !!this.actionConfig.mat_icon;
     this.useIcon = this.actionConfig.icon !== undefined;
