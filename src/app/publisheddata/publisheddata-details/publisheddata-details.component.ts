@@ -11,6 +11,7 @@ import {
   registerPublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
+import { ClipboardService } from "shared/services/clipboard.service";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
@@ -41,6 +42,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
+    private clipboardService: ClipboardService,
   ) {}
 
   ngOnInit() {
@@ -104,6 +106,12 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
         datasetPids: this.publishedData.datasetPids,
         publishedDataDoi: this.publishedData.doi,
       }),
+    );
+  }
+  onCopy(doi: string): void {
+    this.clipboardService.copyToClipboard(
+      doi,
+      "Published data DOI has been copied to your clipboard",
     );
   }
 
