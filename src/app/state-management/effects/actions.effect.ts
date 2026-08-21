@@ -12,11 +12,16 @@ export class ActionEffects {
       ofType(fromActions.actionSuccessAction, fromActions.actionFailureAction),
       map((action) => {
         if (action.type === fromActions.actionSuccessAction.type) {
+          const successAction = action as ReturnType<
+            typeof fromActions.actionSuccessAction
+          >;
           return showMessageAction({
             message: new Message(
-              action.message || "Success",
+              successAction.message || "Success",
               MessageType.Success,
               5000,
+              successAction.link?.label,
+              successAction.link?.route,
             ),
           });
         } else {

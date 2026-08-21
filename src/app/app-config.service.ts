@@ -127,6 +127,8 @@ export interface AppConfigInterface {
   datasetDetailsActions: ActionConfig[];
   datasetSelectionActionsEnabled: boolean;
   datasetSelectionActions: ActionConfig[];
+  publishedDataActions: ActionConfig[];
+  publishedDataActionsEnabled: boolean;
   editDatasetEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
@@ -209,6 +211,8 @@ export interface AppConfigInterface {
   aboutSettings?: AboutSettings;
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
+  imprintUrl?: string;
+  privacyUrl?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

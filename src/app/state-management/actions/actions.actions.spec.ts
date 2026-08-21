@@ -8,6 +8,7 @@ describe("Actions Actions", () => {
       expect({ ...action }).toEqual({
         type: "[UI] Action Success",
         message: undefined,
+        link: undefined,
       });
     });
 
@@ -18,6 +19,19 @@ describe("Actions Actions", () => {
       expect({ ...action }).toEqual({
         type: "[UI] Action Success",
         message,
+        link: undefined,
+      });
+    });
+
+    it("should create action with message and link", () => {
+      const message = "Job submitted";
+      const link = { label: "View", route: "/user/jobs" };
+      const action = fromActions.actionSuccessAction(message, link);
+
+      expect({ ...action }).toEqual({
+        type: "[UI] Action Success",
+        message,
+        link,
       });
     });
   });
