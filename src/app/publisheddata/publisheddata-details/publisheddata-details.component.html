@@ -56,7 +56,17 @@
           </tr>
           <tr *ngIf="publishedData.doi as value" id="doiRow">
             <th>DOI</th>
-            <td>{{ value }}</td>
+            <td>
+              {{ value }}
+              <button
+                mat-icon-button
+                aria-label="Copy DOI"
+                data-cy="copyDoiButton"
+                (click)="onCopyClick(value)"
+              >
+                <mat-icon class="copy-button">content_copy</mat-icon>
+              </button>
+            </td>
           </tr>
           <tr *ngIf="landingPageUrl">
             <th>URL</th>
