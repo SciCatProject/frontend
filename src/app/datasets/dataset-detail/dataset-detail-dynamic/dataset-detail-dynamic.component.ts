@@ -17,7 +17,6 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
-import { selectCurrentUser } from "state-management/selectors/user.selectors";
 
 import { AppConfigService } from "app-config.service";
 
