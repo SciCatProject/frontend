@@ -49,7 +49,11 @@
       </button>
     </mat-form-field>
   </div>
-  <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
+  <div
+    *ngIf="pagination"
+    class="paginator-container"
+    [class.is-loading]="pagination?.isLoading"
+  >
     <mat-paginator
       class="datasets-paginator datasets-header-paginator"
       [pageSizeOptions]="pagination.pageSizeOptions"
@@ -57,7 +61,6 @@
       [length]="pagination.length"
       [pageSize]="pagination.pageSize"
       (page)="pagination_onChange($event)"
-      *ngIf="pagination"
     ></mat-paginator>
   </div>
 </div>
@@ -469,7 +472,11 @@
     </app-empty-content>
   </ng-container>
 </div>
-<div class="paginator-container" [class.is-loading]="pagination?.isLoading">
+<div
+  *ngIf="pagination"
+  class="paginator-container"
+  [class.is-loading]="pagination?.isLoading"
+>
   <mat-paginator
     class="datasets-paginator datasets-footer-paginator"
     [pageSizeOptions]="pagination.pageSizeOptions"
@@ -477,7 +484,6 @@
     [length]="pagination.length"
     [pageSize]="pagination.pageSize"
     (page)="pagination_onChange($event)"
-    *ngIf="pagination"
   >
   </mat-paginator>
 </div>
