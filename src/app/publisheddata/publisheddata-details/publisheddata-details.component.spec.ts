@@ -17,6 +17,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
 import {
+  Configuration as ApiConfiguration,
   PublishedData,
   PublishedDataService,
   UsersService,
@@ -81,7 +82,10 @@ describe("PublisheddataDetailsComponent", () => {
         { provide: UsersService, useClass: MockUserApi },
         { provide: AuthService, useClass: MockAuthService },
         { provide: AppConfigService, useValue: { getConfig } },
-        { provide: ConfigurableActionComponent },
+        {
+          provide: ApiConfiguration,
+          useValue: { basePath: "" },
+        },
       ],
     }).compileComponents();
 
