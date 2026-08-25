@@ -18,8 +18,8 @@ export class ClipboardService {
    */
   copyToClipboard(
     text: string,
-    successMessage: string = "Copied to clipboard",
-    duration: number = 5000,
+    successMessage = "Copied to clipboard",
+    duration = 5000,
   ): void {
     navigator.clipboard.writeText(text).then(
       () => {

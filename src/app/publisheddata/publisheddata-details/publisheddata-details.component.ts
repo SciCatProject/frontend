@@ -110,10 +110,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   }
 
   onCopyClick(doi: string): void {
-    this.clipboardService.copyToClipboard(
-      doi,
-      "copied to your clipboard.",
-    );
+    this.clipboardService.copyToClipboard(doi, "copied to your clipboard.");
   }
 
   isUrl(dataDescription: string): boolean {
