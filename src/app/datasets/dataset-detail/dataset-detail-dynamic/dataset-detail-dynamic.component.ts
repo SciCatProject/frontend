@@ -5,7 +5,6 @@ import { createSelector, Store } from "@ngrx/store";
 import { Subscription, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-import { showMessageAction } from "state-management/actions/user.actions";
 import {
   selectCurrentAttachments,
   selectCurrentDataset,
@@ -25,8 +24,6 @@ import {
   CustomizationItem,
   DatasetViewFieldType,
   InternalLinkType,
-  Message,
-  MessageType,
 } from "state-management/models";
 
 import { AttachmentService } from "shared/services/attachment.service";
@@ -42,6 +39,7 @@ import {
   ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { ClipboardService } from "shared/services/clipboard.service";
 
 // profile.selectors.ts
 export const selectProfileAccessGroups = createSelector(
@@ -103,6 +101,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
+    private clipboardService: ClipboardService,
   ) {
     this.tileRestrictedIconVisible =
       this.appConfig.datasetDetailComponent?.tileRestrictedIconVisible ?? false;
@@ -238,24 +237,9 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   }
 
   onCopy(value: string) {
-    navigator.clipboard.writeText(value).then(
-      () => {
-        const message = new Message(
-          "Selected field has been copied to your clipboard",
-          MessageType.Success,
-          5000,
-        );
-        this.store.dispatch(showMessageAction({ message }));
-      },
-      (err) => {
-        const errorMessage = new Message(
-          "Failed to copy selected field to clipboard",
-          MessageType.Error,
-          5000,
-        );
-        this.store.dispatch(showMessageAction({ message: errorMessage }));
-        console.error("Could not copy text: ", err);
-      },
+    this.clipboardService.copyToClipboard(
+      value,
+      "Selected field has been copied to your clipboard",
     );
   }
 
