@@ -95,7 +95,6 @@ import { RelationshipsComponent } from "./relationships/relationships.component"
 import { RelatedIdentifierCellComponent } from "./relationships/related-identifier-cell/related-identifier-cell.component";
 import { ActionEffects } from "state-management/effects/actions.effect";
 import { filesReducer } from "state-management/reducers/files.reducer";
-
 @NgModule({
   imports: [
     CommonModule,
@@ -143,7 +142,6 @@ import { filesReducer } from "state-management/reducers/files.reducer";
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
-      ActionEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
