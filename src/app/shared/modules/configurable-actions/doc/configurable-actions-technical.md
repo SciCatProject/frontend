@@ -79,6 +79,14 @@ Below are supported configuration properties, their types, and descriptions.
 - **Type:** `string`
 - **Description:** *Optional*. JS-style boolean expression for hiding the action.
 
+**Condition keywords available in `enabled`, `disabled` and `hidden`:**
+- `#userIsLoggedIn`: `true` if the user is logged in. Prefix with `!` to negate, e.g. `!#userIsLoggedIn` (also works for `#userIsAdmin`).
+- `#userIsAdmin`: `true` if the user is an admin.
+- `#datasetOwner` / `#publishedDataOwner`: `true` if the user owns the current dataset / published data.
+- `#isPublished` / `#!isPublished`: publication state of the current dataset.
+- `#Length(@variable)`: number of elements in a variable.
+- `#MaxDownloadableSize(@variable)`: `true` if the value is within the `maxDirectDownloadSize` limit.
+
 ### 15. `authorization`
 - **Type:** `string[]`
 - **Description:** List of expressions; action is available only if these pass (e.g. `["#datasetOwner && !@isPublished"]`).
