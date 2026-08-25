@@ -27,7 +27,10 @@ import {
   withInterceptorsFromDi,
 } from "@angular/common/http";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
-import { selectIsAdmin } from "state-management/selectors/user.selectors";
+import {
+  selectCurrentUser,
+  selectIsAdmin,
+} from "state-management/selectors/user.selectors";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -86,6 +89,12 @@ describe("PublisheddataDetailsComponent", () => {
       createPublishedData("public"),
     );
     store.overrideSelector(selectIsAdmin, false);
+    store.overrideSelector(selectCurrentUser, {
+      id: "test-user",
+      username: "test",
+      email: "test@test.com",
+      authStrategy: "local",
+    });
   }));
 
   beforeEach(() => {
