@@ -31,6 +31,7 @@ import {
   selectCurrentUser,
   selectIsAdmin,
 } from "state-management/selectors/user.selectors";
+import { ConfigurableActionComponent } from "shared/modules/configurable-actions/configurable-action.component";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -80,6 +81,7 @@ describe("PublisheddataDetailsComponent", () => {
         { provide: UsersService, useClass: MockUserApi },
         { provide: AuthService, useClass: MockAuthService },
         { provide: AppConfigService, useValue: { getConfig } },
+        { provide: ConfigurableActionComponent },
       ],
     }).compileComponents();
 
