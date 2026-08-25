@@ -21,6 +21,16 @@ export class ClipboardService {
     successMessage = "Copied to clipboard",
     duration = 5000,
   ): void {
+    if (!navigator.clipboard?.writeText) {
+      const errorMessage = new Message(
+        "Clipboard not supported",
+        MessageType.Error,
+        duration,
+      );
+      this.store.dispatch(showMessageAction({ message: errorMessage }));
+      return;
+    }
+
     navigator.clipboard.writeText(text).then(
       () => {
         const message = new Message(
