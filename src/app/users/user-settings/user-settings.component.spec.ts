@@ -43,18 +43,18 @@ describe("UserSettingsComponent", () => {
         }),
       ],
       declarations: [UserSettingsComponent],
+      providers: [
+        {
+          provide: ClipboardService,
+          useValue: jasmine.createSpyObj("ClipboardService", [
+            "copyToClipboard",
+          ]),
+        },
+      ],
     });
     TestBed.overrideComponent(UserSettingsComponent, {
       set: {
-        providers: [
-          { provide: AppConfigService, useValue: { getConfig } },
-          {
-            provide: ClipboardService,
-            useValue: jasmine.createSpyObj("ClipboardService", [
-              "copyToClipboard",
-            ]),
-          },
-        ],
+        providers: [{ provide: AppConfigService, useValue: { getConfig } }],
       },
     });
     TestBed.compileComponents();
