@@ -37,6 +37,7 @@ import { ITableSetting, TableSetting } from "../models/table-setting.model";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { EmptyContentModule } from "shared/modules/generic-empty-content/empty-content.module";
 import { MatCardModule } from "@angular/material/card";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtensionsModule = [RowMenuModule];
@@ -62,6 +63,7 @@ const ExtensionsModule = [RowMenuModule];
     MatButtonModule,
     MatCardModule,
     MatMenuModule,
+    MatSlideToggleModule,
     ExtensionsModule,
     PipesModule,
     EmptyContentModule,
