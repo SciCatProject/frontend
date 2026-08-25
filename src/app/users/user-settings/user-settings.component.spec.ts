@@ -12,8 +12,7 @@ import { AppConfigService } from "app-config.service";
 
 import { UserSettingsComponent } from "./user-settings.component";
 import { SharedScicatFrontendModule } from "shared/shared.module";
-import { Message, MessageType } from "state-management/models";
-import { showMessageAction } from "state-management/actions/user.actions";
+import { ClipboardService } from "shared/services/clipboard.service";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -26,6 +25,7 @@ describe("UserSettingsComponent", () => {
 
   let store: MockStore;
   let dispatchSpy;
+  let clipboardService: jasmine.SpyObj<ClipboardService>;
 
   const getConfig = () => ({});
 
@@ -46,7 +46,15 @@ describe("UserSettingsComponent", () => {
     });
     TestBed.overrideComponent(UserSettingsComponent, {
       set: {
-        providers: [{ provide: AppConfigService, useValue: { getConfig } }],
+        providers: [
+          { provide: AppConfigService, useValue: { getConfig } },
+          {
+            provide: ClipboardService,
+            useValue: jasmine.createSpyObj("ClipboardService", [
+              "copyToClipboard",
+            ]),
+          },
+        ],
       },
     });
     TestBed.compileComponents();
@@ -55,6 +63,9 @@ describe("UserSettingsComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserSettingsComponent);
     component = fixture.componentInstance;
+    clipboardService = TestBed.inject(
+      ClipboardService,
+    ) as jasmine.SpyObj<ClipboardService>;
     fixture.detectChanges();
   });
 
@@ -72,21 +83,14 @@ describe("UserSettingsComponent", () => {
 
   describe("#onCopy()", () => {
     it("should copy the token to the users clipboard and dispatch a showMessageAction", () => {
-      const commandSpy = spyOn(document, "execCommand");
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const message = new Message(
-        "SciCat token has been copied to your clipboard",
-        MessageType.Success,
-        5000,
-      );
-
       component.onCopy("test");
 
-      expect(commandSpy).toHaveBeenCalledTimes(1);
-      expect(commandSpy).toHaveBeenCalledWith("copy");
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(showMessageAction({ message }));
+      expect(clipboardService.copyToClipboard).toHaveBeenCalledTimes(1);
+      expect(clipboardService.copyToClipboard).toHaveBeenCalledWith(
+        "test",
+        "SciCat token has been copied to your clipboard",
+        5000,
+      );
     });
   });
 
