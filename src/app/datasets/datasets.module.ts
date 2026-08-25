@@ -93,8 +93,6 @@ import { OverlayModule } from "@angular/cdk/overlay";
 import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
 import { RelationshipsComponent } from "./relationships/relationships.component";
 import { RelatedIdentifierCellComponent } from "./relationships/related-identifier-cell/related-identifier-cell.component";
-import { ActionEffects } from "state-management/effects/actions.effect";
-
 @NgModule({
   imports: [
     CommonModule,
@@ -142,7 +140,6 @@ import { ActionEffects } from "state-management/effects/actions.effect";
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
-      ActionEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
