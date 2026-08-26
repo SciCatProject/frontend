@@ -173,6 +173,7 @@ export class IngestorNewTransferDialogPageComponent
           }
         }),
       );
+      this.generateExampleDataForSciCatHeader();
     }
   }
 
@@ -290,7 +291,12 @@ export class IngestorNewTransferDialogPageComponent
         ingestionObject: this.createNewTransferData,
       }),
     );
-    this.generateExampleDataForSciCatHeader();
+    if (
+      this.createNewTransferData.editorMode === "INGESTION" ||
+      this.createNewTransferData.editorMode === "EDITOR"
+    ) {
+      this.generateExampleDataForSciCatHeader();
+    }
     this.prepareSchemaForProcessing();
 
     // Emit once to go to next step
