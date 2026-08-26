@@ -6,9 +6,12 @@ import { ITableSetting } from "../modules/dynamic-material-table/models/table-se
 import { Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { TablePagination } from "../modules/dynamic-material-table/models/table-pagination.model";
+import { TableSettingsStorageService } from "./table-settings-storage.service";
 
 @Injectable({ providedIn: "root" })
 export class TableConfigService {
+  constructor(private tableSettingsStorage: TableSettingsStorageService) {}
+
   getTableSort(route: ActivatedRoute): ITableSetting["tableSort"] {
     const { queryParams } = route.snapshot;
     return queryParams.sortDirection && queryParams.sortColumn
@@ -72,6 +75,16 @@ export class TableConfigService {
     savedTableConfig?: TableField<any>[],
     tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" },
   ) {
+    // If the caller didn't provide a savedTableConfig (store might not be ready),
+    // attempt to recover from the persistent local storage so recent user changes
+    // survive short navigations.
+    if (!savedTableConfig) {
+      const recovered = this.tableSettingsStorage.get(tableName);
+      if (recovered) {
+        savedTableConfig = recovered as TableField<any>[];
+      }
+    }
+
     const tableSettingsConfig: ITableSetting = {
       ...tableDefaultSettingsConfig,
     };
