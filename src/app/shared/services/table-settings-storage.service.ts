@@ -94,8 +94,9 @@ export class TableSettingsStorageService {
 
     // Optionally initialize a BroadcastChannel for lower-latency messaging in supported browsers
     try {
-      const bc = new (window as any).BroadcastChannel?.("scicat.table.settings.v1");
-      if (bc) {
+      const BC = (window as any).BroadcastChannel;
+      if (typeof BC === 'function') {
+        const bc = new BC("scicat.table.settings.v1");
         bc.onmessage = (msg: any) => {
           const { tableName, userId } = msg.data || {};
           if (tableName) {
