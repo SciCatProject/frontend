@@ -242,3 +242,22 @@ mat-divider {
     font-weight: bold;
   }
 }
+
+::ng-deep .ingestor-creation-dialog {
+  .mat-mdc-dialog-surface {
+    max-height: calc(100dvh - 24px);
+    display: flex;
+    flex-direction: column;
+
+    @supports not (height: 1dvh) {
+      max-height: calc(100vh - 24px);
+    }
+  }
+
+  .mat-mdc-dialog-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: none;
+    flex: 1 1 auto;
+  }
+}
