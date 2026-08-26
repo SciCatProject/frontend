@@ -76,6 +76,7 @@ import { DatasetsListService } from "shared/services/datasets-list.service";
 import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.component";
 import { Router } from "@angular/router";
 import { DynamicMatTableComponent } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.component";
+import { TableSettingsStorageService } from "shared/services/table-settings-storage.service";
 
 export interface SortChangeEvent {
   active: string;
@@ -175,6 +176,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
     private router: Router,
+    private tableSettingsStorage: TableSettingsStorageService,
   ) {}
 
   private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
@@ -253,6 +255,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         tooltip,
       };
     });
+
+    // Persist immediately to persistent local store as a fast fallback so UI changes
+    // survive short navigations / reloads even if the server/store hasn't updated yet.
+    try {
+      // we pass no userId here — TableSettingsStorageService will store 'anon' if not provided.
+      this.tableSettingsStorage.set(this.tableName, columnsSetting);
+    } catch (e) {
+      // Ignore storage failures (private mode or quota), server update still happens below.
+    }
+
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
@@ -268,6 +280,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
+    // If the user resets to default, also clear the persistent cached table setting so
+    // future initializations use the official default rather than the local copy.
+    if (event.type === TableSettingEventType.reset) {
+      try {
+        this.tableSettingsStorage.remove(this.tableName);
+      } catch (e) {
+        // ignore
+      }
+    }
+
     if (
       event.type === TableSettingEventType.save ||
       event.type === TableSettingEventType.create ||
