@@ -23,7 +23,7 @@ import {
   selectColumnsWithHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
-import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
+import { updatePublishedDataAction } from "state-management/actions/published-data.actions";
 import { TableService } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import { DatasetsListService } from "shared/services/datasets-list.service";
@@ -244,9 +244,8 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   onSaveChanges() {
     this.store.dispatch(
-      resyncPublishedDataAction({
+      updatePublishedDataAction({
         doi: this.editingPublishedDataDoi,
-        redirect: false,
         data: { datasetPids: this.datasetList.map((d) => d.pid) },
       }),
     );

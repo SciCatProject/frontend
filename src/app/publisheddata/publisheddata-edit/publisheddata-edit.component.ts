@@ -20,7 +20,7 @@ import {
 import {
   fetchPublishedDataAction,
   fetchPublishedDataConfigAction,
-  resyncPublishedDataAction,
+  updatePublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import {
   selectCurrentPublishedData,
@@ -92,7 +92,7 @@ export class PublisheddataEditComponent
 
       if (doi) {
         this.store.dispatch(
-          resyncPublishedDataAction({
+          updatePublishedDataAction({
             doi,
             data: { ...rest, metadata },
             redirect: shouldRedirect,
@@ -158,6 +158,9 @@ export class PublisheddataEditComponent
           this.initialMetadata = JSON.stringify(publishedData.metadata);
           this.metadataData = publishedData.metadata;
         }
+
+        this.form.markAsPristine();
+        this._hasUnsavedChanges = false;
       }),
     );
 

@@ -109,6 +109,21 @@ export class PublishedDataEffects {
     );
   });
 
+  navigateToUpdatedPublishedData$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.updatePublishedDataCompleteAction),
+        filter(({ publishedData, redirect }) => !!publishedData && !!redirect),
+        exhaustMap(({ publishedData }) =>
+          this.router.navigateByUrl(
+            "/publishedDatasets/" + encodeURIComponent(publishedData.doi),
+          ),
+        ),
+      );
+    },
+    { dispatch: false },
+  );
+
   navigateToResyncedPublishedData$ = createEffect(
     () => {
       return this.actions$.pipe(
@@ -292,13 +307,26 @@ export class PublishedDataEffects {
   updatePublishedData$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updatePublishedDataAction),
-      switchMap(({ doi, data }) =>
+      switchMap(({ doi, data, redirect }) =>
         this.publishedDataService
           .publishedDataV4ControllerUpdateV4(doi, data)
           .pipe(
-            mergeMap((publishedData) => [
-              fromActions.updatePublishedDataCompleteAction({ publishedData }),
-            ]),
+            mergeMap((publishedData) =>
+              redirect
+                ? [
+                    fromActions.updatePublishedDataCompleteAction({
+                      publishedData,
+                      redirect,
+                    }),
+                    datasetActions.clearBatchAction(),
+                    fromActions.clearPublishedDataFromLocalStorage(),
+                  ]
+                : [
+                    fromActions.updatePublishedDataCompleteAction({
+                      publishedData,
+                    }),
+                  ],
+            ),
             catchError(() => of(fromActions.updatePublishedDataFailedAction())),
           ),
       ),

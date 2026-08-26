@@ -49,6 +49,17 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.updatePublishedDataCompleteAction,
+    (state, { publishedData }): PublishedDataState => ({
+      ...state,
+      currentPublishedData: publishedData,
+      publishedData: state.publishedData.map((item) =>
+        item.doi === publishedData.doi ? publishedData : item,
+      ),
+    }),
+  ),
+
+  on(
     fromActions.publishPublishedDataCompleteAction,
     (state, { publishedData }): PublishedDataState => ({
       ...state,

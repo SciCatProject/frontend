@@ -148,11 +148,15 @@ export const resyncPublishedDataFailedAction = createAction(
 
 export const updatePublishedDataAction = createAction(
   "[PublishedData] Update Published Data",
-  props<{ doi: string; data: PartialUpdatePublishedDataV4Dto }>(),
+  props<{
+    doi: string;
+    data: PartialUpdatePublishedDataV4Dto;
+    redirect?: boolean;
+  }>(),
 );
 export const updatePublishedDataCompleteAction = createAction(
   "[PublishedData] Update Published Data Complete",
-  props<{ publishedData: PublishedData }>(),
+  props<{ publishedData: PublishedData; redirect?: boolean }>(),
 );
 export const updatePublishedDataFailedAction = createAction(
   "[PublishedData] Update Published Data Failed",

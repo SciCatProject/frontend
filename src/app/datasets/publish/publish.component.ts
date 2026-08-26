@@ -8,7 +8,6 @@ import {
   createPublishedDataAction,
   createPublishedDataCompleteAction,
   fetchPublishedDataConfigAction,
-  resyncPublishedDataAction,
   savePublishedDataAction,
   savePublishedDataCompleteAction,
   updatePublishedDataAction,
@@ -214,7 +213,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
     if (this.savedPublishedDataDoi) {
       this.store.dispatch(
-        resyncPublishedDataAction({
+        updatePublishedDataAction({
           doi: this.savedPublishedDataDoi,
           data: publishedData,
           redirect: true,
