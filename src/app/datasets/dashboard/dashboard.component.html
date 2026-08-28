@@ -2,8 +2,7 @@
   <mat-sidenav-container [hasBackdrop]="false">
     <mat-sidenav-content>
       <div fxLayout="row" fxLayout.xs="column" class="dashboard-header">
-        <div class="action-column" fxFlex="14" fxFlex.lt-xl="20"></div>
-        <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+        <div class="table-column" fxFlex="100">
           <ng-template [ngIf]="this.loggedIn$ | async">
             <dataset-table-actions></dataset-table-actions>
           </ng-template>
@@ -11,29 +10,51 @@
       </div>
 
       <div fxLayout="row" fxLayout.xs="column">
-        <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
-          <datasets-filter></datasets-filter>
-          <ng-template [ngIf]="this.loggedIn$ | async">
-            <ingestor-creation
-              #ingestor
-              style="display: none"
-            ></ingestor-creation>
-            <mat-card
-              *ngIf="appConfig.addDatasetEnabled"
-              class="add-card"
-              (click)="openDialog()"
-            >
-              <mat-card-content>
-                <mat-icon> add_circle </mat-icon>
-                Create Dataset
-              </mat-card-content>
-            </mat-card>
-            <div *ngIf="!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)">
-              <batch-card></batch-card>
+        <div class="table-column" fxFlex="100">
+          <!-- NEW SEARCH BAR AND FILTER BUTTON ROW -->
+          <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-bottom: 0; padding: 0 16px;">
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" style="gap: 16px;">
+              <mat-form-field style="width: 550px; max-width: 100%;">
+                <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch">search</mat-icon>
+                <input [(ngModel)]="globalTextSearch" type="text" matInput placeholder="Dataset name, Run number..." (ngModelChange)="onTextChange($event)" (keydown.enter)="onSearchAction()" (keydown.escape)="onGlobalTextSearchClear()" data-cy="text-search" />
+                <span matSuffix style="font-size: 16px; margin-right: 8px; color: gray;" matTooltip="Press Enter to search" matTooltipPosition="below" matTooltipShowDelay="500">↵</span>
+                <button mat-icon-button matSuffix *ngIf="globalTextSearch" (click)="onGlobalTextSearchClear()" type="button" matTooltip="Clear search">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <button mat-icon-button matSuffix *ngIf="globalTextSearch" (click)="onSearchAction()" type="button" matTooltip="Apply search">
+                  <mat-icon>search</mat-icon>
+                </button>
+              </mat-form-field>
+
+              <button mat-stroked-button color="primary" (click)="toggleFilters()" style="margin-bottom: 22px;"
+                      [attr.aria-expanded]="filtersExpanded"
+                      aria-controls="datasets-filter-panel">
+                <mat-icon>filter_list</mat-icon> Filters
+              </button>
             </div>
-          </ng-template>
-        </div>
-        <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+
+            <!-- EXISTING ACTION BUTTONS MOVED FROM SIDEBAR TO PRESERVE THEM -->
+            <div fxLayout="row" fxLayoutAlign="end center" style="gap: 16px; margin-bottom: 22px;">
+              <ng-template [ngIf]="this.loggedIn$ | async">
+                <ingestor-creation #ingestor style="display: none"></ingestor-creation>
+                <mat-card *ngIf="appConfig.addDatasetEnabled" class="add-card" (click)="openDialog()" style="cursor: pointer; padding: 8px 16px;">
+                  <mat-card-content style="margin: 0; padding: 0; display: flex; align-items: center;">
+                    <mat-icon style="margin-right: 8px;"> add_circle </mat-icon>
+                    Create Dataset
+                  </mat-card-content>
+                </mat-card>
+                <div *ngIf="!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)">
+                  <batch-card></batch-card>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <!-- EXPANDABLE FILTER PANEL -->
+          <div id="datasets-filter-panel" *ngIf="filtersExpanded" style="padding: 0 16px 16px 16px;">
+            <datasets-filter></datasets-filter>
+          </div>
+
           <dataset-table
             (rowClick)="onRowClick($event)"
             (pageChange)="onPageChange($event)"
