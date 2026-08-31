@@ -1,0 +1,36 @@
+<mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }">
+  <mat-label>{{ label }}</mat-label>
+
+  <input
+    matInput
+    readonly
+    [id]="id"
+    [formControl]="pickerControl"
+    [ngxMatDatetimePicker]="picker"
+  />
+
+  <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+
+  <ngx-mat-datetime-picker
+    #picker
+    [showSpinners]="true"
+    [showSeconds]="true"
+    [stepHour]="1"
+    [stepMinute]="5"
+    [stepSecond]="5"
+  >
+    <ngx-mat-datepicker-actions>
+      <button mat-button ngxMatDatepickerClear>Clear</button>
+      <button mat-button ngxMatDatepickerCancel>Cancel</button>
+      <button mat-raised-button color="primary" ngxMatDatepickerApply>
+        Apply
+      </button>
+    </ngx-mat-datepicker-actions>
+  </ngx-mat-datetime-picker>
+
+  <mat-hint *ngIf="shouldShowUnfocusedDescription()">
+    {{ description }}
+  </mat-hint>
+
+  <mat-error>{{ error }}</mat-error>
+</mat-form-field>

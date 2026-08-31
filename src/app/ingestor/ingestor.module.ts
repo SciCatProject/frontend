@@ -34,8 +34,7 @@ import { CustomObjectControlRendererComponent } from "shared/modules/jsonforms-c
 import { IngestorFileBrowserComponent } from "./ingestor-dialogs/ingestor-file-browser/ingestor.file-browser.component";
 import { MatTreeModule } from "@angular/material/tree";
 import { OwnerGroupFieldComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/owner-group-field-renderer";
-import { CreationLocationFieldComponent } from
-  "shared/modules/jsonforms-custom-renderers/ingestor-renderer/creation-location-field-renderer";
+import { CreationLocationFieldComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/creation-location-field-renderer";
 import {
   CustomLayoutChildrenRenderPropsPipe,
   QuantityValueLayoutRendererComponent,
@@ -57,6 +56,21 @@ import { IngestorCreationComponent } from "./ingestor-page/ingestor-creation.com
 import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.custom-metadata-dialog-page.component";
 import { SIFieldHiderRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/quantity-field-renderer";
 import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/dynamic-object-renderer";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import {
+  NgxMatDatepickerActions,
+  NgxMatDatepickerApply,
+  NgxMatDatepickerCancel,
+  NgxMatDatepickerClear,
+  NgxMatDatepickerInput,
+  NgxMatDatetimepicker,
+} from "@ngxmc/datetime-picker";
+import { DateTimeFieldRendererComponent } from "../shared/modules/jsonforms-custom-renderers/ingestor-renderer/date-time-field-renderer";
+//field validation error
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+import { MatLuxonDateModule } from "@angular/material-luxon-adapter";
+//import { MtxLuxonDatetimeModule } from "@ng-matero/extensions-luxon-adapter";
 
 @NgModule({
   declarations: [
@@ -85,6 +99,7 @@ import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-
     IngestorTransferViewDialogComponent,
     IngestorNoRightsDialogPageComponent,
     IngestorCustomMetadataDialogPageComponent,
+    DateTimeFieldRendererComponent,
   ],
   imports: [
     CommonModule,
@@ -116,6 +131,32 @@ import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-
     MatMenuModule,
     EffectsModule.forFeature([IngestorEffects]),
     StoreModule.forFeature("ingestor", ingestorReducer),
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    NgxMatDatepickerInput,
+    NgxMatDatetimepicker,
+    NgxMatDatepickerActions,
+    NgxMatDatepickerApply,
+    NgxMatDatepickerCancel,
+    NgxMatDatepickerClear,
+    MatLuxonDateModule,
+    //MtxLuxonDatetimeModule, // would need to import - npm install @ng-matero/extensions-luxon-adapter
+  ],
+  // fix field validation error
+  providers: [
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: { dateInput: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ" },
+        display: {
+          dateInput: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
+          timeInput: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
+          monthYearLabel: "LLL yyyy",
+          dateA11yLabel: "DD",
+          monthYearA11yLabel: "LLLL yyyy",
+        },
+      },
+    },
   ],
   exports: [IngestorMetadataEditorComponent, IngestorCreationComponent],
 })

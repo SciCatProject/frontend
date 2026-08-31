@@ -15,8 +15,8 @@ import {
 } from "./owner-group-field-renderer";
 import {
   CreationLocationFieldComponent,
-  creationLocationFieldTester
-} from "./creation-location-field-renderer"
+  creationLocationFieldTester,
+} from "./creation-location-field-renderer";
 import {
   QuantityValueLayoutRendererComponent,
   quantityValueLayoutTester,
@@ -29,6 +29,10 @@ import {
   DynamicObjectRendererComponent,
   dynamicObjectRendererTester,
 } from "./dynamic-object-renderer";
+import {
+  DateTimeFieldRendererComponent,
+  dateTimeFieldTester,
+} from "./date-time-field-renderer";
 
 export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
@@ -41,7 +45,7 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   },
   {
     tester: creationLocationFieldTester,
-    renderer: CreationLocationFieldComponent
+    renderer: CreationLocationFieldComponent,
   },
   {
     tester: quantityValueLayoutTester,
@@ -66,5 +70,9 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
     tester: isSIFieldTester,
     renderer: SIFieldHiderRendererComponent,
+  },
+  {
+    tester: dateTimeFieldTester,
+    renderer: DateTimeFieldRendererComponent,
   },
 ];
