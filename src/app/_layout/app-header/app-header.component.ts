@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Inject, DOCUMENT } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
