@@ -2,6 +2,29 @@
   class="table-header-controls"
   [class.with-side-filter]="sideFilterCollapsed"
 >
+  <div
+    class="real-time-toggle-wrapper"
+    *ngIf="showRealTimeToggle && appConfig?.realTimeUpdatesEnabled"
+  >
+    <mat-slide-toggle
+      [checked]="realTimeEnabled"
+      (change)="realTimeToggle.emit($event.checked)"
+      data-cy="real-time-toggle"
+    >
+      Live updates
+    </mat-slide-toggle>
+
+    <mat-icon
+      *ngIf="realTimeEnabled && eventsService.connectionError$ | async"
+      class="connection-error-icon"
+      matTooltip="Live updates are currently unavailable. Please check with your administrator."
+      matTooltipPosition="above"
+      aria-label="Live updates are currently unavailable. Please check with your administrator."
+      data-cy="live-updates-error"
+    >
+      cloud_off
+    </mat-icon>
+  </div>
   <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
     <mat-form-field>
       <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
@@ -49,7 +72,11 @@
       </button>
     </mat-form-field>
   </div>
-  <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
+  <div
+    *ngIf="pagination"
+    class="paginator-container"
+    [class.is-loading]="pagination?.isLoading"
+  >
     <mat-paginator
       class="datasets-paginator datasets-header-paginator"
       [pageSizeOptions]="pagination.pageSizeOptions"
@@ -57,7 +84,6 @@
       [length]="pagination.length"
       [pageSize]="pagination.pageSize"
       (page)="pagination_onChange($event)"
-      *ngIf="pagination"
     ></mat-paginator>
   </div>
 </div>
@@ -429,6 +455,7 @@
       [class.row-selection]="
         rowSelectionModel ? rowSelectionModel.isSelected(row) : false
       "
+      [class.row-highlight]="highlighted.has(row._id)"
       (contextmenu)="onContextMenu($event, null, row)"
     >
     </mat-row>
@@ -469,7 +496,11 @@
     </app-empty-content>
   </ng-container>
 </div>
-<div class="paginator-container" [class.is-loading]="pagination?.isLoading">
+<div
+  *ngIf="pagination"
+  class="paginator-container"
+  [class.is-loading]="pagination?.isLoading"
+>
   <mat-paginator
     class="datasets-paginator datasets-footer-paginator"
     [pageSizeOptions]="pagination.pageSizeOptions"
@@ -477,7 +508,6 @@
     [length]="pagination.length"
     [pageSize]="pagination.pageSize"
     (page)="pagination_onChange($event)"
-    *ngIf="pagination"
   >
   </mat-paginator>
 </div>

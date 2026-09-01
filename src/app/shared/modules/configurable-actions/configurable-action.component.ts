@@ -12,6 +12,7 @@ import { DatePipe } from "@angular/common";
 import {
   Configuration as ApiConfiguration,
   DatasetClass,
+  UsersService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   ActionButtonStyle,
@@ -81,6 +82,7 @@ export class ConfigurableActionComponent
   form: HTMLFormElement | null = null;
 
   constructor(
+    private usersService: UsersService,
     private authService: AuthService,
     private configService: AppConfigService,
     private store: Store,
@@ -455,7 +457,10 @@ export class ConfigurableActionComponent
   }
 
   private typeLink() {
-    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
+    window.open(
+      this.interpolate(this.actionConfig.url),
+      this.actionConfig.target || "_self",
+    );
   }
 
   private typeDialog() {
@@ -571,7 +576,9 @@ export class ConfigurableActionComponent
   }
 
   ngOnInit() {
-    this.jwt = this.authService.getAccessTokenId() || "";
+    this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
+      this.jwt = jwt.jwt ?? "";
+    });
     this.subscriptions.push(
       this.userProfile$.subscribe(
         (up) => up && (this.userProfile = up as Record<string, unknown>),

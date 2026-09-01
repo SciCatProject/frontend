@@ -81,6 +81,7 @@ import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
+import { DatasetStatusBannerComponent } from "./dataset-detail/dataset-status-banner/dataset-status-banner.component";
 import { DatasetInlineEditCellComponent } from "./dataset-table/dataset-inline-edit-cell.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
@@ -173,6 +174,7 @@ import { ActionEffects } from "state-management/effects/actions.effect";
     DatasetDetailWrapperComponent,
     DatasetDetailComponent,
     DatasetDetailDynamicComponent,
+    DatasetStatusBannerComponent,
     DatasetTableComponent,
     DatasetInlineEditCellComponent,
     DatasetsFilterComponent,

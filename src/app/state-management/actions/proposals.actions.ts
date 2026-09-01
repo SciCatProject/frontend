@@ -187,6 +187,10 @@ export const fetchRelatedProposalsFailedAction = createAction(
   "[Proposal] Fetch Related Proposals Failed",
 );
 
+export const fetchRelatedProposalsCountAction = createAction(
+  "[Proposal] Fetch Related Proposals Count",
+);
+
 export const fetchRelatedProposalsCountCompleteAction = createAction(
   "[Proposal] Fetch Related Proposals Count Complete",
   props<{ count: number }>(),

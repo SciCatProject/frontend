@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readyToFetch$ = this.store
     .select(selectHasPrefilledFilters)
     .pipe(filter((has) => has));
+
   loggedIn$ = this.store.select(selectIsLoggedIn);
   selectColumns$ = this.store.select(selectColumns);
   selectHasFetchedSettings$ = this.store.select(selectHasFetchedSettings);
