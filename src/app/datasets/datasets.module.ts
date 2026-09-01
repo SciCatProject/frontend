@@ -35,7 +35,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
-import { PublishComponent } from "./publish/publish.component";
+import { PublisheddataEditModule } from "publisheddata/publisheddata-edit/publisheddata-edit.module";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ReduceComponent } from "./reduce/reduce.component";
@@ -164,6 +164,7 @@ import { ActionEffects } from "state-management/effects/actions.effect";
     OverlayModule,
     IngestorModule,
     SharedConditionModule,
+    PublisheddataEditModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -178,7 +179,6 @@ import { ActionEffects } from "state-management/effects/actions.effect";
     DatasetTableComponent,
     DatasetInlineEditCellComponent,
     DatasetsFilterComponent,
-    PublishComponent,
     ReduceComponent,
     DatasetDetailsDashboardComponent,
     AddDatasetDialogComponent,
