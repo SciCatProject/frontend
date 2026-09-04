@@ -4,6 +4,7 @@ import { GenericFilters } from "../models";
 export interface InstrumentState {
   instruments: Instrument[];
   currentInstrument: Instrument | undefined;
+  currentInstruments: Instrument[];
   totalCount: number;
   instrumentsCountIsLoading: boolean;
 
@@ -13,6 +14,7 @@ export interface InstrumentState {
 export const initialInstrumentState: InstrumentState = {
   instruments: [],
   currentInstrument: undefined,
+  currentInstruments: [],
   totalCount: 0,
   instrumentsCountIsLoading: false,
 

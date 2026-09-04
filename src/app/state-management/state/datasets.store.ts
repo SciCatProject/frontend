@@ -1,5 +1,11 @@
 import { DatasetFilters, ArchViewMode } from "state-management/models";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  PartialOutputDatasetDto,
+  OutputAttachmentV3Dto,
+  Datablock,
+  OrigDatablock,
+  HistoryClass,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface FacetCount {
   _id: string;
@@ -16,11 +22,21 @@ export interface Pagination {
   limit: number;
 }
 
+export type CurrentDataset = PartialOutputDatasetDto & {
+  attachments?: OutputAttachmentV3Dto[];
+  datablocks?: Datablock[];
+  origdatablocks?: OrigDatablock[];
+  history?: HistoryClass[];
+  proposalIds?: string[];
+  sampleIds?: string[];
+  instrumentIds?: string[];
+};
+
 export interface DatasetState {
-  datasets: OutputDatasetObsoleteDto[];
-  selectedSets: OutputDatasetObsoleteDto[];
-  currentSet: OutputDatasetObsoleteDto | undefined;
-  relatedDatasets: OutputDatasetObsoleteDto[];
+  datasets: PartialOutputDatasetDto[];
+  selectedSets: PartialOutputDatasetDto[];
+  currentSet: CurrentDataset | undefined;
+  relatedDatasets: PartialOutputDatasetDto[];
   relatedDatasetsCount: number;
   totalCount: number;
 
@@ -40,7 +56,7 @@ export interface DatasetState {
     sortField: string;
   };
 
-  batch: OutputDatasetObsoleteDto[];
+  batch: CurrentDataset[];
 
   openwhiskResult: Record<string, unknown> | undefined;
 }

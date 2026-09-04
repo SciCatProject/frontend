@@ -37,7 +37,7 @@ import { MockActivatedRoute, mockDataset } from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
 import { AttachmentService } from "shared/services/attachment.service";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { TranslateService } from "@ngx-translate/core";
 
 describe("DatasetDetailComponent", () => {
@@ -98,7 +98,7 @@ describe("DatasetDetailComponent", () => {
     component.dataset = {
       pid: "testPid",
       isPublished: false,
-    } as unknown as OutputDatasetObsoleteDto;
+    } as unknown as OutputDatasetDto;
     fixture.detectChanges();
   }));
   afterEach(() => {
@@ -298,7 +298,7 @@ describe("DatasetDetailComponent", () => {
         pid,
         isPublished: false,
         sharedWith: [share],
-      } as unknown as OutputDatasetObsoleteDto;
+      } as unknown as OutputDatasetDto;
       const dialogOpenSpy = spyOn(component.dialog, "open").and.returnValue({
         afterClosed: () => of("ok"),
       } as MatDialogRef<DialogComponent>);

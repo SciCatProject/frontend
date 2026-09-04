@@ -30,6 +30,11 @@ export const selectCurrentProposal = createSelector(
   (state) => state.currentProposal,
 );
 
+export const selectCurrentProposals = createSelector(
+  selectProposalsState,
+  (state) => state.currentProposals,
+);
+
 export const selectParentProposal = createSelector(
   selectProposalsState,
   (state) => state.parentProposal,
@@ -173,7 +178,11 @@ export const selectRelatedProposalsPerPage = createSelector(
   (filters) => filters.limit,
 );
 
-const restrictFilter = (filter: any, allowedKeys?: string[]) => {
+const restrictFilter = (
+  filter: any,
+  allowedKeys?: string[],
+  wrapArrays = false,
+) => {
   const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);
     return value == null || (hasLength && value.length === 0);
@@ -182,7 +191,11 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
-    return isNully(val) ? obj : { ...obj, [key]: val };
+    if (isNully(val)) return obj;
+    return {
+      ...obj,
+      [key]: wrapArrays && Array.isArray(val) ? { $in: val } : val,
+    };
   }, {});
 };
 

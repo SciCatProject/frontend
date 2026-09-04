@@ -52,6 +52,7 @@ const reducer = createReducer(
     (state, { sample }): SampleState => ({
       ...state,
       currentSample: sample,
+      currentSamples: [...(state.currentSamples || []), sample],
     }),
   ),
 
@@ -204,6 +205,7 @@ const reducer = createReducer(
   on(fromActions.clearCurrentSampleStateAction, (state) => ({
     ...state,
     currentSample: undefined,
+    currentSamples: [],
   })),
 );
 

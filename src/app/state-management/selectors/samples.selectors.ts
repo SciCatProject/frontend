@@ -19,6 +19,11 @@ export const selectCurrentSample = createSelector(
   (state) => state.currentSample,
 );
 
+export const selectCurrentSamples = createSelector(
+  selectSampleState,
+  (state) => state.currentSamples,
+);
+
 export const selectCurrentAttachments = createSelector(
   selectSampleState,
   (state) => state.attachments,
@@ -205,7 +210,11 @@ export const selectDatasetsQueryParams = createSelector(
 );
 
 // Returns copy with null/undefined values and empty arrays removed
-const restrictFilter = (filter: any, allowedKeys?: string[]) => {
+const restrictFilter = (
+  filter: any,
+  allowedKeys?: string[],
+  wrapArrays = false,
+) => {
   const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);
     return value == null || (hasLength && value.length === 0);
@@ -214,6 +223,10 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
-    return isNully(val) ? obj : { ...obj, [key]: val };
+    if (isNully(val)) return obj;
+    return {
+      ...obj,
+      [key]: wrapArrays && Array.isArray(val) ? { $in: val } : val,
+    };
   }, {});
 };
