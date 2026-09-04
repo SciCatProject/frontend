@@ -237,15 +237,15 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
 
     this.createNewTransferData.scicatHeader["owner"] =
-      this.userProfile.username;
+      this.userProfile?.username;
     this.createNewTransferData.scicatHeader["ownerGroup"] =
       this.userGroups.length > 0 ? this.userGroups[0] : undefined;
     this.createNewTransferData.scicatHeader["principalInvestigator"] =
-      this.userProfile.username;
+      this.userProfile?.username;
     this.createNewTransferData.scicatHeader["ownerEmail"] =
-      this.userProfile.email;
+      this.userProfile?.email;
     this.createNewTransferData.scicatHeader["contactEmail"] =
-      this.userProfile.email;
+      this.userProfile?.email;
 
     const creationTime = new Date();
     const formattedCreationTime = creationTime.toISOString();
