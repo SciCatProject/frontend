@@ -211,7 +211,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
     creationTime: "--dateTime",
     type: "raw",
     datasetName: "--string",
-    creationLocation: "--string --path",
+    creationLocation: "--string",
 
     // Optional fields
     description: "--string --optional",
@@ -350,8 +350,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
   const regExFQDN = /^(?!:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/;
   const regExDatasetType = /raw|derived/;
-  const regExAbsolutePath = /^([/][a-zA-Z0-9]+)+$/;
-
+  
   for (const key in emptyDatasetForSchema) {
     if (Object.prototype.hasOwnProperty.call(emptyDatasetForSchema, key)) {
       const value = (emptyDatasetForSchema as any)[key];
@@ -391,10 +390,6 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
           schema.properties[key].type = "string";
           schema.properties[key].format = "date-time";
           schema.properties[key].pattern = regExDatasetType.source;
-        }
-        if (value.includes("--path")) {
-          schema.properties[key].type = "string";
-          schema.properties[key].pattern = regExAbsolutePath.source;
         }
       } else if (typeof value === "number") {
         // If -1 skip
