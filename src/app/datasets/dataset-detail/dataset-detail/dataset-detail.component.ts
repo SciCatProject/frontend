@@ -26,11 +26,11 @@ import {
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
-import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
+import { selectCurrentProposals } from "state-management/selectors/proposals.selectors";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { AppConfigService } from "app-config.service";
-import { selectCurrentSample } from "state-management/selectors/samples.selectors";
-import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
+import { selectCurrentSamples } from "state-management/selectors/samples.selectors";
+import { selectCurrentInstruments } from "state-management/selectors/instruments.selectors";
 import {
   FormArray,
   FormBuilder,
@@ -42,12 +42,12 @@ import { Message, MessageType } from "state-management/models";
 import { DOCUMENT } from "@angular/common";
 import {
   Instrument,
-  OutputDatasetObsoleteDto,
   ProposalClass,
   ReturnedUserDto,
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 /**
  * Component to show details for a data set, using the
@@ -74,13 +74,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
 
   localization = "dataset";
-  dataset: OutputDatasetObsoleteDto | undefined;
+  dataset: CurrentDataset | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);
-  instrument: Instrument | undefined;
-  proposal: ProposalClass | undefined;
-  sample: OutputSampleDto | undefined;
+  instruments: Instrument[];
+  proposals: ProposalClass[];
+  samples: OutputSampleDto[];
   user: ReturnedUserDto | undefined;
   editingAllowed = false;
   editEnabled = false;
@@ -121,20 +121,18 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(selectCurrentInstrument).subscribe((instrument) => {
-        this.instrument = instrument;
+      this.store.select(selectCurrentInstruments).subscribe((instruments) => {
+        this.instruments = instruments;
       }),
     );
 
-    this.subscriptions.push(
-      this.store.select(selectCurrentProposal).subscribe((proposal) => {
-        this.proposal = proposal;
-      }),
-    );
+    this.store.select(selectCurrentProposals).subscribe((proposals) => {
+      this.proposals = proposals;
+    });
 
     this.subscriptions.push(
-      this.store.select(selectCurrentSample).subscribe((sample) => {
-        this.sample = sample;
+      this.store.select(selectCurrentSamples).subscribe((samples) => {
+        this.samples = samples;
       }),
     );
 

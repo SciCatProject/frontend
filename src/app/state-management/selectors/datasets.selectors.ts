@@ -1,6 +1,7 @@
 import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { selectFilters as selectUserFilters } from "state-management/selectors/user.selectors";
+import { scientificConditionsToQuery } from "shared/modules/shared-condition/utils";
 
 const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
 
@@ -177,7 +178,11 @@ export const selectKeywordFacetCounts = createSelector(
 // === Querying ===
 
 // Returns copy with null/undefined values and empty arrays removed
-const restrictFilter = (filter: any, allowedKeys?: string[]) => {
+const restrictFilter = (
+  filter: any,
+  allowedKeys?: string[],
+  wrapArrays = false,
+) => {
   const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);
     return value == null || (hasLength && value.length === 0);
@@ -186,7 +191,11 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
-    return isNully(val) ? obj : { ...obj, [key]: val };
+    if (isNully(val)) return obj;
+    return {
+      ...obj,
+      [key]: wrapArrays && Array.isArray(val) ? { $in: val } : val,
+    };
   }, {});
 };
 
@@ -196,10 +205,37 @@ export const selectFullqueryParams = createSelector(
     const filter = state.filters;
     const pagination = state.pagination;
     // don't query with modeToggle, it's only in filters for persistent routing
-    const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+    const {
+      text,
+      skip,
+      limit,
+      sortField,
+      modeToggle,
+      mode,
+      scientific,
+      ...theRest
+    } = filter;
 
-    const limits = { ...pagination, order: sortField };
-    const query = restrictFilter(theRest);
+    const [sortKey, sortDirection] = sortField.split(":");
+
+    const sort = sortKey && sortDirection ? { [sortKey]: sortDirection } : {};
+
+    const limits = { ...pagination, sort };
+
+    const baseQuery = restrictFilter(theRest, undefined, true);
+
+    const textQuery = text && text.trim() ? { $text: { $search: text } } : {};
+
+    const scientificQuery =
+      scientific && scientific.length > 0
+        ? scientificConditionsToQuery(scientific)
+        : {};
+
+    const query = {
+      ...baseQuery,
+      ...textQuery,
+      ...scientificQuery,
+    };
 
     return { query, limits };
   },
