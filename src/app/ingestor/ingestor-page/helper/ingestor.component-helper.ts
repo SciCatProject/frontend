@@ -350,7 +350,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
   const regExFQDN = /^(?!:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/;
   const regExDatasetType = /raw|derived/;
-  
+
   for (const key in emptyDatasetForSchema) {
     if (Object.prototype.hasOwnProperty.call(emptyDatasetForSchema, key)) {
       const value = (emptyDatasetForSchema as any)[key];
