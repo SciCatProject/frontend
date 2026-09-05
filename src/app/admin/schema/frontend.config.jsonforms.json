@@ -19,6 +19,12 @@
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
       "addScientificMetadataKeysAsColumn": { "type": "boolean" },
       "allowConfigOverrides": { "type": "boolean" },
+      "additionalConfigs": {
+        "type": "array",
+        "title": "Additional Configs",
+        "description": "Up to 3 URLs whose config is fetched and merged in on load. Useful e.g. to point the frontend at a backend on a different origin.",
+        "items": { "type": "string" }
+      },
       "dateFormat": { "type": "string" },
       "timezone": { "type": "string" },
       "accessTokenPrefix": { "type": "string" },
@@ -513,6 +519,7 @@
             "scope": "#/properties/skipSciCatLoginPageEnabled"
           },
           { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
+          { "type": "Control", "scope": "#/properties/additionalConfigs" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
           { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },

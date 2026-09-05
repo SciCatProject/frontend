@@ -210,6 +210,7 @@ export interface AppConfigInterface {
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
   realTimeUpdatesEnabled?: boolean;
+  additionalConfigs?: string[];
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -242,6 +243,8 @@ function applyDefaultBatchActions(config: AppConfigInterface): void {
     })),
   );
 }
+
+const MAX_ADDITIONAL_CONFIGS = 3;
 
 @Injectable({
   providedIn: "root",
@@ -285,6 +288,41 @@ export class AppConfigService {
     );
   }
 
+  /**
+   * Fetches and merges in each config referenced by `additionalConfigs`.
+   * At most MAX_ADDITIONAL_CONFIGS entries are processed.
+   */
+  private async loadAdditionalConfigs(
+    config: AppConfigInterface,
+  ): Promise<AppConfigInterface> {
+    if (!config.additionalConfigs?.length) {
+      return config;
+    }
+    if (config.additionalConfigs.length > MAX_ADDITIONAL_CONFIGS) {
+      console.error(
+        `additionalConfigs has more than ${MAX_ADDITIONAL_CONFIGS} entries; only the first ${MAX_ADDITIONAL_CONFIGS} will be loaded.`,
+      );
+    }
+    for (const url of config.additionalConfigs.slice(
+      0,
+      MAX_ADDITIONAL_CONFIGS,
+    )) {
+      const additionalConfig = await firstValueFrom(
+        this.http.get<Partial<AppConfigInterface>>(url).pipe(
+          timeout(2000),
+          catchError(() => {
+            console.error(`Error loading config from ${url}`);
+            return of({} as Partial<AppConfigInterface>);
+          }),
+        ),
+      );
+      config = mergeWith({}, config, additionalConfig, (objVal, srcVal) =>
+        Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
+      );
+    }
+    return config;
+  }
+
   async loadAppConfig(): Promise<void> {
     try {
       const config = await firstValueFrom(
@@ -297,6 +335,10 @@ export class AppConfigService {
       const config = await this.mergeConfig();
       this.appConfig = Object.assign({}, this.appConfig, config);
     }
+
+    this.appConfig = await this.loadAdditionalConfigs(
+      this.appConfig as AppConfigInterface,
+    );
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
     if (
