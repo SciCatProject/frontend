@@ -35,6 +35,7 @@ export class IngestorCreationComponent {
       width: "auto",
       minWidth: "40%",
       maxWidth: "1400px",
+      panelClass: "ingestor-creation-dialog",
     });
 
     // Error if the dialog reference is not set
