@@ -19,7 +19,7 @@ import {
 import {
   selectCurrentUser,
   selectIsLoading,
-  selectProfile,
+  selectUserAccessGroups,
 } from "state-management/selectors/user.selectors";
 
 import { AppConfigService } from "app-config.service";
@@ -96,10 +96,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);
-
-  userGroups$ = this.store
-    .select(selectProfile)
-    .pipe(map((profile) => (profile ? profile.accessGroups : [])));
+  userGroups$ = this.store.select(selectUserAccessGroups);
 
   showJsonMetadata = false;
 
@@ -296,7 +293,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     if (value == null || value === "") return true;
     if (Array.isArray(value)) {
       return (
-        value.length === 0 || value.every((v) => !v == null || v?.id == null)
+        value.length === 0 ||
+        value.every((v) => v == null || (typeof v === "object" && v.id == null))
       );
     }
     return false;

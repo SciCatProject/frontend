@@ -448,11 +448,14 @@ describe("DatasetsReducer", () => {
       const action = fromActions.addDatasetFilterAction({
         filterType: "dateRange",
         key: "creationTime",
-        value: { $gte: begin, $lte: end },
+        value: { $gte: { $date: begin }, $lte: { $date: end } },
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.filters.creationTime).toEqual({ $gte: begin, $lte: end });
+      expect(state.filters.creationTime).toEqual({
+        $gte: { $date: begin },
+        $lte: { $date: end },
+      });
     });
   });
 
