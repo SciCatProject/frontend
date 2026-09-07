@@ -284,6 +284,7 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
       width: "auto",
       minWidth: "60%",
       maxWidth: "1400px",
+      panelClass: "ingestor-creation-dialog",
     });
 
     // Error if the dialog reference is not set
