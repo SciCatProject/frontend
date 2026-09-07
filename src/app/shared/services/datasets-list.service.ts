@@ -146,9 +146,9 @@ export class DatasetsListService implements OnDestroy {
 
         if (column.name === "creationTime") {
           convertedColumn.customRender = (column, row) =>
-            this.datePipe.transform(row[column.name]);
+            this.datePipe.transform(row[column.name], column.format);
           convertedColumn.toExport = (row) =>
-            this.datePipe.transform(row[column.name]);
+            this.datePipe.transform(row[column.name], column.format);
         }
 
         if (
