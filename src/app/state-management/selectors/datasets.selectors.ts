@@ -2,6 +2,7 @@ import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { selectFilters as selectUserFilters } from "state-management/selectors/user.selectors";
 import { scientificConditionsToQuery } from "shared/modules/shared-condition/utils";
+import { DateRange, DateRangeFilter } from "state-management/models";
 
 const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
 
@@ -193,13 +194,19 @@ const restrictFilter = (
     return value == null || (hasLength && value.length === 0);
   };
 
+  const convert = (val: any) => {
+    if (Array.isArray(val)) return wrapArrays ? { $in: val } : val;
+    if (!wrapArrays && isMongoDateRange(val)) return toLegacyDateRange(val);
+    return val;
+  };
+
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
     if (isNully(val)) return obj;
     return {
       ...obj,
-      [key]: wrapArrays && Array.isArray(val) ? { $in: val } : val,
+      [key]: convert(val),
     };
   }, {});
 };
@@ -366,3 +373,19 @@ export const selectRelatedDatasetsPerPage = createSelector(
   selectRelatedDatasetsFilters,
   (filters) => filters.limit,
 );
+
+const isMongoDateRange = (value: any): value is DateRangeFilter => {
+  return (
+    value != null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    ("$gte" in value || "$lte" in value)
+  );
+};
+
+// filters are stored in the v4 mongo shape, but fullfacet still goes
+// through the v3 translation layer which only understands begin/end
+const toLegacyDateRange = (value: DateRangeFilter): DateRange => ({
+  begin: value.$gte?.$date,
+  end: value.$lte?.$date,
+});

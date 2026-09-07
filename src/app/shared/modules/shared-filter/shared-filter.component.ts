@@ -127,11 +127,9 @@ export class SharedFilterComponent implements OnChanges, OnInit {
           max: range?.max ?? null,
         });
       } else {
-        // datasets store the mongo range shape while proposals still
-        // store begin/end, so read whichever one was passed in
         const range = (this.prefilled ?? {}) as DateRange & DateRangeFilter;
-        const start = range.$gte ?? range.begin;
-        const end = range.$lte ?? range.end;
+        const start = range.$gte?.$date ?? range.begin;
+        const end = range.$lte?.$date ?? range.end;
         this.filterForm
           .get("dateRangeField.start")!
           .setValue(start ? new Date(start) : null);

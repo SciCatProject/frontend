@@ -234,12 +234,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const { queryParams } = this.route.snapshot;
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
-    if (
-      this.activeFilters.creationTime &&
-      !this.activeFilters.creationTime["end"]
-    ) {
-      this.activeFilters.creationTime["end"] = new Date().toISOString();
-    }
     this.router.navigate([], {
       queryParams: {
         searchQuery: JSON.stringify({
@@ -260,11 +254,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   setDateFilter(filterKey: string, value: DateRange) {
     if (value.begin || value.end) {
-      this.activeFilters[filterKey] = {
-        $gte: value.begin,
-        $lte: value.end,
-      };
-
+      const range = {} as DateRangeFilter;
+      if (value.begin) range.$gte = { $date: value.begin };
+      if (value.end) range.$lte = { $date: value.end };
+      this.activeFilters[filterKey] = range;
       this.store.dispatch(
         addDatasetFilterAction({
           key: filterKey,

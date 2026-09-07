@@ -11,8 +11,8 @@ export interface DateRange {
 }
 
 export interface DateRangeFilter {
-  $gte?: string;
-  $lte?: string;
+  $gte?: { $date: string };
+  $lte?: { $date: string };
 }
 
 export interface FacetCount {
