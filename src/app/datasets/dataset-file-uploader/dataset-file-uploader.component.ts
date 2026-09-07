@@ -7,7 +7,7 @@ import {
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
 import {
-  OutputAttachmentV3Dto,
+  OutputAttachmentV4Dto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { OwnershipService } from "shared/services/ownership.service";
@@ -30,9 +30,11 @@ import { CurrentDataset } from "state-management/state/datasets.store";
   standalone: false,
 })
 export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
-  attachments: OutputAttachmentV3Dto[] = [];
+  attachments: OutputAttachmentV4Dto[] = [];
   subscriptions: Subscription[] = [];
-  attachment: Partial<OutputAttachmentV3Dto> = {};
+  attachment: Partial<OutputAttachmentV4Dto> & { datasetId: string } = {
+    datasetId: "",
+  };
   dataset: CurrentDataset | undefined;
   user: ReturnedUserDto | undefined;
   isOwner: boolean;
@@ -76,6 +78,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
         caption: file.name,
         ownerGroup: this.dataset.ownerGroup,
         accessGroups: this.dataset.accessGroups,
+        isPublished: false,
         datasetId: this.dataset.pid,
       };
       this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));

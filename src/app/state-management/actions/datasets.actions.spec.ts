@@ -8,9 +8,12 @@ import {
 import {
   mockDataset as dataset,
   createMock,
-  mockAttachment as attachment,
+  mockAttachmentV4,
 } from "shared/MockStubs";
 import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
+
+const attachment = mockAttachmentV4;
+const attachmentToAdd = { ...mockAttachmentV4, datasetId: "testId" };
 
 describe("Dataset Actions", () => {
   const datasets = [dataset];
@@ -343,10 +346,12 @@ describe("Dataset Actions", () => {
 
   describe("addAttachmentAction", () => {
     it("should create an action", () => {
-      const action = fromActions.addAttachmentAction({ attachment });
+      const action = fromActions.addAttachmentAction({
+        attachment: attachmentToAdd,
+      });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Attachment",
-        attachment,
+        attachment: attachmentToAdd,
       });
     });
   });

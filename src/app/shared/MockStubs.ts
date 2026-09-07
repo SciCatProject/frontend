@@ -20,6 +20,7 @@ import {
   ReturnedUserDto,
   OrigDatablock,
   OutputAttachmentV3Dto,
+  OutputAttachmentV4Dto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
 import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
@@ -339,6 +340,7 @@ export function createMock<T>(data?: Partial<T>): T {
 
 export const mockDataset = createMock<CurrentDataset>({});
 export const mockAttachment = createMock<OutputAttachmentV3Dto>({});
+export const mockAttachmentV4 = createMock<OutputAttachmentV4Dto>({});
 export const mockSample = createMock<OutputSampleDto>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});

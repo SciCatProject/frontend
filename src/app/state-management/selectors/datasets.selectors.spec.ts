@@ -28,8 +28,8 @@ const initialDatasetState: DatasetState = {
     modeToggle: ArchViewMode.all,
     text: "",
     creationTime: {
-      begin: "2019-10-03",
-      end: "2019-10-04",
+      $gte: "2019-10-03",
+      $lte: "2019-10-04",
     },
     type: [],
     creationLocation: [],
@@ -200,7 +200,7 @@ describe("test dataset selectors", () => {
         fromDatasetSelectors.selectCreationTimeFilter.projector(
           initialDatasetState.filters,
         ),
-      ).toEqual({ begin: "2019-10-03", end: "2019-10-04" });
+      ).toEqual({ $gte: "2019-10-03", $lte: "2019-10-04" });
     });
   });
 

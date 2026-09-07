@@ -1,10 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import {
-  Attachment,
-  OrigDatablock,
-  Datablock,
-  CreateDatasetDto,
-  OutputAttachmentV3Dto,
+  OutputAttachmentV4Dto,
   PartialOutputDatasetDto,
   OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -12,9 +8,9 @@ import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
   DatasetFilters,
+  DateRangeFilter,
   ScientificCondition,
 } from "state-management/models";
-import { DateRange } from "state-management/state/proposals.store";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 
 // === Effects ===
@@ -62,41 +58,6 @@ export const fetchDatasetCompleteAction = createAction(
 export const fetchDatasetFailedAction = createAction(
   "[Dataset] Fetch Dataset Failed",
 );
-export const fetchDatablocksAction = createAction(
-  "[Dataset] Fetch Origin Datablocks",
-  props<{ pid: string; filters?: any }>(),
-);
-export const fetchDatablocksCompleteAction = createAction(
-  "[Dataset] Fetch Origin Datablocks Complete",
-  props<{ datablocks: Datablock[] }>(),
-);
-export const fetchDatablocksFailedAction = createAction(
-  "[Dataset] Fetch Origin Datablocks Failed",
-);
-
-export const fetchOrigDatablocksAction = createAction(
-  "[Dataset] Fetch Origin Datablocks",
-  props<{ pid: string; filters?: any }>(),
-);
-export const fetchOrigDatablocksCompleteAction = createAction(
-  "[Dataset] Fetch Origin Datablocks Complete",
-  props<{ origdatablocks: OrigDatablock[] }>(),
-);
-export const fetchOrigDatablocksFailedAction = createAction(
-  "[Dataset] Fetch Origin Datablocks Failed",
-);
-export const fetchAttachmentsAction = createAction(
-  "[Dataset] Fetch Attachments",
-  props<{ pid: string; filters?: any }>(),
-);
-export const fetchAttachmentsCompleteAction = createAction(
-  "[Dataset] Fetch Attachments Complete",
-  props<{ attachments: Attachment[] }>(),
-);
-export const fetchAttachmentsFailedAction = createAction(
-  "[Dataset] Fetch Attachments Failed",
-);
-
 export const fetchRelatedDatasetsAction = createAction(
   "[Dataset] Fetch Related Datasets",
 );
@@ -173,11 +134,13 @@ export const updatePropertyFailedAction = createAction(
 
 export const addAttachmentAction = createAction(
   "[Dataset] Add Attachment",
-  props<{ attachment: Partial<OutputAttachmentV3Dto> }>(),
+  props<{
+    attachment: Partial<OutputAttachmentV4Dto> & { datasetId: string };
+  }>(),
 );
 export const addAttachmentCompleteAction = createAction(
   "[Dataset] Add Attachment Complete",
-  props<{ attachment: OutputAttachmentV3Dto }>(),
+  props<{ attachment: OutputAttachmentV4Dto }>(),
 );
 export const addAttachmentFailedAction = createAction(
   "[Dataset] Add Attachment Failed",
@@ -194,7 +157,7 @@ export const updateAttachmentCaptionAction = createAction(
 );
 export const updateAttachmentCaptionCompleteAction = createAction(
   "[Dataset] Update Attachment Caption Complete",
-  props<{ attachment: OutputAttachmentV3Dto }>(),
+  props<{ attachment: OutputAttachmentV4Dto }>(),
 );
 export const updateAttachmentCaptionFailedAction = createAction(
   "[Dataset] Update Attachment Action Failed",
@@ -303,7 +266,7 @@ export const setFiltersAction = createAction(
   props<{
     datasetFilters: Record<
       string,
-      string | DateRange | string[] | INumericRange
+      string | DateRangeFilter | string[] | INumericRange | boolean
     >;
   }>(),
 );
@@ -311,7 +274,7 @@ export const addDatasetFilterAction = createAction(
   "[Dataset] Add Dataset Filter",
   props<{
     key: string;
-    value: string | DateRange | string[] | INumericRange;
+    value: string | DateRangeFilter | string[] | INumericRange;
     filterType: "text" | "dateRange" | "number" | "multiSelect" | "checkbox";
   }>(),
 );

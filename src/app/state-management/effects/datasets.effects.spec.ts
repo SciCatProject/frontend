@@ -27,11 +27,7 @@ import {
   DatasetsPublicV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import {
-  createMock,
-  mockAttachment as attachment,
-  mockDataset,
-} from "shared/MockStubs";
+import { createMock, mockAttachmentV4, mockDataset } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 import {
   provideHttpClient,
@@ -39,6 +35,9 @@ import {
 } from "@angular/common/http";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
+
+const attachment = mockAttachmentV4;
+const attachmentToAdd = { ...mockAttachmentV4, datasetId: "testId" };
 
 const derivedData = createMock<OutputDatasetDto>({
   inputDatasets: [],
@@ -536,7 +535,9 @@ describe("DatasetEffects", () => {
 
   describe("addAttachment$", () => {
     it("should result in a addAttachmentCompleteAction", () => {
-      const action = fromActions.addAttachmentAction({ attachment });
+      const action = fromActions.addAttachmentAction({
+        attachment: attachmentToAdd,
+      });
       const outcome = fromActions.addAttachmentCompleteAction({ attachment });
 
       actions = hot("-a", { a: action });
@@ -548,7 +549,9 @@ describe("DatasetEffects", () => {
     });
 
     it("should result in a addAttachmentFailedAction", () => {
-      const action = fromActions.addAttachmentAction({ attachment });
+      const action = fromActions.addAttachmentAction({
+        attachment: attachmentToAdd,
+      });
       const outcome = fromActions.addAttachmentFailedAction();
 
       actions = hot("-a", { a: action });
@@ -775,7 +778,9 @@ describe("DatasetEffects", () => {
 
     describe("ofType addAttachmentAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.addAttachmentAction({ attachment });
+        const action = fromActions.addAttachmentAction({
+          attachment: attachmentToAdd,
+        });
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });

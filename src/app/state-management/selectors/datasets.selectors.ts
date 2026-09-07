@@ -141,8 +141,8 @@ export const selectHasAppliedFilters = createSelector(
     filters.keywords.length > 0 ||
     filters.scientific.length > 0 ||
     (filters.creationTime &&
-      (filters.creationTime.begin !== null ||
-        filters.creationTime.end !== null)),
+      (filters.creationTime.$gte !== null ||
+        filters.creationTime.$lte !== null)),
 );
 
 export const selectScientificConditions = createSelector(

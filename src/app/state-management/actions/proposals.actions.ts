@@ -5,7 +5,7 @@ import {
   PartialUpdateProposalDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { DateRange, FacetCounts } from "state-management/state/proposals.store";
+import { DateRange, FacetCounts } from "state-management/models";
 
 export const fetchProposalsAction = createAction(
   "[Proposal] Fetch Proposals",

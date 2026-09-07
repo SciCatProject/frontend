@@ -51,41 +51,6 @@ const reducer = createReducer(
     }),
   ),
 
-  on(fromActions.fetchDatablocksCompleteAction, (state, { datablocks }) => {
-    return {
-      ...state,
-      currentSet: {
-        ...state.currentSet,
-        datablocks,
-      },
-    };
-  }),
-
-  on(
-    fromActions.fetchOrigDatablocksCompleteAction,
-    (state, { origdatablocks }) => {
-      return {
-        ...state,
-        currentSet: state.currentSet
-          ? {
-              ...state.currentSet,
-              origdatablocks,
-            }
-          : state.currentSet,
-      };
-    },
-  ),
-
-  on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) => {
-    return {
-      ...state,
-      currentSet: {
-        ...state.currentSet,
-        attachments,
-      },
-    };
-  }),
-
   on(
     fromActions.fetchRelatedDatasetsCompleteAction,
     (state, { relatedDatasets }): DatasetState => ({
@@ -161,7 +126,7 @@ const reducer = createReducer(
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
         const attachments = (state.currentSet.attachments || []).filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id,
+          (existingAttachment) => existingAttachment.aid !== attachment.aid,
         );
         attachments.push(attachment);
         const currentSet = { ...state.currentSet, attachments };
@@ -176,7 +141,7 @@ const reducer = createReducer(
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
         const attachments = (state.currentSet.attachments || []).filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id,
+          (existingAttachment) => existingAttachment.aid !== attachment.aid,
         );
         attachments.push(attachment);
         const currentSet = { ...state.currentSet, attachments };
@@ -191,7 +156,7 @@ const reducer = createReducer(
     (state, { attachmentId }): DatasetState => {
       if (state.currentSet) {
         const attachments = (state.currentSet.attachments || []).filter(
-          (attachment) => attachment.id !== attachmentId,
+          (attachment) => attachment.aid !== attachmentId,
         );
         const currentSet = { ...state.currentSet, attachments };
         return { ...state, currentSet };

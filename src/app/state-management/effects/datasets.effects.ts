@@ -2,12 +2,11 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import {
-  Attachment,
-  CreateAttachmentV3Dto,
-  Datablock,
+  AttachmentRelationshipsV4Dto,
+  AttachmentsV4Service,
+  CreateAttachmentV4Dto,
   DatasetsService,
-  OrigDatablock,
-  UpdateAttachmentV3Dto,
+  PartialUpdateAttachmentV4Dto,
   MetadataKeysV4Service,
   DatasetsV4Service,
   DatasetsPublicV4Service,
@@ -211,54 +210,6 @@ export class DatasetEffects {
     );
   });
 
-  fetchDatablocksOfDataset$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchDatablocksAction),
-      switchMap(({ pid, filters }) => {
-        return this.datasetsService
-          .datasetsControllerFindAllDatablocksV3(pid, filters)
-          .pipe(
-            map((datablocks: Datablock[]) =>
-              fromActions.fetchDatablocksCompleteAction({ datablocks }),
-            ),
-            catchError(() => of(fromActions.fetchDatablocksFailedAction())),
-          );
-      }),
-    );
-  });
-
-  fetchOrigDatablocksOfDataset$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchOrigDatablocksAction),
-      switchMap(({ pid }) => {
-        return this.datasetsService
-          .datasetsControllerFindAllOrigDatablocksV3(pid)
-          .pipe(
-            map((origdatablocks: OrigDatablock[]) =>
-              fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
-            ),
-            catchError(() => of(fromActions.fetchOrigDatablocksFailedAction())),
-          );
-      }),
-    );
-  });
-
-  fetchAttachmentsOfDataset$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchAttachmentsAction),
-      switchMap(({ pid, filters }) => {
-        return this.datasetsService
-          .datasetsControllerFindAllAttachmentsV3(pid, filters)
-          .pipe(
-            map((attachments: Attachment[]) =>
-              fromActions.fetchAttachmentsCompleteAction({ attachments }),
-            ),
-            catchError(() => of(fromActions.fetchAttachmentsFailedAction())),
-          );
-      }),
-    );
-  });
-
   fetchRelatedDatasets$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedDatasetsAction),
@@ -401,12 +352,21 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
-        const { id, proposalId, sampleId, ...theRest } = attachment;
-        return this.datasetsService
-          .datasetsControllerCreateAttachmentV3(
-            theRest.datasetId,
-            theRest as CreateAttachmentV3Dto,
-          )
+        const { datasetId, ...theRest } = attachment;
+        // v4 has no datasetId column on an attachment, the link to the
+        // dataset is expressed as a relationship entry instead
+        const body: CreateAttachmentV4Dto = {
+          ...theRest,
+          isPublished: theRest.isPublished ?? false,
+          relationships: [
+            {
+              targetId: datasetId,
+              targetType: AttachmentRelationshipsV4Dto.TargetTypeEnum.dataset,
+            },
+          ],
+        } as CreateAttachmentV4Dto;
+        return this.attachmentsV4Service
+          .attachmentsV4ControllerCreateAttachmentV4(body)
           .pipe(
             map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res }),
@@ -420,14 +380,10 @@ export class DatasetEffects {
   updateAttachmentCaption$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
-      switchMap(({ datasetId, attachmentId, caption, ownerGroup }) => {
-        const data = { caption, ownerGroup };
-        return this.datasetsService
-          .datasetsControllerFindOneAttachmentAndUpdateV3(
-            datasetId,
-            attachmentId,
-            data as UpdateAttachmentV3Dto,
-          )
+      switchMap(({ attachmentId, caption, ownerGroup }) => {
+        const data: PartialUpdateAttachmentV4Dto = { caption, ownerGroup };
+        return this.attachmentsV4Service
+          .attachmentsV4ControllerFindOneAndUpdateV4(attachmentId, data)
           .pipe(
             map((attachment) =>
               fromActions.updateAttachmentCaptionCompleteAction({ attachment }),
@@ -444,10 +400,12 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ datasetId, attachmentId }) =>
-        this.datasetsService
-          .datasetsControllerFindOneAttachmentAndRemoveV3(
-            datasetId,
+        this.attachmentsV4Service
+          // the sdk requires a second id argument that it never sends,
+          // the request is just DELETE /attachments/{aid}
+          .attachmentsV4ControllerFindOneAttachmentAndRemoveV4(
             attachmentId,
+            datasetId,
           )
           .pipe(
             map(() =>
@@ -482,9 +440,6 @@ export class DatasetEffects {
         fromActions.fetchFacetCountsAction,
         fromActions.fetchMetadataKeysAction,
         fromActions.fetchDatasetAction,
-        fromActions.fetchOrigDatablocksAction,
-        fromActions.fetchDatablocksAction,
-        fromActions.fetchAttachmentsAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
         fromActions.updatePropertyInlineAction,
@@ -510,14 +465,6 @@ export class DatasetEffects {
         fromActions.fetchMetadataKeysFailedAction,
         fromActions.fetchDatasetCompleteAction,
         fromActions.fetchDatasetFailedAction,
-        fromActions.fetchOrigDatablocksCompleteAction,
-        fromActions.fetchOrigDatablocksFailedAction,
-        fromActions.fetchDatablocksCompleteAction,
-        fromActions.fetchDatablocksFailedAction,
-        fromActions.fetchOrigDatablocksCompleteAction,
-        fromActions.fetchOrigDatablocksFailedAction,
-        fromActions.fetchAttachmentsCompleteAction,
-        fromActions.fetchAttachmentsFailedAction,
         fromActions.addDatasetCompleteAction,
         fromActions.addDatasetFailedAction,
         fromActions.updatePropertyCompleteAction,
@@ -578,6 +525,7 @@ export class DatasetEffects {
     private metadataKeysV4Service: MetadataKeysV4Service,
     private datasetsV4Service: DatasetsV4Service,
     private datasetsPublicV4Service: DatasetsPublicV4Service,
+    private attachmentsV4Service: AttachmentsV4Service,
   ) {}
 
   private storeBatch(batch: CurrentDataset[], userId: string) {

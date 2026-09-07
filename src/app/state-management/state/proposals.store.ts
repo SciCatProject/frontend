@@ -3,20 +3,7 @@ import {
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
-
-export interface DateRange {
-  begin?: string;
-  end?: string;
-}
-
-export interface FacetCount {
-  _id: string;
-  label?: string;
-  count: number;
-}
-export interface FacetCounts {
-  [field: string]: FacetCount[];
-}
+import { DateRange, FacetCounts } from "state-management/models";
 
 export interface ProposalFilters {
   fields: {

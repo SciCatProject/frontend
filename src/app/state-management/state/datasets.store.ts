@@ -1,7 +1,7 @@
 import { DatasetFilters, ArchViewMode } from "state-management/models";
 import {
   PartialOutputDatasetDto,
-  OutputAttachmentV3Dto,
+  OutputAttachmentV4Dto,
   Datablock,
   OrigDatablock,
   HistoryClass,
@@ -26,7 +26,7 @@ export interface Pagination {
 }
 
 export type CurrentDataset = PartialOutputDatasetDto & {
-  attachments?: OutputAttachmentV3Dto[];
+  attachments?: OutputAttachmentV4Dto[];
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
   history?: HistoryClass[];
