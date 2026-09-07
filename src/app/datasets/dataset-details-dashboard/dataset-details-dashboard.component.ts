@@ -25,21 +25,21 @@ import {
   fetchDatasetAction,
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
-import { clearLogbookAction } from "state-management/actions/logbooks.actions";
+import {
+  clearCurrentInstrumentStateAction,
+  fetchInstrumentsCompleteAction,
+} from "state-management/actions/instruments.actions";
 import {
   clearCurrentProposalStateAction,
-  fetchProposalAction,
+  fetchProposalsCompleteAction,
 } from "state-management/actions/proposals.actions";
 import {
   clearCurrentSampleStateAction,
-  fetchSampleAction,
+  fetchSamplesCompleteAction,
 } from "state-management/actions/samples.actions";
 import { MatDialog } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
-import {
-  fetchInstrumentAction,
-  clearCurrentInstrumentStateAction,
-} from "state-management/actions/instruments.actions";
+
 import { CurrentDataset } from "state-management/state/datasets.store";
 
 export interface FileObject {
@@ -192,27 +192,28 @@ export class DatasetDetailsDashboardComponent
         this.accessGroups$,
         this.isAdmin$,
         this.loggedIn$,
-      ]).subscribe(([dataset, groups, isAdmin, isLoggedIn]) => {
-        if (!dataset) return;
+      ])
+        .pipe(filter(([dataset]) => !!dataset))
+        .subscribe(([dataset, groups, isAdmin, isLoggedIn]) => {
+          this.dataset = dataset;
+          this.dispatchDatasetLookupActions(dataset);
 
-        this.dataset = dataset;
+          const isInOwnerGroup =
+            groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
 
-        const isInOwnerGroup =
-          groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
-
-        this.navLinks = TAB_DEFINITIONS.filter((tab) =>
-          tab.isEnabled({
-            isLoggedIn,
-            isAdmin,
-            isInOwnerGroup,
-            isPublished: dataset.isPublished,
-            hasAccessToLogbook:
-              isInOwnerGroup ||
-              (dataset.accessGroups ?? []).some((g) => groups.includes(g)),
-            config: this.appConfig,
-          }),
-        );
-      }),
+          this.navLinks = TAB_DEFINITIONS.filter((tab) =>
+            tab.isEnabled({
+              isLoggedIn,
+              isAdmin,
+              isInOwnerGroup,
+              isPublished: dataset.isPublished,
+              hasAccessToLogbook:
+                isInOwnerGroup ||
+                (dataset.accessGroups ?? []).some((g) => groups.includes(g)),
+              config: this.appConfig,
+            }),
+          );
+        }),
     );
 
     this.subscriptions.push(
@@ -223,42 +224,24 @@ export class DatasetDetailsDashboardComponent
         )
         .subscribe(() => {
           this.store.dispatch(fetchRelatedDatasetsAction());
-          this.fetchDatasetRelatedDocuments();
         }),
     );
   }
 
-  fetchDatasetRelatedDocuments(): void {
-    if (this.dataset) {
-      this.store.dispatch(clearCurrentProposalStateAction());
-      this.store.dispatch(clearCurrentSampleStateAction());
-      this.store.dispatch(clearCurrentInstrumentStateAction());
-      if (this.dataset.proposalIds?.length > 0) {
-        this.dataset.proposalIds.forEach((proposalId) => {
-          this.store.dispatch(
-            fetchProposalAction({
-              proposalId: proposalId,
-            }),
-          );
-        });
-      } else {
-        this.store.dispatch(clearLogbookAction());
-      }
-      if (this.dataset.sampleIds?.length > 0) {
-        this.dataset.sampleIds.forEach((sampleId) => {
-          this.store.dispatch(fetchSampleAction({ sampleId: sampleId }));
-        });
-      }
-      if (this.dataset.instrumentIds?.length > 0) {
-        this.dataset.instrumentIds.forEach((instrumentId) => {
-          this.store.dispatch(
-            fetchInstrumentAction({
-              pid: instrumentId,
-            }),
-          );
-        });
-      }
-    }
+  dispatchDatasetLookupActions(dataset: CurrentDataset) {
+    const actions = [
+      fetchInstrumentsCompleteAction({
+        instruments: dataset.instruments ?? [],
+      }),
+      fetchProposalsCompleteAction({
+        proposals: dataset.proposals ?? [],
+      }),
+      fetchSamplesCompleteAction({
+        samples: dataset.samples ?? [],
+      }),
+    ];
+
+    actions.forEach((action) => this.store.dispatch(action));
   }
 
   onAddToBatch(): void {
@@ -273,6 +256,7 @@ export class DatasetDetailsDashboardComponent
     this.store.dispatch(clearCurrentDatasetStateAction());
     this.store.dispatch(clearCurrentProposalStateAction());
     this.store.dispatch(clearCurrentSampleStateAction());
+    this.store.dispatch(clearCurrentInstrumentStateAction());
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });

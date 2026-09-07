@@ -5,6 +5,9 @@ import {
   Datablock,
   OrigDatablock,
   HistoryClass,
+  Instrument,
+  ProposalClass,
+  OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface FacetCount {
@@ -27,9 +30,9 @@ export type CurrentDataset = PartialOutputDatasetDto & {
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
   history?: HistoryClass[];
-  proposalIds?: string[];
-  sampleIds?: string[];
-  instrumentIds?: string[];
+  proposals?: ProposalClass[];
+  samples?: OutputSampleDto[];
+  instruments?: Instrument[];
 };
 
 export interface DatasetState {

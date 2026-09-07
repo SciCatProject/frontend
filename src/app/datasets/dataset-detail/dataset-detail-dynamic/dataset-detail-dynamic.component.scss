@@ -160,3 +160,26 @@ mat-card {
     }
   }
 }
+
+button[mat-icon-button].copy-button {
+  width: 16px;
+  height: 16px;
+  padding: 0px;
+  --mat-icon-button-ripple-color: transparent;
+  --mat-icon-button-hover-state-layer-opacity: 0;
+  --mat-icon-button-focus-state-layer-opacity: 0;
+  --mat-icon-button-pressed-state-layer-opacity: 0;
+}
+
+button[mat-icon-button].copy-button .mat-mdc-button-touch-target {
+  width: 16px;
+  height: 16px;
+}
+
+button[mat-icon-button].copy-button mat-icon {
+  margin-left: 10px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}

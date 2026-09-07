@@ -35,6 +35,11 @@ export const selectCurrentDatasetWithoutFileInfo = createSelector(
   (currentSet) => {
     if (currentSet) {
       const { origdatablocks, datablocks, ...theRest } = currentSet;
+      // Remove the raw binary data from attachments to avoid sending large data to the component
+      theRest.attachments = currentSet.attachments?.map((attachment) => {
+        attachment.thumbnail = "raw binary data";
+        return attachment;
+      });
       return theRest;
     }
     return undefined;

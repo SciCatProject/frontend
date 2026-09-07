@@ -3,8 +3,6 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 
-import { Observable, of } from "rxjs";
-
 import { StoreModule } from "@ngrx/store";
 
 import { ActivatedRoute, Router } from "@angular/router";
@@ -38,12 +36,7 @@ describe("DatasetDetailDynamicComponent", () => {
       set: {
         providers: [
           { provide: Router, useValue: router },
-          {
-            provide: AppConfigService,
-            useValue: {
-              getConfig,
-            },
-          },
+          { provide: AppConfigService, useValue: { getConfig } },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
         ],
       },
@@ -62,128 +55,135 @@ describe("DatasetDetailDynamicComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("getNestedValue with instrument name resolution", () => {
-    it("should return instrument name when path is 'instrumentName' and instrument exists", () => {
-      component.instrument = {
-        pid: "instrument1",
-        name: "Test Instrument",
-      } as any;
-      const dataset = {} as any;
-      const result = component.getNestedValue(dataset, "instrumentName");
-      expect(result).toBe("Test Instrument");
-    });
-
-    it("should return '-' when path is 'instrumentName' but instrument has no name", () => {
-      component.instrument = { pid: "instrument1" } as any;
-      const dataset = {} as any;
-      const result = component.getNestedValue(dataset, "instrumentName");
-      expect(result).toBe("-");
-    });
-
-    it("should return undefined when path is 'instrumentName' but no instrument", () => {
-      component.instrument = undefined;
-      const dataset = {} as any;
-      const result = component.getNestedValue(dataset, "instrumentName");
-      expect(result).toBeUndefined();
-    });
-
-    it("should work normally for non-instrumentName paths", () => {
-      component.instrument = {
-        pid: "instrument1",
-        name: "Test Instrument",
-      } as any;
+  describe("getNestedValue", () => {
+    it("should read a top-level property", () => {
       const dataset = { pid: "test-pid" } as any;
-      const result = component.getNestedValue(dataset, "pid");
-      expect(result).toBe("test-pid");
+      expect(component.getNestedValue(dataset, "pid")).toBe("test-pid");
     });
 
-    it("should handle nested property paths", () => {
-      component.instrument = undefined;
+    it("should read a nested property path", () => {
       const dataset = { nested: { property: "nested-value" } } as any;
-      const result = component.getNestedValue(dataset, "nested.property");
-      expect(result).toBe("nested-value");
+      expect(component.getNestedValue(dataset, "nested.property")).toBe(
+        "nested-value",
+      );
     });
 
-    it("should return undefined for non-existent paths", () => {
-      component.instrument = undefined;
+    it("should return undefined for a non-existent path", () => {
       const dataset = { pid: "test-pid" } as any;
-      const result = component.getNestedValue(dataset, "nonexistent.path");
-      expect(result).toBeUndefined();
+      expect(
+        component.getNestedValue(dataset, "nonexistent.path"),
+      ).toBeUndefined();
     });
 
-    it("should return error message when path is missing", () => {
-      component.instrument = undefined;
-      const dataset = {} as any;
-      const result = component.getNestedValue(dataset, "");
-      expect(result).toBe("field source is missing");
+    it("should return a message when the path is empty", () => {
+      expect(component.getNestedValue({} as any, "")).toBe(
+        "field source is missing",
+      );
     });
 
-    it("should return null when dataset is null", () => {
-      component.instrument = undefined;
-      const result = component.getNestedValue(null, "any.path");
-      expect(result).toBeNull();
+    it("should return null when the dataset is null", () => {
+      expect(component.getNestedValue(null, "any.path")).toBeNull();
     });
   });
 
-  describe("getInternalLinkValue", () => {
-    it("should return instrument pid when path is 'instrumentName' and instrument exists", () => {
-      component.instrument = {
-        pid: "instrument1",
-        name: "Test Instrument",
-      } as any;
-      const dataset = {} as any;
-      const result = component.getInternalLinkValue(dataset, "instrumentName");
-      expect(result).toBe("instrument1");
-    });
-
-    it("should return empty string when path is 'instrumentName' but instrument has no pid", () => {
-      component.instrument = { name: "Test Instrument" } as any;
-      const dataset = {} as any;
-      const result = component.getInternalLinkValue(dataset, "instrumentName");
-      expect(result).toBe("");
-    });
-
-    it("should return empty string when path is 'instrumentName' but no instrument", () => {
-      component.instrument = undefined;
-      const dataset = {} as any;
-      const result = component.getInternalLinkValue(dataset, "instrumentName");
-      expect(result).toBe("");
-    });
-
-    it("should use getNestedValue for non-instrumentName paths", () => {
-      component.instrument = {
-        pid: "instrument1",
-        name: "Test Instrument",
-      } as any;
-      const dataset = { pid: "test-pid" } as any;
-      const result = component.getInternalLinkValue(dataset, "pid");
-      expect(result).toBe("test-pid");
-    });
-
-    it("should handle nested paths correctly", () => {
-      component.instrument = undefined;
+  describe("getInternalLinkItems", () => {
+    it("should resolve labels from the relation", () => {
       const dataset = {
-        nested: { value: "test-value" },
+        proposalIds: ["p1"],
+        proposals: [{ proposalId: "p1", title: "My Proposal" }],
       } as any;
-      const result = component.getInternalLinkValue(dataset, "nested.value");
-      expect(result).toBe("test-value");
+      expect(component.getInternalLinkItems(dataset, "proposalIds")).toEqual([
+        { id: "p1", label: "My Proposal" },
+      ]);
     });
 
-    it("should return empty string for null/undefined values", () => {
-      component.instrument = undefined;
-      const dataset = {} as any;
-      const result = component.getInternalLinkValue(dataset, "nonexistent");
-      expect(result).toBe("");
+    it("should fall back to the id when no relation record matches", () => {
+      const dataset = { proposalIds: ["p1"], proposals: [] } as any;
+      expect(component.getInternalLinkItems(dataset, "proposalIds")).toEqual([
+        { id: "p1", label: "p1" },
+      ]);
+    });
+
+    it("should use the id as label when the source has no relation config", () => {
+      const dataset = { inputDatasets: ["d1"] } as any;
+      expect(component.getInternalLinkItems(dataset, "inputDatasets")).toEqual([
+        { id: "d1", label: "d1" },
+      ]);
+    });
+
+    it("should normalize a scalar value into a single item", () => {
+      const dataset = { inputDatasets: "d1" } as any;
+      expect(component.getInternalLinkItems(dataset, "inputDatasets")).toEqual([
+        { id: "d1", label: "d1" },
+      ]);
+    });
+
+    it("should return an empty array when the source is missing", () => {
+      expect(component.getInternalLinkItems({} as any, "proposalIds")).toEqual(
+        [],
+      );
     });
   });
 
-  describe("onClickInternalLink with instrument support", () => {
+  describe("handleFieldValue", () => {
+    it("should join an array of text with a comma", () => {
+      expect(
+        component.handleFieldValue("text", ["a", "b"], {} as any, "x"),
+      ).toBe("a , b");
+    });
+
+    it("should return null for an empty text array", () => {
+      expect(component.handleFieldValue("text", [], {} as any, "x")).toBe(null);
+    });
+
+    it("should return a plain string unchanged", () => {
+      expect(component.handleFieldValue("text", "hello", {} as any, "x")).toBe(
+        "hello",
+      );
+    });
+
+    it("should return link items for internalLink", () => {
+      const dataset = {
+        sampleIds: ["s1"],
+        samples: [{ sampleId: "s1", description: "S1" }],
+      } as any;
+      expect(
+        component.handleFieldValue(
+          "internalLink",
+          ["s1"],
+          dataset,
+          "sampleIds",
+        ),
+      ).toEqual([{ id: "s1", label: "S1" }]);
+    });
+
+    it("should wrap a tag array", () => {
+      expect(
+        component.handleFieldValue("tag", ["a", "b"], {} as any, "x"),
+      ).toEqual(["a", "b"]);
+    });
+  });
+
+  describe("isEmpty", () => {
+    [null, undefined, "", [], [null]].forEach((value) => {
+      it(`should treat ${JSON.stringify(value)} as empty`, () => {
+        expect(component.isEmpty(value)).toBeTrue();
+      });
+    });
+
+    it("should treat a non-empty value as not empty", () => {
+      expect(component.isEmpty("x")).toBeFalse();
+      expect(component.isEmpty(["a"])).toBeFalse();
+    });
+  });
+
+  describe("onClickInternalLink", () => {
     beforeEach(() => {
       (component["router"].navigateByUrl as jasmine.Spy).calls.reset();
       spyOn(component["snackBar"], "open");
     });
 
-    it("should navigate to instruments page when internalLinkType is 'instruments'", () => {
+    it("should navigate to the instruments page", () => {
       component.onClickInternalLink(
         InternalLinkType.INSTRUMENTS,
         "instrument123",
@@ -193,17 +193,14 @@ describe("DatasetDetailDynamicComponent", () => {
       );
     });
 
-    it("should navigate to instruments page when internalLinkType is 'instrumentsName'", () => {
-      component.onClickInternalLink(
-        InternalLinkType.INSTRUMENTS_NAME,
-        "instrument123",
-      );
+    it("should navigate to the datasets page", () => {
+      component.onClickInternalLink(InternalLinkType.DATASETS, "dataset123");
       expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
-        "/instruments/instrument123",
+        "/datasets/dataset123",
       );
     });
 
-    it("should encode special characters in instrument ID", () => {
+    it("should encode special characters in the id", () => {
       component.onClickInternalLink(
         InternalLinkType.INSTRUMENTS,
         "instrument with spaces",
@@ -213,21 +210,12 @@ describe("DatasetDetailDynamicComponent", () => {
       );
     });
 
-    it("should navigate to datasets page for dataset links", () => {
-      component.onClickInternalLink(InternalLinkType.DATASETS, "dataset123");
-      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
-        "/datasets/dataset123",
-      );
-    });
-
-    it("should show error message for invalid link types", () => {
+    it("should show an error for an invalid link type", () => {
       component.onClickInternalLink("invalid", "test123");
       expect(component["snackBar"].open).toHaveBeenCalledWith(
         "The URL is not valid",
         "Close",
-        {
-          duration: 2000,
-        },
+        { duration: 2000 },
       );
     });
   });
@@ -301,11 +289,7 @@ describe("DatasetDetailDynamicComponent", () => {
         desc: "return deeply nested metadata",
         dataset: {
           scientificMetadata: {
-            experiment: {
-              conditions: {
-                environmental: { humidity: "60%" },
-              },
-            },
+            experiment: { conditions: { environmental: { humidity: "60%" } } },
           },
         },
         path: "experiment.conditions.environmental",
@@ -314,9 +298,7 @@ describe("DatasetDetailDynamicComponent", () => {
       {
         desc: "return null when path does not exist",
         dataset: {
-          scientificMetadata: {
-            sampleProperties: { temperature: "25°C" },
-          },
+          scientificMetadata: { sampleProperties: { temperature: "25°C" } },
         },
         path: "nonExistentPath",
         expected: null,
@@ -324,9 +306,7 @@ describe("DatasetDetailDynamicComponent", () => {
       {
         desc: "return null when partial path exists but final key does not",
         dataset: {
-          scientificMetadata: {
-            sampleProperties: { temperature: "25°C" },
-          },
+          scientificMetadata: { sampleProperties: { temperature: "25°C" } },
         },
         path: "sampleProperties.nonExistentKey",
         expected: null,
@@ -334,26 +314,20 @@ describe("DatasetDetailDynamicComponent", () => {
       {
         desc: "return null when path leads to non-object value",
         dataset: {
-          scientificMetadata: {
-            sampleProperties: { temperature: "25°C" },
-          },
+          scientificMetadata: { sampleProperties: { temperature: "25°C" } },
         },
         path: "sampleProperties.temperature",
         expected: null,
       },
       {
         desc: "return null when path leads to null value",
-        dataset: {
-          scientificMetadata: { sampleProperties: null },
-        },
+        dataset: { scientificMetadata: { sampleProperties: null } },
         path: "sampleProperties",
         expected: null,
       },
       {
         desc: "return null when path leads to undefined value",
-        dataset: {
-          scientificMetadata: { sampleProperties: undefined },
-        },
+        dataset: { scientificMetadata: { sampleProperties: undefined } },
         path: "sampleProperties",
         expected: null,
       },
@@ -375,9 +349,7 @@ describe("DatasetDetailDynamicComponent", () => {
       },
       {
         desc: "handle empty object values",
-        dataset: {
-          scientificMetadata: { emptySection: {} },
-        },
+        dataset: { scientificMetadata: { emptySection: {} } },
         path: "emptySection",
         expected: {},
       },
@@ -385,8 +357,9 @@ describe("DatasetDetailDynamicComponent", () => {
 
     testCases.forEach(({ desc, dataset, path, expected }) => {
       it(`should ${desc}`, () => {
-        const result = component.getScientificMetadata(dataset, path);
-        expect(result).toEqual(expected);
+        expect(component.getScientificMetadata(dataset, path)).toEqual(
+          expected,
+        );
       });
     });
   });
