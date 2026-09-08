@@ -19,12 +19,12 @@ import {
 import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
 import {
-  CreateDatasetDto,
   DatasetsService,
   MetadataKeysV4Service,
   OutputDatasetDto,
   DatasetsV4Service,
   DatasetsPublicV4Service,
+  AttachmentsV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock, mockAttachmentV4, mockDataset } from "shared/MockStubs";
@@ -68,6 +68,7 @@ describe("DatasetEffects", () => {
   let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
   let datasetsV4Service: jasmine.SpyObj<DatasetsV4Service>;
   let datasetsPublicV4Service: jasmine.SpyObj<DatasetsPublicV4Service>;
+  let attachmentsV4Service: jasmine.SpyObj<AttachmentsV4Service>;
 
   const getConfig = () => ({});
 
@@ -100,10 +101,15 @@ describe("DatasetEffects", () => {
             "datasetsControllerFullfacetV3",
             "datasetsControllerMetadataKeysV3",
             "datasetsControllerFindByIdAndUpdateV3",
-            "datasetsControllerCreateAttachmentV3",
-            "datasetsControllerFindOneAttachmentAndUpdateV3",
-            "datasetsControllerFindOneAttachmentAndRemoveV3",
             "datasetsControllerAppendToArrayFieldV3",
+          ]),
+        },
+        {
+          provide: AttachmentsV4Service,
+          useValue: jasmine.createSpyObj("attachmentsV4Service", [
+            "attachmentsV4ControllerCreateAttachmentV4",
+            "attachmentsV4ControllerFindOneAndUpdateV4",
+            "attachmentsV4ControllerFindOneAttachmentAndRemoveV4",
           ]),
         },
         {
@@ -143,6 +149,7 @@ describe("DatasetEffects", () => {
     metadataKeysApi = injectedStub(MetadataKeysV4Service);
     datasetsV4Service = injectedStub(DatasetsV4Service);
     datasetsPublicV4Service = injectedStub(DatasetsPublicV4Service);
+    attachmentsV4Service = injectedStub(AttachmentsV4Service);
   });
 
   const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
@@ -542,7 +549,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: attachment });
-      datasetApi.datasetsControllerCreateAttachmentV3.and.returnValue(response);
+      attachmentsV4Service.attachmentsV4ControllerCreateAttachmentV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.addAttachment$).toBeObservable(expected);
@@ -556,7 +565,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerCreateAttachmentV3.and.returnValue(response);
+      attachmentsV4Service.attachmentsV4ControllerCreateAttachmentV4.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.addAttachment$).toBeObservable(expected);
@@ -582,7 +593,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: attachment });
-      datasetApi.datasetsControllerFindOneAttachmentAndUpdateV3.and.returnValue(
+      attachmentsV4Service.attachmentsV4ControllerFindOneAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -601,7 +612,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindOneAttachmentAndUpdateV3.and.returnValue(
+      attachmentsV4Service.attachmentsV4ControllerFindOneAndUpdateV4.and.returnValue(
         response,
       );
 
@@ -625,7 +636,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: attachmentId });
-      datasetApi.datasetsControllerFindOneAttachmentAndRemoveV3.and.returnValue(
+      attachmentsV4Service.attachmentsV4ControllerFindOneAttachmentAndRemoveV4.and.returnValue(
         response,
       );
 
@@ -642,7 +653,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindOneAttachmentAndRemoveV3.and.returnValue(
+      attachmentsV4Service.attachmentsV4ControllerFindOneAttachmentAndRemoveV4.and.returnValue(
         response,
       );
 
