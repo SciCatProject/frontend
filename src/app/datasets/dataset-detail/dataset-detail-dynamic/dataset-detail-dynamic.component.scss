@@ -137,9 +137,9 @@ mat-card {
 }
 
 .attachments-footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 /* Restricted access indicator */
