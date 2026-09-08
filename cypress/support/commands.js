@@ -429,55 +429,6 @@ Cypress.Commands.add("removeJobs", () => {
   });
 });
 
-Cypress.Commands.add("initializeElasticSearch", (index) => {
-  cy.login(Cypress.env("username"), Cypress.env("password"));
-  cy.getToken().then((token) => {
-    cy.request({
-      method: "POST",
-      url: lbBaseUrl + "/elastic-search" + "/create-index" + "?index=" + index,
-      headers: getHeader(token),
-    }).then(() => {
-      cy.request({
-        method: "POST",
-        url:
-          lbBaseUrl + "/elastic-search" + "/sync-database" + "?index=" + index,
-        headers: getHeader(token),
-      });
-    });
-  });
-});
-
-Cypress.Commands.add("createDatasetForElasticSearch", (datasetName) => {
-  cy.getCookie("user").then((userCookie) => {
-    const user = JSON.parse(decodeURIComponent(userCookie.value));
-
-    cy.getToken().then((token) => {
-      const dataset = testData.rawDataset;
-      dataset.datasetName = datasetName;
-      cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
-      cy.log("User: " + JSON.stringify(user, null, 2));
-
-      cy.request({
-        method: "POST",
-        url: lbBaseUrlV4 + "/datasets",
-        headers: getHeader(token),
-        body: dataset,
-      });
-    });
-  });
-});
-
-Cypress.Commands.add("removeElasticSearchIndex", (index) => {
-  cy.login(Cypress.env("username"), Cypress.env("password"));
-  cy.getToken().then((token) => {
-    cy.request({
-      method: "POST",
-      url: lbBaseUrl + "/elastic-search" + "/delete-index" + "?index=" + index,
-      headers: getHeader(token),
-    });
-  });
-});
-
 Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
   cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
@@ -501,38 +452,4 @@ Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
     );
     cy.wait(wait);
   }
-});
-
-Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
-  cy.login(Cypress.env("username"), Cypress.env("password"));
-  cy.getToken().then((token) => {
-    const filter = { where: { datasetName } };
-
-    cy.request({
-      method: "GET",
-      url:
-        lbBaseUrlV4 +
-        "/datasets?filter=" +
-        encodeURIComponent(JSON.stringify(filter)),
-      headers: getHeader(token),
-    })
-      .its("body")
-      .as("datasets");
-
-    cy.login(
-      Cypress.env("secondaryUsername"),
-      Cypress.env("secondaryPassword"),
-    );
-    cy.getToken().then((token) => {
-      cy.get("@datasets").then((datasets) => {
-        datasets.forEach((dataset) => {
-          cy.request({
-            method: "DELETE",
-            url: lbBaseUrlV4 + "/datasets/" + encodeURIComponent(dataset.pid),
-            headers: getHeader(token),
-          });
-        });
-      });
-    });
-  });
 });
