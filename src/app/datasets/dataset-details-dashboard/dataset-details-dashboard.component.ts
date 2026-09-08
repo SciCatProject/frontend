@@ -95,6 +95,12 @@ const TAB_DEFINITIONS: {
     isEnabled: () => true,
   },
   {
+    location: "./relationships",
+    label: TAB.relationships,
+    icon: "device_hub",
+    isEnabled: (c) => c.config.datasetRelationshipsEnabled,
+  },
+  {
     location: "./reduce",
     label: TAB.reduce,
     icon: "tune",
