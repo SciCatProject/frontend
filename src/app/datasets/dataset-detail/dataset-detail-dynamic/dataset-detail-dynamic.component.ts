@@ -31,9 +31,9 @@ import {
 
 import { AttachmentService } from "shared/services/attachment.service";
 import { DatePipe } from "@angular/common";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
 import {
   Instrument,
+  OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";

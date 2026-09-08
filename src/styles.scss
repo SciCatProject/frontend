@@ -310,27 +310,27 @@ a:hover {
 }
 
 .mat-mdc-unelevated-button.mat-primary {
-  --mdc-filled-button-label-text-color: var(--theme-primary-default-contrast);
+  --mat-button-filled-label-text-color: var(--theme-primary-default-contrast);
 }
 
 .mat-mdc-unelevated-button.mat-accent {
-  --mdc-filled-button-label-text-color: var(--theme-accent-default-contrast);
+  --mat-button-filled-label-text-color: var(--theme-accent-default-contrast);
 }
 
 .mat-mdc-raised-button.mat-primary {
-  --mdc-protected-button-label-text-color: var(
+  --mat-button-protected-label-text-color: var(
     --theme-primary-default-contrast
   );
 }
 
 .mat-mdc-raised-button.mat-warn {
-  --mdc-protected-button-label-text-color: var(
+  --mat-button-protected-label-text-color: var(
     --theme-primary-default-contrast
   );
 }
 
 .mat-mdc-raised-button.mat-accent {
-  --mdc-protected-button-label-text-color: var(--theme-accent-default-contrast);
+  --mat-button-protected-label-text-color: var(--theme-accent-default-contrast);
 }
 
 // Manipulate initial background color
@@ -389,17 +389,17 @@ a:hover {
 }
 
 .mat-mdc-slide-toggle {
-  --mdc-switch-selected-handle-color: var(--theme-accent-default);
-  --mdc-switch-selected-pressed-handle-color: var(--theme-accent-default);
-  --mdc-switch-selected-pressed-state-layer-color: var(--theme-accent-default);
-  --mdc-switch-selected-hover-state-layer-color: var(--theme-accent-default);
-  --mdc-switch-selected-hover-handle-color: var(--theme-accent-default);
-  --mdc-switch-selected-focus-state-layer-color: var(--theme-accent-default);
-  --mdc-switch-selected-focus-handle-color: var(--theme-accent-default);
-  --mdc-switch-selected-track-color: var(--theme-accent-default);
-  --mdc-switch-selected-pressed-track-color: var(--theme-accent-default);
-  --mdc-switch-selected-hover-track-color: var(--theme-accent-default);
-  --mdc-switch-selected-focus-track-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-handle-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-pressed-handle-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-pressed-state-layer-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-hover-state-layer-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-hover-handle-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-focus-state-layer-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-focus-handle-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-track-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-pressed-track-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-hover-track-color: var(--theme-accent-default);
+  --mat-slide-toggle-selected-focus-track-color: var(--theme-accent-default);
 }
 
 // Mat Tab customizations
