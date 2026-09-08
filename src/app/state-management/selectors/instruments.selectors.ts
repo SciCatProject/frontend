@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { InstrumentState } from "state-management/state/instruments.store";
 import { selectSettings } from "./user.selectors";
+import { selectCurrentDataset } from "./datasets.selectors";
 
 const selectInstrumentState =
   createFeatureSelector<InstrumentState>("instruments");
@@ -15,9 +16,9 @@ export const selectCurrentInstrument = createSelector(
   (state) => state.currentInstrument,
 );
 
-export const selectCurrentInstruments = createSelector(
-  selectInstrumentState,
-  (state) => state.currentInstruments,
+export const selectCurrentDatasetInstruments = createSelector(
+  selectCurrentDataset,
+  (dataset) => dataset?.instruments ?? [],
 );
 
 export const selectInstrumentsCount = createSelector(

@@ -196,7 +196,6 @@ export class DatasetDetailsDashboardComponent
         .pipe(filter(([dataset]) => !!dataset))
         .subscribe(([dataset, groups, isAdmin, isLoggedIn]) => {
           this.dataset = dataset;
-          this.dispatchDatasetLookupActions(dataset);
 
           const isInOwnerGroup =
             groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
@@ -226,22 +225,6 @@ export class DatasetDetailsDashboardComponent
           this.store.dispatch(fetchRelatedDatasetsAction());
         }),
     );
-  }
-
-  dispatchDatasetLookupActions(dataset: CurrentDataset) {
-    const actions = [
-      fetchInstrumentsCompleteAction({
-        instruments: dataset.instruments ?? [],
-      }),
-      fetchProposalsCompleteAction({
-        proposals: dataset.proposals ?? [],
-      }),
-      fetchSamplesCompleteAction({
-        samples: dataset.samples ?? [],
-      }),
-    ];
-
-    actions.forEach((action) => this.store.dispatch(action));
   }
 
   onAddToBatch(): void {

@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "state-management/state/samples.store";
 import { selectCurrentUser, selectSettings } from "./user.selectors";
+import { selectCurrentDataset } from "./datasets.selectors";
 
 const selectSampleState = createFeatureSelector<SampleState>("samples");
 
@@ -19,9 +20,9 @@ export const selectCurrentSample = createSelector(
   (state) => state.currentSample,
 );
 
-export const selectCurrentSamples = createSelector(
-  selectSampleState,
-  (state) => state.currentSamples,
+export const selectCurrentDatasetSamples = createSelector(
+  selectCurrentDataset,
+  (dataset) => dataset?.samples ?? [],
 );
 
 export const selectCurrentAttachments = createSelector(

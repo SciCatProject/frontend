@@ -2,6 +2,7 @@ import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
 import { selectHasFetchedSettings, selectSettings } from "./user.selectors";
 import { selectInstrumentWithIdAndLabel } from "./instruments.selectors";
+import { selectCurrentDataset } from "./datasets.selectors";
 
 const selectProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
@@ -30,9 +31,9 @@ export const selectCurrentProposal = createSelector(
   (state) => state.currentProposal,
 );
 
-export const selectCurrentProposals = createSelector(
-  selectProposalsState,
-  (state) => state.currentProposals,
+export const selectCurrentDatasetProposals = createSelector(
+  selectCurrentDataset,
+  (dataset) => dataset?.proposals ?? [],
 );
 
 export const selectParentProposal = createSelector(

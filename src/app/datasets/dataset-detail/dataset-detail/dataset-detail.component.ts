@@ -26,11 +26,8 @@ import {
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
-import { selectCurrentProposals } from "state-management/selectors/proposals.selectors";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { AppConfigService } from "app-config.service";
-import { selectCurrentSamples } from "state-management/selectors/samples.selectors";
-import { selectCurrentInstruments } from "state-management/selectors/instruments.selectors";
 import {
   FormArray,
   FormBuilder,
@@ -48,6 +45,9 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 import { CurrentDataset } from "state-management/state/datasets.store";
+import { selectCurrentDatasetInstruments } from "state-management/selectors/instruments.selectors";
+import { selectCurrentDatasetProposals } from "state-management/selectors/proposals.selectors";
+import { selectCurrentDatasetSamples } from "state-management/selectors/samples.selectors";
 
 /**
  * Component to show details for a data set, using the
@@ -121,17 +121,19 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(selectCurrentInstruments).subscribe((instruments) => {
-        this.instruments = instruments;
-      }),
+      this.store
+        .select(selectCurrentDatasetInstruments)
+        .subscribe((instruments) => {
+          this.instruments = instruments;
+        }),
     );
 
-    this.store.select(selectCurrentProposals).subscribe((proposals) => {
+    this.store.select(selectCurrentDatasetProposals).subscribe((proposals) => {
       this.proposals = proposals;
     });
 
     this.subscriptions.push(
-      this.store.select(selectCurrentSamples).subscribe((samples) => {
+      this.store.select(selectCurrentDatasetSamples).subscribe((samples) => {
         this.samples = samples;
       }),
     );
