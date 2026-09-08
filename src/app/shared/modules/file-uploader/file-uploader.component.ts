@@ -9,7 +9,10 @@ import {
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import saveAs from "file-saver";
-import { OutputAttachmentV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  OutputAttachmentV3Dto,
+  OutputAttachmentV4Dto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
@@ -36,13 +39,25 @@ export class FileUploaderComponent {
   appConfig = this.appConfigService.getConfig();
   maxFileUploadSizeInMb = 16;
 
-  @Input() attachments: OutputAttachmentV3Dto[] = [];
+  @Input() attachments: (OutputAttachmentV3Dto | OutputAttachmentV4Dto)[] = [];
   @Input() isOwner: boolean;
   @Output() filePicked = new EventEmitter<PickedFile>();
   @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
   @Output() deleteAttachment = new EventEmitter<string>();
 
   @ViewChild("fileDropRef") fileDropRef: ElementRef<HTMLInputElement>;
+
+  // samples and proposals still return v3 attachments where the id is called
+  // id, datasets return v4 where it is aid
+  // remove this once every feature is on v4 and read attachment.aid directly
+  attachmentIdWithLegacyFallback(
+    attachment: OutputAttachmentV3Dto | OutputAttachmentV4Dto,
+  ): string {
+    return (
+      (attachment as OutputAttachmentV4Dto).aid ??
+      (attachment as OutputAttachmentV3Dto).id
+    );
+  }
 
   constructor(
     private store: Store,
@@ -133,7 +148,9 @@ export class FileUploaderComponent {
     this.attachmentService.openAttachment(encoded);
   }
 
-  onDownloadAttachment(attachment: OutputAttachmentV3Dto) {
+  onDownloadAttachment(
+    attachment: OutputAttachmentV3Dto | OutputAttachmentV4Dto,
+  ) {
     const mimeType = this.base64MimeType(attachment.thumbnail);
     if (!mimeType) {
       throw new Error(
@@ -152,7 +169,8 @@ export class FileUploaderComponent {
 
     saveAs(
       attachment.thumbnail,
-      attachment.caption || `${attachment.id}.${fileType}`,
+      attachment.caption ||
+        `${this.attachmentIdWithLegacyFallback(attachment)}.${fileType}`,
     );
   }
 }
