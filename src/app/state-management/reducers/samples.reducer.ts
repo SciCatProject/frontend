@@ -52,7 +52,6 @@ const reducer = createReducer(
     (state, { sample }): SampleState => ({
       ...state,
       currentSample: sample,
-      currentSamples: [...(state.currentSamples || []), sample],
     }),
   ),
 

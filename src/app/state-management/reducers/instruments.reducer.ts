@@ -39,7 +39,6 @@ const reducer = createReducer(
     (state, { instrument }): InstrumentState => ({
       ...state,
       currentInstrument: instrument,
-      currentInstruments: [...(state.currentInstruments || []), instrument],
     }),
   ),
 

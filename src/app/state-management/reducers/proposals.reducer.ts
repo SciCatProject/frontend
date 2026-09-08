@@ -41,7 +41,6 @@ const reducer = createReducer(
     (state, { proposal }): ProposalsState => ({
       ...state,
       currentProposal: proposal,
-      currentProposals: [...(state.currentProposals || []), proposal],
     }),
   ),
 
