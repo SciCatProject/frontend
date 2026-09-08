@@ -11,7 +11,7 @@ Cypress.Commands.add("getToken", () => {
 });
 
 Cypress.Commands.add("login", (username, password) => {
-  cy.request("POST", lbBaseUrl + "/v3" + loginEndpoint, {
+  cy.request("POST", lbBaseUrl + loginEndpoint, {
     username,
     password,
     rememberMe: true,
@@ -39,7 +39,7 @@ Cypress.Commands.add("createPolicy", (ownerGroup) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/v3/Policies",
+        url: lbBaseUrl + "/Policies",
         headers: getHeader(token),
         body: policy,
       });
@@ -56,7 +56,7 @@ Cypress.Commands.add("removePolicies", () => {
       method: "GET",
       url:
         lbBaseUrl +
-        "/v3/Policies?filter=" +
+        "/Policies?filter=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: getHeader(token),
     })
@@ -72,7 +72,7 @@ Cypress.Commands.add("removePolicies", () => {
         policies.forEach((policy) => {
           cy.request({
             method: "DELETE",
-            url: lbBaseUrl + "/v3/Policies/" + encodeURIComponent(policy.id),
+            url: lbBaseUrl + "/Policies/" + encodeURIComponent(policy.id),
             headers: getHeader(token),
           });
         });
@@ -117,7 +117,7 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
 
         cy.request({
           method: "POST",
-          url: lbBaseUrl + "/v4/datasets",
+          url: lbBaseUrlV4 + "/datasets",
           headers: getHeader(token),
           body: dataset,
         }).then((response) => {
@@ -129,7 +129,7 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
 
           cy.request({
             method: "POST",
-            url: lbBaseUrl + `/v3/OrigDatablocks`,
+            url: lbBaseUrl + `/OrigDatablocks`,
             headers: getHeader(token),
             body: origDataBlock,
           });
@@ -145,7 +145,7 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
 
         cy.request({
           method: "POST",
-          url: lbBaseUrl + "/v4/datasets",
+          url: lbBaseUrlV4 + "/datasets",
           headers: getHeader(token),
           body: dataset,
         });
@@ -167,7 +167,7 @@ Cypress.Commands.add("createProposal", (overwrites = {}) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/v3/Proposals",
+        url: lbBaseUrl + "/Proposals",
         headers: getHeader(token),
         body: proposal,
       });
@@ -185,7 +185,7 @@ Cypress.Commands.add("createInstrument", (instrument) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/v3/Instruments",
+        url: lbBaseUrl + "/Instruments",
         headers: getHeader(token),
         body: instrument,
       });
@@ -203,7 +203,7 @@ Cypress.Commands.add("createSample", (sample) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/v3/Samples",
+        url: lbBaseUrl + "/Samples",
         headers: getHeader(token),
         body: sample,
       });
@@ -243,7 +243,7 @@ Cypress.Commands.add("updateProposal", (proposalId, updateProposalDto) => {
 
       cy.request({
         method: "PATCH",
-        url: `${lbBaseUrl}/v3/Proposals/${encodeURIComponent(proposalId)}`,
+        url: `${lbBaseUrl}/Proposals/${encodeURIComponent(proposalId)}`,
         headers: getHeader(token),
         body: updateProposalDto,
       });
@@ -255,7 +255,7 @@ Cypress.Commands.add("deleteProposal", (id) => {
   cy.getToken().then((token) => {
     cy.request({
       method: "DELETE",
-      url: lbBaseUrl + `/v3/Proposals/${encodeURIComponent(id)}`,
+      url: lbBaseUrl + `/Proposals/${encodeURIComponent(id)}`,
       headers: getHeader(token),
     });
   });
@@ -271,8 +271,8 @@ Cypress.Commands.add("removeDatasets", () => {
     cy.request({
       method: "GET",
       url:
-        lbBaseUrl +
-        "/v4/datasets?filter=" +
+        lbBaseUrlV4 +
+        "/datasets?filter=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: getHeader(token),
     })
@@ -283,7 +283,7 @@ Cypress.Commands.add("removeDatasets", () => {
       datasets.forEach((dataset) => {
         cy.request({
           method: "DELETE",
-          url: lbBaseUrl + "/v4/datasets/" + encodeURIComponent(dataset.pid),
+          url: lbBaseUrlV4 + "/datasets/" + encodeURIComponent(dataset.pid),
           headers: getHeader(token),
         });
       });
@@ -300,7 +300,7 @@ Cypress.Commands.add("removeProposals", () => {
       method: "GET",
       url:
         lbBaseUrl +
-        "/v3/proposals?filters=" +
+        "/proposals?filters=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: getHeader(token),
     })
@@ -318,7 +318,7 @@ Cypress.Commands.add("removeProposals", () => {
             method: "DELETE",
             url:
               lbBaseUrl +
-              "/v3/proposals/" +
+              "/proposals/" +
               encodeURIComponent(proposal.proposalId),
             headers: getHeader(token),
           });
@@ -333,7 +333,7 @@ Cypress.Commands.add("removeInstruments", () => {
   cy.getToken().then((token) => {
     cy.request({
       method: "GET",
-      url: lbBaseUrl + "/v3/instruments",
+      url: lbBaseUrl + "/instruments",
       headers: getHeader(token),
     })
       .its("body")
@@ -349,9 +349,7 @@ Cypress.Commands.add("removeInstruments", () => {
           cy.request({
             method: "DELETE",
             url:
-              lbBaseUrl +
-              "/v3/instruments/" +
-              encodeURIComponent(instrument.pid),
+              lbBaseUrl + "/instruments/" + encodeURIComponent(instrument.pid),
             headers: getHeader(token),
           });
         });
@@ -369,7 +367,7 @@ Cypress.Commands.add("removeSamples", () => {
       method: "GET",
       url:
         lbBaseUrl +
-        "/v3/Samples?filter=" +
+        "/Samples?filter=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: getHeader(token),
     })
@@ -385,7 +383,7 @@ Cypress.Commands.add("removeSamples", () => {
         samples.forEach((sample) => {
           cy.request({
             method: "DELETE",
-            url: lbBaseUrl + "/v3/Samples/" + sample.sampleId,
+            url: lbBaseUrl + "/Samples/" + sample.sampleId,
             headers: getHeader(token),
           });
         });
@@ -404,7 +402,7 @@ Cypress.Commands.add("removeJobs", () => {
       method: "GET",
       url:
         lbBaseUrl +
-        "/v3/jobs/fullquery?fields=" +
+        "/jobs/fullquery?fields=" +
         encodeURIComponent(JSON.stringify(fields)) +
         "&limits=" +
         encodeURIComponent(JSON.stringify(limits)),
@@ -422,7 +420,7 @@ Cypress.Commands.add("removeJobs", () => {
         jobs.forEach((job) => {
           cy.request({
             method: "DELETE",
-            url: lbBaseUrl + `/v3/jobs/${encodeURIComponent(job.id)}`,
+            url: lbBaseUrl + `/jobs/${encodeURIComponent(job.id)}`,
             headers: getHeader(token),
           });
         });
@@ -436,18 +434,13 @@ Cypress.Commands.add("initializeElasticSearch", (index) => {
   cy.getToken().then((token) => {
     cy.request({
       method: "POST",
-      url:
-        lbBaseUrl + "/v3/elastic-search" + "/create-index" + "?index=" + index,
+      url: lbBaseUrl + "/elastic-search" + "/create-index" + "?index=" + index,
       headers: getHeader(token),
     }).then(() => {
       cy.request({
         method: "POST",
         url:
-          lbBaseUrl +
-          "/v3/elastic-search" +
-          "/sync-database" +
-          "?index=" +
-          index,
+          lbBaseUrl + "/elastic-search" + "/sync-database" + "?index=" + index,
         headers: getHeader(token),
       });
     });
@@ -466,7 +459,7 @@ Cypress.Commands.add("createDatasetForElasticSearch", (datasetName) => {
 
       cy.request({
         method: "POST",
-        url: lbBaseUrl + "/v4/datasets",
+        url: lbBaseUrlV4 + "/datasets",
         headers: getHeader(token),
         body: dataset,
       });
@@ -479,8 +472,7 @@ Cypress.Commands.add("removeElasticSearchIndex", (index) => {
   cy.getToken().then((token) => {
     cy.request({
       method: "POST",
-      url:
-        lbBaseUrl + "/v3/elastic-search" + "/delete-index" + "?index=" + index,
+      url: lbBaseUrl + "/elastic-search" + "/delete-index" + "?index=" + index,
       headers: getHeader(token),
     });
   });
@@ -511,7 +503,6 @@ Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
   }
 });
 
-
 Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
   cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getToken().then((token) => {
@@ -520,8 +511,8 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
     cy.request({
       method: "GET",
       url:
-        lbBaseUrl +
-        "/v4/datasets?filter=" +
+        lbBaseUrlV4 +
+        "/datasets?filter=" +
         encodeURIComponent(JSON.stringify(filter)),
       headers: getHeader(token),
     })
@@ -537,7 +528,7 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
         datasets.forEach((dataset) => {
           cy.request({
             method: "DELETE",
-            url: lbBaseUrl + "/v4/datasets/" + encodeURIComponent(dataset.pid),
+            url: lbBaseUrlV4 + "/datasets/" + encodeURIComponent(dataset.pid),
             headers: getHeader(token),
           });
         });
