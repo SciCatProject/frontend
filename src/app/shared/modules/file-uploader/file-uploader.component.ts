@@ -47,18 +47,6 @@ export class FileUploaderComponent {
 
   @ViewChild("fileDropRef") fileDropRef: ElementRef<HTMLInputElement>;
 
-  // samples and proposals still return v3 attachments where the id is called
-  // id, datasets return v4 where it is aid
-  // remove this once every feature is on v4 and read attachment.aid directly
-  attachmentIdWithLegacyFallback(
-    attachment: OutputAttachmentV3Dto | OutputAttachmentV4Dto,
-  ): string {
-    return (
-      (attachment as OutputAttachmentV4Dto).aid ??
-      (attachment as OutputAttachmentV3Dto).id
-    );
-  }
-
   constructor(
     private store: Store,
     private appConfigService: AppConfigService,
@@ -72,6 +60,18 @@ export class FileUploaderComponent {
         ),
       );
     }
+  }
+
+  // NOTE: samples and proposals still return v3 attachments where the id is called
+  // id, datasets return v4 where it is aid
+  // remove this once every feature is on v4 and read attachment.aid directly
+  attachmentIdWithLegacyFallback(
+    attachment: OutputAttachmentV3Dto | OutputAttachmentV4Dto,
+  ): string {
+    return (
+      (attachment as OutputAttachmentV4Dto).aid ??
+      (attachment as OutputAttachmentV3Dto).id
+    );
   }
 
   async onFileDropped(event: unknown) {
