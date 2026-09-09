@@ -115,7 +115,7 @@ export class TableSettingsStorageService {
     try {
       // Iterate over possible legacy key patterns in sessionStorage/localStorage
       // Legacy key: `${tableName}-columns` in local/session storage — we'll search sessionStorage first.
-      for (let i = 0; i < sessionStorage.length; i++) {
+      for (let i = sessionStorage.length - 1; i >= 0; i--) {
         const key = sessionStorage.key(i);
         if (!key) continue;
         if (key.endsWith("-columns")) {
