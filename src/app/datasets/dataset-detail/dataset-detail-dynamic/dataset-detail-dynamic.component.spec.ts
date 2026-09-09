@@ -19,6 +19,10 @@ describe("DatasetDetailDynamicComponent", () => {
 
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
+    parseUrl: jasmine.createSpy("parseUrl").and.callFake((url: string) => url),
+    serializeUrl: jasmine
+      .createSpy("serializeUrl")
+      .and.callFake((url: string) => url),
   };
 
   const getConfig = () => ({});
@@ -180,6 +184,7 @@ describe("DatasetDetailDynamicComponent", () => {
   describe("onClickInternalLink", () => {
     beforeEach(() => {
       (component["router"].navigateByUrl as jasmine.Spy).calls.reset();
+      spyOn(window, "open");
       spyOn(component["snackBar"], "open");
     });
 
@@ -188,15 +193,19 @@ describe("DatasetDetailDynamicComponent", () => {
         InternalLinkType.INSTRUMENTS,
         "instrument123",
       );
-      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
+      expect(window.open).toHaveBeenCalledWith(
         "/instruments/instrument123",
+        "_blank",
+        "noopener",
       );
     });
 
     it("should navigate to the datasets page", () => {
       component.onClickInternalLink(InternalLinkType.DATASETS, "dataset123");
-      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
+      expect(window.open).toHaveBeenCalledWith(
         "/datasets/dataset123",
+        "_blank",
+        "noopener",
       );
     });
 
@@ -205,13 +214,16 @@ describe("DatasetDetailDynamicComponent", () => {
         InternalLinkType.INSTRUMENTS,
         "instrument with spaces",
       );
-      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
+      expect(window.open).toHaveBeenCalledWith(
         "/instruments/instrument%20with%20spaces",
+        "_blank",
+        "noopener",
       );
     });
 
     it("should show an error for an invalid link type", () => {
       component.onClickInternalLink("invalid", "test123");
+      expect(window.open).not.toHaveBeenCalled();
       expect(component["snackBar"].open).toHaveBeenCalledWith(
         "The URL is not valid",
         "Close",
