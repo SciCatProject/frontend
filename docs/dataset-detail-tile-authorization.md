@@ -219,6 +219,8 @@ export interface CustomizationItem {
   authorization?: string[];  // Tile-specific authorization (empty array means no restriction)
   visible?: boolean;  // Controls visibility (defaults to true)
   restrictedIconVisible?: boolean;  // Computed at runtime, indicates if lock icon should be shown
+  icon?: string;
+  headerColor?: themePalette;
 }
 ```
 

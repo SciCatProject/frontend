@@ -49,21 +49,10 @@
         >
           <mat-card>
             <!-- Section Header -->
-            <mat-card-header
-              class="dynamic-template-tile-header sticky-header"
-              data-cy="section-label"
-            >
-              <div mat-card-avatar class="section-icon">
-                <mat-icon>description</mat-icon>
-              </div>
-              <span>{{ section.label | translate: localization }}</span>
-              <span
-                *ngIf="section.restrictedIconVisible"
-                class="restricted-indicator"
-              >
-                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
-              </span>
-            </mat-card-header>
+            <ng-container
+              [ngTemplateOutlet]="sectionHeader"
+              [ngTemplateOutletContext]="{ section: section }"
+            ></ng-container>
             <!-- Section Content -->
             <mat-card-content>
               <table>
@@ -175,21 +164,10 @@
         >
           <ng-container *ngIf="emptyMetadataTable()">
             <mat-card>
-              <mat-card-header
-                class="dynamic-template-tile-header sticky-header"
-                data-cy="section-label"
-              >
-                <div mat-card-avatar class="section-icon">
-                  <mat-icon>science</mat-icon>
-                </div>
-                <span>{{ section.label | translate: localization }}</span>
-                <span
-                  *ngIf="section.restrictedIconVisible"
-                  class="restricted-indicator"
-                >
-                  <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
-                </span>
-              </mat-card-header>
+              <ng-container
+                [ngTemplateOutlet]="sectionHeader"
+                [ngTemplateOutletContext]="{ section: section }"
+              ></ng-container>
               <mat-card-content class="scientific-metadata-content">
                 <ng-container *ngIf="appConfig.tableSciDataEnabled">
                   <ng-container
@@ -239,21 +217,10 @@
           [style.gridRow]="'span ' + (section.row || 1)"
         >
           <mat-card>
-            <mat-card-header
-              class="dynamic-template-tile-header sticky-header"
-              data-cy="section-label"
-            >
-              <div mat-card-avatar class="section-icon">
-                <mat-icon>photo_library</mat-icon>
-              </div>
-              <span>{{ section.label | translate: localization }}</span>
-              <span
-                *ngIf="section.restrictedIconVisible"
-                class="restricted-indicator"
-              >
-                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
-              </span>
-            </mat-card-header>
+            <ng-container
+              [ngTemplateOutlet]="sectionHeader"
+              [ngTemplateOutletContext]="{ section: section }"
+            ></ng-container>
             <mat-card-content>
               <ng-container *ngIf="attachments$ | async as attachments">
                 <!-- TOP: thumbnails -->
@@ -312,21 +279,10 @@
           [style.gridRow]="'span ' + (section.row || 1)"
         >
           <mat-card>
-            <mat-card-header
-              class="dynamic-template-tile-header sticky-header"
-              data-cy="section-label"
-            >
-              <div mat-card-avatar class="section-icon">
-                <mat-icon>data_object</mat-icon>
-              </div>
-              <span>{{ section.label | translate: localization }}</span>
-              <span
-                *ngIf="section.restrictedIconVisible"
-                class="restricted-indicator"
-              >
-                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
-              </span>
-            </mat-card-header>
+            <ng-container
+              [ngTemplateOutlet]="sectionHeader"
+              [ngTemplateOutletContext]="{ section: section }"
+            ></ng-container>
             <mat-card-content>
               <ng-container *ngIf="appConfig.jsonMetadataEnabled">
                 <button
@@ -354,4 +310,24 @@
       </ng-container>
     </ng-container>
   </div>
+
+  <!-- Details Header Section Template -->
+  <ng-template #sectionHeader let-section="section">
+    <mat-card-header
+      class="dynamic-template-tile-header sticky-header"
+      data-cy="section-label"
+      [style.background-color]="getHeaderColor(section)"
+    >
+      <div mat-card-avatar class="section-icon">
+        <mat-icon>{{ section.icon || "description" }}</mat-icon>
+      </div>
+      <span>{{ section.label | translate: localization }}</span>
+      <span 
+        *ngIf="section.restrictedIconVisible" 
+        class="restricted-indicator"
+      >
+        <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+      </span>
+    </mat-card-header>
+  </ng-template>
 </ng-template>
