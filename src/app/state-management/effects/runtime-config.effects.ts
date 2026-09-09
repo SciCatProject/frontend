@@ -39,7 +39,7 @@ export class RunTimeConfigEffects {
       ofType(updateConfiguration),
       exhaustMap(({ id, config }) => {
         return this.runtimeConfigService
-          .runtimeConfigControllerUpdateConfigV3(id, { data: config })
+          .runtimeConfigControllerPatchConfigV3(id, { data: config })
           .pipe(
             map((config: Configuration) =>
               updateConfigurationSuccess({ config }),

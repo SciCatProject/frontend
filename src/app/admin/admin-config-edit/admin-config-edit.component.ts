@@ -21,6 +21,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { JsonPreviewDialogComponent } from "shared/modules/json-preview-dialog/json-preview-dialog.component";
 import { JsonSchema, UISchemaElement } from "@jsonforms/core";
 import { AppConfigInterface } from "app-config.service";
+import { isEqual, isPlainObject, transform } from "lodash-es";
 
 @Component({
   selector: "admin-config-edit",
@@ -36,6 +37,7 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
   );
 
   currentData: AppConfigInterface;
+  originalApiData: any;
   schema: JsonSchema = schema.schema || {};
   uiSchema: UISchemaElement = schema.uiSchema;
   renderers = [
@@ -60,7 +62,10 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.data$.pipe(take(1)).subscribe((d) => (this.currentData = d)),
+      this.data$.pipe(take(1)).subscribe((d) => {
+        this.currentData = d;
+        this.originalApiData = this.toApiData(d);
+      }),
     );
   }
 
@@ -70,10 +75,32 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
 
   save() {
     const apiData = this.toApiData(this.currentData);
+    const changes = this.diff(this.originalApiData, apiData);
 
     this.store.dispatch(
-      updateConfiguration({ id: "frontendConfig", config: apiData }),
+      updateConfiguration({ id: "frontendConfig", config: changes }),
     );
+  }
+
+  // Recursively computes the parts of `updated` that differ from `original`.
+  // Arrays are compared as a whole since the backend patch merges nested
+  // objects but not array elements.
+  diff(
+    original: Record<string, unknown>,
+    updated: Record<string, unknown>,
+  ): Record<string, unknown> {
+    return transform(updated, (result, value, key) => {
+      const originalValue = original?.[key];
+      if (!isEqual(value, originalValue)) {
+        result[key] =
+          isPlainObject(value) && isPlainObject(originalValue)
+            ? this.diff(
+                originalValue as Record<string, unknown>,
+                value as Record<string, unknown>,
+              )
+            : value;
+      }
+    });
   }
 
   jsonPreview() {
