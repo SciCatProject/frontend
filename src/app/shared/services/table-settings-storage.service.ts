@@ -142,7 +142,7 @@ export class TableSettingsStorageService {
       }
 
       // Also check localStorage legacy keys (less likely), but be conservative and only migrate simple arrays
-      for (let i = 0; i < localStorage.length; i++) {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
         const key = localStorage.key(i);
         if (!key) continue;
         if (key.endsWith("-columns") && !key.startsWith(this.keyPrefix)) {
