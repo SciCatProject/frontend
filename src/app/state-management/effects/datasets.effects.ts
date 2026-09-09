@@ -399,14 +399,11 @@ export class DatasetEffects {
   removeAttachment$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
-      switchMap(({ datasetId, attachmentId }) =>
+      switchMap(({ attachmentId }) =>
         this.attachmentsV4Service
-          // the sdk requires a second id argument that it never sends,
-          // the request is just DELETE /attachments/{aid}
-          .attachmentsV4ControllerFindOneAttachmentAndRemoveV4(
-            attachmentId,
-            datasetId,
-          )
+          // NOTE: the second argument should be removed on new backend release after v5.2.1
+          // It's a temporary workaround for a backend bug that requires a second id to be passed.
+          .attachmentsV4ControllerFindOneAttachmentAndRemoveV4(attachmentId, "")
           .pipe(
             map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId }),

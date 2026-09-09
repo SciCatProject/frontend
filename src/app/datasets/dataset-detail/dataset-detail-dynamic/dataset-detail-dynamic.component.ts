@@ -366,26 +366,30 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   onClickInternalLink(internalLinkType: string, id: string): void {
     const encodedId = encodeURIComponent(id);
+    let path: string;
 
     switch (internalLinkType) {
       case InternalLinkType.DATASETS:
-        this.router.navigateByUrl("/datasets/" + encodedId);
+        path = "/datasets/" + encodedId;
         break;
       case InternalLinkType.SAMPLES:
-        this.router.navigateByUrl("/samples/" + encodedId);
+        path = "/samples/" + encodedId;
         break;
       case InternalLinkType.PROPOSALS:
-        this.router.navigateByUrl("/proposals/" + encodedId);
+        path = "/proposals/" + encodedId;
         break;
       case InternalLinkType.INSTRUMENTS:
-        this.router.navigateByUrl("/instruments/" + encodedId);
+        path = "/instruments/" + encodedId;
         break;
       default:
-        this.snackBar.open("The URL is not valid", "Close", {
-          duration: 2000,
-        });
-        break;
+        this.snackBar.open("The URL is not valid", "Close", { duration: 2000 });
+        return;
     }
+    window.open(
+      this.router.serializeUrl(this.router.parseUrl(path)),
+      "_blank",
+      "noopener",
+    );
   }
 
   getInternalLinkItems(

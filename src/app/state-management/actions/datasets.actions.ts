@@ -165,7 +165,7 @@ export const updateAttachmentCaptionFailedAction = createAction(
 
 export const removeAttachmentAction = createAction(
   "[Dataset] Remove Attachment",
-  props<{ datasetId: string; attachmentId: string }>(),
+  props<{ attachmentId: string }>(),
 );
 export const removeAttachmentCompleteAction = createAction(
   "[Dataset] Remove Attachment Complete",
