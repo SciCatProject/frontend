@@ -423,12 +423,10 @@ describe("Dataset Actions", () => {
       const datasetId = "testId";
       const attachmentId = "testId";
       const action = fromActions.removeAttachmentAction({
-        datasetId,
         attachmentId,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Attachment",
-        datasetId,
         attachmentId,
       });
     });

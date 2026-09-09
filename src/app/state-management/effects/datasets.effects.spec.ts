@@ -622,12 +622,10 @@ describe("DatasetEffects", () => {
   });
 
   describe("removeAttachment$", () => {
-    const datasetId = "testPid";
     const attachmentId = "testId";
 
     it("should result in a removeAttachmentCompleteAction", () => {
       const action = fromActions.removeAttachmentAction({
-        datasetId,
         attachmentId,
       });
       const outcome = fromActions.removeAttachmentCompleteAction({
@@ -646,7 +644,6 @@ describe("DatasetEffects", () => {
 
     it("should result in a removeAttachmentFailedAction", () => {
       const action = fromActions.removeAttachmentAction({
-        datasetId,
         attachmentId,
       });
       const outcome = fromActions.removeAttachmentFailedAction();
@@ -825,10 +822,8 @@ describe("DatasetEffects", () => {
 
     describe("ofType removeAttachmentAction", () => {
       it("should dispatch a loadingAction", () => {
-        const datasetId = "testId";
         const attachmentId = "testId";
         const action = fromActions.removeAttachmentAction({
-          datasetId,
           attachmentId,
         });
         const outcome = loadingAction();
