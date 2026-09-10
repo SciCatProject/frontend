@@ -10,6 +10,7 @@ describe("TableConfigService (fallback)", () => {
   beforeEach(() => {
     const storageSpy = jasmine.createSpyObj("TableSettingsStorageService", [
       "get",
+      "set",
     ]);
 
     TestBed.configureTestingModule({
@@ -116,5 +117,43 @@ describe("TableConfigService (fallback)", () => {
 
     expect(storage.get).not.toHaveBeenCalled();
     expect(config).toBeTruthy();
+  });
+
+  it("persistColumns should write to storage with tableName and userId", () => {
+    const tableName = "jobsTable";
+    const userId = "user-1";
+    const columns = [{ name: "jobId", display: "visible", order: 0 }];
+
+    service.persistColumns(tableName, columns, userId);
+
+    expect(storage.set).toHaveBeenCalledWith(tableName, columns, userId);
+  });
+
+  it("preferSavedColumns should prefer persisted columns when storage has entries", () => {
+    const tableName = "filesTable";
+    const userId = "user-1";
+    const persisted: any = [
+      { name: "dataFileList.path", display: "hidden", order: 0 },
+    ];
+    storage.get.and.returnValue(persisted);
+
+    const result = service.preferSavedColumns(
+      tableName,
+      [{ name: "userId", display: "visible", order: 0 }] as any,
+      userId,
+    );
+
+    expect(storage.get).toHaveBeenCalledWith(tableName, userId);
+    expect(result).toEqual(persisted);
+  });
+
+  it("preferSavedColumns should fall back to provided columns when storage is empty", () => {
+    storage.get.and.returnValue(undefined);
+
+    const columns: any = [{ name: "jobId", display: "visible", order: 0 }];
+
+    const result = service.preferSavedColumns("jobsTable", columns);
+
+    expect(result).toBe(columns);
   });
 });
