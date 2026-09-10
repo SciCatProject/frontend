@@ -66,7 +66,10 @@ import {
   TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import {
+  setTableColumnsAction,
+  updateUserSettingsAction,
+} from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { ActivatedRoute } from "@angular/router";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
@@ -238,6 +241,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.pagination = paginationConfig;
   }
 
+  resolveColumnSource(storeColumns: TableColumn[]): TableColumn[] {
+    const persistedColumns = this.tableSettingsStorage.get(
+      this.tableName,
+      this.currentUserId,
+    ) as TableColumn[] | undefined;
+
+    return persistedColumns && persistedColumns.length > 0
+      ? persistedColumns
+      : storeColumns;
+  }
+
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column, index) => {
@@ -261,10 +275,23 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     // Persist immediately to persistent local store as a fast fallback so UI changes
     // survive short navigations / reloads even if the server/store hasn't updated yet.
     try {
-      this.tableSettingsStorage.set(this.tableName, columnsSetting, this.currentUserId);
+      this.tableSettingsStorage.set(
+        this.tableName,
+        columnsSetting,
+        this.currentUserId,
+      );
     } catch (e) {
       // Ignore storage failures (private mode or quota), server update still happens below.
     }
+
+    // Update the in-memory store synchronously so the change is visible even if
+    // the server round-trip hasn't completed (e.g. user navigates away and back).
+    this.store.dispatch(
+      setTableColumnsAction({
+        columns: columnsSetting as TableColumn[],
+        scope: "dataset",
+      }),
+    );
 
     this.store.dispatch(
       updateUserSettingsAction({
@@ -292,7 +319,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
       // Dispatch server update to reset user settings (server remains canonical).
       this.store.dispatch(
-        updateUserSettingsAction({ property: { fe_dataset_table_columns: [] } }),
+        updateUserSettingsAction({
+          property: { fe_dataset_table_columns: [] },
+        }),
+      );
+
+      // Restore the in-memory store to the app-config defaults so the table keeps
+      // initializing with a non-empty column list until the server confirms the reset.
+      const defaultColumns =
+        this.appConfig?.defaultDatasetsListSettings?.columns || [];
+      this.store.dispatch(
+        setTableColumnsAction({ columns: defaultColumns, scope: "dataset" }),
       );
 
       return;
@@ -300,6 +337,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
 
     if (
+      event.type === TableSettingEventType.apply ||
       event.type === TableSettingEventType.save ||
       event.type === TableSettingEventType.create
     ) {
@@ -432,7 +470,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                 this.appConfig?.defaultDatasetsListSettings?.columns;
               const userTableConfigColumns =
                 this.datasetsListService.convertSavedDatasetColumns(
-                  userConfigColumns,
+                  this.resolveColumnSource(userConfigColumns),
                 );
 
               this.tableDefaultSettingsConfig.settingList[0].columnSetting =

@@ -74,12 +74,13 @@ export class TableConfigService {
     tableDefaultSettingsConfig: ITableSetting,
     savedTableConfig?: TableField<any>[],
     tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" },
+    userId?: string,
   ) {
     // If the caller didn't provide a savedTableConfig (store might not be ready),
     // attempt to recover from the persistent local storage so recent user changes
     // survive short navigations.
     if (!savedTableConfig) {
-      const recovered = this.tableSettingsStorage.get(tableName);
+      const recovered = this.tableSettingsStorage.get(tableName, userId);
       if (recovered) {
         savedTableConfig = recovered as TableField<any>[];
       }
