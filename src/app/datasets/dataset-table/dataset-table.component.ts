@@ -264,6 +264,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       }),
     );
 
+      return {
+        name,
+        header,
+        enabled: !!(display === "visible"),
+        order: index,
+        width,
+        path,
+        userAdded: column.userAdded || undefined,
+        type,
+        format,
+        tooltip,
+      };
+    });
+
+    // Persist immediately to persistent local store as a fast fallback so UI changes
+    // survive short navigations / reloads even if the server/store hasn't updated yet.
+    try {
+      this.tableSettingsStorage.set(this.tableName, columnsSetting, this.currentUserId);
+    } catch (e) {
+      // Ignore storage failures (private mode or quota), server update still happens below.
+    }
+
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
@@ -290,23 +312,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
       // Dispatch server update to reset user settings (server remains canonical).
       this.store.dispatch(
-        updateUserSettingsAction({
-          property: { fe_dataset_table_columns: [] },
-        }),
-      );
-
-      // Restore the in-memory store to the app-config defaults so the table keeps
-      // initializing with a non-empty column list until the server confirms the reset.
-      const defaultColumns =
-        this.appConfig?.defaultDatasetsListSettings?.columns || [];
-      this.store.dispatch(
-        setTableColumnsAction({ columns: defaultColumns, scope: "dataset" }),
+        updateUserSettingsAction({ property: { fe_dataset_table_columns: [] } }),
       );
 
       return;
     }
 
-    if (event.type === TableSettingEventType.apply) {
+    if (
+      event.type === TableSettingEventType.save ||
+      event.type === TableSettingEventType.create
+    ) {
       this.saveTableSettings(event.setting);
     }
   }
