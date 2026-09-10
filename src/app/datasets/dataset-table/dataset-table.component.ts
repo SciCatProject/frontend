@@ -75,6 +75,7 @@ import { DatasetsListService } from "shared/services/datasets-list.service";
 import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.component";
 import { Router } from "@angular/router";
 import { DynamicMatTableComponent } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.component";
+import { TableSettingsStorageService } from "shared/services/table-settings-storage.service";
 
 export interface SortChangeEvent {
   active: string;
@@ -140,6 +141,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   localization = "dataset";
 
+  currentUserId?: string;
+
   columns: TableField<any>[];
 
   pending = true;
@@ -173,6 +176,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
     private router: Router,
+    private tableSettingsStorage: TableSettingsStorageService,
   ) {}
 
   private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
@@ -251,6 +255,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         tooltip,
       };
     });
+
+    // Persist immediately to persistent local store as a fast fallback so UI changes
+    // survive short navigations / reloads even if the server/store hasn't updated yet.
+    try {
+      this.tableSettingsStorage.set(this.tableName, columnsSetting, this.currentUserId);
+    } catch (e) {
+      // Ignore storage failures (private mode or quota), server update still happens below.
+    }
+
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
@@ -266,10 +279,26 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
+    // If the user resets to default, also clear the persistent cached table setting so
+    // future initializations use the official default rather than the local copy.
+    if (event.type === TableSettingEventType.reset) {
+      try {
+        this.tableSettingsStorage.remove(this.tableName, this.currentUserId);
+      } catch (e) {
+        // ignore
+      }
+
+      // Dispatch server update to reset user settings (server remains canonical).
+      this.store.dispatch(
+        updateUserSettingsAction({ property: { fe_dataset_table_columns: [] } }),
+      );
+
+      return;
+    }
+
     if (
       event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create ||
-      event.type === TableSettingEventType.reset
+      event.type === TableSettingEventType.create
     ) {
       this.saveTableSettings(event.setting);
     }
@@ -384,6 +413,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           ]) => {
             const userConfigColumns = defaultTableColumns.columns;
 
+            this.currentUserId = currentUser?.id;
             this.rowSelectionMode = currentUser ? "multi" : "none";
             if (userConfigColumns) {
               this.dataSource.next(datasets);
@@ -413,6 +443,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                   this.tableDefaultSettingsConfig,
                   userTableConfigColumns,
                   tableSort,
+                  this.currentUserId,
                 );
               if (tableSettingsConfig?.settingList.length) {
                 this.initTable(tableSettingsConfig, paginationConfig);
