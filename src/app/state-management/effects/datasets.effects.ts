@@ -78,7 +78,7 @@ export class DatasetEffects {
         }
         return params;
       }),
-      mergeMap(({ query, limits }) =>
+      switchMap(({ query, limits }) =>
         this.datasetsService
           .datasetsControllerFullqueryV3(
             JSON.stringify(limits),
@@ -103,7 +103,7 @@ export class DatasetEffects {
       ),
       concatLatestFrom(() => this.fullfacetParams$),
       map(([, params]) => params),
-      mergeMap(({ fields, facets }) =>
+      switchMap(({ fields, facets }) =>
         this.datasetsService
           .datasetsControllerFullfacetV3(
             JSON.stringify(facets),
