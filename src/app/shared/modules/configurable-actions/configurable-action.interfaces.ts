@@ -5,6 +5,14 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 export type DialogField = { key: string } & DynamicField;
 
+export interface IframeConfig {
+  name: string;
+  title?: string;
+  hidden?: boolean;
+  width?: string;
+  height?: string;
+}
+
 export interface DialogConfig {
   title?: string;
   description?: string;
@@ -36,7 +44,8 @@ export interface ActionConfig {
   icon?: string;
   type?: ActionType;
   url: string;
-  target?: "_blank" | "_self" | "_parent" | "_top";
+  target?: "_blank" | "_self" | "_parent" | "_top" | "iframe";
+  iframeConfig?: IframeConfig;
   authorization: string[];
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   enabled?: string | boolean;
