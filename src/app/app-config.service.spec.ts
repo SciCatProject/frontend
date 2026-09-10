@@ -523,4 +523,53 @@ describe("AppConfigService", () => {
       });
     });
   });
+
+  describe("#loadAdditionalConfigs()", () => {
+    it("should return the config unchanged when additionalConfigs is not set", async () => {
+      const httpGet = spyOn(service["http"], "get");
+      const config = { accessTokenPrefix: "" } as AppConfigInterface;
+
+      const result = await service["loadAdditionalConfigs"](config);
+
+      expect(result).toEqual(config);
+      expect(httpGet).not.toHaveBeenCalled();
+    });
+
+    it("should merge in the config fetched from additionalConfigs", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({ accessTokenPrefix: "Bearer " }),
+      );
+      const config = {
+        accessTokenPrefix: "",
+        additionalConfigs: ["/assets/extra.json"],
+      } as AppConfigInterface;
+
+      const result = await service["loadAdditionalConfigs"](config);
+
+      expect(result.accessTokenPrefix).toBe("Bearer ");
+      expect(service["http"].get).toHaveBeenCalledWith("/assets/extra.json");
+    });
+
+    it("should only load the first 3 entries when additionalConfigs has more", async () => {
+      const responses: Record<string, object> = {
+        "/a": { facility: "a" },
+        "/b": { facility: "b" },
+        "/c": { facility: "c" },
+        "/d": { facility: "d" },
+      };
+      const httpGet = spyOn(service["http"], "get").and.callFake(
+        (url: string): Observable<any> => of(responses[url]),
+      );
+      const config = {
+        facility: "root",
+        additionalConfigs: ["/a", "/b", "/c", "/d"],
+      } as AppConfigInterface;
+
+      const result = await service["loadAdditionalConfigs"](config);
+
+      expect(result.facility).toBe("c");
+      expect(httpGet).toHaveBeenCalledTimes(3);
+      expect(httpGet).not.toHaveBeenCalledWith("/d");
+    });
+  });
 });
