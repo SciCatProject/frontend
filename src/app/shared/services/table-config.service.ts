@@ -69,6 +69,29 @@ export class TableConfigService {
     return [...mergedColumns, ...extraColumns];
   }
 
+  persistColumns(tableName: string, columns: unknown[], userId?: string) {
+    try {
+      this.tableSettingsStorage.set(tableName, columns, userId);
+    } catch (e) {
+      // Ignore storage failures (private mode or quota), server update still happens below.
+    }
+  }
+
+  preferSavedColumns<T>(
+    tableName: string,
+    columns: T[] | undefined,
+    userId?: string,
+  ): T[] {
+    const persisted = this.tableSettingsStorage.get(
+      tableName,
+      userId,
+    ) as unknown[];
+
+    return persisted && persisted.length > 0
+      ? (persisted as T[])
+      : (columns ?? []);
+  }
+
   getTableSettingsConfig(
     tableName: string,
     tableDefaultSettingsConfig: ITableSetting,
