@@ -4,7 +4,7 @@ describe("Datasets", () => {
 
     cy.createDataset({ type: "raw" });
 
-    cy.intercept("PATCH", "/api/v3/datasets/**/*").as("change");
+    cy.intercept("PATCH", "/api/v4/datasets/**/*").as("change");
     cy.intercept("GET", "*").as("fetch");
   });
 

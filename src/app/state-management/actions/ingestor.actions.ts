@@ -19,7 +19,7 @@ import {
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import {
   DatasetsControllerCreateV3Request,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 export const setIngestorEndpoint = createAction(
@@ -181,5 +181,5 @@ export const createDatasetAction = createAction(
 
 export const createDatasetSuccess = createAction(
   "[Ingestor] Create Dataset Success",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: OutputDatasetDto }>(),
 );

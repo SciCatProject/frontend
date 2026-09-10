@@ -19,6 +19,7 @@ const initialSampleState: SampleState = {
   samples: [],
   attachments: [],
   currentSample: sample,
+  currentSamples: [],
   datasets: [],
   metadataKeys: [],
 

@@ -56,7 +56,12 @@
 
         <form
           *ngIf="isOwner"
-          (submit)="onSubmitCaption(attachment.id, caption.value)"
+          (submit)="
+            onSubmitCaption(
+              attachmentIdWithLegacyFallback(attachment),
+              caption.value
+            )
+          "
         >
           <mat-form-field>
             <mat-label>Caption</mat-label>
@@ -90,7 +95,9 @@
           *ngIf="isOwner"
           mat-button
           class="delete-button"
-          (click)="onDeleteAttachment(attachment.id)"
+          (click)="
+            onDeleteAttachment(attachmentIdWithLegacyFallback(attachment))
+          "
         >
           <mat-icon>delete</mat-icon>
           Remove

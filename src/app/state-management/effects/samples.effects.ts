@@ -90,7 +90,8 @@ export class SampleEffects {
   fetchSample$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchSampleAction),
-      switchMap(({ sampleId }) => {
+      filter(({ sampleId }) => !!sampleId),
+      mergeMap(({ sampleId }) => {
         return this.sampleApi.samplesControllerFindByIdAccessV3(sampleId).pipe(
           filter((permission) => permission.canAccess),
           switchMap(() =>

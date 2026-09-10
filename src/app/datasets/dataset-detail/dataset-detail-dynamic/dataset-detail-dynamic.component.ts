@@ -1,9 +1,14 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
-import { createSelector, Store } from "@ngrx/store";
-import { Subscription, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { Store } from "@ngrx/store";
+import { Subscription, Observable, combineLatest } from "rxjs";
+import { filter, map } from "rxjs/operators";
 
 import { showMessageAction } from "state-management/actions/user.actions";
 import {
@@ -14,9 +19,8 @@ import {
 import {
   selectCurrentUser,
   selectIsLoading,
-  selectProfile,
+  selectUserAccessGroups,
 } from "state-management/selectors/user.selectors";
-import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 
 import { AppConfigService } from "app-config.service";
 
@@ -31,23 +35,35 @@ import {
 
 import { AttachmentService } from "shared/services/attachment.service";
 import { DatePipe } from "@angular/common";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
-import {
-  Instrument,
-  ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
-// profile.selectors.ts
-export const selectProfileAccessGroups = createSelector(
-  selectProfile,
-  (profile) => profile?.accessGroups || [],
-);
+const RELATION_CONFIG: Record<
+  string,
+  { lookupField: string; idField: string; labelField: string }
+> = {
+  proposalIds: {
+    lookupField: "proposals",
+    idField: "proposalId",
+    labelField: "title",
+  },
+  sampleIds: {
+    lookupField: "samples",
+    idField: "sampleId",
+    labelField: "description",
+  },
+  instrumentIds: {
+    lookupField: "instruments",
+    idField: "pid",
+    labelField: "name",
+  },
+};
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -60,6 +76,7 @@ export const selectProfileAccessGroups = createSelector(
   templateUrl: "./dataset-detail-dynamic.component.html",
   styleUrls: ["./dataset-detail-dynamic.component.scss"],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
@@ -79,18 +96,17 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);
-  show = false;
+  userGroups$ = this.store.select(selectUserAccessGroups);
 
-  userGroups$ = this.store.select(selectProfileAccessGroups);
+  showJsonMetadata = false;
 
   user: ReturnedUserDto | undefined;
 
-  instrument: Instrument | undefined;
-  dataset: OutputDatasetObsoleteDto | undefined;
+  dataset: CurrentDataset | undefined;
 
   actionItems: ActionItems = {
     datasets: [],
-    instruments: undefined,
+    instruments: [],
   };
 
   constructor(
@@ -135,34 +151,33 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
             : section.fields,
       }));
 
-    this.datasetView$ = this.userGroups$.pipe(
-      map((userGroups) =>
+    this.datasetView$ = combineLatest([this.dataset$, this.userGroups$]).pipe(
+      map(([dataset, userGroups]) =>
         sortedDatasetView
           .filter((section) => this.showTile(section, userGroups))
           .map((section) => ({
             ...section,
             restrictedIconVisible: this.showRestrictedIcon(section, userGroups),
+            fields: Array.isArray(section.fields)
+              ? section.fields.map((field) => {
+                  const value = this.handleFieldValue(
+                    field.element,
+                    this.getNestedValue(dataset, field.source),
+                    dataset,
+                    field.source,
+                  );
+                  return { ...field, value, isEmpty: this.isEmpty(value) };
+                })
+              : undefined,
           })),
       ),
     );
 
     this.subscriptions.push(
-      this.store.select(selectCurrentInstrument).subscribe((instrument) => {
-        if (instrument) {
-          console.log("Updatding action items");
-          this.actionItems.instruments = [instrument];
-        }
-        this.instrument = instrument;
-      }),
-    );
-
-    this.subscriptions.push(
-      this.dataset$.subscribe((dataset) => {
-        if (dataset) {
-          console.log("Updatding action items");
-          this.actionItems.datasets = <ActionItemDataset[]>[dataset];
-        }
+      this.dataset$.pipe(filter(Boolean)).subscribe((dataset) => {
         this.dataset = dataset;
+        this.actionItems.datasets = <ActionItemDataset[]>[dataset];
+        this.actionItems.instruments = dataset.instruments ?? [];
       }),
     );
   }
@@ -274,35 +289,17 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     return !supportedTypes.includes(fieldType);
   }
 
-  handleFieldValue(
-    fieldType: string,
-    value: string | string[],
-  ): string | string[] {
-    const errorElement = `<span class="general-warning">Unsupported data type</span>`;
-
-    switch (fieldType) {
-      case DatasetViewFieldType.TEXT:
-        return typeof value === "string" ? value : JSON.stringify(value);
-      case DatasetViewFieldType.COPY:
-        return typeof value === "string" ? value : JSON.stringify(value);
-      case DatasetViewFieldType.LINKY:
-        return typeof value === "string" ? value : errorElement;
-      case DatasetViewFieldType.DATE:
-        return this.transformDate(value, errorElement);
-      case DatasetViewFieldType.TAG:
-        if (Array.isArray(value)) {
-          return value.length > 0 ? value : [null];
-        }
-        return typeof value === "string" ? [value] : ["Unsupported data type"];
-      case DatasetViewFieldType.INTERNALLINK:
-        if (Array.isArray(value)) {
-          return value.length > 0 ? value : [null];
-        }
-        return typeof value === "string" ? [value] : ["Unsupported data type"];
-      default:
-        return "Unsupported data type";
+  isEmpty(value: unknown): boolean {
+    if (value == null || value === "") return true;
+    if (Array.isArray(value)) {
+      return (
+        value.length === 0 ||
+        value.every((v) => v == null || (typeof v === "object" && v.id == null))
+      );
     }
+    return false;
   }
+
   transformDate(value: unknown, errorElement: string): string {
     if (typeof value !== "string") {
       return errorElement;
@@ -316,10 +313,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   getThumbnailSize(value: string): string {
     return value ? `thumbnail-image--${value}` : "";
   }
-  getNestedValue(
-    obj: OutputDatasetObsoleteDto,
-    path: string,
-  ): string | string[] {
+  getNestedValue(obj: CurrentDataset, path: string): string | string[] {
     if (!path) {
       return "field source is missing";
     }
@@ -327,54 +321,101 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    if (path === "instrumentName" && this.instrument) {
-      return this.instrument.name || "-";
-    }
-
     return path
       .split(".")
       .reduce((prev, curr) => (prev != null ? prev[curr] : undefined), obj);
   }
 
-  getInternalLinkValue(obj: OutputDatasetObsoleteDto, path: string): string {
-    // For instrumentName internal links, return the instrument ID instead of the name
-    if (path === "instrumentName" && this.instrument) {
-      return this.instrument.pid || "";
-    }
-
+  getInternalLinkValue(obj: CurrentDataset, path: string): string {
     const value = this.getNestedValue(obj, path);
     return Array.isArray(value) ? value[0] || "" : (value as string) || "";
   }
 
-  onClickInternalLink(internalLinkType: string, id: string): void {
-    const encodedId = encodeURIComponent(id);
+  handleFieldValue(
+    fieldType: string,
+    value: string | string[],
+    dataset: CurrentDataset,
+    source: string,
+  ): string | string[] | { id: string; label: string }[] {
+    const errorElement = `<span class="general-warning">Unsupported data type</span>`;
 
-    switch (internalLinkType) {
-      case InternalLinkType.DATASETS:
-        this.router.navigateByUrl("/datasets/" + encodedId);
-        break;
-      case InternalLinkType.SAMPLES:
-        this.router.navigateByUrl("/samples/" + encodedId);
-        break;
-      case InternalLinkType.PROPOSALS:
-        this.router.navigateByUrl("/proposals/" + encodedId);
-        break;
-      case InternalLinkType.INSTRUMENTS:
-      case InternalLinkType.INSTRUMENTS_NAME:
-        this.router.navigateByUrl("/instruments/" + encodedId);
-        break;
+    switch (fieldType) {
+      case DatasetViewFieldType.TEXT:
+      case DatasetViewFieldType.COPY:
+        if (Array.isArray(value)) {
+          return value.length > 0 ? value.join(" , ") : null;
+        }
+        return typeof value === "string" ? value : JSON.stringify(value);
+      case DatasetViewFieldType.LINKY:
+        return typeof value === "string" ? value : errorElement;
+      case DatasetViewFieldType.DATE:
+        return this.transformDate(value, errorElement);
+      case DatasetViewFieldType.TAG:
+        if (Array.isArray(value)) {
+          return value.length > 0 ? value : [null];
+        }
+        return typeof value === "string" ? [value] : ["Unsupported data type"];
+
+      case DatasetViewFieldType.INTERNALLINK:
+        return this.getInternalLinkItems(dataset, source);
+
       default:
-        this.snackBar.open("The URL is not valid", "Close", {
-          duration: 2000,
-        });
-        break;
+        return "Unsupported data type";
     }
   }
 
-  getScientificMetadata(
-    dataset: OutputDatasetObsoleteDto,
-    source?: string,
-  ): any {
+  onClickInternalLink(internalLinkType: string, id: string): void {
+    const encodedId = encodeURIComponent(id);
+    let path: string;
+
+    switch (internalLinkType) {
+      case InternalLinkType.DATASETS:
+        path = "/datasets/" + encodedId;
+        break;
+      case InternalLinkType.SAMPLES:
+        path = "/samples/" + encodedId;
+        break;
+      case InternalLinkType.PROPOSALS:
+        path = "/proposals/" + encodedId;
+        break;
+      case InternalLinkType.INSTRUMENTS:
+        path = "/instruments/" + encodedId;
+        break;
+      default:
+        this.snackBar.open("The URL is not valid", "Close", { duration: 2000 });
+        return;
+    }
+    window.open(
+      this.router.serializeUrl(this.router.parseUrl(path)),
+      "_blank",
+      "noopener",
+    );
+  }
+
+  getInternalLinkItems(
+    dataset: CurrentDataset,
+    source: string,
+  ): { id: string; label: string }[] {
+    const raw = this.getNestedValue(dataset, source);
+    const ids = Array.isArray(raw) ? raw : raw != null ? [raw] : [];
+
+    const relation = RELATION_CONFIG[source];
+
+    if (!relation) {
+      return ids.map((id) => ({ id, label: id }));
+    }
+
+    const related = (dataset[relation.lookupField] as any[]) ?? [];
+    return ids.map((id) => ({
+      id,
+      label:
+        related.find((r) => r[relation.idField] === id)?.[
+          relation.labelField
+        ] ?? id,
+    }));
+  }
+
+  getScientificMetadata(dataset: CurrentDataset, source?: string): any {
     const meta = dataset?.scientificMetadata;
     if (!meta) return null;
     if (!source) return meta;

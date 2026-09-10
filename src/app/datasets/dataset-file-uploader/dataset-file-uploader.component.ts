@@ -7,9 +7,7 @@ import {
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
 import {
-  Attachment,
-  OutputAttachmentV3Dto,
-  OutputDatasetObsoleteDto,
+  OutputAttachmentV4Dto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { OwnershipService } from "shared/services/ownership.service";
@@ -23,6 +21,7 @@ import {
   selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 @Component({
   selector: "app-dataset-file-uploader",
@@ -31,10 +30,12 @@ import { selectCurrentUser } from "state-management/selectors/user.selectors";
   standalone: false,
 })
 export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
-  attachments: OutputAttachmentV3Dto[] = [];
+  attachments: OutputAttachmentV4Dto[] = [];
   subscriptions: Subscription[] = [];
-  attachment: Partial<OutputAttachmentV3Dto> = {};
-  dataset: OutputDatasetObsoleteDto | undefined;
+  attachment: Partial<OutputAttachmentV4Dto> & { datasetId: string } = {
+    datasetId: "",
+  };
+  dataset: CurrentDataset | undefined;
   user: ReturnedUserDto | undefined;
   isOwner: boolean;
 
@@ -77,6 +78,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
         caption: file.name,
         ownerGroup: this.dataset.ownerGroup,
         accessGroups: this.dataset.accessGroups,
+        isPublished: false,
         datasetId: this.dataset.pid,
       };
       this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
@@ -97,9 +99,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   }
   deleteAttachment(attachmentId: string) {
     if (this.dataset) {
-      this.store.dispatch(
-        removeAttachmentAction({ datasetId: this.dataset.pid, attachmentId }),
-      );
+      this.store.dispatch(removeAttachmentAction({ attachmentId }));
     }
   }
   ngOnDestroy() {

@@ -1,6 +1,8 @@
 import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { selectFilters as selectUserFilters } from "state-management/selectors/user.selectors";
+import { scientificConditionsToQuery } from "shared/modules/shared-condition/utils";
+import { DateRange, DateRangeFilter } from "state-management/models";
 
 const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
 
@@ -34,6 +36,13 @@ export const selectCurrentDatasetWithoutFileInfo = createSelector(
   (currentSet) => {
     if (currentSet) {
       const { origdatablocks, datablocks, ...theRest } = currentSet;
+      // trimmed for the raw json view, drops datablocks and base64 thumbnails
+      if (currentSet.attachments) {
+        theRest.attachments = currentSet.attachments.map((attachment) => ({
+          ...attachment,
+          thumbnail: "raw binary data",
+        }));
+      }
       return theRest;
     }
     return undefined;
@@ -135,8 +144,8 @@ export const selectHasAppliedFilters = createSelector(
     filters.keywords.length > 0 ||
     filters.scientific.length > 0 ||
     (filters.creationTime &&
-      (filters.creationTime.begin !== null ||
-        filters.creationTime.end !== null)),
+      (filters.creationTime.$gte !== null ||
+        filters.creationTime.$lte !== null)),
 );
 
 export const selectScientificConditions = createSelector(
@@ -177,16 +186,30 @@ export const selectKeywordFacetCounts = createSelector(
 // === Querying ===
 
 // Returns copy with null/undefined values and empty arrays removed
-const restrictFilter = (filter: any, allowedKeys?: string[]) => {
+const restrictFilter = (
+  filter: any,
+  allowedKeys?: string[],
+  wrapArrays = false,
+) => {
   const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);
     return value == null || (hasLength && value.length === 0);
   };
 
+  const convert = (val: any) => {
+    if (Array.isArray(val)) return wrapArrays ? { $in: val } : val;
+    if (!wrapArrays && isMongoDateRange(val)) return toLegacyDateRange(val);
+    return val;
+  };
+
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
-    return isNully(val) ? obj : { ...obj, [key]: val };
+    if (isNully(val)) return obj;
+    return {
+      ...obj,
+      [key]: convert(val),
+    };
   }, {});
 };
 
@@ -196,10 +219,37 @@ export const selectFullqueryParams = createSelector(
     const filter = state.filters;
     const pagination = state.pagination;
     // don't query with modeToggle, it's only in filters for persistent routing
-    const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+    const {
+      text,
+      skip,
+      limit,
+      sortField,
+      modeToggle,
+      mode,
+      scientific,
+      ...theRest
+    } = filter;
 
-    const limits = { ...pagination, order: sortField };
-    const query = restrictFilter(theRest);
+    const [sortKey, sortDirection] = sortField.split(":");
+
+    const sort = sortKey && sortDirection ? { [sortKey]: sortDirection } : {};
+
+    const limits = { ...pagination, sort };
+
+    const baseQuery = restrictFilter(theRest, undefined, true);
+
+    const textQuery = text && text.trim() ? { $text: { $search: text } } : {};
+
+    const scientificQuery =
+      scientific && scientific.length > 0
+        ? scientificConditionsToQuery(scientific)
+        : {};
+
+    const query = {
+      ...baseQuery,
+      ...textQuery,
+      ...scientificQuery,
+    };
 
     return { query, limits };
   },
@@ -325,3 +375,19 @@ export const selectRelatedDatasetsPerPage = createSelector(
   selectRelatedDatasetsFilters,
   (filters) => filters.limit,
 );
+
+const isMongoDateRange = (value: any): value is DateRangeFilter => {
+  return (
+    value != null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    ("$gte" in value || "$lte" in value)
+  );
+};
+
+// filters are stored in the v4 mongo shape, but fullfacet still goes
+// through the v3 translation layer which only understands begin/end
+const toLegacyDateRange = (value: DateRangeFilter): DateRange => ({
+  begin: value.$gte?.$date,
+  end: value.$lte?.$date,
+});

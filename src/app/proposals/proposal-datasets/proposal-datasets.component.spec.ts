@@ -22,7 +22,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { ProposalDatasetsComponent } from "./proposal-datasets.component";
 import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { DatasetsListService } from "shared/services/datasets-list.service";
@@ -128,7 +128,7 @@ describe("ViewProposalPageComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = createMock<OutputDatasetObsoleteDto>({});
+      const dataset = createMock<OutputDatasetDto>({});
       const pid = encodeURIComponent(dataset.pid);
       component.onRowClick({
         event: RowEventType.RowClick,

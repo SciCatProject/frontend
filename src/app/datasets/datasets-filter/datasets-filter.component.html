@@ -18,9 +18,7 @@
       <div class="public-toggle">
         <button
           mat-stroked-button
-          [class.active]="
-            currentPublicViewMode === '' || currentPublicViewMode === false
-          "
+          [class.active]="currentPublicViewMode === false"
           (click)="onViewPublicChange(false)"
         >
           My data

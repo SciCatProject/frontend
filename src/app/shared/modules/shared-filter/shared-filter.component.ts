@@ -13,13 +13,13 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
 import { Observable } from "rxjs";
-import { DateRange } from "state-management/state/proposals.store";
 import { MultiSelectFilterValue } from "../filters/multiselect-filter.component";
 import { INumericRange } from "../numeric-range/form/model/numeric-range-field.model";
 import { FilterType } from "state-management/state/user.store";
 import { toIsoUtc } from "../filters/utils";
 import { orderBy } from "lodash-es";
 import { AppConfigService } from "app-config.service";
+import { DateRange, DateRangeFilter } from "state-management/models";
 
 type FacetItem = { _id: string; label?: string; count: number };
 @Component({
@@ -61,7 +61,9 @@ export class SharedFilterComponent implements OnChanges, OnInit {
   @Input() currentFilter$!: Observable<string[]>;
   @Input() dispatchAction!: () => void;
   @Input() filterType: FilterType;
-  @Input() prefilled: string | DateRange | string[] | INumericRange = undefined;
+  @Input() prefilled:
+    string | string[] | INumericRange | DateRange | DateRangeFilter | boolean =
+    undefined;
   @Input()
   set clear(value: boolean) {
     this.currentCheckboxDisplayLimit = this.CHECKBOX_DISPLAY_LIMIT;
@@ -74,7 +76,14 @@ export class SharedFilterComponent implements OnChanges, OnInit {
   }
 
   @Input() filterValue:
-    string[] | string | INumericRange | DateRange | undefined | null;
+    | string
+    | string[]
+    | INumericRange
+    | DateRange
+    | DateRangeFilter
+    | boolean
+    | undefined
+    | null;
   @Input() collapsible = false;
   collapsed = false;
 
@@ -118,16 +127,15 @@ export class SharedFilterComponent implements OnChanges, OnInit {
           max: range?.max ?? null,
         });
       } else {
-        const range = (this.prefilled as DateRange) || {
-          begin: null,
-          end: null,
-        };
+        const range = (this.prefilled ?? {}) as DateRange & DateRangeFilter;
+        const start = range.$gte?.$date ?? range.begin;
+        const end = range.$lte?.$date ?? range.end;
         this.filterForm
           .get("dateRangeField.start")!
-          .setValue(range.begin ? new Date(range.begin) : null);
+          .setValue(start ? new Date(start) : null);
         this.filterForm
           .get("dateRangeField.end")!
-          .setValue(range.end ? new Date(range.end) : null);
+          .setValue(end ? new Date(end) : null);
       }
     }
   }

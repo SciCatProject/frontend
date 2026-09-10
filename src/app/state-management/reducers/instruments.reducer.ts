@@ -53,6 +53,12 @@ const reducer = createReducer(
   on(fromActions.clearInstrumentsStateAction, (): InstrumentState => ({
     ...initialInstrumentState,
   })),
+
+  on(fromActions.clearCurrentInstrumentStateAction, (state) => ({
+    ...state,
+    currentInstrument: undefined,
+    currentInstruments: [],
+  })),
 );
 
 export const instrumentsReducer = (

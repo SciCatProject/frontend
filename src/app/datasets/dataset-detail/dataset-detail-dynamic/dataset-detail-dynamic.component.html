@@ -1,4 +1,4 @@
-<ng-template [ngIf]="dataset$">
+<ng-template [ngIf]="dataset$ | async">
   <!-- Jupyter Hub Button -->
   <div fxLayout="row">
     <div fxFlex="auto">
@@ -25,7 +25,6 @@
     class="custom-grid"
     [style.grid-template-columns]="'repeat(' + cols + ', 1fr)'"
     [style.gap.px]="gutterSize"
-    *ngIf="dataset$ | async as dataset"
   >
     <!-- Iterate over each section in datasetView -->
     <ng-container *ngFor="let section of datasetView$ | async">
@@ -37,7 +36,9 @@
           [style.gridColumn]="'span ' + (section.col || 10)"
           [style.gridRow]="'span ' + (section.row || 1)"
         >
-          <dataset-status-banner [datasetItem]="dataset"></dataset-status-banner>
+          <dataset-status-banner
+            [datasetItem]="dataset"
+          ></dataset-status-banner>
         </div>
 
         <!-- Regular Section -->
@@ -61,14 +62,17 @@
                 *ngIf="section.restrictedIconVisible"
                 class="restricted-indicator"
               >
-                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+                <mat-icon
+                  [matTooltip]="formatAuthorizedGroups(section.authorization)"
+                  >lock_outline</mat-icon
+                >
               </span>
             </mat-card-header>
             <!-- Section Content -->
             <mat-card-content>
               <table>
                 <ng-container *ngFor="let field of section.fields">
-                  <tr *ngIf="getNestedValue(dataset, field.source)">
+                  <tr>
                     <th data-cy="field-label">
                       {{ field.source | translate: localization }}
                     </th>
@@ -79,84 +83,92 @@
                           [ngTemplateOutlet]="dynamicTemplate"
                           [ngTemplateOutletContext]="{
                             fieldType: field.element,
-                            fieldValue: handleFieldValue(
-                              field.element,
-                              getNestedValue(dataset, field.source)
-                            ),
+                            fieldValue: field.value,
+                            isEmpty: field.isEmpty,
                           }"
                         ></ng-container>
                       </ng-container>
+
                       <!-- Dynamic Template Definition -->
                       <ng-template
                         #dynamicTemplate
                         let-fieldType="fieldType"
                         let-fieldValue="fieldValue"
+                        let-isEmpty="isEmpty"
                       >
-                        <!-- InternalLink Field-->
-                        <ng-container *ngIf="fieldType === 'internalLink'">
-                          <ng-container *ngFor="let value of fieldValue">
-                            <a
-                              (click)="
-                                onClickInternalLink(
-                                  field.source,
-                                  getInternalLinkValue(dataset, field.source)
-                                )
-                              "
-                              [title]="value"
-                              [ngClass]="{ disabled: !value }"
-                              >{{ value ?? "-" }}
-                            </a>
+                        <!-- Fallback if field is empty -->
+                        <ng-container *ngIf="isEmpty; else content"
+                          >-</ng-container
+                        >
+                        <ng-template #content>
+                          <!-- InternalLink Field-->
+                          <ng-container *ngIf="fieldType === 'internalLink'">
+                            <ng-container
+                              *ngFor="let item of fieldValue; let isLast = last"
+                            >
+                              <a
+                                (click)="
+                                  onClickInternalLink(field.source, item.id)
+                                "
+                                [title]="item.label"
+                                [ngClass]="{ disabled: !item.id }"
+                                >{{ item.label }} </a
+                              ><span *ngIf="!isLast">&nbsp;,&nbsp;</span>
+                            </ng-container>
                           </ng-container>
-                        </ng-container>
-                        <!-- Text Field -->
-                        <span *ngIf="fieldType === 'text'" [title]="fieldValue">
-                          {{ fieldValue }}
-                        </span>
-                        <!-- Linky Field -->
-                        <span
-                          *ngIf="fieldType === 'linky'"
-                          [innerHTML]="fieldValue | linky"
-                          [title]="fieldValue"
-                        ></span>
-                        <!-- Date Field -->
-                        <span
-                          *ngIf="fieldType === 'date'"
-                          [title]="fieldValue"
-                          [innerHTML]="fieldValue"
-                        ></span>
-                        <!-- Copy Field -->
-                        <ng-container *ngIf="fieldType === 'copy'">
-                          <span class="truncated-text" [title]="fieldValue">
+                          <!-- Text Field -->
+                          <span
+                            *ngIf="fieldType === 'text'"
+                            [title]="fieldValue"
+                          >
                             {{ fieldValue }}
                           </span>
-                          <button
-                            mat-icon-button
-                            aria-label="copy"
-                            (click)="onCopy(fieldValue)"
-                          >
-                            <mat-icon class="copy-button"
-                              >content_copy</mat-icon
+                          <!-- Linky Field -->
+                          <span
+                            *ngIf="fieldType === 'linky'"
+                            [innerHTML]="fieldValue | linky"
+                            [title]="fieldValue"
+                          ></span>
+                          <!-- Date Field -->
+                          <span
+                            *ngIf="fieldType === 'date'"
+                            [title]="fieldValue"
+                            [innerHTML]="fieldValue"
+                          ></span>
+                          <!-- Copy Field -->
+                          <ng-container *ngIf="fieldType === 'copy'">
+                            <span class="truncated-text" [title]="fieldValue">
+                              {{ fieldValue }}
+                            </span>
+                            <button
+                              mat-icon-button
+                              class="copy-button"
+                              aria-label="copy"
+                              (click)="onCopy(fieldValue)"
+                              *ngIf="fieldValue"
                             >
-                          </button>
-                        </ng-container>
-                        <!-- Tag Field -->
-                        <mat-chip-set *ngIf="fieldType === 'tag'" role="list">
-                          <mat-chip
-                            role="listitem"
-                            *ngFor="let tag of fieldValue"
-                            [title]="tag"
+                              <mat-icon>content_copy</mat-icon>
+                            </button>
+                          </ng-container>
+                          <!-- Tag Field -->
+                          <mat-chip-set *ngIf="fieldType === 'tag'" role="list">
+                            <mat-chip
+                              role="listitem"
+                              *ngFor="let tag of fieldValue"
+                              [title]="tag"
+                            >
+                              {{ tag }}
+                            </mat-chip>
+                          </mat-chip-set>
+                          <!-- Fallback for unsupported types -->
+                          <span
+                            *ngIf="isUnsupportedFieldType(fieldType)"
+                            [title]="fieldValue"
+                            class="general-warning"
                           >
-                            {{ tag ?? "-" }}
-                          </mat-chip>
-                        </mat-chip-set>
-                        <!-- Fallback for unsupported types -->
-                        <span
-                          *ngIf="isUnsupportedFieldType(fieldType)"
-                          [title]="fieldValue"
-                          class="general-warning"
-                        >
-                          {{ fieldValue }}
-                        </span>
+                            {{ fieldValue }}
+                          </span>
+                        </ng-template>
                       </ng-template>
                     </td>
                   </tr>
@@ -187,7 +199,10 @@
                   *ngIf="section.restrictedIconVisible"
                   class="restricted-indicator"
                 >
-                  <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+                  <mat-icon
+                    [matTooltip]="formatAuthorizedGroups(section.authorization)"
+                    >lock_outline</mat-icon
+                  >
                 </span>
               </mat-card-header>
               <mat-card-content class="scientific-metadata-content">
@@ -251,7 +266,10 @@
                 *ngIf="section.restrictedIconVisible"
                 class="restricted-indicator"
               >
-                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+                <mat-icon
+                  [matTooltip]="formatAuthorizedGroups(section.authorization)"
+                  >lock_outline</mat-icon
+                >
               </span>
             </mat-card-header>
             <mat-card-content>
@@ -324,7 +342,10 @@
                 *ngIf="section.restrictedIconVisible"
                 class="restricted-indicator"
               >
-                <mat-icon [matTooltip]="formatAuthorizedGroups(section.authorization)">lock_outline</mat-icon>
+                <mat-icon
+                  [matTooltip]="formatAuthorizedGroups(section.authorization)"
+                  >lock_outline</mat-icon
+                >
               </span>
             </mat-card-header>
             <mat-card-content>
@@ -333,15 +354,15 @@
                   class="show-json-metadata-btn"
                   mat-flat-button
                   color="primary"
-                  (click)="show = !show"
+                  (click)="showJsonMetadata = !showJsonMetadata"
                 >
                   {{
-                    (show ? "Hide JSON View" : "Show JSON View")
+                    (showJsonMetadata ? "Hide JSON View" : "Show JSON View")
                       | translate: localization
                   }}
                 </button>
                 <br />
-                <div *ngIf="show" class="json-view-overflow">
+                <div *ngIf="showJsonMetadata" class="json-view-overflow">
                   <ngx-json-viewer
                     [json]="datasetWithout$ | async"
                     [expanded]="false"

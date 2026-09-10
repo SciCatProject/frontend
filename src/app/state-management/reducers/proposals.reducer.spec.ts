@@ -6,7 +6,7 @@ import {
 import * as fromActions from "../actions/proposals.actions";
 import { createMock } from "shared/MockStubs";
 import {
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -25,22 +25,21 @@ const proposal = createMock<ProposalClass>({
   instrumentIds: [],
 });
 
-const dataset = createMock<OutputDatasetObsoleteDto>({
+const dataset = createMock<OutputDatasetDto>({
   ownerGroup: "testGroup",
+  datasetName: "test name",
   owner: "testOwner",
   contactEmail: "testEmail",
   sourceFolder: "testFolder",
   creationTime: new Date(2019, 10, 7).toString(),
   type: "raw",
   pid: "testPid",
-  attachments: [],
   createdAt: "",
   createdBy: "",
   creationLocation: "",
   inputDatasets: [],
-  investigator: "",
+  principalInvestigators: [],
   numberOfFilesArchived: 0,
-  principalInvestigator: "",
   updatedAt: "",
   updatedBy: "",
   usedSoftware: [],

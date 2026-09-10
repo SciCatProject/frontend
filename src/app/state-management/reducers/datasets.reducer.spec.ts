@@ -5,12 +5,11 @@ import {
   initialDatasetState,
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
-import { createMock, mockAttachment as attachment } from "shared/MockStubs";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
+import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
-const derivedDataset = createMock<OutputDatasetObsoleteDto>({
+const derivedDataset = createMock<OutputDatasetDto>({
   pid: "testPid",
-  investigator: "",
   inputDatasets: [],
   usedSoftware: [],
   owner: "",
@@ -19,21 +18,21 @@ const derivedDataset = createMock<OutputDatasetObsoleteDto>({
   creationTime: new Date().toString(),
   type: "derived",
   ownerGroup: "",
+  datasetName: "test name",
   numberOfFilesArchived: 0,
   accessGroups: [],
   createdAt: "",
   createdBy: "",
   creationLocation: "",
-  principalInvestigator: "",
+  principalInvestigators: [],
   updatedAt: "",
   updatedBy: "",
-  attachments: [],
 });
 
-const dataset = createMock<OutputDatasetObsoleteDto>({
+const dataset = createMock<OutputDatasetDto>({
   ...derivedDataset,
   type: "raw",
-  origdatablocks: undefined,
+  datasetName: "test name",
 });
 
 describe("DatasetsReducer", () => {
@@ -239,7 +238,7 @@ describe("DatasetsReducer", () => {
       initialDatasetState.currentSet = dataset;
 
       const attachmentId = "testId";
-      attachment.id = attachmentId;
+      attachment.aid = attachmentId;
       initialDatasetState.currentSet.attachments = [attachment];
 
       const action = fromActions.removeAttachmentCompleteAction({
@@ -449,11 +448,14 @@ describe("DatasetsReducer", () => {
       const action = fromActions.addDatasetFilterAction({
         filterType: "dateRange",
         key: "creationTime",
-        value: { begin, end },
+        value: { $gte: { $date: begin }, $lte: { $date: end } },
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.filters.creationTime).toEqual({ begin, end });
+      expect(state.filters.creationTime).toEqual({
+        $gte: { $date: begin },
+        $lte: { $date: end },
+      });
     });
   });
 
