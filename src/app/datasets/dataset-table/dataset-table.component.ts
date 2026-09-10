@@ -143,6 +143,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   localization = "dataset";
 
+  currentUserId?: string;
+
   columns: TableField<any>[];
 
   pending = true;
@@ -259,8 +261,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     // Persist immediately to persistent local store as a fast fallback so UI changes
     // survive short navigations / reloads even if the server/store hasn't updated yet.
     try {
-      // we pass no userId here — TableSettingsStorageService will store 'anon' if not provided.
-      this.tableSettingsStorage.set(this.tableName, columnsSetting);
+      this.tableSettingsStorage.set(this.tableName, columnsSetting, this.currentUserId);
     } catch (e) {
       // Ignore storage failures (private mode or quota), server update still happens below.
     }
@@ -284,16 +285,23 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     // future initializations use the official default rather than the local copy.
     if (event.type === TableSettingEventType.reset) {
       try {
-        this.tableSettingsStorage.remove(this.tableName);
+        this.tableSettingsStorage.remove(this.tableName, this.currentUserId);
       } catch (e) {
         // ignore
       }
+
+      // Dispatch server update to reset user settings (server remains canonical).
+      this.store.dispatch(
+        updateUserSettingsAction({ property: { fe_dataset_table_columns: [] } }),
+      );
+
+      return;
+>>>>>>> c9d45b648 (fix: add localStorage persistence to DatasetTableComponent)
     }
 
     if (
       event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create ||
-      event.type === TableSettingEventType.reset
+      event.type === TableSettingEventType.create
     ) {
       this.saveTableSettings(event.setting);
     }
@@ -408,6 +416,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           ]) => {
             const userConfigColumns = defaultTableColumns.columns;
 
+            this.currentUserId = currentUser?.id;
             this.rowSelectionMode = currentUser ? "multi" : "none";
             if (userConfigColumns) {
               this.dataSource.next(datasets);
@@ -437,6 +446,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                   this.tableDefaultSettingsConfig,
                   userTableConfigColumns,
                   tableSort,
+                  this.currentUserId,
                 );
               if (tableSettingsConfig?.settingList.length) {
                 this.initTable(tableSettingsConfig, paginationConfig);
