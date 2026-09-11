@@ -667,6 +667,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         type: TableSettingEventType.apply,
         setting: this.tableSetting,
       });
+      this.refreshColumn(this.tableSetting.columnSetting);
     } else if (e.type === TableMenuAction.DefaultSimpleSetting) {
       const columns = [];
       const defaultColumns = this.setting.settingList.find(

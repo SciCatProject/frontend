@@ -5,8 +5,6 @@ import {
   Output,
   Input,
   EventEmitter,
-  OnDestroy,
-  ViewChild,
 } from "@angular/core";
 import { moveItemInArray, CdkDragDrop } from "@angular/cdk/drag-drop";
 import { Subject, Subscription } from "rxjs";
@@ -59,8 +57,6 @@ export class TableMenuComponent implements OnDestroy {
   }
 
   @Output() tableSettingChange = new EventEmitter<ITableSetting>();
-
-  @ViewChild("columnMenuTrigger") columnMenuTrigger: MatMenuTrigger;
 
   currentColumn: number = null;
   reverseDirection: "auto" | Direction = "auto";
