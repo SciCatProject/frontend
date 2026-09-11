@@ -336,11 +336,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 >>>>>>> c9d45b648 (fix: add localStorage persistence to DatasetTableComponent)
     }
 
-    if (
-      event.type === TableSettingEventType.apply ||
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
-    ) {
+    if (event.type === TableSettingEventType.apply) {
       this.saveTableSettings(event.setting);
     }
   }
