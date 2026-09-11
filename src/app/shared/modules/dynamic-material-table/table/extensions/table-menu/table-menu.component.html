@@ -45,112 +45,12 @@
   <button
     mat-menu-item
     type="button"
-    *ngIf="currentTableSetting?.saveSettingMode === 'simple'"
-    (click)="saveSimpleSetting_onClick($event, null); menuTrigger.closeMenu()"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-  >
-    <mat-icon>grading</mat-icon>
-    <span>Save table setting</span>
-  </button>
-  <button
-    mat-menu-item
-    type="button"
-    *ngIf="currentTableSetting?.saveSettingMode === 'simple'"
     (click)="resetDefaultSimple_onClick($event)"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
     <mat-icon>settings_backup_restore</mat-icon>
     Default setting
   </button>
-  <button
-    mat-menu-item
-    *ngIf="currentTableSetting?.saveSettingMode === 'multi'"
-    [matMenuTriggerFor]="saveTableSetting"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-  >
-    <mat-icon>grading</mat-icon>
-    <span>Save table setting</span>
-  </button>
-</mat-menu>
-
-<!-- Save Table Config Menu -->
-
-<mat-menu #saveTableSetting="matMenu">
-  <button
-    mat-menu-item
-    type="button"
-    (click)="newSetting_onClick($event)"
-    *ngIf="showNewSetting === false"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-  >
-    <mat-icon>tune</mat-icon>
-    <span>New setting</span>
-  </button>
-  <section
-    *ngIf="showNewSetting === true"
-    class="new-setting"
-    (click)="$event.stopPropagation()"
-  >
-    <div class="input-container">
-      <input
-        matInput
-        type="text"
-        #newSetting
-        placeholder="New setting"
-        [(ngModel)]="newSettingName"
-        (keydown.enter)="applySaveSetting_onClick($event)"
-      />
-    </div>
-    <div class="save-table-setting">
-      <mat-icon (click)="cancelSaveSetting_onClick($event)">close</mat-icon>
-      <mat-icon (click)="applySaveSetting_onClick($event)">done</mat-icon>
-    </div>
-  </section>
-  <mat-divider></mat-divider>
-
-  <button
-    mat-menu-item
-    type="button"
-    (click)="resetDefault_onClick($event)"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-  >
-    <mat-icon>settings_backup_restore</mat-icon>
-    Default setting
-  </button>
-
-  <section
-    *ngFor="let setting of tableSetting?.settingList"
-    class="setting-item"
-    [class.setting-item-active]="setting?.isCurrentSetting === true"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-  >
-    <button
-      mat-icon-button
-      type="button"
-      (click)="default_onClick($event, setting)"
-    >
-      <mat-icon style="color: #dcc48f"
-        >{{ setting?.isDefaultSetting === true ? "star" : "star_outline" }}
-      </mat-icon>
-    </button>
-    <span (click)="selectSetting_onClick($event, setting)">{{
-      setting.settingName
-    }}</span>
-    <mat-icon (click)="saveSetting_onClick($event, setting)">save</mat-icon>
-    <mat-icon
-      style="color: #ff4081"
-      (click)="deleteSetting_onClick($event, setting)"
-      >delete</mat-icon
-    >
-  </section>
-  <section
-    *ngIf="tableSetting?.settingList?.length === 0"
-    mat-menu-item
-    (click)="$event.stopPropagation()"
-  >
-    <mat-icon style="color: #dcc48f">lightbulb</mat-icon>
-    No setting
-  </section>
 </mat-menu>
 
 <!-- Convert Sub Menu -->
