@@ -298,8 +298,6 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   }) {
     if (
       event.type === TableSettingEventType.apply ||
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create ||
       event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);

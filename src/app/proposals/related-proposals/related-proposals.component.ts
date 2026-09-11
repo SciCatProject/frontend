@@ -28,11 +28,9 @@ import { selectRelatedProposalsPageViewModel } from "state-management/selectors/
 
 const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
-  saveSettingMode: "none",
   settingList: [
     {
       visibleActionMenu: actionMenu,
-      saveSettingMode: "none",
       isDefaultSetting: true,
       isCurrentSetting: true,
       columnSetting: [

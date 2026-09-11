@@ -4,8 +4,6 @@ import {
   Output,
   Input,
   EventEmitter,
-  ViewChild,
-  ElementRef,
 } from "@angular/core";
 import { moveItemInArray, CdkDragDrop } from "@angular/cdk/drag-drop";
 import { TableService } from "../../dynamic-mat-table.service";
@@ -56,10 +54,6 @@ export class TableMenuComponent {
   }
 
   @Output() tableSettingChange = new EventEmitter<ITableSetting>();
-  @ViewChild("newSetting", { static: false }) newSettingElement: ElementRef;
-
-  newSettingName = "";
-  showNewSetting = false;
 
   currentColumn: number = null;
   reverseDirection: "auto" | Direction = "auto";
@@ -110,88 +104,12 @@ export class TableMenuComponent {
   }
 
   /*****  Save ********/
-  saveSetting_onClick(e, setting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SaveSetting,
-      data: setting?.settingName,
-    });
-  }
-
-  saveSimpleSetting_onClick(e, setting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SaveSimpleSetting,
-      data: setting?.settingName,
-    });
-    this.showNewSetting = true;
-  }
-
-  newSetting_onClick(e) {
-    this.showNewSetting = true;
-    this.newSettingName = "";
-    window.requestAnimationFrame(() => {
-      this.newSettingElement.nativeElement.focus();
-    });
-    e.stopPropagation();
-  }
-
-  selectSetting_onClick(e, setting: ITableSetting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SelectSetting,
-      data: setting.settingName,
-    });
-  }
-
-  resetDefault_onClick(e) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SelectSetting,
-      data: null,
-    });
-  }
-
   resetDefaultSimple_onClick(e) {
     e.stopPropagation();
     this.menuActionChange.emit({
       type: TableMenuAction.DefaultSimpleSetting,
       data: null,
     });
-    this.showNewSetting = true;
-  }
-
-  default_onClick(e, setting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.DefaultSetting,
-      data: setting.settingName,
-    });
-  }
-
-  applySaveSetting_onClick(e) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SaveSetting,
-      data: this.newSettingName,
-    });
-    this.showNewSetting = true;
-  }
-
-  cancelSaveSetting_onClick(e) {
-    e.stopPropagation();
-    this.newSettingName = "";
-    this.showNewSetting = false;
-  }
-
-  deleteSetting_onClick(e, setting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.DeleteSetting,
-      data: setting,
-    });
-    this.newSettingName = "";
-    this.showNewSetting = false;
   }
 
   /******* Save File (JSON, CSV, Print)***********/

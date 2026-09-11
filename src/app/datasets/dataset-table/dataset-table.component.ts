@@ -333,11 +333,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (
-      event.type === TableSettingEventType.apply ||
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
-    ) {
+    if (event.type === TableSettingEventType.apply) {
       this.saveTableSettings(event.setting);
     }
   }
