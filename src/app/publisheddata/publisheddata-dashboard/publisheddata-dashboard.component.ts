@@ -24,6 +24,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { TableConfigService } from "shared/services/table-config.service";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-publisheddata-dashboard",
@@ -86,6 +87,10 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   currentFilters: any = {};
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   constructor(
     private router: Router,
     private store: Store,
@@ -105,6 +110,10 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
+    this.subscriptions.push(
       this.vm$.pipe(take(1)).subscribe((vm) => {
         this.currentFilters = vm.filters;
 
@@ -112,7 +121,11 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
           this.tableConfigService.getTableSettingsConfig(
             this.tableName,
             this.tableDefaultSettingsConfig,
-            vm.tablesSettings?.columns || [],
+            this.tableConfigService.preferSavedColumns(
+              this.tableName,
+              vm.tablesSettings?.columns,
+              this.currentUserId,
+            ),
           );
 
         const currentColumnSetting = tableSettingsConfig.settingList.find(
@@ -192,6 +205,12 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
       return { name, display, order: index, width };
     });
 
+    this.tableConfigService.persistColumns(
+      this.tableName,
+      columnsSetting,
+      this.currentUserId,
+    );
+
     this.store.dispatch(
       updateUserSettingsAction({
         property: { fe_publisheddata_table_columns: columnsSetting },
@@ -203,10 +222,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
-    if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
-    ) {
+    if (event.type === TableSettingEventType.apply) {
       this.saveTableSettings(event.setting);
     }
   }

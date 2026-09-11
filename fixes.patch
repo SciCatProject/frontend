@@ -1,0 +1,429 @@
+Below is the full git-style patch that implements the remaining Sourcery fixes on branch fix/datasets-columns-persist-local-fallback. It:
+
+- Persists local table settings per-user (avoids anon key collisions).
+- Fixes reset handling (clears local cache and avoids immediately re-saving the default).
+- Maps persisted format (enabled/order) into TableField before merging.
+- Updates DatasetTableComponent to obtain currentUserId and pass it through.
+- Improves unit tests (avoid private access) and E2E test (assert exact removed column header is absent after reload).
+- Keeps the migration/backwards-compatibility and BroadcastChannel fixes already applied.
+
+Save the patch to a file (e.g., fixes.patch) and apply it on your repo with:
+  git checkout fix/datasets-columns-persist-local-fallback
+  git apply --index fixes.patch
+  git commit -m "Fixes: per-user local persistence, reset handling, persisted-format mapping, and tests (Sourcery suggestions)"
+  git push origin fix/datasets-columns-persist-local-fallback
+
+--- Begin patch
+*** Begin Patch
+*** Add File: src/app/datasets/dataset-table/dataset-table.storage.spec.ts
++import { DatasetTableComponent } from './dataset-table.component';
++import { TableSettingsStorageService } from 'shared/services/table-settings-storage.service';
++import { Store } from '@ngrx/store';
++import { of } from 'rxjs';
++
++describe('DatasetTableComponent (storage interactions)', () => {
++  let component: DatasetTableComponent;
++  let storageSpy: jasmine.SpyObj<TableSettingsStorageService>;
++  let storeSpy: jasmine.SpyObj<Store<any>>;
++
++  beforeEach(() => {
++    storageSpy = jasmine.createSpyObj('TableSettingsStorageService', ['set', 'remove']);
++    storeSpy = jasmine.createSpyObj('Store', ['select', 'dispatch']);
++    // minimal stubs for dependencies used in constructor
++    const appConfigService: any = { getConfig: () => ({ datasetPageSizeOptions: [5,10,25] }) };
++    const route: any = { snapshot: { queryParams: {} } };
++    const tableConfigService: any = {};
++    const datasetsListService: any = { convertSavedDatasetColumns: (c:any)=>c };
++    const router: any = { navigate: () => {} };
++
++    // store.select used in component - return observables
++    storeSpy.select.and.returnValue(of(undefined));
++
++    component = new DatasetTableComponent(
++      appConfigService,
++      storeSpy as any,
++      route,
++      tableConfigService,
++      datasetsListService,
++      router,
++      storageSpy,
++    );
++  });
++
++  it('saveTableSettings should call storage.set and dispatch updateUserSettingsAction', () => {
++    const setting: any = { columnSetting: [ { name: 'pid', display: 'visible' } ] };
++
++    component.saveTableSettings(setting as any);
++
++    expect(storageSpy.set).toHaveBeenCalled();
++    expect(storeSpy.dispatch).toHaveBeenCalled();
++  });
++
++  it('onSettingChange with reset should remove stored key (via injected spy)', () => {
++    const setting: any = { columnSetting: [ { name: 'pid', display: 'visible' } ] };
++    // simulate reset event
++    component.onSettingChange({ type: (2 as any) /* TableSettingEventType.reset simulated */, setting });
++
++    // The component should have called the injected storage spy's remove method.
++    expect(storageSpy.remove).toHaveBeenCalled();
++  });
++});
++
+*** End Patch
+*** Begin Patch
+*** Update File: src/app/shared/services/table-config.service.ts
+@@
+   constructor(private tableSettingsStorage: TableSettingsStorageService) {}
+ 
+   getTableSort(route: ActivatedRoute): ITableSetting["tableSort"] {
+@@
+   getTableSettingsConfig(
+     tableName: string,
+     tableDefaultSettingsConfig: ITableSetting,
+-    savedTableConfig?: TableField<any>[],
++    savedTableConfig?: TableField<any>[],
+     tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" },
++    userId?: string,
+   ) {
+     // If the caller didn't provide a savedTableConfig (store might not be ready),
+     // attempt to recover from the persistent local storage so recent user changes
+     // survive short navigations.
+     if (!savedTableConfig) {
+-      const recovered = this.tableSettingsStorage.get(tableName);
+-      if (recovered) {
+-        savedTableConfig = recovered as TableField<any>[];
+-      }
++      const recovered = this.tableSettingsStorage.get(tableName, userId);
++      if (recovered) {
++        // The persisted format stores columns with `enabled` / `order` fields.
++        // Map that representation to the TableField expected by mergeColumnSettings
++        savedTableConfig = (recovered as any[]).map((c: any) => {
++          return {
++            name: c.name,
++            header: c.header || c.name,
++            display: c.enabled ? 'visible' : 'hidden',
++            width: c.width,
++            path: c.path,
++            userAdded: c.userAdded,
++            type: c.type,
++            format: c.format,
++            tooltip: c.tooltip,
++            // preserve order as index when provided
++            index: typeof c.order === 'number' ? c.order : undefined,
++          } as TableField<any>;
++        });
++      }
+     }
+ 
+     const tableSettingsConfig: ITableSetting = {
+       ...tableDefaultSettingsConfig,
+     };
+*** End Patch
+*** Begin Patch
+*** Update File: src/app/datasets/dataset-table/dataset-table.component.ts
+@@
+   currentUser$ = this.store.select(selectCurrentUser);
++  currentUserId?: string;
+@@
+   constructor(
+     public appConfigService: AppConfigService,
+     private store: Store,
+     private route: ActivatedRoute,
+     private tableConfigService: TableConfigService,
+     private datasetsListService: DatasetsListService,
+     private router: Router,
+     private tableSettingsStorage: TableSettingsStorageService,
+   ) {}
+@@
+   saveTableSettings(setting: ITableSetting) {
+     this.pending = true;
+     const columnsSetting = setting.columnSetting.map((column, index) => {
+@@
+     // Persist immediately to persistent local store as a fast fallback so UI changes
+     // survive short navigations / reloads even if the server/store hasn't updated yet.
+     try {
+-      // we pass no userId here — TableSettingsStorageService will store 'anon' if not provided.
+-      this.tableSettingsStorage.set(this.tableName, columnsSetting);
++      // store per-user when available to avoid cross-user overwrite in shared browsers
++      this.tableSettingsStorage.set(this.tableName, columnsSetting, this.currentUserId);
+     } catch (e) {
+       // Ignore storage failures (private mode or quota), server update still happens below.
+     }
+@@
+   onSettingChange(event: {
+     type: TableSettingEventType;
+     setting: ITableSetting;
+   }) {
+-    // If the user resets to default, also clear the persistent cached table setting so
+-    // future initializations use the official default rather than the local copy.
+-    if (event.type === TableSettingEventType.reset) {
+-      try {
+-        this.tableSettingsStorage.remove(this.tableName);
+-      } catch (e) {
+-        // ignore
+-      }
+-    }
+-
+-    if (
+-      event.type === TableSettingEventType.save ||
+-      event.type === TableSettingEventType.create ||
+-      event.type === TableSettingEventType.reset
+-    ) {
+-      this.saveTableSettings(event.setting);
+-    }
++    if (event.type === TableSettingEventType.reset) {
++      // Clear local cached setting for this user only and dispatch server reset
++      try {
++        this.tableSettingsStorage.remove(this.tableName, this.currentUserId);
++      } catch (e) {
++        // ignore
++      }
++
++      // Dispatch server update to reset user settings (server remains canonical).
++      this.store.dispatch(
++        updateUserSettingsAction({ property: { fe_dataset_table_columns: [] } }),
++      );
++
++      return;
++    }
++
++    if (event.type === TableSettingEventType.save || event.type === TableSettingEventType.create) {
++      this.saveTableSettings(event.setting);
++    }
+   }
+@@
+     this.subscriptions.push(
+       this.datasets$
+         .pipe(
+           combineLatestWith(
+             this.currentUser$,
+             this.datasetCount$,
+             this.isFacetCountsLoading$,
+             this.selectColumnsWithFetchedSettings$.pipe(
+               filter(
+                 ({ hasFetchedSettings, columns }) =>
+                   hasFetchedSettings && columns.length > 0,
+               ),
+             ),
+           ),
+         )
+         .subscribe(
+           ([
+             datasets,
+-            currentUser,
++            currentUser,
+             count,
+             isFacetCountsLoading,
+             defaultTableColumns,
+           ]) => {
+             const userConfigColumns = defaultTableColumns.columns;
+ 
+-            this.rowSelectionMode = currentUser ? "multi" : "none";
++            this.currentUserId = currentUser?.id;
++            this.rowSelectionMode = currentUser ? "multi" : "none";
+             if (userConfigColumns) {
+               this.dataSource.next(datasets);
+               this.pending = false;
+ 
+               const tableSort = this.getTableSort();
+               const paginationConfig = this.getTablePaginationConfig(
+                 count,
+                 isFacetCountsLoading,
+               );
+ 
+               const defaultConfigColumns =
+                 this.appConfig?.defaultDatasetsListSettings?.columns;
+               const userTableConfigColumns =
+                 this.datasetsListService.convertSavedDatasetColumns(
+                   userConfigColumns,
+                 );
+ 
+               this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+                 this.datasetsListService.convertSavedDatasetColumns(
+                   defaultConfigColumns as TableColumn[],
+                 );
+ 
+               const tableSettingsConfig =
+                 this.tableConfigService.getTableSettingsConfig(
+                   this.tableName,
+                   this.tableDefaultSettingsConfig,
+-                  userTableConfigColumns,
+-                  tableSort,
++                  userTableConfigColumns,
++                  tableSort,
++                  this.currentUserId,
+                 );
+               if (tableSettingsConfig?.settingList.length) {
+                 this.initTable(tableSettingsConfig, paginationConfig);
+               }
+             }
+           },
+         ),
+     );
+*** End Patch
+*** Begin Patch
+*** Add File: src/app/shared/services/table-settings-storage.service.spec.ts
++import { TestBed } from '@angular/core/testing';
++import { TableSettingsStorageService } from './table-settings-storage.service';
++
++describe('TableSettingsStorageService', () => {
++  let service: TableSettingsStorageService;
++
++  beforeEach(() => {
++    TestBed.configureTestingModule({
++      providers: [TableSettingsStorageService],
++    });
++    service = TestBed.inject(TableSettingsStorageService);
++    // clear relevant localStorage keys before each test
++    try {
++      localStorage.clear();
++      sessionStorage.clear();
++    } catch {}
++  });
++
++  it('should set and get columns correctly', () => {
++    const tableName = 'datasetsTable';
++    const columns = [{ name: 'pid', enabled: true }];
++
++    service.set(tableName, columns as any);
++
++    const recovered = service.get(tableName);
++    expect(recovered).toBeTruthy();
++    expect(Array.isArray(recovered)).toBeTrue();
++    expect((recovered as any)[0].name).toBe('pid');
++  });
++
++  it('should remove columns', () => {
++    const tableName = 'datasetsTable';
++    const columns = [{ name: 'pid', enabled: true }];
++
++    service.set(tableName, columns as any);
++    expect(service.get(tableName)).toBeTruthy();
++
++    service.remove(tableName);
++    expect(service.get(tableName)).toBeUndefined();
++  });
++
++  it('get returns undefined for non-existent key', () => {
++    expect(service.get('nonexistent')).toBeUndefined();
++  });
++});
++
+*** End Patch
+*** Begin Patch
+*** Update File: src/app/shared/services/table-config.service.spec.ts
+@@
+-import { TestBed } from '@angular/core/testing';
+-import { TableConfigService } from './table-config.service';
+-import { TableSettingsStorageService } from './table-settings-storage.service';
+-import { ITableSetting } from '../modules/dynamic-material-table/models/table-setting.model';
++import { TestBed } from '@angular/core/testing';
++import { TableConfigService } from './table-config.service';
++import { TableSettingsStorageService } from './table-settings-storage.service';
++import { ITableSetting } from '../modules/dynamic-material-table/models/table-setting.model';
+ 
+ describe('TableConfigService (fallback)', () => {
+   let service: TableConfigService;
+   let storage: jasmine.SpyObj<TableSettingsStorageService>;
+ 
+   beforeEach(() => {
+-    const storageSpy = jasmine.createSpyObj('TableSettingsStorageService', ['get']);
+-
+-    TestBed.configureTestingModule({
+-      providers: [
+-        TableConfigService,
+-        { provide: TableSettingsStorageService, useValue: storageSpy },
+-      ],
+-    });
+-
+-    service = TestBed.inject(TableConfigService);
+-    storage = TestBed.inject(TableSettingsStorageService) as jasmine.SpyObj<TableSettingsStorageService>;
++    const storageSpy = jasmine.createSpyObj('TableSettingsStorageService', ['get']);
++
++    TestBed.configureTestingModule({
++      providers: [
++        TableConfigService,
++        { provide: TableSettingsStorageService, useValue: storageSpy },
++      ],
++    });
++
++    service = TestBed.inject(TableConfigService);
++    storage = TestBed.inject(TableSettingsStorageService) as jasmine.SpyObj<TableSettingsStorageService>;
+   });
+ 
+   it('should use recovered savedTableConfig from storage when none provided', () => {
+     const tableName = 'datasetsTable';
+ 
+     const savedColumns = [
+       { name: 'pid', enabled: true, order: 0 },
+     ];
+ 
+     storage.get.and.returnValue(savedColumns as any);
+ 
+     const defaultSetting: ITableSetting = {
+       settingList: [
+         { columnSetting: [{ name: 'PID' }], isDefaultSetting: true, isCurrentSetting: true }
+       ],
+       rowStyle: {}
+     } as any;
+ 
+-    const config = service.getTableSettingsConfig(tableName, defaultSetting, undefined);
++    const config = service.getTableSettingsConfig(tableName, defaultSetting, undefined, undefined);
+ 
+     expect(config).toBeTruthy();
+     // find added setting by settingName
+     const found = config.settingList.find(s => (s as any).settingName === tableName);
+     expect(found).toBeTruthy();
+     // merged columnSetting should include our savedColumns (mapped)
+     expect((found as any).columnSetting).toBeTruthy();
+   });
+ });
+*** End Patch
+*** Begin Patch
+*** Add File: cypress/e2e/datasets/columns-persistence.cy.js
++describe('Datasets columns persistence', () => {
++  before(() => {
++    cy.login(Cypress.env('username'), Cypress.env('password'));
++    cy.createDataset({ type: 'raw', dataFileSize: 'small', datasetName: 'Columns Persistence Dataset' });
++  });
++
++  after(() => {
++    cy.removeDatasets();
++  });
++
++  it('should persist deselected column across navigation and reload', () => {
++    cy.visit('/datasets');
++
++    // capture the header text of the second column (index 1) as a candidate to remove
++    cy.get('dynamic-mat-table mat-header-row th').eq(1).invoke('text').then((headerText) => {
++      // open column settings dialog
++      cy.get('dynamic-mat-table table-menu button').click();
++      cy.get('[role="menu"] button').contains('Column setting').click();
++
++      // In the column dialog, find the checkbox whose label contains the header text and uncheck it
++      cy.get('[role="menu"]').within(() => {
++        cy.contains(headerText.trim()).parents('label').find('input[type="checkbox"]').uncheck({ force: true });
++      });
++
++      cy.contains('.column-config-apply button.done-setting', 'done').click();
++
++      // Save table setting so it persists
++      cy.get('dynamic-mat-table table-menu button').click();
++      cy.get('[role="menu"] button').contains('Save table setting').click();
++
++      // Navigate into a dataset and back
++      cy.get('dynamic-mat-table mat-row').first().click();
++      cy.url().should('include', '/datasets/');
++
++      cy.go('back');
++
++      // reload and assert the previously removed header text is no longer present
++      cy.reload();
++      cy.get('dynamic-mat-table mat-header-row').should('exist');
++      cy.get('dynamic-mat-table mat-header-row').should('not.contain', headerText.trim());
++    });
++  });
++});
++
+*** End Patch
+*** End Patch
