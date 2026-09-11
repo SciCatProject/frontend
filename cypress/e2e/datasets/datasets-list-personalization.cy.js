@@ -141,10 +141,6 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.finishedLoading();
 
-    cy.contains("mat-icon", "more_vert").closest("button").click();
-
-    cy.contains("button.mat-mdc-menu-item", "Save table setting").click();
-
     cy.visit("/datasets");
 
     cy.get("mat-table")
@@ -307,10 +303,6 @@ describe("1000 - Datasets list personalization", () => {
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
-
-    cy.contains("mat-icon", "more_vert").closest("button").click();
-
-    cy.contains("button.mat-mdc-menu-item", "Save table setting").click();
 
     cy.get("mat-table")
       .find("mat-header-row.header")
