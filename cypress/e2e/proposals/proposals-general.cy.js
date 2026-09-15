@@ -473,9 +473,6 @@ describe("Proposals general", () => {
 
       cy.contains(".column-config-apply button.done-setting", "done").click();
 
-      cy.get("dynamic-mat-table table-menu button").click();
-      cy.get('[role="menu"] button').contains("Save table setting").click();
-
       cy.reload();
 
       cy.get("dynamic-mat-table mat-header-row.header").should("exist");
@@ -489,10 +486,6 @@ describe("Proposals general", () => {
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
-
-      cy.get("body").type("{esc}");
-      cy.get("dynamic-mat-table table-menu button").click();
-      cy.get('[role="menu"] button').contains("Save table setting").click();
 
       cy.get("body").type("{esc}");
 

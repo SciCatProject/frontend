@@ -1,86 +1,159 @@
+import { TestBed } from "@angular/core/testing";
 import { TableConfigService } from "./table-config.service";
-import { AbstractField } from "../modules/dynamic-material-table/models/table-field.model";
+import { TableSettingsStorageService } from "./table-settings-storage.service";
+import { ITableSetting } from "../modules/dynamic-material-table/models/table-setting.model";
 
-describe("TableConfigService", () => {
+describe("TableConfigService (fallback)", () => {
   let service: TableConfigService;
+  let storage: jasmine.SpyObj<TableSettingsStorageService>;
 
   beforeEach(() => {
-    service = new TableConfigService();
+    const storageSpy = jasmine.createSpyObj("TableSettingsStorageService", [
+      "get",
+      "set",
+    ]);
+
+    TestBed.configureTestingModule({
+      providers: [
+        TableConfigService,
+        { provide: TableSettingsStorageService, useValue: storageSpy },
+      ],
+    });
+
+    service = TestBed.inject(TableConfigService);
+    storage = TestBed.inject(
+      TableSettingsStorageService,
+    ) as jasmine.SpyObj<TableSettingsStorageService>;
   });
 
-  describe("#mergeColumnSettings()", () => {
-    const defaultColumns: AbstractField[] = [
-      { name: "pid", header: "PID", display: "visible", width: 130 },
-      { name: "size", header: "Size", display: "hidden", width: 150 },
-      { name: "createdAt", header: "Created", display: "visible", width: 200 },
+  it("should use recovered savedTableConfig from storage when none provided", () => {
+    const tableName = "datasetsTable";
+
+    const savedColumns = [{ name: "pid", enabled: true, order: 0 }];
+
+    storage.get.and.returnValue(savedColumns as any);
+
+    const defaultSetting: ITableSetting = {
+      settingList: [
+        {
+          columnSetting: [{ name: "PID" }],
+          isDefaultSetting: true,
+          isCurrentSetting: true,
+        },
+      ],
+      rowStyle: {},
+    } as any;
+
+    const config = service.getTableSettingsConfig(
+      tableName,
+      defaultSetting,
+      undefined,
+    );
+
+    expect(config).toBeTruthy();
+    // find added setting by settingName
+    const found = config.settingList.find(
+      (s) => (s as any).settingName === tableName,
+    );
+    expect(found).toBeTruthy();
+    // merged columnSetting should include our savedColumns (mapped)
+    expect((found as any).columnSetting).toBeTruthy();
+  });
+
+  it("should pass the userId through to storage when recovering savedTableConfig", () => {
+    const tableName = "datasetsTable";
+    const userId = "some-user-id";
+
+    const savedColumns = [{ name: "pid", enabled: true, order: 0 }];
+
+    storage.get.and.returnValue(savedColumns as any);
+
+    const defaultSetting: ITableSetting = {
+      settingList: [
+        {
+          columnSetting: [{ name: "PID" }],
+          isDefaultSetting: true,
+          isCurrentSetting: true,
+        },
+      ],
+      rowStyle: {},
+    } as any;
+
+    service.getTableSettingsConfig(
+      tableName,
+      defaultSetting,
+      undefined,
+      undefined,
+      userId,
+    );
+
+    expect(storage.get).toHaveBeenCalledWith(tableName, userId);
+  });
+
+  it("should not consult storage when a savedTableConfig is provided", () => {
+    const tableName = "datasetsTable";
+    const userId = "some-user-id";
+
+    const savedColumns = [{ name: "pid", enabled: true, order: 0 }];
+
+    const defaultSetting: ITableSetting = {
+      settingList: [
+        {
+          columnSetting: [{ name: "PID" }],
+          isDefaultSetting: true,
+          isCurrentSetting: true,
+        },
+      ],
+      rowStyle: {},
+    } as any;
+
+    const config = service.getTableSettingsConfig(
+      tableName,
+      defaultSetting,
+      savedColumns as any,
+      undefined,
+      userId,
+    );
+
+    expect(storage.get).not.toHaveBeenCalled();
+    expect(config).toBeTruthy();
+  });
+
+  it("persistColumns should write to storage with tableName and userId", () => {
+    const tableName = "jobsTable";
+    const userId = "user-1";
+    const columns = [{ name: "jobId", display: "visible", order: 0 }];
+
+    service.persistColumns(tableName, columns, userId);
+
+    expect(storage.set).toHaveBeenCalledWith(tableName, columns, userId);
+  });
+
+  it("preferSavedColumns should prefer persisted columns when storage has entries", () => {
+    const tableName = "filesTable";
+    const userId = "user-1";
+    const persisted: any = [
+      { name: "dataFileList.path", display: "hidden", order: 0 },
     ];
+    storage.get.and.returnValue(persisted);
 
-    it("merges saved settings with matching defaults and appends new defaults", () => {
-      const merged = service.mergeColumnSettings(defaultColumns, [
-        { name: "size", display: "visible", width: 220, index: 0 },
-        { name: "pid", display: "hidden", width: 140, index: 1 },
-      ]);
+    const result = service.preferSavedColumns(
+      tableName,
+      [{ name: "userId", display: "visible", order: 0 }] as any,
+      userId,
+    );
 
-      expect(merged).toEqual([
-        jasmine.objectContaining({
-          name: "size",
-          header: "Size",
-          display: "visible",
-          width: 220,
-          index: 0,
-        }),
-        jasmine.objectContaining({
-          name: "pid",
-          header: "PID",
-          display: "hidden",
-          width: 140,
-          index: 1,
-        }),
-        jasmine.objectContaining({
-          name: "createdAt",
-          header: "Created",
-          display: "visible",
-          width: 200,
-        }),
-      ]);
-    });
+    expect(storage.get).toHaveBeenCalledWith(tableName, userId);
+    expect(result).toEqual(persisted);
+  });
 
-    it("preserves user-added columns that are not part of defaults", () => {
-      const customColumn = {
-        name: "scientificMetadata.sample.temperature",
-        header: "Temperature",
-        path: "scientificMetadata.sample.temperature",
-        display: "visible" as const,
-        index: 1,
-        type: "custom" as const,
-        userAdded: true,
-      };
+  it("preferSavedColumns should fall back to provided columns when storage is empty", () => {
+    storage.get.and.returnValue(undefined);
 
-      const merged = service.mergeColumnSettings(defaultColumns, [
-        { name: "pid", display: "visible", index: 0 },
-        customColumn,
-      ]);
+    const columns: any = [{ name: "jobId", display: "visible", order: 0 }];
 
-      expect(merged).toEqual([
-        jasmine.objectContaining({ name: "pid" }),
-        customColumn,
-        jasmine.objectContaining({ name: "size" }),
-        jasmine.objectContaining({ name: "createdAt" }),
-      ]);
-    });
+    const result = service.preferSavedColumns("jobsTable", columns);
 
-    it("drops unknown saved columns that are not marked as user-added", () => {
-      const merged = service.mergeColumnSettings(defaultColumns, [
-        { name: "pid", display: "visible", index: 0 },
-        { name: "oldColumn", header: "Old", display: "visible", index: 1 },
-      ]);
-
-      expect(merged.some((column) => column.name === "oldColumn")).toBeFalse();
-      expect(merged.map((column) => column.name)).toEqual([
-        "pid",
-        "size",
-        "createdAt",
-      ]);
-    });
+    expect(result).toBe(columns);
   });
 });
