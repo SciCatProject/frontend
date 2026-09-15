@@ -121,6 +121,7 @@ export interface Field {
   source: string;
   order: number;
   path?: string;
+  internalLinkLabel?: string;
 }
 
 // Type alias for allowed customization types
@@ -132,7 +133,7 @@ type CustomizationType =
   | "statusBanner";
 
 // Type alias for allowed field types
-type FieldType = "text" | "copy" | "linky" | "tag" | "date";
+type FieldType = "text" | "copy" | "linky" | "tag" | "date" | "internalLink";
 
 export interface ListSettings {
   columns?: TableColumn[];

@@ -103,6 +103,172 @@
       "shoppingCartOnHeader": { "type": "boolean" },
       "tableSciDataEnabled": { "type": "boolean" },
       "datasetDetailsShowMissingProposalId": { "type": "boolean" },
+      "datasetDetailsTabsInclude": {
+        "type": "object",
+        "properties": {
+          "details": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "jsonScientificMetadata": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "datafiles": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "relatedDatasets": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "relationships": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "reduce": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "logbook": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "lifecycle": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          },
+          "admin": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
@@ -425,6 +591,12 @@
                         ]
                       },
                       "source": { "type": "string" },
+                      "internalLinkLabel": {
+                        "type": "string",
+                        "title": "Internal Link Label",
+                        "description": "Related-document field to display (e.g. title for proposals, description for samples, name for instruments), or id (default) for the original ID. Falls back to the ID when unavailable.",
+                        "default": "id"
+                      },
                       "order": { "type": "number" }
                     },
                     "required": ["element", "source", "order"]
@@ -820,6 +992,65 @@
       },
       {
         "type": "Group",
+        "label": "Dataset Details Tabs Data",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "label": "Details",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/details"
+          },
+          {
+            "type": "Control",
+            "label": "Scientific Metadata (JSON)",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/jsonScientificMetadata"
+          },
+          {
+            "type": "Control",
+            "label": "Datafiles",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/datafiles"
+          },
+          {
+            "type": "Control",
+            "label": "Related Datasets",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/relatedDatasets"
+          },
+          {
+            "type": "Control",
+            "label": "Relationships",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/relationships"
+          },
+          {
+            "type": "Control",
+            "label": "Reduce",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/reduce"
+          },
+          {
+            "type": "Control",
+            "label": "Logbook",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/logbook"
+          },
+          {
+            "type": "Control",
+            "label": "Attachments",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/attachments"
+          },
+          {
+            "type": "Control",
+            "label": "Lifecycle",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/lifecycle"
+          },
+          {
+            "type": "Control",
+            "label": "Admin",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/admin"
+          }
+        ]
+      },
+      {
+        "type": "Group",
         "label": "Dataset Detail Component",
         "options": {
           "expandable": true
@@ -933,6 +1164,17 @@
                           {
                             "type": "Control",
                             "scope": "#/properties/source"
+                          },
+                          {
+                            "type": "Control",
+                            "scope": "#/properties/internalLinkLabel",
+                            "rule": {
+                              "effect": "SHOW",
+                              "condition": {
+                                "scope": "#/properties/element",
+                                "schema": { "const": "internalLink" }
+                              }
+                            }
                           },
                           {
                             "type": "Control",

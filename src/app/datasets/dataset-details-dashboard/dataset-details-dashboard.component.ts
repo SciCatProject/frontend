@@ -16,9 +16,14 @@ import {
   selectIsLoggedIn,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { ActivatedRoute, IsActiveMatchOptions } from "@angular/router";
+import {
+  ActivatedRoute,
+  IsActiveMatchOptions,
+  NavigationEnd,
+  Router,
+} from "@angular/router";
 import { Subscription, Observable, combineLatest } from "rxjs";
-import { distinctUntilChanged, filter, map } from "rxjs/operators";
+import { distinctUntilChanged, filter, map, startWith } from "rxjs/operators";
 import * as fromDatasetActions from "state-management/actions/datasets.actions";
 import {
   clearCurrentDatasetStateAction,
@@ -38,7 +43,10 @@ import {
   fetchSamplesCompleteAction,
 } from "state-management/actions/samples.actions";
 import { MatDialog } from "@angular/material/dialog";
-import { AppConfigService } from "app-config.service";
+import {
+  AppConfigService,
+  DatasetDetailsTabsInclude,
+} from "app-config.service";
 
 import { CurrentDataset } from "state-management/state/datasets.store";
 
@@ -67,6 +75,20 @@ enum TAB {
   attachments = "Attachments",
   admin = "Admin",
   lifecycle = "Lifecycle",
+}
+
+// Tab identifiers, matching the child route paths of the dataset details dashboard.
+enum TAB_ID {
+  details = "details",
+  jsonScientificMetadata = "jsonScientificMetadata",
+  datafiles = "datafiles",
+  relatedDatasets = "relatedDatasets",
+  relationships = "relationships",
+  reduce = "reduce",
+  logbook = "logbook",
+  attachments = "attachments",
+  admin = "admin",
+  lifecycle = "lifecycle",
 }
 
 const TAB_DEFINITIONS: {
@@ -133,6 +155,20 @@ const TAB_DEFINITIONS: {
     isEnabled: (c) => c.isLoggedIn && c.isAdmin,
   },
 ];
+
+const DEFAULT_TABS_INCLUDE: DatasetDetailsTabsInclude = {
+  [TAB_ID.details]: [],
+  [TAB_ID.jsonScientificMetadata]: [],
+  [TAB_ID.datafiles]: ["origdatablocks"],
+  [TAB_ID.relatedDatasets]: [],
+  [TAB_ID.relationships]: [],
+  [TAB_ID.reduce]: [],
+  [TAB_ID.logbook]: [],
+  [TAB_ID.attachments]: ["attachments"],
+  [TAB_ID.lifecycle]: [],
+  [TAB_ID.admin]: ["datablocks"],
+};
+
 @Component({
   selector: "dataset-details-dashboard",
   templateUrl: "./dataset-details-dashboard.component.html",
@@ -169,10 +205,17 @@ export class DatasetDetailsDashboardComponent
   );
   isInBatch$: Observable<boolean>;
 
+  private currentPid: string | null = null;
+  private loadedTabs = new Set<string>();
+  // `include` values already requested for the current dataset. They are sent
+  // again on every fetch so the store keeps the complete set of loaded data.
+  private fetchedInclude = new Set<string>();
+
   constructor(
     public appConfigService: AppConfigService,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private router: Router,
     private store: Store,
     public dialog: MatDialog,
   ) {}
@@ -180,16 +223,28 @@ export class DatasetDetailsDashboardComponent
   ngOnInit() {
     this.isInBatch$ = this.store.select(selectIsCurrentDatasetInBatch);
 
+    const pid$ = this.route.params.pipe(
+      map((params) => params["id"]),
+      filter((pid): pid is string => !!pid),
+      distinctUntilChanged(),
+    );
+
+    const activeTab$ = this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      startWith(null),
+      map(() => this.getActiveTabId()),
+      distinctUntilChanged(),
+    );
+
     this.subscriptions.push(
-      this.route.params
-        .pipe(map((params) => params["id"]))
-        .subscribe((id: string) => {
-          if (id) {
-            this.store.dispatch(
-              fetchDatasetAction({ pid: id, filters: ["all"] }),
-            );
-          }
-        }),
+      combineLatest([pid$, activeTab$]).subscribe(([pid, tab]) => {
+        if (pid !== this.currentPid) {
+          this.currentPid = pid;
+          this.loadedTabs.clear();
+          this.fetchedInclude.clear();
+        }
+        this.fetchDataForTab(pid, tab);
+      }),
     );
 
     this.subscriptions.push(
@@ -230,6 +285,41 @@ export class DatasetDetailsDashboardComponent
         .subscribe(() => {
           this.store.dispatch(fetchRelatedDatasetsAction());
         }),
+    );
+  }
+
+  getActiveTabId(): string {
+    const path = this.route.snapshot.firstChild?.url?.[0]?.path;
+    return path || TAB_ID.details;
+  }
+
+  // Fetches the dataset with the `include` values configured for the given tab,
+  // together with the ones already loaded, so that the store always holds the
+  // complete set of data fetched so far for this dataset.
+  fetchDataForTab(pid: string, tab: string): void {
+    const tabsInclude = {
+      ...DEFAULT_TABS_INCLUDE,
+      ...(this.appConfig.datasetDetailsTabsInclude ?? {}),
+    };
+    const tabInclude = tabsInclude[tab] ?? [];
+    const isNewTab = !this.loadedTabs.has(tab);
+    const hasNewInclude = tabInclude.some(
+      (include) => !this.fetchedInclude.has(include),
+    );
+
+    if (!isNewTab && !hasNewInclude) {
+      return;
+    }
+
+    this.loadedTabs.add(tab);
+    tabInclude.forEach((include) => this.fetchedInclude.add(include));
+
+    if (this.dataset?.pid === pid && !hasNewInclude) {
+      return;
+    }
+
+    this.store.dispatch(
+      fetchDatasetAction({ pid, filters: [...this.fetchedInclude] }),
     );
   }
 

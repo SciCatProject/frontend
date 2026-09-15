@@ -107,6 +107,20 @@ export interface DatasetStatusBannerConfig {
   rules?: DatasetStatusBannerRule[];
 }
 
+// Values accepted by the `include` parameter of the v4 single dataset endpoint.
+export type DatasetIncludeField =
+  | "instruments"
+  | "proposals"
+  | "origdatablocks"
+  | "datablocks"
+  | "attachments"
+  | "samples"
+  | "all";
+
+// Maps a dataset details tab id (child route path, e.g. "details", "datafiles")
+// to the `include` values requested when that tab is opened.
+export type DatasetDetailsTabsInclude = Record<string, DatasetIncludeField[]>;
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   addScientificMetadataKeysAsColumn?: boolean;
@@ -119,6 +133,7 @@ export interface AppConfigInterface {
   datasetReduceEnabled: boolean;
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
+  datasetDetailsTabsInclude?: DatasetDetailsTabsInclude;
   datasetActionsEnabled: boolean;
   datasetActions: ActionConfig[];
   datafilesActionsEnabled: boolean;

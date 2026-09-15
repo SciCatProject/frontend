@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 
-import { StoreModule } from "@ngrx/store";
+import { Store, StoreModule } from "@ngrx/store";
 
 import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute } from "shared/MockStubs";
@@ -12,6 +12,7 @@ import { AppConfigService } from "app-config.service";
 import { DatasetDetailDynamicComponent } from "./dataset-detail-dynamic.component";
 import { InternalLinkType } from "state-management/models";
 import { TranslateService } from "@ngx-translate/core";
+import { of } from "rxjs";
 
 describe("DatasetDetailDynamicComponent", () => {
   let component: DatasetDetailDynamicComponent;
@@ -59,6 +60,82 @@ describe("DatasetDetailDynamicComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  describe("rendered internal link labels", () => {
+    [
+      {
+        description: "shows names when related documents are included",
+        related: {
+          proposals: [{ proposalId: "p1", title: "My Proposal" }],
+          samples: [{ sampleId: "s1", description: "My Sample" }],
+          instruments: [{ pid: "i1", name: "My Instrument" }],
+        },
+        labels: ["My Proposal", "My Sample", "My Instrument"],
+      },
+      {
+        description: "shows IDs when the response only contains IDs",
+        related: {},
+        labels: ["p1", "s1", "i1"],
+      },
+    ].forEach(({ description, related, labels }) => {
+      it(description, () => {
+        component.appConfig.datasetDetailComponent = {
+          enableCustomizedComponent: true,
+          customization: [
+            {
+              type: "regular",
+              label: "Related Documents",
+              order: 0,
+              row: 1,
+              col: 1,
+              fields: [
+                {
+                  element: "internalLink",
+                  source: "proposalIds",
+                  internalLinkLabel: "title",
+                  order: 0,
+                },
+                {
+                  element: "internalLink",
+                  source: "sampleIds",
+                  internalLinkLabel: "description",
+                  order: 1,
+                },
+                {
+                  element: "internalLink",
+                  source: "instrumentIds",
+                  internalLinkLabel: "name",
+                  order: 2,
+                },
+              ] as any,
+            },
+          ],
+        };
+        component.dataset$ = of({
+          proposalIds: ["p1"],
+          sampleIds: ["s1"],
+          instrumentIds: ["i1"],
+          ...related,
+        } as any);
+        component.userGroups$ = of([]);
+        spyOn(TestBed.inject(Store), "select").and.returnValue(of(null));
+        const click = spyOn(component, "onClickInternalLink");
+        fixture.detectChanges();
+
+        const links: HTMLAnchorElement[] = Array.from(
+          fixture.nativeElement.querySelectorAll("td a"),
+        );
+        expect(links.map((link) => link.textContent.trim())).toEqual(labels);
+        expect(links.map((link) => link.title)).toEqual(labels);
+        links.forEach((link) => link.click());
+        expect(click.calls.allArgs()).toEqual([
+          ["proposalIds", "p1"],
+          ["sampleIds", "s1"],
+          ["instrumentIds", "i1"],
+        ]);
+      });
+    });
+  });
+
   describe("getNestedValue", () => {
     it("should read a top-level property", () => {
       const dataset = { pid: "test-pid" } as any;
@@ -91,21 +168,31 @@ describe("DatasetDetailDynamicComponent", () => {
   });
 
   describe("getInternalLinkItems", () => {
-    it("should resolve labels from the relation", () => {
+    it("should use the id as label by default", () => {
       const dataset = {
         proposalIds: ["p1"],
         proposals: [{ proposalId: "p1", title: "My Proposal" }],
       } as any;
       expect(component.getInternalLinkItems(dataset, "proposalIds")).toEqual([
-        { id: "p1", label: "My Proposal" },
+        { id: "p1", label: "p1" },
       ]);
+    });
+
+    it("should use the configured field from the related document", () => {
+      const dataset = {
+        proposalIds: ["p1"],
+        proposals: [{ proposalId: "p1", title: "My Proposal" }],
+      } as any;
+      expect(
+        component.getInternalLinkItems(dataset, "proposalIds", "title"),
+      ).toEqual([{ id: "p1", label: "My Proposal" }]);
     });
 
     it("should fall back to the id when no relation record matches", () => {
       const dataset = { proposalIds: ["p1"], proposals: [] } as any;
-      expect(component.getInternalLinkItems(dataset, "proposalIds")).toEqual([
-        { id: "p1", label: "p1" },
-      ]);
+      expect(
+        component.getInternalLinkItems(dataset, "proposalIds", "title"),
+      ).toEqual([{ id: "p1", label: "p1" }]);
     });
 
     it("should use the id as label when the source has no relation config", () => {
@@ -113,6 +200,38 @@ describe("DatasetDetailDynamicComponent", () => {
       expect(component.getInternalLinkItems(dataset, "inputDatasets")).toEqual([
         { id: "d1", label: "d1" },
       ]);
+    });
+
+    it("should fall back to the id when the configured field is missing", () => {
+      const dataset = {
+        proposalIds: ["p1"],
+        proposals: [{ proposalId: "p1", title: "My Proposal" }],
+      } as any;
+      expect(
+        component.getInternalLinkItems(dataset, "proposalIds", "name"),
+      ).toEqual([{ id: "p1", label: "p1" }]);
+    });
+
+    it("should allow a different label field for the same document type", () => {
+      const dataset = {
+        proposalIds: ["p1"],
+        proposals: [
+          { proposalId: "p1", title: "My Proposal", summary: "Summary" },
+        ],
+      } as any;
+      expect(
+        component.getInternalLinkItems(dataset, "proposalIds", "summary"),
+      ).toEqual([{ id: "p1", label: "Summary" }]);
+    });
+
+    it("should resolve the configured instrument name without changing its id", () => {
+      const dataset = {
+        instrumentIds: ["i1"],
+        instruments: [{ pid: "i1", name: "My Instrument" }],
+      } as any;
+      expect(
+        component.getInternalLinkItems(dataset, "instrumentIds", "name"),
+      ).toEqual([{ id: "i1", label: "My Instrument" }]);
     });
 
     it("should normalize a scalar value into a single item", () => {
@@ -157,6 +276,7 @@ describe("DatasetDetailDynamicComponent", () => {
           ["s1"],
           dataset,
           "sampleIds",
+          "description",
         ),
       ).toEqual([{ id: "s1", label: "S1" }]);
     });
@@ -166,6 +286,60 @@ describe("DatasetDetailDynamicComponent", () => {
         component.handleFieldValue("tag", ["a", "b"], {} as any, "x"),
       ).toEqual(["a", "b"]);
     });
+  });
+
+  it("should apply the label choice independently to each configured field", () => {
+    component.appConfig.datasetDetailComponent = {
+      enableCustomizedComponent: true,
+      customization: [
+        {
+          type: "regular",
+          label: "Related Documents",
+          order: 0,
+          row: 1,
+          col: 1,
+          fields: [
+            {
+              element: "internalLink",
+              source: "proposalIds",
+              internalLinkLabel: "title",
+              order: 0,
+            },
+            {
+              element: "internalLink",
+              source: "instrumentIds",
+              internalLinkLabel: "id",
+              order: 1,
+            },
+            {
+              element: "internalLink",
+              source: "sampleIds",
+              order: 2,
+            },
+          ] as any,
+        },
+      ],
+    };
+    component.dataset$ = of({
+      proposalIds: ["p1"],
+      proposals: [{ proposalId: "p1", title: "My Proposal" }],
+      instrumentIds: ["i1"],
+      instruments: [{ pid: "i1", name: "My Instrument" }],
+      sampleIds: ["s1"],
+      samples: [{ sampleId: "s1", description: "My Sample" }],
+    } as any);
+    component.userGroups$ = of([]);
+    spyOn(TestBed.inject(Store), "select").and.returnValue(of(null));
+    component.ngOnInit();
+
+    const subscription = component.datasetView$.subscribe((sections) => {
+      expect(sections[0].fields.map((field) => field.value)).toEqual([
+        [{ id: "p1", label: "My Proposal" }],
+        [{ id: "i1", label: "i1" }],
+        [{ id: "s1", label: "s1" }],
+      ]);
+    });
+    subscription.unsubscribe();
   });
 
   describe("isEmpty", () => {

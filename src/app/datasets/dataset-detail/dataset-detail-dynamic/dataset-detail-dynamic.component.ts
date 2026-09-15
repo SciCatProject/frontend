@@ -46,22 +46,19 @@ import { CurrentDataset } from "state-management/state/datasets.store";
 
 const RELATION_CONFIG: Record<
   string,
-  { lookupField: string; idField: string; labelField: string }
+  { lookupField: string; idField: string }
 > = {
   proposalIds: {
     lookupField: "proposals",
     idField: "proposalId",
-    labelField: "title",
   },
   sampleIds: {
     lookupField: "samples",
     idField: "sampleId",
-    labelField: "description",
   },
   instrumentIds: {
     lookupField: "instruments",
     idField: "pid",
-    labelField: "name",
   },
 };
 
@@ -165,6 +162,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
                     this.getNestedValue(dataset, field.source),
                     dataset,
                     field.source,
+                    field.internalLinkLabel,
                   );
                   return { ...field, value, isEmpty: this.isEmpty(value) };
                 })
@@ -336,6 +334,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     value: string | string[],
     dataset: CurrentDataset,
     source: string,
+    internalLinkLabel: string = "id",
   ): string | string[] | { id: string; label: string }[] {
     const errorElement = `<span class="general-warning">Unsupported data type</span>`;
 
@@ -357,7 +356,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         return typeof value === "string" ? [value] : ["Unsupported data type"];
 
       case DatasetViewFieldType.INTERNALLINK:
-        return this.getInternalLinkItems(dataset, source);
+        return this.getInternalLinkItems(dataset, source, internalLinkLabel);
 
       default:
         return "Unsupported data type";
@@ -395,13 +394,13 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   getInternalLinkItems(
     dataset: CurrentDataset,
     source: string,
+    internalLinkLabel: string = "id",
   ): { id: string; label: string }[] {
     const raw = this.getNestedValue(dataset, source);
     const ids = Array.isArray(raw) ? raw : raw != null ? [raw] : [];
 
     const relation = RELATION_CONFIG[source];
-
-    if (!relation) {
+    if (!relation || internalLinkLabel === "id") {
       return ids.map((id) => ({ id, label: id }));
     }
 
@@ -409,9 +408,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     return ids.map((id) => ({
       id,
       label:
-        related.find((r) => r[relation.idField] === id)?.[
-          relation.labelField
-        ] ?? id,
+        related.find((r) => r[relation.idField] === id)?.[internalLinkLabel] ??
+        id,
     }));
   }
 

@@ -19,6 +19,8 @@ import { MockStore } from "@ngrx/store/testing";
 import { AppConfigService } from "app-config.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
+import { of } from "rxjs";
+import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -27,6 +29,7 @@ describe("DetailsDashboardComponent", () => {
 
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
+    events: of(),
   };
 
   const getConfig = () => ({
@@ -80,5 +83,27 @@ describe("DetailsDashboardComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should request no related documents for Details by default", () => {
+    const dispatch = spyOn(store, "dispatch");
+    component.fetchDataForTab("dataset-id", "details");
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchDatasetAction({ pid: "dataset-id", filters: [] }),
+    );
+  });
+
+  it("should include documents configured for Details label lookups", () => {
+    component.appConfig.datasetDetailsTabsInclude = {
+      details: ["proposals", "samples", "instruments"],
+    };
+    const dispatch = spyOn(store, "dispatch");
+    component.fetchDataForTab("dataset-id", "details");
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchDatasetAction({
+        pid: "dataset-id",
+        filters: ["proposals", "samples", "instruments"],
+      }),
+    );
   });
 });
