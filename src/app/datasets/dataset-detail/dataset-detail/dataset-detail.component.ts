@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject, DOCUMENT } from "@angular/core";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
@@ -39,7 +39,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { Message, MessageType } from "state-management/models";
-import { DOCUMENT } from "@angular/common";
+
 import {
   Instrument,
   OutputDatasetObsoleteDto,
