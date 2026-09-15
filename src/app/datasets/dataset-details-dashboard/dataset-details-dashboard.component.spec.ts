@@ -116,7 +116,7 @@ describe("DetailsDashboardComponent", () => {
       details: [...DATASET_INCLUDE_FIELDS],
     };
     const dispatch = spyOn(store, "dispatch");
-    const warn = spyOn(console, "warn");
+    const error = spyOn(console, "error");
     component.fetchDataForTab("dataset-id", "details");
     expect(dispatch).toHaveBeenCalledWith(
       fetchDatasetAction({
@@ -124,7 +124,7 @@ describe("DetailsDashboardComponent", () => {
         filters: [...DATASET_INCLUDE_FIELDS],
       }),
     );
-    expect(warn).not.toHaveBeenCalled();
+    expect(error).not.toHaveBeenCalled();
   });
 
   it("should ignore unsupported includes while retaining valid ones across tabs", () => {
@@ -133,7 +133,7 @@ describe("DetailsDashboardComponent", () => {
       datafiles: ["origdatablocks"],
     } as unknown as DatasetDetailsTabsInclude;
     const dispatch = spyOn(store, "dispatch");
-    const warn = spyOn(console, "warn");
+    const error = spyOn(console, "error");
 
     component.fetchDataForTab("dataset-id", "details");
     expect(dispatch).toHaveBeenCalledWith(
@@ -142,7 +142,7 @@ describe("DetailsDashboardComponent", () => {
         filters: ["proposals", "instruments"],
       }),
     );
-    expect(warn).toHaveBeenCalledWith(
+    expect(error).toHaveBeenCalledWith(
       'Ignoring unsupported dataset include for tab "details":',
       "proposallls",
     );
@@ -163,14 +163,14 @@ describe("DetailsDashboardComponent", () => {
           details: includes,
         } as unknown as DatasetDetailsTabsInclude;
         const dispatch = spyOn(store, "dispatch");
-        const warn = spyOn(console, "warn");
+        const error = spyOn(console, "error");
 
         component.fetchDataForTab("dataset-id", "details");
 
         expect(dispatch).toHaveBeenCalledWith(
           fetchDatasetAction({ pid: "dataset-id", filters: [] }),
         );
-        expect(warn).toHaveBeenCalled();
+        expect(error).toHaveBeenCalled();
       });
     },
   );
