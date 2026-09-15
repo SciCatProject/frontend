@@ -2,6 +2,7 @@ import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
 import { selectHasFetchedSettings, selectSettings } from "./user.selectors";
 import { selectInstrumentWithIdAndLabel } from "./instruments.selectors";
+import { selectCurrentDataset } from "./datasets.selectors";
 
 const selectProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
@@ -28,6 +29,11 @@ export const selectEnrichedProposals = createSelector(
 export const selectCurrentProposal = createSelector(
   selectProposalsState,
   (state) => state.currentProposal,
+);
+
+export const selectCurrentDatasetProposals = createSelector(
+  selectCurrentDataset,
+  (dataset) => dataset?.proposals ?? [],
 );
 
 export const selectParentProposal = createSelector(
@@ -173,7 +179,11 @@ export const selectRelatedProposalsPerPage = createSelector(
   (filters) => filters.limit,
 );
 
-const restrictFilter = (filter: any, allowedKeys?: string[]) => {
+const restrictFilter = (
+  filter: any,
+  allowedKeys?: string[],
+  wrapArrays = false,
+) => {
   const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);
     return value == null || (hasLength && value.length === 0);
@@ -182,7 +192,11 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
-    return isNully(val) ? obj : { ...obj, [key]: val };
+    if (isNully(val)) return obj;
+    return {
+      ...obj,
+      [key]: wrapArrays && Array.isArray(val) ? { $in: val } : val,
+    };
   }, {});
 };
 

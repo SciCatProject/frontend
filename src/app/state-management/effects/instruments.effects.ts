@@ -58,7 +58,7 @@ export class InstrumentEffects {
   fetchInstrument$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchInstrumentAction),
-      switchMap(({ pid }) =>
+      mergeMap(({ pid }) =>
         this.instrumentsService.instrumentsControllerFindByIdV3(pid).pipe(
           map((instrument: Instrument) =>
             fromActions.fetchInstrumentCompleteAction({ instrument }),

@@ -1,19 +1,16 @@
 import { createAction, props } from "@ngrx/store";
 import {
-  Attachment,
-  OrigDatablock,
-  Datablock,
-  OutputDatasetObsoleteDto,
-  DatasetsControllerCreateV3Request,
-  OutputAttachmentV3Dto,
+  OutputAttachmentV4Dto,
+  PartialOutputDatasetDto,
+  OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
   DatasetFilters,
+  DateRangeFilter,
   ScientificCondition,
 } from "state-management/models";
-import { DateRange } from "state-management/state/proposals.store";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 
 // === Effects ===
@@ -21,7 +18,7 @@ import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-r
 export const fetchDatasetsAction = createAction("[Dataset] Fetch Datasets");
 export const fetchDatasetsCompleteAction = createAction(
   "[Dataset] Fetch Datasets Complete",
-  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
+  props<{ datasets: PartialOutputDatasetDto[] }>(),
 );
 export const fetchDatasetsFailedAction = createAction(
   "[Dataset] Fetch Datasets Failed",
@@ -56,52 +53,17 @@ export const fetchDatasetAction = createAction(
 );
 export const fetchDatasetCompleteAction = createAction(
   "[Dataset] Fetch Dataset Complete",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const fetchDatasetFailedAction = createAction(
   "[Dataset] Fetch Dataset Failed",
 );
-export const fetchDatablocksAction = createAction(
-  "[Dataset] Fetch Origin Datablocks",
-  props<{ pid: string; filters?: any }>(),
-);
-export const fetchDatablocksCompleteAction = createAction(
-  "[Dataset] Fetch Origin Datablocks Complete",
-  props<{ datablocks: Datablock[] }>(),
-);
-export const fetchDatablocksFailedAction = createAction(
-  "[Dataset] Fetch Origin Datablocks Failed",
-);
-
-export const fetchOrigDatablocksAction = createAction(
-  "[Dataset] Fetch Origin Datablocks",
-  props<{ pid: string; filters?: any }>(),
-);
-export const fetchOrigDatablocksCompleteAction = createAction(
-  "[Dataset] Fetch Origin Datablocks Complete",
-  props<{ origdatablocks: OrigDatablock[] }>(),
-);
-export const fetchOrigDatablocksFailedAction = createAction(
-  "[Dataset] Fetch Origin Datablocks Failed",
-);
-export const fetchAttachmentsAction = createAction(
-  "[Dataset] Fetch Attachments",
-  props<{ pid: string; filters?: any }>(),
-);
-export const fetchAttachmentsCompleteAction = createAction(
-  "[Dataset] Fetch Attachments Complete",
-  props<{ attachments: Attachment[] }>(),
-);
-export const fetchAttachmentsFailedAction = createAction(
-  "[Dataset] Fetch Attachments Failed",
-);
-
 export const fetchRelatedDatasetsAction = createAction(
   "[Dataset] Fetch Related Datasets",
 );
 export const fetchRelatedDatasetsCompleteAction = createAction(
   "[Dataset] Fetch Related Datasets Complete",
-  props<{ relatedDatasets: OutputDatasetObsoleteDto[] }>(),
+  props<{ relatedDatasets: PartialOutputDatasetDto[] }>(),
 );
 export const fetchRelatedDatasetsFailedAction = createAction(
   "[Datasets] Fetch Related Datasets Failed",
@@ -123,7 +85,7 @@ export const changeRelatedDatasetsPageAction = createAction(
 export const prefillBatchAction = createAction("[Dataset] Prefill Batch");
 export const prefillBatchCompleteAction = createAction(
   "[Dataset] Prefill Batch Complete",
-  props<{ batch: OutputDatasetObsoleteDto[] }>(),
+  props<{ batch: PartialOutputDatasetDto[] }>(),
 );
 export const addToBatchAction = createAction("[Dataset] Add To Batch");
 export const addCurrentToBatchAction = createAction(
@@ -131,21 +93,21 @@ export const addCurrentToBatchAction = createAction(
 );
 export const storeBatchAction = createAction(
   "[Dataset] Store To Batch",
-  props<{ batch: OutputDatasetObsoleteDto[] }>(),
+  props<{ batch: PartialOutputDatasetDto[] }>(),
 );
 export const removeFromBatchAction = createAction(
   "[Dataset] Remove From Batch",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
 export const addDatasetAction = createAction(
   "[Dataset] Add Dataset",
-  props<{ dataset: DatasetsControllerCreateV3Request }>(),
+  props<{ dataset: OutputDatasetDto }>(),
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: OutputDatasetDto }>(),
 );
 export const addDatasetFailedAction = createAction(
   "[Dataset] Add Dataset Failed",
@@ -172,11 +134,13 @@ export const updatePropertyFailedAction = createAction(
 
 export const addAttachmentAction = createAction(
   "[Dataset] Add Attachment",
-  props<{ attachment: Partial<OutputAttachmentV3Dto> }>(),
+  props<{
+    attachment: Partial<OutputAttachmentV4Dto> & { datasetId: string };
+  }>(),
 );
 export const addAttachmentCompleteAction = createAction(
   "[Dataset] Add Attachment Complete",
-  props<{ attachment: OutputAttachmentV3Dto }>(),
+  props<{ attachment: OutputAttachmentV4Dto }>(),
 );
 export const addAttachmentFailedAction = createAction(
   "[Dataset] Add Attachment Failed",
@@ -193,7 +157,7 @@ export const updateAttachmentCaptionAction = createAction(
 );
 export const updateAttachmentCaptionCompleteAction = createAction(
   "[Dataset] Update Attachment Caption Complete",
-  props<{ attachment: OutputAttachmentV3Dto }>(),
+  props<{ attachment: OutputAttachmentV4Dto }>(),
 );
 export const updateAttachmentCaptionFailedAction = createAction(
   "[Dataset] Update Attachment Action Failed",
@@ -201,7 +165,7 @@ export const updateAttachmentCaptionFailedAction = createAction(
 
 export const removeAttachmentAction = createAction(
   "[Dataset] Remove Attachment",
-  props<{ datasetId: string; attachmentId: string }>(),
+  props<{ attachmentId: string }>(),
 );
 export const removeAttachmentCompleteAction = createAction(
   "[Dataset] Remove Attachment Complete",
@@ -213,7 +177,7 @@ export const removeAttachmentFailedAction = createAction(
 
 export const reduceDatasetAction = createAction(
   "[Dataset] Reduce Dataset",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const reduceDatasetCompleteAction = createAction(
   "[Dataset] Reduce Dataset Complete",
@@ -238,15 +202,15 @@ export const appendToDatasetArrayFieldFailedAction = createAction(
 
 export const selectDatasetAction = createAction(
   "[Dataset] Select Dataset",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const selectDatasetsAction = createAction(
   "[Dataset] Select Datasets",
-  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
+  props<{ datasets: PartialOutputDatasetDto[] }>(),
 );
 export const deselectDatasetAction = createAction(
   "[Dataset] Deselect Dataset",
-  props<{ dataset: OutputDatasetObsoleteDto }>(),
+  props<{ dataset: PartialOutputDatasetDto }>(),
 );
 
 export const selectAllDatasetsAction = createAction(
@@ -302,7 +266,7 @@ export const setFiltersAction = createAction(
   props<{
     datasetFilters: Record<
       string,
-      string | DateRange | string[] | INumericRange
+      string | DateRangeFilter | string[] | INumericRange | boolean
     >;
   }>(),
 );
@@ -310,7 +274,7 @@ export const addDatasetFilterAction = createAction(
   "[Dataset] Add Dataset Filter",
   props<{
     key: string;
-    value: string | DateRange | string[] | INumericRange;
+    value: string | DateRangeFilter | string[] | INumericRange;
     filterType: "text" | "dateRange" | "number" | "multiSelect" | "checkbox";
   }>(),
 );

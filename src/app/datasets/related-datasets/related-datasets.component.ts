@@ -9,7 +9,7 @@ import {
 } from "shared/modules/table/table.component";
 import {
   DatasetClass,
-  OutputDatasetObsoleteDto,
+  PartialOutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changeRelatedDatasetsPageAction,
@@ -84,7 +84,7 @@ export class RelatedDatasetsComponent {
   ) {}
 
   formatTableData(
-    datasets: OutputDatasetObsoleteDto[],
+    datasets: PartialOutputDatasetDto[],
   ): Record<string, unknown>[] {
     if (!datasets) {
       return [];
@@ -114,7 +114,7 @@ export class RelatedDatasetsComponent {
     this.store.dispatch(fetchRelatedDatasetsAction());
   }
 
-  onRowClick(dataset: DatasetClass): void {
+  onRowClick(dataset: PartialOutputDatasetDto): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }

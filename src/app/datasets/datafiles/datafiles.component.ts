@@ -2,7 +2,6 @@ import {
   Component,
   ChangeDetectorRef,
   OnDestroy,
-  AfterViewInit,
   OnInit,
   AfterViewChecked,
   ViewChild,
@@ -23,11 +22,7 @@ import {
   selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import {
-  CreateUserJWT,
-  UsersService,
-  CreateJobDtoV3,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { CreateJobDtoV3 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
@@ -91,7 +86,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   maxFileSizeWarning: string | null =
     this.appConfig.maxFileSizeWarning ||
     `Some files are above the max size ${this.fileSizePipe.transform(this.maxFileSize)}`;
-  jwt: CreateUserJWT;
   auth_token: string;
 
   tableColumns: TableColumn[] = [
@@ -123,8 +117,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     private store: Store,
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private usersService: UsersService,
-    private authService: AuthService,
     private fileSizePipe: FileSizePipe,
   ) {}
 
@@ -247,7 +239,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
     return warning;
   }
-  //ngAfterViewInit() {
   ngOnInit() {
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
@@ -279,24 +270,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
     this.cdRef.detectChanges();
-  }
-
-  downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
-    if (this.appConfig.multipleDownloadUseAuthToken) {
-      this.auth_token = `Bearer ${this.authService.getToken().id}`;
-      this[`${form}Element`].nativeElement.auth_token.value = this.auth_token;
-    }
-    if (!this.jwt) {
-      this.subscriptions.push(
-        this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
-          this.jwt = jwt;
-          this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
-          this[`${form}Element`].nativeElement.submit();
-        }),
-      );
-    } else {
-      this[`${form}Element`].nativeElement.submit();
-    }
   }
 
   ngOnDestroy() {

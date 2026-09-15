@@ -21,7 +21,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
 import { selectIngestorTransferListRequestOptions } from "state-management/selectors/ingestor.selectors";
 import { concatLatestFrom } from "@ngrx/operators";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
+import { DatasetsV4Service } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Injectable()
 export class IngestorEffects {
@@ -331,7 +331,7 @@ export class IngestorEffects {
     return this.actions$.pipe(
       ofType(fromActions.createDatasetAction),
       mergeMap(({ dataset }) =>
-        this.datasetsService.datasetsControllerCreateV3(dataset).pipe(
+        this.datasetsV4Service.datasetsV4ControllerCreateV4(dataset).pipe(
           mergeMap((response) =>
             from([
               fromActions.createDatasetSuccess({ dataset: response }),
@@ -363,7 +363,7 @@ export class IngestorEffects {
   constructor(
     private actions$: Actions,
     private ingestor: Ingestor,
-    private datasetsService: DatasetsService,
+    private datasetsV4Service: DatasetsV4Service,
     private store: Store,
   ) {}
 }
