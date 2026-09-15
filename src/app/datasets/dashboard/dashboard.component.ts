@@ -28,7 +28,7 @@ import {
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
-import { combineLatest, Subscription, lastValueFrom } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import {
   selectProfile,
   selectCurrentUser,
@@ -128,11 +128,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           ]),
           distinctUntilChanged(deepEqual),
         )
-        .subscribe(async ([pagination, loggedIn]) => {
-          const hasFetchedSettings = await lastValueFrom(
-            this.selectHasFetchedSettings$.pipe(take(1)),
-          );
-
+        .subscribe(async ([pagination, loggedIn, hasFetchedSettings]) => {
           if (!hasFetchedSettings) {
             return;
           }
