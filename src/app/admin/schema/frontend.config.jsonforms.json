@@ -105,6 +105,7 @@
       "datasetDetailsShowMissingProposalId": { "type": "boolean" },
       "datasetDetailsTabsInclude": {
         "type": "object",
+        "description": "Dataset includes requested per tab. Unsupported values are ignored with a console warning so the dataset can still load.",
         "properties": {
           "details": {
             "type": "array",

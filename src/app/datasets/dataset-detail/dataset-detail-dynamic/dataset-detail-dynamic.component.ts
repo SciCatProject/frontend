@@ -334,7 +334,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     value: string | string[],
     dataset: CurrentDataset,
     source: string,
-    internalLinkLabel: string = "id",
+    internalLinkLabel = "id",
   ): string | string[] | { id: string; label: string }[] {
     const errorElement = `<span class="general-warning">Unsupported data type</span>`;
 
@@ -394,7 +394,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   getInternalLinkItems(
     dataset: CurrentDataset,
     source: string,
-    internalLinkLabel: string = "id",
+    internalLinkLabel = "id",
   ): { id: string; label: string }[] {
     const raw = this.getNestedValue(dataset, source);
     const ids = Array.isArray(raw) ? raw : raw != null ? [raw] : [];

@@ -45,7 +45,9 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import {
   AppConfigService,
+  DATASET_INCLUDE_FIELDS,
   DatasetDetailsTabsInclude,
+  DatasetIncludeField,
 } from "app-config.service";
 
 import { CurrentDataset } from "state-management/state/datasets.store";
@@ -179,6 +181,12 @@ export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked
 {
   private subscriptions: Subscription[] = [];
+  private currentPid: string | null = null;
+  private loadedTabs = new Set<string>();
+  // `include` values already requested for the current dataset. They are sent
+  // again on every fetch so the store keeps the complete set of loaded data.
+  private fetchedInclude = new Set<DatasetIncludeField>();
+
   loading$ = this.store.select(selectIsLoading);
   loggedIn$ = this.store.select(selectIsLoggedIn);
   dataset$ = this.store.select(selectCurrentDataset);
@@ -204,12 +212,6 @@ export class DatasetDetailsDashboardComponent
     map((profile) => (profile ? profile.accessGroups : [])),
   );
   isInBatch$: Observable<boolean>;
-
-  private currentPid: string | null = null;
-  private loadedTabs = new Set<string>();
-  // `include` values already requested for the current dataset. They are sent
-  // again on every fetch so the store keeps the complete set of loaded data.
-  private fetchedInclude = new Set<string>();
 
   constructor(
     public appConfigService: AppConfigService,
@@ -301,7 +303,26 @@ export class DatasetDetailsDashboardComponent
       ...DEFAULT_TABS_INCLUDE,
       ...(this.appConfig.datasetDetailsTabsInclude ?? {}),
     };
-    const tabInclude = tabsInclude[tab] ?? [];
+    const configuredInclude: unknown = tabsInclude[tab] ?? [];
+    let tabInclude: DatasetIncludeField[] = [];
+    if (Array.isArray(configuredInclude)) {
+      tabInclude = configuredInclude.filter(
+        (include): include is DatasetIncludeField => {
+          if (DATASET_INCLUDE_FIELDS.some((field) => field === include)) {
+            return true;
+          }
+          console.error(
+            `Ignoring unsupported dataset include for tab "${tab}":`,
+            include,
+          );
+          return false;
+        },
+      );
+    } else {
+      console.error(
+        `Ignoring invalid dataset includes for tab "${tab}": expected an array.`,
+      );
+    }
     const isNewTab = !this.loadedTabs.has(tab);
     const hasNewInclude = tabInclude.some(
       (include) => !this.fetchedInclude.has(include),

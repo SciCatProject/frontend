@@ -108,14 +108,17 @@ export interface DatasetStatusBannerConfig {
 }
 
 // Values accepted by the `include` parameter of the v4 single dataset endpoint.
-export type DatasetIncludeField =
-  | "instruments"
-  | "proposals"
-  | "origdatablocks"
-  | "datablocks"
-  | "attachments"
-  | "samples"
-  | "all";
+export const DATASET_INCLUDE_FIELDS = [
+  "instruments",
+  "proposals",
+  "origdatablocks",
+  "datablocks",
+  "attachments",
+  "samples",
+  "all",
+] as const;
+
+export type DatasetIncludeField = (typeof DATASET_INCLUDE_FIELDS)[number];
 
 // Maps a dataset details tab id (child route path, e.g. "details", "datafiles")
 // to the `include` values requested when that tab is opened.
