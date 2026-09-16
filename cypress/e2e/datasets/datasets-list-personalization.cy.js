@@ -4,6 +4,12 @@ import {
 } from "../../fixtures/testData";
 
 describe("1000 - Datasets list personalization", () => {
+  before(() => {
+    // The proposal uses a fixed proposalId and is reused across tests, so clean
+    // up any leftover from a previous run to avoid a 409 on createProposal.
+    cy.removeProposals();
+  });
+
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
   });
@@ -188,7 +194,7 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.get("button[type=submit]").click();
 
-    cy.finishedLoading();
+    cy.url().should("include", "/datasets");
 
     // visit the datasets list
     cy.visit("/datasets");
@@ -301,7 +307,7 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.get("button[type=submit]").click();
 
-    cy.finishedLoading();
+    cy.url().should("include", "/datasets");
 
     // visit the datasets list
     cy.visit("/datasets");
