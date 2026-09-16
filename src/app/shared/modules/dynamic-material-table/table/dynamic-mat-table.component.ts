@@ -302,12 +302,12 @@ export class DynamicMatTableComponent<T extends TableRow>
           this.pagination.pageSize;
       }
       /* Dynamic Cell must update when setting change */
-      value?.columnSetting?.forEach((column) => {
+      value?.columnSetting?.forEach((column, i) => {
         const originalColumn = this.columns?.find(
           (c) => c.name === column.name,
         );
         if (originalColumn) {
-          column = { ...originalColumn, ...column };
+          value.columnSetting[i] = { ...originalColumn, ...column };
         }
       });
       this.tableSetting = value;
