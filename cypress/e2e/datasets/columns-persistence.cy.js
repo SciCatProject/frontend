@@ -38,8 +38,12 @@ describe("Datasets columns persistence", () => {
     // Apply persists the column setting automatically
     cy.contains(".column-config-apply button.done-setting", "done").click();
 
-    // Navigate into a dataset and back
-    cy.get("dynamic-mat-table mat-row").first().click();
+    // Applying the setting reloads the table data, so wait for rows to render
+    // before navigating into a dataset (slower backends may exceed the default).
+    cy.get("dynamic-mat-table mat-row", { timeout: 30000 })
+      .should("have.length.greaterThan", 0)
+      .first()
+      .click();
     cy.url().should("include", "/datasets/");
 
     cy.go("back");
@@ -54,5 +58,14 @@ describe("Datasets columns persistence", () => {
         text,
       );
     });
+
+    // Spec files share the same backend user settings in CI, so the column we
+    // just deselected would leak into later specs and break their default-columns
+    // assertions. Restore the default column settings before moving on.
+    cy.get("dynamic-mat-table table-menu button").click();
+    cy.get('[role="menu"] button').contains("Default setting").click();
+    cy.finishedLoading();
+
+    cy.get("dynamic-mat-table mat-header-row.header").should("contain", "PID");
   });
 });
