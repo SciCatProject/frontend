@@ -1,12 +1,42 @@
 import {
   defaultDatasetsColumnsList,
   personalizedDatasetsColumnsList,
+  testData,
 } from "../../fixtures/testData";
+import { getHeader } from "../../support/utils";
 
 describe("1000 - Datasets list personalization", () => {
   before(() => {
-    // The proposal uses a fixed proposalId and is reused across tests, so clean
-    // up any leftover from a previous run to avoid a 409 on createProposal.
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+
+    // The proposal uses a fixed proposalId and is reused across tests. Delete a
+    // leftover from a previous run by id (removeProposals' title query can miss
+    // it), tolerating 404/403 when it is already gone, to avoid a 409 on
+    // createProposal.
+    cy.getToken().then((token) => {
+      cy.request({
+        method: "DELETE",
+        url: `${Cypress.env("baseUrl")}/Proposals/${testData.proposal.proposalId}`,
+        headers: getHeader(token),
+        failOnStatusCode: false,
+      });
+    });
+
+    // Backend user settings are shared across spec files, so another spec (e.g.
+    // columns-persistence) may have persisted a personalized column set. Reset
+    // the dataset columns so the default-columns tests start clean.
+    cy.getCookie("userId").then((userId) => {
+      cy.getToken().then((token) => {
+        cy.request({
+          method: "PATCH",
+          url: `${Cypress.env("baseUrl")}/users/${userId.value}/settings/external`,
+          headers: getHeader(token),
+          body: { fe_dataset_table_columns: [] },
+          failOnStatusCode: false,
+        });
+      });
+    });
+
     cy.removeProposals();
   });
 
