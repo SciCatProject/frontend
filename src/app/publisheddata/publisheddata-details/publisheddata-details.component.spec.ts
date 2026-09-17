@@ -21,6 +21,7 @@ import {
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import {
   selectIsAdmin,
+  selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 
@@ -70,6 +71,7 @@ describe("PublisheddataDetailsComponent", () => {
     );
     store.overrideSelector(selectIsAdmin, false);
     store.overrideSelector(selectIsLoggedIn, false);
+    store.overrideSelector(selectIsLoading, false);
   }));
 
   beforeEach(() => {
@@ -97,6 +99,43 @@ describe("PublisheddataDetailsComponent", () => {
       expect(
         compiled.querySelector('[data-cy="registerButton"]'),
       ).not.toBeNull();
+    });
+  });
+
+  describe("published data not found", () => {
+    it("should not show the error page when the published data is loaded", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(
+        compiled.querySelector('[data-cy="published-data-not-found"]'),
+      ).toBeNull();
+    });
+
+    describe("without published data", () => {
+      beforeEach(() => {
+        store.overrideSelector(selectCurrentPublishedData, undefined);
+        store.refreshState();
+        fixture = TestBed.createComponent(PublisheddataDetailsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      });
+
+      it("should show the error page once loading has finished", () => {
+        const compiled = fixture.debugElement.nativeElement;
+        expect(
+          compiled.querySelector('[data-cy="published-data-not-found"]'),
+        ).not.toBeNull();
+      });
+
+      it("should not show the error page while loading", () => {
+        store.overrideSelector(selectIsLoading, true);
+        store.refreshState();
+        fixture.detectChanges();
+
+        const compiled = fixture.debugElement.nativeElement;
+        expect(
+          compiled.querySelector('[data-cy="published-data-not-found"]'),
+        ).toBeNull();
+      });
     });
   });
 
