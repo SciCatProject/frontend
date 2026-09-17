@@ -20,6 +20,23 @@ export class ScicatDataService {
     private authService: AuthService,
   ) {}
 
+  private mapPublishedDataTextSearch(
+    filterFields: Record<string, unknown>,
+  ): Record<string, unknown> {
+    if (!filterFields["text"]) {
+      return filterFields;
+    }
+    const search = filterFields["text"] as string;
+    delete filterFields["text"];
+    filterFields["$or"] = [
+      { doi: { $regex: search, $options: "i" } },
+      { title: { $regex: search, $options: "i" } },
+      { abstract: { $regex: search, $options: "i" } },
+      { creator: { $regex: search, $options: "i" } },
+    ];
+    return filterFields;
+  }
+
   findDataById(url: string, dataId: number): Observable<any> {
     return this.http.get<any>(`${url}/${dataId}`);
   }
@@ -228,22 +245,5 @@ export class ScicatDataService {
         Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
       },
     });
-  }
-
-  private mapPublishedDataTextSearch(
-    filterFields: Record<string, unknown>,
-  ): Record<string, unknown> {
-    if (!filterFields["text"]) {
-      return filterFields;
-    }
-    const search = filterFields["text"] as string;
-    delete filterFields["text"];
-    filterFields["$or"] = [
-      { doi: { $regex: search, $options: "i" } },
-      { title: { $regex: search, $options: "i" } },
-      { abstract: { $regex: search, $options: "i" } },
-      { creator: { $regex: search, $options: "i" } },
-    ];
-    return filterFields;
   }
 }
