@@ -156,8 +156,16 @@ export class ScicatDataService {
 
     // NOTE: For published data endpoint we don't have fullquery and fullfacet and that's why it is a bit special case.
     if (url.includes("publishedData")) {
+      const pdParams = new HttpParams()
+        .set(
+          "fields",
+          JSON.stringify(this.mapPublishedDataTextSearch(filterFields)),
+        )
+        .set("limits", JSON.stringify(limits))
+        .append("access_token", `Bearer ${this.authService.getToken().id}`);
+
       return this.http.get<any[]>(url, {
-        params,
+        params: pdParams,
         headers: {
           Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
         },
@@ -195,8 +203,16 @@ export class ScicatDataService {
 
     // NOTE: For published data endpoint we don't have fullquery and fullfacet and that's why it is a bit special case.
     if (url.includes("publishedData")) {
+      const pdParams = new HttpParams()
+        .set(
+          "fields",
+          JSON.stringify(this.mapPublishedDataTextSearch(filterFields)),
+        )
+        .set("facets", JSON.stringify([]))
+        .append("access_token", `Bearer ${this.authService.getToken().id}`);
+
       return this.http.get<any>(`${url}/count`, {
-        params,
+        params: pdParams,
         headers: {
           Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
         },
@@ -212,5 +228,22 @@ export class ScicatDataService {
         Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
       },
     });
+  }
+
+  private mapPublishedDataTextSearch(
+    filterFields: Record<string, unknown>,
+  ): Record<string, unknown> {
+    if (!filterFields["text"]) {
+      return filterFields;
+    }
+    const search = filterFields["text"] as string;
+    delete filterFields["text"];
+    filterFields["$or"] = [
+      { doi: { $regex: search, $options: "i" } },
+      { title: { $regex: search, $options: "i" } },
+      { abstract: { $regex: search, $options: "i" } },
+      { creator: { $regex: search, $options: "i" } },
+    ];
+    return filterFields;
   }
 }
