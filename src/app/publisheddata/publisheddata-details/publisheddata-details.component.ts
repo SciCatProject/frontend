@@ -16,6 +16,7 @@ import { selectCurrentPublishedData } from "state-management/selectors/published
 import { AppConfigService } from "app-config.service";
 import {
   selectIsAdmin,
+  selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 
@@ -31,6 +32,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   publishedData: PublishedData & { metadata?: any };
   subscriptions: Subscription[] = [];
   isLoggedIn$ = this.store.select(selectIsLoggedIn);
+  loading$ = this.store.select(selectIsLoading);
   appConfig = this.appConfigService.getConfig();
   show = false;
   landingPageUrl = "";

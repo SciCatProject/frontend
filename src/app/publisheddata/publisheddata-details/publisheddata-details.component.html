@@ -286,3 +286,12 @@
     </ng-container>
   </div>
 </div>
+
+<ng-template [ngIf]="!publishedData && (loading$ | async) === false">
+  <error-page
+    data-cy="published-data-not-found"
+    [errorTitle]="'Published data not found'"
+    [message]="'The published data you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
+  >
+  </error-page>
+</ng-template>
