@@ -1,24 +1,27 @@
 <div fxLayout="row">
   <div fxFlex="140">
     <mat-card>
-      <mat-card-header
-        ><mat-card-title
-          >You are editing Published Data record.</mat-card-title
-        ></mat-card-header
-      >
+      <mat-card-header>
+        <mat-card-title *ngIf="mode === 'edit'">
+          You are editing Published Data record.
+        </mat-card-title>
+        <p *ngIf="mode === 'create'">
+          You are about to publish {{ datasetCount }} datasets.
+        </p>
+      </mat-card-header>
 
       <mat-card-content>
         <form
-          *ngIf="publishedData$ | async"
+          *ngIf="formReady"
           [formGroup]="form"
           data-cy="editPublishedDataForm"
         >
           <mat-form-field>
+            <mat-label>Title</mat-label>
             <input
               id="titleInput"
               required
               matInput
-              placeholder="Title"
               autocomplete="off"
               formControlName="title"
               name="title"
@@ -26,11 +29,11 @@
           </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Abstract</mat-label>
             <textarea
               id="abstractInput"
               required
               matInput
-              placeholder="Abstract"
               autocomplete="off"
               formControlName="abstract"
               name="abstract"
@@ -47,11 +50,15 @@
             <mat-expansion-panel-header>
               <mat-panel-title> Metadata </mat-panel-title>
               <mat-panel-description>
-                Here you can edit the metadata.
+                {{
+                  mode === "edit"
+                    ? "Here you can edit the metadata."
+                    : "Here you can add metadata to your published data."
+                }}
               </mat-panel-description>
             </mat-expansion-panel-header>
             <jsonforms
-              [data]="metadataData"
+              [data]="metadata"
               [schema]="schema"
               [uischema]="uiSchema"
               [renderers]="renderers"
@@ -62,27 +69,29 @@
           </mat-expansion-panel>
 
           <button
+            id="saveButton"
+            (click)="onSaveChanges()"
             mat-raised-button
             color="primary"
-            (click)="onPublishedDataUpdate(false)"
             [disabled]="!form.valid"
           >
             Save changes
           </button>
           <button
+            id="saveAndContinueButton"
+            (click)="onSaveAndContinue()"
+            class="save-and-continue"
             mat-raised-button
             color="primary"
-            class="save-and-continue"
-            (click)="onPublishedDataUpdate(true)"
             [disabled]="!form.valid"
           >
-            Save and continue
+            Save and Continue
           </button>
           <button
+            id="cancelButton"
             (click)="onCancel()"
             class="cancel"
             mat-raised-button
-            color="white"
           >
             Cancel
           </button>
