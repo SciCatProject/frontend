@@ -74,9 +74,6 @@ describe("Jobs general", () => {
 
       cy.contains(".column-config-apply button.done-setting", "done").click();
 
-      cy.get("dynamic-mat-table table-menu button").click();
-      cy.get('[role="menu"] button').contains("Save table setting").click();
-
       cy.reload();
 
       cy.get("dynamic-mat-table")
