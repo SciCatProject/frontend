@@ -24,6 +24,7 @@ import {
 import { TableConfigService } from "shared/services/table-config.service";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { selectJobsDashboardPageViewModel } from "state-management/selectors/jobs.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-jobs-new-dashboard",
@@ -117,6 +118,10 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   currentFilters: any = {};
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   constructor(
     private router: Router,
     private store: Store,
@@ -135,6 +140,10 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
+    this.subscriptions.push(
       this.vm$
         .pipe(
           filter((vm) => vm.hasFetchedSettings),
@@ -151,7 +160,11 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
             this.tableConfigService.getTableSettingsConfig(
               this.tableName,
               this.tableDefaultSettingsConfig,
-              vm.tableSettings?.columns || [],
+              this.tableConfigService.preferSavedColumns(
+                this.tableName,
+                vm.tableSettings?.columns,
+                this.currentUserId,
+              ),
             );
 
           const currentColumnSetting =
@@ -220,6 +233,12 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
       return { name, display, order: index, width };
     });
 
+    this.tableConfigService.persistColumns(
+      this.tableName,
+      columnsSetting,
+      this.currentUserId,
+    );
+
     this.store.dispatch(
       updateUserSettingsAction({
         property: { fe_job_table_columns: columnsSetting },
@@ -231,10 +250,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
-    if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
-    ) {
+    if (event.type === TableSettingEventType.apply) {
       this.saveTableSettings(event.setting);
     }
   }
