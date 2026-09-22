@@ -229,6 +229,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     return groups.join(", ");
   }
 
+  getHeaderColor(section: CustomizationItem): string {
+    return `var(--theme-${section.headerColor || "header-5"}-lighter)`;
+  }
+
   onCopy(value: string) {
     navigator.clipboard.writeText(value).then(
       () => {
