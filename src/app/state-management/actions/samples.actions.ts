@@ -2,7 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import {
   CreateAttachmentV3Dto,
   OutputAttachmentV3Dto,
-  OutputDatasetObsoleteDto,
+  PartialOutputDatasetDto,
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SampleFilters, ScientificCondition } from "state-management/models";
@@ -70,7 +70,7 @@ export const fetchSampleDatasetsAction = createAction(
 );
 export const fetchSampleDatasetsCompleteAction = createAction(
   "[Sample] Fetch Datasets Complete",
-  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
+  props<{ datasets: PartialOutputDatasetDto[] }>(),
 );
 export const fetchSampleDatasetsFailedAction = createAction(
   "[Sample] Fetch Datasets Failed",

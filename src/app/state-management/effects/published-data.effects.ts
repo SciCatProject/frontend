@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import {
   DatasetsV4Service,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
   PublishedData,
   PublishedDataV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -372,7 +372,7 @@ export class PublishedDataEffects {
             mergeMap((datasets) => [
               datasetActions.clearBatchAction(),
               datasetActions.selectDatasetsAction({
-                datasets: datasets as OutputDatasetObsoleteDto[],
+                datasets: datasets as OutputDatasetDto[],
               }),
               datasetActions.addToBatchAction(),
               fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction({

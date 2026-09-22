@@ -1,8 +1,5 @@
 import { Component, OnInit, OnChanges, SimpleChange } from "@angular/core";
-import {
-  HistoryClass,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { HistoryClass } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   trigger,
   state,
@@ -16,6 +13,7 @@ import { selectCurrentDataset } from "state-management/selectors/datasets.select
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 export interface HistoryItem {
   property: string;
@@ -47,7 +45,7 @@ export type HistoryWithProperties = HistoryClass & { [key: string]: unknown };
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
   appConfig = this.appConfigService.getConfig();
 
-  dataset: OutputDatasetObsoleteDto | undefined;
+  dataset: CurrentDataset | undefined;
   historyItems: HistoryItem[] = [];
 
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];

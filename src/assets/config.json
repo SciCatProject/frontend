@@ -77,6 +77,18 @@
   "shoppingCartOnHeader": true,
   "tableSciDataEnabled": true,
   "datasetDetailsShowMissingProposalId": false,
+  "datasetDetailsTabsInclude": {
+    "details": [],
+    "jsonScientificMetadata": [],
+    "datafiles": ["origdatablocks"],
+    "relatedDatasets": [],
+    "relationships": [],
+    "reduce": [],
+    "logbook": [],
+    "attachments": ["attachments"],
+    "lifecycle": [],
+    "admin": ["datablocks"]
+  },
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,
   "hideEmptyMetadataTable": false,
@@ -876,11 +888,13 @@
           {
             "element": "internalLink",
             "source": "proposalIds",
+            "internalLinkLabel": "id",
             "order": 0
           },
           {
             "element": "internalLink",
             "source": "instrumentIds",
+            "internalLinkLabel": "id",
             "order": 1
           },
           {

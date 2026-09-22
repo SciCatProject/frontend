@@ -8,7 +8,11 @@ import {
   selectHasAppliedFilters,
   selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
-import { ScientificCondition } from "state-management/models";
+import {
+  DateRange,
+  DateRangeFilter,
+  ScientificCondition,
+} from "state-management/models";
 import {
   addDatasetFilterAction,
   clearFacetsAction,
@@ -32,7 +36,6 @@ import { AsyncPipe } from "@angular/common";
 import { Subscription } from "rxjs";
 import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FilterConfig } from "state-management/state/user.store";
-import { DateRange } from "state-management/state/proposals.store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
@@ -49,8 +52,10 @@ import {
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  activeFilters: Record<string, string | DateRange | string[] | INumericRange> =
-    {};
+  activeFilters: Record<
+    string,
+    string | DateRangeFilter | string[] | INumericRange | boolean
+  > = {};
   filtersList: FilterConfig[];
 
   filterConfigs$ = this.store.select(selectFilters);
@@ -148,14 +153,20 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   onViewPublicChange(value: boolean) {
-    this.currentPublicViewMode = value;
+    const next = this.currentPublicViewMode === value ? "" : value;
+    this.currentPublicViewMode = next;
+
+    if (next === "") {
+      delete this.activeFilters.isPublished;
+    } else {
+      this.activeFilters.isPublished = next;
+    }
 
     this.store.dispatch(
       setPublicViewModeAction({ isPublished: this.currentPublicViewMode }),
     );
 
-    this.store.dispatch(fetchDatasetsAction());
-    this.store.dispatch(fetchFacetCountsAction());
+    this.applyFilters();
   }
 
   reset() {
@@ -223,12 +234,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const { queryParams } = this.route.snapshot;
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
-    if (
-      this.activeFilters.creationTime &&
-      !this.activeFilters.creationTime["end"]
-    ) {
-      this.activeFilters.creationTime["end"] = new Date().toISOString();
-    }
     this.router.navigate([], {
       queryParams: {
         searchQuery: JSON.stringify({
@@ -249,11 +254,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   setDateFilter(filterKey: string, value: DateRange) {
     if (value.begin || value.end) {
-      this.activeFilters[filterKey] = {
-        begin: value.begin,
-        end: value.end,
-      };
-
+      const range = {} as DateRangeFilter;
+      if (value.begin) range.$gte = { $date: value.begin };
+      if (value.end) range.$lte = { $date: value.end };
+      this.activeFilters[filterKey] = range;
       this.store.dispatch(
         addDatasetFilterAction({
           key: filterKey,
