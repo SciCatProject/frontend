@@ -1,19 +1,96 @@
 <ng-template [ngIf]="visible">
   <button
-    *ngIf="buttonStyle.raised" 
+    *ngIf="buttonStyle.raised"
     mat-raised-button
     (click)="performAction()"
-    [color]="buttonStyle.color" 
-    [disabled]="disabled">
+    [color]="buttonStyle.color"
+    [disabled]="disabled"
+  >
     <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
     <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
     {{ actionConfig.label }}
   </button>
-  <button *ngIf="!buttonStyle.raised" mat-button
-    [color]="buttonStyle.color" (click)="performAction()"
-    [disabled]="disabled">
+  <button
+    *ngIf="!buttonStyle.raised"
+    mat-button
+    (click)="performAction()"
+    [color]="buttonStyle.color"
+    [disabled]="disabled"
+  >
     <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
     <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
     {{ actionConfig.label }}
   </button>
 </ng-template>
+
+<ng-container *ngIf="iframeEnabled">
+  <div
+    *ngIf="iframeVisible"
+    class="configurable-action-iframe-backdrop"
+    (click)="closeIframe()"
+  ></div>
+
+  <section
+    class="configurable-action-iframe-host"
+    [class.configurable-action-iframe-panel]="iframeVisible"
+    [class.configurable-action-iframe-hidden-host]="!iframeVisible"
+    [class.mat-elevation-z8]="iframeVisible"
+    [style.width]="iframeWidth"
+    [style.height]="iframeHeight"
+    [attr.role]="iframeVisible ? 'dialog' : null"
+    [attr.aria-modal]="iframeVisible ? 'true' : null"
+    [attr.aria-label]="iframeTitle"
+  >
+    <header
+      *ngIf="iframeVisible"
+      class="configurable-action-iframe-header"
+    >
+      <span class="configurable-action-iframe-title">{{ iframeTitle }}</span>
+      <div class="configurable-action-iframe-actions">
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Open iframe in a new tab"
+          title="Open in new tab"
+          (click)="openIframeInNewTab()"
+        >
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Close iframe"
+          title="Close"
+          (click)="closeIframe()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </header>
+    <div
+      class="configurable-action-iframe-content"
+      [class.configurable-action-iframe-hidden-content]="!iframeVisible"
+    >
+      <iframe
+        class="configurable-action-iframe"
+        [class.configurable-action-hidden-iframe]="!iframeVisible"
+        [name]="iframeName"
+        [id]="iframeName"
+        [title]="iframeTitle"
+        (load)="onIframeLoad()"
+      ></iframe>
+      <div
+        *ngIf="iframeVisible && iframeLoading"
+        class="configurable-action-iframe-loading"
+        aria-live="polite"
+      >
+        <mat-progress-spinner
+          color="primary"
+          diameter="40"
+          mode="indeterminate"
+        ></mat-progress-spinner>
+        <span>Loading...</span>
+      </div>
+    </div>
+  </section>
+</ng-container>

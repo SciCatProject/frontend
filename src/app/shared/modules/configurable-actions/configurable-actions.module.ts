@@ -5,9 +5,15 @@ import { MatButtonModule } from "@angular/material/button";
 import { ConfigurableActionsComponent } from "./configurable-actions.component";
 import { ConfigurableActionComponent } from "./configurable-action.component";
 import { MatIconModule } from "@angular/material/icon";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+  ],
   declarations: [ConfigurableActionsComponent, ConfigurableActionComponent],
   exports: [ConfigurableActionsComponent, ConfigurableActionComponent],
 })
