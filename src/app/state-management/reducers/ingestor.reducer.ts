@@ -234,11 +234,8 @@ const reducer = createReducer(
       ingestorConfiguration: configuration,
     }),
   ),
-  on(
-    fromActions.getConfigurationFailure,
-    (state, { err }): IngestorState => ({
-      ...state,
-      error: JSON.stringify(err),
-    }),
-  ),
+  on(fromActions.getConfigurationFailure, (state, { err }): IngestorState => ({
+    ...state,
+    error: JSON.stringify(err),
+  })),
 );

@@ -69,7 +69,10 @@ import {
 } from "@ngxmc/datetime-picker";
 import { DateTimeFieldRendererComponent } from "../shared/modules/jsonforms-custom-renderers/ingestor-renderer/date-time-field-renderer";
 import { MAT_DATE_FORMATS } from "@angular/material/core";
-import { MatLuxonDateModule, provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
+import {
+  MatLuxonDateModule,
+  provideLuxonDateAdapter,
+} from "@angular/material-luxon-adapter";
 import { AppConfigService } from "app-config.service";
 
 @NgModule({

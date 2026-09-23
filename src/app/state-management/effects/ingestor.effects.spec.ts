@@ -67,23 +67,23 @@ describe("IngestorEffects", () => {
     it("should dispatch getConfigurationSuccess on HTTP 200", (done) => {
       const configuration = { creationLocations: ["PSI"] };
       ingestorService.getConfiguration.and.returnValue(of(configuration));
-  
+
       actions$ = of(fromActions.getConfiguration());
-  
+
       effects.getConfiguration$.subscribe((action) => {
         expect(action).toEqual(
-          fromActions.getConfigurationSuccess({ configuration })
+          fromActions.getConfigurationSuccess({ configuration }),
         );
         done();
       });
     });
-  
+
     it("should dispatch setNoRightsError when session expired", (done) => {
       const error = { error: { error: "login session has expired" } };
       ingestorService.getConfiguration.and.returnValue(throwError(() => error));
-  
+
       actions$ = of(fromActions.getConfiguration());
-  
+
       effects.getConfiguration$.subscribe((action) => {
         expect(action.type).toBe(fromActions.setNoRightsError.type);
         done();

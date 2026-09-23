@@ -92,17 +92,17 @@ export class Ingestor {
     );
   }
 
-  getConfiguration(): Observable<ConfigurationResponse>{
+  getConfiguration(): Observable<ConfigurationResponse> {
     return this.store.select(selectIngestorEndpoint).pipe(
-    take(1),
-    switchMap((ingestorEndpoint) =>
-      this.http.get<ConfigurationResponse>(
-        `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.OTHER.CONFIGURATION}`,
-        this.getRequestOptions(),
+      take(1),
+      switchMap((ingestorEndpoint) =>
+        this.http.get<ConfigurationResponse>(
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.OTHER.CONFIGURATION}`,
+          this.getRequestOptions(),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   cancelTransfer(
     requestBody: DeleteTransferRequest,

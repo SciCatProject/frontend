@@ -42,10 +42,10 @@ export class CreationLocationFieldComponent
 
     this.componentSubscriptions.push(
       this.ingestorCreationLocation$.subscribe((creationLocation) => {
-          this.creationLocations  = creationLocation;
-          if (this.form.disabled) {
-            this.form.enable();
-          }
+        this.creationLocations = creationLocation;
+        if (this.form.disabled) {
+          this.form.enable();
+        }
       }),
     );
   }

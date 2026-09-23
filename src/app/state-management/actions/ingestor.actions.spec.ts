@@ -13,7 +13,7 @@ describe("Ingestor Actions", () => {
       expect(action.type).toBe("[Ingestor] Get Configuration");
     });
   });
-  
+
   describe("getConfigurationSuccess", () => {
     it("should create an action with configuration", () => {
       const configuration = { creationLocations: ["PSI"] };
@@ -22,7 +22,7 @@ describe("Ingestor Actions", () => {
       expect(action.configuration).toEqual(configuration);
     });
   });
-  
+
   describe("getConfigurationFailure", () => {
     it("should create an action with error", () => {
       const error = new Error("fetch failed");

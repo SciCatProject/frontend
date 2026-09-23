@@ -13,21 +13,23 @@ describe("IngestorReducer", () => {
         configuration: { creationLocations: ["PSI"] },
       });
       const result = ingestorReducer(undefined, action);
-  
-      expect(result.ingestorConfiguration).toEqual({ creationLocations: ["PSI"] });
+
+      expect(result.ingestorConfiguration).toEqual({
+        creationLocations: ["PSI"],
+      });
     });
   });
-  
+
   describe("getConfigurationFailure", () => {
     it("should set error in state", () => {
       const error = new Error("network error");
       const action = fromActions.getConfigurationFailure({ err: error });
       const result = ingestorReducer(undefined, action);
-  
+
       expect(result.error).toBe(JSON.stringify(error));
     });
   });
-  
+
   describe("undefined action", () => {
     it("should return the default state", () => {
       const action = { type: "NOOP" } as any;

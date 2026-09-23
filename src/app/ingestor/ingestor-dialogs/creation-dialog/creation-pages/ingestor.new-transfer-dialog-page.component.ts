@@ -56,9 +56,7 @@ export class IngestorNewTransferDialogPageComponent
   ingestorExtractionMethods$ = this.store.select(
     selectIngestorExtractionMethods,
   );
-  ingestorCreationLocation$ = this.store.select(
-    selectIngestorCreationLocation
-  );
+  ingestorCreationLocation$ = this.store.select(selectIngestorCreationLocation);
 
   @Output() nextStep = new EventEmitter<void>();
 
@@ -102,9 +100,9 @@ export class IngestorNewTransferDialogPageComponent
 
   ngOnInit() {
     this.subscriptions.push(
-        this.ingestorCreationLocation$.subscribe((creationLocations) => {
-            this.creationLocations = creationLocations;
-        }),
+      this.ingestorCreationLocation$.subscribe((creationLocations) => {
+        this.creationLocations = creationLocations;
+      }),
     );
     // get configurations from ingestor to build up autocomplete and autofill
     this.store.dispatch(fromActions.getConfiguration());
@@ -265,7 +263,8 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["creationTime"] =
       formattedCreationTime;
 
-    this.createNewTransferData.scicatHeader["creationLocation"] = this.creationLocations?.length > 0 ? this.creationLocations[0]: null;
+    this.createNewTransferData.scicatHeader["creationLocation"] =
+      this.creationLocations?.length > 0 ? this.creationLocations[0] : null;
   }
 
   prepareSchemaForProcessing(): void {

@@ -51,7 +51,7 @@ export class IngestorMetadataEditorComponent implements OnInit, OnChanges {
   visualData: object = {};
   reducedSchema: JsonSchema = {};
   editorInitialized = false;
-  private lastEmittedData: unknown = null;
+  lastEmittedData: any = null;
 
   ngOnInit() {
     this.updateVisualData();
