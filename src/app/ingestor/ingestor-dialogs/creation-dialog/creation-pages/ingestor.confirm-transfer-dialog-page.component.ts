@@ -135,9 +135,6 @@ export class IngestorConfirmTransferDialogPageComponent
             this.provideMergeMetaData;
 
           this.nextStep.emit();
-
-          // Close the parent dialog
-          this.dialogRef?.close(result);
         }
         dialogSub.unsubscribe();
       });

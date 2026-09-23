@@ -249,8 +249,6 @@ export class IngestorNewTransferDialogPageComponent
 
     this.createNewTransferData.scicatHeader["owner"] =
       this.userProfile?.username;
-    this.createNewTransferData.scicatHeader["ownerGroup"] =
-      this.userGroups.length > 0 ? this.userGroups[0] : undefined;
     this.createNewTransferData.scicatHeader["principalInvestigator"] =
       this.userProfile?.username;
     this.createNewTransferData.scicatHeader["ownerEmail"] =
