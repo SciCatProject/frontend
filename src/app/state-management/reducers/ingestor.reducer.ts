@@ -227,4 +227,15 @@ const reducer = createReducer(
       },
     }),
   ),
+  on(
+    fromActions.getConfigurationSuccess,
+    (state, { configuration }): IngestorState => ({
+      ...state,
+      ingestorConfiguration: configuration,
+    }),
+  ),
+  on(fromActions.getConfigurationFailure, (state, { err }): IngestorState => ({
+    ...state,
+    error: JSON.stringify(err),
+  })),
 );

@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { switchMap, take } from "rxjs/operators";
 import { AppConfigService } from "app-config.service";
 import {
+  ConfigurationResponse,
   DeleteTransferRequest,
   DeleteTransferResponse,
   GetBrowseDatasetResponse,
@@ -30,6 +31,7 @@ export const INGESTOR_API_ENDPOINTS_V1 = {
   OTHER: {
     VERSION: "version",
     HEALTH: "health",
+    CONFIGURATION: "configuration",
   },
   EXTRACTOR: "extractor",
   METADATA: "metadata",
@@ -84,6 +86,18 @@ export class Ingestor {
       switchMap((ingestorEndpoint) =>
         this.http.get<OtherHealthResponse>(
           `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.OTHER.HEALTH}`,
+          this.getRequestOptions(),
+        ),
+      ),
+    );
+  }
+
+  getConfiguration(): Observable<ConfigurationResponse> {
+    return this.store.select(selectIngestorEndpoint).pipe(
+      take(1),
+      switchMap((ingestorEndpoint) =>
+        this.http.get<ConfigurationResponse>(
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.OTHER.CONFIGURATION}`,
           this.getRequestOptions(),
         ),
       ),

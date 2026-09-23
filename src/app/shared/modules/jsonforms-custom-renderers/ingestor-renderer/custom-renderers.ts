@@ -14,6 +14,10 @@ import {
   ownerGroupFieldTester,
 } from "./owner-group-field-renderer";
 import {
+  CreationLocationFieldComponent,
+  creationLocationFieldTester,
+} from "./creation-location-field-renderer";
+import {
   QuantityValueLayoutRendererComponent,
   quantityValueLayoutTester,
 } from "./quantity-value-layout-renderer";
@@ -29,6 +33,10 @@ import {
   GenericFieldRendererComponent,
   genericFieldTester,
 } from "./generic-field-renderer";
+import {
+  DateTimeFieldRendererComponent,
+  dateTimeFieldTester,
+} from "./date-time-field-renderer";
 
 export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
@@ -38,6 +46,10 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
     tester: ownerGroupFieldTester,
     renderer: OwnerGroupFieldComponent,
+  },
+  {
+    tester: creationLocationFieldTester,
+    renderer: CreationLocationFieldComponent,
   },
   {
     tester: quantityValueLayoutTester,
@@ -66,5 +78,9 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
     tester: genericFieldTester,
     renderer: GenericFieldRendererComponent,
+  },
+  {
+    tester: dateTimeFieldTester,
+    renderer: DateTimeFieldRendererComponent,
   },
 ];
