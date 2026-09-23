@@ -14,6 +14,7 @@ import { DateTime } from "luxon";
 
 @Component({
   selector: "date-time-field-renderer",
+  styleUrls: ["./ingestor-renderer.component.scss"],
   templateUrl: "./date-time-field-renderer.html",
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,5 +84,5 @@ export class DateTimeFieldRendererComponent extends JsonFormsControl {
 
 export const dateTimeFieldTester: RankedTester = rankWith(
   3,
-  and(isDateTimeControl, not(scopeEndsWith("creationTime"))),
+  and(isDateTimeControl),
 );

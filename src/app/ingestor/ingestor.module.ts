@@ -68,10 +68,9 @@ import {
   NgxMatDatetimepicker,
 } from "@ngxmc/datetime-picker";
 import { DateTimeFieldRendererComponent } from "../shared/modules/jsonforms-custom-renderers/ingestor-renderer/date-time-field-renderer";
-//field validation error
 import { MAT_DATE_FORMATS } from "@angular/material/core";
-import { MatLuxonDateModule } from "@angular/material-luxon-adapter";
-//import { MtxLuxonDatetimeModule } from "@ng-matero/extensions-luxon-adapter";
+import { MatLuxonDateModule, provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
+import { AppConfigService } from "app-config.service";
 
 @NgModule({
   declarations: [
@@ -142,22 +141,25 @@ import { MatLuxonDateModule } from "@angular/material-luxon-adapter";
     NgxMatDatepickerCancel,
     NgxMatDatepickerClear,
     MatLuxonDateModule,
-    //MtxLuxonDatetimeModule, // would need to import - npm install @ng-matero/extensions-luxon-adapter
   ],
   // fix field validation error
   providers: [
+    provideLuxonDateAdapter(),
     {
       provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: { dateInput: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ" },
-        display: {
-          dateInput: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
-          timeInput: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
-          monthYearLabel: "LLL yyyy",
-          dateA11yLabel: "DD",
-          monthYearA11yLabel: "LLLL yyyy",
-        },
+      useFactory: (appConfigService: AppConfigService) => {
+        const base = appConfigService.getConfig().dateFormat;
+        return {
+          parse: { dateInput: base },
+          display: {
+            dateInput: base,
+            monthYearLabel: "MMM yyyy",
+            dateA11yLabel: "LL",
+            monthYearA11yLabel: "MMMM yyyy",
+          },
+        };
       },
+      deps: [AppConfigService],
     },
   ],
   exports: [IngestorMetadataEditorComponent, IngestorCreationComponent],
