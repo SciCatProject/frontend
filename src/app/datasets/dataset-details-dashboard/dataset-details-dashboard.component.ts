@@ -238,6 +238,8 @@ export class DatasetDetailsDashboardComponent
             this.fetchDataForTab(TAB[tab]);
           })
           .unsubscribe();
+
+        this.fetchDatasetRelatedDocuments();
       }
     });
     this.subscriptions.push(datasetSub);
