@@ -20,6 +20,11 @@ export const selectInstrumentsCount = createSelector(
   (state) => state.totalCount,
 );
 
+export const selectInstrumentsCountIsLoading = createSelector(
+  selectInstrumentState,
+  (state) => state.instrumentsCountIsLoading,
+);
+
 export const selectFilters = createSelector(
   selectInstrumentState,
   (state) => state.filters,
@@ -38,11 +43,13 @@ export const selectInstrumentsPerPage = createSelector(
 export const selectInstrumentsWithCountAndTableSettings = createSelector(
   selectInstruments,
   selectInstrumentsCount,
+  selectInstrumentsCountIsLoading,
   selectSettings,
-  (instruments, count, settings) => {
+  (instruments, count, isLoading, settings) => {
     return {
       instruments,
       count,
+      isLoading,
       tablesSettings: {
         columns: settings.fe_instrument_table_columns,
       },

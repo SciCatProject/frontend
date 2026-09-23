@@ -6,7 +6,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { AppConfigService } from "app-config.service";
-import { BehaviorSubject, lastValueFrom, Subscription, take } from "rxjs";
+import {
+  BehaviorSubject,
+  filter,
+  lastValueFrom,
+  Subscription,
+  take,
+} from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -28,7 +34,11 @@ import { DatasetsListService } from "shared/services/datasets-list.service";
 import { TableConfigService } from "shared/services/table-config.service";
 import { fetchProposalDatasetsAction } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
-import { selectColumnsWithHasFetchedSettings } from "state-management/selectors/user.selectors";
+import {
+  selectColumnsWithHasFetchedSettings,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
+import { EventsService } from "shared/events.service";
 
 export interface TableData {
   pid: string;
@@ -47,15 +57,19 @@ export interface TableData {
   standalone: false,
 })
 export class ProposalDatasetsComponent implements OnInit, OnDestroy {
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
   proposalDatasets$ = this.store.select(selectViewProposalPageViewModel);
+  latestUpdatedId$ = this.eventsService.latestUpdatedId$;
 
-  subscription: Subscription;
+  subscriptions: Subscription[] = [];
   @Input() proposalId: string;
 
   appConfig = this.appConfigService.getConfig();
   selectColumnsWithFetchedSettings$ = this.store.select(
     selectColumnsWithHasFetchedSettings,
   );
+
+  realTimeEnabled = false;
 
   tableName = "proposalDatasetsTable";
 
@@ -75,9 +89,6 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   showNoData = true;
 
-  //dataSource: BehaviorSubject<TableData[]> = new BehaviorSubject<TableData[]>(
-  //  [],
-  //);
   dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
     OutputDatasetObsoleteDto[]
   >([]);
@@ -127,9 +138,31 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     private store: Store,
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
+    private eventsService: EventsService,
   ) {}
 
   ngOnInit(): void {
+    this.subscriptions.push(
+      this.eventsService.message$
+        .pipe(
+          filter((payload) => {
+            return payload.type === "Dataset.created";
+          }),
+        )
+        .subscribe((payload: Record<string, any>) => {
+          if (!payload.data.proposalIds.includes(this.proposalId)) return;
+          this.store.dispatch(
+            fetchProposalDatasetsAction({
+              proposalId: this.proposalId,
+              skip: 0,
+              limit: this.defaultPageSize,
+              sortColumn: "creationTime",
+              sortDirection: "desc",
+            }),
+          );
+        }),
+    );
+
     this.store.dispatch(
       fetchProposalDatasetsAction({
         proposalId: this.proposalId,
@@ -138,44 +171,46 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       }),
     );
 
-    this.subscription = this.proposalDatasets$.subscribe(async (data) => {
-      this.dataSource.next(data.datasets);
-      this.pending = false;
+    this.subscriptions.push(
+      this.proposalDatasets$.subscribe(async (data) => {
+        this.dataSource.next(data.datasets);
+        this.pending = false;
 
-      const defaultTableColumns = await lastValueFrom(
-        this.selectColumnsWithFetchedSettings$.pipe(take(1)),
-      );
-
-      const defaultConfigColumns =
-        this.appConfig?.defaultDatasetsListSettings?.columns;
-
-      const userTableConfigColumns =
-        this.datasetsListService.convertSavedDatasetColumns(
-          defaultTableColumns.columns,
+        const defaultTableColumns = await lastValueFrom(
+          this.selectColumnsWithFetchedSettings$.pipe(take(1)),
         );
 
-      this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-        this.datasetsListService.convertSavedDatasetColumns(
-          defaultConfigColumns as TableColumn[],
-        );
+        const defaultConfigColumns =
+          this.appConfig?.defaultDatasetsListSettings?.columns;
 
-      const tableSettingsConfig =
-        this.tableConfigService.getTableSettingsConfig(
-          this.tableName,
-          this.tableDefaultSettingsConfig,
-          userTableConfigColumns,
-        );
-      const paginationConfig = {
-        pageSizeOptions: [5, 10, 25, 100],
-        pageIndex: data.currentPage || 0,
-        pageSize: data.datasetsPerPage || this.defaultPageSize,
-        length: data.datasetCount,
-      };
+        const userTableConfigColumns =
+          this.datasetsListService.convertSavedDatasetColumns(
+            defaultTableColumns.columns,
+          );
 
-      if (tableSettingsConfig?.settingList.length) {
-        this.initTable(tableSettingsConfig, paginationConfig);
-      }
-    });
+        this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+          this.datasetsListService.convertSavedDatasetColumns(
+            defaultConfigColumns as TableColumn[],
+          );
+
+        const tableSettingsConfig =
+          this.tableConfigService.getTableSettingsConfig(
+            this.tableName,
+            this.tableDefaultSettingsConfig,
+            userTableConfigColumns,
+          );
+        const paginationConfig = {
+          pageSizeOptions: [5, 10, 25, 100],
+          pageIndex: data.currentPage || 0,
+          pageSize: data.datasetsPerPage || this.defaultPageSize,
+          length: data.datasetCount,
+        };
+
+        if (tableSettingsConfig?.settingList.length) {
+          this.initTable(tableSettingsConfig, paginationConfig);
+        }
+      }),
+    );
   }
 
   initTable(
@@ -189,6 +224,24 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     this.columns = currentColumnSetting;
     this.setting = settingConfig;
     this.pagination = paginationConfig;
+  }
+
+  onRealTimeToggle(enabled: boolean) {
+    this.realTimeEnabled = enabled;
+    if (enabled) {
+      this.eventsService.connect();
+      this.store.dispatch(
+        fetchProposalDatasetsAction({
+          proposalId: this.proposalId,
+          skip: 0,
+          limit: this.defaultPageSize,
+          sortColumn: "creationTime",
+          sortDirection: "desc",
+        }),
+      );
+    } else {
+      this.eventsService.disconnect();
+    }
   }
 
   formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
@@ -269,6 +322,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.eventsService.disconnect();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

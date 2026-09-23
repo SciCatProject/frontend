@@ -9,8 +9,12 @@
   $header-2: map.get($color-config, "header-2");
   $header-3: map.get($color-config, "header-3");
   $header-4: map.get($color-config, "header-4");
+  $header-5: map.get($color-config, "header-5");
   $warn: map.get($color-config, "warn");
   $warn-2: map.get($color-config, "warn-2");
+  .dynamic-template-tile-header {
+    background-color: mat.m2-get-color-from-palette($header-5, "lighter");
+  }
   .dynamic-template-general-header {
     background-color: mat.m2-get-color-from-palette($primary, "lighter");
   }

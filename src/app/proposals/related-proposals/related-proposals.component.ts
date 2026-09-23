@@ -133,7 +133,7 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
     );
 
     this.subscription = this.relatedProposalsWithCount$.subscribe(
-      ({ relatedProposals, relatedProposalsCount }) => {
+      ({ relatedProposals, relatedProposalsCount, isLoading }) => {
         const queryParams = this.route.snapshot.queryParams;
 
         this.dataSource.next(relatedProposals);
@@ -160,6 +160,7 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
           pageIndex: queryParams.pageIndex,
           pageSize: queryParams.pageSize || this.defaultPageSize,
           length: relatedProposalsCount,
+          isLoading: isLoading,
         };
 
         if (tableSettingsConfig?.settingList.length) {

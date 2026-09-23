@@ -1,0 +1,23 @@
+.dataset-status-banner {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.dataset-status-banner-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.dataset-status-banner-WARN {
+  background-color: #feefb3;
+  color: #9f6000;
+}
+
+.dataset-status-banner-INFO {
+  background-color: #dff2bf;
+  color: #4f8a10;
+}

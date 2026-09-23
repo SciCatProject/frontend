@@ -486,15 +486,15 @@ Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
   cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
   for (let i = 0; i < number; i++) {
-    const randomContent = `data:image/png;base64,${Cypress._.times(100, () =>
-      Math.floor(Math.random()).toString(16),
-    ).join("")}`;
+    // const randomContent = `data:image/png;base64,${Cypress._.times(100, () =>
+    //   Math.floor(Math.random()).toString(16),
+    // ).join("")}`;
 
     const fileName = `random-image-${Date.now()}-${i}.png`;
 
     cy.get(".dropzone").selectFile(
       {
-        contents: Cypress.Buffer.from(randomContent, "base64"),
+        contents: Cypress.Buffer.from(testData.testImage, "base64"),
         fileName: fileName,
         mimeType: "image/png",
       },
@@ -506,6 +506,7 @@ Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
     cy.wait(wait);
   }
 });
+
 
 Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
   cy.login(Cypress.env("username"), Cypress.env("password"));

@@ -15,7 +15,7 @@ import {
   selectRelatedProposalsFilters,
   selectFullfacetParams,
 } from "state-management/selectors/proposals.selectors";
-import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
+import { map, mergeMap, catchError, switchMap } from "rxjs/operators";
 import { ObservableInput, of } from "rxjs";
 import {
   loadingAction,
@@ -294,7 +294,7 @@ export class ProposalEffects {
         return this.proposalsService
           .proposalsControllerFindAllV3(JSON.stringify(queryFilter))
           .pipe(
-            map((relatedProposals) => {
+            mergeMap((relatedProposals) => {
               const relatedProposalsWithRelations = relatedProposals.map(
                 (p) => {
                   return {
@@ -307,9 +307,12 @@ export class ProposalEffects {
                 },
               );
 
-              return fromActions.fetchRelatedProposalsCompleteAction({
-                relatedProposals: relatedProposalsWithRelations,
-              });
+              return [
+                fromActions.fetchRelatedProposalsCompleteAction({
+                  relatedProposals: relatedProposalsWithRelations,
+                }),
+                fromActions.fetchRelatedProposalsCountAction(),
+              ];
             }),
             catchError(() =>
               of(fromActions.fetchRelatedProposalsFailedAction()),
@@ -321,7 +324,7 @@ export class ProposalEffects {
 
   fetchRelatedProposalsCount$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.fetchRelatedProposalsAction),
+      ofType(fromActions.fetchRelatedProposalsCountAction),
       concatLatestFrom(() => [this.currentProposal$]),
       switchMap(([, proposal]) => {
         const queryFilter = {

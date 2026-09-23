@@ -23,13 +23,24 @@ const reducer = createReducer(
     }),
   ),
 
+  on(fromActions.fetchSamplesCountAction, (state): SampleState => ({
+    ...state,
+    samplesCountIsLoading: true,
+  })),
+
   on(
     fromActions.fetchSamplesCountCompleteAction,
     (state, { count }): SampleState => ({
       ...state,
       samplesCount: count,
+      samplesCountIsLoading: false,
     }),
   ),
+
+  on(fromActions.fetchSamplesCountFailedAction, (state): SampleState => ({
+    ...state,
+    samplesCountIsLoading: false,
+  })),
 
   on(
     fromActions.fetchMetadataKeysCompleteAction,
@@ -52,9 +63,26 @@ const reducer = createReducer(
     }),
   ),
 
+  on(fromActions.fetchSampleDatasetsCountAction, (state): SampleState => ({
+    ...state,
+    datasetsCountIsLoading: true,
+  })),
+
   on(
     fromActions.fetchSampleDatasetsCountCompleteAction,
-    (state, { count }): SampleState => ({ ...state, datasetsCount: count }),
+    (state, { count }): SampleState => ({
+      ...state,
+      datasetsCount: count,
+      datasetsCountIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchSampleDatasetsCountFailedAction,
+    (state): SampleState => ({
+      ...state,
+      datasetsCountIsLoading: false,
+    }),
   ),
 
   on(fromActions.addSampleCompleteAction, (state, { sample }): SampleState => {
