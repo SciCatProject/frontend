@@ -235,6 +235,7 @@ export class SampleDetailComponent
           pageIndex: vm.datasetsPage || 0,
           pageSize: vm.datasetsPerPage || this.pagination.pageSize,
           length: vm.datasetsCount || 0,
+          isLoading: vm.isLoading,
         };
 
         if (tableSettingsConfig?.settingList.length) {

@@ -23,7 +23,9 @@ const initialSampleState: SampleState = {
   metadataKeys: [],
 
   samplesCount: 0,
+  samplesCountIsLoading: false,
   datasetsCount: 0,
+  datasetsCountIsLoading: false,
 
   hasPrefilledFilters: false,
 
@@ -207,6 +209,7 @@ describe("Sample Selectors", () => {
           initialUserState.settings,
           initialSampleState.samplesCount,
           false, //hasAppliedFilters
+          initialSampleState.samplesCountIsLoading,
         ),
       ).toEqual({
         samples: [],
@@ -225,6 +228,7 @@ describe("Sample Selectors", () => {
         },
         count: 0,
         hasAppliedFilters: false,
+        isLoading: false,
       });
     });
   });
@@ -240,6 +244,7 @@ describe("Sample Selectors", () => {
             initialSampleState.datasetFilters,
           ),
           initialSampleState.datasetsCount,
+          initialSampleState.datasetsCountIsLoading,
           fromSelectors.selectCurrentAttachments.projector(initialSampleState),
           initialUserState.currentUser,
         ),
@@ -249,6 +254,7 @@ describe("Sample Selectors", () => {
         datasetsPerPage: 25,
         datasetsPage: 0,
         datasetsCount: 0,
+        isLoading: false,
         attachments: [],
         user: undefined,
       });

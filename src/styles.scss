@@ -152,6 +152,17 @@ $theme-header-4: (
   ),
 );
 
+$theme-header-5: (
+  default: var(--theme-header-5-default),
+  lighter: var(--theme-header-5-lighter),
+  darker: var(--theme-header-5-darker),
+  contrast: (
+    default: var(--theme-header-5-default-contrast),
+    lighter: var(--theme-header-5-lighter-contrast),
+    darker: var(--theme-header-5-darker-contrast),
+  ),
+);
+
 $theme-hover: (
   default: var(--theme-hover-default),
   lighter: var(--theme-hover-lighter),
@@ -191,6 +202,12 @@ $header-4: mat.m2-define-palette(
   "lighter",
   "darker"
 );
+$header-5: mat.m2-define-palette(
+  $theme-header-5,
+  "default",
+  "lighter",
+  "darker"
+);
 $hover: mat.m2-define-palette($theme-hover, "default", "lighter", "darker");
 
 $basetheme: mat.m2-define-light-theme(
@@ -211,8 +228,9 @@ $newcolor: map.merge(
     warn-2: $warn-2,
     header-1: $header-1,
     header-2: $header-2,
-    header-3: $header-4,
+    header-3: $header-3,
     header-4: $header-4,
+    header-5: $header-5,
     hover: $hover,
   )
 );

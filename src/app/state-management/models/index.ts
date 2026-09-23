@@ -45,6 +45,8 @@ export interface LabelsLocalization {
 export interface DatasetDetailComponentConfig {
   enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
+  tileRestrictedIconVisible?: boolean;
+  tileRestrictedIconGroups?: string[];
 }
 
 export interface IngestorComponentConfig {
@@ -85,6 +87,9 @@ export interface CustomizationItem {
   source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
+  authorization?: string[];
+  visible?: boolean;
+  restrictedIconVisible?: boolean;
 }
 
 export interface Field {
@@ -96,7 +101,11 @@ export interface Field {
 
 // Type alias for allowed customization types
 type CustomizationType =
-  "regular" | "scientificMetadata" | "datasetJsonView" | "attachments";
+  | "regular"
+  | "scientificMetadata"
+  | "datasetJsonView"
+  | "attachments"
+  | "statusBanner";
 
 // Type alias for allowed field types
 type FieldType = "text" | "copy" | "linky" | "tag" | "date";

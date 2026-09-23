@@ -1,0 +1,11 @@
+<div
+  *ngIf="banner as content"
+  class="dataset-status-banner"
+  [ngClass]="'dataset-status-banner-' + content.code"
+  data-cy="dataset-status-banner"
+>
+  <mat-icon class="dataset-status-banner-icon">
+    {{ content.code === "INFO" ? "info" : "warning" }}
+  </mat-icon>
+  <span>{{ content.message }}</span>
+</div>

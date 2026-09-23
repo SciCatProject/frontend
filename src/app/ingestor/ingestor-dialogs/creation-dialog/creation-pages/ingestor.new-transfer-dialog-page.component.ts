@@ -74,7 +74,8 @@ export class IngestorNewTransferDialogPageComponent
   extractionMethodsInitialized = false;
 
   userProfile: ReturnedUserDto | null = null;
-  groups: string[] = [];
+  userGroups: string[] = [];
+
   uiNextButtonReady = false;
 
   renderView$ = this.store.select(selectIngestorRenderView);
@@ -112,7 +113,7 @@ export class IngestorNewTransferDialogPageComponent
     this.subscriptions.push(
       this.vm$.subscribe((settings) => {
         this.userProfile = settings.user;
-        this.groups = settings.profile?.accessGroups ?? [];
+        this.userGroups = settings.profile?.accessGroups ?? [];
       }),
     );
 
@@ -185,6 +186,7 @@ export class IngestorNewTransferDialogPageComponent
           }
         }),
       );
+      this.generateExampleDataForSciCatHeader();
     }
   }
 
@@ -246,15 +248,17 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["license"] = "MIT License";
     this.createNewTransferData.scicatHeader["type"] = "raw";
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
-    this.createNewTransferData.scicatHeader["ownerGroup"] = this.groups.length > 0 ? this.groups[0] : undefined;
-    this.createNewTransferData.scicatHeader["owner"] = this.userProfile.username;
 
+    this.createNewTransferData.scicatHeader["owner"] =
+      this.userProfile?.username;
+    this.createNewTransferData.scicatHeader["ownerGroup"] =
+      this.userGroups.length > 0 ? this.userGroups[0] : undefined;
     this.createNewTransferData.scicatHeader["principalInvestigator"] =
-      this.userProfile.username;
+      this.userProfile?.username;
     this.createNewTransferData.scicatHeader["ownerEmail"] =
-      this.userProfile.email;
+      this.userProfile?.email;
     this.createNewTransferData.scicatHeader["contactEmail"] =
-      this.userProfile.email;
+      this.userProfile?.email;
 
     const creationTime = new Date();
     const formattedCreationTime = creationTime.toISOString();
@@ -302,7 +306,12 @@ export class IngestorNewTransferDialogPageComponent
         ingestionObject: this.createNewTransferData,
       }),
     );
-    this.generateExampleDataForSciCatHeader();
+    if (
+      this.createNewTransferData.editorMode === "INGESTION" ||
+      this.createNewTransferData.editorMode === "EDITOR"
+    ) {
+      this.generateExampleDataForSciCatHeader();
+    }
     this.prepareSchemaForProcessing();
 
     // Emit once to go to next step

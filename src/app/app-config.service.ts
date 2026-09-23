@@ -91,6 +91,22 @@ export interface AboutSettings {
   htmlContent?: string;
 }
 
+export interface DatasetStatusBannerRule {
+  // Dot-path to the field to check, resolved from the dataset root,
+  // e.g. "datasetlifecycle.archiveStatusMessage".
+  field: string;
+  // Value the field must equal (as a string) for this rule to match.
+  value: string;
+  message: string;
+  code?: "INFO" | "WARN";
+}
+
+export interface DatasetStatusBannerConfig {
+  enabled?: boolean;
+  // Evaluated in order; the first matching rule wins.
+  rules?: DatasetStatusBannerRule[];
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   addScientificMetadataKeysAsColumn?: boolean;
@@ -183,6 +199,7 @@ export interface AppConfigInterface {
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
   hideEmptyMetadataTable?: boolean;
+  datasetStatusBanner?: DatasetStatusBannerConfig;
   ingestorComponent?: IngestorComponentConfig;
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
@@ -192,6 +209,7 @@ export interface AppConfigInterface {
   aboutSettings?: AboutSettings;
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
+  realTimeUpdatesEnabled?: boolean;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -336,6 +354,14 @@ export class AppConfigService {
         htmlContent:
           'Here goes your SciCat About page!!<br>For more information, please read the documentation available on the <a href="https://scicatproject.org">SciCat Website</a>',
       };
+    }
+
+    if (config.datasetDetailComponent) {
+      config.datasetDetailComponent.tileRestrictedIconVisible =
+        config.datasetDetailComponent.tileRestrictedIconVisible ?? false;
+
+      config.datasetDetailComponent.tileRestrictedIconGroups = config
+        .datasetDetailComponent.tileRestrictedIconGroups ?? ["admin"];
     }
 
     applyDefaultBatchActions(config);
