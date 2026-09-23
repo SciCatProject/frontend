@@ -55,6 +55,7 @@ import { IngestorCreationComponent } from "./ingestor-page/ingestor-creation.com
 import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.custom-metadata-dialog-page.component";
 import { SIFieldHiderRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/quantity-field-renderer";
 import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/dynamic-object-renderer";
+import { GenericFieldRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/generic-field-renderer";
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-
     ExportTemplateHelperComponent,
     IngestorFileBrowserComponent,
     OwnerGroupFieldComponent,
+    GenericFieldRendererComponent,
     QuantityValueLayoutRendererComponent,
     CustomLayoutChildrenRenderPropsPipe,
     IngestorTransferViewDialogComponent,

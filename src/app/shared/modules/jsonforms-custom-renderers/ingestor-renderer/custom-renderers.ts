@@ -25,6 +25,10 @@ import {
   DynamicObjectRendererComponent,
   dynamicObjectRendererTester,
 } from "./dynamic-object-renderer";
+import {
+  GenericFieldRendererComponent,
+  genericFieldTester,
+} from "./generic-field-renderer";
 
 export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
@@ -58,5 +62,9 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
     tester: isSIFieldTester,
     renderer: SIFieldHiderRendererComponent,
+  },
+  {
+    tester: genericFieldTester,
+    renderer: GenericFieldRendererComponent,
   },
 ];
