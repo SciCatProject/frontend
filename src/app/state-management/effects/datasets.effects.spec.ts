@@ -379,7 +379,7 @@ describe("DatasetEffects", () => {
   describe("fetchRelatedDatasetsCount$", () => {
     it("should result in a fetchRelatedDatasetsCountCompleteAction", () => {
       const count = 3;
-      const action = fromActions.fetchRelatedDatasetsAction();
+      const action = fromActions.fetchRelatedDatasetsCountAction();
       const outcome = fromActions.fetchRelatedDatasetsCountCompleteAction({
         count,
       });
@@ -392,7 +392,7 @@ describe("DatasetEffects", () => {
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
     });
     it("should result in a fetchRelatedDatasetsCountFailedAction", () => {
-      const action = fromActions.fetchRelatedDatasetsAction();
+      const action = fromActions.fetchRelatedDatasetsCountAction();
       const outcome = fromActions.fetchRelatedDatasetsCountFailedAction();
 
       actions = hot("-a", { a: action });
