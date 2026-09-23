@@ -30,6 +30,10 @@ import {
   dynamicObjectRendererTester,
 } from "./dynamic-object-renderer";
 import {
+  GenericFieldRendererComponent,
+  genericFieldTester,
+} from "./generic-field-renderer";
+import {
   DateTimeFieldRendererComponent,
   dateTimeFieldTester,
 } from "./date-time-field-renderer";
@@ -70,6 +74,10 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
     tester: isSIFieldTester,
     renderer: SIFieldHiderRendererComponent,
+  },
+  {
+    tester: genericFieldTester,
+    renderer: GenericFieldRendererComponent,
   },
   {
     tester: dateTimeFieldTester,
