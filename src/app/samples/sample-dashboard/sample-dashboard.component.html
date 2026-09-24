@@ -75,7 +75,7 @@
         </mat-card>
       </ng-template>
     </div>
-    <div fxFlex="63" fxFlex.lt-xl="80">
+    <div fxFlex fxFlex.lt-xl="80">
       <dynamic-mat-table
         [tableName]="tableName"
         [columns]="columns"
@@ -90,7 +90,6 @@
         (onRowEvent)="onRowClick($event)"
         (settingChange)="onSettingChange($event)"
         (onTableEvent)="onTableEvent($event)"
-        style="height: 70vh"
         class="mat-elevation-z2"
       >
       </dynamic-mat-table>

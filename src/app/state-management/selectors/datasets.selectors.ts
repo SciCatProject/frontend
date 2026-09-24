@@ -24,6 +24,16 @@ export const selectDatasetsFacetCountsIsLoading = createSelector(
   (state) => state.facetCountsIsLoading,
 );
 
+export const selectOrigDatablocksCountIsLoading = createSelector(
+  selectDatasetState,
+  (state) => state.origDatablocksCountIsLoading,
+);
+
+export const selectRelatedDatasetsCountIsLoading = createSelector(
+  selectDatasetState,
+  (state) => state.relatedDatasetsCountIsLoading,
+);
+
 export const selectCurrentDataset = createSelector(
   selectDatasetState,
   (state) => state.currentSet,
@@ -324,4 +334,22 @@ export const selectRelatedDatasetsCurrentPage = createSelector(
 export const selectRelatedDatasetsPerPage = createSelector(
   selectRelatedDatasetsFilters,
   (filters) => filters.limit,
+);
+
+export const selectCurrentOrigDatablocksCount = createSelector(
+  selectDatasetState,
+  (state) => state.origDatablocksCount ?? 0,
+);
+
+export const selectDatafilesPageViewModel = createSelector(
+  selectCurrentOrigDatablocks,
+  selectCurrentOrigDatablocksCount,
+  selectCurrentDataset,
+  selectOrigDatablocksCountIsLoading,
+  (datablocks, totalCount, dataset, isLoading) => ({
+    datablocks,
+    totalCount,
+    dataset,
+    isLoading,
+  }),
 );
