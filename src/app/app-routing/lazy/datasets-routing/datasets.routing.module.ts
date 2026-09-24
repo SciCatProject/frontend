@@ -6,7 +6,7 @@ import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { DashboardComponent } from "datasets/dashboard/dashboard.component";
 import { DatablocksComponent } from "datasets/datablocks-table/datablocks-table.component";
 import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
-import { PublishComponent } from "datasets/publish/publish.component";
+import { PublisheddataEditComponent } from "publisheddata/publisheddata-edit/publisheddata-edit.component";
 
 const routes: Routes = [
   {
@@ -20,7 +20,8 @@ const routes: Routes = [
   },
   {
     path: "selection/publish",
-    component: PublishComponent,
+    component: PublisheddataEditComponent,
+    data: { mode: "create" },
     canActivate: [AuthGuard],
     canDeactivate: [leavingPageGuard],
   },
