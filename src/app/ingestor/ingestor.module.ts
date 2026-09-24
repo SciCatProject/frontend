@@ -34,7 +34,6 @@ import { CustomObjectControlRendererComponent } from "shared/modules/jsonforms-c
 import { IngestorFileBrowserComponent } from "./ingestor-dialogs/ingestor-file-browser/ingestor.file-browser.component";
 import { MatTreeModule } from "@angular/material/tree";
 import { OwnerGroupFieldComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/owner-group-field-renderer";
-import { CreationLocationFieldComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/creation-location-field-renderer";
 import {
   CustomLayoutChildrenRenderPropsPipe,
   QuantityValueLayoutRendererComponent,
@@ -97,7 +96,6 @@ import { AppConfigService } from "app-config.service";
     IngestorFileBrowserComponent,
     OwnerGroupFieldComponent,
     GenericFieldRendererComponent,
-    CreationLocationFieldComponent,
     QuantityValueLayoutRendererComponent,
     CustomLayoutChildrenRenderPropsPipe,
     IngestorTransferViewDialogComponent,
