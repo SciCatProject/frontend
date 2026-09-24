@@ -102,13 +102,19 @@ export class SearchParametersDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction({ searchTerm: "" }));
   }
 
-  add = (): void => {
-    const { lhs, relation, unit } = this.parametersForm.value;
+  add = (selectedKey?: string): void => {
+    const rawLhs = selectedKey || this.parametersForm.value.lhs;
 
     const metadataKey =
-      Object.keys(this.humanNameMap).find(
-        (key) => this.humanNameMap[key] === lhs,
-      ) || lhs;
+      (selectedKey
+        ? selectedKey
+        : Object.keys(this.humanNameMap).find(
+            (key) => this.humanNameMap[key] === rawLhs,
+          )) || rawLhs;
+
+    if (!metadataKey) {
+      return;
+    }
 
     if (this.data.usedFields && this.data.usedFields.includes(metadataKey)) {
       this.snackBar.open("Field already used", "Close", {
@@ -118,11 +124,24 @@ export class SearchParametersDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const rawRhs = this.parametersForm.get("rhs")?.value;
+    const relation =
+      this.parametersForm.get("relation")?.value || "GREATER_THAN";
+    const unit = this.parametersForm.get("unit")?.value || "";
+    const rawRhs = this.parametersForm.get("rhs")?.value ?? "";
     const rhs =
-      relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
+      relation === "EQUAL_TO_STRING"
+        ? String(rawRhs)
+        : rawRhs !== "" && !isNaN(Number(rawRhs))
+          ? Number(rawRhs)
+          : rawRhs;
     this.parametersForm.patchValue({ rhs });
     this.dialogRef.close({ data: { lhs: metadataKey, relation, rhs, unit } });
+  };
+
+  selectCondition = (key: string): void => {
+    this.parametersForm.get("lhs")?.setValue(this.getHumanName(key) || key);
+    this.getUnits(key);
+    this.add(key);
   };
 
   cancel = (): void => {

@@ -22,6 +22,10 @@ mat-dialog-content {
   }
   .search-field {
     width: 100%;
+
+    input {
+      caret-color: transparent;
+    }
   }
 
   .scroll-table-container {
@@ -92,3 +96,10 @@ mat-dialog-content {
   font-size: 1.2em;
   color: var(--theme-primary-default);
 }
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
