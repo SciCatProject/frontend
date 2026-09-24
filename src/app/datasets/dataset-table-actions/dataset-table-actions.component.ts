@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ArchViewMode } from "state-management/models";
+import { DatasetViewConfig } from "state-management/models/dataset-view.interfaces";
 import { Store } from "@ngrx/store";
 import {
   setArchiveViewModeAction,
+  setPublicViewModeAction,
+  fetchDatasetsAction,
+  fetchFacetCountsAction,
   clearSelectionAction,
   addToBatchAction,
   clearBatchAction,
@@ -12,10 +15,12 @@ import { distinctUntilChanged } from "rxjs/operators";
 import {
   selectArchiveViewMode,
   selectIsBatchNonEmpty,
+  selectPublicViewMode,
   selectSelectedDatasets,
 } from "state-management/selectors/datasets.selectors";
 import {
   selectIsLoading,
+  selectIsLoggedIn,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { MatDialog } from "@angular/material/dialog";
@@ -46,18 +51,14 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   selectedSets: OutputDatasetObsoleteDto[] | null = [];
 
-  public currentArchViewMode: ArchViewMode = ArchViewMode.all;
-  public viewModes = ArchViewMode;
-  modes = [
-    ArchViewMode.all,
-    ArchViewMode.archivable,
-    ArchViewMode.retrievable,
-    ArchViewMode.work_in_progress,
-    ArchViewMode.system_error,
-    ArchViewMode.user_error,
-  ];
+  public currentArchViewMode = "";
+  modes: DatasetViewConfig[] = (this.appConfig.datasetViews ?? [])
+    .filter((view) => view.enabled !== false)
+    .sort((a, b) => a.order - b.order);
 
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
+  loggedIn$ = this.store.select(selectIsLoggedIn);
+  currentPublicViewMode: boolean | "" = "";
 
   subscriptions: Subscription[] = [];
 
@@ -81,11 +82,30 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   /**
    * Handle changing of view mode and disabling selected rows
-   * @param mode
+   * @param view
    */
-  onModeChange(mode: ArchViewMode): void {
-    this.store.dispatch(setArchiveViewModeAction({ modeToggle: mode }));
+  onModeChange(view: DatasetViewConfig): void {
+    this.store.dispatch(
+      setArchiveViewModeAction({
+        modeToggle: view.id,
+        query: view.query,
+        url: view.url,
+        headers: view.headers,
+        variables: view.variables,
+      }),
+    );
     this.store.dispatch(clearSelectionAction());
+  }
+
+  onViewPublicChange(value: boolean): void {
+    this.currentPublicViewMode = value;
+
+    this.store.dispatch(
+      setPublicViewModeAction({ isPublished: this.currentPublicViewMode }),
+    );
+
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
   }
 
   isEmptySelection(): boolean {
@@ -117,6 +137,15 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
           }
         }),
     );
+    this.subscriptions.push(
+      this.store
+        .select(selectPublicViewMode)
+        .pipe(distinctUntilChanged())
+        .subscribe((publicViewMode) => {
+          this.currentPublicViewMode = publicViewMode;
+        }),
+    );
+
     this.subscriptions.push(
       combineLatest([
         this.userProfile$.pipe(distinctUntilChanged()),

@@ -195,13 +195,24 @@ export const selectFullqueryParams = createSelector(
   (state) => {
     const filter = state.filters;
     const pagination = state.pagination;
-    // don't query with modeToggle, it's only in filters for persistent routing
-    const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+    // don't query with modeToggle/view*, they're UI routing metadata, not
+    // real filter fields - the view* fields are consumed separately by the
+    // effect to decide whether/how to bypass fullquery for the active view.
+    const {
+      skip,
+      limit,
+      sortField,
+      modeToggle,
+      viewUrl,
+      viewHeaders,
+      viewVariables,
+      ...theRest
+    } = filter;
 
     const limits = { ...pagination, order: sortField };
     const query = restrictFilter(theRest);
 
-    return { query, limits };
+    return { query, limits, viewUrl, viewHeaders, viewVariables };
   },
 );
 
@@ -211,7 +222,16 @@ export const selectFullfacetParams = createSelector(
   (state, userFilters) => {
     const filter = state.filters;
     const pagination = state.pagination;
-    const { skip, limit, sortField, modeToggle, ...theRest } = {
+    const {
+      skip,
+      limit,
+      sortField,
+      modeToggle,
+      viewUrl,
+      viewHeaders,
+      viewVariables,
+      ...theRest
+    } = {
       ...filter,
       ...pagination,
     };

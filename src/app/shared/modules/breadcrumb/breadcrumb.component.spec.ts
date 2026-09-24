@@ -15,6 +15,12 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import { of } from "rxjs/internal/observable/of";
 import { ArchViewMode } from "state-management/models";
+import { AppConfigService } from "app-config.service";
+import { buildDefaultDatasetViews } from "state-management/models/dataset-views.defaults";
+
+class MockAppConfigService {
+  getConfig = () => ({ datasetViews: buildDefaultDatasetViews() });
+}
 
 describe("BreadcrumbComponent", () => {
   let component: BreadcrumbComponent;
@@ -37,6 +43,7 @@ describe("BreadcrumbComponent", () => {
       imports: [],
       providers: [
         { provide: Store, useClass: MockStore },
+        { provide: AppConfigService, useClass: MockAppConfigService },
         provideHttpClient(withInterceptorsFromDi()),
         provideRouter([]),
       ],

@@ -175,7 +175,7 @@ export interface GenericFilters {
 }
 
 export interface DatasetFilters extends GenericFilters {
-  modeToggle: ArchViewMode;
+  modeToggle: string;
   text: string;
   ownerGroup: string[];
   type: string[];
@@ -183,6 +183,11 @@ export interface DatasetFilters extends GenericFilters {
   creationLocation: string[];
   keywords: string[];
   mode: Record<string, unknown>;
+  // Set when the active dataset view (see DatasetViewConfig) fetches its
+  // dataset list from a custom URL instead of the generic fullquery filter.
+  viewUrl?: string;
+  viewHeaders?: Record<string, string>;
+  viewVariables?: Record<string, string>;
   scientific: ScientificCondition[];
   isPublished: boolean | "";
   pid: string | { $regex: string };

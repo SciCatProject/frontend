@@ -4,7 +4,7 @@ import {
   DatasetState,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
-import { ArchViewMode, ScientificCondition } from "state-management/models";
+import { ScientificCondition } from "state-management/models";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -274,73 +274,20 @@ const reducer = createReducer(
 
   on(
     fromActions.setArchiveViewModeAction,
-    (state, { modeToggle }): DatasetState => {
-      let mode = {};
-
-      switch (modeToggle) {
-        case ArchViewMode.all:
-          mode = {};
-          break;
-        case ArchViewMode.archivable:
-          mode = {
-            "datasetlifecycle.archivable": true,
-            "datasetlifecycle.retrievable": false,
-          };
-          break;
-        case ArchViewMode.retrievable:
-          mode = {
-            "datasetlifecycle.retrievable": true,
-            "datasetlifecycle.archivable": false,
-          };
-          break;
-        case ArchViewMode.work_in_progress:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.retrievable": false,
-                "datasetlifecycle.archivable": false,
-                "datasetlifecycle.archiveStatusMessage": {
-                  $ne: "scheduleArchiveJobFailed",
-                },
-                "datasetlifecycle.retrieveStatusMessage": {
-                  $ne: "scheduleRetrieveJobFailed",
-                },
-              },
-            ],
-          };
-          break;
-        case ArchViewMode.system_error:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.retrievable": true,
-                "datasetlifecycle.archivable": true,
-              },
-              {
-                "datasetlifecycle.archiveStatusMessage":
-                  "scheduleArchiveJobFailed",
-              },
-              {
-                "datasetlifecycle.retrieveStatusMessage":
-                  "scheduleRetrieveJobFailed",
-              },
-            ],
-          };
-          break;
-        case ArchViewMode.user_error:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.archiveStatusMessage": "missingFilesError",
-              },
-            ],
-          };
-          break;
-        default: {
-          break;
-        }
-      }
-      const filters = { ...state.filters, skip: 0, mode, modeToggle };
+    (state, { modeToggle, query, url, headers, variables }): DatasetState => {
+      // query/url/headers/variables come from the matching DatasetViewConfig,
+      // resolved by the dispatching component (which has access to
+      // AppConfigService) - the reducer just stores the result, it doesn't
+      // know about app config.
+      const filters = {
+        ...state.filters,
+        skip: 0,
+        mode: query ?? {},
+        viewUrl: url,
+        viewHeaders: headers,
+        viewVariables: variables,
+        modeToggle,
+      };
       return { ...state, filters };
     },
   ),

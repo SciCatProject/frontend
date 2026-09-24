@@ -1,4 +1,26 @@
 <div class="mode-container">
+  <div
+    class="public-toggle"
+    *ngIf="(loggedIn$ | async) && searchPublicDataEnabled"
+  >
+    <button
+      mat-stroked-button
+      [class.active]="
+        currentPublicViewMode === '' || currentPublicViewMode === false
+      "
+      (click)="onViewPublicChange(false)"
+    >
+      My data
+    </button>
+    <button
+      mat-stroked-button
+      [class.active]="currentPublicViewMode === true"
+      (click)="onViewPublicChange(true)"
+    >
+      Public data
+    </button>
+  </div>
+
   <mat-button-toggle-group
     [value]="currentArchViewMode"
     *ngIf="appConfig.archiveWorkflowEnabled"
@@ -6,10 +28,10 @@
     <mat-button-toggle
       *ngFor="let mode of modes"
       (click)="onModeChange(mode)"
-      [value]="mode"
-      [ngClass]="mode"
+      [value]="mode.id"
+      [ngClass]="mode.id"
     >
-      {{ mode | titlecase }}
+      {{ mode.label }}
     </mat-button-toggle>
   </mat-button-toggle-group>
 </div>

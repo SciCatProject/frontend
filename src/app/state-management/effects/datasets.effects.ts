@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import {
   Attachment,
+  Configuration as ApiConfiguration,
   CreateAttachmentV3Dto,
   Datablock,
   DatasetsService,
@@ -11,6 +13,12 @@ import {
   UpdateAttachmentV3Dto,
   MetadataKeysV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { AuthService } from "shared/services/auth/auth.service";
+import {
+  DatasetViewContext,
+  interpolateDatasetViewTemplate,
+  resolveDatasetViewVariables,
+} from "state-management/models/dataset-view.interfaces";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
@@ -55,8 +63,8 @@ export class DatasetEffects {
         fromActions.sortByColumnAction,
         fromActions.setArchiveViewModeAction,
       ),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([, params]) => {
+      concatLatestFrom(() => [this.fullqueryParams$, this.currentUser$]),
+      map(([, params, user]) => {
         const config = this.appConfigService.getConfig();
 
         const defaultConfigColumns =
@@ -76,20 +84,63 @@ export class DatasetEffects {
         if (!params.limits.order) {
           params.limits.order = `${defaultColumn}:${defaultDirection}`;
         }
-        return params;
+        return { ...params, user };
       }),
-      mergeMap(({ query, limits }) =>
-        this.datasetsService
-          .datasetsControllerFullqueryV3(
-            JSON.stringify(limits),
-            JSON.stringify(query),
-          )
-          .pipe(
-            map((datasets) =>
-              fromActions.fetchDatasetsCompleteAction({ datasets }),
-            ),
-            catchError(() => of(fromActions.fetchDatasetsFailedAction())),
-          ),
+      mergeMap(
+        ({ query, limits, viewUrl, viewHeaders, viewVariables, user }) => {
+          if (viewUrl) {
+            const context: DatasetViewContext = {
+              apiBaseUrl: this.apiConfiguration.basePath,
+              token: this.authService.getToken()?.id,
+              tokenBearer: `Bearer ${this.authService.getToken()?.id}`,
+              searchText: (query as { text?: string }).text ?? "",
+              isPublished:
+                (query as { isPublished?: boolean | "" }).isPublished ?? "",
+              skip: limits.skip,
+              limit: limits.limit,
+              order: limits.order,
+              user,
+            };
+            const resolvedVariables = resolveDatasetViewVariables(
+              viewVariables,
+              context,
+            );
+            const url = interpolateDatasetViewTemplate(
+              viewUrl,
+              resolvedVariables,
+            );
+            const headers: Record<string, string> = {
+              Authorization: context.tokenBearer,
+            };
+            Object.entries(viewHeaders ?? {}).forEach(([key, value]) => {
+              headers[key] = interpolateDatasetViewTemplate(
+                value,
+                resolvedVariables,
+              );
+            });
+
+            return this.http
+              .get<OutputDatasetObsoleteDto[]>(url, { headers })
+              .pipe(
+                map((datasets) =>
+                  fromActions.fetchDatasetsCompleteAction({ datasets }),
+                ),
+                catchError(() => of(fromActions.fetchDatasetsFailedAction())),
+              );
+          }
+
+          return this.datasetsService
+            .datasetsControllerFullqueryV3(
+              JSON.stringify(limits),
+              JSON.stringify(query),
+            )
+            .pipe(
+              map((datasets) =>
+                fromActions.fetchDatasetsCompleteAction({ datasets }),
+              ),
+              catchError(() => of(fromActions.fetchDatasetsFailedAction())),
+            );
+        },
       ),
     );
   });
@@ -543,6 +594,9 @@ export class DatasetEffects {
     private store: Store,
     private appConfigService: AppConfigService,
     private metadataKeysV4Service: MetadataKeysV4Service,
+    private http: HttpClient,
+    private authService: AuthService,
+    private apiConfiguration: ApiConfiguration,
   ) {}
 
   private storeBatch(batch: OutputDatasetObsoleteDto[], userId: string) {

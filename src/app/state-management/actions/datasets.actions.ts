@@ -8,11 +8,7 @@ import {
   OutputAttachmentV3Dto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FacetCounts } from "state-management/state/datasets.store";
-import {
-  ArchViewMode,
-  DatasetFilters,
-  ScientificCondition,
-} from "state-management/models";
+import { DatasetFilters, ScientificCondition } from "state-management/models";
 import { DateRange } from "state-management/state/proposals.store";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 
@@ -279,7 +275,13 @@ export const setPidTermsAction = createAction(
 );
 export const setArchiveViewModeAction = createAction(
   "[Dataset] Set Archive View Mode",
-  props<{ modeToggle: ArchViewMode }>(),
+  props<{
+    modeToggle: string;
+    query?: Record<string, unknown>;
+    url?: string;
+    headers?: Record<string, string>;
+    variables?: Record<string, string>;
+  }>(),
 );
 export const setPublicViewModeAction = createAction(
   "[Dataset] Set Public View Mode",

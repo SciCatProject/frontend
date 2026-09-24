@@ -350,6 +350,30 @@ describe("DatasetsReducer", () => {
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
     });
+
+    it("should store the query, url, headers and variables of a config-driven view verbatim", () => {
+      const modeToggle = "custom-view";
+      const query = { "datasetlifecycle.archivable": true };
+      const url = "{{@baseUrl}}/datasets/custom-view";
+      const headers = { "X-Custom": "{{@reviewer}}" };
+      const variables = { baseUrl: "#apiBaseUrl", reviewer: "#user.username" };
+
+      const action = fromActions.setArchiveViewModeAction({
+        modeToggle,
+        query,
+        url,
+        headers,
+        variables,
+      });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.filters.mode).toEqual(query);
+      expect(state.filters.modeToggle).toEqual(modeToggle);
+      expect(state.filters.viewUrl).toEqual(url);
+      expect(state.filters.viewHeaders).toEqual(headers);
+      expect(state.filters.viewVariables).toEqual(variables);
+      expect(state.filters.skip).toEqual(0);
+    });
   });
 
   describe("on setPublicViewMode", () => {

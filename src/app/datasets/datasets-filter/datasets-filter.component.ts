@@ -6,7 +6,6 @@ import {
   selectFacetCountByKey,
   selectFilterByKey,
   selectHasAppliedFilters,
-  selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import { ScientificCondition } from "state-management/models";
 import {
@@ -16,7 +15,6 @@ import {
   fetchFacetCountsAction,
   removeDatasetFilterAction,
   setFiltersAction,
-  setPublicViewModeAction,
 } from "state-management/actions/datasets.actions";
 import {
   updateConditionsConfigs,
@@ -24,10 +22,7 @@ import {
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
-import {
-  selectFilters,
-  selectIsLoggedIn,
-} from "state-management/selectors/user.selectors";
+import { selectFilters } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
 import { Subscription } from "rxjs";
 import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
@@ -64,10 +59,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
   @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
-
-  loggedIn$ = this.store.select(selectIsLoggedIn);
-
-  currentPublicViewMode: boolean | "" = "";
 
   humanNameMap: { [key: string]: string } = {};
 
@@ -139,23 +130,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       setFiltersAction({ datasetFilters: this.activeFilters }),
     );
-
-    this.subscriptions.push(
-      this.store.select(selectPublicViewMode).subscribe((publicViewMode) => {
-        this.currentPublicViewMode = publicViewMode;
-      }),
-    );
-  }
-
-  onViewPublicChange(value: boolean) {
-    this.currentPublicViewMode = value;
-
-    this.store.dispatch(
-      setPublicViewModeAction({ isPublished: this.currentPublicViewMode }),
-    );
-
-    this.store.dispatch(fetchDatasetsAction());
-    this.store.dispatch(fetchFacetCountsAction());
   }
 
   reset() {

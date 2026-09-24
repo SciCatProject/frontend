@@ -14,26 +14,6 @@
   </mat-card-header>
 
   <mat-card-content>
-    <ng-template [ngIf]="this.loggedIn$ | async">
-      <div class="public-toggle">
-        <button
-          mat-stroked-button
-          [class.active]="
-            currentPublicViewMode === '' || currentPublicViewMode === false
-          "
-          (click)="onViewPublicChange(false)"
-        >
-          My data
-        </button>
-        <button
-          mat-stroked-button
-          [class.active]="currentPublicViewMode === true"
-          (click)="onViewPublicChange(true)"
-        >
-          Public data
-        </button>
-      </div>
-    </ng-template>
     <ng-container *ngFor="let filter of filtersList">
       <shared-filter
         *ngIf="filter.enabled"

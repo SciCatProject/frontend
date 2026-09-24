@@ -8,9 +8,9 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import { take, filter } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
-import { ArchViewMode } from "state-management/models";
 import { Location } from "@angular/common";
 import { isEmpty } from "lodash-es";
+import { AppConfigService } from "app-config.service";
 
 interface Breadcrumb {
   label: string;
@@ -42,6 +42,7 @@ export class BreadcrumbComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
+    private appConfigService: AppConfigService,
   ) {}
 
   ngOnInit() {
@@ -124,7 +125,11 @@ export class BreadcrumbComponent implements OnInit {
             .select(selectArchiveViewMode)
             .pipe(take(1))
             .subscribe((currentMode) => {
-              const mode = setMode(currentMode);
+              const mode =
+                this.appConfigService
+                  .getConfig()
+                  .datasetViews?.find((view) => view.id === currentMode)
+                  ?.query ?? {};
               if (isEmpty(mode)) {
                 this.router.navigateByUrl(url + crumb.fallback);
               } else {
@@ -140,62 +145,3 @@ export class BreadcrumbComponent implements OnInit {
     }
   }
 }
-
-const setMode = (modeToggle: ArchViewMode) => {
-  switch (modeToggle) {
-    case ArchViewMode.all:
-      return {};
-    case ArchViewMode.archivable:
-      return {
-        "datasetlifecycle.archivable": true,
-        "datasetlifecycle.retrievable": false,
-      };
-    case ArchViewMode.retrievable:
-      return {
-        "datasetlifecycle.retrievable": true,
-        "datasetlifecycle.archivable": false,
-      };
-    case ArchViewMode.work_in_progress:
-      return {
-        $or: [
-          {
-            "datasetlifecycle.retrievable": false,
-            "datasetlifecycle.archivable": false,
-            "datasetlifecycle.archiveStatusMessage": {
-              $ne: "scheduleArchiveJobFailed",
-            },
-            "datasetlifecycle.retrieveStatusMessage": {
-              $ne: "scheduleRetrieveJobFailed",
-            },
-          },
-        ],
-      };
-    case ArchViewMode.system_error:
-      return {
-        $or: [
-          {
-            "datasetlifecycle.retrievable": true,
-            "datasetlifecycle.archivable": true,
-          },
-          {
-            "datasetlifecycle.archiveStatusMessage": "scheduleArchiveJobFailed",
-          },
-          {
-            "datasetlifecycle.retrieveStatusMessage":
-              "scheduleRetrieveJobFailed",
-          },
-        ],
-      };
-    case ArchViewMode.user_error:
-      return {
-        $or: [
-          {
-            "datasetlifecycle.archiveStatusMessage": "missingFilesError",
-          },
-        ],
-      };
-    default: {
-      return {};
-    }
-  }
-};

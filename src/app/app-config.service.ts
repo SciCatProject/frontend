@@ -15,6 +15,8 @@ import {
   ListSettings,
   TableColumn,
 } from "state-management/models";
+import { DatasetViewConfig } from "state-management/models/dataset-view.interfaces";
+import { buildDefaultDatasetViews } from "state-management/models/dataset-views.defaults";
 
 export interface OAuth2Endpoint {
   authURL: string;
@@ -210,6 +212,7 @@ export interface AppConfigInterface {
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
   realTimeUpdatesEnabled?: boolean;
+  datasetViews?: DatasetViewConfig[];
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -241,6 +244,17 @@ function applyDefaultBatchActions(config: AppConfigInterface): void {
       tooltip: destination.tooltip ?? undefined,
     })),
   );
+}
+
+/**
+ * Same rationale as applyDefaultBatchActions: a deployment with
+ * archiveWorkflowEnabled but no datasetViews of its own predates the
+ * config-driven views mechanism, so fall back to the built-in
+ * All/Archivable/Retrievable/... tabs instead of showing nothing.
+ */
+function applyDefaultDatasetViews(config: AppConfigInterface): void {
+  if (!config.archiveWorkflowEnabled || config.datasetViews?.length) return;
+  config.datasetViews = buildDefaultDatasetViews();
 }
 
 @Injectable({
@@ -365,6 +379,7 @@ export class AppConfigService {
     }
 
     applyDefaultBatchActions(config);
+    applyDefaultDatasetViews(config);
     validateAllActionConfigsIn(config);
 
     this.appConfig = config;

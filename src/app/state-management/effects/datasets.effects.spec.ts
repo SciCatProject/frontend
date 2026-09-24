@@ -1,7 +1,8 @@
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
-import { provideMockStore } from "@ngrx/store/testing";
+import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
+import { of } from "rxjs";
 import * as fromActions from "../actions/datasets.actions";
 import { DatasetEffects } from "./datasets.effects";
 import { FacetCounts } from "state-management/state/datasets.store";
@@ -23,19 +24,25 @@ import {
   DatasetsService,
   OutputDatasetObsoleteDto,
   MetadataKeysV4Service,
+  Configuration as ApiConfiguration,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import {
   createMock,
   mockAttachment as attachment,
   mockDataset,
+  MockAuthService,
 } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
-import { provideHttpClientTesting } from "@angular/common/http/testing";
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from "@angular/common/http/testing";
+import { AuthService } from "shared/services/auth/auth.service";
 
 const derivedData = createMock<OutputDatasetObsoleteDto>({
   investigator: "",
@@ -63,6 +70,8 @@ describe("DatasetEffects", () => {
   let effects: DatasetEffects;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
   let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
+  let store: MockStore;
+  let httpMock: HttpTestingController;
 
   const getConfig = () => ({});
 
@@ -112,6 +121,8 @@ describe("DatasetEffects", () => {
           ]),
         },
         { provide: AppConfigService, useValue: { getConfig } },
+        { provide: AuthService, useClass: MockAuthService },
+        { provide: ApiConfiguration, useValue: { basePath: "" } },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
@@ -120,6 +131,12 @@ describe("DatasetEffects", () => {
     effects = TestBed.inject(DatasetEffects);
     datasetApi = injectedStub(DatasetsService);
     metadataKeysApi = injectedStub(MetadataKeysV4Service);
+    store = TestBed.inject(MockStore);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 
   const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
@@ -149,6 +166,43 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
+    });
+
+    it("should call a config-driven view's url directly, bypassing fullquery, when one is set", () => {
+      store.overrideSelector(selectFullqueryParams, {
+        query: { text: "abc", isPublished: false },
+        limits: { skip: 0, limit: 25, order: "test asc" },
+        viewUrl: "{{@baseUrl}}/datasets/custom?text={{@text}}&skip={{@skip}}",
+        viewHeaders: undefined,
+        viewVariables: {
+          baseUrl: "#apiBaseUrl",
+          text: "#searchText",
+          skip: "#skip",
+        },
+      });
+      store.refreshState();
+
+      const datasets = [dataset];
+      actions = of(
+        fromActions.fetchDatasetsAction(),
+      ) as unknown as TestObservable;
+
+      let result: ReturnType<typeof fromActions.fetchDatasetsCompleteAction>;
+      effects.fetchDatasets$.subscribe(
+        (action) =>
+          (result = action as ReturnType<
+            typeof fromActions.fetchDatasetsCompleteAction
+          >),
+      );
+
+      const req = httpMock.expectOne("/datasets/custom?text=abc&skip=0");
+      expect(req.request.headers.get("Authorization")).toContain("Bearer");
+      req.flush(datasets);
+
+      expect(result).toEqual(
+        fromActions.fetchDatasetsCompleteAction({ datasets }),
+      );
+      expect(datasetApi.datasetsControllerFullqueryV3).not.toHaveBeenCalled();
     });
   });
 

@@ -11,9 +11,13 @@ import { DatasetTableActionsComponent } from "./dataset-table-actions.component"
 import { MockStore, mockDataset } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Store, StoreModule } from "@ngrx/store";
-import { ArchViewMode } from "state-management/models";
+import { DatasetViewConfig } from "state-management/models/dataset-view.interfaces";
+import { buildDefaultDatasetViews } from "state-management/models/dataset-views.defaults";
 import {
   setArchiveViewModeAction,
+  setPublicViewModeAction,
+  fetchDatasetsAction,
+  fetchFacetCountsAction,
   addToBatchAction,
   clearBatchAction,
   clearSelectionAction,
@@ -25,7 +29,11 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 
 class MockAppConfigService {
-  getConfig = () => ({ archiveWorkflowEnabled: true });
+  getConfig = () => ({
+    archiveWorkflowEnabled: true,
+    searchPublicDataEnabled: true,
+    datasetViews: buildDefaultDatasetViews(),
+  });
 }
 
 describe("DatasetTableActionsComponent", () => {
@@ -95,15 +103,42 @@ describe("DatasetTableActionsComponent", () => {
   describe("#onModeChange()", () => {
     it("should dispatch a SetViewModeAction and a clearSelectionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      const modeToggle = ArchViewMode.all;
+      const view: DatasetViewConfig = {
+        id: "all",
+        label: "All",
+        order: 1,
+        query: {},
+      };
 
-      component.onModeChange(modeToggle);
+      component.onModeChange(view);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({ modeToggle }),
+        setArchiveViewModeAction({
+          modeToggle: view.id,
+          query: view.query,
+          url: view.url,
+          headers: view.headers,
+          variables: view.variables,
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+    });
+  });
+
+  describe("#onViewPublicChange()", () => {
+    it("should dispatch a SetPublicViewModeAction, fetchDatasetsAction, and fetchFacetCountsAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const viewPublic = false;
+      component.onViewPublicChange(viewPublic);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(3);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setPublicViewModeAction({ isPublished: viewPublic }),
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchFacetCountsAction());
     });
   });
 
