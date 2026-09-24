@@ -1,0 +1,54 @@
+<!--
+  SciCat Info HTML template
+
+  This is an HTML fragment for AppConfig aboutSettings.htmlContent.
+  Replace all values in square brackets for each environment.
+-->
+
+<section
+  id="scicat-info"
+  aria-labelledby="scicat-info-title"
+  style="max-width: 960px; margin: 32px auto; color: #1f2d3d; font-family: Inter, Arial, sans-serif; font-size: 16px; line-height: 1.55;"
+>
+  <header style="padding: 28px 32px; border-left: 5px solid #169fd5; background: #eef8fc;">
+    <p style="margin: 0 0 6px; color: #397287; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;">Service Information</p>
+    <h1 id="scicat-info-title" style="margin: 0; color: #153647; font-size: 28px; line-height: 1.2;">About This SciCat Instance</h1>
+    <p style="margin: 12px 0 0; max-width: 680px;">
+      This SciCat instance is operated by [FACILITY NAME] for the discovery,
+      cataloguing, and management of scientific data.
+    </p>
+  </header>
+
+  <div style="display: grid; gap: 16px; margin-top: 20px;">
+    <section style="padding: 20px 24px; border: 1px solid #d9e5ea; border-radius: 6px; background: #ffffff;">
+      <h2 style="margin: 0 0 14px; color: #153647; font-size: 19px;">Service Information</h2>
+      <dl style="display: grid; grid-template-columns: minmax(140px, 0.35fr) 1fr; gap: 10px 24px; margin: 0;">
+        <dt style="font-weight: 600;">Environment</dt>
+        <dd style="margin: 0;">[Development / Staging / Production]</dd>
+        <dt style="font-weight: 600;">Service owner</dt>
+        <dd style="margin: 0;">[TEAM OR ORGANISATION]</dd>
+        <dt style="font-weight: 600;">Support contact</dt>
+        <dd style="margin: 0;">[SUPPORT EMAIL OR URL]</dd>
+        <dt style="font-weight: 600;">Data policy</dt>
+        <dd style="margin: 0;"><a href="[DATA POLICY URL]" style="color: #007cae;">[DATA POLICY NAME]</a></dd>
+      </dl>
+    </section>
+
+    <section style="padding: 20px 24px; border: 1px solid #d9e5ea; border-radius: 6px; background: #ffffff;">
+      <h2 style="margin: 0 0 8px; color: #153647; font-size: 19px;">What Is SciCat?</h2>
+      <p style="margin: 0;">
+        SciCat is an open-source scientific data catalogue. It supports metadata
+        capture, data discovery, access control, provenance, and integration with
+        facility data-management workflows.
+      </p>
+    </section>
+
+    <section style="padding: 20px 24px; border: 1px solid #f0d58a; border-radius: 6px; background: #fff9e8;">
+      <h2 style="margin: 0 0 8px; color: #735817; font-size: 19px;">Availability Notice</h2>
+      <p style="margin: 0;">
+        [Add planned maintenance windows, environment-specific limitations, or a
+        link to the service-status page here.]
+      </p>
+    </section>
+  </div>
+</section>
