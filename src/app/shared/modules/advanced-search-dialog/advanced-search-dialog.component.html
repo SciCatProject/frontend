@@ -1,0 +1,288 @@
+<div class="advanced-search-dialog">
+  <div class="dialog-header">
+    <div class="header-titles">
+      <div class="main-title">
+        <mat-icon class="title-icon">science</mat-icon>
+        <h2>{{ dialogTitle }}</h2>
+      </div>
+      <p class="subtitle">
+        Construct targeted metadata queries across scientific datasets.
+      </p>
+    </div>
+    <button
+      mat-icon-button
+      type="button"
+      class="close-dialog-btn"
+      (click)="cancel()"
+      matTooltip="Close"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="dialog-body">
+    <!-- LEFT COLUMN: Available Conditions -->
+    <div class="left-column">
+      <div class="column-header">
+        <span class="column-title">Available Conditions</span>
+        <span class="badge count-badge">{{ metadataKeys.length }}</span>
+      </div>
+
+      <div class="search-box-wrapper">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          type="text"
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          placeholder="Search conditions…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button
+          type="button"
+          *ngIf="searchTerm"
+          class="clear-search-btn"
+          (click)="searchTerm = ''"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="categories-scroll-area">
+        <ng-container *ngFor="let group of getCategories(); trackBy: trackByCategory">
+          <div class="category-block">
+            <div class="category-title-row">
+              <mat-icon class="category-icon">{{ group.icon }}</mat-icon>
+              <span class="category-name">{{ group.name }}</span>
+              <span class="category-count">{{ group.keys.length }}</span>
+            </div>
+
+            <div class="category-items-list">
+              <button
+                type="button"
+                *ngFor="let key of group.keys; trackBy: trackByKey"
+                class="condition-item"
+                [class.configured]="isKeyConfigured(key)"
+                (click)="addCondition(key)"
+                [attr.aria-label]="'Add ' + (getHumanName(key) || key) + ' condition'"
+              >
+                <span class="item-text">
+                  <span class="human-name">{{ getHumanName(key) || key }}</span>
+                </span>
+                <span class="item-action">
+                  <mat-icon *ngIf="!isKeyConfigured(key)" class="add-icon">add</mat-icon>
+                  <mat-icon *ngIf="isKeyConfigured(key)" class="check-icon">check</mat-icon>
+                </span>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="no-results" *ngIf="!getCategories()?.length">
+          <mat-icon>search_off</mat-icon>
+          <span>No matching conditions found</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Configured Conditions Builder -->
+    <div class="right-column">
+      <div class="column-header">
+        <div class="title-with-badge">
+          <span class="column-title">Configured Conditions</span>
+          <span class="badge active-badge">{{ configuredConditions.length }}</span>
+        </div>
+        <button
+          *ngIf="configuredConditions.length"
+          type="button"
+          class="clear-all-link"
+          (click)="clearAll()"
+        >
+          Clear all
+        </button>
+      </div>
+
+      <div class="configured-scroll-area">
+        <div class="empty-configured-state" *ngIf="!configuredConditions.length">
+          <div class="empty-icon-circle">
+            <mat-icon>filter_alt</mat-icon>
+          </div>
+          <h4>No conditions configured</h4>
+          <p>
+            Select a metadata condition from the left panel to add it to your search criteria.
+          </p>
+        </div>
+
+        <div class="conditions-cards-container" *ngIf="configuredConditions.length">
+          <div
+            *ngFor="let item of configuredConditions; let i = index; trackBy: trackByCondition"
+            class="condition-card"
+            [class.disabled-card]="!item.enabled"
+            [class.focused-condition-card]="item.condition.lhs === focusedConditionLhs"
+            [attr.data-condition-key]="item.condition.lhs"
+          >
+            <!-- Top bar of card -->
+            <div class="card-top-bar">
+              <div class="card-title-group">
+                <span class="card-human-title">
+                  {{ getHumanName(item.condition.lhs) || item.condition.lhs }}
+                </span>
+                <span class="card-raw-key">{{ item.condition.lhs }}</span>
+              </div>
+
+              <div class="card-top-actions">
+                <mat-slide-toggle
+                  [checked]="item.enabled"
+                  (change)="toggleEnabled(i, $event.checked)"
+                  class="condition-toggle"
+                  matTooltip="Enable/disable filter"
+                >
+                  <span class="toggle-label">{{ item.enabled ? 'Active' : 'Paused' }}</span>
+                </mat-slide-toggle>
+
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="delete-condition-btn"
+                  (click)="removeCondition(i)"
+                  matTooltip="Remove condition"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <!-- Bottom horizontal fields row -->
+            <div class="card-fields-row">
+              <!-- Operator dropdown -->
+              <div class="field-item operator-item">
+                <label class="field-label">Operator</label>
+                <mat-form-field appearance="outline" class="compact-form-field">
+                  <mat-select
+                    [value]="getOperatorUIValue(item.condition.relation)"
+                    (selectionChange)="updateOperator(i, $event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let op of operatorOptions"
+                      [value]="op.value"
+                    >
+                      {{ op.label }} <span class="op-symbol">({{ op.symbol }})</span>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Value input (standard) -->
+              <div
+                class="field-item value-item"
+                *ngIf="getOperatorUIValue(item.condition.relation) !== 'RANGE'"
+              >
+                <label class="field-label">Value</label>
+                <mat-form-field appearance="outline" class="compact-form-field">
+                  <input
+                    matInput
+                    [value]="item.condition.rhs || ''"
+                    (input)="updateValue(i, $event)"
+                    placeholder="Enter target value…"
+                    autocomplete="off"
+                  />
+                </mat-form-field>
+              </div>
+
+              <!-- Min & Max inputs (range) -->
+              <div
+                class="field-item range-item"
+                *ngIf="getOperatorUIValue(item.condition.relation) === 'RANGE'"
+              >
+                <label class="field-label">Min</label>
+                <mat-form-field appearance="outline" class="compact-form-field">
+                  <input
+                    matInput
+                    type="number"
+                    [value]="item.condition.rhs?.[0] || ''"
+                    (input)="updateRangeValue(i, 0, $event)"
+                    placeholder="Min"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div
+                class="field-item range-item"
+                *ngIf="getOperatorUIValue(item.condition.relation) === 'RANGE'"
+              >
+                <label class="field-label">Max</label>
+                <mat-form-field appearance="outline" class="compact-form-field">
+                  <input
+                    matInput
+                    type="number"
+                    [value]="item.condition.rhs?.[1] || ''"
+                    (input)="updateRangeValue(i, 1, $event)"
+                    placeholder="Max"
+                  />
+                </mat-form-field>
+              </div>
+
+              <!-- Unit selector (if units available or enabled) -->
+              <div
+                class="field-item unit-item"
+                *ngIf="unitsEnabled && getUnits(item.condition.lhs)?.length"
+              >
+                <label class="field-label">Unit</label>
+                <mat-form-field appearance="outline" class="compact-form-field">
+                  <mat-select
+                    [value]="item.condition.unit || ''"
+                    (selectionChange)="updateUnit(i, $event.value)"
+                  >
+                    <mat-option value=""><em>None</em></mat-option>
+                    <mat-option
+                      *ngFor="let unit of getUnits(item.condition.lhs)"
+                      [value]="unit"
+                    >
+                      {{ unit }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <div class="footer-left">
+      <button
+        mat-stroked-button
+        type="button"
+        class="clear-all-btn"
+        (click)="clearAll()"
+        [disabled]="!configuredConditions.length"
+      >
+        <mat-icon>clear_all</mat-icon>
+        Clear All
+      </button>
+    </div>
+
+    <div class="footer-right">
+      <button
+        mat-button
+        type="button"
+        class="cancel-btn"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        class="apply-btn"
+        (click)="apply()"
+      >
+        <mat-icon>search</mat-icon>
+        Apply
+      </button>
+    </div>
+  </div>
+</div>

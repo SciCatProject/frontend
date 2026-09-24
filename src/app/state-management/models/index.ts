@@ -2,6 +2,7 @@ import {
   FilterConfig,
   ConditionConfig,
 } from "state-management/state/user.store";
+export { ConditionConfig, FilterConfig };
 import { IngestorAutodiscovery } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import { FieldSort } from "shared/modules/dynamic-material-table/models/table-field.model";
 
@@ -149,7 +150,7 @@ export enum JobViewMode {
   allJobs = "all jobs",
 }
 
-type ScientificConditionRelation =
+export type ScientificConditionRelation =
   | "EQUAL_TO_NUMERIC"
   | "EQUAL_TO_STRING"
   | "GREATER_THAN"
