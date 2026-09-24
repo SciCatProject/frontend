@@ -147,6 +147,7 @@ This section list all the default values and operators that are available when c
 | #Length( @variable ) | integer | The number of elements in the specified variable |
 | #datasetOwner | boolean | True if the user is part of the owner group of the dataset(s) |
 | #userIsAdmin | boolean | True if the user is an admin |
+| #userIsLoggedIn | boolean | True if the user is logged in (negate with a leading `!`, e.g. `!#userIsLoggedIn`) |
 | #uuid | string | A v4 uuid generated on the fly |
 | @variable | any | replace the string with the valu eof the variable defined in the action variable |
 
