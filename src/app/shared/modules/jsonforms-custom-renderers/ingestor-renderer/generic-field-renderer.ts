@@ -37,12 +37,15 @@ export class GenericFieldRendererComponent extends JsonFormsControl {
   }
 }
 
-const isLeafType = (schema: JsonSchema): boolean =>
-  schema?.type === "string" ||
-  schema?.type === "number" ||
-  schema?.type === "integer";
+const isLeafType = (schema: JsonSchema): boolean => {
+  const leafTypes = ["string", "number", "integer"];
+
+  return Array.isArray(schema?.type)
+    ? schema.type.some((type) => leafTypes.includes(type))
+    : leafTypes.includes(schema?.type);
+};
 
 export const genericFieldTester: RankedTester = rankWith(
-  1.5,
+  2,
   schemaMatches(isLeafType),
 );

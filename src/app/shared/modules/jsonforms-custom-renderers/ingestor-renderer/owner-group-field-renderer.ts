@@ -97,6 +97,6 @@ export class OwnerGroupFieldComponent
 }
 
 export const ownerGroupFieldTester: RankedTester = rankWith(
-  2,
+  2.5,
   scopeEndsWith("ownerGroup"),
 );
