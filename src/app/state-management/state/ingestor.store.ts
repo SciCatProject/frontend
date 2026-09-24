@@ -6,7 +6,6 @@ import {
   IngestorHelper,
 } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import {
-  ConfigurationResponse,
   GetBrowseDatasetResponse,
   GetExtractorResponse,
   GetTransferResponse,
@@ -32,7 +31,6 @@ export interface IngestorState {
   ingestorEndpoint: IngestorAutodiscovery | null;
   ingestorTransferList: GetTransferResponse | null;
   ingestorTransferListDetailView: GetTransferResponse | null;
-  ingestorConfiguration: ConfigurationResponse | null;
   transferListRequestOptions: {
     page: number;
     pageNumber: number;
@@ -67,7 +65,6 @@ export const initialIngestorState: IngestorState = {
     page: 0,
     pageNumber: 100,
   },
-  ingestorConfiguration: null,
   ingestorExtractionMethods: null,
   ingestionObject: IngestorHelper.createEmptyRequestInformation(),
   ingestionObjectApiInformation: IngestorHelper.createEmptyAPIInformation(),

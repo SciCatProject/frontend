@@ -30,7 +30,6 @@ import {
   selectIngestorExtractionMethods,
   selectIngestorRenderView,
   selectUpdateEditorFromThirdParty,
-  selectIngestorCreationLocation,
 } from "state-management/selectors/ingestor.selectors";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
@@ -56,7 +55,6 @@ export class IngestorNewTransferDialogPageComponent
   ingestorExtractionMethods$ = this.store.select(
     selectIngestorExtractionMethods,
   );
-  ingestorCreationLocation$ = this.store.select(selectIngestorCreationLocation);
 
   @Output() nextStep = new EventEmitter<void>();
 
@@ -91,7 +89,6 @@ export class IngestorNewTransferDialogPageComponent
     scicat: true,
   };
   experimentalBannerDismissed = false;
-  creationLocations: string[] | null = null;
 
   constructor(
     private store: Store,
@@ -99,14 +96,6 @@ export class IngestorNewTransferDialogPageComponent
   ) {}
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.ingestorCreationLocation$.subscribe((creationLocations) => {
-        this.creationLocations = creationLocations;
-      }),
-    );
-    // get configurations from ingestor to build up autocomplete and autofill
-    this.store.dispatch(fromActions.getConfiguration());
-
     // Fetch the API token that the ingestor can authenticate to scicat as the user
     this.subscriptions.push(
       this.vm$.subscribe((settings) => {
@@ -260,9 +249,6 @@ export class IngestorNewTransferDialogPageComponent
     const formattedCreationTime = creationTime.toISOString();
     this.createNewTransferData.scicatHeader["creationTime"] =
       formattedCreationTime;
-
-    this.createNewTransferData.scicatHeader["creationLocation"] =
-      this.creationLocations?.length > 0 ? this.creationLocations[0] : null;
   }
 
   prepareSchemaForProcessing(): void {

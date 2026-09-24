@@ -7,22 +7,6 @@ import {
 } from "shared/MockStubs";
 
 describe("Ingestor Actions", () => {
-  describe("getConfiguration", () => {
-    it("should create an action", () => {
-      const action = fromActions.getConfiguration();
-      expect(action.type).toBe("[Ingestor] Get Configuration");
-    });
-  });
-
-  describe("getConfigurationSuccess", () => {
-    it("should create an action with configuration", () => {
-      const configuration = { creationLocations: ["PSI"] };
-      const action = fromActions.getConfigurationSuccess({ configuration });
-      expect(action.type).toBe("[Ingestor] Get Configuration Success");
-      expect(action.configuration).toEqual(configuration);
-    });
-  });
-
   describe("getConfigurationFailure", () => {
     it("should create an action with error", () => {
       const error = new Error("fetch failed");

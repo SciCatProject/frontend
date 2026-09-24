@@ -5,7 +5,6 @@ import {
   IngestorAutodiscovery,
 } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import {
-  ConfigurationResponse,
   GetBrowseDatasetResponse,
   GetExtractorResponse,
   GetTransferResponse,
@@ -115,13 +114,6 @@ export const getExtractionMethodsSuccess = createAction(
 export const getExtractionMethodsFailure = createAction(
   "[Ingestor] Get Extraction Methods Failure",
   props<{ err: Error }>(),
-);
-
-export const getConfiguration = createAction("[Ingestor] Get Configuration");
-
-export const getConfigurationSuccess = createAction(
-  "[Ingestor] Get Configuration Success",
-  props<{ configuration: ConfigurationResponse }>(),
 );
 
 export const getConfigurationFailure = createAction(
