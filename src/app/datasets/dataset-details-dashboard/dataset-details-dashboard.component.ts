@@ -167,6 +167,15 @@ export class DatasetDetailsDashboardComponent
               enabled: true,
             },
             {
+              location: "./logbook",
+              label: TAB.logbook,
+              icon: "book",
+              enabled:
+                this.appConfig.logbookEnabled &&
+                isLoggedIn &&
+                hasAccessToLogbook,
+            },
+            {
               location: "./jsonScientificMetadata",
               label: TAB.jsonScientificMetadata,
               icon: "data_object",
@@ -189,7 +198,7 @@ export class DatasetDetailsDashboardComponent
               location: "./relationships",
               label: TAB.relationships,
               icon: "device_hub",
-              enabled: this.appConfig.datasetRelationshipsEnabled,
+              enabled: this.appConfig.datasetRelationshipsEnabled && isAdmin,
             },
             {
               location: "./reduce",
@@ -199,15 +208,6 @@ export class DatasetDetailsDashboardComponent
                 this.appConfig.datasetReduceEnabled &&
                 isLoggedIn &&
                 isInOwnerGroup,
-            },
-            {
-              location: "./logbook",
-              label: TAB.logbook,
-              icon: "book",
-              enabled:
-                this.appConfig.logbookEnabled &&
-                isLoggedIn &&
-                hasAccessToLogbook,
             },
             {
               location: "./attachments",

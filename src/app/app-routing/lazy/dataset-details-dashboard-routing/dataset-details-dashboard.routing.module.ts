@@ -34,6 +34,7 @@ const routes: Routes = [
   {
     path: "relationships",
     component: RelationshipsComponent,
+    canActivate: [AuthGuard, AdminGuard],
   },
   // For reduce && logbook this is a work around because guard priority somehow doesn't work and this work around make guards excuted sequencial
   // Expected behavior should be that ServiceGuard return false should have higher priority than AuthGuard therefore it shoulds navigate to /404 instead of /login
