@@ -36,14 +36,6 @@ export class DateTimeFieldRendererComponent extends JsonFormsControl {
     );
   }
 
-  saveDateTime2(value: DateTime | null): void {
-    let isoValue: string | null = null;
-    if (isoValue != null && value.isValid) {
-      isoValue = value.toUTC().toISO();
-    }
-    this.onChange({ value: isoValue });
-  }
-
   saveDateTime(value: unknown): void {
     let isoValue: string | null = null;
 
