@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { JsonFormsAngularService, JsonFormsControl } from "@jsonforms/angular";
+import { Actions } from "@jsonforms/core";
 import { FormControl } from "@angular/forms";
 import {
   and,
@@ -50,7 +51,8 @@ export class DateTimeFieldRendererComponent extends JsonFormsControl {
       isoValue = parsed.isValid ? parsed.toUTC().toISO() : value;
     }
 
-    this.onChange({ value: isoValue });
+    this.jsonFormsService.updateCore(Actions.update(this.propsPath, () => isoValue));
+    this.triggerValidation?.();
   }
 
   override mapAdditionalProps(props: StatePropsOfControl): void {
