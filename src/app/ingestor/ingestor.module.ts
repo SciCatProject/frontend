@@ -55,6 +55,24 @@ import { IngestorCreationComponent } from "./ingestor-page/ingestor-creation.com
 import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.custom-metadata-dialog-page.component";
 import { SIFieldHiderRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/quantity-field-renderer";
 import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/dynamic-object-renderer";
+import { GenericFieldRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/generic-field-renderer";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import {
+  NgxMatDatepickerActions,
+  NgxMatDatepickerApply,
+  NgxMatDatepickerCancel,
+  NgxMatDatepickerClear,
+  NgxMatDatepickerInput,
+  NgxMatDatetimepicker,
+} from "@ngxmc/datetime-picker";
+import { DateTimeFieldRendererComponent } from "../shared/modules/jsonforms-custom-renderers/ingestor-renderer/date-time-field-renderer";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+import {
+  MatLuxonDateModule,
+  provideLuxonDateAdapter,
+} from "@angular/material-luxon-adapter";
+import { AppConfigService } from "app-config.service";
 
 @NgModule({
   declarations: [
@@ -77,11 +95,13 @@ import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-
     ExportTemplateHelperComponent,
     IngestorFileBrowserComponent,
     OwnerGroupFieldComponent,
+    GenericFieldRendererComponent,
     QuantityValueLayoutRendererComponent,
     CustomLayoutChildrenRenderPropsPipe,
     IngestorTransferViewDialogComponent,
     IngestorNoRightsDialogPageComponent,
     IngestorCustomMetadataDialogPageComponent,
+    DateTimeFieldRendererComponent,
   ],
   imports: [
     CommonModule,
@@ -113,6 +133,35 @@ import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-
     MatMenuModule,
     EffectsModule.forFeature([IngestorEffects]),
     StoreModule.forFeature("ingestor", ingestorReducer),
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    NgxMatDatepickerInput,
+    NgxMatDatetimepicker,
+    NgxMatDatepickerActions,
+    NgxMatDatepickerApply,
+    NgxMatDatepickerCancel,
+    NgxMatDatepickerClear,
+    MatLuxonDateModule,
+  ],
+  // fix field validation error
+  providers: [
+    provideLuxonDateAdapter(),
+    {
+      provide: MAT_DATE_FORMATS,
+      useFactory: (appConfigService: AppConfigService) => {
+        const base = appConfigService.getConfig().dateFormat;
+        return {
+          parse: { dateInput: base },
+          display: {
+            dateInput: base,
+            monthYearLabel: "MMM yyyy",
+            dateA11yLabel: "LL",
+            monthYearA11yLabel: "MMMM yyyy",
+          },
+        };
+      },
+      deps: [AppConfigService],
+    },
   ],
   exports: [IngestorMetadataEditorComponent, IngestorCreationComponent],
 })

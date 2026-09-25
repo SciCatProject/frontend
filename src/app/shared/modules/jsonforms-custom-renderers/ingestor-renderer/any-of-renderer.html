@@ -1,14 +1,25 @@
 <mat-card class="anyof-group">
   <mat-card-title
-    >{{ anyOfTitle }}
-    <span class="spacer"></span>
+    >{{ anyOfTitle }} 
+    
+    <span class="spacer">&nbsp;<mat-icon
+      *ngIf="description"
+      matSuffix
+      class="field-description-icon"
+      [matTooltip]="description"
+      matTooltipPosition="above"
+    >
+      info_outline
+    </mat-icon></span>
     <mat-checkbox
     *ngIf="options.includes('null')"
     [(ngModel)]="notNullOptionSelected"
     (change)="onEnableCheckboxChange($event)"
     >
     Enabled
+    
     </mat-checkbox>
+   
   </mat-card-title
     >
   <mat-card-content *ngIf="notNullOptionSelected">
@@ -25,6 +36,7 @@
         </div>
       </mat-tab>
     </mat-tab-group>
+
     <div *ngIf="tabAmount === 1">
       <jsonforms-outlet
       [uischema]="getUISchema(options[0])"
@@ -32,6 +44,9 @@
       [path]="propsPath"
       >
       </jsonforms-outlet>
+      
     </div>
+    
   </mat-card-content>
+      
 </mat-card>
