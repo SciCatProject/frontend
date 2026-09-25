@@ -51,7 +51,9 @@ export class DateTimeFieldRendererComponent extends JsonFormsControl {
       isoValue = parsed.isValid ? parsed.toUTC().toISO() : value;
     }
 
-    this.jsonFormsService.updateCore(Actions.update(this.propsPath, () => isoValue));
+    this.jsonFormsService.updateCore(
+      Actions.update(this.propsPath, () => isoValue),
+    );
     this.triggerValidation?.();
   }
 
