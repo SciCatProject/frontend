@@ -44,6 +44,7 @@
         <div
           *ngSwitchCase="'regular'"
           class="card-container"
+          [class.summary-container]="section.label === 'Summary'"
           [style.gridColumn]="'span ' + (section.col || 10)"
           [style.gridRow]="'span ' + (section.row || 1)"
         >
@@ -211,6 +212,10 @@
                       <metadata-view
                         *ngSwitchDefault
                         [metadata]="metadata"
+                        [commentedMetadataNames]="commentedMetadataNames"
+                        [metadataCommentMap]="metadataCommentMap"
+                        (commentRequested)="startMetadataComment($event)"
+                        (commentViewed)="viewMetadataComments($event)"
                       ></metadata-view>
                       <div class="json-view" *ngSwitchCase="'json'">
                         <ngx-json-viewer
@@ -230,6 +235,42 @@
             </mat-card>
           </ng-container>
         </div>
+
+        <ng-container *ngIf="canUseMessageLog">
+          <div
+            *ngSwitchCase="'messageLog'"
+            class="card-container message-log"
+            #messageLog
+            [style.gridColumn]="'span ' + (section.col || 10)"
+            [style.gridRow]="'span ' + (section.row || 1)"
+          >
+            <mat-card>
+              <mat-card-header class="dynamic-template-tile-header sticky-header" data-cy="section-label">
+                <div mat-card-avatar class="section-icon"><mat-icon>forum</mat-icon></div>
+                <span>{{ section.label | translate: localization }}</span>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="message-log-entries" *ngIf="visibleMessages.length; else noMessages">
+                  <article class="message-log-entry" *ngFor="let message of visibleMessages" [id]="messageAnchor(message)">
+                    <div class="message-log-meta">
+                      <strong>{{ message.senderName || message.sender || user?.username || 'SciCat user' }}</strong>
+                      <time>{{ message.origin_server_ts | date: 'yyyy-MM-dd HH:mm' : 'Europe/Stockholm' }}</time>
+                    </div>
+                    <p><strong *ngIf="messagePrefix(message)">{{ messagePrefix(message) }}</strong>{{ messageText(message) }}</p>
+                  </article>
+                </div>
+                <ng-template #noMessages><p class="no-messages">No messages yet.</p></ng-template>
+                <div class="message-log-composer">
+                  <div class="message-log-input" role="textbox" aria-multiline="true">
+                    <strong *ngIf="messageLogPrefix" contenteditable="false">{{ messageLogPrefix }}</strong>
+                    <span #messageLogInput class="message-log-editor" contenteditable="true" (input)="onMessageDraftChange($event)" (keydown.control.enter)="postMessage()"></span>
+                  </div>
+                  <button mat-raised-button color="primary" type="button" [disabled]="!canUseMessageLog || !messageLogDraft.trim()" (click)="postMessage()">Submit</button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </ng-container>
 
         <!-- Attachments Section -->
         <div
@@ -354,4 +395,5 @@
       </ng-container>
     </ng-container>
   </div>
+
 </ng-template>

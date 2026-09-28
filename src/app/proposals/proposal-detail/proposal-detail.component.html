@@ -4,7 +4,7 @@
       <div mat-card-avatar class="section-icon">
         <mat-icon> description </mat-icon>
       </div>
-      {{ "General Information" | translate: localization }}
+      {{ "Proposal Information" | translate: localization }}
     </mat-card-header>
 
     <mat-card-content>
@@ -25,6 +25,10 @@
           <th>{{ "Proposal Type" | translate: localization }}</th>
           <!-- TODO: Change this to just proposal.type when new sdk is merged -->
           <td>{{ proposal["type"] }}</td>
+        </tr>
+        <tr *ngIf="proposal.instrumentIds?.length">
+          <th>{{ "Instrument Info" | translate: localization }}</th>
+          <td>{{ proposal.instrumentIds.join(", ") }}</td>
         </tr>
         <tr
           *ngIf="

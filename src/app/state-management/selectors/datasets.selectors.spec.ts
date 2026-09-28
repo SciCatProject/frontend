@@ -11,6 +11,8 @@ const initialDatasetState: DatasetState = {
   relatedDatasets: [],
   relatedDatasetsCount: 0,
   totalCount: 0,
+  myDataCount: 0,
+  publicDataCount: 0,
 
   facetCounts: {},
   facetCountsIsLoading: false,
@@ -41,6 +43,7 @@ const initialDatasetState: DatasetState = {
     scientific: [],
     isPublished: false,
     pid: "",
+    instrumentIds: [],
   },
   pagination: {
     skip: 0,
@@ -293,6 +296,31 @@ describe("test dataset selectors", () => {
       );
       expect(fullqueryKeys).toContain("query");
     });
+
+    it("should search the dataset pid for the persistent ID format", () => {
+      const state = {
+        ...initialDatasetState,
+        filters: {
+          ...initialDatasetState.filters,
+          text: "20.500.12269/abc123-def456",
+        },
+      };
+
+      const result = fromDatasetSelectors.selectFullqueryParams.projector(state);
+
+      expect(result.query).toEqual({ pid: "20.500.12269/abc123-def456" });
+    });
+
+      it("should search datasets by exact run number", () => {
+        const state = {
+          ...initialDatasetState,
+          filters: { ...initialDatasetState.filters, text: "260051" },
+        };
+
+        const result = fromDatasetSelectors.selectFullqueryParams.projector(state);
+
+        expect(result.query).toEqual({ runNumber: "260051" });
+      });
   });
 
   describe("selectFullfacetParams", () => {

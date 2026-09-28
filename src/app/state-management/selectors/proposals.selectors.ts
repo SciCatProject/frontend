@@ -240,13 +240,23 @@ export const selectProposalsFacetCountsWithInstrumentName = createSelector(
   selectProposalsFacetCounts,
   selectInstrumentWithIdAndLabel,
   (facets, instruments) => {
-    const instrumentIds = instruments.map((inst) => {
-      const matched = (facets.instrumentIds ?? []).find(
-        (f) => f._id === inst._id,
+    const instrumentFacets = facets.instrumentIds ?? [];
+    const knownInstruments = new Map(
+      instruments.map((instrument) => [instrument._id, instrument]),
+    );
+    const instrumentIds = [
+      ...new Set([
+        ...instruments.map((instrument) => instrument._id),
+        ...instrumentFacets.map((facet) => facet._id),
+      ]),
+    ].map((instrumentId) => {
+      const instrument = knownInstruments.get(instrumentId);
+      const matched = instrumentFacets.find(
+        (facet) => facet._id === instrumentId,
       );
       return {
-        _id: inst._id,
-        label: inst.label ?? inst._id,
+        _id: instrumentId,
+        label: instrument?.label ?? instrumentId,
         count: matched?.count ?? 0,
       };
     });

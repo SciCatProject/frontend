@@ -68,6 +68,52 @@ mat-card {
     }
   }
 }
+
+.dataset-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas: "metadata summary" "metadata attachments";
+  align-items: start;
+  gap: 0;
+}
+
+.dataset-detail-content {
+  display: contents;
+}
+
+.summary-card {
+  grid-area: summary;
+}
+
+.scientific-metadata-card {
+  grid-area: metadata;
+}
+
+.attachments-panel {
+  grid-area: attachments;
+  min-width: 0;
+}
+
+.attachments-panel mat-card {
+  height: 100%;
+}
+
+.attachments-panel .thumbnail-image {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .dataset-detail-layout {
+    display: block;
+  }
+
+  .dataset-detail-content {
+    display: block;
+  }
+}
+
 .attachment-card {
   display: flex;
   align-items: center;

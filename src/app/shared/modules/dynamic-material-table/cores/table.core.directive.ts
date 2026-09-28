@@ -73,11 +73,21 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() localization: string;
   @Input() globalTextSearch = "";
   @Input() globalTextSearchPlaceholder = "Search...";
+  @Input() showAdvancedSearch = false;
+  @Input() showPublicScopeToggle = false;
+  @Input() publicScope: boolean | "" = "";
+  @Input() myDataCount = 0;
+  @Input() publicDataCount = 0;
+  @Input() activeAdvancedFilters: Array<{ label: string; [key: string]: any }> = [];
   @Input() selectionIds = [];
   @Input() disableBorder: boolean;
   @Input() showRealTimeToggle = false;
   @Input() realTimeEnabled = false;
   @Output() realTimeToggle = new EventEmitter<boolean>();
+  @Output() advancedSearchClick = new EventEmitter<any>();
+  @Output() advancedSearchClearAll = new EventEmitter<void>();
+  @Output() publicScopeChange = new EventEmitter<boolean>();
+  @Output() removeAdvancedFilter = new EventEmitter<any>();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix

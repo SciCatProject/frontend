@@ -83,8 +83,9 @@ mat-card {
 }
 
 .thumbnail-image {
-  width: 50px;
-  height: 50px;
+  width: min(100%, 320px);
+  height: auto;
+  aspect-ratio: 16 / 9;
   object-fit: contain;
   cursor: pointer;
 
@@ -97,8 +98,8 @@ mat-card {
     height: 100px;
   }
   &--large {
-    width: 200px;
-    height: 200px;
+    width: min(100%, 320px);
+    height: auto;
   }
 }
 .json-view {
@@ -136,10 +137,116 @@ mat-card {
   }
 }
 
+.summary-container {
+  mat-card-content {
+    table {
+      border-collapse: collapse;
+
+      tr {
+        height: 2.25rem;
+      }
+
+      th,
+      td {
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: 1.35;
+        vertical-align: middle;
+      }
+
+      .mat-mdc-icon-button {
+        width: 1.5rem;
+        height: 1.5rem;
+        padding: 0.125rem;
+        line-height: 1.25rem;
+
+        .mat-icon {
+          width: 1.25rem;
+          height: 1.25rem;
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+}
+
 .attachments-footer {
   display: flex;
   justify-content: flex-end;
   margin-top: 8px;
+}
+
+.message-log {
+  .message-log-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 22rem;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+
+  .message-log-entry {
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--theme-primary-default);
+    background: #f7fafc;
+  }
+
+  .message-log-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: rgba(31, 45, 61, 0.72);
+    font-size: 0.85rem;
+  }
+
+  .message-log-entry p,
+  .no-messages {
+    margin: 0.35rem 0 0;
+    white-space: pre-wrap;
+  }
+
+  .message-log-composer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .message-log-input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 5.25rem;
+    resize: vertical;
+    padding: 0.75rem;
+    border: 1px solid #a9b8c2;
+    border-radius: 4px;
+    font: inherit;
+    white-space: pre-wrap;
+
+    &:focus-within {
+      border-color: var(--theme-primary-default);
+      outline: 2px solid rgba(25, 118, 210, 0.18);
+    }
+
+    .message-log-editor {
+      display: inline-block;
+      min-width: 1ch;
+      min-height: 1.2em;
+      outline: none;
+
+      &:empty::before {
+        color: rgba(31, 45, 61, 0.55);
+        content: "Write a message";
+      }
+    }
+
+    strong {
+      color: #153647;
+      font-weight: 600;
+    }
+  }
 }
 
 /* Restricted access indicator */

@@ -26,65 +26,101 @@
     </mat-icon>
   </div>
   <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
-    <mat-form-field>
-      <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
-        >search</mat-icon
-      >
-      <input
-        [(ngModel)]="globalTextSearch"
-        type="text"
-        matInput
-        [placeholder]="globalTextSearchPlaceholder"
-        (ngModelChange)="this.globalSearchUpdate.next($event)"
-        (keydown.enter)="onGlobalTextSearchApply()"
-        (keydown.escape)="onGlobalTextSearchClear()"
-        data-cy="text-search"
-      />
-      <span
-        matSuffix
-        class="enter-hint"
-        matTooltip="Press Enter to search"
-        matTooltipPosition="below"
-        matTooltipShowDelay="500"
-        >↵</span
-      >
+    <div class="public-scope-toggle" *ngIf="showPublicScopeToggle">
       <button
-        mat-icon-button
-        matSuffix
-        *ngIf="globalTextSearch"
-        (click)="onGlobalTextSearchClear()"
         type="button"
-        matTooltip="Clear search"
-        data-cy="search-clear-button"
+        [class.active]="publicScope === '' || publicScope === false"
+        (click)="publicScopeChange.emit(false)"
       >
-        <mat-icon>close</mat-icon>
+        My Data ({{ myDataCount | number }})
       </button>
       <button
-        mat-icon-button
-        matSuffix
-        *ngIf="globalTextSearch"
-        (click)="onGlobalTextSearchApply()"
         type="button"
-        matTooltip="Apply search"
-        data-cy="search-button"
+        [class.active]="publicScope === true"
+        (click)="publicScopeChange.emit(true)"
       >
-        <mat-icon>search</mat-icon>
+        Public Data ({{ publicDataCount | number }})
       </button>
-    </mat-form-field>
+    </div>
+    <div class="search-input-line">
+      <mat-form-field>
+        <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
+          >search</mat-icon
+        >
+        <input
+          [(ngModel)]="globalTextSearch"
+          type="text"
+          matInput
+          [placeholder]="globalTextSearchPlaceholder"
+          (ngModelChange)="this.globalSearchUpdate.next($event)"
+          (keydown.enter)="onGlobalTextSearchApply()"
+          (keydown.escape)="onGlobalTextSearchClear()"
+          data-cy="text-search"
+        />
+        <span
+          matSuffix
+          class="enter-hint"
+          matTooltip="Press Enter to search"
+          matTooltipPosition="below"
+          matTooltipShowDelay="500"
+          >↵</span
+        >
+        <button
+          mat-icon-button
+          matSuffix
+          *ngIf="globalTextSearch"
+          (click)="onGlobalTextSearchClear()"
+          type="button"
+          matTooltip="Clear search"
+          data-cy="search-clear-button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
   </div>
-  <div
-    *ngIf="pagination"
-    class="paginator-container"
-    [class.is-loading]="pagination?.isLoading"
-  >
-    <mat-paginator
-      class="datasets-paginator datasets-header-paginator"
-      [pageSizeOptions]="pagination.pageSizeOptions"
-      [pageIndex]="pagination.pageIndex"
-      [length]="pagination.length"
-      [pageSize]="pagination.pageSize"
-      (page)="pagination_onChange($event)"
-    ></mat-paginator>
+
+  <div class="advanced-search-full-row" *ngIf="showAdvancedSearch">
+    <button
+      type="button"
+      class="advanced-search-btn"
+      (click)="advancedSearchClick.emit()"
+      data-cy="advanced-search-trigger"
+    >
+      <mat-icon>tune</mat-icon>
+      <span>Advanced Search</span>
+    </button>
+
+    <button
+      type="button"
+      class="advanced-search-clear-btn"
+      *ngIf="activeAdvancedFilters?.length"
+      (click)="advancedSearchClearAll.emit()"
+      data-cy="advanced-search-clear-all"
+    >
+      Clear All
+    </button>
+
+    <div class="active-chips-container" *ngIf="activeAdvancedFilters?.length">
+      <mat-chip-set>
+        <mat-chip
+          *ngFor="let filter of activeAdvancedFilters"
+          (removed)="removeAdvancedFilter.emit(filter)"
+            (click)="advancedSearchClick.emit(filter)"
+          [removable]="true"
+          class="active-advanced-chip"
+        >
+          <span>{{ filter.label }}</span>
+          <button
+            matChipRemove
+            (click)="$event.stopPropagation()"
+            [attr.aria-label]="'Remove ' + filter.label"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-set>
+    </div>
   </div>
 </div>
 <div
@@ -92,7 +128,13 @@
   [ngClass]="viewportClass"
   [ngStyle]="{ 'background-color': backgroundColor || 'white' }"
   [class.print-preview]="printing"
+  [class.is-loading]="pending"
 >
+  <div class="table-loading-skeleton" *ngIf="pending" aria-hidden="true">
+    <div class="skeleton-row" *ngFor="let row of skeletonRows">
+      <span class="skeleton-cell" *ngFor="let column of columns"></span>
+    </div>
+  </div>
   <mat-table
     matSort
     class="dynamic-table"
@@ -221,11 +263,37 @@
       >
         <!-- The render image is specific for the dataset table as the "thumbnail" pipe is designed to work only with datasets. Maybe this should be reviewed later and have a more general solution where we render images in columns -->
         <ng-container *ngIf="column.renderImage; else renderColumn">
-          <img
-            src="{{ row.pid | thumbnail | async }}"
-            height="42px"
-            loading="lazy"
-          />
+          <span
+            class="dataset-preview-trigger"
+            cdkOverlayOrigin
+            #previewOrigin="cdkOverlayOrigin"
+            (mouseenter)="onPreviewEnter(row, column)"
+            (mouseleave)="onPreviewLeave()"
+          >
+            <img
+              src="{{ row.pid | thumbnail | async }}"
+              class="dataset-preview-thumbnail"
+              height="42px"
+              loading="lazy"
+            />
+          </span>
+          <ng-template
+            cdkConnectedOverlay
+            [cdkConnectedOverlayOrigin]="previewOrigin"
+            [cdkConnectedOverlayOpen]="previewRow === row && previewColumn === column"
+            [cdkConnectedOverlayPositions]="overlayPositions"
+          >
+            <div
+              class="dataset-preview-popover"
+              (mouseenter)="onPreviewEnter(row, column)"
+              (mouseleave)="onPreviewLeave()"
+            >
+              <img
+                src="{{ row.pid | thumbnail | async }}"
+                alt="Dataset preview"
+              />
+            </div>
+          </ng-template>
         </ng-container>
         <ng-template #renderColumn>
           <ng-container *ngIf="column.customRender; else regularColumnRender">
@@ -244,13 +312,11 @@
                 <span class="cell-with-icon">
                   <mat-icon
                     class="cell-icon"
-                    [class.pinned]="isHoverCardPinned(row, column)"
                     fontIcon="description"
                     #hoverOriginSpan="cdkOverlayOrigin"
                     cdkOverlayOrigin
-                    (mouseenter)="onHoverCardTriggerEnter(row, column)"
-                    (mouseleave)="onHoverCardTriggerLeave(row, column)"
-                    (click)="togglePinnedHoverCard($event, row, column)"
+                    (mouseenter)="hoverKey = makeKey(row, column)"
+                    (mouseleave)="hoverKey = null"
                   ></mat-icon>
                   <span
                     class="cell-text"
@@ -260,55 +326,20 @@
                 <ng-template
                   cdkConnectedOverlay
                   [cdkConnectedOverlayOrigin]="hoverOriginSpan"
-                  [cdkConnectedOverlayOpen]="isHoverCardOpen(row, column)"
+                  [cdkConnectedOverlayOpen]="hoverKey === makeKey(row, column)"
                   [cdkConnectedOverlayPositions]="metadataOverlayPositions"
-                  [cdkConnectedOverlayHasBackdrop]="
-                    isHoverCardPinned(row, column)
-                  "
-                  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-                  (backdropClick)="closePinnedHoverCard()"
                 >
-                  <mat-card
-                    class="hover-card"
-                    [class.metadata-hover-card]="
-                      isScientificMetadataColumn(column)
-                    "
-                    (mouseenter)="onHoverCardContentEnter(row, column)"
-                    (mouseleave)="onHoverCardContentLeave(row, column)"
-                    (click)="stopEventPropagation($event)"
-                  >
+                  <mat-card class="hover-card">
                     <mat-card-title class="hover-card-title">
                       {{
                         column.header || column.name | translate: localization
                       }}
                     </mat-card-title>
-                    <ng-container
-                      *ngIf="
-                        isScientificMetadataColumn(column);
-                        else metadataNameHoverContentCard
-                      "
-                    >
-                      <div mat-card-content class="hover-card-content">
-                        <div
-                          *ngIf="
-                            hasScientificMetadata(row, column);
-                            else emptyScientificMetadata
-                          "
-                          class="scientific-metadata-hover-content"
-                        >
-                          <tree-view
-                            [metadata]="getScientificMetadata(row, column)"
-                          ></tree-view>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <ng-template #metadataNameHoverContentCard>
-                      <div
-                        mat-card-content
-                        class="hover-card-content"
-                        [innerHTML]="metadataNameHoverContent(row)"
-                      ></div>
-                    </ng-template>
+                    <div
+                      mat-card-content
+                      class="hover-card-content"
+                      [innerHTML]="metadataNameHoverContent(row)"
+                    ></div>
                   </mat-card>
                 </ng-template>
               </ng-container>
@@ -316,7 +347,7 @@
                 <span
                   class="tooltip-anchor"
                   [innerHTML]="columnName(row, column)"
-                  matTooltip="{{ columnName(row, column) }}"
+                  [matTooltip]="row?._tooltipText ?? columnName(row, column)"
                   matTooltipPosition="above"
                   matTooltipShowDelay="500"
                 ></span>
@@ -385,68 +416,25 @@
         <ng-container *ngIf="column.hoverContent && !column.hoverOnCell">
           <span
             class="icon-wrapper"
-            [class.pinned]="pinnedHoverKey && isHoverCardPinned(row, column)"
-            [class.not-pinned]="
-              pinnedHoverKey && !isHoverCardPinned(row, column)
-            "
             #hoverOrigin="cdkOverlayOrigin"
             cdkOverlayOrigin
-            (mouseenter)="onHoverCardTriggerEnter(row, column)"
-            (mouseleave)="onHoverCardTriggerLeave(row, column)"
-            (click)="togglePinnedHoverCard($event, row, column)"
+            (mouseenter)="onAbstractHoverEnter(row, column)"
+            (mouseleave)="onAbstractHoverLeave()"
           >
             <mat-icon class="hover-icon" fontIcon="description"></mat-icon>
             <ng-template
               cdkConnectedOverlay
               [cdkConnectedOverlayOrigin]="hoverOrigin"
-              [cdkConnectedOverlayOpen]="isHoverCardOpen(row, column)"
+              [cdkConnectedOverlayOpen]="abstractHoverKey === makeKey(row, column)"
               [cdkConnectedOverlayPositions]="overlayPositions"
-              [cdkConnectedOverlayHasBackdrop]="isHoverCardPinned(row, column)"
-              cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-              (backdropClick)="closePinnedHoverCard()"
             >
-              <mat-card
-                class="hover-card"
-                [class.metadata-hover-card]="isScientificMetadataColumn(column)"
-                [class.pinned-card]="pinnedHoverKey"
-                (mouseenter)="onHoverCardContentEnter(row, column)"
-                (mouseleave)="onHoverCardContentLeave(row, column)"
-                (click)="stopEventPropagation($event)"
-              >
+              <mat-card class="hover-card">
                 <mat-card-title class="hover-card-title">
                   {{ column.header || column.name | translate: localization }}
-                  <mat-icon
-                    *ngIf="pinnedHoverKey"
-                    class="pinned-icon"
-                    aria-label="Pinned hover card"
-                    >push_pin</mat-icon
-                  >
                 </mat-card-title>
-                <ng-container
-                  *ngIf="
-                    isScientificMetadataColumn(column);
-                    else standardHoverContentCard
-                  "
-                >
-                  <div mat-card-content class="hover-card-content">
-                    <div
-                      *ngIf="
-                        hasScientificMetadata(row, column);
-                        else emptyScientificMetadata
-                      "
-                      class="scientific-metadata-hover-content"
-                    >
-                      <tree-view
-                        [metadata]="getScientificMetadata(row, column)"
-                      ></tree-view>
-                    </div>
-                  </div>
-                </ng-container>
-                <ng-template #standardHoverContentCard>
-                  <div mat-card-content class="hover-card-content">
-                    {{ getColumnValue(row, column) || "No content" }}
-                  </div>
-                </ng-template>
+                <div mat-card-content class="hover-card-content">
+                  {{ getColumnValue(row, column) || "No content" }}
+                </div>
               </mat-card>
             </ng-template>
           </span>
@@ -461,10 +449,6 @@
         </div>
       </mat-footer-cell>
     </ng-container>
-
-    <ng-template #emptyScientificMetadata>
-      <div class="hover-card-empty">No content</div>
-    </ng-template>
 
     <ng-container matColumnDef="progress">
       <mat-header-cell
@@ -569,9 +553,17 @@
       [style.top.px]="headerHeight - 5"
     ></mat-header-row>
   </mat-table>
-  <ng-container *ngIf="showNoData && init === true">
+  <ng-container *ngIf="showNoData && init === true && !pending">
     <app-empty-content
-      *ngIf="standardDataSource.data.length === 0"
+      *ngIf="errorMessage"
+      [message]="errorMessage"
+      icon="error_outline"
+      [showReload]="true"
+      (reload)="reload_onClick()"
+    >
+    </app-empty-content>
+    <app-empty-content
+      *ngIf="!errorMessage && standardDataSource.data.length === 0"
       [message]="emptyMessage"
       [icon]="emptyIcon"
       [showReload]="showReload"
@@ -582,7 +574,7 @@
 </div>
 <div
   *ngIf="pagination"
-  class="paginator-container"
+  class="paginator-container footer-paginator-container"
   [class.is-loading]="pagination?.isLoading"
 >
   <mat-paginator

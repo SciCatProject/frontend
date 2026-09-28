@@ -1,0 +1,79 @@
+:host {
+	--proposal-title-inset: 0.75rem;
+	--proposal-id-inset: 0.75rem;
+}
+
+:host ::ng-deep .proposal-table mat-header-cell.proposal-title-column,
+:host ::ng-deep .proposal-table mat-cell.proposal-title-column {
+	box-sizing: border-box;
+	padding-left: var(--proposal-title-inset) !important;
+	padding-right: 0 !important;
+}
+
+:host ::ng-deep .proposal-table mat-header-cell.proposal-title-column {
+
+	.column-icon {
+		display: none;
+	}
+
+	.header-caption,
+	.mat-sort-header-container,
+	.mat-sort-header-content {
+		justify-content: flex-start !important;
+		padding-left: 0 !important;
+		margin-left: 0 !important;
+		text-align: left;
+	}
+
+	.header-caption {
+		width: 100% !important;
+	}
+
+	.mat-sort-header-container {
+		width: 100% !important;
+	}
+}
+
+:host ::ng-deep .proposal-table mat-cell.proposal-title-column .label-cell {
+	box-sizing: border-box;
+	padding-left: 0;
+	text-align: left;
+	width: 100%;
+}
+
+:host ::ng-deep .proposal-table mat-header-cell.proposal-id-column,
+:host ::ng-deep .proposal-table mat-cell.proposal-id-column {
+	box-sizing: border-box;
+	padding-left: var(--proposal-id-inset) !important;
+	padding-right: 0 !important;
+}
+
+:host ::ng-deep .proposal-table mat-header-cell.proposal-id-column {
+	padding-left: 14px !important;
+
+	.column-icon {
+		display: none;
+	}
+
+	.header-caption,
+	.mat-sort-header-container,
+	.mat-sort-header-content {
+		justify-content: flex-start !important;
+		padding-left: 0 !important;
+		margin-left: 0 !important;
+		text-align: left;
+	}
+
+	.header-caption,
+	.mat-sort-header-container {
+		width: 100% !important;
+	}
+}
+
+:host ::ng-deep .proposal-table mat-cell.proposal-id-column .label-cell {
+	box-sizing: border-box;
+	padding-left: 0;
+	text-align: left;
+	width: 100%;
+}
+

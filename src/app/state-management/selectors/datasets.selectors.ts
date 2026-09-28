@@ -92,7 +92,7 @@ export const selectFilterByKey = (key: string) =>
 
 export const selectLocationFilter = createSelector(
   selectFilters,
-  (filters) => filters.creationLocation,
+  (filters) => filters.instrumentIds,
 );
 
 export const selectGroupFilter = createSelector(
@@ -129,7 +129,7 @@ export const selectHasAppliedFilters = createSelector(
   selectFilters,
   (filters) =>
     filters.text !== "" ||
-    filters.creationLocation.length > 0 ||
+    filters.instrumentIds.length > 0 ||
     filters.ownerGroup.length > 0 ||
     filters.type.length > 0 ||
     filters.keywords.length > 0 ||
@@ -156,7 +156,7 @@ export const selectFacetCountByKey = (key: string) =>
 
 export const selectLocationFacetCounts = createSelector(
   selectFacetCounts,
-  (counts) => counts.creationLocation || [],
+  (counts) => counts.instrumentIds || [],
 );
 
 export const selectGroupFacetCounts = createSelector(
@@ -199,7 +199,16 @@ export const selectFullqueryParams = createSelector(
     const { skip, limit, sortField, modeToggle, ...theRest } = filter;
 
     const limits = { ...pagination, order: sortField };
-    const query = restrictFilter(theRest);
+    const query = restrictFilter(theRest) as Record<string, unknown>;
+    const searchText = typeof query.text === "string" ? query.text.trim() : "";
+
+    if (/^20\.\d+\/[0-9a-f-]+$/i.test(searchText)) {
+      query.pid = searchText;
+      delete query.text;
+    } else if (/^\d+$/.test(searchText)) {
+      query.runNumber = searchText;
+      delete query.text;
+    }
 
     return { query, limits };
   },
@@ -215,7 +224,15 @@ export const selectFullfacetParams = createSelector(
       ...filter,
       ...pagination,
     };
-    const fields = restrictFilter(theRest);
+    const fields = restrictFilter(theRest) as Record<string, unknown>;
+    const facetSearchText = fields.text;
+    if (
+      typeof facetSearchText === "string" &&
+      /^20\.\d+\/[0-9a-f-]+$/i.test(facetSearchText.trim())
+    ) {
+      fields.pid = facetSearchText.trim();
+      delete fields.text;
+    }
     const facets = userFilters
       .filter(
         (f) => f.enabled && (f.type === "multiSelect" || f.type === "checkbox"),
@@ -231,6 +248,16 @@ export const selectFullfacetParams = createSelector(
 export const selectTotalSets = createSelector(
   selectDatasetState,
   (state) => state.totalCount,
+);
+
+export const selectMyDataCount = createSelector(
+  selectDatasetState,
+  (state) => state.myDataCount,
+);
+
+export const selectPublicDataCount = createSelector(
+  selectDatasetState,
+  (state) => state.publicDataCount,
 );
 
 export const selectPage = createSelector(selectPagination, (pagination) => {

@@ -1,8 +1,12 @@
 @use "@angular/material" as mat;
 mat-card {
-  box-shadow: var(--theme-side-panel-shadow);
-  border: var(--theme-side-panel-border, 1px solid rgba(153, 213, 233, 0.7));
+  box-shadow: var(--theme-side-panel-shadow, 0 2px 8px rgba(31, 45, 61, 0.12));
+  border: var(--theme-side-panel-border, 1px solid #9aa7b3);
   border-radius: 4px;
+
+  .mat-mdc-card-content {
+    padding-top: 0.65rem;
+  }
   .mat-mdc-form-field {
     width: 100%;
   }
@@ -58,13 +62,22 @@ mat-card {
       word-break: break-all;
     }
 
-    .datasets-filters-search-button {
-      width: 49%;
-      margin-left: 2%;
-    }
+    &:last-child {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.75rem;
+      margin-bottom: 0;
 
-    .datasets-filters-clear-all-button {
-      width: 49%;
+      button {
+        width: 100%;
+        min-height: 2.25rem;
+        height: 2.25rem;
+        line-height: 2.25rem;
+        padding: 0 0.5rem;
+      }
     }
   }
 
@@ -103,3 +116,48 @@ mat-card {
     }
   }
 }
+
+.public-scope-toggle {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2px;
+  margin-bottom: 0.9rem;
+  border: 1px solid #d5dde6;
+  border-radius: 6px;
+  background: #f3f5f7;
+  gap: 2px;
+
+  button {
+    flex: 1;
+    border: none;
+    min-width: 0;
+    height: 30px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.74rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+
+    &.active {
+      background: #ffffff;
+      color: var(--theme-primary-darker, #325b84);
+      box-shadow: 0 1px 2px rgba(31, 45, 61, 0.1);
+    }
+
+    &:hover:not(.active) {
+      color: var(--theme-primary-darker, #325b84);
+      background: rgba(255, 255, 255, 0.55);
+    }
+  }
+}
+
+

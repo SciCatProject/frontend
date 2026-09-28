@@ -6,6 +6,8 @@ import {
   selectFacetCountByKey,
   selectFilterByKey,
   selectHasAppliedFilters,
+  selectMyDataCount,
+  selectPublicDataCount,
   selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import { ScientificCondition } from "state-management/models";
@@ -17,6 +19,7 @@ import {
   removeDatasetFilterAction,
   setFiltersAction,
   setPublicViewModeAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
 import {
   updateConditionsConfigs,
@@ -29,7 +32,7 @@ import {
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
-import { Subscription } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FilterConfig } from "state-management/state/user.store";
 import { DateRange } from "state-management/state/proposals.store";
@@ -63,9 +66,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
-  @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
-
   loggedIn$ = this.store.select(selectIsLoggedIn);
+  myDataCount$ = this.store.select(selectMyDataCount);
+  publicDataCount$ = this.store.select(selectPublicDataCount);
 
   currentPublicViewMode: boolean | "" = "";
 
@@ -173,6 +176,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         property: { fe_dataset_table_conditions: [] },
       }),
     );
+    this.store.dispatch(
+      setScientificConditionsAction({ scientific: [] }),
+    );
 
     this.activeFilters = {};
 
@@ -239,10 +245,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       queryParamsHandling: "merge",
     });
 
-    if (this.conditionFilter) {
-      this.conditionFilter.applyConditions();
-    }
-
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
   }
@@ -274,7 +276,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   setFilter(filterKey: string, value: string | string[]) {
-    if (value) {
+    const hasValue = Array.isArray(value) ? value.length > 0 : Boolean(value);
+
+    if (hasValue) {
       this.activeFilters[filterKey] = value;
 
       this.store.dispatch(
@@ -299,7 +303,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     // This applies to both multiselect type and checkBoxFilter
     // skip PID text input to avoid triggering on keystrokes
     // Array check can be removed when we remove text input filter type
-    if (Array.isArray(value) && this.appConfig.autoApplyFilters) {
+    const isCheckboxFilter =
+      this.filtersList.find((filter) => filter.key === filterKey)?.type ===
+      "checkbox";
+    if (Array.isArray(value) && (this.appConfig.autoApplyFilters || isCheckboxFilter)) {
       this.applyFilters();
     }
   }
@@ -347,6 +354,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         }),
       );
     }
+
   }
 
   numericRangeChange(filterKey: string, { min, max }: INumericRange) {
@@ -368,7 +376,29 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   getFilterFacetCounts$(key: string) {
-    return this.store.select(selectFacetCountByKey(key));
+    const facetCounts$ = this.store.select(selectFacetCountByKey(key));
+
+    if (key !== "instrumentIds") {
+      return facetCounts$;
+    }
+
+    const instruments = ["DREAM", "ODIN", "ESTIA", "LOKI", "NMX", "SKADI", "BIFROST"];
+    return facetCounts$.pipe(
+      map((facetCounts) => {
+        const countsByInstrument = new Map(
+          facetCounts.map((facet) => [facet._id, facet]),
+        );
+
+        return instruments.map(
+          (instrument) =>
+            countsByInstrument.get(instrument) || {
+              _id: instrument,
+              label: instrument,
+              count: 0,
+            },
+        );
+      }),
+    );
   }
 
   getFilterByKey$(key: string) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, ElementRef, OnInit, OnDestroy, ViewChild } from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
 import { createSelector, Store } from "@ngrx/store";
@@ -11,12 +11,17 @@ import {
   selectCurrentDataset,
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
+import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
+import { fetchProposalAction } from "state-management/actions/proposals.actions";
 import {
   selectCurrentUser,
+  selectCurrentUserName,
   selectIsLoading,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
+import { selectCurrentLogbook } from "state-management/selectors/logbooks.selectors";
+import { fetchDatasetLogbookAction } from "state-management/actions/logbooks.actions";
 
 import { AppConfigService } from "app-config.service";
 
@@ -38,6 +43,8 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { AuthService } from "shared/services/auth/auth.service";
 import {
   ActionItemDataset,
   ActionItems,
@@ -78,15 +85,27 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
+  logbook$ = this.store.select(selectCurrentLogbook);
   loading$ = this.store.select(selectIsLoading);
   show = false;
 
   userGroups$ = this.store.select(selectProfileAccessGroups);
 
   user: ReturnedUserDto | undefined;
+  currentUserName = "";
+  get canUseMessageLog(): boolean {
+    return this.authService.isAuthenticated() || !!this.user?.id;
+  }
 
   instrument: Instrument | undefined;
   dataset: OutputDatasetObsoleteDto | undefined;
+  proposalName = "";
+  messageLogPrefix = "";
+  messageLogDraft = "";
+  private logbookMessages: any[] = [];
+  private pendingMessages: any[] = [];
+  @ViewChild("messageLog", { static: false }) messageLog?: ElementRef<HTMLElement>;
+  @ViewChild("messageLogInput", { static: false }) messageLogInput?: ElementRef<HTMLElement>;
 
   actionItems: ActionItems = {
     datasets: [],
@@ -103,11 +122,176 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
+    private http: HttpClient,
+    private authService: AuthService,
   ) {
     this.tileRestrictedIconVisible =
       this.appConfig.datasetDetailComponent?.tileRestrictedIconVisible ?? false;
     this.tileRestrictedIconGroups =
       this.appConfig.datasetDetailComponent?.tileRestrictedIconGroups ?? [];
+  }
+
+  postMessage(): void {
+    if (!this.canUseMessageLog) {
+      this.snackBar.open("You must be logged in to use the message log.", "Close", {
+        duration: 3000,
+      });
+      return;
+    }
+
+    const comment = this.messageLogDraft.trim();
+    if (!comment || !this.dataset?.proposalId || !this.dataset?.pid) return;
+    const metadataPrefix = this.messageLogPrefix;
+    const datasetPid = this.dataset.pid;
+    const message = `${metadataPrefix}${comment}`;
+    const senderName =
+      this.currentUserName ||
+      this.user?.username ||
+      this.authService.getCurrentUserData()?.username ||
+      this.authService.getCurrentUserData()?.email ||
+      "You";
+
+    const pendingMessage = {
+      senderName,
+      datasetPid,
+      origin_server_ts: Date.now(),
+      content: {
+        msgtype: "m.text",
+        body: message,
+        metadataPrefix,
+        datasetPid,
+      },
+    };
+    this.pendingMessages = [...this.pendingMessages, pendingMessage];
+    this.messageLogPrefix = "";
+    this.messageLogDraft = "";
+    this.clearMessageEditor();
+
+    this.http
+      .post(
+        `/api/v3/logbooks/${encodeURIComponent(this.dataset.proposalId)}/message`,
+        { message, metadataPrefix, senderName, datasetPid },
+        { headers: this.messageHeaders() },
+      )
+      .subscribe({
+        next: () => {
+          this.pendingMessages = this.pendingMessages.filter(
+            (entry) => entry !== pendingMessage,
+          );
+          this.store.dispatch(fetchDatasetLogbookAction({ pid: this.dataset.pid }));
+        },
+        error: () => {
+          this.pendingMessages = this.pendingMessages.filter(
+            (entry) => entry !== pendingMessage,
+          );
+          this.snackBar.open("Unable to save message", "Close", { duration: 3000 });
+        },
+      });
+  }
+
+  startMetadataComment(metadataName: string): void {
+    if (!this.canUseMessageLog) {
+      this.snackBar.open("You must be logged in to use the message log.", "Close", {
+        duration: 3000,
+      });
+      return;
+    }
+
+    this.messageLogPrefix = `${metadataName} - `;
+    this.messageLogDraft = "";
+    setTimeout(() => {
+      this.messageLog?.nativeElement.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      this.messageLogInput?.nativeElement.focus();
+    });
+  }
+
+  viewMetadataComments(metadataName: string): void {
+    const message = this.visibleMessages.find(
+      (entry) => this.messagePrefix(entry) === `${metadataName} - `,
+    );
+    if (!message) return;
+
+    setTimeout(() => {
+      document
+        .getElementById(this.messageAnchor(message))
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }
+
+  onMessageDraftChange(event: Event): void {
+    this.messageLogDraft = (event.target as HTMLElement).innerText.trimStart();
+  }
+
+  private clearMessageEditor(): void {
+    if (this.messageLogInput) {
+      this.messageLogInput.nativeElement.textContent = "";
+    }
+  }
+
+  messagePrefix(message: any): string {
+    return message.content?.metadataPrefix || "";
+  }
+
+  messageAnchor(message: any): string {
+    return `message-log-${message.event_id || message.origin_server_ts}`;
+  }
+
+  get commentedMetadataNames(): string[] {
+    return this.visibleMessages
+      .map((message) => this.messagePrefix(message).replace(/ - $/, ""))
+      .filter(Boolean);
+  }
+
+  get metadataCommentMap(): Record<string, string> {
+    const map: Record<string, string> = {};
+    this.visibleMessages.forEach((message) => {
+      const prefix = this.messagePrefix(message);
+      if (!prefix || !prefix.endsWith(" - ")) {
+        return;
+      }
+      const metadataName = prefix.slice(0, -3);
+      const text = this.messageText(message).trim();
+      if (metadataName && text) {
+        map[metadataName] = text;
+      }
+    });
+    return map;
+  }
+
+  messageText(message: any): string {
+    const prefix = this.messagePrefix(message);
+    const body = message.content?.body || "";
+    return prefix && body.startsWith(prefix) ? body.slice(prefix.length) : body;
+  }
+
+  get visibleMessages(): any[] {
+    const currentPid = this.dataset?.pid;
+    const all = [...this.logbookMessages, ...this.pendingMessages].sort(
+      (left, right) => right.origin_server_ts - left.origin_server_ts,
+    );
+    if (!currentPid) {
+      return all;
+    }
+    return all.filter((message) => {
+      const msgPid = message.datasetPid || message.content?.datasetPid;
+      if (msgPid) {
+        return msgPid === currentPid;
+      }
+      const prefix = this.messagePrefix(message);
+      if (prefix && prefix.endsWith(" - ")) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  private messageHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      Authorization: `${this.appConfig.accessTokenPrefix || "Bearer "}${this.authService.getAccessTokenId()}`,
+    });
   }
 
   ngOnInit() {
@@ -118,6 +302,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         if (user) {
           this.user = user;
         }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.store.select(selectCurrentUserName).subscribe((name) => {
+        this.currentUserName = name || "";
       }),
     );
 
@@ -161,8 +351,29 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         if (dataset) {
           console.log("Updatding action items");
           this.actionItems.datasets = <ActionItemDataset[]>[dataset];
+          this.proposalName = "";
+          if (dataset.proposalId) {
+            this.store.dispatch(
+              fetchProposalAction({ proposalId: dataset.proposalId }),
+            );
+          }
+          this.store.dispatch(fetchDatasetLogbookAction({ pid: dataset.pid }));
         }
         this.dataset = dataset;
+      }),
+    );
+
+    this.subscriptions.push(
+      this.logbook$.subscribe((logbook) => {
+        this.logbookMessages = logbook?.messages || [];
+      }),
+    );
+
+    this.subscriptions.push(
+      this.store.select(selectCurrentProposal).subscribe((proposal) => {
+        if (proposal?.proposalId === this.dataset?.proposalId) {
+          this.proposalName = proposal.title || "";
+        }
       }),
     );
   }
@@ -331,6 +542,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       return this.instrument.name || "-";
     }
 
+    if (path === "proposalName") {
+      return this.proposalName || obj["proposalName"] || "-";
+    }
+
     return path
       .split(".")
       .reduce((prev, curr) => (prev != null ? prev[curr] : undefined), obj);
@@ -340,6 +555,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     // For instrumentName internal links, return the instrument ID instead of the name
     if (path === "instrumentName" && this.instrument) {
       return this.instrument.pid || "";
+    }
+
+    if (path === "proposalName") {
+      return obj["proposalId"] || "";
     }
 
     const value = this.getNestedValue(obj, path);
@@ -357,6 +576,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl("/samples/" + encodedId);
         break;
       case InternalLinkType.PROPOSALS:
+      case "proposalName":
         this.router.navigateByUrl("/proposals/" + encodedId);
         break;
       case InternalLinkType.INSTRUMENTS:

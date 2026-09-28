@@ -3,10 +3,52 @@
     <ng-container
       *ngIf="mainMenuConfig$ | async as mainMenuConfig; else noMenuItems"
     >
+      <ng-container *ngIf="mainMenuConfig?.proposals ?? false">
+        <button mat-menu-item routerLink="/proposals/">
+          <mat-icon> spa</mat-icon>
+          <span>Proposals</span>
+        </button>
+      </ng-container>
+
       <ng-container *ngIf="mainMenuConfig?.datasets ?? false">
         <button mat-menu-item routerLink="/datasets/">
           <mat-icon> folder</mat-icon>
           <span>Datasets</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.instruments ?? false">
+        <button mat-menu-item routerLink="/instruments/">
+          <mat-icon>scanner</mat-icon>
+          <span>Instruments</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.samples ?? false">
+        <button mat-menu-item routerLink="/samples/">
+          <mat-icon> center_focus_weak</mat-icon>
+          <span>Samples</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.publishedData ?? false">
+        <button mat-menu-item routerLink="/publishedDatasets/">
+          <mat-icon> chrome_reader_mode</mat-icon>
+          <span>Published Data</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="config.jobsEnabled && mainMenuConfig?.jobs">
+        <button mat-menu-item routerLink="/user/jobs">
+          <mat-icon> transfer_within_a_station</mat-icon>
+          <span>Jobs</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.files ?? false">
+        <button mat-menu-item routerLink="/files/">
+          <mat-icon> text_snippet</mat-icon>
+          <span>Files</span>
         </button>
       </ng-container>
 
@@ -20,26 +62,6 @@
           <span>Ingestor</span>
         </button>
       </ng-container>
-      <ng-container *ngIf="mainMenuConfig?.files ?? false">
-        <button mat-menu-item routerLink="/files/">
-          <mat-icon> text_snippet</mat-icon>
-          <span>Files</span>
-        </button>
-      </ng-container>
-
-      <ng-container *ngIf="mainMenuConfig?.instruments ?? false">
-        <button mat-menu-item routerLink="/instruments/">
-          <mat-icon>scanner</mat-icon>
-          <span>Instruments</span>
-        </button>
-      </ng-container>
-
-      <ng-container *ngIf="config.jobsEnabled && mainMenuConfig?.jobs">
-        <button mat-menu-item routerLink="/user/jobs">
-          <mat-icon> transfer_within_a_station</mat-icon>
-          <span>Jobs</span>
-        </button>
-      </ng-container>
 
       <ng-container *ngIf="config.policiesEnabled && mainMenuConfig?.policies">
         <button mat-menu-item routerLink="/policies/">
@@ -48,26 +70,6 @@
         </button>
       </ng-container>
 
-      <ng-container *ngIf="mainMenuConfig?.proposals ?? false">
-        <button mat-menu-item routerLink="/proposals/">
-          <mat-icon> spa</mat-icon>
-          <span>Proposals</span>
-        </button>
-      </ng-container>
-
-      <ng-container *ngIf="mainMenuConfig?.publishedData ?? false">
-        <button mat-menu-item routerLink="/publishedDatasets/">
-          <mat-icon> chrome_reader_mode</mat-icon>
-          <span>Published Data</span>
-        </button>
-      </ng-container>
-
-      <ng-container *ngIf="mainMenuConfig?.samples ?? false">
-        <button mat-menu-item routerLink="/samples/">
-          <mat-icon> center_focus_weak</mat-icon>
-          <span>Samples</span>
-        </button>
-      </ng-container>
     </ng-container>
     <ng-template #noMenuItems>
       <ng-container>

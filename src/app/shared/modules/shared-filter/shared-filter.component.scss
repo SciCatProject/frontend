@@ -6,12 +6,43 @@
   @include mat.form-field-density(-5);
 }
 
-::ng-deep .mat-date-range-input-wrapper {
-  min-width: 100px;
+.date-range-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
 }
 
-::ng-deep .mat-date-range-input-separator {
-  color: var(--theme-primary-default) !important;
+.date-range-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.date-range-row {
+  width: 100%;
+  min-width: 0;
+}
+
+::ng-deep .date-range-row .mat-mdc-form-field-infix {
+  width: 100%;
+  padding-right: 2.25rem;
+}
+
+::ng-deep .date-range-row .mat-mdc-floating-label {
+  left: 5px;
+}
+
+::ng-deep .date-range-row .mat-mdc-form-field-label-wrapper {
+  padding-left: 5px;
+}
+
+::ng-deep .date-range-row .mat-datepicker-toggle {
+  margin-left: 0.25rem;
+}
+
+::ng-deep .date-range-row .mat-mdc-input-element {
+  padding-right: 0.5rem;
 }
 
 .mat-mdc-form-field {

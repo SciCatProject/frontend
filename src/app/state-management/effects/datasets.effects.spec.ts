@@ -166,6 +166,8 @@ describe("DatasetEffects", () => {
       const outcome = fromActions.fetchFacetCountsCompleteAction({
         facetCounts,
         allCounts,
+        myDataCount: 0,
+        publicDataCount: 0,
       });
 
       const responseArray = [
@@ -182,7 +184,7 @@ describe("DatasetEffects", () => {
       const response = cold("-a|", { a: responseArray });
       datasetApi.datasetsControllerFullfacetV3.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("---b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
     });
 

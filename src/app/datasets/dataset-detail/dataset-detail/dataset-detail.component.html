@@ -24,13 +24,17 @@
     </div>
   </div>
   <div style="clear: both"></div>
-  <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
-    <div [fxFlex]="(attachments$ | async)?.length > 0 ? '90%' : '100%'">
-      <mat-card [formGroup]="form" data-cy="general-info">
+  <div class="dataset-detail-layout" *ngIf="dataset">
+    <div class="dataset-detail-content">
+      <mat-card
+        class="summary-card"
+        [formGroup]="form"
+        data-cy="general-info"
+      >
         <mat-card-header class="general-header">
           <mat-icon class="section-icon"> description </mat-icon>
           <mat-card-title class="section-title">{{
-            "General Information" | translate: localization
+            "Summary" | translate: localization
           }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
@@ -359,7 +363,7 @@
         </mat-card-content>
       </mat-card>
       <ng-container *ngIf="emptyMetadataTable()">
-        <mat-card>
+        <mat-card class="scientific-metadata-card">
           <mat-card-header class="scientific-header">
             <mat-icon class="section-icon"> science </mat-icon>
             <mat-card-title class="section-title">{{
@@ -457,7 +461,7 @@
     </div>
 
     <div
-      [fxFlex]="(attachments$ | async)?.length > 0 ? '10%' : '0'"
+      class="attachments-panel"
       *ngIf="attachments$ | async as attachments"
     >
       <ng-container *ngFor="let da of attachments">

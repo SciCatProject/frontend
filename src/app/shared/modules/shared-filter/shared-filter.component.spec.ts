@@ -156,6 +156,19 @@ describe("SharedFilterComponent", () => {
     expect(res2.length).toBe(1);
   });
 
+  it("keeps unselected instrument options visible after a selection", () => {
+    component.key = "instrumentIds";
+    component.checkboxFacetCounts = [
+      { _id: "ODIN", label: "ODIN", count: 4 },
+      { _id: "ESTIA", label: "ESTIA", count: 0 },
+    ];
+    component.filterForm.get("selectedIds")!.setValue(["ODIN"]);
+
+    const result = component.filteredFacetCounts();
+
+    expect(result.map((item) => item._id)).toEqual(["ODIN", "ESTIA"]);
+  });
+
   it("filteredFacetCounts should de-duplicate by _id", () => {
     component.checkboxFacetCounts = [
       { _id: "a", label: "Alpha", count: 1 },

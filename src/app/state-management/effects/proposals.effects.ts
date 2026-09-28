@@ -97,9 +97,15 @@ export class ProposalEffects {
         const config = this.appConfigService.getConfig();
         const filters = config.defaultProposalsListSettings?.filters ?? [];
         const facets = filters.map((f) => f.key);
+        const fields: Record<string, unknown> = { ...params.fields };
+
+        // Count every instrument against the other active filters, rather than
+        // counting inside the currently selected instrument subset.
+        delete fields.instrumentIds;
 
         return {
           ...params,
+          fields,
           facets,
         };
       }),

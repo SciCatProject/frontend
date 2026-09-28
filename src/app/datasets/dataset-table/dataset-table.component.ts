@@ -7,14 +7,23 @@ import {
   ViewEncapsulation,
   ViewChild,
 } from "@angular/core";
-import { TableColumn } from "state-management/models";
+import {
+  TableColumn,
+  ConditionConfig,
+  ScientificCondition,
+  getSettingKey,
+} from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatDialog } from "@angular/material/dialog";
 import {
   BehaviorSubject,
   Subscription,
   combineLatest,
   combineLatestWith,
   filter,
+  map,
+  Observable,
+  take,
 } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
@@ -27,23 +36,35 @@ import {
   setTextFilterAction,
   fetchFacetCountsAction,
   fetchDatasetsAction,
+  setPublicViewModeAction,
+  addScientificConditionAction,
+  removeScientificConditionAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
+import { updateConditionsConfigs } from "state-management/actions/user.actions";
+import { AdvancedSearchDialogComponent } from "shared/modules/advanced-search-dialog/advanced-search-dialog.component";
 
 import {
   selectDatasets,
   selectDatasetsPerPage,
   selectPage,
   selectTotalSets,
+  selectMyDataCount,
+  selectPublicDataCount,
   selectSelectedDatasets,
   selectDatasetsInBatch,
   selectDatasetsFacetCountsIsLoading,
   selectTextFilter,
+  selectMetadataKeys,
+  selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
 import {
   selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
+  selectConditions,
+  selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import {
   OutputDatasetObsoleteDto,
@@ -99,6 +120,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   currentPage$ = this.store.select(selectPage);
   datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
   datasetCount$ = this.store.select(selectTotalSets);
+  myDataCount$ = this.store.select(selectMyDataCount);
+  publicDataCount$ = this.store.select(selectPublicDataCount);
+  publicScope$ = this.store.select(selectPublicViewMode) as Observable<boolean | "">;
+  loggedIn$ = this.store.select(selectIsLoggedIn);
   currentUser$ = this.store.select(selectCurrentUser);
   datasets$ = this.store.select(selectDatasets);
   selectedDatasets$ = this.store.select(selectDatasetsInBatch);
@@ -158,13 +183,26 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   showGlobalTextSearch = false;
 
-  defaultPageSize = 10;
+  defaultPageSize = 20;
 
   defaultPageSizeOptions = this.appConfig.datasetPageSizeOptions;
 
   tablesSettings: object;
 
   globalTextSearch = "";
+
+  activeAdvancedFilters$ = this.store
+    .select(selectConditions("dataset"))
+    .pipe(
+      map((conditions) =>
+        (conditions || [])
+          .filter((c) => c.enabled && c.condition?.lhs)
+          .map((c) => ({
+            label: this.getConditionChipLabel(c),
+            conditionConfig: c,
+          })),
+      ),
+    );
 
   constructor(
     public appConfigService: AppConfigService,
@@ -173,7 +211,142 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
     private router: Router,
+    private dialog: MatDialog,
   ) {}
+
+  getConditionChipLabel(conditionConfig: ConditionConfig): string {
+    const lhs = conditionConfig?.condition?.lhs;
+    if (!lhs) return "";
+    const name =
+      conditionConfig.condition.human_name ||
+      this.appConfig?.labelsLocalization?.dataset?.[lhs] ||
+      this.formatConditionKey(lhs);
+
+    const rhs = conditionConfig.condition.rhs;
+    if (rhs !== undefined && rhs !== null && rhs !== "") {
+      const unit = conditionConfig.condition.unit ? ` ${conditionConfig.condition.unit}` : "";
+      if (conditionConfig.condition.relation === "RANGE" && Array.isArray(rhs)) {
+        if (rhs[0] && rhs[1]) {
+          return `${name}: ${rhs[0]} - ${rhs[1]}${unit}`;
+        }
+      }
+      return `${name}: ${rhs}${unit}`;
+    }
+    return name;
+  }
+
+  formatConditionKey(key: string): string {
+    if (!key) return "";
+    const parts = key.split(".");
+    const lastPart = parts[parts.length - 1];
+    return lastPart
+      .replace(/[_-]/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  openAdvancedSearchDialog(filterItem?: { conditionConfig?: ConditionConfig }): void {
+    const focusConditionLhs = filterItem?.conditionConfig?.condition?.lhs;
+    this.subscriptions.push(
+      combineLatest([
+        this.store.select(selectConditions("dataset")),
+        this.store.select(selectMetadataKeys),
+      ])
+        .pipe(take(1))
+        .subscribe(([conditions, metadataKeys]) => {
+          const dialogRef = this.dialog.open(AdvancedSearchDialogComponent, {
+            panelClass: "advanced-search-dialog-panel",
+            width: "960px",
+            maxWidth: "94vw",
+            data: {
+              conditions: conditions || [],
+              metadataKeys: metadataKeys || [],
+              unitsEnabled: this.appConfig.scienceSearchUnitsEnabled,
+              dialogTitle: "Advanced Search",
+              conditionSettingScope: "dataset",
+              focusConditionLhs,
+            },
+            restoreFocus: false,
+          });
+
+          dialogRef.afterClosed().subscribe((res) => {
+            if (res && res.applied) {
+              const updatedConditions: ConditionConfig[] = res.conditions || [];
+              this.applyConditions(updatedConditions);
+            }
+          });
+        }),
+    );
+  }
+
+  applyConditions(updatedConditions: ConditionConfig[]): void {
+    this.store.dispatch(
+      updateConditionsConfigs({
+        conditionConfigs: updatedConditions,
+        scope: "dataset",
+      }),
+    );
+
+    const key = getSettingKey("dataset", "conditions");
+    this.store.dispatch(
+      updateUserSettingsAction({
+        property: { [key]: updatedConditions },
+      }),
+    );
+
+    const activeScientificConditions: ScientificCondition[] = [];
+    (updatedConditions || []).forEach((config) => {
+      if (config.enabled && config.condition?.lhs && config.condition?.rhs !== undefined && config.condition?.rhs !== null && config.condition?.rhs !== "") {
+        const condition = { ...config.condition };
+        const rhsValue = condition.rhs;
+        const isNumeric = typeof rhsValue === "number" || (typeof rhsValue === "string" && rhsValue.trim() !== "" && !isNaN(Number(rhsValue)));
+
+        if (isNumeric && typeof rhsValue === "string") {
+          condition.rhs = Number(rhsValue);
+        }
+
+        if (condition.relation === "EQUAL_TO") {
+          condition.relation = !isNumeric
+            ? "EQUAL_TO_STRING"
+            : "EQUAL_TO_NUMERIC";
+        }
+
+        activeScientificConditions.push(condition);
+      }
+    });
+
+    this.store.dispatch(
+      setScientificConditionsAction({ scientific: activeScientificConditions }),
+    );
+
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
+  }
+
+  onRemoveAdvancedFilter(filterItem: { label: string; conditionConfig: ConditionConfig }): void {
+    if (!filterItem?.conditionConfig) return;
+    const targetKey = filterItem.conditionConfig.condition.lhs;
+
+    this.subscriptions.push(
+      this.store
+        .select(selectConditions("dataset"))
+        .pipe(take(1))
+        .subscribe((conditions = []) => {
+          const updated = conditions.filter((c) => c.condition.lhs !== targetKey);
+          this.applyConditions(updated);
+        }),
+    );
+  }
+
+  onPublicScopeChange(isPublished: boolean): void {
+    this.store.dispatch(setPublicViewModeAction({ isPublished }));
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
+  }
+
+  clearAdvancedConditions(): void {
+    this.applyConditions([]);
+  }
+
 
   private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
     return columns.map((column) => {
@@ -452,7 +625,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onTextSearchAction() {
     this.store.dispatch(fetchDatasetsAction());
-    this.store.dispatch(fetchFacetCountsAction());
+
+    // Exact Persistent ID searches only need the dataset result; the
+    // OpenSearch facet path can reject this query with an invalid size value.
+    if (!/^20\.\d+\/[0-9a-f-]+$/i.test(this.globalTextSearch.trim())) {
+      this.store.dispatch(fetchFacetCountsAction());
+    }
   }
 
   ngOnDestroy() {

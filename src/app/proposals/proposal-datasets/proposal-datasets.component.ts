@@ -103,7 +103,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   rowSelectionMode: TableSelectionMode = "none";
 
-  defaultPageSize = 10;
+  defaultPageSize = 100;
 
   tablesSettings: object;
 

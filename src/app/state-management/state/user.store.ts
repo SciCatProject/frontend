@@ -92,10 +92,10 @@ export const initialUserState: UserState = {
 
   filters: [
     {
-      key: "creationLocation",
-      label: "Location",
-      type: "multiSelect",
-      description: "Filter by creation location on the dataset",
+      key: "instrumentIds",
+      label: "Instrument",
+      type: "checkbox",
+      description: "Filter datasets by instrument",
       enabled: true,
     },
     {
@@ -103,21 +103,21 @@ export const initialUserState: UserState = {
       label: "Pid",
       type: "text",
       description: "Filter by dataset pid",
-      enabled: true,
+      enabled: false,
     },
     {
       key: "ownerGroup",
       label: "Group",
       type: "multiSelect",
       description: "Filter by owner group of the dataset",
-      enabled: true,
+      enabled: false,
     },
     {
       key: "type",
       label: "Type",
       type: "multiSelect",
       description: "Filter by dataset type",
-      enabled: true,
+      enabled: false,
     },
     {
       key: "keywords",

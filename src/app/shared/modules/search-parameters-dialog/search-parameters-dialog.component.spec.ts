@@ -132,4 +132,19 @@ describe("SearchParametersDialogComponent", () => {
       expect(component.parametersForm.get("unit").disabled).toEqual(true);
     });
   });
+
+  describe("#selectCondition()", () => {
+    it("should set lhs, get units, and auto-apply by closing dialog with condition data", () => {
+      const dialogCloseSpy = spyOn(component.dialogRef, "close");
+      component.selectCondition("mass");
+      expect(dialogCloseSpy).toHaveBeenCalledWith({
+        data: {
+          lhs: "mass",
+          relation: "GREATER_THAN",
+          rhs: "",
+          unit: "",
+        },
+      });
+    });
+  });
 });

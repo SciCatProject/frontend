@@ -18,7 +18,6 @@ import {
   OnChanges,
   ViewContainerRef,
   SimpleChanges,
-  HostListener,
 } from "@angular/core";
 import { TableCoreDirective } from "../cores/table.core.directive";
 import { TableService } from "./dynamic-mat-table.service";
@@ -77,7 +76,6 @@ import { TableDataSource } from "../cores/table-data-source";
 import { DatePipe } from "@angular/common";
 import { AppConfigService } from "app-config.service";
 import { EventsService } from "shared/events.service";
-import { get as lodashGet } from "lodash-es";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -205,8 +203,13 @@ export class DynamicMatTableComponent<T extends TableRow>
   // Public fields
   globalSearchUpdate = new Subject<string>();
   init = false;
+  skeletonRows = Array.from({ length: 6 });
   hoverKey: string | null = null;
-  pinnedHoverKey: string | null = null;
+  abstractHoverKey: string | null = null;
+  private abstractHoverTimer: ReturnType<typeof setTimeout> | null = null;
+  previewRow: any = null;
+  previewColumn: any = null;
+  private previewTimer: ReturnType<typeof setTimeout> | null = null;
   currentContextMenuSender: any = {};
   highlighted = new Set<string>();
   liveBorder = false;
@@ -264,16 +267,16 @@ export class DynamicMatTableComponent<T extends TableRow>
   /** Overlay positions for metadata hover */
   metadataOverlayPositions: ConnectedPosition[] = [
     {
-      originX: "center",
+      originX: "end",
       originY: "center",
-      overlayX: "center",
+      overlayX: "start",
       overlayY: "center",
       offsetX: 8,
     },
     {
-      originX: "center",
+      originX: "start",
       originY: "center",
-      overlayX: "center",
+      overlayX: "end",
       overlayY: "center",
       offsetX: -8,
     },
@@ -323,6 +326,7 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   @Input() emptyMessage = "No data available";
   @Input() emptyIcon = "info";
+  @Input() errorMessage = "";
   @Input() sideFilterCollapsed = false;
   @Input() set latestUpdatedId(id: string) {
     if (!id || this.highlighted.has(id)) return;
@@ -401,115 +405,49 @@ export class DynamicMatTableComponent<T extends TableRow>
       });
   }
 
-  private normalizeColumnName(column?: TableField<T>) {
-    return (column?.name || "").trim();
+  makeKey = (row: any, col: any) =>
+    (row?._id ?? row?.pid ?? row?.id ?? row) + "::" + col?.name;
+
+  onPreviewEnter(row: any, column: any): void {
+    this.clearPreviewTimer();
+    this.previewTimer = setTimeout(() => {
+      this.previewRow = row;
+      this.previewColumn = column;
+      this.cdr.detectChanges();
+    }, 700);
   }
 
-  makeKey = (row: any, col: any) => (row?.id ?? row) + "::" + col?.name;
+  onPreviewLeave(): void {
+    this.clearPreviewTimer();
+    this.previewRow = null;
+    this.previewColumn = null;
+  }
 
-  @HostListener("document:click")
-  onDocumentClick() {
-    if (this.pinnedHoverKey) {
-      this.closePinnedHoverCard();
+  private clearPreviewTimer(): void {
+    if (this.previewTimer) {
+      clearTimeout(this.previewTimer);
+      this.previewTimer = null;
     }
   }
 
-  @HostListener("document:keydown.escape")
-  onEscapeKey() {
-    if (this.pinnedHoverKey) {
-      this.closePinnedHoverCard();
+  onAbstractHoverEnter(row: any, column: any): void {
+    this.clearAbstractHoverTimer();
+    this.abstractHoverTimer = setTimeout(() => {
+      this.abstractHoverKey = this.makeKey(row, column);
+      this.cdr.detectChanges();
+    }, 700);
+  }
+
+  onAbstractHoverLeave(): void {
+    this.clearAbstractHoverTimer();
+    this.abstractHoverKey = null;
+  }
+
+  private clearAbstractHoverTimer(): void {
+    if (this.abstractHoverTimer) {
+      clearTimeout(this.abstractHoverTimer);
+      this.abstractHoverTimer = null;
     }
-  }
-
-  isHoverCardOpen(row: any, column: TableField<T>) {
-    const key = this.makeKey(row, column);
-    return this.hoverKey === key || this.pinnedHoverKey === key;
-  }
-
-  isHoverCardPinned(row: any, column: TableField<T>) {
-    return this.pinnedHoverKey === this.makeKey(row, column);
-  }
-
-  onHoverCardTriggerEnter(row: any, column: TableField<T>) {
-    const key = this.makeKey(row, column);
-    if (this.pinnedHoverKey && this.pinnedHoverKey !== key) {
-      return;
-    }
-
-    this.hoverKey = key;
-  }
-
-  onHoverCardTriggerLeave(row: any, column: TableField<T>) {
-    const key = this.makeKey(row, column);
-    if (this.pinnedHoverKey === key) {
-      return;
-    }
-
-    if (this.hoverKey === key) {
-      this.hoverKey = null;
-    }
-  }
-
-  onHoverCardContentEnter(row: any, column: TableField<T>) {
-    this.hoverKey = this.makeKey(row, column);
-  }
-
-  onHoverCardContentLeave(row: any, column: TableField<T>) {
-    this.onHoverCardTriggerLeave(row, column);
-  }
-
-  togglePinnedHoverCard(event: MouseEvent, row: any, column: TableField<T>) {
-    event.preventDefault();
-    this.stopEventPropagation(event);
-
-    const key = this.makeKey(row, column);
-    if (this.pinnedHoverKey === key) {
-      this.closePinnedHoverCard();
-      return;
-    }
-
-    this.pinnedHoverKey = key;
-    this.hoverKey = key;
-  }
-
-  closePinnedHoverCard() {
-    this.pinnedHoverKey = null;
-    this.hoverKey = null;
-  }
-
-  stopEventPropagation(event: Event) {
-    event.stopPropagation();
-  }
-
-  isScientificMetadataColumn(column: TableField<T>) {
-    const name = this.normalizeColumnName(column);
-    return (
-      name === "scientificMetadata" || name.startsWith("scientificMetadata.")
-    );
-  }
-
-  getScientificMetadata(row: Record<string, unknown>, column?: TableField<T>) {
-    const metadata = row?.scientificMetadata as Record<string, unknown>;
-    const name = this.normalizeColumnName(column);
-
-    if (
-      !name ||
-      name === "scientificMetadata" ||
-      !name.startsWith("scientificMetadata.")
-    ) {
-      return metadata;
-    }
-
-    return lodashGet(row, name);
-  }
-
-  hasScientificMetadata(row: Record<string, unknown>, column?: TableField<T>) {
-    const metadata = this.getScientificMetadata(row, column);
-    return (
-      !!metadata &&
-      typeof metadata === "object" &&
-      Object.keys(metadata).length > 0
-    );
   }
 
   ngAfterViewInit(): void {
@@ -625,14 +563,14 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   ngOnDestroy(): void {
+    this.clearPreviewTimer();
+    this.clearAbstractHoverTimer();
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
     }
     if (this.liveConnectionErrSub) {
       this.liveConnectionErrSub.unsubscribe();
     }
-    this.closePinnedHoverCard();
-    this.closeTooltip();
   }
 
   public refreshUI() {

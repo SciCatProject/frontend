@@ -28,7 +28,7 @@ import {
   tap,
   filter,
 } from "rxjs/operators";
-import { of } from "rxjs";
+import { forkJoin, of } from "rxjs";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
@@ -102,26 +102,49 @@ export class DatasetEffects {
         fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => this.fullfacetParams$),
-      map(([, params]) => params),
-      mergeMap(({ fields, facets }) =>
-        this.datasetsService
-          .datasetsControllerFullfacetV3(
-            JSON.stringify(facets),
-            JSON.stringify(fields),
-          )
-          .pipe(
-            map((res) => {
-              const { all, ...facetCounts } = res[0];
+      map(([, params]) => {
+        // Keep the full filter set (incl. instrumentIds) for scope counts,
+        // but strip instrumentIds only for the facet-breakdown query so it
+        // still lists all instrument options with their own counts.
+        const facetFields: Record<string, unknown> = { ...params.fields };
+        delete facetFields.instrumentIds;
 
+        return { ...params, facetFields, scopeFields: params.fields };
+      }),
+      mergeMap(({ facetFields, scopeFields, facets }) => {
+        const forScope = (isPublished: boolean) => ({
+          ...scopeFields,
+          isPublished,
+        });
+        return forkJoin({
+          facets: this.datasetsService.datasetsControllerFullfacetV3(
+            JSON.stringify(facets),
+            JSON.stringify(facetFields),
+          ),
+          myData: this.datasetsService.datasetsControllerFullfacetV3(
+            JSON.stringify([]),
+            JSON.stringify(forScope(false)),
+          ),
+          publicData: this.datasetsService.datasetsControllerFullfacetV3(
+            JSON.stringify([]),
+            JSON.stringify(forScope(true)),
+          ),
+        }).pipe(
+            map(({ facets: res, myData, publicData }) => {
+              const { all, ...facetCounts } = res[0];
               const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+              const scopeCount = (scope: any[]) =>
+                scope[0]?.all?.[0]?.totalSets ?? 0;
               return fromActions.fetchFacetCountsCompleteAction({
                 facetCounts,
                 allCounts,
+                myDataCount: scopeCount(myData),
+                publicDataCount: scopeCount(publicData),
               });
             }),
             catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
-          ),
-      ),
+          );
+      }),
     );
   });
 
@@ -172,6 +195,7 @@ export class DatasetEffects {
       ofType(
         fromActions.addScientificConditionAction,
         fromActions.removeScientificConditionAction,
+        fromActions.setScientificConditionsAction,
         fromActions.clearFacetsAction,
       ),
       map(() => fromActions.fetchMetadataKeysAction({})),

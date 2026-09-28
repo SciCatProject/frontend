@@ -16,9 +16,20 @@
     flex: 1 0 5em;
   }
 
+  .mat-column-comment {
+    flex: 0 0 88px !important;
+    min-width: 88px !important;
+    justify-content: center;
+  }
+
   &-header {
     font-weight: bold;
   }
+}
+
+:host ::ng-deep .metadata-comment-icon {
+  color: var(--theme-primary-default);
+  cursor: pointer;
 }
 
 .metadataTable-add-column-enabled {

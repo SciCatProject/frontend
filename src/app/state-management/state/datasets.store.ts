@@ -23,6 +23,8 @@ export interface DatasetState {
   relatedDatasets: OutputDatasetObsoleteDto[];
   relatedDatasetsCount: number;
   totalCount: number;
+  myDataCount: number;
+  publicDataCount: number;
 
   facetCounts: FacetCounts;
   facetCountsIsLoading: boolean;
@@ -52,6 +54,8 @@ export const initialDatasetState: DatasetState = {
   relatedDatasets: [],
   relatedDatasetsCount: 0,
   totalCount: 0,
+  myDataCount: 0,
+  publicDataCount: 0,
 
   facetCounts: {},
   facetCountsIsLoading: false,
@@ -64,9 +68,10 @@ export const initialDatasetState: DatasetState = {
     modeToggle: ArchViewMode.all,
     mode: {},
     text: "",
+    creationLocation: [],
     creationTime: null,
     type: [],
-    creationLocation: [],
+    instrumentIds: [],
     ownerGroup: [],
     skip: 0,
     limit: 25,

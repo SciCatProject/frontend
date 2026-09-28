@@ -30,6 +30,7 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
 import { JsonPreviewDialogModule } from "./modules/json-preview-dialog/json-preview-dialog.module";
 import { DatasetsListService } from "./services/datasets-list.service";
 import { AjvService } from "./services/ajv.service";
+import { AdvancedSearchDialogModule } from "./modules/advanced-search-dialog/advanced-search-dialog.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -44,6 +45,7 @@ import { AjvService } from "./services/ajv.service";
     FullTextSearchBarModule,
     TableModule,
     SearchParametersDialogModule,
+    AdvancedSearchDialogModule,
     CommonModule,
     FormsModule,
     SharedTableModule,
@@ -83,6 +85,7 @@ import { AjvService } from "./services/ajv.service";
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule,
+    AdvancedSearchDialogModule,
     NgxNumericRangeFormFieldModule,
     EmptyContentModule,
     JsonFormsModule,

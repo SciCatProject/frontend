@@ -27,44 +27,37 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'dateRange'">
-      <mat-form-field
-        class="date-range-field"
-        [matTooltip]="tooltip"
-        matTooltipPosition="after"
-        [id]="key"
-      >
-        <mat-label>{{ label }} </mat-label>
-        <mat-date-range-input
-          formGroupName="dateRangeField"
-          [rangePicker]="picker"
-        >
+      <div class="date-range-filter" [id]="key" formGroupName="dateRangeField">
+        <div class="date-range-label">{{ label }}</div>
+
+        <mat-form-field class="date-range-row" appearance="outline">
+          <mat-label>Start Date</mat-label>
           <input
-            matStartDate
+            matInput
+            [matDatepicker]="pickerStart"
             (dateChange)="dateChanged($event, 'begin')"
             formControlName="start"
             data-cy="creation-time-begin"
             (keydown.enter)="onApplyEnter($event)"
           />
+          <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+          <mat-datepicker #pickerStart></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="date-range-row" appearance="outline">
+          <mat-label>End Date</mat-label>
           <input
-            matEndDate
+            matInput
+            [matDatepicker]="pickerEnd"
             (dateChange)="dateChanged($event, 'end')"
             formControlName="end"
             data-cy="creation-time-end"
             (keydown.enter)="onApplyEnter($event)"
           />
-        </mat-date-range-input>
-        <span
-          *ngIf="appConfig.autoApplyFilters"
-          matSuffix
-          class="enter-hint"
-          matTooltip="Press Enter to apply"
-          matTooltipPosition="after"
-          matTooltipShowDelay="500"
-          >↵</span
-        >
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-      </mat-form-field>
+          <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+          <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'checkbox'">

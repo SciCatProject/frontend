@@ -17,6 +17,8 @@ mat-sidenav-container {
     background-color: #ffffff;
 
     .action-column {
+      flex: 0 0 175px !important;
+      width: 175px;
       margin-right: 0.5rem;
 
       .add-card {
@@ -42,5 +44,12 @@ mat-sidenav-container {
   mat-sidenav.mat-drawer-opened,
   mat-sidenav.mat-drawer-opening {
     box-shadow: 0 0 0 0 !important;
+  }
+}
+
+@media (max-width: 959px) {
+  mat-sidenav-container mat-sidenav-content .action-column {
+    flex-basis: 20% !important;
+    width: auto;
   }
 }

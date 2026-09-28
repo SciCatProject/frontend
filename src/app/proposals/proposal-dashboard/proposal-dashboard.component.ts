@@ -20,7 +20,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   dataSource$ = new BehaviorSubject<ProposalClass[]>([]);
   params$ = this.route.queryParams;
-  defaultPageSize = 10;
+  defaultPageSize = 20;
   sideFilterCollapsed = false;
 
   constructor(

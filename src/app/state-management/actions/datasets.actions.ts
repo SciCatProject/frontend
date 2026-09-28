@@ -32,7 +32,12 @@ export const fetchFacetCountsAction = createAction(
 );
 export const fetchFacetCountsCompleteAction = createAction(
   "[Dataset] Fetch Facet Counts Complete",
-  props<{ facetCounts: FacetCounts; allCounts: number }>(),
+  props<{
+    facetCounts: FacetCounts;
+    allCounts: number;
+    myDataCount?: number;
+    publicDataCount?: number;
+  }>(),
 );
 export const fetchFacetCountsFailedAction = createAction(
   "[Dataset] Fetch Facet Counts Failed",
@@ -330,6 +335,10 @@ export const addScientificConditionAction = createAction(
 export const removeScientificConditionAction = createAction(
   "[Dataset] Remove Scientific Condition",
   props<{ condition: ScientificCondition }>(),
+);
+export const setScientificConditionsAction = createAction(
+  "[Dataset] Set Scientific Conditions",
+  props<{ scientific: ScientificCondition[] }>(),
 );
 
 export const clearDatasetsStateAction = createAction("[Dataset] Clear State");

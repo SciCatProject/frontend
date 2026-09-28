@@ -1,4 +1,6 @@
 mat-card {
+  box-sizing: border-box;
+  width: 100%;
   box-shadow: var(--theme-side-panel-shadow);
   border: var(--theme-side-panel-border, 1px solid rgba(153, 213, 233, 0.7));
   border-radius: 4px;
@@ -17,17 +19,28 @@ mat-card {
     margin-top: 1rem;
 
     .proposal-filters-search-button {
-      width: 49%;
-      margin-left: 2%;
+      flex: 0 0 auto;
+      width: 100%;
+      margin-left: 0;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
 
     .proposal-filters-clear-all-button {
-      width: 49%;
+      flex: 0 0 auto;
+      width: 100%;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
   }
 
   .section-container:first-child {
     margin-top: unset;
+  }
+
+  .section-container:last-child {
+    flex-direction: column;
+    gap: 0.35rem;
   }
 }
 

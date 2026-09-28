@@ -2,6 +2,8 @@ import {
   Component,
   OnInit,
   Input,
+  Output,
+  EventEmitter,
   OnChanges,
   SimpleChange,
 } from "@angular/core";
@@ -39,6 +41,10 @@ import { AppConfigService } from "app-config.service";
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
   @Input() metadata: object = {};
+  @Input() commentedMetadataNames: string[] = [];
+  @Input() metadataCommentMap: Record<string, string> = {};
+  @Output() commentRequested = new EventEmitter<string>();
+  @Output() commentViewed = new EventEmitter<string>();
 
   tableData: ScientificMetadataTableData[] = [];
 
@@ -117,20 +123,36 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             header: "Value",
             width: 250,
             customRender: (column, row) => {
-              if (row.type === "date") {
-                return this.datePipe.transform(row[column.name]);
+              const metadataName = row.human_name || row.name || "";
+              const commentText = this.metadataCommentMap[metadataName];
+              const rawValue = (() => {
+                if (row.type === "date") {
+                  return this.datePipe.transform(row[column.name]);
+                }
+
+                if (row.type === "link") {
+                  return this.linkyPipe.transform(row[column.name] || "", {
+                    urls: true,
+                    newWindow: true,
+                    stripPrefix: false,
+                    sanitizeHtml: true,
+                  });
+                }
+
+                return row[column.name];
+              })();
+
+              if (!commentText) {
+                row._tooltipText = undefined;
+                return rawValue;
               }
 
-              if (row.type === "link") {
-                return this.linkyPipe.transform(row[column.name] || "", {
-                  urls: true,
-                  newWindow: true,
-                  stripPrefix: false,
-                  sanitizeHtml: true,
-                });
-              }
-
-              return row[column.name];
+              row._tooltipText = commentText;
+              return `
+                <span class="metadata-commented-value">
+                  <strong>${this.escapeHtml(String(rawValue ?? ""))}</strong>
+                </span>
+              `;
             },
             toExport: (column, row) => {
               if (row.type === "date") {
@@ -176,6 +198,18 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             cellClass: "unit-input",
           },
           {
+            name: "comment",
+            header: "Comment",
+            width: 88,
+            clickType: "cell",
+            renderContentIcon: (_column, row) =>
+              this.commentedMetadataNames.includes(row.human_name || row.name)
+                ? "comment"
+                : "add_comment",
+            contentIconTooltip: "Add or view metadata comments",
+            contentIconClass: "metadata-comment-icon",
+          },
+          {
             name: "type",
             header: "Type",
             display: "hidden",
@@ -203,6 +237,15 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     this.rowContextMenuItems = this.canAddScientificMetadataKeysAsColumn
       ? [this.scientificMetadataColumnsService.addAsColumnAction]
       : [];
+  }
+
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
   createMetadataArray(
@@ -286,6 +329,20 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   }
 
   async onRowEvent({ event, sender }: IRowEvent<ScientificMetadataTableData>) {
+    if (
+      event === RowEventType.CellClick &&
+      sender.column?.name === "comment" &&
+      sender.row
+    ) {
+      const metadataName = sender.row.human_name || sender.row.name;
+      if (this.commentedMetadataNames.includes(metadataName)) {
+        this.commentViewed.emit(metadataName);
+      } else {
+        this.commentRequested.emit(metadataName);
+      }
+      return;
+    }
+
     if (
       !this.canAddScientificMetadataKeysAsColumn ||
       event !== RowEventType.RowActionMenu ||

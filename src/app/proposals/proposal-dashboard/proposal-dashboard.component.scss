@@ -5,6 +5,14 @@ mat-sidenav-container {
     overflow-x: hidden;
 
     .action-column {
+      flex: 0 0 150px !important;
+      width: 150px;
+
+      proposal-side-filter {
+        display: block;
+        width: 100%;
+      }
+
       .add-card {
         margin: 1rem 0 1rem;
         text-align: center;
@@ -29,5 +37,16 @@ mat-sidenav-container {
   mat-sidenav.mat-drawer-opened,
   mat-sidenav.mat-drawer-opening {
     box-shadow: 0 0 0 0 !important;
+  }
+}
+
+.proposal-content-row {
+  gap: 1.66rem;
+}
+
+@media (max-width: 599px) {
+  mat-sidenav-container mat-sidenav-content .action-column {
+    flex-basis: auto !important;
+    width: auto;
   }
 }

@@ -222,7 +222,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   onRowClick(event: IRowEvent<ProposalClass>) {
     if (event.event === RowEventType.RowClick) {
       const id = encodeURIComponent(event.sender.row!.proposalId);
-      this.router.navigateByUrl(`/proposals/${id}`);
+      this.router.navigateByUrl(`/proposals/${id}?tab=datasets`);
     }
   }
 
@@ -238,6 +238,22 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         format: column.format,
         tooltip: column.tooltip,
       };
+      if (column.name === "title") {
+        convertedColumn.classNames = "proposal-title-column";
+        convertedColumn.cellClass = "proposal-title-column";
+      }
+      if (column.name === "proposalId") {
+        convertedColumn.classNames = "proposal-id-column";
+        convertedColumn.cellClass = "proposal-id-column";
+      }
+      if (column.name === "instrumentName") {
+        convertedColumn.classNames = "proposal-instrument-column";
+        convertedColumn.cellClass = "proposal-instrument-column";
+      }
+      if (column.name === "abstract") {
+        convertedColumn.classNames = "proposal-abstract-column";
+        convertedColumn.cellClass = "proposal-abstract-column";
+      }
       if (column.type === "hoverContent") {
         convertedColumn.hoverContent = true;
       }
@@ -314,20 +330,28 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   onGlobalTextSearchAction() {
     const { queryParams } = this.route.snapshot;
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+    const searchValue = this.globalTextSearch?.trim() || "";
+    const isProposalId = /^\d{6}-\d$/.test(searchValue);
+
+    if (isProposalId) {
+      delete searchQuery.text;
+      searchQuery.proposalId = searchValue;
+    } else {
+      delete searchQuery.proposalId;
+      searchQuery.text = searchValue || undefined;
+    }
+
     this.router.navigate([], {
       queryParams: {
-        searchQuery: JSON.stringify({
-          ...searchQuery,
-          text: this.globalTextSearch || undefined,
-        }),
+        searchQuery: JSON.stringify(searchQuery),
         pageIndex: 0,
       },
       queryParamsHandling: "merge",
     });
     this.store.dispatch(
       addProposalFilterAction({
-        key: "text",
-        value: this.globalTextSearch || undefined,
+        key: isProposalId ? "proposalId" : "text",
+        value: searchValue || undefined,
         filterType: "text",
       }),
     );

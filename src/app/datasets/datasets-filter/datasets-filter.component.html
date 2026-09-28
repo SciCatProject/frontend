@@ -1,39 +1,5 @@
 <mat-card>
-  <mat-card-header class="section-container filters-header">
-    <mat-card-title>Filters</mat-card-title>
-    <div class="section-container" data-cy="more-filters-button">
-      <button
-        mat-icon-button
-        class="settings-button"
-        (click)="showDatasetsFilterSettingsDialog()"
-        matTooltip="Filter settings"
-      >
-        <mat-icon>settings</mat-icon>
-      </button>
-    </div>
-  </mat-card-header>
-
   <mat-card-content>
-    <ng-template [ngIf]="this.loggedIn$ | async">
-      <div class="public-toggle">
-        <button
-          mat-stroked-button
-          [class.active]="
-            currentPublicViewMode === '' || currentPublicViewMode === false
-          "
-          (click)="onViewPublicChange(false)"
-        >
-          My data
-        </button>
-        <button
-          mat-stroked-button
-          [class.active]="currentPublicViewMode === true"
-          (click)="onViewPublicChange(true)"
-        >
-          Public data
-        </button>
-      </div>
-    </ng-template>
     <ng-container *ngFor="let filter of filtersList">
       <shared-filter
         *ngIf="filter.enabled"
@@ -55,20 +21,6 @@
         (applyEnterKey)="applyFilters()"
       ></shared-filter>
     </ng-container>
-
-    <shared-condition
-      #conditionFilter
-      *ngIf="appConfig.scienceSearchEnabled"
-      data-cy="scientific-condition-filter-list"
-      [showConditions]="true"
-      [metadataKeys]="metadataKeys$ | async"
-      [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
-      [showConditionToggle]="true"
-      [conditionSettingScope]="'dataset'"
-      [addConditionAction]="addCondition"
-      [removeConditionAction]="removeCondition"
-      [dialogTitle]="'Add Dataset Metadata Key'"
-    ></shared-condition>
 
     <div class="section-container">
       <button

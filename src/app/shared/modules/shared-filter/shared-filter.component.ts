@@ -11,6 +11,7 @@ import {
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { DateTime } from "luxon";
 import { Observable } from "rxjs";
 import { DateRange } from "state-management/state/proposals.store";
@@ -27,6 +28,20 @@ type FacetItem = { _id: string; label?: string; count: number };
   templateUrl: "./shared-filter.component.html",
   styleUrls: ["./shared-filter.component.scss"],
   standalone: false,
+  providers: [
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: { dateInput: "yyyy-MM-dd" },
+        display: {
+          dateInput: "yyyy-MM-dd",
+          monthYearLabel: "MMM yyyy",
+          dateA11yLabel: "LL",
+          monthYearA11yLabel: "MMMM yyyy",
+        },
+      },
+    },
+  ],
 })
 export class SharedFilterComponent implements OnChanges, OnInit {
   private readonly CHECKBOX_DISPLAY_LIMIT = 10;
@@ -138,12 +153,21 @@ export class SharedFilterComponent implements OnChanges, OnInit {
   }
 
   dateChanged(evt: MatDatepickerInputEvent<DateTime>, side: "begin" | "end") {
-    const isoDate = toIsoUtc(evt.value);
+    if (!evt.value) {
+      if (side === "begin") this.dateRange.begin = null;
+      if (side === "end") this.dateRange.end = null;
+      this.dateRangeChange.emit(this.dateRange);
+      return;
+    }
+
+    const localDate = DateTime.fromJSDate(evt.value.toJSDate());
+    const isoDate = localDate.toISODate();
+
     if (side === "begin") {
-      this.dateRange.begin = isoDate;
+      this.dateRange.begin = `${isoDate}T00:01:00.000Z`;
     }
     if (side === "end") {
-      this.dateRange.end = isoDate;
+      this.dateRange.end = `${isoDate}T23:59:00.000Z`;
     }
     this.dateRangeChange.emit(this.dateRange);
   }
@@ -165,7 +189,7 @@ export class SharedFilterComponent implements OnChanges, OnInit {
 
     // the filter is to prevent showing items with empty _id or null which should not be selected anyway
     const base = orderBy(this.checkboxFacetCounts, ["count"], ["desc"]).filter(
-      (item) => item._id,
+      (item) => item._id && (item.count > 0 || this.key === "instrumentIds"),
     );
 
     // always include checked items
@@ -181,7 +205,12 @@ export class SharedFilterComponent implements OnChanges, OnInit {
     // merge (checked/pinned to the top), de-duplicate by _id
     const merged = [...pinned, ...filtered]
       .filter((x, i, arr) => arr.findIndex((y) => y._id === x._id) === i)
-      .filter((x) => x.count > 0 || selected.has(x._id));
+      .filter(
+        (x) =>
+          x.count > 0 ||
+          selected.has(x._id) ||
+          this.key === "instrumentIds",
+      );
 
     return merged;
   }
@@ -229,7 +258,10 @@ export class SharedFilterComponent implements OnChanges, OnInit {
       );
 
       this.checkboxFacetCounts = merged.filter(
-        (x) => selectedIds.has(x._id) || x.count > 0,
+        (x) =>
+          selectedIds.has(x._id) ||
+          x.count > 0 ||
+          this.key === "instrumentIds",
       );
     });
   }

@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import { DateTime } from "luxon";
-import { Observable, Subscription } from "rxjs";
+import { map, Observable, Subscription } from "rxjs";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import {
   addProposalFilterAction,
@@ -140,7 +140,10 @@ export class ProposalSideFilterComponent implements OnInit, OnDestroy {
         }),
       );
     }
-    if (this.appConfig.autoApplyFilters) {
+    const isCheckboxFilter = this.filterLists.find(
+      (filter) => filter.key === filterKey,
+    )?.type === "checkbox";
+    if (this.appConfig.autoApplyFilters || isCheckboxFilter) {
       this.applyFilters();
     }
   }
@@ -232,8 +235,38 @@ export class ProposalSideFilterComponent implements OnInit, OnDestroy {
   }
 
   getFacetCounts$(key: string): Observable<any> {
-    return this.store.select(
+    const facetCounts$ = this.store.select(
       selectProposalsFacetCountsWithInstrumentNameByKey(key),
+    );
+
+    if (key !== "instrumentIds") {
+      return facetCounts$;
+    }
+
+    const instruments = [
+      "DREAM",
+      "ODIN",
+      "ESTIA",
+      "LOKI",
+      "NMX",
+      "SKADI",
+      "BIFROST",
+    ];
+    return facetCounts$.pipe(
+      map((facetCounts) => {
+        const countsByInstrument = new Map(
+          facetCounts.map((facet) => [facet._id, facet]),
+        );
+
+        return instruments.map(
+          (instrument) =>
+            countsByInstrument.get(instrument) || {
+              _id: instrument,
+              label: instrument,
+              count: 0,
+            },
+        );
+      }),
     );
   }
 

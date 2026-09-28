@@ -76,7 +76,9 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   }
 
   resetTabs(): void {
-    const defaultTab = this.appConfig.defaultTab?.proposal || "details";
+    const requestedTab = this.route.snapshot.queryParamMap.get("tab");
+    const defaultTab =
+      requestedTab || this.appConfig.defaultTab?.proposal || "details";
     this.selectedTabIndex = this.tabIndexMap[defaultTab] || 0;
   }
 

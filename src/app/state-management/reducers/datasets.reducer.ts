@@ -23,10 +23,12 @@ const reducer = createReducer(
 
   on(
     fromActions.fetchFacetCountsCompleteAction,
-    (state, { facetCounts, allCounts }): DatasetState => ({
+    (state, { facetCounts, allCounts, myDataCount, publicDataCount }): DatasetState => ({
       ...state,
       facetCounts,
       totalCount: allCounts,
+      myDataCount: myDataCount ?? state.myDataCount,
+      publicDataCount: publicDataCount ?? state.publicDataCount,
       facetCountsIsLoading: false,
     }),
   ),
@@ -454,10 +456,29 @@ const reducer = createReducer(
     fromActions.removeScientificConditionAction,
     (state, { condition }): DatasetState => {
       const currentFilters = state.filters;
-      const scientific = [...currentFilters.scientific];
-      const index = scientific.indexOf(condition);
-      scientific.splice(index, 1);
+      const areConditionsEqual = (
+        cond1: ScientificCondition,
+        cond2: ScientificCondition,
+      ) => {
+        return (
+          cond1.lhs === cond2.lhs &&
+          cond1.relation === cond2.relation &&
+          cond1.rhs === cond2.rhs &&
+          cond1.unit === cond2.unit
+        );
+      };
+      const scientific = currentFilters.scientific.filter(
+        (c) => !areConditionsEqual(c, condition),
+      );
       const filters = { ...currentFilters, scientific };
+      return { ...state, filters };
+    },
+  ),
+  on(
+    fromActions.setScientificConditionsAction,
+    (state, { scientific }): DatasetState => {
+      const currentFilters = state.filters;
+      const filters = { ...currentFilters, scientific: scientific || [] };
       return { ...state, filters };
     },
   ),

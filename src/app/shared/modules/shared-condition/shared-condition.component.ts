@@ -253,6 +253,7 @@ export class SharedConditionComponent implements OnDestroy, OnInit {
                   dialogTitle: this.dialogTitle,
                 },
                 restoreFocus: false,
+                autoFocus: false,
               },
             )
             .afterClosed()
