@@ -65,12 +65,15 @@ describe("DatasetsReducer", () => {
   describe("on fetchMetadataKeysCompleteAction", () => {
     it("should set metadataKeys property", () => {
       const metadataKeys = ["test"];
+      const metadataKeyHumanNames = { test: "Test" };
       const action = fromActions.fetchMetadataKeysCompleteAction({
         metadataKeys,
+        metadataKeyHumanNames,
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.metadataKeys).toEqual(metadataKeys);
+      expect(state.metadataKeyHumanNames).toEqual(metadataKeyHumanNames);
     });
   });
 

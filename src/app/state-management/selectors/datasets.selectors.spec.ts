@@ -17,6 +17,7 @@ const initialDatasetState: DatasetState = {
   facetCounts: {},
   facetCountsIsLoading: false,
   metadataKeys: ["test"],
+  metadataKeyHumanNames: { test: "Test" },
   hasPrefilledFilters: false,
   searchTerms: "run",
   keywordsTerms: "",

@@ -49,7 +49,10 @@ export const fetchMetadataKeysAction = createAction(
 );
 export const fetchMetadataKeysCompleteAction = createAction(
   "[Dataset] Fetch Metadata Keys Complete",
-  props<{ metadataKeys: string[] }>(),
+  props<{
+    metadataKeys: string[];
+    metadataKeyHumanNames?: Record<string, string>;
+  }>(),
 );
 export const fetchMetadataKeysFailedAction = createAction(
   "[Dataset] Fetch Metadata Keys Failed",

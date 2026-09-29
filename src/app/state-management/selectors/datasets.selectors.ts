@@ -19,6 +19,11 @@ export const selectMetadataKeys = createSelector(
   (state) => state.metadataKeys,
 );
 
+export const selectMetadataKeyHumanNames = createSelector(
+  selectDatasetState,
+  (state) => state.metadataKeyHumanNames,
+);
+
 export const selectDatasetsFacetCountsIsLoading = createSelector(
   selectDatasetState,
   (state) => state.facetCountsIsLoading,

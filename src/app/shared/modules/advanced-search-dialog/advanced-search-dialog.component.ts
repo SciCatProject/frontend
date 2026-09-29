@@ -95,16 +95,50 @@ export class AdvancedSearchDialogComponent implements OnInit {
     if (this.humanNameMap[key]) return this.humanNameMap[key];
 
     const parts = key.split(".");
-    const lastPart = parts[parts.length - 1];
-    return lastPart
-      .replace(/[_-]/g, " ")
+    const lastPart = parts[parts.length - 1].replace(/^extra[_-]entry[_-]/i, "");
+
+    // Drop repeated words, e.g. "sample_sample_environment_x_value_log_minimum_value"
+    const seen = new Set<string>();
+    const words = lastPart
+      .split(/[_\-\s]+/)
+      .filter(Boolean)
+      .filter((word) => {
+        const normalized = word.toLowerCase();
+        if (seen.has(normalized)) return false;
+        seen.add(normalized);
+        return true;
+      });
+
+    return words
+      .join(" ")
       .replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
   getUnits(parameterKey: string): string[] {
     const stored = this.unitsOptionsService.getUnitsOptions(parameterKey);
     if (stored?.length) return stored;
-    return this.unitsService.getUnits(parameterKey);
+    return this.getKindUnits(parameterKey) ?? this.unitsService.getUnits();
+  }
+
+  // Units for the physical quantity recognised in the key or its human name,
+  // e.g. "temperature" -> [celsius, kelvin]; undefined when none is recognised
+  private getKindUnits(parameterKey: string): string[] | undefined {
+    const allUnitsCount = this.unitsService.getUnits().length;
+    const candidates = [
+      parameterKey,
+      this.getHumanName(parameterKey).toLowerCase().replace(/\s+/g, "_"),
+    ];
+    for (const candidate of candidates) {
+      const units = this.unitsService.getUnits(candidate);
+      if (units.length < allUnitsCount) return units;
+    }
+    return undefined;
+  }
+
+  private getDefaultUnit(parameterKey: string): string {
+    const stored = this.unitsOptionsService.getUnitsOptions(parameterKey);
+    if (stored?.length) return stored[0];
+    return this.getKindUnits(parameterKey)?.[0] ?? "";
   }
 
   getCategories(): ConditionCategoryGroup[] {
@@ -170,6 +204,10 @@ export class AdvancedSearchDialogComponent implements OnInit {
       groups.push({ name: "Motion Stages", icon: "open_with", keys: motionKeys });
     if (polarizationKeys.length)
       groups.push({ name: "Polarization", icon: "alt_route", keys: polarizationKeys });
+
+    groups.sort((a, b) => a.name.localeCompare(b.name));
+
+    // "Other" is a catch-all, so it stays last regardless of name
     if (otherKeys.length)
       groups.push({ name: "Other", icon: "category", keys: otherKeys });
 
@@ -198,13 +236,12 @@ export class AdvancedSearchDialogComponent implements OnInit {
       return;
     }
 
-    const availableUnits = this.getUnits(key);
     const newCondition: ConditionConfig = {
       condition: {
         lhs: key,
         relation: "EQUAL_TO",
         rhs: "",
-        unit: availableUnits.length ? availableUnits[0] : "",
+        unit: this.getDefaultUnit(key),
         human_name: this.getHumanName(key),
       },
       enabled: true,

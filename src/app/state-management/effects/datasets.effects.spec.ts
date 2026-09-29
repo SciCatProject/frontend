@@ -207,17 +207,45 @@ describe("DatasetEffects", () => {
       const action = fromActions.fetchMetadataKeysAction({});
       const outcome = fromActions.fetchMetadataKeysCompleteAction({
         metadataKeys,
+        metadataKeyHumanNames: { test: "Test" },
       });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", {
-        a: [{ key: "test", humanReadable: "Test" }],
+        a: [
+          { key: "test", humanReadableName: "" },
+          { key: "test", humanReadableName: "Test" },
+        ],
       });
       metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
         response,
       );
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+
+    it("should request all keys sorted by key and remove duplicates", () => {
+      const action = fromActions.fetchMetadataKeysAction({});
+      const outcome = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys: ["a", "b"],
+        metadataKeyHumanNames: {},
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", {
+        a: [{ key: "a" }, { key: "b" }, { key: "a" }],
+      });
+      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
+        response,
+      );
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+
+      const filter = JSON.parse(
+        metadataKeysApi.metadataKeysV4ControllerFindAllV4.calls.mostRecent()
+          .args[0],
+      );
+      expect(filter.limits).toEqual({ limit: 10000, sort: { key: "asc" } });
     });
 
     it("should result in a fetchMetadataKeysFailedAction", () => {

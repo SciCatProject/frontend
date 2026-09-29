@@ -38,6 +38,8 @@ import {
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 
+const METADATA_KEYS_LIMIT = 10000;
+
 @Injectable()
 export class DatasetEffects {
   currentDataset$ = this.store.select(selectCurrentDataset);
@@ -152,9 +154,12 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
       switchMap(({ searchTerm }) => {
+        // The backend caps results at 100 by default, which truncates the
+        // list of available conditions, so request a higher limit explicitly.
         const filter = {
           where: {},
           fields: ["key", "humanReadableName"],
+          limits: { limit: METADATA_KEYS_LIMIT, sort: { key: "asc" } },
         };
 
         if (searchTerm && searchTerm.trim()) {
@@ -170,9 +175,17 @@ export class DatasetEffects {
           .metadataKeysV4ControllerFindAllV4(JSON.stringify(filter))
           .pipe(
             map((metadataKeys) => {
-              const keys = metadataKeys.map((dto) => dto.key);
+              // The same key can appear once per source type / human name
+              const keys = [...new Set(metadataKeys.map((dto) => dto.key))];
+              const humanNames: Record<string, string> = {};
+              metadataKeys.forEach(({ key, humanReadableName }) => {
+                if (humanReadableName && !humanNames[key]) {
+                  humanNames[key] = humanReadableName;
+                }
+              });
               return fromActions.fetchMetadataKeysCompleteAction({
                 metadataKeys: keys,
+                metadataKeyHumanNames: humanNames,
               });
             }),
             catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),

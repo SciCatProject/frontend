@@ -52,6 +52,52 @@ describe("AdvancedSearchDialogComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("should strip the extra entry prefix and repeated words from names", () => {
+    expect(
+      component.getHumanName(
+        "extra_entry_sample_sample_environment_KRDG1_value_log_minimum_value",
+      ),
+    ).toBe("Sample Environment KRDG1 Value Log Minimum");
+    expect(component.getHumanName("chopper_3_radius")).toBe("Chopper 3 Radius");
+  });
+
+  it("should list categories alphabetically with Other last", () => {
+    component.metadataKeys = [
+      "misc_value",
+      "sample_width",
+      "start_time",
+      "detector_distance",
+      "motor_position",
+    ];
+    expect(component.getCategories().map((g) => g.name)).toEqual([
+      "Instrument",
+      "Motion Stages",
+      "Sample",
+      "Timing",
+      "Other",
+    ]);
+  });
+
+  it("should prefer the human name from the backend", () => {
+    component.humanNameMap = { sample_width: "Width of Sample" };
+    expect(component.getHumanName("sample_width")).toBe("Width of Sample");
+  });
+
+  it("should default the unit from the kind found in the human name", () => {
+    mockUnitsService.getUnits.and.callFake((variable?: string) =>
+      variable?.includes("temperature")
+        ? ["celsius", "kelvin"]
+        : ["ampere", "celsius", "kelvin", "meters"],
+    );
+    component.humanNameMap = { krdg1_min: "KRDG1 Temperature (min)" };
+
+    component.addCondition("krdg1_min");
+    component.addCondition("sample_env");
+
+    expect(component.configuredConditions[0].condition.unit).toBe("celsius");
+    expect(component.configuredConditions[1].condition.unit).toBe("");
+  });
+
   it("should add condition when addCondition is called", () => {
     component.addCondition("scientificMetadata.wavelength.value");
     expect(component.configuredConditions.length).toBe(1);

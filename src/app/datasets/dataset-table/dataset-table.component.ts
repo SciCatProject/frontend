@@ -56,6 +56,7 @@ import {
   selectDatasetsInBatch,
   selectDatasetsFacetCountsIsLoading,
   selectTextFilter,
+  selectMetadataKeyHumanNames,
   selectMetadataKeys,
   selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
@@ -250,9 +251,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       combineLatest([
         this.store.select(selectConditions("dataset")),
         this.store.select(selectMetadataKeys),
+        this.store.select(selectMetadataKeyHumanNames),
       ])
         .pipe(take(1))
-        .subscribe(([conditions, metadataKeys]) => {
+        .subscribe(([conditions, metadataKeys, humanNameMap]) => {
           const dialogRef = this.dialog.open(AdvancedSearchDialogComponent, {
             panelClass: "advanced-search-dialog-panel",
             width: "960px",
@@ -260,6 +262,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             data: {
               conditions: conditions || [],
               metadataKeys: metadataKeys || [],
+              humanNameMap: humanNameMap || {},
               unitsEnabled: this.appConfig.scienceSearchUnitsEnabled,
               dialogTitle: "Advanced Search",
               conditionSettingScope: "dataset",
