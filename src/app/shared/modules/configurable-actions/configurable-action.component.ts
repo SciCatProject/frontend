@@ -401,7 +401,8 @@ export class ConfigurableActionComponent
   }
 
   private typeForm() {
-    if (this.actionConfig.target === "iframe") {
+    const isIframeTarget = this.actionConfig.target === "iframe";
+    if (isIframeTarget) {
       this.prepareIframe();
       this.cdRef.detectChanges();
     }
@@ -429,9 +430,9 @@ export class ConfigurableActionComponent
       }
     });
     document.body.appendChild(this.form);
-    if (this.actionConfig.target === "iframe") {
+    if (isIframeTarget) {
       this.iframeLoadArmed = this.iframeVisible;
-      this.syncIframeTargetWindowName();
+      this.syncIframeTargetWindowName(this.form.target);
     }
     this.form.submit();
     return true;
@@ -462,14 +463,14 @@ export class ConfigurableActionComponent
     return config.name;
   }
 
-  private syncIframeTargetWindowName() {
+  private syncIframeTargetWindowName(targetName: string) {
     // Make sure iframe target is correctly set
-    if (!this.form || this.actionConfig.target !== "iframe") return;
+    if (this.actionConfig.target !== "iframe") return;
     const iframe = document.getElementById(
       this.iframeName,
     ) as HTMLIFrameElement | null;
     if (iframe?.contentWindow) {
-      iframe.contentWindow.name = this.form.target;
+      iframe.contentWindow.name = targetName;
     }
   }
 
@@ -513,7 +514,17 @@ export class ConfigurableActionComponent
   }
 
   private typeLink() {
-    window.open(this.interpolate(this.actionConfig.url), this.getTarget());
+    const isIframeTarget = this.actionConfig.target === "iframe";
+    if (isIframeTarget) {
+      this.prepareIframe();
+      this.cdRef.detectChanges();
+    }
+    const target = this.getTarget();
+    if (isIframeTarget) {
+      this.syncIframeTargetWindowName(target);
+      this.iframeLoadArmed = this.iframeVisible;
+    }
+    window.open(this.interpolate(this.actionConfig.url), target);
   }
 
   private typeDialog() {

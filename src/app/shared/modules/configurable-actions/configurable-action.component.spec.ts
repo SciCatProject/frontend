@@ -1155,6 +1155,42 @@ describe("1000: ConfigurableActionComponent", () => {
     );
   });
 
+  it("1131: link action targeting an iframe should open the configured iframe instead of a new tab", () => {
+    const iframeLinkConfig: ActionConfig = {
+      ...mockActionsConfig.find((a) => a.id === actionSelectorType.link),
+      id: "iframe-link",
+      type: "link",
+      target: "iframe",
+      iframeConfig: {
+        name: "link-preview-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeLinkConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    spyOn(window, "open");
+
+    component.performAction();
+
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.iframeName).toBe("link-preview-frame");
+    expect(component.iframeLoading).toBeTrue();
+    expect(window.open).toHaveBeenCalledWith(
+      iframeLinkConfig.url,
+      "link-preview-frame",
+    );
+    const iframe = document.getElementById(
+      "link-preview-frame",
+    ) as HTMLIFrameElement;
+    expect(iframe).not.toBeNull();
+    expect(iframe.contentWindow?.name).toBe("link-preview-frame");
+
+    component.onIframeLoad();
+
+    expect(component.iframeLoading).toBeFalse();
+  });
+
   it("1140: should build dependency graph", () => {
     const variables: Record<string, unknown> = {
       files: "#Dataset0FilesPath",
