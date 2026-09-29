@@ -8,6 +8,8 @@ import {
   SimpleChanges,
   OnDestroy,
   ChangeDetectorRef,
+  ElementRef,
+  ViewChild,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import {
@@ -52,6 +54,9 @@ export class ConfigurableActionComponent
   implements OnInit, OnChanges, OnDestroy
 {
   private iframeLoadArmed = false;
+  @ViewChild("actionIframe")
+  private iframeRef?: ElementRef<HTMLIFrameElement>;
+  private cachedLinkUrl: string | null = null;
   private authorizationTokens = {
     "#jwt": () => this.jwt,
     "#token": () => this.authService.getToken()?.id,
@@ -84,6 +89,7 @@ export class ConfigurableActionComponent
   isAdmin = false;
   subscriptions: Subscription[] = [];
   form: HTMLFormElement | null = null;
+
   iframeEnabled = false;
   iframeVisible = false;
   iframeName = "";
@@ -402,7 +408,8 @@ export class ConfigurableActionComponent
   }
 
   private typeForm() {
-    if (this.actionConfig.target === "iframe") {
+    const isIframeTarget = this.actionConfig.target === "iframe";
+    if (isIframeTarget) {
       this.prepareIframe();
       this.cdRef.detectChanges();
     }
@@ -430,9 +437,9 @@ export class ConfigurableActionComponent
       }
     });
     document.body.appendChild(this.form);
-    if (this.actionConfig.target === "iframe") {
+    if (isIframeTarget) {
       this.iframeLoadArmed = this.iframeVisible;
-      this.syncIframeTargetWindowName();
+      this.syncIframeTargetWindowName(this.form.target);
     }
     this.form.submit();
     return true;
@@ -452,7 +459,7 @@ export class ConfigurableActionComponent
       name: `configurable-action-${this.actionConfig.id}`,
     };
     this.iframeEnabled = true;
-    this.iframeVisible = (config.hidden ?? true) === false;
+    this.iframeVisible = !(config.hidden ?? false);
     this.iframeName = config.name;
     this.iframeTitle = config.title || config.name;
     this.iframeWidth = config.width || "90vw";
@@ -463,14 +470,15 @@ export class ConfigurableActionComponent
     return config.name;
   }
 
-  private syncIframeTargetWindowName() {
-    // Make sure iframe target is correctly set
-    if (!this.form || this.actionConfig.target !== "iframe") return;
-    const iframe = document.getElementById(
-      this.iframeName,
-    ) as HTMLIFrameElement | null;
-    if (iframe?.contentWindow) {
-      iframe.contentWindow.name = this.form.target;
+  private syncIframeTargetWindowName(targetName: string) {
+    // Make sure iframe target is correctly set (Chromium)
+    if (this.actionConfig.target !== "iframe") return;
+    const contentWindow = this.iframeRef?.nativeElement.contentWindow;
+    if (!contentWindow) return;
+    try {
+      if (contentWindow.name !== targetName) contentWindow.name = targetName;
+    } catch {
+      // Propagate the CORS case browsing-context previousely set.
     }
   }
 
@@ -514,7 +522,18 @@ export class ConfigurableActionComponent
   }
 
   private typeLink() {
-    window.open(this.interpolate(this.actionConfig.url), this.getTarget());
+    const isIframeTarget = this.actionConfig.target === "iframe";
+    if (isIframeTarget) {
+      this.prepareIframe();
+      this.cdRef.detectChanges();
+    }
+    const target = this.getTarget();
+    if (isIframeTarget) {
+      this.syncIframeTargetWindowName(target);
+      this.iframeLoadArmed = this.iframeVisible;
+    }
+    this.cachedLinkUrl = this.interpolate(this.actionConfig.url);
+    window.open(this.cachedLinkUrl, target);
   }
 
   private typeDialog() {
@@ -601,6 +620,23 @@ export class ConfigurableActionComponent
     });
   }
 
+  // only the first failing condition is explained
+  private enabledState(): { disabled: boolean; tooltip: string } {
+    const { conditions, enabledTooltip } = normalizeEnabled(this.actionConfig);
+    try {
+      if (conditions.length) this.resolveVariableContext();
+      const failed = conditions.find(
+        (c) => !this.evaluate(this.viewHandlers(c.condition)),
+      );
+      if (failed)
+        return { disabled: true, tooltip: failed.disabledTooltip ?? "" };
+      return { disabled: false, tooltip: enabledTooltip ?? "" };
+    } catch (error) {
+      console.error("Configurable action error on get disabled", error);
+      return { disabled: true, tooltip: "" };
+    }
+  }
+
   closeIframe() {
     this.iframeVisible = false;
     this.iframeLoading = false;
@@ -608,6 +644,8 @@ export class ConfigurableActionComponent
   }
 
   openIframeInNewTab() {
+    // A cross-origin iframe's current URL cannot be read, so a form is
+    // re-submitted to the new tab (accepted even for non-idempotent POSTs).
     if (this.form) {
       const currentTarget = this.form.target;
       this.form.target = "_blank";
@@ -616,8 +654,8 @@ export class ConfigurableActionComponent
       } finally {
         this.form.target = currentTarget;
       }
-    } else if (this.actionConfig.type === "link") {
-      window.open(this.interpolate(this.actionConfig.url), "_blank");
+    } else if (this.cachedLinkUrl) {
+      window.open(this.cachedLinkUrl, "_blank");
     }
   }
 
@@ -662,23 +700,6 @@ export class ConfigurableActionComponent
 
   get tooltip(): string {
     return this.enabledState().tooltip;
-  }
-
-  // only the first failing condition is explained
-  private enabledState(): { disabled: boolean; tooltip: string } {
-    const { conditions, enabledTooltip } = normalizeEnabled(this.actionConfig);
-    try {
-      if (conditions.length) this.resolveVariableContext();
-      const failed = conditions.find(
-        (c) => !this.evaluate(this.viewHandlers(c.condition)),
-      );
-      if (failed)
-        return { disabled: true, tooltip: failed.disabledTooltip ?? "" };
-      return { disabled: false, tooltip: enabledTooltip ?? "" };
-    } catch (error) {
-      console.error("Configurable action error on get disabled", error);
-      return { disabled: true, tooltip: "" };
-    }
   }
 
   ngOnInit() {

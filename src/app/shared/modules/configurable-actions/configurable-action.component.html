@@ -89,10 +89,11 @@
       </header>
       <div class="configurable-action-iframe-content">
         <iframe
+          #actionIframe
           class="configurable-action-iframe"
           [attr.name]="iframeName"
           [attr.title]="iframeTitle"
-          (load)="onIframeLoad($event)"
+          (load)="onIframeLoad()"
         ></iframe>
 
         @if (iframeLoading){
@@ -113,6 +114,7 @@
   }
   @else{
     <iframe
+      #actionIframe
       class="configurable-action-hidden-iframe"
       [attr.name]="iframeName"
       [attr.title]="iframeTitle"
