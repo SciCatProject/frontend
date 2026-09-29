@@ -187,13 +187,15 @@ export class SharedFilterComponent implements OnChanges, OnInit {
       .trim();
     const selected = new Set(this.filterForm.get("selectedIds")?.value ?? []);
 
+    const isInstrument = this.key === "instrumentIds";
+
     // the filter is to prevent showing items with empty _id or null which should not be selected anyway
     const base = orderBy(this.checkboxFacetCounts, ["count"], ["desc"]).filter(
-      (item) => item._id && (item.count > 0 || this.key === "instrumentIds"),
+      (item) => item._id && (item.count > 0 || isInstrument),
     );
 
-    // always include checked items
-    const pinned = base.filter((x) => selected.has(x._id));
+    // always include checked items; instruments are not pinned so their order stays stable on selection
+    const pinned = isInstrument ? [] : base.filter((x) => selected.has(x._id));
 
     // apply text filter to the rest
     const filtered = term
@@ -207,9 +209,7 @@ export class SharedFilterComponent implements OnChanges, OnInit {
       .filter((x, i, arr) => arr.findIndex((y) => y._id === x._id) === i)
       .filter(
         (x) =>
-          x.count > 0 ||
-          selected.has(x._id) ||
-          this.key === "instrumentIds",
+          x.count > 0 || selected.has(x._id) || this.key === "instrumentIds",
       );
 
     return merged;
@@ -259,9 +259,7 @@ export class SharedFilterComponent implements OnChanges, OnInit {
 
       this.checkboxFacetCounts = merged.filter(
         (x) =>
-          selectedIds.has(x._id) ||
-          x.count > 0 ||
-          this.key === "instrumentIds",
+          selectedIds.has(x._id) || x.count > 0 || this.key === "instrumentIds",
       );
     });
   }

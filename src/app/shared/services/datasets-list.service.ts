@@ -39,6 +39,18 @@ export class DatasetsListService implements OnDestroy {
     );
   }
 
+  private getInstrumentNames(row: OutputDatasetObsoleteDto): string {
+    const instrumentIds: string[] | undefined = (
+      row as { instrumentIds?: string[] }
+    ).instrumentIds;
+    if (!instrumentIds?.length) {
+      return this.getInstrumentName(row);
+    }
+    return instrumentIds
+      .map((id) => this.instrumentMap.get(id)?.name ?? id)
+      .join(", ");
+  }
+
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
     const instrument = this.instrumentMap.get(row.instrumentId);
     if (instrument?.name) {
@@ -217,6 +229,13 @@ export class DatasetsListService implements OnDestroy {
         if (column.name === "image") {
           convertedColumn.renderImage = true;
           convertedColumn.sort = "none";
+        }
+
+        if (column.name === "instrumentIds") {
+          convertedColumn.customRender = (column, row) =>
+            this.getInstrumentNames(row);
+          convertedColumn.toExport = (row, column) =>
+            this.getInstrumentNames(row);
         }
 
         if (column.name === "instrumentName") {

@@ -32,8 +32,9 @@ import {
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
-import { map, Subscription } from "rxjs";
+import { combineLatest, map, Subscription } from "rxjs";
 import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
+import { selectInstrumentWithIdAndLabel } from "state-management/selectors/instruments.selectors";
 import { FilterConfig } from "state-management/state/user.store";
 import { DateRange } from "state-management/state/proposals.store";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -176,9 +177,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         property: { fe_dataset_table_conditions: [] },
       }),
     );
-    this.store.dispatch(
-      setScientificConditionsAction({ scientific: [] }),
-    );
+    this.store.dispatch(setScientificConditionsAction({ scientific: [] }));
 
     this.activeFilters = {};
 
@@ -306,7 +305,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const isCheckboxFilter =
       this.filtersList.find((filter) => filter.key === filterKey)?.type ===
       "checkbox";
-    if (Array.isArray(value) && (this.appConfig.autoApplyFilters || isCheckboxFilter)) {
+    if (
+      Array.isArray(value) &&
+      (this.appConfig.autoApplyFilters || isCheckboxFilter)
+    ) {
       this.applyFilters();
     }
   }
@@ -354,7 +356,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         }),
       );
     }
-
   }
 
   numericRangeChange(filterKey: string, { min, max }: INumericRange) {
@@ -382,21 +383,39 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       return facetCounts$;
     }
 
-    const instruments = ["DREAM", "ODIN", "ESTIA", "LOKI", "NMX", "SKADI", "BIFROST"];
-    return facetCounts$.pipe(
-      map((facetCounts) => {
-        const countsByInstrument = new Map(
-          facetCounts.map((facet) => [facet._id, facet]),
+    const instruments = [
+      "DREAM",
+      "ODIN",
+      "ESTIA",
+      "LOKI",
+      "NMX",
+      "SKADI",
+      "BIFROST",
+    ];
+    // Facet counts are keyed by instrument pid, so resolve pids via the instrument names
+    return combineLatest([
+      facetCounts$,
+      this.store.select(selectInstrumentWithIdAndLabel),
+    ]).pipe(
+      map(([facetCounts, knownInstruments]) => {
+        const countsByPid = new Map(
+          facetCounts.map((facet) => [facet._id, facet.count]),
+        );
+        const pidsByName = new Map(
+          knownInstruments.map((instrument) => [
+            instrument.label,
+            instrument._id,
+          ]),
         );
 
-        return instruments.map(
-          (instrument) =>
-            countsByInstrument.get(instrument) || {
-              _id: instrument,
-              label: instrument,
-              count: 0,
-            },
-        );
+        return instruments.map((instrument) => {
+          const pid = pidsByName.get(instrument) ?? instrument;
+          return {
+            _id: pid,
+            label: instrument,
+            count: countsByPid.get(pid) ?? 0,
+          };
+        });
       }),
     );
   }

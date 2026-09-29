@@ -140,9 +140,9 @@ export class ProposalSideFilterComponent implements OnInit, OnDestroy {
         }),
       );
     }
-    const isCheckboxFilter = this.filterLists.find(
-      (filter) => filter.key === filterKey,
-    )?.type === "checkbox";
+    const isCheckboxFilter =
+      this.filterLists.find((filter) => filter.key === filterKey)?.type ===
+      "checkbox";
     if (this.appConfig.autoApplyFilters || isCheckboxFilter) {
       this.applyFilters();
     }
@@ -254,8 +254,9 @@ export class ProposalSideFilterComponent implements OnInit, OnDestroy {
     ];
     return facetCounts$.pipe(
       map((facetCounts) => {
+        // Facets are keyed by instrument pid; match on the resolved name instead
         const countsByInstrument = new Map(
-          facetCounts.map((facet) => [facet._id, facet]),
+          facetCounts.map((facet) => [facet.label, facet]),
         );
 
         return instruments.map(
