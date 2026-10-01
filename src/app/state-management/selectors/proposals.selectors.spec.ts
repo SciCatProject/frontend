@@ -34,7 +34,6 @@ const parentProposal = createMock<ProposalClass>({
 const initialProposalsState: ProposalsState = {
   proposals: [],
   currentProposal: proposal,
-  currentProposals: [],
   parentProposal: parentProposal,
   datasets: [],
 

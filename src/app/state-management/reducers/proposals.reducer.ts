@@ -55,7 +55,6 @@ const reducer = createReducer(
   on(fromActions.clearCurrentProposalAction, (state): ProposalsState => ({
     ...state,
     currentProposal: null,
-    currentProposals: [],
   })),
 
   on(
@@ -143,7 +142,6 @@ const reducer = createReducer(
   on(fromActions.clearCurrentProposalStateAction, (state): ProposalsState => ({
     ...state,
     currentProposal: undefined,
-    currentProposals: [],
   })),
 
   on(

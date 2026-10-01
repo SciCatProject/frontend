@@ -57,7 +57,6 @@ const reducer = createReducer(
   on(fromActions.clearCurrentInstrumentStateAction, (state) => ({
     ...state,
     currentInstrument: undefined,
-    currentInstruments: [],
   })),
 );
 

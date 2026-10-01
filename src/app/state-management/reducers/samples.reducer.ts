@@ -204,7 +204,6 @@ const reducer = createReducer(
   on(fromActions.clearCurrentSampleStateAction, (state) => ({
     ...state,
     currentSample: undefined,
-    currentSamples: [],
   })),
 );
 
