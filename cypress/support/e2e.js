@@ -19,16 +19,14 @@ import './commands'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-// Benign browser warnings (e.g. from Angular Material overlays/autosize) that
-// Cypress would otherwise treat as uncaught application errors. Only the exact
-// browser messages are ignored so real application errors still fail tests.
-const RESIZE_OBSERVER_WARNINGS = [
-  "ResizeObserver loop completed with undelivered notifications.",
-  "ResizeObserver loop limit exceeded",
-];
-
+// Benign browser warning (e.g. from Angular Material overlays) that Cypress
+// would otherwise treat as an uncaught application error.
 Cypress.on("uncaught:exception", (err) => {
-  if (RESIZE_OBSERVER_WARNINGS.includes(err.message.trim())) {
+  if (
+    err.message.includes(
+      "ResizeObserver loop completed with undelivered notifications",
+    )
+  ) {
     return false;
   }
 });
