@@ -401,9 +401,7 @@ export class DatasetEffects {
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ attachmentId }) =>
         this.attachmentsV4Service
-          // NOTE: the second argument should be removed on new backend release after v5.2.1
-          // It's a temporary workaround for a backend bug that requires a second id to be passed.
-          .attachmentsV4ControllerFindOneAttachmentAndRemoveV4(attachmentId, "")
+          .attachmentsV4ControllerFindOneAttachmentAndRemoveV4(attachmentId)
           .pipe(
             map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId }),
