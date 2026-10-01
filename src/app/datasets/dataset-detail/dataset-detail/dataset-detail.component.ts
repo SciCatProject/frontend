@@ -128,9 +128,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         }),
     );
 
-    this.store.select(selectCurrentDatasetProposals).subscribe((proposals) => {
-      this.proposals = proposals;
-    });
+    this.subscriptions.push(
+      this.store
+        .select(selectCurrentDatasetProposals)
+        .subscribe((proposals) => {
+          this.proposals = proposals;
+        }),
+    );
 
     this.subscriptions.push(
       this.store.select(selectCurrentDatasetSamples).subscribe((samples) => {

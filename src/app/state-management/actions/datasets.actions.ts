@@ -4,11 +4,11 @@ import {
   PartialOutputDatasetDto,
   OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
   DatasetFilters,
   DateRangeFilter,
+  FacetCounts,
   ScientificCondition,
 } from "state-management/models";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";

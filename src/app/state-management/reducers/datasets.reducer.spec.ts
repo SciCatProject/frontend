@@ -1,10 +1,7 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
-import {
-  FacetCounts,
-  initialDatasetState,
-} from "state-management/state/datasets.store";
-import { ArchViewMode, ScientificCondition } from "../models";
+import { initialDatasetState } from "state-management/state/datasets.store";
+import { ArchViewMode, FacetCounts, ScientificCondition } from "../models";
 import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
 import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 

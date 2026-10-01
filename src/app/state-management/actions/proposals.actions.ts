@@ -163,9 +163,6 @@ export const clearProposalsStateAction = createAction("[Proposal] Clear State");
 export const clearProposalsFiltersAction = createAction(
   "[Proposal] Clear Filters",
 );
-export const clearCurrentProposalStateAction = createAction(
-  "[Proposal] Clear Current Proposal State",
-);
 
 export const fetchRelatedProposalsAction = createAction(
   "[Proposal] Fetch Related Proposals",

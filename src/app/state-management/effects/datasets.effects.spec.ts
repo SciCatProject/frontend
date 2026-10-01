@@ -4,7 +4,7 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
 import * as fromActions from "../actions/datasets.actions";
 import { DatasetEffects } from "./datasets.effects";
-import { FacetCounts } from "state-management/state/datasets.store";
+import { FacetCounts } from "state-management/models";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
@@ -98,9 +98,6 @@ describe("DatasetEffects", () => {
         {
           provide: DatasetsService,
           useValue: jasmine.createSpyObj("datasetApi", [
-            "datasetsControllerFullfacetV3",
-            "datasetsControllerMetadataKeysV3",
-            "datasetsControllerFindByIdAndUpdateV3",
             "datasetsControllerAppendToArrayFieldV3",
           ]),
         },

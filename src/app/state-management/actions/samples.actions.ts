@@ -182,6 +182,3 @@ export const removeCharacteristicsFilterAction = createAction(
 );
 
 export const clearSamplesStateAction = createAction("[Sample] Clear State");
-export const clearCurrentSampleStateAction = createAction(
-  "[Sample] Clear Current Sample State",
-);

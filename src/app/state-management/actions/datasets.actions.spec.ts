@@ -1,5 +1,5 @@
 import * as fromActions from "./datasets.actions";
-import { FacetCounts } from "state-management/state/datasets.store";
+import { FacetCounts } from "state-management/models";
 import {
   ArchViewMode,
   DatasetFilters,

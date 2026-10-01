@@ -30,18 +30,6 @@ import {
   fetchDatasetAction,
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
-import {
-  clearCurrentInstrumentStateAction,
-  fetchInstrumentsCompleteAction,
-} from "state-management/actions/instruments.actions";
-import {
-  clearCurrentProposalStateAction,
-  fetchProposalsCompleteAction,
-} from "state-management/actions/proposals.actions";
-import {
-  clearCurrentSampleStateAction,
-  fetchSamplesCompleteAction,
-} from "state-management/actions/samples.actions";
 import { MatDialog } from "@angular/material/dialog";
 import {
   AppConfigService,
@@ -354,9 +342,6 @@ export class DatasetDetailsDashboardComponent
 
   ngOnDestroy() {
     this.store.dispatch(clearCurrentDatasetStateAction());
-    this.store.dispatch(clearCurrentProposalStateAction());
-    this.store.dispatch(clearCurrentSampleStateAction());
-    this.store.dispatch(clearCurrentInstrumentStateAction());
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });

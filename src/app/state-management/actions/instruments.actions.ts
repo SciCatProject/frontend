@@ -55,6 +55,3 @@ export const saveCustomMetadataFailedAction = createAction(
 export const clearInstrumentsStateAction = createAction(
   "[Instrument] Clear State",
 );
-export const clearCurrentInstrumentStateAction = createAction(
-  "[Instrument] Clear Current Instrument State",
-);

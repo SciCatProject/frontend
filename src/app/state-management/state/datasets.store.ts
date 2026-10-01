@@ -1,4 +1,8 @@
-import { DatasetFilters, ArchViewMode } from "state-management/models";
+import {
+  DatasetFilters,
+  ArchViewMode,
+  FacetCounts,
+} from "state-management/models";
 import {
   PartialOutputDatasetDto,
   OutputAttachmentV4Dto,
@@ -9,16 +13,6 @@ import {
   ProposalClass,
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
-
-export interface FacetCount {
-  _id: string;
-  label?: string;
-  count: number;
-}
-
-export interface FacetCounts {
-  [field: string]: FacetCount[];
-}
 
 export interface Pagination {
   skip: number;

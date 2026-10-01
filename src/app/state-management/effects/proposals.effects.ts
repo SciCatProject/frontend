@@ -419,7 +419,7 @@ export class ProposalEffects {
     return createEffect(() => {
       return this.actions$.pipe(
         ofType(triggerAction),
-        mergeMap<ProposalClass, ObservableInput<Action>>(({ proposalId }) =>
+        switchMap<ProposalClass, ObservableInput<Action>>(({ proposalId }) =>
           this.proposalsService
             .proposalsControllerFindByIdAccessV3(proposalId)
             .pipe(

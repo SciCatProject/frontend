@@ -139,11 +139,6 @@ const reducer = createReducer(
     ...initialProposalsState,
   })),
 
-  on(fromActions.clearCurrentProposalStateAction, (state): ProposalsState => ({
-    ...state,
-    currentProposal: undefined,
-  })),
-
   on(
     fromActions.fetchRelatedProposalsCompleteAction,
     (state, { relatedProposals }): ProposalsState => ({

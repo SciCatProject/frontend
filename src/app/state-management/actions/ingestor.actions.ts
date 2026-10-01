@@ -18,7 +18,7 @@ import {
 
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import {
-  DatasetsControllerCreateV3Request,
+  CreateDatasetDto,
   OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -176,7 +176,7 @@ export const setNoRightsError = createAction(
 
 export const createDatasetAction = createAction(
   "[Ingestor] Create Dataset",
-  props<{ dataset: DatasetsControllerCreateV3Request }>(),
+  props<{ dataset: CreateDatasetDto }>(),
 );
 
 export const createDatasetSuccess = createAction(
