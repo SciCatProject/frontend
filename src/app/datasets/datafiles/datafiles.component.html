@@ -33,6 +33,7 @@
     </div>
 
     <configurable-actions
+      *ngIf="appConfig.datafilesActionsEnabled"
       [actionsConfig]="appConfig.datafilesActions"
       [actionItems]="actionItems"
     ></configurable-actions>
