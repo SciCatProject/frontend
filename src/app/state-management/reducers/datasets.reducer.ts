@@ -74,7 +74,25 @@ const reducer = createReducer(
       };
     },
   ),
+  on(fromActions.fetchOrigDatablocksCountAction, (state): DatasetState => ({
+    ...state,
+    origDatablocksCountIsLoading: true,
+  })),
 
+  on(fromActions.fetchOrigDatablocksCountCompleteAction, (state, { count }) => {
+    return {
+      ...state,
+      origDatablocksCount: count,
+      origDatablocksCountIsLoading: false,
+    };
+  }),
+  on(
+    fromActions.fetchOrigDatablocksCountFailedAction,
+    (state): DatasetState => ({
+      ...state,
+      origDatablocksCountIsLoading: false,
+    }),
+  ),
   on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) => {
     return {
       ...state,
@@ -92,11 +110,26 @@ const reducer = createReducer(
       relatedDatasets,
     }),
   ),
+
+  on(fromActions.fetchRelatedDatasetsCountAction, (state): DatasetState => ({
+    ...state,
+    relatedDatasetsCountIsLoading: true,
+  })),
+
   on(
     fromActions.fetchRelatedDatasetsCountCompleteAction,
     (state, { count }): DatasetState => ({
       ...state,
       relatedDatasetsCount: count,
+      relatedDatasetsCountIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchRelatedDatasetsCountFailedAction,
+    (state): DatasetState => ({
+      ...state,
+      relatedDatasetsCountIsLoading: false,
     }),
   ),
 

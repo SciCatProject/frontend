@@ -78,7 +78,6 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
         columnSetting: [
           {
             name: "dataFileList.path",
-            icon: "text_snippet",
             header: "Filename",
             customRender(column, row) {
               return get(row, column.name);
@@ -86,7 +85,6 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
           },
           {
             name: "dataFileList.size",
-            icon: "save",
             header: "Size",
             customRender(column, row) {
               return get(row, column.name);
@@ -94,7 +92,6 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
           },
           {
             name: "dataFileList.time",
-            icon: "access_time",
             header: "Created at",
             customRender: (column, row) => {
               return this.datePipe.transform(get(row, column.name));
@@ -102,7 +99,6 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
           },
           {
             name: "dataFileList.uid",
-            icon: "person",
             header: "UID",
             customRender: (column, row) => {
               return get(row, column.name);
@@ -110,7 +106,6 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
           },
           {
             name: "dataFileList.gid",
-            icon: "group",
             header: "GID",
             customRender: (column, row) => {
               return get(row, column.name);
@@ -118,12 +113,10 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
           },
           {
             name: "ownerGroup",
-            icon: "group",
             header: "Owner Group",
           },
           {
             name: "datasetId",
-            icon: "list",
             header: "Dataset PID",
             customRender: (column, row) =>
               `<a href="/datasets/${encodeURIComponent(row[column.name])}" target="_blank">${row[column.name]}</a>`,

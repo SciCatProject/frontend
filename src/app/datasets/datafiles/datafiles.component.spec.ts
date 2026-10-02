@@ -6,14 +6,12 @@ import { MatTableModule } from "@angular/material/table";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
-import { CheckboxEvent } from "shared/modules/table/table.component";
 import {
   MockAuthService,
   MockDatafilesActionsComponent,
   MockMatDialogRef,
   MockUserApi,
 } from "shared/MockStubs";
-import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
@@ -22,6 +20,7 @@ import { ConfigurableActionsComponent } from "shared/modules/configurable-action
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -92,6 +91,7 @@ describe("DatafilesComponent", () => {
       ],
       declarations: [DatafilesComponent],
     });
+
     TestBed.overrideComponent(DatafilesComponent, {
       set: {
         providers: [
@@ -107,20 +107,14 @@ describe("DatafilesComponent", () => {
         ],
       },
     });
+
     TestBed.compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatafilesComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
-  afterEach(() => {
-    fixture.destroy();
-  });
-
-  beforeEach(() => {
     component.files = [
       {
         path: "test1",
@@ -145,182 +139,93 @@ describe("DatafilesComponent", () => {
         hash: "",
       },
     ];
-    component.tableData = component.files;
+
     component.sourceFolder = "/test/";
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#getAreAllSelected()", () => {
-    it("should return 'false' if no file is selected", () => {
-      const areAllSelected = component.getAreAllSelected();
-
-      expect(areAllSelected).toEqual(false);
-    });
-
-    it("should return 'false' if only some files are selected", () => {
-      component.tableData[0].selected = true;
-      const areAllSelected = component.getAreAllSelected();
-
-      expect(areAllSelected).toEqual(false);
-    });
-
-    it("should return 'true' if all files are selected", () => {
-      component.tableData.forEach((file) => {
-        file.selected = true;
-      });
-      const areAllSelected = component.getAreAllSelected();
-
-      expect(areAllSelected).toEqual(true);
-    });
-  });
-
-  describe("#getIsNoneSelected()", () => {
-    it("should return 'true' if no file is selected", () => {
-      const isNoneSelected = component.getIsNoneSelected();
-
-      expect(isNoneSelected).toEqual(true);
-    });
-
-    it("should return 'false' if some files are selected", () => {
-      component.tableData[0].selected = true;
-      const isNoneSelected = component.getIsNoneSelected();
-
-      expect(isNoneSelected).toEqual(false);
-    });
-
-    it("should return 'false' if all files are selected", () => {
-      component.tableData.forEach((file) => {
-        file.selected = true;
-      });
-      const isNoneSelected = component.getIsNoneSelected();
-
-      expect(isNoneSelected).toEqual(false);
-    });
-  });
-
   describe("#getAllFiles()", () => {
-    it("should return an array of file paths of files in table", () => {
+    it("should return an array of file paths from files", () => {
       const files = component.getAllFiles();
 
       expect(Array.isArray(files)).toEqual(true);
-      expect(files.includes("test1")).toEqual(true);
-      expect(files.includes("test2")).toEqual(true);
+      expect(files).toEqual(["test1", "test2"]);
     });
   });
 
   describe("#getSelectedFiles()", () => {
-    it("should return an array of file paths from selected files in table", () => {
-      component.tableData[0].selected = true;
+    it("should return selected file paths", () => {
+      component.files[0].selected = true;
 
       const files = component.getSelectedFiles();
 
-      expect(Array.isArray(files)).toEqual(true);
-      expect(files.includes("test1")).toEqual(true);
+      expect(files).toEqual(["test1"]);
     });
   });
 
-  describe("#updateSelectionStatus()", () => {
-    it("should set 'areAllSelected' to false and 'isNoneSelected' to true if no file is selected", () => {
-      component.updateSelectionStatus();
+  describe("#onRowEvent()", () => {
+    it("should select one row and update selectedFileSize", () => {
+      const row = component.files[0];
 
-      expect(component.areAllSelected).toEqual(false);
-      expect(component.isNoneSelected).toEqual(true);
+      component.onRowEvent({
+        event: RowEventType.RowSelectionChange,
+        sender: { row, checked: true },
+      } as any);
+
+      expect(component.files[0].selected).toEqual(true);
+      expect(component.selectedFileSize).toEqual(5000);
     });
 
-    it("should set both 'areAllSelected' and 'isNoneSelected' to false if some files are selected", () => {
-      component.tableData[0].selected = true;
-      component.updateSelectionStatus();
+    it("should unselect one row and update selectedFileSize", () => {
+      const row = component.files[0];
+      row.selected = true;
+      component.selectedFileSize = 5000;
 
-      expect(component.areAllSelected).toEqual(false);
-      expect(component.isNoneSelected).toEqual(false);
+      component.onRowEvent({
+        event: RowEventType.RowSelectionChange,
+        sender: { row, checked: false },
+      } as any);
+
+      expect(component.files[0].selected).toEqual(false);
+      expect(component.selectedFileSize).toEqual(0);
     });
 
-    it("should set 'areAllSelected' to true and 'isNoneSelected' to false if all files are selected", () => {
-      component.tableData.forEach((file) => {
-        file.selected = true;
-      });
-      component.updateSelectionStatus();
-
-      expect(component.areAllSelected).toEqual(true);
-      expect(component.isNoneSelected).toEqual(false);
-    });
-  });
-
-  describe("#onSelectOne()", () => {
-    it("should set 'selected' to true and add the size of the file to 'selectedFileSize'", () => {
-      const file = component.tableData[0];
-      const event = new MatCheckboxChange();
-      event.checked = true;
-      const checkboxEvent: CheckboxEvent = { event, row: file };
-      component.onSelectOne(checkboxEvent);
-
-      expect(component.tableData[0].selected).toEqual(true);
-      expect(component.selectedFileSize).toEqual(file.size);
-    });
-
-    it("should set 'selected' of the provided file to false and subtract the size of the file from 'selectedFileSize'", () => {
-      const firstFile = component.tableData[0];
-      const event = new MatCheckboxChange();
-      event.checked = true;
-      const firstCheckboxEvent: CheckboxEvent = { event, row: firstFile };
-      component.onSelectOne(firstCheckboxEvent);
-
-      expect(component.tableData[0].selected).toEqual(true);
-      expect(component.selectedFileSize).toEqual(firstFile.size);
-
-      const event2 = new MatCheckboxChange();
-      event2.checked = false;
-      const secondCheckboxEvent: CheckboxEvent = {
-        event: event2,
-        row: firstFile,
+    it("should apply master selection from selectionModel", () => {
+      const selectionModel = {
+        isSelected: (file) => file.path === "test1",
       };
-      component.onSelectOne(secondCheckboxEvent);
 
-      expect(component.tableData[0].selected).toEqual(false);
-      expect(component.selectedFileSize).toEqual(0);
-    });
-  });
+      component.onRowEvent({
+        event: RowEventType.MasterSelectionChange,
+        sender: { selectionModel },
+      } as any);
 
-  describe("#onSelectAll()", () => {
-    it("should set 'selected' of all files to true if previously set to false and add the size of the files to 'selectedFileSize'", () => {
-      const event = {
-        checked: true,
-      } as MatCheckboxChange;
-      component.onSelectAll(event);
-
-      component.tableData.forEach((file) => {
-        expect(file.selected).toEqual(true);
-      });
-
-      expect(component.selectedFileSize).toEqual(15000);
+      expect(component.files[0].selected).toEqual(true);
+      expect(component.files[1].selected).toEqual(false);
+      expect(component.selectedFileSize).toEqual(5000);
     });
 
-    it("should set 'selected' of all files to false and subtract the size of the files from 'selectedFileSize'", () => {
-      const firstEvent = {
-        checked: true,
-      } as MatCheckboxChange;
-      component.onSelectAll(firstEvent);
+    it("should select all rows in master selection", () => {
+      const selectionModel = {
+        isSelected: () => true,
+      };
 
-      component.tableData.forEach((file) => {
-        expect(file.selected).toEqual(true);
-      });
+      component.onRowEvent({
+        event: RowEventType.MasterSelectionChange,
+        sender: { selectionModel },
+      } as any);
 
+      expect(component.files[0].selected).toEqual(true);
+      expect(component.files[1].selected).toEqual(true);
       expect(component.selectedFileSize).toEqual(15000);
-
-      const secondEvent = {
-        checked: false,
-      } as MatCheckboxChange;
-      component.onSelectAll(secondEvent);
-
-      component.tableData.forEach((file) => {
-        expect(file.selected).toEqual(false);
-      });
-
-      expect(component.selectedFileSize).toEqual(0);
     });
   });
 

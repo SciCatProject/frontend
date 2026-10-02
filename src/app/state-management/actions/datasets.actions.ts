@@ -79,10 +79,21 @@ export const fetchOrigDatablocksAction = createAction(
 );
 export const fetchOrigDatablocksCompleteAction = createAction(
   "[Dataset] Fetch Origin Datablocks Complete",
-  props<{ origdatablocks: OrigDatablock[] }>(),
+  props<{ origdatablocks: OrigDatablock[]; count?: number }>(),
 );
 export const fetchOrigDatablocksFailedAction = createAction(
   "[Dataset] Fetch Origin Datablocks Failed",
+);
+export const fetchOrigDatablocksCountAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Count",
+  props<{ pid: string; filters?: any }>(),
+);
+export const fetchOrigDatablocksCountCompleteAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Count Complete",
+  props<{ count: number }>(),
+);
+export const fetchOrigDatablocksCountFailedAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Count Failed",
 );
 export const fetchAttachmentsAction = createAction(
   "[Dataset] Fetch Attachments",
@@ -105,6 +116,10 @@ export const fetchRelatedDatasetsCompleteAction = createAction(
 );
 export const fetchRelatedDatasetsFailedAction = createAction(
   "[Datasets] Fetch Related Datasets Failed",
+);
+
+export const fetchRelatedDatasetsCountAction = createAction(
+  "[Dataset] Fetch Related Datasets Count",
 );
 
 export const fetchRelatedDatasetsCountCompleteAction = createAction(

@@ -69,21 +69,17 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         columnSetting: [
           {
             name: "sampleId",
-            icon: "fingerprint",
             header: "Sample ID",
           },
           {
             name: "description",
-            icon: "description",
           },
           {
             name: "owner",
-            icon: "face",
           },
           {
             name: "createdAt",
             header: "Creation time",
-            icon: "date_range",
             customRender: (column, row) => {
               return this.datePipe.transform(row[column.name]);
             },
@@ -91,7 +87,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
           {
             name: "ownerGroup",
             header: "Owner group",
-            icon: "group",
           },
         ],
       },

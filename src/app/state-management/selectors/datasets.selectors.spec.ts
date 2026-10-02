@@ -14,6 +14,8 @@ const initialDatasetState: DatasetState = {
 
   facetCounts: {},
   facetCountsIsLoading: false,
+  origDatablocksCountIsLoading: false,
+  relatedDatasetsCountIsLoading: false,
   metadataKeys: ["test"],
   hasPrefilledFilters: false,
   searchTerms: "run",
