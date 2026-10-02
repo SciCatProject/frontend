@@ -20,6 +20,8 @@ import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
 import {
   DatasetsService,
+  OrigdatablocksV4Service,
+  OrigdatablocksPublicV4Service,
   MetadataKeysV4Service,
   OutputDatasetDto,
   DatasetsV4Service,
@@ -65,6 +67,8 @@ describe("DatasetEffects", () => {
   let actions: TestObservable;
   let effects: DatasetEffects;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
+  let origdatablocksApi: jasmine.SpyObj<OrigdatablocksV4Service>;
+  let origdatablocksPublicApi: jasmine.SpyObj<OrigdatablocksPublicV4Service>;
   let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
   let datasetsV4Service: jasmine.SpyObj<DatasetsV4Service>;
   let datasetsPublicV4Service: jasmine.SpyObj<DatasetsPublicV4Service>;
@@ -130,6 +134,20 @@ describe("DatasetEffects", () => {
           ]),
         },
         {
+          provide: OrigdatablocksV4Service,
+          useValue: jasmine.createSpyObj("origdatablocksService", [
+            "origDatablocksV4ControllerFindAllFilesV4",
+            "origDatablocksV4ControllerCountFilesV4",
+          ]),
+        },
+        {
+          provide: OrigdatablocksPublicV4Service,
+          useValue: jasmine.createSpyObj("origdatablocksPublicService", [
+            "origDatablocksPublicV4ControllerFindAllFilesPublicV4",
+            "origDatablocksPublicV4ControllerCountFilesPublicV4",
+          ]),
+        },
+        {
           provide: MetadataKeysV4Service,
           useValue: jasmine.createSpyObj("metadataKeysApi", [
             "metadataKeysV4ControllerFindAllV4",
@@ -143,6 +161,8 @@ describe("DatasetEffects", () => {
 
     effects = TestBed.inject(DatasetEffects);
     datasetApi = injectedStub(DatasetsService);
+    origdatablocksApi = injectedStub(OrigdatablocksV4Service);
+    origdatablocksPublicApi = injectedStub(OrigdatablocksPublicV4Service);
     metadataKeysApi = injectedStub(MetadataKeysV4Service);
     datasetsV4Service = injectedStub(DatasetsV4Service);
     datasetsPublicV4Service = injectedStub(DatasetsPublicV4Service);
@@ -394,7 +414,7 @@ describe("DatasetEffects", () => {
   describe("fetchRelatedDatasetsCount$", () => {
     it("should result in a fetchRelatedDatasetsCountCompleteAction", () => {
       const count = 3;
-      const action = fromActions.fetchRelatedDatasetsAction();
+      const action = fromActions.fetchRelatedDatasetsCountAction();
       const outcome = fromActions.fetchRelatedDatasetsCountCompleteAction({
         count,
       });
@@ -407,7 +427,7 @@ describe("DatasetEffects", () => {
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
     });
     it("should result in a fetchRelatedDatasetsCountFailedAction", () => {
-      const action = fromActions.fetchRelatedDatasetsAction();
+      const action = fromActions.fetchRelatedDatasetsCountAction();
       const outcome = fromActions.fetchRelatedDatasetsCountFailedAction();
 
       actions = hot("-a", { a: action });

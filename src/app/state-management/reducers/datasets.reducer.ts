@@ -43,11 +43,51 @@ const reducer = createReducer(
 
   on(
     fromActions.fetchDatasetCompleteAction,
-    (state, { dataset }): DatasetState => ({
+    (state, { dataset }): DatasetState => {
+      // origdatablocks are paginated by the datafiles tab, keep the loaded
+      // page while the same dataset is refetched with other includes
+      const loadedOrigDatablocks = state.currentSet?.origdatablocks;
+      const keepLoadedPage =
+        loadedOrigDatablocks &&
+        (!state.currentSet.pid || state.currentSet.pid === dataset.pid);
+      return {
+        ...state,
+        currentSet: keepLoadedPage
+          ? { ...dataset, origdatablocks: loadedOrigDatablocks }
+          : { ...dataset },
+      };
+    },
+  ),
+
+  on(
+    fromActions.fetchOrigDatablocksCompleteAction,
+    (state, { origdatablocks }) => {
+      return {
+        ...state,
+        currentSet: {
+          ...state.currentSet,
+          origdatablocks,
+        },
+      };
+    },
+  ),
+  on(fromActions.fetchOrigDatablocksCountAction, (state): DatasetState => ({
+    ...state,
+    origDatablocksCountIsLoading: true,
+  })),
+
+  on(fromActions.fetchOrigDatablocksCountCompleteAction, (state, { count }) => {
+    return {
       ...state,
-      currentSet: {
-        ...dataset,
-      },
+      origDatablocksCount: count,
+      origDatablocksCountIsLoading: false,
+    };
+  }),
+  on(
+    fromActions.fetchOrigDatablocksCountFailedAction,
+    (state): DatasetState => ({
+      ...state,
+      origDatablocksCountIsLoading: false,
     }),
   ),
 
@@ -58,11 +98,26 @@ const reducer = createReducer(
       relatedDatasets,
     }),
   ),
+
+  on(fromActions.fetchRelatedDatasetsCountAction, (state): DatasetState => ({
+    ...state,
+    relatedDatasetsCountIsLoading: true,
+  })),
+
   on(
     fromActions.fetchRelatedDatasetsCountCompleteAction,
     (state, { count }): DatasetState => ({
       ...state,
       relatedDatasetsCount: count,
+      relatedDatasetsCountIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchRelatedDatasetsCountFailedAction,
+    (state): DatasetState => ({
+      ...state,
+      relatedDatasetsCountIsLoading: false,
     }),
   ),
 

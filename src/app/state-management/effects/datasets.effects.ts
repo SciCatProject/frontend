@@ -7,6 +7,9 @@ import {
   CreateAttachmentV4Dto,
   DatasetsService,
   PartialUpdateAttachmentV4Dto,
+  OrigDatablock,
+  OrigdatablocksV4Service,
+  OrigdatablocksPublicV4Service,
   MetadataKeysV4Service,
   DatasetsV4Service,
   DatasetsPublicV4Service,
@@ -38,6 +41,7 @@ import {
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 import { CurrentDataset } from "state-management/state/datasets.store";
+import { selectFilesFilters } from "state-management/selectors/files.selectors";
 
 @Injectable()
 export class DatasetEffects {
@@ -45,6 +49,7 @@ export class DatasetEffects {
   relatedDatasetsFilters$ = this.store.select(selectRelatedDatasetsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   fullfacetParams$ = this.store.select(selectFullfacetParams);
+  filesFilters$ = this.store.select(selectFilesFilters);
   datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
   currentUser$ = this.store.select(selectCurrentUser);
 
@@ -209,6 +214,78 @@ export class DatasetEffects {
       }),
     );
   });
+  fetchOrigDatablocksOfDataset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchOrigDatablocksAction),
+      concatLatestFrom(() => [this.currentUser$, this.filesFilters$]),
+      switchMap(([{ pid, filters }, user, storeFilters]) => {
+        const {
+          skip = storeFilters.skip,
+          limit = storeFilters.limit,
+          sortField = storeFilters.sortField,
+        } = filters || {};
+
+        const filter = {
+          where: { datasetId: pid },
+          limits: {
+            skip: skip,
+            limit: limit,
+            sort: sortField,
+          },
+        };
+
+        const apiCall$ = user?.id
+          ? this.origdatablocksService.origDatablocksV4ControllerFindAllFilesV4(
+              JSON.stringify(filter),
+            )
+          : this.origdatablocksPublicService.origDatablocksPublicV4ControllerFindAllFilesPublicV4(
+              JSON.stringify(filter),
+            );
+
+        return apiCall$.pipe(
+          map((origdatablocks: OrigDatablock[]) => {
+            return fromActions.fetchOrigDatablocksCompleteAction({
+              origdatablocks,
+            });
+          }),
+          catchError(() => of(fromActions.fetchOrigDatablocksFailedAction())),
+        );
+      }),
+    );
+  });
+
+  fetchOrigDatablocksCount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchOrigDatablocksCountAction),
+      concatLatestFrom(() => this.currentUser$),
+      switchMap(([{ pid }, user]) => {
+        const filter = {
+          where: {
+            datasetId: pid,
+          },
+        };
+
+        const apiCall$ = user?.id
+          ? this.origdatablocksService.origDatablocksV4ControllerCountFilesV4(
+              JSON.stringify(filter),
+            )
+          : this.origdatablocksPublicService.origDatablocksPublicV4ControllerCountFilesPublicV4(
+              JSON.stringify(filter),
+            );
+
+        return apiCall$.pipe(
+          map(({ count }) =>
+            fromActions.fetchOrigDatablocksCountCompleteAction({
+              count,
+            }),
+          ),
+          catchError(() =>
+            of(fromActions.fetchOrigDatablocksCountFailedAction()),
+          ),
+        );
+      }),
+    );
+  });
 
   fetchRelatedDatasets$ = createEffect(() => {
     return this.actions$.pipe(
@@ -219,11 +296,27 @@ export class DatasetEffects {
         this.currentUser$,
       ]),
       switchMap(([, dataset, filters, user]) => {
+        // v4 expects `limits.sort` as an object; pid is a tie-breaker so
+        // pagination stays stable when the sorted values repeat
+        const [sortColumn, sortDirection] = (filters.sortField || "").split(
+          ":",
+        );
+        const sort: Record<string, "asc" | "desc"> = {};
+        if (
+          sortColumn &&
+          (sortDirection === "asc" || sortDirection === "desc")
+        ) {
+          sort[sortColumn] = sortDirection;
+        }
+        if (!sort.pid) {
+          sort.pid = "asc";
+        }
         const queryFilter = {
           where: {},
           limits: {
             skip: filters.skip,
             limit: filters.limit,
+            sort,
           },
         };
         if (dataset.type === "raw") {
@@ -260,7 +353,7 @@ export class DatasetEffects {
 
   fetchRelatedDatasetsCount$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.fetchRelatedDatasetsAction),
+      ofType(fromActions.fetchRelatedDatasetsCountAction),
       concatLatestFrom(() => [this.currentDataset$, this.currentUser$]),
       switchMap(([, dataset, user]) => {
         const queryFilter = {
@@ -515,6 +608,8 @@ export class DatasetEffects {
   constructor(
     private actions$: Actions,
     private datasetsService: DatasetsService,
+    private origdatablocksService: OrigdatablocksV4Service,
+    private origdatablocksPublicService: OrigdatablocksPublicV4Service,
     private store: Store,
     private appConfigService: AppConfigService,
     private metadataKeysV4Service: MetadataKeysV4Service,

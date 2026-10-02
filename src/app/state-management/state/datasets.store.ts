@@ -39,6 +39,8 @@ export interface DatasetState {
 
   facetCounts: FacetCounts;
   facetCountsIsLoading: boolean;
+  origDatablocksCountIsLoading: boolean;
+  relatedDatasetsCountIsLoading: boolean;
   metadataKeys: string[];
   hasPrefilledFilters: boolean;
   searchTerms: string;
@@ -56,6 +58,8 @@ export interface DatasetState {
   batch: CurrentDataset[];
 
   openwhiskResult: Record<string, unknown> | undefined;
+
+  origDatablocksCount?: number;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -68,6 +72,8 @@ export const initialDatasetState: DatasetState = {
 
   facetCounts: {},
   facetCountsIsLoading: false,
+  origDatablocksCountIsLoading: false,
+  relatedDatasetsCountIsLoading: false,
   metadataKeys: [],
   hasPrefilledFilters: false,
   searchTerms: "",
@@ -102,4 +108,6 @@ export const initialDatasetState: DatasetState = {
   batch: [],
 
   openwhiskResult: undefined,
+
+  origDatablocksCount: 0,
 };

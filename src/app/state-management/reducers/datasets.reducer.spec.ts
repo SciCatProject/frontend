@@ -3,7 +3,10 @@ import * as fromActions from "../actions/datasets.actions";
 import { initialDatasetState } from "state-management/state/datasets.store";
 import { ArchViewMode, FacetCounts, ScientificCondition } from "../models";
 import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
-import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  OrigDatablock,
+  OutputDatasetDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 const derivedDataset = createMock<OutputDatasetDto>({
   pid: "testPid",
@@ -74,6 +77,31 @@ describe("DatasetsReducer", () => {
     it("should set currentSet property", () => {
       const action = fromActions.fetchDatasetCompleteAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.currentSet).toEqual(dataset);
+    });
+
+    it("should keep the loaded origdatablocks page of the same dataset", () => {
+      const origdatablocks = [createMock<OrigDatablock>({})];
+      const action = fromActions.fetchDatasetCompleteAction({ dataset });
+      const state = fromDatasets.datasetsReducer(
+        { ...initialDatasetState, currentSet: { ...dataset, origdatablocks } },
+        action,
+      );
+
+      expect(state.currentSet).toEqual({ ...dataset, origdatablocks });
+    });
+
+    it("should drop the origdatablocks of a different dataset", () => {
+      const origdatablocks = [createMock<OrigDatablock>({})];
+      const action = fromActions.fetchDatasetCompleteAction({ dataset });
+      const state = fromDatasets.datasetsReducer(
+        {
+          ...initialDatasetState,
+          currentSet: { ...dataset, pid: "otherPid", origdatablocks },
+        },
+        action,
+      );
 
       expect(state.currentSet).toEqual(dataset);
     });

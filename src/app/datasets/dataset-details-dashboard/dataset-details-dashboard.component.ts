@@ -28,7 +28,10 @@ import * as fromDatasetActions from "state-management/actions/datasets.actions";
 import {
   clearCurrentDatasetStateAction,
   fetchDatasetAction,
+  fetchOrigDatablocksAction,
+  fetchOrigDatablocksCountAction,
   fetchRelatedDatasetsAction,
+  fetchRelatedDatasetsCountAction,
 } from "state-management/actions/datasets.actions";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -149,7 +152,7 @@ const TAB_DEFINITIONS: {
 const DEFAULT_TABS_INCLUDE: DatasetDetailsTabsInclude = {
   [TAB_ID.details]: [],
   [TAB_ID.jsonScientificMetadata]: [],
-  [TAB_ID.datafiles]: ["origdatablocks"],
+  [TAB_ID.datafiles]: [],
   [TAB_ID.relatedDatasets]: [],
   [TAB_ID.relationships]: [],
   [TAB_ID.reduce]: [],
@@ -274,6 +277,7 @@ export class DatasetDetailsDashboardComponent
         )
         .subscribe(() => {
           this.store.dispatch(fetchRelatedDatasetsAction());
+          this.store.dispatch(fetchRelatedDatasetsCountAction());
         }),
     );
   }
@@ -287,6 +291,12 @@ export class DatasetDetailsDashboardComponent
   // together with the ones already loaded, so that the store always holds the
   // complete set of data fetched so far for this dataset.
   fetchDataForTab(pid: string, tab: string): void {
+    // datafiles are paginated server side instead of being included
+    if (tab === TAB_ID.datafiles) {
+      this.store.dispatch(fetchOrigDatablocksAction({ pid }));
+      this.store.dispatch(fetchOrigDatablocksCountAction({ pid }));
+    }
+
     const tabsInclude = {
       ...DEFAULT_TABS_INCLUDE,
       ...(this.appConfig.datasetDetailsTabsInclude ?? {}),

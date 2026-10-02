@@ -7,12 +7,7 @@
   "datasetReduceEnabled": true,
   "datasetRelationshipsEnabled": true,
   "datasetJsonScientificMetadata": true,
-  "datasetPageSizeOptions": [
-    5,
-    10,
-    25,
-    100
-  ],
+  "datasetPageSizeOptions": [5, 10, 25, 100],
   "editDatasetEnabled": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
@@ -80,7 +75,7 @@
   "datasetDetailsTabsInclude": {
     "details": [],
     "jsonScientificMetadata": [],
-    "datafiles": ["origdatablocks"],
+    "datafiles": [],
     "relatedDatasets": [],
     "relationships": [],
     "reduce": [],
@@ -133,10 +128,7 @@
         "directory[]": "@folder",
         "files[]": "@files"
       },
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ]
+      "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "3072fafc-4363-11ef-b9f9-ebf568222d26",
@@ -163,10 +155,7 @@
         "files[]": "@files"
       },
       "enabled": "#Length(@files) && #MaxDownloadableSize(@totalSize)",
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ]
+      "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "4f974f0e-4364-11ef-9c63-03d19f813f4e",
@@ -192,10 +181,7 @@
         "directory[]": "@folder",
         "files[]": "@files"
       },
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ]
+      "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
@@ -221,10 +207,7 @@
         "files[]": "@files"
       },
       "enabled": "#Length(@files) > 0",
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ]
+      "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "0cd5b592-0b1a-11f0-a42c-23e177127ee7",
@@ -236,10 +219,7 @@
       "icon": "/assets/icons/jupyter_logo.png",
       "url": "https://www.sciwyrm.info/notebook",
       "target": "_blank",
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ],
+      "authorization": ["#datasetAccess", "#datasetPublic"],
       "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0FilesPath",
@@ -258,10 +238,7 @@
       "url": "https://www.sciwyrm.info/notebook",
       "target": "_blank",
       "enabled": "#Length(@files) > 0",
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ],
+      "authorization": ["#datasetAccess", "#datasetPublic"],
       "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0SelectedFilesPath",
