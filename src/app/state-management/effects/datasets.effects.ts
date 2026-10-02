@@ -9,6 +9,8 @@ import {
   OrigDatablock,
   OutputDatasetObsoleteDto,
   UpdateAttachmentV3Dto,
+  OrigdatablocksV4Service,
+  OrigdatablocksPublicV4Service,
   MetadataKeysV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
@@ -37,6 +39,7 @@ import {
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
+import { selectFilesFilters } from "state-management/selectors/files.selectors";
 
 @Injectable()
 export class DatasetEffects {
@@ -44,6 +47,7 @@ export class DatasetEffects {
   relatedDatasetsFilters$ = this.store.select(selectRelatedDatasetsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   fullfacetParams$ = this.store.select(selectFullfacetParams);
+  filesFilters$ = this.store.select(selectFilesFilters);
   datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
   currentUser$ = this.store.select(selectCurrentUser);
 
@@ -192,9 +196,9 @@ export class DatasetEffects {
   fetchDatablocksOfDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatablocksAction),
-      switchMap(({ pid, filters }) => {
+      switchMap(({ pid }) => {
         return this.datasetsService
-          .datasetsControllerFindAllDatablocksV3(pid, filters)
+          .datasetsControllerFindAllDatablocksV3(pid)
           .pipe(
             map((datablocks: Datablock[]) =>
               fromActions.fetchDatablocksCompleteAction({ datablocks }),
@@ -208,15 +212,72 @@ export class DatasetEffects {
   fetchOrigDatablocksOfDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksAction),
-      switchMap(({ pid }) => {
-        return this.datasetsService
-          .datasetsControllerFindAllOrigDatablocksV3(pid)
-          .pipe(
-            map((origdatablocks: OrigDatablock[]) =>
-              fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
-            ),
-            catchError(() => of(fromActions.fetchOrigDatablocksFailedAction())),
-          );
+      concatLatestFrom(() => [this.currentUser$, this.filesFilters$]),
+      switchMap(([{ pid, filters }, user, storeFilters]) => {
+        const {
+          skip = storeFilters.skip,
+          limit = storeFilters.limit,
+          sortField = storeFilters.sortField,
+        } = filters || {};
+
+        const filter = {
+          where: { datasetId: pid },
+          limits: {
+            skip: skip,
+            limit: limit,
+            sort: sortField,
+          },
+        };
+
+        const apiCall$ = user?.id
+          ? this.origdatablocksService.origDatablocksV4ControllerFindAllFilesV4(
+              JSON.stringify(filter),
+            )
+          : this.origdatablocksPublicService.origDatablocksPublicV4ControllerFindAllFilesPublicV4(
+              JSON.stringify(filter),
+            );
+
+        return apiCall$.pipe(
+          map((origdatablocks: OrigDatablock[]) => {
+            return fromActions.fetchOrigDatablocksCompleteAction({
+              origdatablocks,
+            });
+          }),
+          catchError(() => of(fromActions.fetchOrigDatablocksFailedAction())),
+        );
+      }),
+    );
+  });
+
+  fetchOrigDatablocksCount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchOrigDatablocksCountAction),
+      concatLatestFrom(() => this.currentUser$),
+      switchMap(([{ pid }, user]) => {
+        const filter = {
+          where: {
+            datasetId: pid,
+          },
+        };
+
+        const apiCall$ = user?.id
+          ? this.origdatablocksService.origDatablocksV4ControllerCountFilesV4(
+              JSON.stringify(filter),
+            )
+          : this.origdatablocksPublicService.origDatablocksPublicV4ControllerCountFilesPublicV4(
+              JSON.stringify(filter),
+            );
+
+        return apiCall$.pipe(
+          map(({ count }) =>
+            fromActions.fetchOrigDatablocksCountCompleteAction({
+              count,
+            }),
+          ),
+          catchError(() =>
+            of(fromActions.fetchOrigDatablocksCountFailedAction()),
+          ),
+        );
       }),
     );
   });
@@ -245,12 +306,13 @@ export class DatasetEffects {
         this.relatedDatasetsFilters$,
       ]),
       switchMap(([, dataset, filters]) => {
+        const sortTieBreaker = "pid:asc";
         const queryFilter = {
           where: {},
           limits: {
             skip: filters.skip,
             limit: filters.limit,
-            order: filters.sortField,
+            order: filters.sortField + "," + sortTieBreaker,
           },
         };
         if (dataset.type === "raw") {
@@ -282,7 +344,7 @@ export class DatasetEffects {
 
   fetchRelatedDatasetsCount$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.fetchRelatedDatasetsAction),
+      ofType(fromActions.fetchRelatedDatasetsCountAction),
       concatLatestFrom(() => [this.currentDataset$]),
       switchMap(([, dataset]) => {
         const queryFilter = {
@@ -540,6 +602,8 @@ export class DatasetEffects {
   constructor(
     private actions$: Actions,
     private datasetsService: DatasetsService,
+    private origdatablocksService: OrigdatablocksV4Service,
+    private origdatablocksPublicService: OrigdatablocksPublicV4Service,
     private store: Store,
     private appConfigService: AppConfigService,
     private metadataKeysV4Service: MetadataKeysV4Service,
