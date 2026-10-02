@@ -305,6 +305,32 @@ describe("ProposalEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchProposalDatasets$).toBeObservable(expected);
     });
+
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const datasets = [dataset];
+      const skip = 0;
+      const limit = 50;
+      const action = fromActions.fetchProposalDatasetsAction({
+        proposalId,
+        skip,
+        limit,
+      });
+      const outcome1 = fromActions.fetchProposalDatasetsCompleteAction({
+        datasets,
+        skip,
+        limit,
+      });
+      const outcome2 = fromActions.fetchProposalDatasetsCountAction({
+        proposalId,
+      });
+
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", { a: datasets });
+      datasetApi.datasetsControllerFindAllV3.and.returnValue(response);
+
+      const expected = cold("-----(bc)", { b: outcome1, c: outcome2 });
+      expect(effects.fetchProposalDatasets$).toBeObservable(expected);
+    });
   });
 
   describe("fetchProposalDatasetsCount$", () => {
