@@ -392,6 +392,22 @@
                   "type": "string",
                   "enum": ["table", "json", "tree"]
                 },
+                "icon": {
+                  "type": "string"
+                },
+                "headerColor": {
+                  "type": "string",
+                  "enum": [
+                    "primary",
+                    "accent",
+                    "warn",
+                    "header-1",
+                    "header-2",
+                    "header-3",
+                    "header-4",
+                    "header-5"
+                  ]
+                },
                 "authorization": {
                   "type": "array",
                   "items": { "type": "string" }
@@ -871,6 +887,22 @@
                         }
                       }
                     ]
+                  },
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      { "type": "Control", "scope": "#/properties/icon" },
+                      { "type": "Control", "scope": "#/properties/headerColor" }
+                    ],
+                    "rule": {
+                      "effect": "HIDE",
+                      "condition": {
+                        "scope": "#/properties/type",
+                        "schema": {
+                          "const": "statusBanner"
+                        }
+                      }
+                    }
                   },
                   {
                     "type": "HorizontalLayout",
