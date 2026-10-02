@@ -73,16 +73,7 @@
   "tableSciDataEnabled": true,
   "datasetDetailsShowMissingProposalId": false,
   "datasetDetailsTabsInclude": {
-    "details": [],
-    "jsonScientificMetadata": [],
-    "datafiles": [],
-    "relatedDatasets": [],
-    "relationships": [],
-    "reduce": [],
-    "logbook": [],
-    "attachments": ["attachments"],
-    "lifecycle": [],
-    "admin": ["datablocks"]
+    "details": ["attachments"]
   },
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,

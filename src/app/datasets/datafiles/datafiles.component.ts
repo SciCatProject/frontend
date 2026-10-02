@@ -30,7 +30,6 @@ import {
   ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
-import { AuthService } from "shared/services/auth/auth.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   TablePagination,
@@ -43,10 +42,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import {
-  fetchOrigDatablocksAction,
-  fetchOrigDatablocksCountAction,
-} from "state-management/actions/datasets.actions";
+import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "datafiles",

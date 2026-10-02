@@ -24,7 +24,10 @@ import {
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { of } from "rxjs";
-import { fetchDatasetAction } from "state-management/actions/datasets.actions";
+import {
+  fetchDatasetAction,
+  fetchOrigDatablocksAction,
+} from "state-management/actions/datasets.actions";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -89,24 +92,34 @@ describe("DetailsDashboardComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should request no related documents for Details by default", () => {
+  it("should include attachments for Details by default", () => {
     const dispatch = spyOn(store, "dispatch");
     component.fetchDataForTab("dataset-id", "details");
     expect(dispatch).toHaveBeenCalledWith(
-      fetchDatasetAction({ pid: "dataset-id", filters: [] }),
+      fetchDatasetAction({ pid: "dataset-id", filters: ["attachments"] }),
     );
   });
 
-  it("should include documents configured for Details label lookups", () => {
+  it("should request the configured Details includes and ignore the other tabs config", () => {
     component.appConfig.datasetDetailsTabsInclude = {
       details: ["proposals", "samples", "instruments"],
-    };
+      relatedDatasets: ["datablocks"],
+    } as unknown as DatasetDetailsTabsInclude;
     const dispatch = spyOn(store, "dispatch");
+
     component.fetchDataForTab("dataset-id", "details");
+    component.fetchDataForTab("dataset-id", "relatedDatasets");
+
     expect(dispatch).toHaveBeenCalledWith(
       fetchDatasetAction({
         pid: "dataset-id",
         filters: ["proposals", "samples", "instruments"],
+      }),
+    );
+    expect(dispatch).not.toHaveBeenCalledWith(
+      fetchDatasetAction({
+        pid: "dataset-id",
+        filters: ["proposals", "samples", "instruments", "datablocks"],
       }),
     );
   });
@@ -121,8 +134,17 @@ describe("DetailsDashboardComponent", () => {
     expect(dispatch).toHaveBeenCalledWith(
       fetchDatasetAction({
         pid: "dataset-id",
-        filters: [...DATASET_INCLUDE_FIELDS],
+        filters: [
+          "instruments",
+          "proposals",
+          "datablocks",
+          "attachments",
+          "samples",
+        ],
       }),
+    );
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchOrigDatablocksAction({ pid: "dataset-id" }),
     );
     expect(error).not.toHaveBeenCalled();
   });
@@ -130,7 +152,6 @@ describe("DetailsDashboardComponent", () => {
   it("should ignore unsupported includes while retaining valid ones across tabs", () => {
     component.appConfig.datasetDetailsTabsInclude = {
       details: ["proposals", "proposallls", null, 42, {}, "instruments"],
-      datafiles: ["origdatablocks"],
     } as unknown as DatasetDetailsTabsInclude;
     const dispatch = spyOn(store, "dispatch");
     const error = spyOn(console, "error");
@@ -149,9 +170,12 @@ describe("DetailsDashboardComponent", () => {
 
     component.fetchDataForTab("dataset-id", "datafiles");
     expect(dispatch).toHaveBeenCalledWith(
+      fetchOrigDatablocksAction({ pid: "dataset-id" }),
+    );
+    expect(dispatch).toHaveBeenCalledWith(
       fetchDatasetAction({
         pid: "dataset-id",
-        filters: ["proposals", "instruments", "origdatablocks"],
+        filters: ["proposals", "instruments"],
       }),
     );
   });

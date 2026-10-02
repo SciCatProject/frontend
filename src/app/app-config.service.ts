@@ -120,9 +120,11 @@ export const DATASET_INCLUDE_FIELDS = [
 
 export type DatasetIncludeField = (typeof DATASET_INCLUDE_FIELDS)[number];
 
-// Maps a dataset details tab id (child route path, e.g. "details", "datafiles")
-// to the `include` values requested when that tab is opened.
-export type DatasetDetailsTabsInclude = Record<string, DatasetIncludeField[]>;
+// `include` values requested when the dataset details tab is opened. The other
+// tabs request fixed includes (see dataset-details-dashboard.component.ts).
+export interface DatasetDetailsTabsInclude {
+  details?: DatasetIncludeField[];
+}
 
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;

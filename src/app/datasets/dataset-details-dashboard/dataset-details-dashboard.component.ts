@@ -37,7 +37,6 @@ import { MatDialog } from "@angular/material/dialog";
 import {
   AppConfigService,
   DATASET_INCLUDE_FIELDS,
-  DatasetDetailsTabsInclude,
   DatasetIncludeField,
 } from "app-config.service";
 
@@ -73,7 +72,6 @@ enum TAB {
 // Tab identifiers, matching the child route paths of the dataset details dashboard.
 enum TAB_ID {
   details = "details",
-  jsonScientificMetadata = "jsonScientificMetadata",
   datafiles = "datafiles",
   relatedDatasets = "relatedDatasets",
   relationships = "relationships",
@@ -149,18 +147,26 @@ const TAB_DEFINITIONS: {
   },
 ];
 
-const DEFAULT_TABS_INCLUDE: DatasetDetailsTabsInclude = {
-  [TAB_ID.details]: [],
-  [TAB_ID.jsonScientificMetadata]: [],
-  [TAB_ID.datafiles]: [],
-  [TAB_ID.relatedDatasets]: [],
-  [TAB_ID.relationships]: [],
-  [TAB_ID.reduce]: [],
-  [TAB_ID.logbook]: [],
+// Used when `datasetDetailsTabsInclude.details` is not configured.
+const DEFAULT_DETAILS_INCLUDE: DatasetIncludeField[] = ["attachments"];
+
+// Documents the other tabs need to show anything. Tabs not listed here only
+// use fields of the dataset itself and request no includes.
+const TABS_INCLUDE: Partial<Record<TAB_ID, DatasetIncludeField[]>> = {
+  [TAB_ID.datafiles]: ["origdatablocks"],
   [TAB_ID.attachments]: ["attachments"],
-  [TAB_ID.lifecycle]: [],
   [TAB_ID.admin]: ["datablocks"],
 };
+
+// what "all" means for the dataset request, origdatablocks are paginated
+// separately (see fetchDataForTab)
+const INCLUDE_ALL_EXCEPT_ORIGDATABLOCKS: DatasetIncludeField[] = [
+  "instruments",
+  "proposals",
+  "datablocks",
+  "attachments",
+  "samples",
+];
 
 @Component({
   selector: "dataset-details-dashboard",
@@ -291,36 +297,20 @@ export class DatasetDetailsDashboardComponent
   // together with the ones already loaded, so that the store always holds the
   // complete set of data fetched so far for this dataset.
   fetchDataForTab(pid: string, tab: string): void {
-    // datafiles are paginated server side instead of being included
-    if (tab === TAB_ID.datafiles) {
+    let tabInclude = this.getTabInclude(tab);
+
+    // origdatablocks can hold a huge number of files, so instead of including
+    // them in the dataset they are fetched page by page (one row per file)
+    // from the origdatablocks files endpoint
+    const includesAll = tabInclude.includes("all");
+    if (includesAll || tabInclude.includes("origdatablocks")) {
       this.store.dispatch(fetchOrigDatablocksAction({ pid }));
       this.store.dispatch(fetchOrigDatablocksCountAction({ pid }));
     }
+    tabInclude = includesAll
+      ? INCLUDE_ALL_EXCEPT_ORIGDATABLOCKS
+      : tabInclude.filter((include) => include !== "origdatablocks");
 
-    const tabsInclude = {
-      ...DEFAULT_TABS_INCLUDE,
-      ...(this.appConfig.datasetDetailsTabsInclude ?? {}),
-    };
-    const configuredInclude: unknown = tabsInclude[tab] ?? [];
-    let tabInclude: DatasetIncludeField[] = [];
-    if (Array.isArray(configuredInclude)) {
-      tabInclude = configuredInclude.filter(
-        (include): include is DatasetIncludeField => {
-          if (DATASET_INCLUDE_FIELDS.some((field) => field === include)) {
-            return true;
-          }
-          console.error(
-            `Ignoring unsupported dataset include for tab "${tab}":`,
-            include,
-          );
-          return false;
-        },
-      );
-    } else {
-      console.error(
-        `Ignoring invalid dataset includes for tab "${tab}": expected an array.`,
-      );
-    }
     const isNewTab = !this.loadedTabs.has(tab);
     const hasNewInclude = tabInclude.some(
       (include) => !this.fetchedInclude.has(include),
@@ -339,6 +329,36 @@ export class DatasetDetailsDashboardComponent
 
     this.store.dispatch(
       fetchDatasetAction({ pid, filters: [...this.fetchedInclude] }),
+    );
+  }
+
+  // Only the details tab includes are configurable, the other tabs request
+  // the fixed includes they need.
+  private getTabInclude(tab: string): DatasetIncludeField[] {
+    if (tab !== TAB_ID.details) {
+      return TABS_INCLUDE[tab as TAB_ID] ?? [];
+    }
+
+    const configuredInclude: unknown =
+      this.appConfig.datasetDetailsTabsInclude?.details ??
+      DEFAULT_DETAILS_INCLUDE;
+    if (!Array.isArray(configuredInclude)) {
+      console.error(
+        `Ignoring invalid dataset includes for tab "${tab}": expected an array.`,
+      );
+      return [];
+    }
+    return configuredInclude.filter(
+      (include): include is DatasetIncludeField => {
+        if (DATASET_INCLUDE_FIELDS.some((field) => field === include)) {
+          return true;
+        }
+        console.error(
+          `Ignoring unsupported dataset include for tab "${tab}":`,
+          include,
+        );
+        return false;
+      },
     );
   }
 

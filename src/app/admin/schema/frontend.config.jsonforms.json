@@ -105,153 +105,9 @@
       "datasetDetailsShowMissingProposalId": { "type": "boolean" },
       "datasetDetailsTabsInclude": {
         "type": "object",
-        "description": "Dataset includes requested per tab. Unsupported values are ignored with a console warning so the dataset can still load.",
+        "description": "Related documents included (looked up) with the dataset on the Details tab, defaults to [\"attachments\"]. The other tabs are not configurable: Attachments always includes attachments, Admin always includes datablocks and Datafiles loads its files page by page from the origdatablocks files endpoint. Unsupported values are ignored with a console error so the dataset can still load.",
         "properties": {
           "details": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "jsonScientificMetadata": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "datafiles": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "relatedDatasets": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "relationships": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "reduce": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "logbook": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "attachments": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "lifecycle": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": [
-                "instruments",
-                "proposals",
-                "origdatablocks",
-                "datablocks",
-                "attachments",
-                "samples",
-                "all"
-              ]
-            }
-          },
-          "admin": {
             "type": "array",
             "uniqueItems": true,
             "items": {
@@ -993,7 +849,7 @@
       },
       {
         "type": "Group",
-        "label": "Dataset Details Tabs Data",
+        "label": "Dataset Details Data",
         "options": {
           "expandable": true
         },
@@ -1002,51 +858,6 @@
             "type": "Control",
             "label": "Details",
             "scope": "#/properties/datasetDetailsTabsInclude/properties/details"
-          },
-          {
-            "type": "Control",
-            "label": "Scientific Metadata (JSON)",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/jsonScientificMetadata"
-          },
-          {
-            "type": "Control",
-            "label": "Datafiles",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/datafiles"
-          },
-          {
-            "type": "Control",
-            "label": "Related Datasets",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/relatedDatasets"
-          },
-          {
-            "type": "Control",
-            "label": "Relationships",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/relationships"
-          },
-          {
-            "type": "Control",
-            "label": "Reduce",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/reduce"
-          },
-          {
-            "type": "Control",
-            "label": "Logbook",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/logbook"
-          },
-          {
-            "type": "Control",
-            "label": "Attachments",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/attachments"
-          },
-          {
-            "type": "Control",
-            "label": "Lifecycle",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/lifecycle"
-          },
-          {
-            "type": "Control",
-            "label": "Admin",
-            "scope": "#/properties/datasetDetailsTabsInclude/properties/admin"
           }
         ]
       },
