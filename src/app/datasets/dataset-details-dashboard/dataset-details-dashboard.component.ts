@@ -219,6 +219,36 @@ export class DatasetDetailsDashboardComponent
     public dialog: MatDialog,
   ) {}
 
+  // Only the details tab includes are configurable, the other tabs request
+  // the fixed includes they need.
+  private getTabInclude(tab: string): DatasetIncludeField[] {
+    if (tab !== TAB_ID.details) {
+      return TABS_INCLUDE[tab as TAB_ID] ?? [];
+    }
+
+    const configuredInclude: unknown =
+      this.appConfig.datasetDetailsTabsInclude?.details ??
+      DEFAULT_DETAILS_INCLUDE;
+    if (!Array.isArray(configuredInclude)) {
+      console.error(
+        `Ignoring invalid dataset includes for tab "${tab}": expected an array.`,
+      );
+      return [];
+    }
+    return configuredInclude.filter(
+      (include): include is DatasetIncludeField => {
+        if (DATASET_INCLUDE_FIELDS.some((field) => field === include)) {
+          return true;
+        }
+        console.error(
+          `Ignoring unsupported dataset include for tab "${tab}":`,
+          include,
+        );
+        return false;
+      },
+    );
+  }
+
   ngOnInit() {
     this.isInBatch$ = this.store.select(selectIsCurrentDatasetInBatch);
 
@@ -329,36 +359,6 @@ export class DatasetDetailsDashboardComponent
 
     this.store.dispatch(
       fetchDatasetAction({ pid, filters: [...this.fetchedInclude] }),
-    );
-  }
-
-  // Only the details tab includes are configurable, the other tabs request
-  // the fixed includes they need.
-  private getTabInclude(tab: string): DatasetIncludeField[] {
-    if (tab !== TAB_ID.details) {
-      return TABS_INCLUDE[tab as TAB_ID] ?? [];
-    }
-
-    const configuredInclude: unknown =
-      this.appConfig.datasetDetailsTabsInclude?.details ??
-      DEFAULT_DETAILS_INCLUDE;
-    if (!Array.isArray(configuredInclude)) {
-      console.error(
-        `Ignoring invalid dataset includes for tab "${tab}": expected an array.`,
-      );
-      return [];
-    }
-    return configuredInclude.filter(
-      (include): include is DatasetIncludeField => {
-        if (DATASET_INCLUDE_FIELDS.some((field) => field === include)) {
-          return true;
-        }
-        console.error(
-          `Ignoring unsupported dataset include for tab "${tab}":`,
-          include,
-        );
-        return false;
-      },
     );
   }
 
