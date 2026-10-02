@@ -8,6 +8,25 @@ import {
   FieldSticky,
 } from "shared/modules/dynamic-material-table/models/table-field.model";
 
+export interface DateRange {
+  begin?: string;
+  end?: string;
+}
+
+export interface DateRangeFilter {
+  $gte?: { $date: string };
+  $lte?: { $date: string };
+}
+
+export interface FacetCount {
+  _id: string;
+  label?: string;
+  count: number;
+}
+export interface FacetCounts {
+  [field: string]: FacetCount[];
+}
+
 export interface Settings {
   tapeCopies: string;
   datasetCount: number;
@@ -88,7 +107,7 @@ export interface CustomizationItem {
   order: number;
   row: number;
   col: number;
-  fields?: Field[];
+  fields?: ComputedField[];
   source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
@@ -97,11 +116,17 @@ export interface CustomizationItem {
   restrictedIconVisible?: boolean;
 }
 
+export type ComputedField = Field & {
+  value: string | string[] | { id: string; label: string }[];
+  isEmpty: boolean;
+};
+
 export interface Field {
   element: FieldType;
   source: string;
   order: number;
   path?: string;
+  internalLinkLabel?: string;
 }
 
 // Type alias for allowed customization types
@@ -113,7 +138,7 @@ type CustomizationType =
   | "statusBanner";
 
 // Type alias for allowed field types
-type FieldType = "text" | "copy" | "linky" | "tag" | "date";
+type FieldType = "text" | "copy" | "linky" | "tag" | "date" | "internalLink";
 
 export interface ListSettings {
   columns?: TableColumn[];
@@ -194,7 +219,7 @@ export interface DatasetFilters extends GenericFilters {
   text: string;
   ownerGroup: string[];
   type: string[];
-  creationTime: { begin: string; end: string } | null;
+  creationTime: DateRangeFilter | null;
   creationLocation: string[];
   keywords: string[];
   mode: Record<string, unknown>;

@@ -32,7 +32,7 @@ import {
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
@@ -97,11 +97,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
-  currentUser$ = this.store.select(selectCurrentUser);
-
-  currentUserId?: string;
-
-  datasets: OutputDatasetObsoleteDto[] = [];
+  datasets: OutputDatasetDto[] = [];
 
   @Input() sideFilterCollapsed = false;
 

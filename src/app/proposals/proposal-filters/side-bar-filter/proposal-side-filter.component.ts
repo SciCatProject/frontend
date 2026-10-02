@@ -18,6 +18,7 @@ import {
   clearProposalsFiltersAction,
   removeProposalFilterAction,
 } from "state-management/actions/proposals.actions";
+import { DateRange } from "state-management/models";
 import {
   selectFilterByKey,
   selectProposalsFacetCountsWithInstrumentName,
@@ -25,7 +26,6 @@ import {
 } from "state-management/selectors/proposals.selectors";
 import { selectFilters } from "state-management/selectors/user.selectors";
 
-import { DateRange } from "state-management/state/proposals.store";
 import { FilterConfig } from "state-management/state/user.store";
 
 @Component({

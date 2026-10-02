@@ -1,11 +1,9 @@
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
-  DatasetClass,
   Instrument,
-  PublishedData,
+  PartialOutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { DynamicField } from "../dialog/dialog.component";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 export type DialogField = { key: string } & DynamicField;
 
@@ -114,7 +112,7 @@ export function validateAllActionConfigsIn(config: object): void {
   });
 }
 
-export interface ActionItemDataset extends OutputDatasetObsoleteDto {
+export interface ActionItemDataset extends PartialOutputDatasetDto {
   files?: DataFiles_File[];
 }
 

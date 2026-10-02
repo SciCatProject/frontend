@@ -8,7 +8,7 @@ import {
   AppConfigService,
   DatasetStatusBannerRule,
 } from "app-config.service";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 const DELETED_RULE: DatasetStatusBannerRule = {
   field: "datasetlifecycle.archiveStatusMessage",
@@ -42,10 +42,10 @@ describe("DatasetStatusBannerComponent", () => {
     });
   }
 
-  function initComponent(dataset?: Partial<OutputDatasetObsoleteDto>): void {
+  function initComponent(dataset?: Partial<PartialOutputDatasetDto>): void {
     fixture = TestBed.createComponent(DatasetStatusBannerComponent);
     component = fixture.componentInstance;
-    component.datasetItem = dataset as OutputDatasetObsoleteDto;
+    component.datasetItem = dataset as PartialOutputDatasetDto;
     component.ngOnChanges();
     fixture.detectChanges();
   }

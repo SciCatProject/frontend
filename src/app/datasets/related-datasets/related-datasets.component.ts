@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,
@@ -113,8 +113,8 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
     },
   };
 
-  dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
-    OutputDatasetObsoleteDto[]
+  dataSource: BehaviorSubject<PartialOutputDatasetDto[]> = new BehaviorSubject<
+    PartialOutputDatasetDto[]
   >([]);
 
   paginationMode: TablePaginationMode = "server-side";
@@ -206,8 +206,8 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   }
 
   formatTableData(
-    datasets: OutputDatasetObsoleteDto[],
-  ): OutputDatasetObsoleteDto[] {
+    datasets: PartialOutputDatasetDto[],
+  ): PartialOutputDatasetDto[] {
     if (!datasets) {
       return [];
     }
@@ -237,7 +237,7 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchRelatedDatasetsAction());
   }
 
-  onRowEvent({ event, sender }: IRowEvent<OutputDatasetObsoleteDto>): void {
+  onRowEvent({ event, sender }: IRowEvent<PartialOutputDatasetDto>): void {
     if (event === RowEventType.RowClick) {
       const pid = encodeURIComponent(sender.row.pid);
       this.router.navigateByUrl("/datasets/" + pid);

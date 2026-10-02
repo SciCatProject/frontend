@@ -10,6 +10,9 @@
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "datasetRelationshipsEnabled": true,
+  "datasetDetailsTabsInclude": {
+    "details": ["proposals", "samples", "instruments", "attachments"]
+  },
   "datasetJsonScientificMetadata": true,
   "editDatasetEnabled": true,
   "editDatasetSampleEnabled": true,

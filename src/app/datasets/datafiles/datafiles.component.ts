@@ -2,7 +2,6 @@ import {
   Component,
   ChangeDetectorRef,
   OnDestroy,
-  AfterViewInit,
   OnInit,
   AfterViewChecked,
   ViewChild,
@@ -19,11 +18,7 @@ import {
   selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import {
-  CreateUserJWT,
-  UsersService,
-  CreateJobDtoV3,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { CreateJobDtoV3 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatDialog } from "@angular/material/dialog";
 import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/public-download-dialog.component";
@@ -35,7 +30,6 @@ import {
   ActionItemDataset,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
-import { AuthService } from "shared/services/auth/auth.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   TablePagination,
@@ -48,10 +42,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import {
-  fetchOrigDatablocksAction,
-  fetchOrigDatablocksCountAction,
-} from "state-management/actions/datasets.actions";
+import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "datafiles",
@@ -98,7 +89,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   maxFileSizeWarning: string | null =
     this.appConfig.maxFileSizeWarning ||
     `Some files are above the max size ${this.fileSizePipe.transform(this.maxFileSize)}`;
-  jwt: CreateUserJWT;
   auth_token: string;
 
   tableColumns: TableField<any>[] = [
@@ -161,8 +151,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     private store: Store,
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private usersService: UsersService,
-    private authService: AuthService,
     private fileSizePipe: FileSizePipe,
   ) {}
 
@@ -233,7 +221,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
     return warning;
   }
-
   ngOnInit() {
     this.setting = this.tableDefaultSettingsConfig;
     this.subscriptions.push(
@@ -273,24 +260,6 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
     this.cdRef.detectChanges();
-  }
-
-  downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
-    if (this.appConfig.multipleDownloadUseAuthToken) {
-      this.auth_token = `Bearer ${this.authService.getToken().id}`;
-      this[`${form}Element`].nativeElement.auth_token.value = this.auth_token;
-    }
-    if (!this.jwt) {
-      this.subscriptions.push(
-        this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
-          this.jwt = jwt;
-          this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
-          this[`${form}Element`].nativeElement.submit();
-        }),
-      );
-    } else {
-      this[`${form}Element`].nativeElement.submit();
-    }
   }
 
   onPaginationChange({ pageIndex, pageSize }: TablePagination) {

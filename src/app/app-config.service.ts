@@ -107,6 +107,25 @@ export interface DatasetStatusBannerConfig {
   rules?: DatasetStatusBannerRule[];
 }
 
+// Values accepted by the `include` parameter of the v4 single dataset endpoint.
+export const DATASET_INCLUDE_FIELDS = [
+  "instruments",
+  "proposals",
+  "origdatablocks",
+  "datablocks",
+  "attachments",
+  "samples",
+  "all",
+] as const;
+
+export type DatasetIncludeField = (typeof DATASET_INCLUDE_FIELDS)[number];
+
+// `include` values requested when the dataset details tab is opened. The other
+// tabs request fixed includes (see dataset-details-dashboard.component.ts).
+export interface DatasetDetailsTabsInclude {
+  details?: DatasetIncludeField[];
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   addScientificMetadataKeysAsColumn?: boolean;
@@ -119,6 +138,7 @@ export interface AppConfigInterface {
   datasetReduceEnabled: boolean;
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
+  datasetDetailsTabsInclude?: DatasetDetailsTabsInclude;
   datasetActionsEnabled: boolean;
   datasetActions: ActionConfig[];
   datafilesActionsEnabled: boolean;

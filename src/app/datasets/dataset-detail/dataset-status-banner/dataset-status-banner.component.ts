@@ -4,7 +4,7 @@ import {
   AppConfigService,
   DatasetStatusBannerConfig,
 } from "app-config.service";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface DatasetStatusBannerContent {
   message: string;
@@ -26,7 +26,7 @@ export interface DatasetStatusBannerContent {
 })
 export class DatasetStatusBannerComponent implements OnChanges {
   private readonly config: DatasetStatusBannerConfig | undefined;
-  @Input() datasetItem: OutputDatasetObsoleteDto | undefined;
+  @Input() datasetItem: PartialOutputDatasetDto | undefined;
 
   banner: DatasetStatusBannerContent | undefined;
 
