@@ -18,6 +18,11 @@ export const selectProfile = createSelector(
   (state) => state.profile,
 );
 
+export const selectUserAccessGroups = createSelector(
+  selectProfile,
+  (profile) => profile?.accessGroups ?? [],
+);
+
 export const selectCurrentUserName = createSelector(
   selectProfile,
   selectCurrentUser,
