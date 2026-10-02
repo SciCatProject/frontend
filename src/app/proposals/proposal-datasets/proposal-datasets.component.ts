@@ -111,11 +111,9 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
-    saveSettingMode: "none",
     settingList: [
       {
         visibleActionMenu: actionMenu,
-        saveSettingMode: "none",
         isDefaultSetting: true,
         isCurrentSetting: true,
         columnSetting: [],
@@ -177,7 +175,13 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
         this.pending = false;
 
         const defaultTableColumns = await lastValueFrom(
-          this.selectColumnsWithFetchedSettings$.pipe(take(1)),
+          this.selectColumnsWithFetchedSettings$.pipe(
+            filter(
+              ({ hasFetchedSettings, columns }) =>
+                hasFetchedSettings && columns.length > 0,
+            ),
+            take(1),
+          ),
         );
 
         const defaultConfigColumns =

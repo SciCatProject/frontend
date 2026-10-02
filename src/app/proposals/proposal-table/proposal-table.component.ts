@@ -29,6 +29,7 @@ import {
   selectDefaultProposalColumns,
   selectProposalsFacetCountsIsLoading,
 } from "state-management/selectors/proposals.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   OutputDatasetObsoleteDto,
@@ -96,6 +97,10 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   datasets: OutputDatasetObsoleteDto[] = [];
 
   @Input() sideFilterCollapsed = false;
@@ -119,6 +124,10 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
+    this.subscriptions.push(
       this.proposalsWithCountAndTableSettings$
         .pipe(
           filter(({ hasFetchedSettings }) => hasFetchedSettings),
@@ -135,7 +144,12 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
             const defaultConfigColumns =
               this.appConfig?.defaultProposalsListSettings?.columns;
 
-            const userConfigColumns = tablesSettings?.columns || [];
+            const userConfigColumns =
+              this.tableConfigService.preferSavedColumns(
+                this.tableName,
+                tablesSettings?.columns,
+                this.currentUserId,
+              );
 
             const userTableConfigColumns =
               this.convertSavedColumns(userConfigColumns);
@@ -261,6 +275,12 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
       };
     });
 
+    this.tableConfigService.persistColumns(
+      this.tableName,
+      columnsSetting,
+      this.currentUserId,
+    );
+
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
@@ -277,8 +297,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     setting: ITableSetting;
   }) {
     if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create ||
+      event.type === TableSettingEventType.apply ||
       event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);

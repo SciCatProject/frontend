@@ -15,7 +15,6 @@ export interface ITableSetting {
   rowStyle?: any;
   enableContextMenu?: boolean;
   autoHeight?: boolean;
-  saveSettingMode?: "simple" | "multi" | "none";
   settingName?: string;
   settingList?: SettingItem[];
   showColumnSettingMenu?: boolean;
@@ -37,7 +36,6 @@ export interface VisibleActionMenu {
   columnSettingFilter?: boolean;
   columnSettingSort?: boolean;
   columnSettingPrint?: boolean;
-  saveTableSetting?: boolean;
 }
 
 export class TableSetting implements ITableSetting {
@@ -50,18 +48,12 @@ export class TableSetting implements ITableSetting {
   settingName?: string = "default";
   enableContextMenu?: boolean;
   autoHeight?: boolean = false;
-  saveSettingMode?: "simple" | "multi" | "none" = "simple";
   showColumnSettingMenu?: boolean = false;
   tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
 }
 
 export enum TableSettingEventType {
-  create = "create",
-  save = "save",
   apply = "apply",
-  delete = "delete",
-  default = "default",
   reset = "reset",
-  select = "select",
   error = "error",
 }

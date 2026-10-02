@@ -84,11 +84,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
-    saveSettingMode: "none",
     settingList: [
       {
         visibleActionMenu: actionMenu,
-        saveSettingMode: "none",
         isDefaultSetting: true,
         isCurrentSetting: true,
         columnSetting: [
