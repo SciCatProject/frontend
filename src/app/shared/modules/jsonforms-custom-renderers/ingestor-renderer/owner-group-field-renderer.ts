@@ -49,7 +49,7 @@ export class OwnerGroupFieldComponent
             return null;
           }
 
-          if (profile.oidcClaims !== undefined) {
+          if (profile.oidcClaims?.accessGroups !== undefined) {
             return settings.profile.oidcClaims.accessGroups ?? null;
           }
 
@@ -97,6 +97,6 @@ export class OwnerGroupFieldComponent
 }
 
 export const ownerGroupFieldTester: RankedTester = rankWith(
-  2,
+  2.5,
   scopeEndsWith("ownerGroup"),
 );
