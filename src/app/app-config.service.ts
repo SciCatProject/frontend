@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { mergeWith } from "lodash-es";
+import { mergeWith, omit } from "lodash-es";
 import { firstValueFrom, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
 import {
@@ -264,7 +264,22 @@ function applyDefaultBatchActions(config: AppConfigInterface): void {
   );
 }
 
+const CONFIG_URL = "/assets/config.json";
+const CONFIG_OVERRIDE_URL = "/assets/config.override.json";
 const MAX_ADDITIONAL_CONFIGS = 3;
+
+// Custom merge to replace arrays instead of merging them
+function mergeConfigs(
+  ...sources: Partial<AppConfigInterface>[]
+): Partial<AppConfigInterface> {
+  return mergeWith({}, ...sources, (objVal: unknown, srcVal: unknown) =>
+    Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
+  );
+}
+
+function resolveUrl(url: string): string {
+  return new URL(url, document.baseURI).href;
+}
 
 @Injectable({
   providedIn: "root",
@@ -274,73 +289,85 @@ export class AppConfigService {
 
   constructor(private http: HttpClient) {}
 
-  private async mergeConfig(): Promise<object> {
+  private async mergeConfig(): Promise<Partial<AppConfigInterface>> {
     const config = await firstValueFrom(
-      this.http.get<Partial<AppConfigInterface>>("/assets/config.json").pipe(
+      this.http.get<Partial<AppConfigInterface>>(CONFIG_URL).pipe(
         catchError(() => {
           console.error("No config provided.");
           return of({} as Partial<AppConfigInterface>);
         }),
       ),
     );
+    const overridesAllowed = !!config?.allowConfigOverrides;
     let configOverrideRequest: Partial<AppConfigInterface> = {};
-    if (config?.allowConfigOverrides) {
+    if (overridesAllowed) {
       configOverrideRequest = await firstValueFrom(
-        this.http
-          .get<Partial<AppConfigInterface>>("/assets/config.override.json")
-          .pipe(
-            catchError(() => {
-              console.error(
-                "allowConfigOverrides set to true but no config.override provided.",
-              );
-              return of({} as Partial<AppConfigInterface>);
-            }),
-          ),
-      );
-    }
-    // Custom merge to replace arrays instead of merging them
-    return mergeWith(
-      {},
-      config ?? {},
-      configOverrideRequest ?? {},
-      (objVal, srcVal) =>
-        Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
-    );
-  }
-
-  /**
-   * Fetches and merges in each config referenced by `additionalConfigs`.
-   * At most MAX_ADDITIONAL_CONFIGS entries are processed.
-   */
-  private async loadAdditionalConfigs(
-    config: AppConfigInterface,
-  ): Promise<AppConfigInterface> {
-    if (!config.additionalConfigs?.length) {
-      return config;
-    }
-    if (config.additionalConfigs.length > MAX_ADDITIONAL_CONFIGS) {
-      console.error(
-        `additionalConfigs has more than ${MAX_ADDITIONAL_CONFIGS} entries; only the first ${MAX_ADDITIONAL_CONFIGS} will be loaded.`,
-      );
-    }
-    for (const url of config.additionalConfigs.slice(
-      0,
-      MAX_ADDITIONAL_CONFIGS,
-    )) {
-      const additionalConfig = await firstValueFrom(
-        this.http.get<Partial<AppConfigInterface>>(url).pipe(
-          timeout(2000),
+        this.http.get<Partial<AppConfigInterface>>(CONFIG_OVERRIDE_URL).pipe(
           catchError(() => {
-            console.error(`Error loading config from ${url}`);
+            console.error(
+              "allowConfigOverrides set to true but no config.override provided.",
+            );
             return of({} as Partial<AppConfigInterface>);
           }),
         ),
       );
-      config = mergeWith({}, config, additionalConfig, (objVal, srcVal) =>
-        Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
+    }
+    const bootstrap = mergeConfigs(config ?? {}, configOverrideRequest ?? {});
+    if (!bootstrap.additionalConfigs?.length) {
+      return bootstrap;
+    }
+
+    const localConfigs: Record<string, Partial<AppConfigInterface>> = {
+      [CONFIG_URL]: config ?? {},
+    };
+    if (overridesAllowed) {
+      localConfigs[CONFIG_OVERRIDE_URL] = configOverrideRequest ?? {};
+    }
+    return this.loadAdditionalConfigs(
+      bootstrap.additionalConfigs,
+      localConfigs,
+    );
+  }
+
+  /**
+   * Builds the config from the sources listed in `additionalConfigs`, merged
+   * in list order. Only listed sources contribute; `additionalConfigs` inside
+   * a source is ignored. Already fetched local files are reused, and at most
+   * MAX_ADDITIONAL_CONFIGS entries are processed.
+   */
+  private async loadAdditionalConfigs(
+    urls: string[],
+    localConfigs: Record<string, Partial<AppConfigInterface>>,
+  ): Promise<Partial<AppConfigInterface>> {
+    if (urls.length > MAX_ADDITIONAL_CONFIGS) {
+      console.warn(
+        `additionalConfigs has more than ${MAX_ADDITIONAL_CONFIGS} entries; only the first ${MAX_ADDITIONAL_CONFIGS} will be loaded.`,
       );
     }
-    return config;
+    const fetched = new Map(
+      Object.entries(localConfigs).map(([url, c]) => [resolveUrl(url), c]),
+    );
+    let config: Partial<AppConfigInterface> = {};
+    for (const url of urls.slice(0, MAX_ADDITIONAL_CONFIGS)) {
+      const source =
+        fetched.get(resolveUrl(url)) ?? (await this.fetchAdditionalConfig(url));
+      config = mergeConfigs(config, omit(source, "additionalConfigs"));
+    }
+    return { ...config, additionalConfigs: urls };
+  }
+
+  private fetchAdditionalConfig(
+    url: string,
+  ): Promise<Partial<AppConfigInterface>> {
+    return firstValueFrom(
+      this.http.get<Partial<AppConfigInterface>>(url).pipe(
+        timeout(2000),
+        catchError(() => {
+          console.error(`Error loading config from ${url}`);
+          return of({} as Partial<AppConfigInterface>);
+        }),
+      ),
+    );
   }
 
   async loadAppConfig(): Promise<void> {
@@ -355,10 +382,6 @@ export class AppConfigService {
       const config = await this.mergeConfig();
       this.appConfig = Object.assign({}, this.appConfig, config);
     }
-
-    this.appConfig = await this.loadAdditionalConfigs(
-      this.appConfig as AppConfigInterface,
-    );
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
     if (
