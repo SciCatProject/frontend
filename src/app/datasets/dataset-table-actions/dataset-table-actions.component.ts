@@ -75,7 +75,17 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
     return batchActions.map((action) => ({
       ...action,
-      disabled: true,
+      // a boolean disabled would take precedence and hide the tooltip
+      disabled: undefined,
+      enabled: {
+        conditions: [
+          {
+            condition: "false",
+            disabledTooltip:
+              "Actions are disabled while datasets are in your Selection. Use the actions on the Selection page, or empty the Selection.",
+          },
+        ],
+      },
     }));
   }
 

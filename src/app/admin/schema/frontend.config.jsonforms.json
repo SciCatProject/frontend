@@ -186,7 +186,23 @@
             "mat_icon": { "type": "string" },
             "url": { "type": "string" },
             "target": { "type": "string" },
-            "enabled": { "type": "string" },
+            "enabled": {
+              "type": "object",
+              "properties": {
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "condition": { "type": "string" },
+                      "disabledTooltip": { "type": "string" }
+                    },
+                    "required": ["condition"]
+                  }
+                },
+                "enabledTooltip": { "type": "string" }
+              }
+            },
             "inputs": {
               "type": "array",
               "items": {
@@ -718,7 +734,35 @@
                   { "type": "Control", "scope": "#/properties/mat_icon" },
                   { "type": "Control", "scope": "#/properties/url" },
                   { "type": "Control", "scope": "#/properties/target" },
-                  { "type": "Control", "scope": "#/properties/enabled" },
+                  {
+                    "type": "Group",
+                    "label": "Enabled when all conditions hold",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/enabled/properties/conditions",
+                        "options": {
+                          "detail": {
+                            "type": "HorizontalLayout",
+                            "elements": [
+                              {
+                                "type": "Control",
+                                "scope": "#/properties/condition"
+                              },
+                              {
+                                "type": "Control",
+                                "scope": "#/properties/disabledTooltip"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/enabled/properties/enabledTooltip"
+                      }
+                    ]
+                  },
                   {
                     "type": "Control",
                     "scope": "#/properties/method"

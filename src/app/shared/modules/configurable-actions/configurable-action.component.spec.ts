@@ -11,6 +11,8 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
+import { MatTooltip, MatTooltipModule } from "@angular/material/tooltip";
+import { By } from "@angular/platform-browser";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { DatePipe } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -110,6 +112,7 @@ describe("1000: ConfigurableActionComponent", () => {
         MatButtonModule,
         MatIconModule,
         MatTableModule,
+        MatTooltipModule,
         PipesModule,
         ReactiveFormsModule,
         MatDialogModule,
@@ -1983,6 +1986,179 @@ describe("1000: ConfigurableActionComponent", () => {
       expect(body.jobParams.option).toBe("second");
       expect(body.jobParams.retrieveDestination).toBeUndefined();
       expect(body.type).toBe("retrieve");
+    });
+  });
+
+  describe("1410: default batch actions (Archive/Retrieve) disabled tooltips", () => {
+    const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
+
+    const itemsWithSizes = (size: number, packedSize: number): ActionItems => ({
+      datasets: [{ pid: "pid-0", size, packedSize } as ActionItemDataset],
+    });
+
+    it("1410: should ask to select datasets when nothing is selected", () => {
+      createComponent(archiveAction, { datasets: [] });
+      expect(component.tooltip).toEqual(
+        "Select one or more datasets to archive.",
+      );
+
+      createComponent(retrieveAction, { datasets: [] });
+      expect(component.tooltip).toEqual(
+        "Select one or more datasets to retrieve.",
+      );
+    });
+
+    it("1411: should explain an empty selection total", () => {
+      createComponent(archiveAction, itemsWithSizes(0, 0));
+      expect(component.tooltip).toEqual(
+        "The selected datasets have a total size of 0 bytes, so there is nothing to archive.",
+      );
+
+      createComponent(retrieveAction, itemsWithSizes(0, 0));
+      expect(component.tooltip).toEqual(
+        "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve.",
+      );
+    });
+
+    it("1412: should show no tooltip while enabled", () => {
+      createComponent(archiveAction, itemsWithSizes(100, 100));
+      expect(component.tooltip).toEqual("");
+
+      createComponent(retrieveAction, itemsWithSizes(100, 100));
+      expect(component.tooltip).toEqual("");
+    });
+  });
+
+  describe("1500: enabled conditions", () => {
+    const baseAction: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "enabled-conditions-test",
+      variables: { pids: "#DatasetsPid" },
+    };
+
+    it("1500: should be disabled by the first failing condition, with its tooltip", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [
+              { condition: "#Length(@pids) > 0", disabledTooltip: "never" },
+              { condition: "false", disabledTooltip: "first failing" },
+              { condition: "false", disabledTooltip: "second failing" },
+            ],
+            enabledTooltip: "unused",
+          },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeTrue();
+      expect(component.tooltip).toEqual("first failing");
+    });
+
+    it("1501: should be enabled with the enabledTooltip when all conditions hold", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [
+              { condition: "#Length(@pids) > 0", disabledTooltip: "unused" },
+              { condition: "true" },
+            ],
+            enabledTooltip: "May fail",
+          },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("May fail");
+
+      createComponent(
+        {
+          ...baseAction,
+          enabled: { conditions: [], enabledTooltip: "Always" },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("Always");
+    });
+
+    it("1502: should have no tooltip when none is configured", () => {
+      createComponent(
+        { ...baseAction, enabled: { conditions: [{ condition: "false" }] } },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeTrue();
+      expect(component.tooltip).toEqual("");
+
+      createComponent(
+        { ...baseAction, enabled: { conditions: [{ condition: "true" }] } },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("");
+
+      createComponent({ ...baseAction, enabled: "false" }, mockActionItems);
+      expect(component.tooltip).toEqual("");
+    });
+
+    it("1503: should put the tooltip of a disabled action on a focusable wrapper", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [{ condition: "false", disabledTooltip: "Because" }],
+          },
+        },
+        mockActionItems,
+      );
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const wrapperTooltip = wrapper.injector.get(MatTooltip);
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(wrapperTooltip.message).toEqual("Because");
+      expect(wrapperTooltip.disabled).toBeFalse();
+      expect(buttonTooltip.disabled).toBeTrue();
+      // focusable, so keyboard users can reach the tooltip
+      expect(wrapper.nativeElement.getAttribute("tabindex")).toEqual("0");
+      expect(wrapper.nativeElement.getAttribute("aria-label")).toEqual(
+        baseAction.label,
+      );
+    });
+
+    it("1504: should put the tooltip of an enabled action on the button", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: { conditions: [], enabledTooltip: "May fail" },
+        },
+        mockActionItems,
+      );
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(buttonTooltip.message).toEqual("May fail");
+      expect(buttonTooltip.disabled).toBeFalse();
+      expect(wrapper.injector.get(MatTooltip).disabled).toBeTrue();
+      expect(wrapper.nativeElement.hasAttribute("tabindex")).toBeFalse();
+    });
+
+    it("1505: should not show a tooltip or take focus without one", () => {
+      createComponent({ ...baseAction, enabled: "true" }, mockActionItems);
+
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(wrapper.injector.get(MatTooltip).disabled).toBeTrue();
+      expect(buttonTooltip.disabled).toBeTrue();
+      expect(wrapper.nativeElement.hasAttribute("tabindex")).toBeFalse();
+      expect(wrapper.nativeElement.hasAttribute("aria-label")).toBeFalse();
     });
   });
 });
