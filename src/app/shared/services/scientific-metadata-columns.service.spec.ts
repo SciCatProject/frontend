@@ -56,6 +56,58 @@ describe("ScientificMetadataColumnsService", () => {
     });
   });
 
+  it("should build a hover-content column for a group using its own path", () => {
+    expect(
+      service.buildColumn(
+        {
+          name: "sample.instrument",
+          columnName: "scientificMetadata.sample.instrument",
+          human_name: "Instrument",
+          isGroup: true,
+        },
+        3,
+      ),
+    ).toEqual({
+      name: "scientificMetadata.sample.instrument",
+      header: "Instrument",
+      userAdded: true,
+      order: 3,
+      type: "hoverContent",
+      enabled: true,
+      tooltip: "sample.instrument",
+      width: 250,
+    });
+  });
+
+  it("should convert an existing group column to hover content without duplicating it", () => {
+    const result = service.upsertColumn(
+      [
+        {
+          name: "scientificMetadata.sample",
+          order: 7,
+          type: "standard",
+          enabled: false,
+        },
+      ],
+      {
+        name: "sample",
+        columnName: "scientificMetadata.sample",
+        isGroup: true,
+      },
+    );
+
+    expect(result.length).toBe(1);
+    expect(result[0]).toEqual(
+      jasmine.objectContaining({
+        name: "scientificMetadata.sample",
+        order: 7,
+        type: "hoverContent",
+        enabled: true,
+        userAdded: true,
+      }),
+    );
+  });
+
   it("should upsert an existing column without duplicating it", () => {
     const result = service.upsertColumn(
       [

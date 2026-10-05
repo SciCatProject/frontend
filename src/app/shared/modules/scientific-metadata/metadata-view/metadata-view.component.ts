@@ -269,6 +269,14 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               : undefined,
         };
       }
+      if (
+        entry !== null &&
+        typeof entry === "object" &&
+        !Array.isArray(entry) &&
+        !("value" in entry)
+      ) {
+        metadataObject.isGroup = true;
+      }
       metadataArray.push(metadataObject);
     });
     return metadataArray;

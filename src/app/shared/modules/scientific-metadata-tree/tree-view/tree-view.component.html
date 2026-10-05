@@ -51,7 +51,11 @@
         ></row-menu>
         <span
           class="menu-spacer"
-          *ngIf="allowAddAsColumn && rowContextMenuItems.length > 0 && !canShowAddAsColumn(node)"
+          *ngIf="
+            allowAddAsColumn &&
+            rowContextMenuItems.length > 0 &&
+            !canShowAddAsColumn(node)
+          "
         ></span>
       </div>
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">
@@ -69,9 +73,19 @@
   >
     <section>
       <div class="menu-cell">
+        <row-menu
+          *ngIf="canShowAddAsColumn(node)"
+          [actionMenus]="rowContextMenuItems"
+          [tableSetting]="tableSetting"
+          (rowActionChange)="onRowActionChange(node, $event)"
+        ></row-menu>
         <span
           class="menu-spacer"
-          *ngIf="allowAddAsColumn && rowContextMenuItems.length > 0"
+          *ngIf="
+            allowAddAsColumn &&
+            rowContextMenuItems.length > 0 &&
+            !canShowAddAsColumn(node)
+          "
         ></span>
       </div>
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">

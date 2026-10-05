@@ -21,6 +21,7 @@ export class TreeNode {
   path: string;
   columnName: string;
   human_name?: string;
+  isGroup?: boolean;
 }
 export class FlatNode {
   key: string;
@@ -32,6 +33,7 @@ export class FlatNode {
   path: string;
   columnName: string;
   human_name?: string;
+  isGroup?: boolean;
 }
 @Component({
   template: "",
@@ -70,6 +72,15 @@ export class TreeBaseComponent {
       node.key = key;
       node.path = path;
       node.columnName = path;
+      if (
+        value !== null &&
+        typeof value === "object" &&
+        !Array.isArray(value) &&
+        !("value" in value) &&
+        !("v" in value && "u" in value)
+      ) {
+        node.isGroup = true;
+      }
       node.human_name =
         value !== null && typeof value === "object"
           ? value["human_name"]

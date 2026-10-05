@@ -151,6 +151,69 @@ describe("TreeViewComponent", () => {
     });
   });
 
+  it("should show menus and save nested and empty object groups", async () => {
+    appConfigService.getConfig.and.returnValue(addAsColumnEnabledConfig as any);
+    const enabledFixture = TestBed.createComponent(TreeViewComponent);
+    const enabledComponent = enabledFixture.componentInstance;
+    enabledComponent.allowAddAsColumn = true;
+    enabledComponent.metadataPath = "scientificMetadata.sample";
+    enabledComponent.metadata = {
+      instrument: { human_name: "Instrument", beam: { energy: 12 } },
+      empty: {},
+      array: [{ energy: 12 }],
+      field: { value: 12, unit: "eV" },
+      fieldWithoutUnit: { value: 12 },
+      legacyField: { v: 12, u: "eV" },
+    };
+    enabledFixture.detectChanges();
+
+    for (const key of ["instrument", "beam", "empty"]) {
+      const node = enabledComponent.treeControl.dataNodes.find(
+        (n) => n.key === key,
+      );
+      expect(enabledComponent.canShowAddAsColumn(node)).toBeTrue();
+      await enabledComponent.addAsColumn(node);
+    }
+    expect(
+      scientificMetadataColumnsService.addMetadataColumn,
+    ).toHaveBeenCalledWith({
+      name: "instrument",
+      human_name: "Instrument",
+      columnName: "scientificMetadata.sample.instrument",
+      isGroup: true,
+    });
+    expect(
+      scientificMetadataColumnsService.addMetadataColumn,
+    ).toHaveBeenCalledWith({
+      name: "instrument.beam",
+      human_name: undefined,
+      columnName: "scientificMetadata.sample.instrument.beam",
+      isGroup: true,
+    });
+    expect(
+      scientificMetadataColumnsService.addMetadataColumn,
+    ).toHaveBeenCalledWith({
+      name: "empty",
+      human_name: undefined,
+      columnName: "scientificMetadata.sample.empty",
+      isGroup: true,
+    });
+    for (const key of ["array", "field", "fieldWithoutUnit", "legacyField"]) {
+      const node = enabledComponent.treeControl.dataNodes.find(
+        (n) => n.key === key,
+      );
+      expect(node.isGroup).toBeFalsy();
+    }
+    const renderedGroup = Array.from(
+      enabledFixture.nativeElement.querySelectorAll("mat-tree-node"),
+    ).find(
+      (element: HTMLElement) =>
+        element.textContent.includes("Instrument") ||
+        element.textContent.includes("instrument"),
+    ) as HTMLElement;
+    expect(renderedGroup.querySelector("row-menu")).not.toBeNull();
+  });
+
   it("should derive the column entry name from the configured metadata path", async () => {
     appConfigService.getConfig.and.returnValue(addAsColumnEnabledConfig as any);
 

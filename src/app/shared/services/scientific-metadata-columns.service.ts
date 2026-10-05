@@ -21,6 +21,7 @@ export interface ScientificMetadataColumnEntry {
   name: string;
   columnName: string;
   human_name?: string;
+  isGroup?: boolean;
 }
 
 @Injectable({ providedIn: "root" })
@@ -50,7 +51,7 @@ export class ScientificMetadataColumnsService {
       header: entry.human_name || entry.name,
       userAdded: true,
       order,
-      type: "standard",
+      type: entry.isGroup ? "hoverContent" : "standard",
       enabled: true,
       tooltip: entry.name,
       width: 250,

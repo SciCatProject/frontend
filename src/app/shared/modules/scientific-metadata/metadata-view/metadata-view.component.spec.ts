@@ -104,6 +104,30 @@ describe("MetadataViewComponent", () => {
   });
 
   describe("#createMetadataArray()", () => {
+    it("should distinguish object groups from arrays and metadata fields", () => {
+      const rows = component.createMetadataArray({
+        sample: { instrument: { energy: 12 }, human_name: "Sample" },
+        empty: {},
+        array: [{ energy: 12 }],
+        emptyArray: [],
+        scalar: 12,
+        nullValue: null,
+        field: { value: 12, unit: "eV" },
+        fieldWithoutUnit: { value: 12 },
+        legacyField: { v: 12, u: "eV" },
+      });
+
+      expect(rows[0]).toEqual(
+        jasmine.objectContaining({
+          columnName: "scientificMetadata.sample",
+          human_name: "Sample",
+          isGroup: true,
+        }),
+      );
+      expect(rows[1].isGroup).toBeTrue();
+      rows.slice(2).forEach((row) => expect(row.isGroup).toBeFalsy());
+    });
+
     it("should parse a typed metadata object to an array", () => {
       const testMetadata = {
         typedTestName: {

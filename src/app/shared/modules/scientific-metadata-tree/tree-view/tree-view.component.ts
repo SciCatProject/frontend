@@ -115,6 +115,7 @@ export class TreeViewComponent
     flatNode.path = node.path;
     flatNode.columnName = node.columnName;
     flatNode.human_name = node.human_name;
+    flatNode.isGroup = node.isGroup;
     this.flatNodeMap.set(flatNode, node);
     this.nestNodeMap.set(node, flatNode);
     return flatNode;
@@ -124,7 +125,7 @@ export class TreeViewComponent
     return (
       this.allowAddAsColumn &&
       this.rowContextMenuItems.length > 0 &&
-      !node.expandable &&
+      (!node.expandable || node.isGroup === true) &&
       !!node.columnName
     );
   }
@@ -152,6 +153,7 @@ export class TreeViewComponent
       name: this.getMetadataColumnName(node.path),
       human_name: node.human_name,
       columnName: node.columnName,
+      ...(node.isGroup ? { isGroup: true } : {}),
     });
   }
 }

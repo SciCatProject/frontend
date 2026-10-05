@@ -78,4 +78,5 @@ export interface ScientificMetadataTableData {
   type?: string;
   ontology_reference?: string;
   validUnit?: boolean;
+  isGroup?: boolean;
 }
