@@ -575,6 +575,25 @@ export class ConfigurableActionComponent
     }
   }
 
+  /**
+   * Message of the first matching disabledReasons entry, or "" when the
+   * action is enabled or no reason matches.
+   */
+  get disabledReason(): string {
+    const reasons = this.actionConfig.disabledReasons;
+    if (!reasons?.length || !this.disabled) return "";
+    try {
+      this.resolveVariableContext();
+      const reason = reasons.find((r) =>
+        this.evaluate(this.viewHandlers(r.when)),
+      );
+      return reason?.message ?? "";
+    } catch (error) {
+      console.error("Configurable action error on get disabledReason", error);
+      return "";
+    }
+  }
+
   ngOnInit() {
     this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
       this.jwt = jwt.jwt ?? "";

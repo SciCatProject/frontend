@@ -62,6 +62,17 @@ export function buildDefaultBatchActions(
       hidden:
         "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
       enabled: "@totalSize > 0",
+      disabledReasons: [
+        {
+          when: "#Length(@pids) === 0",
+          message: "Select one or more datasets to archive.",
+        },
+        {
+          when: "@totalSize <= 0",
+          message:
+            "The selected datasets have a total size of 0 bytes, so there is nothing to archive.",
+        },
+      ],
     },
     {
       id: "dc10cd56-6d0a-4f0a-899a-f9c6726465bf",
@@ -103,6 +114,17 @@ export function buildDefaultBatchActions(
       hidden:
         "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
       enabled: "@totalPackedSize > 0",
+      disabledReasons: [
+        {
+          when: "#Length(@pids) === 0",
+          message: "Select one or more datasets to retrieve.",
+        },
+        {
+          when: "@totalPackedSize <= 0",
+          message:
+            "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve.",
+        },
+      ],
     },
   ];
 }

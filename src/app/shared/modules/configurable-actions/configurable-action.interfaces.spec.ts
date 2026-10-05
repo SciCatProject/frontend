@@ -68,6 +68,34 @@ describe("configurable-action.interfaces", () => {
       );
     });
 
+    it("does not warn for valid disabledReasons", () => {
+      validateActionConfigs(
+        [
+          {
+            ...baseAction,
+            disabledReasons: [{ when: "true", message: "Not now" }],
+          },
+        ],
+        "batchActions",
+      );
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it("warns when disabledReasons is malformed", () => {
+      validateActionConfigs(
+        [
+          {
+            ...baseAction,
+            disabledReasons: [{ when: "true" }],
+          } as unknown as ActionConfig,
+        ],
+        "batchActions",
+      );
+      expect(warnSpy).toHaveBeenCalledOnceWith(
+        jasmine.stringContaining("invalid disabledReasons"),
+      );
+    });
+
     it("does nothing when actions is undefined", () => {
       validateActionConfigs(undefined, "datasetActions");
       expect(warnSpy).not.toHaveBeenCalled();

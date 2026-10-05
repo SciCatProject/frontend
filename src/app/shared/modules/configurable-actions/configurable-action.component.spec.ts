@@ -1959,4 +1959,110 @@ describe("1000: ConfigurableActionComponent", () => {
       expect(component.visible).toBeFalse();
     });
   });
+
+  describe("1410: default batch actions (Archive/Retrieve) disabled reasons", () => {
+    const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
+
+    const itemsWithSizes = (size: number, packedSize: number): ActionItems => ({
+      datasets: [{ pid: "pid-0", size, packedSize } as ActionItemDataset],
+    });
+
+    it("1410: should ask to select datasets when nothing is selected", () => {
+      createComponent(archiveAction, { datasets: [] });
+      expect(component.disabledReason).toEqual(
+        "Select one or more datasets to archive.",
+      );
+
+      createComponent(retrieveAction, { datasets: [] });
+      expect(component.disabledReason).toEqual(
+        "Select one or more datasets to retrieve.",
+      );
+    });
+
+    it("1411: should explain an empty selection total", () => {
+      createComponent(archiveAction, itemsWithSizes(0, 0));
+      expect(component.disabledReason).toEqual(
+        "The selected datasets have a total size of 0 bytes, so there is nothing to archive.",
+      );
+
+      createComponent(retrieveAction, itemsWithSizes(0, 0));
+      expect(component.disabledReason).toEqual(
+        "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve.",
+      );
+    });
+
+    it("1412: should show no reason while enabled", () => {
+      createComponent(archiveAction, itemsWithSizes(100, 100));
+      expect(component.disabledReason).toEqual("");
+
+      createComponent(retrieveAction, itemsWithSizes(100, 100));
+      expect(component.disabledReason).toEqual("");
+    });
+  });
+
+  describe("1500: disabledReasons", () => {
+    const baseAction: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "disabled-reasons-test",
+      variables: { pids: "#DatasetsPid" },
+    };
+
+    it("1500: should return the first matching reason while disabled", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: "false",
+          disabledReasons: [
+            { when: "false", message: "never" },
+            { when: "#Length(@pids) > 0", message: "first match" },
+            { when: "true", message: "second match" },
+          ],
+        },
+        mockActionItems,
+      );
+      expect(component.disabledReason).toEqual("first match");
+    });
+
+    it("1501: should return an empty string while enabled", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: "true",
+          disabledReasons: [{ when: "true", message: "unused" }],
+        },
+        mockActionItems,
+      );
+      expect(component.disabledReason).toEqual("");
+    });
+
+    it("1502: should return an empty string when no reason matches or none are configured", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: "false",
+          disabledReasons: [{ when: "false", message: "unused" }],
+        },
+        mockActionItems,
+      );
+      expect(component.disabledReason).toEqual("");
+
+      createComponent({ ...baseAction, enabled: "false" }, mockActionItems);
+      expect(component.disabledReason).toEqual("");
+    });
+
+    it("1503: should put the reason on a tooltip wrapper around the button", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: "false",
+          disabledReasons: [{ when: "true", message: "Because" }],
+        },
+        mockActionItems,
+      );
+      const wrapper: HTMLElement =
+        fixture.nativeElement.querySelector(".action-wrapper");
+      expect(wrapper).toBeTruthy();
+      expect(wrapper.querySelector("button")).toBeTruthy();
+    });
+  });
 });

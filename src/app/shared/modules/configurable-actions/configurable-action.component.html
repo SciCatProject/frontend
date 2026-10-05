@@ -1,19 +1,25 @@
 <ng-template [ngIf]="visible">
-  <button
-    *ngIf="buttonStyle.raised" 
-    mat-raised-button
-    (click)="performAction()"
-    [color]="buttonStyle.color" 
-    [disabled]="disabled">
-    <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
-    <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
-    {{ actionConfig.label }}
-  </button>
-  <button *ngIf="!buttonStyle.raised" mat-button
-    [color]="buttonStyle.color" (click)="performAction()"
-    [disabled]="disabled">
-    <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
-    <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
-    {{ actionConfig.label }}
-  </button>
+  <span
+    class="action-wrapper"
+    [matTooltip]="disabledReason"
+    [matTooltipDisabled]="!disabledReason"
+  >
+    <button
+      *ngIf="buttonStyle.raised" 
+      mat-raised-button
+      (click)="performAction()"
+      [color]="buttonStyle.color" 
+      [disabled]="disabled">
+      <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
+      <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
+      {{ actionConfig.label }}
+    </button>
+    <button *ngIf="!buttonStyle.raised" mat-button
+      [color]="buttonStyle.color" (click)="performAction()"
+      [disabled]="disabled">
+      <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
+      <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
+      {{ actionConfig.label }}
+    </button>
+  </span>
 </ng-template>

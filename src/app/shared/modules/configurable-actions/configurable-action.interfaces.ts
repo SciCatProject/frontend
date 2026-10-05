@@ -28,6 +28,11 @@ export function isActionType(value: unknown): value is ActionType {
   return ACTION_TYPES.includes(value as ActionType);
 }
 
+export interface DisabledReason {
+  when: string;
+  message: string;
+}
+
 export interface ActionConfig {
   id: string;
   description?: string;
@@ -43,6 +48,7 @@ export interface ActionConfig {
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   enabled?: string | boolean;
   disabled?: string | boolean;
+  disabledReasons?: DisabledReason[];
   payload?: string;
   filename?: string;
   hidden?: string;
@@ -79,6 +85,20 @@ export function validateActionConfigs(
       console.warn(
         `${configKey}: action "${action.id}" has unknown type "${action.type}". ` +
           `Supported action types are: ${ACTION_TYPES.join(", ")}.`,
+      );
+    }
+    if (
+      action.disabledReasons !== undefined &&
+      !(
+        Array.isArray(action.disabledReasons) &&
+        action.disabledReasons.every(
+          (r) => typeof r?.when === "string" && typeof r?.message === "string",
+        )
+      )
+    ) {
+      console.warn(
+        `${configKey}: action "${action.id}" has invalid disabledReasons. ` +
+          `Expected an array of { "when": string, "message": string }.`,
       );
     }
     if (action.onSuccess !== undefined && !isActionType(action.onSuccess)) {

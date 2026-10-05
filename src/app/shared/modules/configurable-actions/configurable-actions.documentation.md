@@ -78,6 +78,12 @@ Please review the offical documentation for this attribute https://www.w3schools
       True if the total size of the files is below the limit indicated in configuration under the key `maxDirectDownloadSize`.
     - #Selected :
       True if one or more files are selected in the list.  
+- __disabledReasons__: explains why the action is disabled, shown as a tooltip on the disabled button.  
+  While the action is disabled, the `message` of the first entry whose `when` expression is true is shown. `when` uses the same syntax as `enabled`. If no entry matches, or the action is enabled, no tooltip is shown.  
+  - _Type_: `{ "when": string, "message": string }[]`
+  - _Optional_: true
+  - _Example_: `[{ "when": "#Length(@pids) === 0", "message": "Select one or more datasets." }]`
+  - _Notes_: order the entries from the most basic reason (e.g. nothing selected) to the most specific one.
 - __authorization__: indicate which user has access to the action and can see the related button.  
   - _Type_: string[]
   - _Examples_: ["#datasetAccess", "#datasetPublic"]
@@ -356,6 +362,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "baseUrl": "#apiBaseUrl",
     "username": "#user.username",
     "userEmail": "#user.email",
+    "pids": "#DatasetsPid",
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "archiveViewMode": "#currentArchViewMode",
     "totalSize": "#DatasetsTotalSize"
@@ -366,7 +373,11 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"archive\"}",
   "hidden": "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
-  "enabled": "@totalSize > 0"
+  "enabled": "@totalSize > 0",
+  "disabledReasons": [
+    { "when": "#Length(@pids) === 0", "message": "Select one or more datasets to archive." },
+    { "when": "@totalSize <= 0", "message": "The selected datasets have a total size of 0 bytes, so there is nothing to archive." }
+  ]
 }
 ```
 
@@ -389,6 +400,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "baseUrl": "#apiBaseUrl",
     "username": "#user.username",
     "userEmail": "#user.email",
+    "pids": "#DatasetsPid",
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "archiveViewMode": "#currentArchViewMode",
     "totalPackedSize": "#DatasetsTotalPackedSize"
@@ -407,7 +419,11 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\", \"retrieveDestination\": \"{{ @dialog.retrieveDestination }}\", \"destinationPath\": \"/archive/retrieve\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"retrieve\"}",
   "hidden": "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
-  "enabled": "@totalPackedSize > 0"
+  "enabled": "@totalPackedSize > 0",
+  "disabledReasons": [
+    { "when": "#Length(@pids) === 0", "message": "Select one or more datasets to retrieve." },
+    { "when": "@totalPackedSize <= 0", "message": "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve." }
+  ]
 }
 ```
 
