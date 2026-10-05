@@ -357,6 +357,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "username": "#user.username",
     "userEmail": "#user.email",
     "datasetList": "#DatasetsPidEmptyFilesMap",
+    "lifecycles": "#DatasetsField[datasetlifecycle]",
     "archiveViewMode": "#currentArchViewMode",
     "totalSize": "#DatasetsTotalSize"
   },
@@ -365,8 +366,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "fields": []
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"archive\"}",
-  "hidden": "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
-  "enabled": "@totalSize > 0"
+  "enabled": "['archivable', '#currentArchViewMode'].includes(@archiveViewMode) && @totalSize > 0 && @lifecycles.every((l) => l?.archivable === true && l?.retrievable !== true)"
 }
 ```
 
@@ -390,6 +390,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "username": "#user.username",
     "userEmail": "#user.email",
     "datasetList": "#DatasetsPidEmptyFilesMap",
+    "lifecycles": "#DatasetsField[datasetlifecycle]",
     "archiveViewMode": "#currentArchViewMode",
     "totalPackedSize": "#DatasetsTotalPackedSize"
   },
@@ -406,8 +407,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     ]
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\", \"retrieveDestination\": \"{{ @dialog.retrieveDestination }}\", \"destinationPath\": \"/archive/retrieve\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"retrieve\"}",
-  "hidden": "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
-  "enabled": "@totalPackedSize > 0"
+  "enabled": "['retrievable', '#currentArchViewMode'].includes(@archiveViewMode) && @totalPackedSize > 0 && @lifecycles.every((l) => l?.retrievable === true && l?.archivable !== true)"
 }
 ```
 
@@ -416,9 +416,9 @@ A few things worth noting if you adapt these:
 - `retrieveDestination`'s `options` is left empty (`[]`) in a custom config on purpose if you rely on `retrieveDestinations`; only the *built-in default* Retrieve action gets it auto-populated by `applyDefaultBatchActions`. A custom `batchActions` entry must supply its own `options` (statically, or by referencing `retrieveDestinations` yourself if you re-add that wiring).
 - `#DatasetsPidEmptyFilesMap` already returns a JSON-stringified array, so it's interpolated as `{{ @datasetList }}` (no trailing `[]`) — using `{{ @datasetList[] }}` here would double-encode it.
 - **Archive is a plain confirmation dialog, not a data-collecting one.** `type: "dialog"` + `onSuccess: "xhr"` with `dialog.fields: []` (no fields at all) renders just the title/description and Cancel/Ok buttons — clicking Ok closes the dialog with a truthy (but empty) result, which is enough to trigger the `onSuccess` step; clicking Cancel closes with no result and nothing further happens. This is the pattern to reach for whenever you want a "are you sure?" prompt without asking the user for any input — compare to Retrieve, which uses the same `type`/`onSuccess` pair but adds a real `retrieveDestination` field to actually collect a value.
-- **These same two actions render on both the dataset list page (`dataset-table-actions`, which sets `currentArchViewMode`) and the cart (`batch-view`, which does not) — the `hidden` expression has two jobs, one per context, and every entry in the `.includes([...])` array is load-bearing:**
-  - *Cart*: `#currentArchViewMode` has no matching key in `batch-view`'s `actionItems`, so it resolves to the *literal selector text* (`"#currentArchViewMode"`), not `undefined`. The `'#currentArchViewMode'` entry is what actually detects "not on the mode-toggle page" and makes the action always visible there (the `undefined` entry is only a defensive fallback and never actually matches in practice — the selector resolution never produces real `undefined`). If you copy this pattern for a selector that isn't always provided, remember the fallback is the selector string itself, not `undefined`.
-  - *Dataset list page*: here `#currentArchViewMode` resolves to a real mode string (`'all'`, `'archivable'`, `'retrievable'`, etc.), so neither of the above two entries matches — without the trailing `'archivable'` (or `'retrievable'` for Retrieve) entry, the action would be hidden in *every* mode on this page, not just the wrong ones. That entry is what restores the old per-mode behavior (Archive only in `'archivable'` mode, Retrieve only in `'retrievable'` mode) and it's easy to drop by mistake when simplifying this expression — don't remove it.
+- **Both actions are always visible, and are enabled based on the selection and, on the dataset list, on the current view.** Archive is enabled only when every selected dataset has `datasetlifecycle.archivable === true` and is not retrievable; Retrieve is the mirror image. These are the same conditions as the "Archivable" and "Retrievable" archive view modes (see `setArchiveViewModeAction` in `datasets.reducer.ts`). `#DatasetsField[datasetlifecycle]` returns one lifecycle object per selected dataset, so `.every(...)` is false for a mixed selection and true for an empty one, which is why the `@totalSize > 0` / `@totalPackedSize > 0` check is kept.
+  - On the dataset list, `#currentArchViewMode` resolves to the selected view (`'all'`, `'archivable'`, …), and each action is additionally enabled only in its own view (`'archivable'` for Archive, `'retrievable'` for Retrieve). Earlier versions hid the actions outside that view instead, which made them hard to find.
+  - In the cart (`batch-view`), `#currentArchViewMode` has no matching key, so it resolves to the *literal selector text* (`"#currentArchViewMode"`), not `undefined`. The `'#currentArchViewMode'` entry in the `.includes([...])` array is what keeps the actions usable there on the lifecycle checks alone. If you copy this pattern for a selector that isn't always provided, remember the fallback is the selector string itself.
 
 ## Best practices
 
