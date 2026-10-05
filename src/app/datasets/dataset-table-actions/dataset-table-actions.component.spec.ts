@@ -107,6 +107,51 @@ describe("DatasetTableActionsComponent", () => {
     });
   });
 
+  describe("batch actions while the Selection is not empty", () => {
+    it("should force them disabled with a tooltip that explains why", () => {
+      component.appConfig = {
+        ...component.appConfig,
+        batchActions: [
+          {
+            id: "a",
+            order: 1,
+            label: "Archive",
+            url: "",
+            authorization: [],
+            disabled: false,
+            enabled: { conditions: [], enabledTooltip: "unrelated" },
+          },
+        ],
+      } as typeof component.appConfig;
+
+      const [action] = component["buildBatchActionsConfig"](true);
+
+      expect(action.disabled).toBeUndefined();
+      expect(action.enabled).toEqual({
+        conditions: [
+          {
+            condition: "false",
+            disabledTooltip: jasmine.stringContaining(
+              "datasets are in your Selection",
+            ),
+          },
+        ],
+      });
+    });
+
+    it("should leave them unchanged when the Selection is empty", () => {
+      const batchActions = [
+        { id: "a", order: 1, label: "Archive", url: "", authorization: [] },
+      ];
+      component.appConfig = {
+        ...component.appConfig,
+        batchActions,
+      } as typeof component.appConfig;
+
+      expect(component["buildBatchActionsConfig"](false)).toEqual(batchActions);
+    });
+  });
+
   describe("#isEmptySelection()", () => {
     it("should return true if the length of selectedSets equals 0", () => {
       const isEmpty = component.isEmptySelection();

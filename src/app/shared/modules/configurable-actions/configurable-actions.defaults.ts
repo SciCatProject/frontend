@@ -62,8 +62,30 @@ export function buildDefaultBatchActions(
       },
       payload:
         '{"jobParams": {"username": "{{ @username }}"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "archive"}',
-      enabled:
-        "['archivable', '#currentArchViewMode'].includes(@archiveViewMode) && @totalSize > 0 && @lifecycles.every((l) => l?.archivable === true && l?.retrievable !== true)",
+      enabled: {
+        conditions: [
+          {
+            condition: "#Length(@pids) > 0",
+            disabledTooltip: "Select one or more datasets to archive.",
+          },
+          {
+            condition:
+              "['archivable', '#currentArchViewMode'].includes(@archiveViewMode)",
+            disabledTooltip:
+              "Switch to the Archivable view to archive datasets.",
+          },
+          {
+            condition: "@totalSize > 0",
+            disabledTooltip:
+              "The selected datasets have a total size of 0 bytes, so there is nothing to archive.",
+          },
+          {
+            condition:
+              "@lifecycles.every((l) => l?.archivable === true && l?.retrievable !== true)",
+            disabledTooltip: "All selected datasets must be archivable.",
+          },
+        ],
+      },
     },
     {
       id: "dc10cd56-6d0a-4f0a-899a-f9c6726465bf",
@@ -103,8 +125,30 @@ export function buildDefaultBatchActions(
       },
       payload:
         '{"jobParams": {"username": "{{ @username }}", "option": "{{ @dialog.option }}", "destinationPath": "/archive/retrieve"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "retrieve"}',
-      enabled:
-        "['retrievable', '#currentArchViewMode'].includes(@archiveViewMode) && @totalPackedSize > 0 && @lifecycles.every((l) => l?.retrievable === true && l?.archivable !== true)",
+      enabled: {
+        conditions: [
+          {
+            condition: "#Length(@pids) > 0",
+            disabledTooltip: "Select one or more datasets to retrieve.",
+          },
+          {
+            condition:
+              "['retrievable', '#currentArchViewMode'].includes(@archiveViewMode)",
+            disabledTooltip:
+              "Switch to the Retrievable view to retrieve datasets.",
+          },
+          {
+            condition: "@totalPackedSize > 0",
+            disabledTooltip:
+              "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve.",
+          },
+          {
+            condition:
+              "@lifecycles.every((l) => l?.retrievable === true && l?.archivable !== true)",
+            disabledTooltip: "All selected datasets must be retrievable.",
+          },
+        ],
+      },
     },
   ];
 }

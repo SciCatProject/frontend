@@ -21,6 +21,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { JsonPreviewDialogComponent } from "shared/modules/json-preview-dialog/json-preview-dialog.component";
 import { JsonSchema, UISchemaElement } from "@jsonforms/core";
 import { AppConfigInterface } from "app-config.service";
+import { normalizeEnabled } from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "admin-config-edit",
@@ -134,6 +135,9 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
     if (d.datafilesActions) {
       d.datafilesActions = d.datafilesActions.map((a: any) => ({
         ...a,
+        // the form only edits the conditions form, which also covers disabled
+        enabled: normalizeEnabled(a),
+        disabled: undefined,
         variables:
           a.variables && !Array.isArray(a.variables)
             ? this.toArray(a.variables)
