@@ -184,8 +184,9 @@ export interface DatasetViewMode {
   tooltip?: string;
 }
 
-// the dataset list view modes
+// the dataset list views, shown as a dropdown in the filter panel
 export interface DatasetViewsConfig {
+  label?: string;
   modes?: DatasetViewMode[];
 }
 export enum JobViewMode {

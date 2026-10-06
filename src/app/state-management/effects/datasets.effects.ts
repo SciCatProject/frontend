@@ -109,6 +109,7 @@ export class DatasetEffects {
       ofType(
         fromActions.fetchFacetCountsAction,
         fromActions.setPublicViewModeAction,
+        fromActions.setArchiveViewModeAction,
         fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => [this.fullfacetParams$, this.currentUser$]),

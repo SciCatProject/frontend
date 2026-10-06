@@ -30,11 +30,16 @@ function visitWithConfig(overrides) {
   cy.finishedLoading();
 }
 
+function openViews() {
+  cy.get('[data-cy="dataset-view-modes"] mat-select').click();
+}
+
 function selectView(label, check) {
   cy.intercept({ method: "GET", pathname: "/api/v4/datasets" }).as(
     "listRequest",
   );
-  cy.contains("mat-button-toggle", label).click();
+  openViews();
+  cy.contains("mat-option", label).click();
   cy.get("@listRequest.all").should((requests) => {
     expect(requests, "list requests").not.to.be.empty;
     const url = new URL(requests[requests.length - 1].request.url);
@@ -80,13 +85,14 @@ describe("Datasets view modes", () => {
       });
     });
 
-    it("should show a toggle per configured view, with its label and tooltip", () => {
-      cy.get("mat-button-toggle").should("have.length", 3);
-      cy.get("mat-button-toggle").eq(0).should("contain.text", "All");
-      cy.get("mat-button-toggle").eq(1).should("contain.text", toTape.label);
-      cy.get("mat-button-toggle").eq(2).should("contain.text", onTape.label);
+    it("should show an option per configured view, with its label and tooltip", () => {
+      openViews();
+      cy.get("mat-option").should("have.length", 3);
+      cy.get("mat-option").eq(0).should("contain.text", "All");
+      cy.get("mat-option").eq(1).should("contain.text", toTape.label);
+      cy.get("mat-option").eq(2).should("contain.text", onTape.label);
 
-      cy.contains("mat-button-toggle", toTape.label).trigger("mouseenter");
+      cy.contains("mat-option", toTape.label).trigger("mouseenter");
       cy.get(".mat-mdc-tooltip").should("contain.text", toTape.tooltip);
     });
 
@@ -114,18 +120,19 @@ describe("Datasets view modes", () => {
     });
   });
 
-  it("should hide the view toggles when no views are configured", () => {
+  it("should hide the view dropdown when no views are configured", () => {
     visitWithConfig({
       archiveWorkflowEnabled: true,
       datasetViews: { modes: [] },
     });
 
     cy.get(".dataset-table mat-header-row").should("exist");
-    cy.get("mat-button-toggle-group").should("not.exist");
+    cy.get('[data-cy="dataset-view-modes"]').should("not.exist");
   });
 
   it("should use the built-in archive views when none are configured", () => {
     visitWithConfig({ archiveWorkflowEnabled: true, datasetViews: undefined });
+    openViews();
 
     [
       "All",
@@ -135,7 +142,7 @@ describe("Datasets view modes", () => {
       "System Error",
       "User Error",
     ].forEach((label, i) => {
-      cy.get("mat-button-toggle").eq(i).should("contain.text", label);
+      cy.get("mat-option").eq(i).should("contain.text", label);
     });
   });
 });

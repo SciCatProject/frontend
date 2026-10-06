@@ -153,6 +153,7 @@ export const selectHasAppliedFilters = createSelector(
     filters.type.length > 0 ||
     filters.keywords.length > 0 ||
     filters.scientific.length > 0 ||
+    Object.keys(filters.mode ?? {}).length > 0 ||
     (filters.creationTime &&
       (filters.creationTime.$gte !== null ||
         filters.creationTime.$lte !== null)),
