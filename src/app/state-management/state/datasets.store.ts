@@ -29,6 +29,20 @@ export type CurrentDataset = PartialOutputDatasetDto & {
   instruments?: Instrument[];
 };
 
+// `addedFrom` value for datasets added to the cart from the details page
+export const BATCH_ADDED_FROM_DETAILS = "details";
+
+/**
+ * A dataset in the cart. `addedFrom` records where it was added from, so
+ * batch actions in the cart can tell (see the default Archive/Retrieve
+ * actions): the archive view mode it was selected in on the dataset list
+ * (e.g. "archivable"), or "details" when added from the dataset details page.
+ * It is unset for datasets added before this was recorded.
+ */
+export type BatchDataset = CurrentDataset & {
+  addedFrom?: string;
+};
+
 export interface DatasetState {
   datasets: PartialOutputDatasetDto[];
   selectedSets: PartialOutputDatasetDto[];
@@ -55,7 +69,7 @@ export interface DatasetState {
     sortField: string;
   };
 
-  batch: CurrentDataset[];
+  batch: BatchDataset[];
 
   openwhiskResult: Record<string, unknown> | undefined;
 

@@ -162,15 +162,37 @@ describe("DatasetsReducer", () => {
       const batchedPids = initialDatasetState.batch.map(
         (batchSet) => batchSet.pid,
       );
-      const addition = initialDatasetState.selectedSets.filter(
-        (selectedSet) => batchedPids.indexOf(selectedSet.pid) === -1,
-      );
+      const addition = initialDatasetState.selectedSets
+        .filter((selectedSet) => batchedPids.indexOf(selectedSet.pid) === -1)
+        .map((selectedSet) => ({
+          ...selectedSet,
+          addedFrom: initialDatasetState.filters.modeToggle,
+        }));
       const batch = [...initialDatasetState.batch, ...addition];
 
       const action = fromActions.addToBatchAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.batch).toEqual(batch);
+    });
+
+    it("should record the current view on the added datasets only", () => {
+      const stateIn = {
+        ...initialDatasetState,
+        batch: [{ pid: "already-in-cart", addedFrom: "retrievable" }],
+        selectedSets: [{ pid: "already-in-cart" }, { pid: "new" }],
+        filters: { ...initialDatasetState.filters, modeToggle: "archivable" },
+      } as typeof initialDatasetState;
+
+      const state = fromDatasets.datasetsReducer(
+        stateIn,
+        fromActions.addToBatchAction(),
+      );
+
+      expect(state.batch).toEqual([
+        { pid: "already-in-cart", addedFrom: "retrievable" },
+        { pid: "new", addedFrom: "archivable" },
+      ] as typeof state.batch);
     });
   });
 
@@ -183,7 +205,7 @@ describe("DatasetsReducer", () => {
       const action = fromActions.addCurrentToBatchAction();
       const state = fromDatasets.datasetsReducer(stateIn, action);
 
-      expect(state.batch).toEqual([dataset]);
+      expect(state.batch).toEqual([{ ...dataset, addedFrom: "details" }]);
     });
 
     it("should not duplicate currentSet if already present in batch", () => {
