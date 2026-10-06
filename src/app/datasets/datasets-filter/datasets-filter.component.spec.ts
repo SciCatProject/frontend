@@ -13,10 +13,13 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   clearFacetsAction,
+  clearSelectionAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
+  setArchiveViewModeAction,
   setPublicViewModeAction,
 } from "state-management/actions/datasets.actions";
+import { DatasetViewMode } from "state-management/models";
 import { of } from "rxjs";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -107,8 +110,19 @@ export class MockMatDialog {
   }
 }
 
+const viewModes: DatasetViewMode[] = [
+  { id: "all", label: "All", where: {} },
+  {
+    id: "to-tape",
+    label: "Ready for tape",
+    tooltip: "Datasets that can be archived",
+    where: { "datasetlifecycle.archivable": true },
+  },
+];
+
 const getConfig = () => ({
   scienceSearchEnabled: false,
+  datasetViews: { modes: viewModes },
 });
 
 describe("DatasetsFilterComponent", () => {
@@ -264,6 +278,67 @@ describe("DatasetsFilterComponent", () => {
       );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(fetchFacetCountsAction());
+    });
+  });
+
+  describe("view modes", () => {
+    beforeEach(() => {
+      component.loggedIn$ = of(true);
+      fixture.detectChanges();
+    });
+
+    it("should render a labelled view mode select for logged in users", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      const field = compiled.querySelector("[data-cy=dataset-view-modes]");
+      expect(field).toBeTruthy();
+      expect(field.textContent).toContain("Archive status");
+    });
+
+    it("should not render the view mode select for anonymous users", () => {
+      component.loggedIn$ = of(false);
+      fixture.detectChanges();
+
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector("[data-cy=dataset-view-modes]")).toBeNull();
+    });
+
+    it("should not render the view mode select when none are configured", () => {
+      component.viewModes = [];
+      fixture.detectChanges();
+
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector("[data-cy=dataset-view-modes]")).toBeNull();
+    });
+
+    it("should not add an implicit All option when one is configured", () => {
+      expect(component.hasAllViewMode).toBeTrue();
+    });
+  });
+
+  describe("#onViewModeChange()", () => {
+    it("should dispatch setArchiveViewModeAction with the view query and clear the selection", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onViewModeChange("to-tape");
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "to-tape",
+          mode: { "datasetlifecycle.archivable": true },
+        }),
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+    });
+
+    it("should dispatch an empty query for the implicit All option", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onViewModeChange("all");
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({ modeToggle: "all", mode: {} }),
+      );
     });
   });
 });

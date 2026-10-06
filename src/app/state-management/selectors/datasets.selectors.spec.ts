@@ -237,6 +237,26 @@ describe("test dataset selectors", () => {
         ),
       ).toEqual(true);
     });
+
+    it("should return true if only a view mode is applied", () => {
+      expect(
+        fromDatasetSelectors.selectHasAppliedFilters.projector({
+          ...initialDatasetState.filters,
+          creationTime: null,
+          mode: { "datasetlifecycle.archivable": true },
+        }),
+      ).toEqual(true);
+    });
+
+    it("should return false if no filters and no view mode are applied", () => {
+      expect(
+        fromDatasetSelectors.selectHasAppliedFilters.projector({
+          ...initialDatasetState.filters,
+          creationTime: null,
+          mode: {},
+        }),
+      ).toBeFalsy();
+    });
   });
 
   describe("selectScientificConditions", () => {
