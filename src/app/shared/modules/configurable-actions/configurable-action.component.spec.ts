@@ -1918,6 +1918,53 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(storeDispatchSpy).toHaveBeenCalledWith(actionSuccessAction());
   });
 
+  describe("1420: default batch actions (Archive/Retrieve) in the cart", () => {
+    const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
+
+    // no currentArchViewMode key: the cart (batch-view) context
+    const cartWith = (...views: (string | undefined)[]): ActionItems => ({
+      datasets: views.map(
+        (addedFrom, i) =>
+          ({
+            pid: `pid-${i}`,
+            size: 100,
+            packedSize: 100,
+            addedFrom,
+          }) as ActionItemDataset,
+      ),
+    });
+
+    it("1420: Archive should be enabled only when every item was added from the archivable view", () => {
+      createComponent(archiveAction, cartWith("archivable", "archivable"));
+      expect(component.disabled).toBeFalse();
+
+      createComponent(archiveAction, cartWith("archivable", "all"));
+      expect(component.disabled).toBeTrue();
+
+      createComponent(archiveAction, cartWith("archivable", undefined));
+      expect(component.disabled).toBeTrue();
+
+      createComponent(archiveAction, cartWith("archivable", "details"));
+      expect(component.disabled).toBeTrue();
+    });
+
+    it("1421: Retrieve should be enabled only when every item was added from the retrievable view", () => {
+      createComponent(retrieveAction, cartWith("retrievable"));
+      expect(component.disabled).toBeFalse();
+
+      createComponent(retrieveAction, cartWith("retrievable", "archivable"));
+      expect(component.disabled).toBeTrue();
+    });
+
+    it("1422: on the dataset list the origin is not checked", () => {
+      createComponent(archiveAction, {
+        ...cartWith(undefined),
+        currentArchViewMode: "archivable",
+      });
+      expect(component.disabled).toBeFalse();
+    });
+  });
+
   describe("1400: default batch actions (Archive/Retrieve) visibility", () => {
     const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
 

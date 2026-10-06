@@ -358,6 +358,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "userEmail": "#user.email",
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "archiveViewMode": "#currentArchViewMode",
+    "addedFrom": "#DatasetsField[addedFrom]",
     "totalSize": "#DatasetsTotalSize"
   },
   "dialog": {
@@ -366,7 +367,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"archive\"}",
   "hidden": "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
-  "enabled": "@totalSize > 0"
+  "enabled": "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))"
 }
 ```
 
@@ -391,6 +392,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "userEmail": "#user.email",
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "archiveViewMode": "#currentArchViewMode",
+    "addedFrom": "#DatasetsField[addedFrom]",
     "totalPackedSize": "#DatasetsTotalPackedSize"
   },
   "dialog": {
@@ -407,7 +409,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\", \"option\": \"{{ @dialog.option }}\", \"destinationPath\": \"/archive/retrieve\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"retrieve\"}",
   "hidden": "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
-  "enabled": "@totalPackedSize > 0"
+  "enabled": "@totalPackedSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'retrievable'))"
 }
 ```
 
@@ -419,6 +421,8 @@ A few things worth noting if you adapt these:
 - **These same two actions render on both the dataset list page (`dataset-table-actions`, which sets `currentArchViewMode`) and the cart (`batch-view`, which does not) — the `hidden` expression has two jobs, one per context, and every entry in the `.includes([...])` array is load-bearing:**
   - *Cart*: `#currentArchViewMode` has no matching key in `batch-view`'s `actionItems`, so it resolves to the *literal selector text* (`"#currentArchViewMode"`), not `undefined`. The `'#currentArchViewMode'` entry is what actually detects "not on the mode-toggle page" and makes the action always visible there (the `undefined` entry is only a defensive fallback and never actually matches in practice — the selector resolution never produces real `undefined`). If you copy this pattern for a selector that isn't always provided, remember the fallback is the selector string itself, not `undefined`.
   - *Dataset list page*: here `#currentArchViewMode` resolves to a real mode string (`'all'`, `'archivable'`, `'retrievable'`, etc.), so neither of the above two entries matches — without the trailing `'archivable'` (or `'retrievable'` for Retrieve) entry, the action would be hidden in *every* mode on this page, not just the wrong ones. That entry is what restores the old per-mode behavior (Archive only in `'archivable'` mode, Retrieve only in `'retrievable'` mode) and it's easy to drop by mistake when simplifying this expression — don't remove it.
+
+- **In the cart, the actions also check where each dataset came from.** When the selection on the dataset list is added to the cart, every new cart item records the view it was selected in as `addedFrom` (e.g. `'archivable'`). Datasets added from the dataset details page get `addedFrom: 'details'` (a reserved value, so don't use `details` as a view `id`), and datasets added before this was recorded have none. In the cart, Archive is enabled only when every item has `addedFrom === 'archivable'` (Retrieve: `'retrievable'`), the same guarantee the dataset list gives by showing each action only in its view. `@archiveViewMode !== '#currentArchViewMode'` limits this check to the cart: on the dataset list the selector resolves to the real view, and the `hidden` expression already handles it. Custom `batchActions` can use `#DatasetsField[addedFrom]` the same way, e.g. to also accept `'details'` for an action.
 
 ## Best practices
 
