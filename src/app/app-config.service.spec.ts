@@ -96,6 +96,7 @@ const appConfig: AppConfigInterface = {
   datasetSelectionActions: [],
   batchActionsEnabled: true,
   batchActions: [],
+  datasetViews: { modes: [] },
   defaultDatasetsListSettings: {
     columns: [
       {
@@ -332,6 +333,59 @@ describe("AppConfigService", () => {
       const config = service.getConfig();
       expect(config.batchActionsEnabled).toBeUndefined();
       expect(config.batchActions).toBeUndefined();
+    });
+
+    it("should default datasetViews.modes to the archive workflow views when archiveWorkflowEnabled is true", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({
+          ...appConfig,
+          archiveWorkflowEnabled: true,
+          datasetViews: undefined,
+        }),
+      );
+
+      await service.loadAppConfig();
+
+      expect(
+        service.getConfig().datasetViews?.modes?.map((mode) => mode.id),
+      ).toEqual([
+        "all",
+        "archivable",
+        "retrievable",
+        "work in progress",
+        "system error",
+        "user error",
+      ]);
+    });
+
+    it("should not default datasetViews.modes when archiveWorkflowEnabled is false", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({
+          ...appConfig,
+          archiveWorkflowEnabled: false,
+          datasetViews: undefined,
+        }),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().datasetViews?.modes).toBeUndefined();
+    });
+
+    [[], [{ id: "on-tape", label: "On tape", query: {} }]].forEach((modes) => {
+      it(`should not override a deployment's own datasetViews.modes (${modes.length} entries)`, async () => {
+        spyOn(service["http"], "get").and.returnValue(
+          of({
+            ...appConfig,
+            archiveWorkflowEnabled: true,
+            datasetViews: { modes },
+          }),
+        );
+
+        await service.loadAppConfig();
+
+        expect(service.getConfig().datasetViews?.modes).toEqual(modes);
+      });
     });
 
     it("should populate the defaulted Retrieve action's dialog options from retrieveDestinations", async () => {

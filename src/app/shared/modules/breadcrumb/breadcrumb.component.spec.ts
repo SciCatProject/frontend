@@ -15,6 +15,14 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import { of } from "rxjs/internal/observable/of";
 import { ArchViewMode } from "state-management/models";
+import { AppConfigService } from "app-config.service";
+import { DEFAULT_DATASET_VIEW_MODES } from "datasets/dataset-view-modes.defaults";
+
+class MockAppConfigService {
+  getConfig = () => ({
+    datasetViews: { modes: DEFAULT_DATASET_VIEW_MODES },
+  });
+}
 
 describe("BreadcrumbComponent", () => {
   let component: BreadcrumbComponent;
@@ -37,6 +45,7 @@ describe("BreadcrumbComponent", () => {
       imports: [],
       providers: [
         { provide: Store, useClass: MockStore },
+        { provide: AppConfigService, useClass: MockAppConfigService },
         provideHttpClient(withInterceptorsFromDi()),
         provideRouter([]),
       ],
@@ -85,5 +94,18 @@ describe("BreadcrumbComponent", () => {
     component.crumbClick(0, datasetsCrumb);
 
     expect(location.back).toHaveBeenCalled();
+  });
+
+  it("should navigateByUrl to fallback when mode is not configured", () => {
+    spyOn(store, "select").and.callFake((selector) => {
+      if (selector === selectFilters) return of({});
+      if (selector === selectArchiveViewMode) return of("unknown");
+      return of(null);
+    });
+    spyOn(router, "navigateByUrl").and.returnValue(Promise.resolve(true));
+
+    component.crumbClick(0, datasetsCrumb);
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
   });
 });
