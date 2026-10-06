@@ -139,14 +139,11 @@ const reducer = createReducer(
     ...state,
     batch,
   })),
-  on(fromActions.addToBatchAction, (state) => {
+  on(fromActions.addToBatchAction, (state, { addedFrom }) => {
     const batchedPids = state.batch.map((dataset) => dataset.pid);
     const addition = state.selectedSets
       .filter((dataset) => batchedPids.indexOf(dataset.pid) === -1)
-      .map((dataset) => ({
-        ...dataset,
-        addedFrom: state.filters.modeToggle,
-      }));
+      .map((dataset) => (addedFrom ? { ...dataset, addedFrom } : dataset));
     const batch = [...state.batch, ...addition];
     return { ...state, batch };
   }),

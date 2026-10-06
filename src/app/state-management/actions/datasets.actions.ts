@@ -115,7 +115,12 @@ export const prefillBatchCompleteAction = createAction(
   "[Dataset] Prefill Batch Complete",
   props<{ batch: PartialOutputDatasetDto[] }>(),
 );
-export const addToBatchAction = createAction("[Dataset] Add To Batch");
+// addedFrom: where the selection comes from, e.g. the dataset list's view
+// mode or "publishedData" (see BatchDataset in datasets.store.ts)
+export const addToBatchAction = createAction(
+  "[Dataset] Add To Batch",
+  props<{ addedFrom?: string }>(),
+);
 export const addCurrentToBatchAction = createAction(
   "[Dataset] Add Current To Batch",
 );

@@ -158,40 +158,49 @@ describe("DatasetsReducer", () => {
   });
 
   describe("on addToBatchAction", () => {
-    it("should update batch property with selectedSets", () => {
-      const batchedPids = initialDatasetState.batch.map(
-        (batchSet) => batchSet.pid,
+    const stateWith = (
+      batch: { pid: string; addedFrom?: string }[],
+      selectedSets: { pid: string }[],
+    ) =>
+      ({
+        ...initialDatasetState,
+        batch,
+        selectedSets,
+        filters: { ...initialDatasetState.filters, modeToggle: "all" },
+      }) as typeof initialDatasetState;
+
+    it("should add the selected datasets that are not yet in the batch", () => {
+      const state = fromDatasets.datasetsReducer(
+        stateWith([{ pid: "in-cart" }], [{ pid: "in-cart" }, { pid: "new" }]),
+        fromActions.addToBatchAction({}),
       );
-      const addition = initialDatasetState.selectedSets
-        .filter((selectedSet) => batchedPids.indexOf(selectedSet.pid) === -1)
-        .map((selectedSet) => ({
-          ...selectedSet,
-          addedFrom: initialDatasetState.filters.modeToggle,
-        }));
-      const batch = [...initialDatasetState.batch, ...addition];
 
-      const action = fromActions.addToBatchAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.batch).toEqual(batch);
+      expect(state.batch.map((d) => d.pid)).toEqual(["in-cart", "new"]);
     });
 
-    it("should record the current view on the added datasets only", () => {
-      const stateIn = {
-        ...initialDatasetState,
-        batch: [{ pid: "already-in-cart", addedFrom: "retrievable" }],
-        selectedSets: [{ pid: "already-in-cart" }, { pid: "new" }],
-        filters: { ...initialDatasetState.filters, modeToggle: "archivable" },
-      } as typeof initialDatasetState;
-
+    it("should stamp only the newly added datasets with the given addedFrom", () => {
       const state = fromDatasets.datasetsReducer(
-        stateIn,
-        fromActions.addToBatchAction(),
+        stateWith(
+          [{ pid: "in-cart", addedFrom: "retrievable" }],
+          [{ pid: "in-cart" }, { pid: "new" }],
+        ),
+        fromActions.addToBatchAction({ addedFrom: "archivable" }),
       );
 
       expect(state.batch).toEqual([
-        { pid: "already-in-cart", addedFrom: "retrievable" },
+        { pid: "in-cart", addedFrom: "retrievable" },
         { pid: "new", addedFrom: "archivable" },
+      ] as typeof state.batch);
+    });
+
+    it("should not use the current view when addedFrom is not given", () => {
+      const state = fromDatasets.datasetsReducer(
+        stateWith([], [{ pid: "unknown-origin" }]),
+        fromActions.addToBatchAction({}),
+      );
+
+      expect(state.batch).toEqual([
+        { pid: "unknown-origin" },
       ] as typeof state.batch);
     });
   });
