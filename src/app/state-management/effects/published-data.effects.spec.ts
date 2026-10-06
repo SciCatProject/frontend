@@ -4,7 +4,11 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectQueryParams } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
-import { clearBatchAction } from "state-management/actions/datasets.actions";
+import {
+  addToBatchAction,
+  clearBatchAction,
+  selectDatasetsAction,
+} from "state-management/actions/datasets.actions";
 import { hot, cold } from "jasmine-marbles";
 import { MessageType } from "state-management/models";
 import {
@@ -152,6 +156,37 @@ describe("PublishedDataEffects", () => {
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchAllPublishedData$).toBeObservable(expected);
       });
+    });
+  });
+
+  describe("fetchRelatedDatasetsAndAddToBatch$", () => {
+    it("should add the publication's datasets to the batch tagged as publishedData", () => {
+      const datasets = [{ pid: "testPid" }];
+      const action = fromActions.fetchRelatedDatasetsAndAddToBatchAction({
+        datasetPids: ["testPid"],
+        publishedDataDoi: "testDOI",
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: datasets });
+      injectedStub(
+        DatasetsV4Service,
+      ).datasetsV4ControllerFindAllV4.and.returnValue(response);
+
+      const expected = cold("--(bcdef)", {
+        b: clearBatchAction(),
+        c: selectDatasetsAction({ datasets: datasets as never }),
+        d: addToBatchAction({ addedFrom: "publishedData" }),
+        e: fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction({
+          publishedDataDoi: "testDOI",
+        }),
+        f: fromActions.storeEditingPublishedDataDoiAction({
+          publishedDataDoi: "testDOI",
+        }),
+      });
+      expect(effects.fetchRelatedDatasetsAndAddToBatch$).toBeObservable(
+        expected,
+      );
     });
   });
 

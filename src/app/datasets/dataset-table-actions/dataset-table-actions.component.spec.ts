@@ -132,13 +132,16 @@ describe("DatasetTableActionsComponent", () => {
   });
 
   describe("#onAddToBatch()", () => {
-    it("should dispatch an addToBatchAction and a clearSelectionAction", () => {
+    it("should dispatch an addToBatchAction with the current view and a clearSelectionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
+      component.currentArchViewMode = ArchViewMode.archivable;
 
       component.onAddToBatch();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(addToBatchAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        addToBatchAction({ addedFrom: "archivable" }),
+      );
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
     });
   });

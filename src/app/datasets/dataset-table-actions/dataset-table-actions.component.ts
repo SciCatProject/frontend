@@ -93,7 +93,9 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   }
 
   onAddToBatch(): void {
-    this.store.dispatch(addToBatchAction());
+    this.store.dispatch(
+      addToBatchAction({ addedFrom: this.currentArchViewMode }),
+    );
     this.store.dispatch(clearSelectionAction());
   }
 

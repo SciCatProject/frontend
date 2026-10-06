@@ -424,8 +424,11 @@ A few things worth noting if you adapt these:
 
 Every dataset in the cart records where it was added from, as `addedFrom`:
 - the archive view mode it was selected in on the dataset list (e.g. `'archivable'`), when added from the list
-- `'details'` when added from the dataset details page (a reserved value, so don't use `details` as a view `id`)
+- `'details'` when added from the dataset details page
+- `'publishedData'` when loaded from a publication's dataset list (when editing published data)
 - unset for datasets added before this was recorded.
+
+`details` and `publishedData` are reserved, so don't use them as view `id`s.
 
 Actions read it with `#DatasetsField[addedFrom]`, one value per dataset. The built-in Archive/Retrieve actions don't use it, so the cart behaves as before. A deployment that wants the cart to give the same guarantee as the dataset list, where Archive is only shown in the `archivable` view, can add the check to its own `batchActions`:
 
