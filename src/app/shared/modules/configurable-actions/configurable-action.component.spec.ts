@@ -1918,12 +1918,12 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(storeDispatchSpy).toHaveBeenCalledWith(actionSuccessAction());
   });
 
-  describe("1420: default batch actions (Archive/Retrieve) in the cart", () => {
-    const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
+  describe("1420: addedFrom in the cart", () => {
+    const [archiveAction] = buildDefaultBatchActions([]);
 
     // no currentArchViewMode key: the cart (batch-view) context
-    const cartWith = (...views: (string | undefined)[]): ActionItems => ({
-      datasets: views.map(
+    const cartWith = (...origins: (string | undefined)[]): ActionItems => ({
+      datasets: origins.map(
         (addedFrom, i) =>
           ({
             pid: `pid-${i}`,
@@ -1934,30 +1934,29 @@ describe("1000: ConfigurableActionComponent", () => {
       ),
     });
 
-    it("1420: Archive should be enabled only when every item was added from the archivable view", () => {
-      createComponent(archiveAction, cartWith("archivable", "archivable"));
+    it("1420: the default Archive action should ignore addedFrom", () => {
+      createComponent(archiveAction, cartWith("all", "details", undefined));
       expect(component.disabled).toBeFalse();
-
-      createComponent(archiveAction, cartWith("archivable", "all"));
-      expect(component.disabled).toBeTrue();
-
-      createComponent(archiveAction, cartWith("archivable", undefined));
-      expect(component.disabled).toBeTrue();
-
-      createComponent(archiveAction, cartWith("archivable", "details"));
-      expect(component.disabled).toBeTrue();
     });
 
-    it("1421: Retrieve should be enabled only when every item was added from the retrievable view", () => {
-      createComponent(retrieveAction, cartWith("retrievable"));
+    it("1421: a custom action can require every dataset to come from a view", () => {
+      const strictArchive: ActionConfig = {
+        ...archiveAction,
+        variables: {
+          ...archiveAction.variables,
+          addedFrom: "#DatasetsField[addedFrom]",
+        },
+        enabled:
+          "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))",
+      };
+
+      createComponent(strictArchive, cartWith("archivable", "archivable"));
       expect(component.disabled).toBeFalse();
 
-      createComponent(retrieveAction, cartWith("retrievable", "archivable"));
+      createComponent(strictArchive, cartWith("archivable", "details"));
       expect(component.disabled).toBeTrue();
-    });
 
-    it("1422: on the dataset list the origin is not checked", () => {
-      createComponent(archiveAction, {
+      createComponent(strictArchive, {
         ...cartWith(undefined),
         currentArchViewMode: "archivable",
       });
