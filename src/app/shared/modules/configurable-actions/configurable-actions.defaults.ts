@@ -54,7 +54,6 @@ export function buildDefaultBatchActions(
         datasetList: "#DatasetsPidEmptyFilesMap",
         lifecycles: "#DatasetsField[datasetlifecycle]",
         archiveViewMode: "#currentArchViewMode",
-        addedFrom: "#DatasetsField[addedFrom]",
         totalSize: "#DatasetsTotalSize",
       },
       dialog: {
@@ -88,7 +87,6 @@ export function buildDefaultBatchActions(
         datasetList: "#DatasetsPidEmptyFilesMap",
         lifecycles: "#DatasetsField[datasetlifecycle]",
         archiveViewMode: "#currentArchViewMode",
-        addedFrom: "#DatasetsField[addedFrom]",
         totalPackedSize: "#DatasetsTotalPackedSize",
       },
       dialog: {

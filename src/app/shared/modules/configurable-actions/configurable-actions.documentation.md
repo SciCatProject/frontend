@@ -359,7 +359,6 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "lifecycles": "#DatasetsField[datasetlifecycle]",
     "archiveViewMode": "#currentArchViewMode",
-    "addedFrom": "#DatasetsField[addedFrom]",
     "totalSize": "#DatasetsTotalSize"
   },
   "dialog": {
@@ -393,7 +392,6 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "lifecycles": "#DatasetsField[datasetlifecycle]",
     "archiveViewMode": "#currentArchViewMode",
-    "addedFrom": "#DatasetsField[addedFrom]",
     "totalPackedSize": "#DatasetsTotalPackedSize"
   },
   "dialog": {
@@ -422,7 +420,25 @@ A few things worth noting if you adapt these:
   - On the dataset list, `#currentArchViewMode` resolves to the selected view (`'all'`, `'archivable'`, …), and each action is additionally enabled only in its own view (`'archivable'` for Archive, `'retrievable'` for Retrieve). Earlier versions hid the actions outside that view instead, which made them hard to find.
   - In the cart (`batch-view`), `#currentArchViewMode` has no matching key, so it resolves to the *literal selector text* (`"#currentArchViewMode"`), not `undefined`. The `'#currentArchViewMode'` entry in the `.includes([...])` array is what keeps the actions usable there on the lifecycle checks alone. If you copy this pattern for a selector that isn't always provided, remember the fallback is the selector string itself.
 
-- **In the cart, the actions also check where each dataset came from.** When the selection on the dataset list is added to the cart, every new cart item records the view it was selected in as `addedFrom` (e.g. `'archivable'`). Datasets added from the dataset details page get `addedFrom: 'details'` (a reserved value, so don't use `details` as a view `id`), and datasets added before this was recorded have none. In the cart, Archive is enabled only when every item has `addedFrom === 'archivable'` (Retrieve: `'retrievable'`), the same guarantee the dataset list gives by showing each action only in its view. `@archiveViewMode !== '#currentArchViewMode'` limits this check to the cart: on the dataset list the selector resolves to the real view, and the `hidden` expression already handles it. Custom `batchActions` can use `#DatasetsField[addedFrom]` the same way, e.g. to also accept `'details'` for an action.
+## Batch actions: where cart datasets came from (`addedFrom`)
+
+Every dataset in the cart records where it was added from, as `addedFrom`:
+- the archive view mode it was selected in on the dataset list (e.g. `'archivable'`), when added from the list
+- `'details'` when added from the dataset details page (a reserved value, so don't use `details` as a view `id`)
+- unset for datasets added before this was recorded.
+
+Actions read it with `#DatasetsField[addedFrom]`, one value per dataset. The built-in Archive/Retrieve actions don't use it, so the cart behaves as before. A deployment that wants the cart to give the same guarantee as the dataset list, where Archive is only shown in the `archivable` view, can add the check to its own `batchActions`:
+
+```json
+"variables": {
+  "archiveViewMode": "#currentArchViewMode",
+  "addedFrom": "#DatasetsField[addedFrom]",
+  "totalSize": "#DatasetsTotalSize"
+},
+"enabled": "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))"
+```
+
+`@archiveViewMode !== '#currentArchViewMode'` limits the check to the cart: on the dataset list the selector resolves to the real view, while in the cart it resolves to the literal selector text. With this rule, datasets added from the details page or before `addedFrom` existed keep Archive disabled in the cart; accept `'details'` too if that's wanted.
 
 ## Best practices
 
