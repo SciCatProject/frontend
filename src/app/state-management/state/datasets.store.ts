@@ -29,14 +29,16 @@ export type CurrentDataset = PartialOutputDatasetDto & {
   instruments?: Instrument[];
 };
 
-// `addedFrom` value for datasets added to the cart from the details page
+// `addedFrom` values for datasets added to the cart outside the dataset list
 export const BATCH_ADDED_FROM_DETAILS = "details";
+export const BATCH_ADDED_FROM_PUBLISHED_DATA = "publishedData";
 
 /**
  * A dataset in the cart. `addedFrom` records where it was added from, so
  * batch actions in the cart can tell (see the default Archive/Retrieve
  * actions): the archive view mode it was selected in on the dataset list
- * (e.g. "archivable"), or "details" when added from the dataset details page.
+ * (e.g. "archivable"), "details" when added from the dataset details page,
+ * or "publishedData" when loaded from a publication's dataset list.
  * It is unset for datasets added before this was recorded.
  */
 export type BatchDataset = CurrentDataset & {
