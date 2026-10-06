@@ -27,6 +27,7 @@ import { DEFAULT_DATASET_VIEW_MODES } from "datasets/dataset-view-modes.defaults
 
 class MockAppConfigService {
   getConfig = () => ({
+    archiveWorkflowEnabled: true,
     datasetViews: { modes: DEFAULT_DATASET_VIEW_MODES },
   });
 }
@@ -111,6 +112,7 @@ describe("DatasetTableActionsComponent", () => {
   });
 
   it("should not render the mode toggles when no view modes are configured", () => {
+    expect(component.appConfig.archiveWorkflowEnabled).toBeTrue();
     component.modes = [];
     fixture.detectChanges();
 

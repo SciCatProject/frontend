@@ -9,20 +9,8 @@ import { BreadcrumbComponent } from "./breadcrumb.component";
 import { Store } from "@ngrx/store";
 import { provideRouter, Router } from "@angular/router";
 import { Location } from "@angular/common";
-import {
-  selectArchiveViewMode,
-  selectFilters,
-} from "state-management/selectors/datasets.selectors";
+import { selectFilters } from "state-management/selectors/datasets.selectors";
 import { of } from "rxjs/internal/observable/of";
-import { ArchViewMode } from "state-management/models";
-import { AppConfigService } from "app-config.service";
-import { DEFAULT_DATASET_VIEW_MODES } from "datasets/dataset-view-modes.defaults";
-
-class MockAppConfigService {
-  getConfig = () => ({
-    datasetViews: { modes: DEFAULT_DATASET_VIEW_MODES },
-  });
-}
 
 describe("BreadcrumbComponent", () => {
   let component: BreadcrumbComponent;
@@ -45,7 +33,6 @@ describe("BreadcrumbComponent", () => {
       imports: [],
       providers: [
         { provide: Store, useClass: MockStore },
-        { provide: AppConfigService, useClass: MockAppConfigService },
         provideHttpClient(withInterceptorsFromDi()),
         provideRouter([]),
       ],
@@ -71,8 +58,7 @@ describe("BreadcrumbComponent", () => {
 
   it("should navigateByUrl to fallback when mode is empty", () => {
     spyOn(store, "select").and.callFake((selector) => {
-      if (selector === selectFilters) return of({});
-      if (selector === selectArchiveViewMode) return of(ArchViewMode.all);
+      if (selector === selectFilters) return of({ mode: {} });
       return of(null);
     });
     spyOn(router, "navigateByUrl").and.returnValue(Promise.resolve(true));
@@ -82,11 +68,22 @@ describe("BreadcrumbComponent", () => {
     expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
   });
 
-  it("should call location.back() when mode is not empty", () => {
+  it("should navigateByUrl to fallback when there is no mode", () => {
     spyOn(store, "select").and.callFake((selector) => {
       if (selector === selectFilters) return of({});
-      if (selector === selectArchiveViewMode)
-        return of(ArchViewMode.archivable);
+      return of(null);
+    });
+    spyOn(router, "navigateByUrl").and.returnValue(Promise.resolve(true));
+
+    component.crumbClick(0, datasetsCrumb);
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
+  });
+
+  it("should call location.back() when a view mode query is set", () => {
+    spyOn(store, "select").and.callFake((selector) => {
+      if (selector === selectFilters)
+        return of({ mode: { "datasetlifecycle.archivable": true } });
       return of(null);
     });
     spyOn(location, "back");
@@ -94,18 +91,5 @@ describe("BreadcrumbComponent", () => {
     component.crumbClick(0, datasetsCrumb);
 
     expect(location.back).toHaveBeenCalled();
-  });
-
-  it("should navigateByUrl to fallback when mode is not configured", () => {
-    spyOn(store, "select").and.callFake((selector) => {
-      if (selector === selectFilters) return of({});
-      if (selector === selectArchiveViewMode) return of("unknown");
-      return of(null);
-    });
-    spyOn(router, "navigateByUrl").and.returnValue(Promise.resolve(true));
-
-    component.crumbClick(0, datasetsCrumb);
-
-    expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
   });
 });

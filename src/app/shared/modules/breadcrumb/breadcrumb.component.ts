@@ -2,13 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, NavigationEnd, Params } from "@angular/router";
 import { Store } from "@ngrx/store";
 
-import {
-  selectArchiveViewMode,
-  selectFilters,
-} from "state-management/selectors/datasets.selectors";
+import { selectFilters } from "state-management/selectors/datasets.selectors";
 import { take, filter } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
-import { AppConfigService } from "app-config.service";
 import { Location } from "@angular/common";
 import { isEmpty } from "lodash-es";
 
@@ -42,7 +38,6 @@ export class BreadcrumbComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private appConfigService: AppConfigService,
   ) {}
 
   ngOnInit() {
@@ -121,22 +116,11 @@ export class BreadcrumbComponent implements OnInit {
         .select(selectFilters)
         .pipe(take(1))
         .subscribe((filters) => {
-          this.store
-            .select(selectArchiveViewMode)
-            .pipe(take(1))
-            .subscribe((currentMode) => {
-              const mode =
-                this.appConfigService
-                  .getConfig()
-                  .datasetViews?.modes?.find((m) => m.id === currentMode)
-                  ?.query ?? {};
-              if (isEmpty(mode)) {
-                this.router.navigateByUrl(url + crumb.fallback);
-              } else {
-                filters["mode"] = mode;
-                this.location.back();
-              }
-            });
+          if (isEmpty(filters.mode)) {
+            this.router.navigateByUrl(url + crumb.fallback);
+          } else {
+            this.location.back();
+          }
         });
     } else {
       this.router
