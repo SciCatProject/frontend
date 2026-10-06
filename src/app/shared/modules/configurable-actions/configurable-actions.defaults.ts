@@ -24,11 +24,6 @@ import { ActionConfig } from "./configurable-action.interfaces";
  * not the `typeof ... === 'undefined'` check (kept only as a defensive
  * fallback). Both actions should render unconditionally in the cart, and
  * only for their matching mode on the dataset list page.
- *
- * In the cart they are additionally enabled only when every dataset was added
- * from their matching view (`addedFrom`, set when adding the selection to
- * the cart), the same guarantee the list gives by only showing them there.
- * Datasets added from the details page have `addedFrom: "details"` instead.
  */
 export function buildDefaultBatchActions(
   retrieveDestinationOptions: DialogOptionData[],
@@ -56,7 +51,6 @@ export function buildDefaultBatchActions(
         pids: "#DatasetsPid",
         datasetList: "#DatasetsPidEmptyFilesMap",
         archiveViewMode: "#currentArchViewMode",
-        addedFrom: "#DatasetsField[addedFrom]",
         totalSize: "#DatasetsTotalSize",
       },
       dialog: {
@@ -67,8 +61,7 @@ export function buildDefaultBatchActions(
         '{"jobParams": {"username": "{{ @username }}"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "archive"}',
       hidden:
         "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
-      enabled:
-        "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))",
+      enabled: "@totalSize > 0",
     },
     {
       id: "dc10cd56-6d0a-4f0a-899a-f9c6726465bf",
@@ -91,7 +84,6 @@ export function buildDefaultBatchActions(
         pids: "#DatasetsPid",
         datasetList: "#DatasetsPidEmptyFilesMap",
         archiveViewMode: "#currentArchViewMode",
-        addedFrom: "#DatasetsField[addedFrom]",
         totalPackedSize: "#DatasetsTotalPackedSize",
       },
       dialog: {
@@ -110,8 +102,7 @@ export function buildDefaultBatchActions(
         '{"jobParams": {"username": "{{ @username }}", "option": "{{ @dialog.option }}", "destinationPath": "/archive/retrieve"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "retrieve"}',
       hidden:
         "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
-      enabled:
-        "@totalPackedSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'retrievable'))",
+      enabled: "@totalPackedSize > 0",
     },
   ];
 }
