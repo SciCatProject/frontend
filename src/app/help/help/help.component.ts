@@ -21,11 +21,9 @@ export class HelpComponent implements OnInit {
   ngOnInit() {
     if (this.appConfig.helpSettings?.enabled) {
       const html = this.appConfig.helpSettings?.htmlContent;
-      console.log(html);
       if (html) {
         this.htmlContent = this.sanitizer.bypassSecurityTrustHtml(html);
       }
-      console.log(this.htmlContent);
     } else {
       this.htmlContent = "Help page is disabled";
     }
