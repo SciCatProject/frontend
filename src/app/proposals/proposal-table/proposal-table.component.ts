@@ -229,14 +229,8 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   convertSavedColumns(columns: TableColumn[]): TableField<any>[] {
     return columns.map((column) => {
       const convertedColumn: TableField<any> = {
-        name: column.name,
-        header: column.header,
-        index: column.order,
+        ...column,
         display: column.enabled ? "visible" : "hidden",
-        width: column.width,
-        type: column.type,
-        format: column.format,
-        tooltip: column.tooltip,
       };
       if (column.type === "hoverContent") {
         convertedColumn.hoverContent = true;
