@@ -1,32 +1,45 @@
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { angularMaterialRenderers } from "@jsonforms/angular-material";
-import { Store } from "@ngrx/store";
+import { ActionsSubject, Store } from "@ngrx/store";
 import {
-  Attachment,
+  CreatePublishedDataV4Dto,
   PublishedData,
+  PublishedDataV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AppConfigService } from "app-config.service";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { isEmpty } from "lodash-es";
-import { fromEvent, Observable, Subscription } from "rxjs";
-import { tap } from "rxjs/operators";
+import { fromEvent, Subscription } from "rxjs";
+import { first, switchMap, tap } from "rxjs/operators";
 import {
   AccordionArrayLayoutRendererComponent,
   accordionArrayLayoutRendererTester,
 } from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
+import { AjvService } from "shared/services/ajv.service";
+import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
+  createPublishedDataAction,
+  createPublishedDataCompleteAction,
   fetchPublishedDataAction,
   fetchPublishedDataConfigAction,
   resyncPublishedDataAction,
+  savePublishedDataAction,
+  savePublishedDataCompleteAction,
+  updatePublishedDataAction,
 } from "state-management/actions/published-data.actions";
+import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
   selectCurrentPublishedData,
   selectPublishedDataConfig,
 } from "state-management/selectors/published-data.selectors";
-import { AjvService } from "shared/services/ajv.service";
+
+/**
+ * "create" publishes the datasets currently in the batch, "edit" updates an
+ * existing published data record. The mode comes from the route data.
+ */
+export type PublisheddataEditMode = "create" | "edit";
 
 @Component({
   selector: "publisheddata-edit",
@@ -37,8 +50,20 @@ import { AjvService } from "shared/services/ajv.service";
 export class PublisheddataEditComponent
   implements OnInit, OnDestroy, EditableComponent
 {
-  private _hasUnsavedChanges = false;
+  private datasets$ = this.store.select(selectDatasetsInBatch);
   private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
+  private currentPublishedData$ = this.store.select(selectCurrentPublishedData);
+  private subscriptions = new Subscription();
+  private _hasUnsavedChanges = false;
+
+  mode: PublisheddataEditMode = "create";
+  /** DOI of the record being edited, or of the draft saved in create mode */
+  publishedDataDoi: string | null = null;
+  formReady = false;
+  datasetCount = 0;
+
+  appConfig = this.appConfigService.getConfig();
+  readonly panelOpenState = signal(false);
   renderers = [
     ...angularMaterialRenderers,
     {
@@ -48,72 +73,204 @@ export class PublisheddataEditComponent
   ];
   schema: any = {};
   uiSchema: any = {};
-  metadataData: any = {};
-  public metadataFormErrors = [];
-  readonly panelOpenState = signal(false);
-  routeSubscription = new Subscription();
-  publishedData$: Observable<PublishedData> = new Observable();
-  attachments: Attachment[] = [];
+  metadata: any = {};
+  metadataFormErrors = [];
+  initialMetadata = JSON.stringify({});
 
   form: FormGroup = this.formBuilder.group({
-    doi: [""],
     title: ["", Validators.required],
     abstract: ["", Validators.required],
-    datasetPids: [[""], Validators.minLength(1)],
+    datasetPids: [[] as string[], Validators.minLength(1)],
   });
 
-  public separatorKeysCodes: number[] = [ENTER, COMMA];
-  publishedDataConfigSubscription: Subscription;
-  beforeUnloadSubscription: Subscription;
-  formValueChangesSubscription: Subscription;
-  initialMetadata: string;
-  appConfig = this.appConfigService.getConfig();
-
   constructor(
+    private actionsSubj: ActionsSubject,
+    private appConfigService: AppConfigService,
     private formBuilder: FormBuilder,
+    private publishedDataApi: PublishedDataV4Service,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
-    private appConfigService: AppConfigService,
     protected ajvService: AjvService,
   ) {}
 
+  private initCreateMode() {
+    this.formReady = true;
+    this.store.dispatch(prefillBatchAction());
+
+    this.subscriptions.add(
+      this.datasets$.subscribe((datasets) => {
+        this.datasetCount = datasets ? datasets.length : 0;
+      }),
+    );
+
+    this.subscriptions.add(
+      this.datasets$
+        .pipe(
+          first(),
+          tap((datasets) =>
+            this.form.patchValue({
+              datasetPids: (datasets ?? []).map((dataset) => dataset.pid),
+            }),
+          ),
+          switchMap(() =>
+            this.publishedDataApi.publishedDataV4ControllerFormPopulateV4(
+              this.form.value.datasetPids,
+            ),
+          ),
+        )
+        .subscribe((result) => {
+          this.form.patchValue({
+            title: result.title,
+            abstract: result.abstract,
+          });
+          this.setMetadata(result.metadata);
+        }),
+    );
+
+    this.subscriptions.add(
+      this.actionsSubj.subscribe((action) => {
+        // Saving keeps the user on the form, publishing sends them to the record
+        if (action.type === savePublishedDataCompleteAction.type) {
+          const { publishedData } = action as {
+            type: string;
+            publishedData: PublishedData;
+          };
+          this.publishedDataDoi = publishedData.doi;
+        }
+
+        if (action.type === createPublishedDataCompleteAction.type) {
+          const { publishedData } = action as {
+            type: string;
+            publishedData: PublishedData;
+          };
+          this.navigateToPublishedData(publishedData.doi);
+        }
+      }),
+    );
+  }
+
+  private initEditMode() {
+    this.subscriptions.add(
+      this.route.params.subscribe(({ id }) =>
+        this.store.dispatch(fetchPublishedDataAction({ id })),
+      ),
+    );
+
+    this.subscriptions.add(
+      this.currentPublishedData$.subscribe((publishedData) => {
+        if (!publishedData) {
+          return;
+        }
+        this.publishedDataDoi = publishedData.doi;
+        this.form.patchValue(publishedData);
+        this.setMetadata(publishedData.metadata);
+        this.formReady = true;
+      }),
+    );
+  }
+
+  private setMetadata(metadata: any) {
+    this.metadata = metadata ?? {};
+    this.initialMetadata = JSON.stringify(this.metadata);
+  }
+
+  private getPublishedData(): CreatePublishedDataV4Dto {
+    return {
+      ...this.form.value,
+      metadata: {
+        ...this.metadata,
+        landingPage: this.appConfig.landingPage,
+      },
+    } as CreatePublishedDataV4Dto;
+  }
+
+  private navigateToPublishedData(doi: string) {
+    this.router.navigateByUrl("/publishedDatasets/" + encodeURIComponent(doi));
+  }
+
+  private save(shouldRedirect: boolean) {
+    if (!this.form.valid) {
+      return;
+    }
+
+    const doi = this.publishedDataDoi;
+    const data = this.getPublishedData();
+
+    if (!doi) {
+      // Nothing has been created yet, only possible while publishing a batch
+      if (this.mode === "edit") {
+        return;
+      }
+      this.store.dispatch(
+        shouldRedirect
+          ? createPublishedDataAction({ data })
+          : savePublishedDataAction({ data }),
+      );
+    } else if (shouldRedirect) {
+      this.store.dispatch(
+        resyncPublishedDataAction({ doi, data, redirect: true }),
+      );
+    } else if (this.mode === "create") {
+      // The draft is not registered yet, a plain update is enough and it keeps
+      // the batch and the stored draft DOI around so the user can come back
+      this.store.dispatch(updatePublishedDataAction({ doi, data }));
+    } else {
+      this.store.dispatch(
+        resyncPublishedDataAction({ doi, data, redirect: false }),
+      );
+    }
+
+    this._hasUnsavedChanges = false;
+    this.form.markAsPristine();
+  }
+
+  ngOnInit() {
+    this.mode = this.route.snapshot.data?.["mode"] ?? "create";
+
+    this.store.dispatch(fetchPublishedDataConfigAction());
+
+    this.subscriptions.add(
+      this.publishedDataConfig$.subscribe((publishedDataConfig) => {
+        if (!isEmpty(publishedDataConfig)) {
+          this.schema = this.ajvService.cleanupSchema(
+            publishedDataConfig.metadataSchema,
+          );
+          this.uiSchema = publishedDataConfig.uiSchema;
+        }
+      }),
+    );
+
+    if (this.mode === "edit") {
+      this.initEditMode();
+    } else {
+      this.initCreateMode();
+    }
+
+    this.subscriptions.add(
+      this.form.valueChanges.subscribe(() => {
+        if (this.form.dirty) {
+          this._hasUnsavedChanges = true;
+        }
+      }),
+    );
+
+    // Prevent user from reloading page if there are unsaved changes
+    this.subscriptions.add(
+      fromEvent(window, "beforeunload").subscribe((event) => {
+        if (this.hasUnsavedChanges()) {
+          event.preventDefault();
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
   isSchemaEmpty(): boolean {
     return isEmpty(this.schema);
-  }
-
-  public onPublishedDataUpdate(shouldRedirect = false) {
-    if (this.form.valid) {
-      const { doi, ...rest } = this.form.value;
-      const metadata = {
-        ...this.metadataData,
-        landingPage: this.appConfig.landingPage,
-      };
-
-      if (doi) {
-        this.store.dispatch(
-          resyncPublishedDataAction({
-            doi,
-            data: { ...rest, metadata },
-            redirect: shouldRedirect,
-          }),
-        );
-      }
-
-      this._hasUnsavedChanges = false;
-    }
-  }
-
-  public onCancel() {
-    const doi = this.form.get("doi")!.value;
-    if (doi) {
-      const encodedDoi = encodeURIComponent(doi);
-      this.router.navigateByUrl("/publishedDatasets/" + encodedDoi);
-    }
-  }
-
-  public metadataDataIsValid() {
-    return this.metadataFormErrors.length === 0;
   }
 
   onErrors(errors) {
@@ -121,7 +278,8 @@ export class PublisheddataEditComponent
   }
 
   onMetadataChange(data: any) {
-    this.metadataData = data;
+    this.metadata = data;
+
     if (JSON.stringify(data) !== this.initialMetadata) {
       this._hasUnsavedChanges = true;
     }
@@ -131,56 +289,19 @@ export class PublisheddataEditComponent
     return this._hasUnsavedChanges;
   }
 
-  ngOnInit() {
-    this.store.dispatch(fetchPublishedDataConfigAction());
-
-    this.routeSubscription = this.route.params.subscribe(({ id }) =>
-      this.store.dispatch(fetchPublishedDataAction({ id })),
-    );
-
-    this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
-      (publishedDataConfig) => {
-        if (!isEmpty(publishedDataConfig)) {
-          this.schema = this.ajvService.cleanupSchema(
-            publishedDataConfig.metadataSchema,
-          );
-          this.uiSchema = publishedDataConfig.uiSchema;
-        }
-      },
-    );
-
-    this.publishedData$ = this.store.select(selectCurrentPublishedData).pipe(
-      tap((publishedData) => {
-        this.form.patchValue(publishedData);
-        this.initialMetadata = JSON.stringify(this.form.value);
-
-        if (publishedData?.metadata) {
-          this.initialMetadata = JSON.stringify(publishedData.metadata);
-          this.metadataData = publishedData.metadata;
-        }
-      }),
-    );
-
-    // Prevent user from reloading page if there are unsave changes
-    this.beforeUnloadSubscription = fromEvent(window, "beforeunload").subscribe(
-      (event) => {
-        if (this.hasUnsavedChanges()) {
-          event.preventDefault();
-        }
-      },
-    );
-
-    this.formValueChangesSubscription = this.form.valueChanges.subscribe(() => {
-      if (this.form.dirty) {
-        this._hasUnsavedChanges = true;
-      }
-    });
+  public onSaveChanges() {
+    this.save(false);
   }
 
-  ngOnDestroy() {
-    this.routeSubscription.unsubscribe();
-    this.publishedDataConfigSubscription.unsubscribe();
-    this.beforeUnloadSubscription.unsubscribe();
-    this.formValueChangesSubscription.unsubscribe();
+  public onSaveAndContinue() {
+    this.save(true);
+  }
+
+  public onCancel() {
+    if (this.mode === "create") {
+      this.router.navigateByUrl("/datasets/selection");
+    } else if (this.publishedDataDoi) {
+      this.navigateToPublishedData(this.publishedDataDoi);
+    }
   }
 }
