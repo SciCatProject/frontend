@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { cloneDeep, isEqual } from "lodash-es";
 import {
   selectArchiveViewMode,
+  selectArchiveViewModeChecked,
   selectFacetCountByKey,
   selectFilterByKey,
   selectHasAppliedFilters,
@@ -12,6 +13,7 @@ import {
 import {
   ArchViewMode,
   DatasetViewMode,
+  DatasetViewModeCheckbox,
   DateRange,
   DateRangeFilter,
   ScientificCondition,
@@ -36,7 +38,13 @@ import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-sett
 import {
   selectFilters,
   selectIsLoggedIn,
+  selectProfile,
 } from "state-management/selectors/user.selectors";
+import {
+  buildViewModeQuery,
+  checkboxAppliesTo,
+  ViewModeUser,
+} from "datasets/dataset-view-modes.utils";
 import { AsyncPipe } from "@angular/common";
 import { Subscription } from "rxjs";
 import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
@@ -57,6 +65,7 @@ import {
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
+  private user: ViewModeUser | null = null;
   activeFilters: Record<
     string,
     string | DateRangeFilter | string[] | INumericRange | boolean
@@ -90,6 +99,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   currentViewMode: string = ArchViewMode.all;
 
+  currentViewModeChecked = false;
+
   humanNameMap: { [key: string]: string } = {};
 
   fieldTypeMap: { [key: string]: string } = {};
@@ -106,6 +117,22 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
   ) {}
+
+  private setViewMode(
+    id: string,
+    viewMode: DatasetViewMode | undefined,
+    checked: boolean,
+  ) {
+    this.store.dispatch(
+      setArchiveViewModeAction({
+        modeToggle: id,
+        mode: buildViewModeQuery(viewMode, checked, this.user),
+        checked,
+      }),
+    );
+    // rows selected under the previous query may not match the new one
+    this.store.dispatch(clearSelectionAction());
+  }
 
   addCondition = (condition: ScientificCondition) => {
     this.store.dispatch(addScientificConditionAction({ condition }));
@@ -172,15 +199,41 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         this.currentViewMode = viewMode;
       }),
     );
+
+    this.subscriptions.push(
+      this.store.select(selectArchiveViewModeChecked).subscribe((checked) => {
+        this.currentViewModeChecked = checked;
+      }),
+    );
+
+    this.subscriptions.push(
+      this.store.select(selectProfile).subscribe((profile) => {
+        this.user = profile;
+      }),
+    );
+  }
+
+  get selectedViewMode(): DatasetViewMode | undefined {
+    return this.viewModes.find((m) => m.id === this.currentViewMode);
+  }
+
+  get selectedViewModeCheckbox(): DatasetViewModeCheckbox | undefined {
+    const viewMode = this.selectedViewMode;
+    return checkboxAppliesTo(viewMode, this.user)
+      ? viewMode?.checkbox
+      : undefined;
   }
 
   onViewModeChange(id: string) {
-    const where = this.viewModes.find((m) => m.id === id)?.where ?? {};
+    const viewMode = this.viewModes.find((m) => m.id === id);
+    const checked =
+      checkboxAppliesTo(viewMode, this.user) &&
+      viewMode?.checkbox?.default !== false;
+    this.setViewMode(id, viewMode, checked);
+  }
 
-    this.store.dispatch(
-      setArchiveViewModeAction({ modeToggle: id, mode: where }),
-    );
-    this.store.dispatch(clearSelectionAction());
+  onViewModeCheckboxChange(checked: boolean) {
+    this.setViewMode(this.currentViewMode, this.selectedViewMode, checked);
   }
 
   onViewPublicChange(value: boolean) {
