@@ -153,7 +153,15 @@ describe("AdminConfigEditComponent datafiles action conditions", () => {
     const inputs = Array.from(
       fixture.nativeElement.querySelectorAll("input"),
     ) as HTMLInputElement[];
-    expect(inputs.some((i) => i.value === "#Length(@files) > 0")).toBeTrue();
+    const conditionInput = inputs.find(
+      (i) => i.value === "#Length(@files) > 0",
+    );
+    expect(conditionInput).toBeTruthy();
+    conditionInput.value = "#Length(@files) > 1";
+    conditionInput.dispatchEvent(new Event("input", { bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
 
     const dispatch = spyOn(store, "dispatch");
     fixture.componentInstance.save();
@@ -161,7 +169,7 @@ describe("AdminConfigEditComponent datafiles action conditions", () => {
       typeof updateConfiguration
     >;
     expect(action.config.datafilesActions[0].enabled).toEqual({
-      conditions: [{ condition: "#Length(@files) > 0" }],
+      conditions: [{ condition: "#Length(@files) > 1" }],
     });
     expect(action.config.datafilesActions[0].disabled).toBeUndefined();
   });
