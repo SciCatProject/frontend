@@ -621,6 +621,7 @@ describe("UserEffects", () => {
           fe_file_table_columns: [],
           fe_job_table_columns: [],
           fe_publisheddata_table_columns: [],
+          fe_datafiles_table_columns: [],
         },
       } as unknown as UserSettings;
       const action = fromActions.fetchUserSettingsAction({ id });
