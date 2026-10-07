@@ -118,6 +118,26 @@ const viewModes: DatasetViewMode[] = [
     tooltip: "Datasets that can be archived",
     where: { "datasetlifecycle.archivable": true },
   },
+  {
+    id: "owned",
+    label: "Owned",
+    where: { "datasetlifecycle.archivable": true },
+    checkbox: {
+      label: "Only datasets owned by my groups",
+      where: { ownerGroup: { $in: "#user.accessGroups" } },
+      exemptGroups: ["admin"],
+    },
+  },
+  {
+    id: "owned-off",
+    label: "Owned, unticked",
+    where: {},
+    checkbox: {
+      label: "Only mine",
+      default: false,
+      where: { ownerGroup: { $in: "#user.accessGroups" } },
+    },
+  },
 ];
 
 const getConfig = () => ({
@@ -326,6 +346,7 @@ describe("DatasetsFilterComponent", () => {
         setArchiveViewModeAction({
           modeToggle: "to-tape",
           mode: { "datasetlifecycle.archivable": true },
+          checked: false,
         }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
@@ -337,7 +358,132 @@ describe("DatasetsFilterComponent", () => {
       component.onViewModeChange("all");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({ modeToggle: "all", mode: {} }),
+        setArchiveViewModeAction({
+          modeToggle: "all",
+          mode: {},
+          checked: false,
+        }),
+      );
+    });
+
+    it("should tick a view's checkbox by default and add its query with the user's values", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      component["user"] = { accessGroups: ["p1234"] };
+
+      component.onViewModeChange("owned");
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "owned",
+          mode: {
+            $and: [
+              { "datasetlifecycle.archivable": true },
+              { ownerGroup: { $in: ["p1234"] } },
+            ],
+          },
+          checked: true,
+        }),
+      );
+    });
+
+    it("should leave the checkbox unticked when its default is false", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onViewModeChange("owned-off");
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "owned-off",
+          mode: {},
+          checked: false,
+        }),
+      );
+    });
+  });
+
+  describe("checkbox exemptGroups", () => {
+    it("should not tick or apply the checkbox for exempt users", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      component["user"] = { accessGroups: ["admin"] };
+
+      component.onViewModeChange("owned");
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "owned",
+          mode: { "datasetlifecycle.archivable": true },
+          checked: false,
+        }),
+      );
+    });
+
+    it("should hide the checkbox for exempt users", () => {
+      component.loggedIn$ = of(true);
+      component["user"] = { accessGroups: ["admin"] };
+      component.currentViewMode = "owned";
+      fixture.detectChanges();
+
+      expect(
+        fixture.debugElement.nativeElement.querySelector(
+          "[data-cy=dataset-view-mode-checkbox]",
+        ),
+      ).toBeNull();
+    });
+  });
+
+  describe("#onViewModeCheckboxChange()", () => {
+    it("should apply or remove the checkbox query for the current view and clear the selection", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      component["user"] = { accessGroups: ["p1234"] };
+      component.currentViewMode = "owned";
+
+      component.onViewModeCheckboxChange(false);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "owned",
+          mode: { "datasetlifecycle.archivable": true },
+          checked: false,
+        }),
+      );
+
+      component.onViewModeCheckboxChange(true);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "owned",
+          mode: {
+            $and: [
+              { "datasetlifecycle.archivable": true },
+              { ownerGroup: { $in: ["p1234"] } },
+            ],
+          },
+          checked: true,
+        }),
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+    });
+  });
+
+  describe("view mode checkbox", () => {
+    beforeEach(() => {
+      component.loggedIn$ = of(true);
+    });
+
+    it("should show the checkbox only for views that configure one", () => {
+      component.currentViewMode = "to-tape";
+      fixture.detectChanges();
+      const compiled = fixture.debugElement.nativeElement;
+      expect(
+        compiled.querySelector("[data-cy=dataset-view-mode-checkbox]"),
+      ).toBeNull();
+
+      component.currentViewMode = "owned";
+      fixture.detectChanges();
+      const checkbox = compiled.querySelector(
+        "[data-cy=dataset-view-mode-checkbox]",
+      );
+      expect(checkbox).toBeTruthy();
+      expect(checkbox.textContent).toContain(
+        "Only datasets owned by my groups",
       );
     });
   });

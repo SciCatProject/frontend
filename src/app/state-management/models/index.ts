@@ -182,6 +182,17 @@ export interface DatasetViewMode {
   // Mongo query, as the where of the v4 dataset filter
   where: Record<string, unknown>;
   tooltip?: string;
+  checkbox?: DatasetViewModeCheckbox;
+}
+
+// see docs/dataset-view-modes-configuration.md
+export interface DatasetViewModeCheckbox {
+  label: string;
+  where: Record<string, unknown>;
+  // true if not set
+  default?: boolean;
+  // users in these groups don't get the checkbox
+  exemptGroups?: string[];
 }
 
 // the dataset list views, shown as a dropdown in the filter panel
