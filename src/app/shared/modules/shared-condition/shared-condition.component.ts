@@ -54,6 +54,7 @@ export class SharedConditionComponent implements OnDestroy, OnInit {
 
   humanNameMap: { [key: string]: string } = {};
   tempConditionValues: string[] = [];
+  tempConditionRangeValues: Record<string, [string, string]> = {};
   hoverKey: string | null = null;
   overlayPositions: ConnectedPosition[] = [
     {
@@ -190,9 +191,16 @@ export class SharedConditionComponent implements OnDestroy, OnInit {
   ): string {
     if (condition.relation === "RANGE") {
       if (!condition.lhs || !condition.rhs) return "Configure condition...";
-      const rangeValues = Array.isArray(condition.rhs)
-        ? condition.rhs
-        : [undefined, undefined];
+
+      const tempRhs = this.tempConditionRangeValues[`${index}`];
+      const rangeValues =
+        tempRhs ||
+        (Array.isArray(condition.rhs) ? condition.rhs : [undefined, undefined]);
+
+      if (!rangeValues || (rangeValues[0] == null && rangeValues[1] == null)) {
+        return "Configure condition...";
+      }
+
       const min = rangeValues[0] !== undefined ? rangeValues[0] : "?";
       const max = rangeValues[1] !== undefined ? rangeValues[1] : "?";
       const unit = condition.unit ? ` ${condition.unit}` : "";
@@ -370,14 +378,19 @@ export class SharedConditionComponent implements OnDestroy, OnInit {
   }
 
   updateConditionRangeValue(index: number, event: Event, rangeIndex: 0 | 1) {
-    const newValue = (event.target as HTMLInputElement).value;
-    const currentRhs = this.asyncPipe.transform(this.conditionConfigs$)?.[index]
-      ?.condition.rhs;
-    const rhs = Array.isArray(currentRhs)
-      ? [...currentRhs]
-      : [undefined, undefined];
-    rhs[rangeIndex] = Number(newValue);
-    this.updateConditionField(index, { rhs });
+    const key = `${index}`;
+
+    if (!this.tempConditionRangeValues[key]) {
+      const conditions = this.asyncPipe.transform(this.conditionConfigs$);
+      const currentRhs = conditions?.[index]?.condition.rhs;
+      this.tempConditionRangeValues[key] = Array.isArray(currentRhs)
+        ? [String(currentRhs[0] ?? ""), String(currentRhs[1] ?? "")]
+        : ["", ""];
+    }
+
+    this.tempConditionRangeValues[key][rangeIndex] = (
+      event.target as HTMLInputElement
+    ).value;
   }
 
   updateConditionUnit(index: number, event: any) {
@@ -426,6 +439,27 @@ export class SharedConditionComponent implements OnDestroy, OnInit {
             human_name: this.humanNameMap[lhs],
           };
 
+          if (config.condition.relation === "RANGE") {
+            const rhs =
+              this.tempConditionRangeValues[`${i}`] || config.condition.rhs;
+            return {
+              ...config,
+              condition: {
+                ...baseCondition,
+                rhs: Array.isArray(rhs)
+                  ? [
+                      rhs[0] !== "" && rhs[0] !== null
+                        ? Number(rhs[0])
+                        : undefined,
+                      rhs[1] !== "" && rhs[1] !== null
+                        ? Number(rhs[1])
+                        : undefined,
+                    ]
+                  : rhs,
+              },
+            };
+          }
+
           const value =
             this.tempConditionValues[i] !== undefined
               ? this.tempConditionValues[i]
@@ -447,7 +481,7 @@ export class SharedConditionComponent implements OnDestroy, OnInit {
                   : "EQUAL_TO_NUMERIC") as ScientificCondition["relation"],
               },
             };
-          } else if (config.condition.relation !== "RANGE") {
+          } else {
             return {
               ...config,
               condition: {
@@ -456,8 +490,6 @@ export class SharedConditionComponent implements OnDestroy, OnInit {
               },
             };
           }
-
-          return { ...config, condition: baseCondition };
         });
 
         // Removes old conditions
@@ -478,6 +510,7 @@ export class SharedConditionComponent implements OnDestroy, OnInit {
         // Merges other conditions with updated conditions
         this.updateStore(updatedMyConditions);
         this.tempConditionValues = [];
+        this.tempConditionRangeValues = {};
         this.conditionsApplied.emit();
       }),
     );

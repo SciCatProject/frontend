@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input } from "@angular/core";
 import { ArchViewMode } from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
@@ -21,12 +21,12 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 import { AppConfigService } from "app-config.service";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   ActionConfig,
   ActionButtonStyle,
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "dataset-table-actions",
@@ -44,7 +44,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   selectIsBatchNonEmpty$ = this.store.select(selectIsBatchNonEmpty);
   batchActionsConfig: ActionConfig[] = this.appConfig.batchActions || [];
 
-  selectedSets: OutputDatasetObsoleteDto[] | null = [];
+  @Input() selectedSets: PartialOutputDatasetDto[] | null = [];
 
   public currentArchViewMode: ArchViewMode = ArchViewMode.all;
   public viewModes = ArchViewMode;

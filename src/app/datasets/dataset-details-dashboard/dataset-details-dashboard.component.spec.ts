@@ -16,9 +16,18 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MockStore } from "@ngrx/store/testing";
-import { AppConfigService } from "app-config.service";
+import {
+  AppConfigService,
+  DATASET_INCLUDE_FIELDS,
+  DatasetDetailsTabsInclude,
+} from "app-config.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
+import { of } from "rxjs";
+import {
+  fetchDatasetAction,
+  fetchOrigDatablocksAction,
+} from "state-management/actions/datasets.actions";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -27,6 +36,7 @@ describe("DetailsDashboardComponent", () => {
 
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
+    events: of(),
   };
 
   const getConfig = () => ({
@@ -81,4 +91,111 @@ describe("DetailsDashboardComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should include attachments for Details by default", () => {
+    const dispatch = spyOn(store, "dispatch");
+    component.fetchDataForTab("dataset-id", "details");
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchDatasetAction({ pid: "dataset-id", filters: ["attachments"] }),
+    );
+  });
+
+  it("should request the configured Details includes and ignore the other tabs config", () => {
+    component.appConfig.datasetDetailsTabsInclude = {
+      details: ["proposals", "samples", "instruments"],
+      relatedDatasets: ["datablocks"],
+    } as unknown as DatasetDetailsTabsInclude;
+    const dispatch = spyOn(store, "dispatch");
+
+    component.fetchDataForTab("dataset-id", "details");
+    component.fetchDataForTab("dataset-id", "relatedDatasets");
+
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchDatasetAction({
+        pid: "dataset-id",
+        filters: ["proposals", "samples", "instruments"],
+      }),
+    );
+    expect(dispatch).not.toHaveBeenCalledWith(
+      fetchDatasetAction({
+        pid: "dataset-id",
+        filters: ["proposals", "samples", "instruments", "datablocks"],
+      }),
+    );
+  });
+
+  it("should preserve every supported include", () => {
+    component.appConfig.datasetDetailsTabsInclude = {
+      details: [...DATASET_INCLUDE_FIELDS],
+    };
+    const dispatch = spyOn(store, "dispatch");
+    const error = spyOn(console, "error");
+    component.fetchDataForTab("dataset-id", "details");
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchDatasetAction({
+        pid: "dataset-id",
+        filters: [
+          "instruments",
+          "proposals",
+          "datablocks",
+          "attachments",
+          "samples",
+        ],
+      }),
+    );
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchOrigDatablocksAction({ pid: "dataset-id" }),
+    );
+    expect(error).not.toHaveBeenCalled();
+  });
+
+  it("should ignore unsupported includes while retaining valid ones across tabs", () => {
+    component.appConfig.datasetDetailsTabsInclude = {
+      details: ["proposals", "proposallls", null, 42, {}, "instruments"],
+    } as unknown as DatasetDetailsTabsInclude;
+    const dispatch = spyOn(store, "dispatch");
+    const error = spyOn(console, "error");
+
+    component.fetchDataForTab("dataset-id", "details");
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchDatasetAction({
+        pid: "dataset-id",
+        filters: ["proposals", "instruments"],
+      }),
+    );
+    expect(error).toHaveBeenCalledWith(
+      'Ignoring unsupported dataset include for tab "details":',
+      "proposallls",
+    );
+
+    component.fetchDataForTab("dataset-id", "datafiles");
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchOrigDatablocksAction({ pid: "dataset-id" }),
+    );
+    expect(dispatch).toHaveBeenCalledWith(
+      fetchDatasetAction({
+        pid: "dataset-id",
+        filters: ["proposals", "instruments"],
+      }),
+    );
+  });
+
+  [["proposallls", "unknown"], "proposals", { proposals: true }, 42].forEach(
+    (includes) => {
+      it(`should fetch the base dataset for invalid includes ${JSON.stringify(includes)}`, () => {
+        component.appConfig.datasetDetailsTabsInclude = {
+          details: includes,
+        } as unknown as DatasetDetailsTabsInclude;
+        const dispatch = spyOn(store, "dispatch");
+        const error = spyOn(console, "error");
+
+        component.fetchDataForTab("dataset-id", "details");
+
+        expect(dispatch).toHaveBeenCalledWith(
+          fetchDatasetAction({ pid: "dataset-id", filters: [] }),
+        );
+        expect(error).toHaveBeenCalled();
+      });
+    },
+  );
 });

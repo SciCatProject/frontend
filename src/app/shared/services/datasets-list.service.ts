@@ -9,7 +9,7 @@ import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import {
   DatasetClass,
   Instrument,
-  OutputDatasetObsoleteDto,
+  OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { Subscription } from "rxjs";
@@ -39,13 +39,13 @@ export class DatasetsListService implements OnDestroy {
     );
   }
 
-  private getInstrumentName(row: OutputDatasetObsoleteDto): string {
-    const instrument = this.instrumentMap.get(row.instrumentId);
+  private getInstrumentName(row: OutputDatasetDto): string {
+    const instrument = this.instrumentMap.get(row.instrumentIds?.[0] || "");
     if (instrument?.name) {
       return instrument.name;
     }
-    if (row.instrumentId != null) {
-      return row.instrumentId === "" ? "-" : row.instrumentId;
+    if (row.instrumentIds?.[0] != null) {
+      return row.instrumentIds[0] === "" ? "-" : row.instrumentIds[0];
     }
     return "-";
   }
