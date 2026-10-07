@@ -407,6 +407,11 @@ export const selectCurrentOrigDatablocksCount = createSelector(
   (state) => state.origDatablocksCount ?? 0,
 );
 
+export const selectDefaultDatafilesColumns = createSelector(
+  selectDatasetState,
+  (state) => state.datafilesColumns ?? [],
+);
+
 export const selectDatafilesPageViewModel = createSelector(
   selectCurrentOrigDatablocks,
   selectCurrentOrigDatablocksCount,

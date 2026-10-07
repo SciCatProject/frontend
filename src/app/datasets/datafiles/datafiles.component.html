@@ -40,16 +40,19 @@
   </div>
 
   <dynamic-mat-table
+    [tableName]="tableName"
     [columns]="tableColumns"
-    [dataSource]="dataSource"
-    [setting]="setting"
+    [pending]="pending"
+    [setting]="tableSettingsConfig"
     [pagination]="pagination"
     [pagingMode]="paginationMode"
-    [showGlobalTextSearch]="false"
+    [dataSource]="dataSource"
     [rowSelectionMode]="rowSelectionMode"
+    [showGlobalTextSearch]="false"
     [emptyMessage]="'No datafiles available'"
     (onRowEvent)="onRowEvent($event)"
     (paginationChange)="onPaginationChange($event)"
+    (settingChange)="onSettingChange($event)"
   >
   </dynamic-mat-table>
 </ng-template>

@@ -40,6 +40,7 @@ export interface Settings {
   fe_file_table_columns?: TableColumn[];
   fe_job_table_columns?: TableColumn[];
   fe_publisheddata_table_columns?: TableColumn[];
+  fe_datafiles_table_columns?: TableColumn[];
 }
 
 export interface TableColumn {
@@ -54,6 +55,9 @@ export interface TableColumn {
   tooltip?: string;
   width?: number;
   sort?: FieldSort;
+  emptyValue?: string;
+  pipe?: "date" | "filesize" | "timeduration";
+  pipeArgs?: unknown[];
 }
 
 export interface LabelsLocalization {
@@ -259,6 +263,11 @@ export const SETTINGS_CONFIG = [
     scope: "publisheddata",
     configKey: "columns",
   },
+  {
+    key: "fe_datafiles_table_columns",
+    scope: "datafiles",
+    configKey: "columns",
+  },
 ];
 
 export type SettingScope =
@@ -268,7 +277,8 @@ export type SettingScope =
   | "instrument"
   | "file"
   | "job"
-  | "publisheddata";
+  | "publisheddata"
+  | "datafiles";
 export type SettingKind = "columns" | "filters" | "conditions";
 
 export const getSettingKey = (
