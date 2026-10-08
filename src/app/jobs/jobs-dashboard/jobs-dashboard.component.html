@@ -2,14 +2,15 @@
   <div fxFlex="14" fxFlex.lt-xl="10"></div>
   <div fxFlex="60" fxFlex.lt-xl="80">
     <mat-button-toggle-group [(ngModel)]="currentMode">
-      <mat-button-toggle
-        *ngFor="let mode of modes"
-        [value]="mode"
-        [ngClass]="mode"
-        (click)="onModeToggleChange()"
-      >
-        {{ mode | titleCase }}
-      </mat-button-toggle>
+      @for (mode of modes; track mode) {
+        <mat-button-toggle
+          [value]="mode"
+          [ngClass]="mode"
+          (click)="onModeToggleChange()"
+        >
+          {{ mode | titleCase }}
+        </mat-button-toggle>
+      }
     </mat-button-toggle-group>
     <app-table
       [data]="jobs"
@@ -22,13 +23,15 @@
       (sortChange)="onSortChange($event)"
       (rowClick)="onRowClick($event)"
     ></app-table>
-    <div class="no-jobs-message" *ngIf="jobs.length === 0">
-      <mat-card
-        ><mat-card-content>
-          <mat-icon>info</mat-icon> You have no jobs yet.
-        </mat-card-content></mat-card
-      >
-    </div>
+    @if (jobs.length === 0) {
+      <div class="no-jobs-message">
+        <mat-card
+          ><mat-card-content>
+            <mat-icon>info</mat-icon> You have no jobs yet.
+          </mat-card-content></mat-card
+        >
+      </div>
+    }
   </div>
   <div fxFlex="26" fxFlex.lt-xl="10"></div>
 </div>
