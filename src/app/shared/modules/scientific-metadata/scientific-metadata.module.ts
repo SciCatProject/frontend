@@ -26,7 +26,7 @@ import {
   NgxMatDatepickerApply,
   NgxMatDatepickerCancel,
   NgxMatDatepickerClear,
-} from "@ngxmc/datetime-picker";
+} from "@ngx-mce/datetime-picker";
 
 @NgModule({
   declarations: [MetadataViewComponent, MetadataEditComponent],
