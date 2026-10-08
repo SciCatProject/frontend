@@ -39,6 +39,8 @@ import { EmptyContentModule } from "shared/modules/generic-empty-content/empty-c
 import { MatCardModule } from "@angular/material/card";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { ScientificMetadataTreeModule } from "shared/modules/scientific-metadata-tree/scientific-metadata-tree.module";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { TimeDurationPipe } from "shared/pipes/time-duration.pipe";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtensionsModule = [RowMenuModule];
@@ -87,6 +89,8 @@ const ExtensionsModule = [RowMenuModule];
       provide: OverlayContainer,
       useClass: FullscreenOverlayContainer,
     },
+    FileSizePipe,
+    TimeDurationPipe,
   ],
 })
 

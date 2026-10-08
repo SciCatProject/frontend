@@ -1,4 +1,4 @@
-import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import { DataFile } from "datasets/datafiles/datafiles.interfaces";
 import {
   Instrument,
   PartialOutputDatasetDto,
@@ -109,7 +109,7 @@ export function validateAllActionConfigsIn(config: object): void {
 }
 
 export interface ActionItemDataset extends PartialOutputDatasetDto {
-  files?: DataFiles_File[];
+  files?: DataFile[];
 }
 
 export interface ActionItems {
