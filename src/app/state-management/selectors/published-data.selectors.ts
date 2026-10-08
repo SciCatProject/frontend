@@ -1,6 +1,10 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { PublishedDataState } from "state-management/state/published-data.store";
-import { selectSettings } from "./user.selectors";
+import {
+  selectHasFetchedSettings,
+  selectIsLoading,
+  selectSettings,
+} from "./user.selectors";
 
 const selectPublishedDataState =
   createFeatureSelector<PublishedDataState>("publishedData");
@@ -47,6 +51,8 @@ export const selectPublishedDataDashboardPageViewModel = createSelector(
   selectPublishedDataPerPage,
   selectFilters,
   selectSettings,
+  selectHasFetchedSettings,
+  selectIsLoading,
   (
     publishedData,
     count,
@@ -54,12 +60,16 @@ export const selectPublishedDataDashboardPageViewModel = createSelector(
     publishedDataPerPage,
     filters,
     settings,
+    hasFetchedSettings,
+    isLoading,
   ) => ({
     publishedData,
     count,
     currentPage,
     publishedDataPerPage,
     filters,
+    hasFetchedSettings,
+    isLoading,
     tablesSettings: {
       columns: settings.fe_publisheddata_table_columns,
     },
@@ -67,6 +77,9 @@ export const selectPublishedDataDashboardPageViewModel = createSelector(
 );
 
 export const selectQueryParams = createSelector(selectFilters, (filters) => {
-  const { sortField, skip, limit } = filters;
-  return { order: sortField, skip, limit };
+  const { text, sortField, skip, limit } = filters;
+  return {
+    filter: text ? { where: { $text: { $search: text } } } : {},
+    limits: { order: sortField, skip, limit },
+  };
 });
