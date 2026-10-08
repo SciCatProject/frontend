@@ -1,194 +1,212 @@
-<ng-container *ngIf="vm$ | async as vm">
-  <mat-tab-group *ngIf="sample">
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon> details </mat-icon> Details
-      </ng-template>
-
-      <div fxLayout="row" fxLayout.xs="column">
-        <div fxFlex="80%">
-          <mat-card>
-            <mat-card-header class="general-header">
-              <div mat-card-avatar class="section-icon">
-                <mat-icon> description </mat-icon>
-              </div>
-              General Information
-            </mat-card-header>
-            <mat-card-content>
-              <table>
-                <tr *ngIf="sample.description as value">
-                  <th>Description</th>
-                  <td>{{ value }}</td>
-                </tr>
-                <tr *ngIf="sample.sampleId as value">
-                  <th>Sample ID</th>
-                  <td>{{ value }}</td>
-                </tr>
-                <tr *ngIf="sample.createdAt as value">
-                  <th>Creation Time</th>
-                  <td>{{ value | date }}</td>
-                </tr>
-              </table>
-            </mat-card-content>
-          </mat-card>
-
-          <mat-card>
-            <mat-card-header class="creator-header">
-              <div mat-card-avatar class="section-icon">
-                <mat-icon> person </mat-icon>
-                Creator Information
-              </div>
-            </mat-card-header>
-
-            <mat-card-content>
-              <table>
-                <tr *ngIf="sample.owner as value">
-                  <th>Sample Owner</th>
-                  <td>{{ value }}</td>
-                </tr>
-                <tr *ngIf="sample.ownerGroup as value">
-                  <th>Owner Group</th>
-                  <td>{{ value }}</td>
-                </tr>
-                <tr *ngIf="sample.accessGroups as value">
-                  <th>Access Groups</th>
-                  <td>{{ value }}</td>
-                </tr>
-              </table>
-            </mat-card-content>
-          </mat-card>
-          <ng-container *ngIf="emptyMetadataTable()">
-            <mat-card *ngIf="sample.sampleCharacteristics as value">
-              <mat-card-header class="characteristics-header">
-                <div mat-card-avatar class="section-icon">
-                  <mat-icon> science </mat-icon>
-                </div>
-                Characteristics
-              </mat-card-header>
-
-              <mat-card-content>
-                <ng-template
-                  [ngIf]="appConfig.tableSciDataEnabled"
-                  [ngIfElse]="jsonView"
-                >
-                  <mat-tab-group>
-                    <mat-tab>
-                      <ng-template mat-tab-label>
-                        <mat-icon> list </mat-icon> View
-                      </ng-template>
-                      <div [ngSwitch]="appConfig.metadataStructure">
-                        <tree-view
-                          *ngSwitchCase="'tree'"
-                          [metadata]="value"
-                        ></tree-view>
-                        <metadata-view
-                          *ngSwitchDefault
-                          [metadata]="value"
-                        ></metadata-view>
-                      </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="appConfig.editMetadataEnabled">
-                      <ng-template mat-tab-label>
-                        <mat-icon> edit </mat-icon> Edit
-                      </ng-template>
-                      <div [ngSwitch]="appConfig.metadataStructure">
-                        <tree-edit
-                          *ngSwitchCase="'tree'"
-                          [metadata]="value"
-                          (save)="onSaveCharacteristics($event)"
-                          (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-                        ></tree-edit>
-                        <metadata-edit
-                          *ngSwitchDefault
-                          [metadata]="value"
-                          (save)="onSaveCharacteristics($event)"
-                        >
-                        </metadata-edit>
-                      </div>
-                    </mat-tab>
-                  </mat-tab-group>
-                </ng-template>
-
-                <ng-template #jsonView>
-                  <ngx-json-viewer
-                    [json]="value"
-                    [expanded]="false"
-                  ></ngx-json-viewer>
-                </ng-template>
-              </mat-card-content>
-            </mat-card>
-
-            <mat-card *ngIf="appConfig.jsonMetadataEnabled">
-              <mat-card-content>
-                <button mat-stroked-button (click)="show = !show">
-                  {{ show ? "Hide MetaData" : "Show Metadata" }}
-                </button>
-                <br />
-                <div *ngIf="show">
-                  <ngx-json-viewer
-                    [json]="sample"
-                    [expanded]="false"
-                  ></ngx-json-viewer>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          </ng-container>
-        </div>
-
-        <div fxFlex="30%" *ngIf="vm.attachments as attachments">
-          <ng-container *ngFor="let attachment of attachments">
+@if (vm$ | async; as vm) {
+  @if (sample) {
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon> details </mat-icon> Details
+        </ng-template>
+        <div fxLayout="row" fxLayout.xs="column">
+          <div fxFlex="80%">
             <mat-card>
-              <img mat-card-image src="{{ attachment.thumbnail }}" />
-
-              <mat-card-actions>{{ attachment.caption }}</mat-card-actions>
+              <mat-card-header class="general-header">
+                <div mat-card-avatar class="section-icon">
+                  <mat-icon> description </mat-icon>
+                </div>
+                General Information
+              </mat-card-header>
+              <mat-card-content>
+                <table>
+                  @if (sample.description; as value) {
+                    <tr>
+                      <th>Description</th>
+                      <td>{{ value }}</td>
+                    </tr>
+                  }
+                  @if (sample.sampleId; as value) {
+                    <tr>
+                      <th>Sample ID</th>
+                      <td>{{ value }}</td>
+                    </tr>
+                  }
+                  @if (sample.createdAt; as value) {
+                    <tr>
+                      <th>Creation Time</th>
+                      <td>{{ value | date }}</td>
+                    </tr>
+                  }
+                </table>
+              </mat-card-content>
             </mat-card>
-          </ng-container>
+            <mat-card>
+              <mat-card-header class="creator-header">
+                <div mat-card-avatar class="section-icon">
+                  <mat-icon> person </mat-icon>
+                  Creator Information
+                </div>
+              </mat-card-header>
+              <mat-card-content>
+                <table>
+                  @if (sample.owner; as value) {
+                    <tr>
+                      <th>Sample Owner</th>
+                      <td>{{ value }}</td>
+                    </tr>
+                  }
+                  @if (sample.ownerGroup; as value) {
+                    <tr>
+                      <th>Owner Group</th>
+                      <td>{{ value }}</td>
+                    </tr>
+                  }
+                  @if (sample.accessGroups; as value) {
+                    <tr>
+                      <th>Access Groups</th>
+                      <td>{{ value }}</td>
+                    </tr>
+                  }
+                </table>
+              </mat-card-content>
+            </mat-card>
+            @if (emptyMetadataTable()) {
+              @if (sample.sampleCharacteristics; as value) {
+                <mat-card>
+                  <mat-card-header class="characteristics-header">
+                    <div mat-card-avatar class="section-icon">
+                      <mat-icon> science </mat-icon>
+                    </div>
+                    Characteristics
+                  </mat-card-header>
+                  <mat-card-content>
+                    @if (appConfig.tableSciDataEnabled) {
+                      <mat-tab-group>
+                        <mat-tab>
+                          <ng-template mat-tab-label>
+                            <mat-icon> list </mat-icon> View
+                          </ng-template>
+                          <div>
+                            @switch (appConfig.metadataStructure) {
+                              @case ("tree") {
+                                <tree-view [metadata]="value"></tree-view>
+                              }
+                              @default {
+                                <metadata-view
+                                  [metadata]="value"
+                                ></metadata-view>
+                              }
+                            }
+                          </div>
+                        </mat-tab>
+                        @if (appConfig.editMetadataEnabled) {
+                          <mat-tab>
+                            <ng-template mat-tab-label>
+                              <mat-icon> edit </mat-icon> Edit
+                            </ng-template>
+                            <div>
+                              @switch (appConfig.metadataStructure) {
+                                @case ("tree") {
+                                  <tree-edit
+                                    [metadata]="value"
+                                    (save)="onSaveCharacteristics($event)"
+                                    (hasUnsavedChanges)="
+                                      onHasUnsavedChanges($event)
+                                    "
+                                  ></tree-edit>
+                                }
+                                @default {
+                                  <metadata-edit
+                                    [metadata]="value"
+                                    (save)="onSaveCharacteristics($event)"
+                                  >
+                                  </metadata-edit>
+                                }
+                              }
+                            </div>
+                          </mat-tab>
+                        }
+                      </mat-tab-group>
+                    } @else {
+                      <ngx-json-viewer
+                        [json]="value"
+                        [expanded]="false"
+                      ></ngx-json-viewer>
+                    }
+                  </mat-card-content>
+                </mat-card>
+              }
+              @if (appConfig.jsonMetadataEnabled) {
+                <mat-card>
+                  <mat-card-content>
+                    <button mat-stroked-button (click)="show = !show">
+                      {{ show ? "Hide MetaData" : "Show Metadata" }}
+                    </button>
+                    <br />
+                    @if (show) {
+                      <div>
+                        <ngx-json-viewer
+                          [json]="sample"
+                          [expanded]="false"
+                        ></ngx-json-viewer>
+                      </div>
+                    }
+                  </mat-card-content>
+                </mat-card>
+              }
+            }
+          </div>
+          @if (vm.attachments; as attachments) {
+            <div fxFlex="30%">
+              @for (attachment of attachments; track attachment) {
+                <mat-card>
+                  <img mat-card-image src="{{ attachment.thumbnail }}" />
+                  <mat-card-actions>{{ attachment.caption }}</mat-card-actions>
+                </mat-card>
+              }
+            </div>
+          }
         </div>
-      </div>
-    </mat-tab>
-
-    <mat-tab *ngIf="attachments">
-      <ng-template mat-tab-label>
-        <mat-icon> insert_photo </mat-icon> Attachments
-      </ng-template>
-
-      <div class="file-uploader">
-        <app-file-uploader
-          [attachments]="attachments"
-          (filePicked)="onFilePicked($event)"
-          (submitCaption)="updateCaption($event)"
-          (deleteAttachment)="deleteAttachment($event)"
-        ></app-file-uploader>
-      </div>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon> folder </mat-icon> Related Datasets
-      </ng-template>
-
-      <div class="datasets-table">
-        <dynamic-mat-table
-          [columns]="columns"
-          [dataSource]="dataSource"
-          [setting]="setting"
-          [pagingMode]="paginationMode"
-          [pagination]="pagination"
-          [rowSelectionMode]="rowSelectionMode"
-          [showGlobalTextSearch]="false"
-          [emptyMessage]="'No datasets available'"
-          [emptyIcon]="'folder'"
-          (paginationChange)="onPaginationChange($event)"
-          (onRowEvent)="onRowEvent($event)"
-        ></dynamic-mat-table>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-</ng-container>
-<ng-template [ngIf]="!sample">
+      </mat-tab>
+      @if (attachments) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon> insert_photo </mat-icon> Attachments
+          </ng-template>
+          <div class="file-uploader">
+            <app-file-uploader
+              [attachments]="attachments"
+              (filePicked)="onFilePicked($event)"
+              (submitCaption)="updateCaption($event)"
+              (deleteAttachment)="deleteAttachment($event)"
+            ></app-file-uploader>
+          </div>
+        </mat-tab>
+      }
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon> folder </mat-icon> Related Datasets
+        </ng-template>
+        <div class="datasets-table">
+          <dynamic-mat-table
+            [columns]="columns"
+            [dataSource]="dataSource"
+            [setting]="setting"
+            [pagingMode]="paginationMode"
+            [pagination]="pagination"
+            [rowSelectionMode]="rowSelectionMode"
+            [showGlobalTextSearch]="false"
+            [emptyMessage]="'No datasets available'"
+            [emptyIcon]="'folder'"
+            (paginationChange)="onPaginationChange($event)"
+            (onRowEvent)="onRowEvent($event)"
+          ></dynamic-mat-table>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+}
+@if (!sample) {
   <error-page
     [errorTitle]="'Sample not found'"
     [message]="'The sample you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
   >
   </error-page>
-</ng-template>
+}
