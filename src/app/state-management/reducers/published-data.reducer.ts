@@ -57,6 +57,14 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.setTextFilterAction,
+    (state, { text }): PublishedDataState => ({
+      ...state,
+      filters: { ...state.filters, text, skip: 0 },
+    }),
+  ),
+
+  on(
     fromActions.changePageAction,
     (state, { page, limit }): PublishedDataState => {
       const skip = page * limit;
