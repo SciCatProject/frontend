@@ -8,85 +8,81 @@
       >
 
       <mat-card-content>
-        <form
-          *ngIf="publishedData$ | async"
-          [formGroup]="form"
-          data-cy="editPublishedDataForm"
-        >
-          <mat-form-field>
-            <input
-              id="titleInput"
-              required
-              matInput
-              placeholder="Title"
-              autocomplete="off"
-              formControlName="title"
-              name="title"
-            />
-          </mat-form-field>
-
-          <mat-form-field>
-            <textarea
-              id="abstractInput"
-              required
-              matInput
-              placeholder="Abstract"
-              autocomplete="off"
-              formControlName="abstract"
-              name="abstract"
-              rows="5"
-            ></textarea>
-          </mat-form-field>
-
-          <mat-expansion-panel
-            *ngIf="!isSchemaEmpty()"
-            (opened)="panelOpenState.set(true)"
-            (closed)="panelOpenState.set(false)"
-            data-cy="metadata"
-          >
-            <mat-expansion-panel-header>
-              <mat-panel-title> Metadata </mat-panel-title>
-              <mat-panel-description>
-                Here you can edit the metadata.
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <jsonforms
-              [data]="metadataData"
-              [schema]="schema"
-              [uischema]="uiSchema"
-              [renderers]="renderers"
-              [ajv]="ajvService.getAjv()"
-              (errors)="onErrors($event)"
-              (dataChange)="onMetadataChange($event)"
-            ></jsonforms>
-          </mat-expansion-panel>
-
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="onPublishedDataUpdate(false)"
-            [disabled]="!form.valid"
-          >
-            Save changes
-          </button>
-          <button
-            mat-raised-button
-            color="primary"
-            class="save-and-continue"
-            (click)="onPublishedDataUpdate(true)"
-            [disabled]="!form.valid"
-          >
-            Save and continue
-          </button>
-          <button
-            (click)="onCancel()"
-            class="cancel"
-            mat-raised-button
-            color="white"
-          >
-            Cancel
-          </button>
-        </form>
+        @if (publishedData$ | async) {
+          <form [formGroup]="form" data-cy="editPublishedDataForm">
+            <mat-form-field>
+              <input
+                id="titleInput"
+                required
+                matInput
+                placeholder="Title"
+                autocomplete="off"
+                formControlName="title"
+                name="title"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <textarea
+                id="abstractInput"
+                required
+                matInput
+                placeholder="Abstract"
+                autocomplete="off"
+                formControlName="abstract"
+                name="abstract"
+                rows="5"
+              ></textarea>
+            </mat-form-field>
+            @if (!isSchemaEmpty()) {
+              <mat-expansion-panel
+                (opened)="panelOpenState.set(true)"
+                (closed)="panelOpenState.set(false)"
+                data-cy="metadata"
+              >
+                <mat-expansion-panel-header>
+                  <mat-panel-title> Metadata </mat-panel-title>
+                  <mat-panel-description>
+                    Here you can edit the metadata.
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <jsonforms
+                  [data]="metadataData"
+                  [schema]="schema"
+                  [uischema]="uiSchema"
+                  [renderers]="renderers"
+                  [ajv]="ajvService.getAjv()"
+                  (errors)="onErrors($event)"
+                  (dataChange)="onMetadataChange($event)"
+                ></jsonforms>
+              </mat-expansion-panel>
+            }
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="onPublishedDataUpdate(false)"
+              [disabled]="!form.valid"
+            >
+              Save changes
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              class="save-and-continue"
+              (click)="onPublishedDataUpdate(true)"
+              [disabled]="!form.valid"
+            >
+              Save and continue
+            </button>
+            <button
+              (click)="onCancel()"
+              class="cancel"
+              mat-raised-button
+              color="white"
+            >
+              Cancel
+            </button>
+          </form>
+        }
       </mat-card-content>
     </mat-card>
   </div>
