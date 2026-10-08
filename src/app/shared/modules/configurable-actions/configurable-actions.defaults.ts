@@ -93,7 +93,7 @@ export function buildDefaultBatchActions(
         title: "Retrieve to",
         fields: [
           {
-            key: "retrieveDestination",
+            key: "option",
             label: "Destination",
             type: "select",
             required: true,
@@ -102,7 +102,7 @@ export function buildDefaultBatchActions(
         ],
       },
       payload:
-        '{"jobParams": {"username": "{{ @username }}", "retrieveDestination": "{{ @dialog.retrieveDestination }}", "destinationPath": "/archive/retrieve"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "retrieve"}',
+        '{"jobParams": {"username": "{{ @username }}", "option": "{{ @dialog.option }}", "destinationPath": "/archive/retrieve"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "retrieve"}',
       enabled:
         "['retrievable', '#currentArchViewMode'].includes(@archiveViewMode) && @totalPackedSize > 0 && @lifecycles.every((l) => l?.retrievable === true && l?.archivable !== true)",
     },
