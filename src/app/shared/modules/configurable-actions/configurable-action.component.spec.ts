@@ -1958,5 +1958,31 @@ describe("1000: ConfigurableActionComponent", () => {
       });
       expect(component.visible).toBeFalse();
     });
+
+    it("1404: Retrieve should send the selected destination as jobParams.option", () => {
+      const [, retrieveWithDestinations] = buildDefaultBatchActions([
+        { option: "first" },
+        { option: "second" },
+      ]);
+      createComponent(retrieveWithDestinations, mockActionItems);
+
+      spyOn(component.dialog, "open").and.returnValue({
+        afterClosed: () => of({ option: "second" }),
+      } as MatDialogRef<unknown>);
+      spyOn(window, "fetch").and.returnValue(
+        Promise.resolve(new Response("", { status: 200 })),
+      );
+
+      component.performAction();
+
+      const fetchSpy = window.fetch as jasmine.Spy;
+      expect(fetchSpy.calls.count()).toBe(1);
+      const body = JSON.parse(
+        String((fetchSpy.calls.mostRecent().args[1] as RequestInit).body),
+      );
+      expect(body.jobParams.option).toBe("second");
+      expect(body.jobParams.retrieveDestination).toBeUndefined();
+      expect(body.type).toBe("retrieve");
+    });
   });
 });
