@@ -1,4 +1,4 @@
-<ng-container *ngIf="instrument$ | async as instrument">
+@if (instrument$ | async; as instrument) {
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="80">
       <mat-card>
@@ -11,81 +11,91 @@
         <mat-card-content>
           <div class="details">
             <table>
-              <tr *ngIf="instrument.uniqueName as value">
-                <th>Unique Name</th>
-                <td>{{ value }}</td>
-              </tr>
-              <tr *ngIf="instrument.name as value">
-                <th>Name</th>
-                <td>{{ value }}</td>
-              </tr>
-              <tr *ngIf="instrument.pid as value">
-                <th>PID</th>
-                <td>{{ value }}</td>
-              </tr>
+              @if (instrument.uniqueName; as value) {
+                <tr>
+                  <th>Unique Name</th>
+                  <td>{{ value }}</td>
+                </tr>
+              }
+              @if (instrument.name; as value) {
+                <tr>
+                  <th>Name</th>
+                  <td>{{ value }}</td>
+                </tr>
+              }
+              @if (instrument.pid; as value) {
+                <tr>
+                  <th>PID</th>
+                  <td>{{ value }}</td>
+                </tr>
+              }
             </table>
           </div>
         </mat-card-content>
       </mat-card>
-
-      <ng-container *ngIf="emptyMetadataTable()">
-        <mat-card
-          data-cy="instrument-metadata-card"
-          *ngIf="instrument.customMetadata as value"
-        >
-          <mat-card-header class="customMetadata-header">
-            <div mat-card-avatar class="section-icon">
-              <mat-icon> science </mat-icon>
-            </div>
-            Custom Metadata
-          </mat-card-header>
-
-          <mat-card-content>
-            <mat-tab-group>
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon>list</mat-icon> View
-                </ng-template>
-
-                <ng-template matTabContent>
-                  <div [ngSwitch]="appConfig.metadataStructure">
-                    <tree-view
-                      *ngSwitchCase="'tree'"
-                      [metadata]="value"
-                    ></tree-view>
-                    <metadata-view
-                      *ngSwitchDefault
-                      [metadata]="value"
-                    ></metadata-view>
-                  </div>
-                </ng-template>
-              </mat-tab>
-
-              <mat-tab *ngIf="isAdmin$ | async">
-                <ng-template mat-tab-label>
-                  <mat-icon>edit</mat-icon> Edit
-                </ng-template>
-
-                <ng-template matTabContent>
-                  <div [ngSwitch]="appConfig.metadataStructure">
-                    <tree-edit
-                      *ngSwitchCase="'tree'"
-                      [metadata]="value"
-                      (save)="onSaveCustomMetadata(instrument.pid, $event)"
-                      (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-                    ></tree-edit>
-                    <metadata-edit
-                      *ngSwitchDefault
-                      [metadata]="value"
-                      (save)="onSaveCustomMetadata(instrument.pid, $event)"
-                    ></metadata-edit>
-                  </div>
-                </ng-template>
-              </mat-tab>
-            </mat-tab-group>
-          </mat-card-content>
-        </mat-card>
-      </ng-container>
+      @if (emptyMetadataTable()) {
+        @if (instrument.customMetadata; as value) {
+          <mat-card data-cy="instrument-metadata-card">
+            <mat-card-header class="customMetadata-header">
+              <div mat-card-avatar class="section-icon">
+                <mat-icon> science </mat-icon>
+              </div>
+              Custom Metadata
+            </mat-card-header>
+            <mat-card-content>
+              <mat-tab-group>
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon>list</mat-icon> View
+                  </ng-template>
+                  <ng-template matTabContent>
+                    <div>
+                      @switch (appConfig.metadataStructure) {
+                        @case ("tree") {
+                          <tree-view [metadata]="value"></tree-view>
+                        }
+                        @default {
+                          <metadata-view [metadata]="value"></metadata-view>
+                        }
+                      }
+                    </div>
+                  </ng-template>
+                </mat-tab>
+                @if (isAdmin$ | async) {
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      <mat-icon>edit</mat-icon> Edit
+                    </ng-template>
+                    <ng-template matTabContent>
+                      <div>
+                        @switch (appConfig.metadataStructure) {
+                          @case ("tree") {
+                            <tree-edit
+                              [metadata]="value"
+                              (save)="
+                                onSaveCustomMetadata(instrument.pid, $event)
+                              "
+                              (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                            ></tree-edit>
+                          }
+                          @default {
+                            <metadata-edit
+                              [metadata]="value"
+                              (save)="
+                                onSaveCustomMetadata(instrument.pid, $event)
+                              "
+                            ></metadata-edit>
+                          }
+                        }
+                      </div>
+                    </ng-template>
+                  </mat-tab>
+                }
+              </mat-tab-group>
+            </mat-card-content>
+          </mat-card>
+        }
+      }
     </div>
   </div>
-</ng-container>
+}
