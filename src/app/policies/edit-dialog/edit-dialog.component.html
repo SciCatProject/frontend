@@ -7,9 +7,9 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-list dense> </mat-list>
-    <mat-list-item *ngFor="let group of selectedGroups">{{
-      group
-    }}</mat-list-item>
+    @for (group of selectedGroups; track group) {
+      <mat-list-item>{{ group }}</mat-list-item>
+    }
   </mat-expansion-panel>
 
   <mat-card>
@@ -22,14 +22,15 @@
               formControlName="manager"
               data-cy="managerChipList"
             >
-              <mat-chip-row
-                *ngFor="let manager of data.selectedPolicy.manager"
-                (removed)="removeManager(manager)"
-                [removable]="true"
-              >
-                {{ manager }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
+              @for (manager of data.selectedPolicy.manager; track manager) {
+                <mat-chip-row
+                  (removed)="removeManager(manager)"
+                  [removable]="true"
+                >
+                  {{ manager }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip-row>
+              }
               <input
                 data-cy="managerInput"
                 matInput
@@ -97,16 +98,18 @@
               #archiveEmailsToBeNotified
               formControlName="archiveEmailsToBeNotified"
             >
-              <mat-chip-row
-                *ngFor="
-                  let email of data.selectedPolicy.archiveEmailsToBeNotified
-                "
-                (removed)="removeArchiveEmail(email)"
-                [removable]="true"
-              >
-                {{ email }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
+              @for (
+                email of data.selectedPolicy.archiveEmailsToBeNotified;
+                track email
+              ) {
+                <mat-chip-row
+                  (removed)="removeArchiveEmail(email)"
+                  [removable]="true"
+                >
+                  {{ email }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip-row>
+              }
               <input
                 placeholder="Archive Emails to be Notified"
                 formControlName="archiveEmailsToBeNotified"
@@ -135,16 +138,18 @@
               #retrieveEmailsToBeNotified
               formControlName="retrieveEmailsToBeNotified"
             >
-              <mat-chip-row
-                *ngFor="
-                  let email of data.selectedPolicy.retrieveEmailsToBeNotified
-                "
-                (removed)="removeRetrieveEmail(email)"
-                [removable]="true"
-              >
-                {{ email }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
+              @for (
+                email of data.selectedPolicy.retrieveEmailsToBeNotified;
+                track email
+              ) {
+                <mat-chip-row
+                  (removed)="removeRetrieveEmail(email)"
+                  [removable]="true"
+                >
+                  {{ email }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip-row>
+              }
               <input
                 placeholder="Retrieve Emails to be Notified"
                 formControlName="retrieveEmailsToBeNotified"
