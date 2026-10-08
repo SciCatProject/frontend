@@ -60,6 +60,23 @@ describe("PublishedData Reducer", () => {
     });
   });
 
+  describe("on setTextFilterAction", () => {
+    it("should set text filter and set skip filter to 0", () => {
+      const text = "doi";
+      const action = fromActions.setTextFilterAction({ text });
+      const state = publishedDataReducer(
+        {
+          ...initialPublishedDataState,
+          filters: { ...initialPublishedDataState.filters, skip: 25 },
+        },
+        action,
+      );
+
+      expect(state.filters.text).toEqual(text);
+      expect(state.filters.skip).toEqual(0);
+    });
+  });
+
   describe("on changePageAction", () => {
     it("should set skip and limit filters", () => {
       const page = 1;
