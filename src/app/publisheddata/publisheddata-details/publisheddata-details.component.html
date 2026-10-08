@@ -1,247 +1,285 @@
-<div fxLayout="row" fxLayout.xs="column" *ngIf="publishedData">
-  <div fxFlex="80">
-    <mat-card>
-      <mat-card-header class="status-header">
-        <div mat-card-avatar class="section-icon">
-          <mat-icon> info </mat-icon>
-        </div>
-        Publication Status
-      </mat-card-header>
-      <mat-card-content>
-        <table>
-          <tr *ngIf="publishedData.status as value" data-cy="status">
-            <th>Status</th>
-            <td>{{ value }}</td>
-          </tr>
-          <ng-template
-            [ngIf]="
-              publishedData.status && publishedData.status === 'registered'
-            "
-          >
-            <tr *ngIf="publishedData.registeredTime as value">
-              <th>Registered Time</th>
-              <td>{{ value | date }}</td>
-            </tr>
-          </ng-template>
-        </table>
-      </mat-card-content>
-
-      <mat-card-actions *ngIf="isLoggedIn$ | async">
-        <button
-          mat-raised-button
-          color="primary"
-          *ngIf="publishedData.status === 'registered'"
-          (click)="onAmendClick(publishedData.doi)"
-        >
-          Amend
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          *ngIf="publishedData.status === 'public'"
-          (click)="onRegisterClick(publishedData.doi)"
-          data-cy="registerButton"
-        >
-          Register
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          *ngIf="publishedData.status === 'private'"
-          (click)="onPublishClick(publishedData.doi)"
-          data-cy="publishButton"
-        >
-          Publish
-        </button>
-      </mat-card-actions>
-    </mat-card>
-
-    <mat-card>
-      <mat-card-header class="general-header">
-        <div mat-card-avatar class="section-icon">
-          <mat-icon> description </mat-icon>
-        </div>
-        General Information
-      </mat-card-header>
-      <mat-card-content>
-        <table>
-          <tr *ngIf="publishedData.title as value">
-            <th>Title</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.abstract as value">
-            <th>Abstract</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.doi as value" id="doiRow">
-            <th>DOI</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="landingPageUrl">
-            <th>URL</th>
-            <td><span [innerHTML]="landingPageUrl | linky"></span></td>
-          </tr>
-          <tr *ngIf="publishedData.metadata?.publicationYear as value">
-            <th>Publication Year</th>
-            <td>{{ value }}</td>
-          </tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card *ngIf="publishedData.metadata?.creators as creators">
-      <mat-card-header class="creator-header">
-        <div mat-card-avatar class="section-icon">
-          <mat-icon> person </mat-icon>
-        </div>
-        Creator Information
-      </mat-card-header>
-
-      <mat-card-content>
-        <table>
-          <tr>
-            <th>Creators</th>
-
-            <td>
-              <ng-container *ngFor="let creator of creators; last as isLast">
-                {{ creator.name }}{{ isLast ? "" : ", " }}
-              </ng-container>
-            </td>
-          </tr>
-          <tr *ngIf="publishedData.metadata?.contributors as contributors">
-            <th>Contributors</th>
-            <td>
-              <ng-container
-                *ngFor="let contributor of contributors; last as isLast"
+@if (publishedData) {
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="80">
+      <mat-card>
+        <mat-card-header class="status-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> info </mat-icon>
+          </div>
+          Publication Status
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            @if (publishedData.status; as value) {
+              <tr data-cy="status">
+                <th>Status</th>
+                <td>{{ value }}</td>
+              </tr>
+            }
+            @if (
+              publishedData.status && publishedData.status === "registered"
+            ) {
+              @if (publishedData.registeredTime; as value) {
+                <tr>
+                  <th>Registered Time</th>
+                  <td>{{ value | date }}</td>
+                </tr>
+              }
+            }
+          </table>
+        </mat-card-content>
+        @if (isLoggedIn$ | async) {
+          <mat-card-actions>
+            @if (publishedData.status === "registered") {
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="onAmendClick(publishedData.doi)"
               >
-                {{ contributor.name }}{{ isLast ? "" : ", " }}
-              </ng-container>
-            </td>
-          </tr>
-          <tr *ngIf="publishedData.metadata?.affiliation as value">
-            <th>Affiliation</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.metadata?.publisher as value">
-            <th>Publisher</th>
-            <td>{{ value.name }}</td>
-          </tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card
-      *ngIf="
+                Amend
+              </button>
+            }
+            @if (publishedData.status === "public") {
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="onRegisterClick(publishedData.doi)"
+                data-cy="registerButton"
+              >
+                Register
+              </button>
+            }
+            @if (publishedData.status === "private") {
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="onPublishClick(publishedData.doi)"
+                data-cy="publishButton"
+              >
+                Publish
+              </button>
+            }
+          </mat-card-actions>
+        }
+      </mat-card>
+      <mat-card>
+        <mat-card-header class="general-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> description </mat-icon>
+          </div>
+          General Information
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            @if (publishedData.title; as value) {
+              <tr>
+                <th>Title</th>
+                <td>{{ value }}</td>
+              </tr>
+            }
+            @if (publishedData.abstract; as value) {
+              <tr>
+                <th>Abstract</th>
+                <td>{{ value }}</td>
+              </tr>
+            }
+            @if (publishedData.doi; as value) {
+              <tr id="doiRow">
+                <th>DOI</th>
+                <td>{{ value }}</td>
+              </tr>
+            }
+            @if (landingPageUrl) {
+              <tr>
+                <th>URL</th>
+                <td><span [innerHTML]="landingPageUrl | linky"></span></td>
+              </tr>
+            }
+            @if (publishedData.metadata?.publicationYear; as value) {
+              <tr>
+                <th>Publication Year</th>
+                <td>{{ value }}</td>
+              </tr>
+            }
+          </table>
+        </mat-card-content>
+      </mat-card>
+      @if (publishedData.metadata?.creators; as creators) {
+        <mat-card>
+          <mat-card-header class="creator-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> person </mat-icon>
+            </div>
+            Creator Information
+          </mat-card-header>
+          <mat-card-content>
+            <table>
+              <tr>
+                <th>Creators</th>
+                <td>
+                  @for (
+                    creator of creators;
+                    track creator;
+                    let isLast = $last
+                  ) {
+                    {{ creator.name }}{{ isLast ? "" : ", " }}
+                  }
+                </td>
+              </tr>
+              @if (publishedData.metadata?.contributors; as contributors) {
+                <tr>
+                  <th>Contributors</th>
+                  <td>
+                    @for (
+                      contributor of contributors;
+                      track contributor;
+                      let isLast = $last
+                    ) {
+                      {{ contributor.name }}{{ isLast ? "" : ", " }}
+                    }
+                  </td>
+                </tr>
+              }
+              @if (publishedData.metadata?.affiliation; as value) {
+                <tr>
+                  <th>Affiliation</th>
+                  <td>{{ value }}</td>
+                </tr>
+              }
+              @if (publishedData.metadata?.publisher; as value) {
+                <tr>
+                  <th>Publisher</th>
+                  <td>{{ value.name }}</td>
+                </tr>
+              }
+            </table>
+          </mat-card-content>
+        </mat-card>
+      }
+      @if (
         publishedData.metadata?.downloadLink ||
         publishedData.sizeOfArchive ||
         publishedData.numberOfFiles ||
         publishedData.metadata?.resourceType ||
         publishedData.metadata?.dataDescription
-      "
-    >
-      <mat-card-header class="file-header">
-        <div mat-card-avatar class="section-icon">
-          <mat-icon> folder </mat-icon>
-        </div>
-        File information
-      </mat-card-header>
-
-      <mat-card-content>
-        <table>
-          <tr *ngIf="publishedData.metadata?.downloadLink as value">
-            <th>Download Link</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.sizeOfArchive as value">
-            <th>Size</th>
-            <td>{{ value | filesize }}</td>
-          </tr>
-          <tr *ngIf="publishedData.numberOfFiles as value">
-            <th>Number of Files</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.metadata?.resourceType as value">
-            <th>Resource Type</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.metadata?.dataDescription as value">
-            <th>Data Description</th>
-            <td *ngIf="isUrl(value); else notUrl">
-              <a href="{{ value }}" target="_blank" rel="noopener">
-                {{ value | descriptionTitle }}
-              </a>
-            </td>
-            <ng-template #notUrl>
-              <td>{{ value }}</td>
-            </ng-template>
-          </tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card>
-      <mat-card-header class="related-header">
-        <div mat-card-avatar class="section-icon">
-          <mat-icon> library_books </mat-icon>
-        </div>
-        Related Documents
-      </mat-card-header>
-
-      <mat-card-content>
-        <table>
-          <tr
-            *ngIf="
+      ) {
+        <mat-card>
+          <mat-card-header class="file-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> folder </mat-icon>
+            </div>
+            File information
+          </mat-card-header>
+          <mat-card-content>
+            <table>
+              @if (publishedData.metadata?.downloadLink; as value) {
+                <tr>
+                  <th>Download Link</th>
+                  <td>{{ value }}</td>
+                </tr>
+              }
+              @if (publishedData.sizeOfArchive; as value) {
+                <tr>
+                  <th>Size</th>
+                  <td>{{ value | filesize }}</td>
+                </tr>
+              }
+              @if (publishedData.numberOfFiles; as value) {
+                <tr>
+                  <th>Number of Files</th>
+                  <td>{{ value }}</td>
+                </tr>
+              }
+              @if (publishedData.metadata?.resourceType; as value) {
+                <tr>
+                  <th>Resource Type</th>
+                  <td>{{ value }}</td>
+                </tr>
+              }
+              @if (publishedData.metadata?.dataDescription; as value) {
+                <tr>
+                  <th>Data Description</th>
+                  @if (isUrl(value)) {
+                    <td>
+                      <a href="{{ value }}" target="_blank" rel="noopener">
+                        {{ value | descriptionTitle }}
+                      </a>
+                    </td>
+                  } @else {
+                    <td>{{ value }}</td>
+                  }
+                </tr>
+              }
+            </table>
+          </mat-card-content>
+        </mat-card>
+      }
+      <mat-card>
+        <mat-card-header class="related-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> library_books </mat-icon>
+          </div>
+          Related Documents
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            @if (
               publishedData.metadata?.relatedPublications &&
               publishedData.metadata?.relatedPublications.length > 0
-            "
-          >
-            <th>Related Publications</th>
-            <td>{{ publishedData.metadata?.relatedPublications }}</td>
-          </tr>
-          <tr *ngIf="publishedData.datasetPids as pidArray">
-            <th>Dataset IDs</th>
-            <td>
-              <ng-container *ngFor="let pid of pidArray">
-                <a [routerLink]="['/datasets/', pid]">
-                  {{ pid }}
-                </a>
-                <span *ngIf="pidArray.indexOf(pid) < pidArray.length - 1"
-                  >,
-                </span>
-              </ng-container>
-            </td>
-            <td *ngIf="publishedData.status === 'private'">
-              <button
-                mat-stroked-button
-                aria-label="Edit dataset list"
-                (click)="onEditDatasetList()"
-                data-cy="editDatasetList"
-              >
-                <mat-icon>edit</mat-icon> Edit
-              </button>
-            </td>
-          </tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card>
-      <mat-card-content>
-        <button
-          mat-raised-button
-          id="editBtn"
-          class="edit-button"
-          color="primary"
-          *ngIf="
-            publishedData.status === 'private' ||
-            (publishedData.status === 'public' && isAdmin$ | async)
-          "
-          (click)="onEditClick()"
-        >
-          Edit
-        </button>
-        <!-- NOTE: For now we will keep the delete button hidden until it is fully decided how to handle it in the frontend. -->
-        <!-- <button
+            ) {
+              <tr>
+                <th>Related Publications</th>
+                <td>{{ publishedData.metadata?.relatedPublications }}</td>
+              </tr>
+            }
+            @if (publishedData.datasetPids; as pidArray) {
+              <tr>
+                <th>Dataset IDs</th>
+                <td>
+                  @for (pid of pidArray; track pid) {
+                    <a [routerLink]="['/datasets/', pid]">
+                      {{ pid }}
+                    </a>
+                    @if (pidArray.indexOf(pid) < pidArray.length - 1) {
+                      <span>, </span>
+                    }
+                  }
+                </td>
+                @if (publishedData.status === "private") {
+                  <td>
+                    <button
+                      mat-stroked-button
+                      aria-label="Edit dataset list"
+                      (click)="onEditDatasetList()"
+                      data-cy="editDatasetList"
+                    >
+                      <mat-icon>edit</mat-icon> Edit
+                    </button>
+                  </td>
+                }
+              </tr>
+            }
+          </table>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-content>
+          @if (
+            publishedData.status === "private" ||
+            (publishedData.status === "public" && isAdmin$ | async)
+          ) {
+            <button
+              mat-raised-button
+              id="editBtn"
+              class="edit-button"
+              color="primary"
+              (click)="onEditClick()"
+            >
+              Edit
+            </button>
+          }
+          <!-- NOTE: For now we will keep the delete button hidden until it is fully decided how to handle it in the frontend. -->
+          <!-- <button
           mat-raised-button
           color="warn"
           id="deleteBtn"
@@ -251,38 +289,39 @@
             (publishedData.status === 'public' && isAdmin$ | async)
           "
           (click)="onDeleteClick(publishedData.doi)"
-        >
+          >
           Delete
         </button> -->
-        <ng-container
-          id="jsonMetadataContainer"
-          *ngIf="appConfig.jsonMetadataEnabled"
-        >
-          <button
-            mat-stroked-button
-            (click)="show = !show"
-            class="show-hide-metadata-button"
-            data-cy="showHideMetadata"
-          >
-            {{ show ? "Hide MetaData" : "Show Metadata" }}
-          </button>
-          <br />
-          <div *ngIf="show">
-            <ngx-json-viewer
-              [json]="currentData$ | async"
-              [expanded]="false"
-            ></ngx-json-viewer>
-          </div>
-        </ng-container>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <div fxFlex="20">
-    <ng-container *ngIf="publishedData.metadata?.thumbnail as thumbnail">
-      <mat-card>
-        <img mat-card-image src="{{ thumbnail }}" />
+          @if (appConfig.jsonMetadataEnabled) {
+            <ng-container id="jsonMetadataContainer">
+              <button
+                mat-stroked-button
+                (click)="show = !show"
+                class="show-hide-metadata-button"
+                data-cy="showHideMetadata"
+              >
+                {{ show ? "Hide MetaData" : "Show Metadata" }}
+              </button>
+              <br />
+              @if (show) {
+                <div>
+                  <ngx-json-viewer
+                    [json]="currentData$ | async"
+                    [expanded]="false"
+                  ></ngx-json-viewer>
+                </div>
+              }
+            </ng-container>
+          }
+        </mat-card-content>
       </mat-card>
-    </ng-container>
+    </div>
+    <div fxFlex="20">
+      @if (publishedData.metadata?.thumbnail; as thumbnail) {
+        <mat-card>
+          <img mat-card-image src="{{ thumbnail }}" />
+        </mat-card>
+      }
+    </div>
   </div>
-</div>
+}
