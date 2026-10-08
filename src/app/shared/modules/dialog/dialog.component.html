@@ -6,7 +6,7 @@
   <form #dynamicForm="ngForm">
     <mat-form-field appearance="outline" class="full-width" *ngIf="data.choice">
       <mat-label>{{ data.label ?? data.title }}</mat-label>
-      <mat-select [(ngModel)]="data.selectedOption" name="primaryReason"
+      <mat-select [(ngModel)]="data.option" name="primaryReason"
         required>
         <mat-option *ngFor="let opt of data.choice.options"
           [matTooltip]="opt.tooltip" 
