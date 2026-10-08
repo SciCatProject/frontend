@@ -15,15 +15,17 @@ import { ActionConfig } from "./configurable-action.interfaces";
  * retrieve dialog was built.
  */
 /**
- * `#currentArchViewMode` is only provided by dataset-table-actions (the
- * dataset list page, with its archive-view-mode toggle); batch-view (the
- * cart) has no such concept and doesn't set it. When a selector has no
- * matching context key, ConfigurableActionComponent's fallback returns the
- * selector text itself rather than undefined — hence the `#currentArchViewMode`
- * string check below is what actually detects "not in a mode-toggle page",
- * not the `typeof ... === 'undefined'` check (kept only as a defensive
- * fallback). Both actions should render unconditionally in the cart, and
- * only for their matching mode on the dataset list page.
+ * Both actions are always visible and are enabled only when every selected
+ * dataset is in the matching lifecycle state, using the same conditions as
+ * the "archivable" and "retrievable" archive view modes (see
+ * setArchiveViewModeAction in datasets.reducer.ts). On the dataset list they
+ * are additionally enabled only in their matching view mode; they used to be
+ * hidden outside it, so users had to know to switch view before the buttons
+ * appeared.
+ *
+ * `#currentArchViewMode` is only provided by dataset-table-actions; in the
+ * cart (batch-view) it resolves to the selector text itself, so that entry
+ * keeps the actions usable there on the lifecycle checks alone.
  */
 export function buildDefaultBatchActions(
   retrieveDestinationOptions: DialogOptionData[],
@@ -50,6 +52,7 @@ export function buildDefaultBatchActions(
         userEmail: "#user.email",
         pids: "#DatasetsPid",
         datasetList: "#DatasetsPidEmptyFilesMap",
+        lifecycles: "#DatasetsField[datasetlifecycle]",
         archiveViewMode: "#currentArchViewMode",
         totalSize: "#DatasetsTotalSize",
       },
@@ -59,9 +62,8 @@ export function buildDefaultBatchActions(
       },
       payload:
         '{"jobParams": {"username": "{{ @username }}"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "archive"}',
-      hidden:
-        "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
-      enabled: "@totalSize > 0",
+      enabled:
+        "['archivable', '#currentArchViewMode'].includes(@archiveViewMode) && @totalSize > 0 && @lifecycles.every((l) => l?.archivable === true && l?.retrievable !== true)",
     },
     {
       id: "dc10cd56-6d0a-4f0a-899a-f9c6726465bf",
@@ -83,6 +85,7 @@ export function buildDefaultBatchActions(
         userEmail: "#user.email",
         pids: "#DatasetsPid",
         datasetList: "#DatasetsPidEmptyFilesMap",
+        lifecycles: "#DatasetsField[datasetlifecycle]",
         archiveViewMode: "#currentArchViewMode",
         totalPackedSize: "#DatasetsTotalPackedSize",
       },
@@ -100,9 +103,8 @@ export function buildDefaultBatchActions(
       },
       payload:
         '{"jobParams": {"username": "{{ @username }}", "retrieveDestination": "{{ @dialog.retrieveDestination }}", "destinationPath": "/archive/retrieve"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "retrieve"}',
-      hidden:
-        "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
-      enabled: "@totalPackedSize > 0",
+      enabled:
+        "['retrievable', '#currentArchViewMode'].includes(@archiveViewMode) && @totalPackedSize > 0 && @lifecycles.every((l) => l?.retrievable === true && l?.archivable !== true)",
     },
   ];
 }
