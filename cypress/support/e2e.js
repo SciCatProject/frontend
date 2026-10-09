@@ -18,3 +18,9 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+// Benign browser warning from Angular Material layout; not an app error.
+Cypress.on("uncaught:exception", (err) => {
+    if (err.message.includes("ResizeObserver loop")) {
+        return false;
+    }
+});
