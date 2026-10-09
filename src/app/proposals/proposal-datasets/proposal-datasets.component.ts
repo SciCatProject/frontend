@@ -163,13 +163,23 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
         }),
     );
 
+    // sort by creation time by default, stored in the url so that the
+    // pagination keeps using it until the user changes the sort
+    const { sortColumn = "creationTime", sortDirection = "desc" } =
+      this.route.snapshot.queryParams;
+    this.router.navigate([], {
+      queryParams: { sortColumn, sortDirection },
+      queryParamsHandling: "merge",
+      replaceUrl: true,
+    });
+
     this.store.dispatch(
       fetchProposalDatasetsAction({
         proposalId: this.proposalId,
         skip: 0,
         limit: this.defaultPageSize,
-        sortColumn: "creationTime",
-        sortDirection: "desc",
+        sortColumn,
+        sortDirection,
       }),
     );
 
@@ -269,8 +279,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
     };
-    const { sortColumn = "creationTime", sortDirection = "desc" } =
-      this.route.snapshot.queryParams;
+    const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
 
     this.router.navigate([], {
       queryParams,
