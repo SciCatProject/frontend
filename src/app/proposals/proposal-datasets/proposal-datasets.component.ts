@@ -105,6 +105,11 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   defaultPageSize = 10;
 
+  // kept here and not only in the url, the proposal page clears the query
+  // params when switching tabs
+  sortColumn: string | undefined = "creationTime";
+  sortDirection: string | undefined = "desc";
+
   tablesSettings: object;
 
   showGlobalTextSearch = false;
@@ -163,23 +168,19 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
         }),
     );
 
-    // sort by creation time by default, stored in the url so that the
-    // pagination keeps using it until the user changes the sort
-    const { sortColumn = "creationTime", sortDirection = "desc" } =
-      this.route.snapshot.queryParams;
-    this.router.navigate([], {
-      queryParams: { sortColumn, sortDirection },
-      queryParamsHandling: "merge",
-      replaceUrl: true,
-    });
+    const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
+    if (sortColumn && sortDirection) {
+      this.sortColumn = sortColumn;
+      this.sortDirection = sortDirection;
+    }
 
     this.store.dispatch(
       fetchProposalDatasetsAction({
         proposalId: this.proposalId,
         skip: 0,
         limit: this.defaultPageSize,
-        sortColumn,
-        sortDirection,
+        sortColumn: this.sortColumn,
+        sortDirection: this.sortDirection,
       }),
     );
 
@@ -279,8 +280,6 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
     };
-    const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
-
     this.router.navigate([], {
       queryParams,
       queryParamsHandling: "merge",
@@ -291,8 +290,8 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
         proposalId: this.proposalId,
         limit: pagination.pageSize,
         skip: pagination.pageIndex * pagination.pageSize,
-        sortColumn: sortColumn,
-        sortDirection: sortDirection,
+        sortColumn: this.sortColumn,
+        sortDirection: this.sortDirection,
       }),
     );
   }
@@ -300,6 +299,8 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   onTableEvent({ event, sender }: ITableEvent) {
     if (event === TableEventType.SortChanged) {
       const { active: sortColumn, direction: sortDirection } = sender as Sort;
+      this.sortColumn = sortDirection ? sortColumn : undefined;
+      this.sortDirection = sortDirection || undefined;
       this.pending = true;
       this.router.navigate([], {
         queryParams: {
