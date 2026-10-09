@@ -257,6 +257,7 @@ export const selectFullqueryParams = createSelector(
 
     const query = {
       ...baseQuery,
+      ...(mode || {}),
       ...textQuery,
       ...scientificQuery,
     };
