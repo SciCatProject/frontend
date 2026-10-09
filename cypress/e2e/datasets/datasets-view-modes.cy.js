@@ -30,17 +30,17 @@ function visitWithConfig(overrides) {
   cy.finishedLoading();
 }
 
-// selects a view and yields the where sent with the list request it triggers
-function selectView(label) {
-  // registered right before the click, so earlier list requests don't count
+function selectView(label, check) {
   cy.intercept({ method: "GET", pathname: "/api/v4/datasets" }).as(
-    "viewRequest",
+    "listRequest",
   );
   cy.contains("mat-button-toggle", label).click();
-  return cy.wait("@viewRequest").then((interception) => {
-    const url = new URL(interception.request.url);
-    return JSON.parse(url.searchParams.get("filter")).where;
+  cy.get("@listRequest.all").should((requests) => {
+    expect(requests, "list requests").not.to.be.empty;
+    const url = new URL(requests[requests.length - 1].request.url);
+    check(JSON.parse(url.searchParams.get("filter")).where);
   });
+  cy.finishedLoading();
 }
 
 describe("Datasets view modes", () => {
@@ -91,27 +91,24 @@ describe("Datasets view modes", () => {
     });
 
     it("should filter the list by the selected view's where", () => {
-      selectView(toTape.label).then((where) => {
+      selectView(toTape.label, (where) => {
         expect(where).to.deep.include(toTape.where);
       });
-      cy.finishedLoading();
       cy.get("mat-row").should("contain.text", archivableName);
       cy.get("mat-row").should("not.contain.text", onTapeName);
 
-      selectView(onTape.label).then((where) => {
+      selectView(onTape.label, (where) => {
         expect(where).to.deep.include(onTape.where);
       });
-      cy.finishedLoading();
       cy.get("mat-row").should("contain.text", onTapeName);
       cy.get("mat-row").should("not.contain.text", archivableName);
 
-      selectView("All").then((where) => {
+      selectView("All", (where) => {
         expect(where).not.to.have.any.keys(
           "datasetlifecycle.archivable",
           "datasetlifecycle.retrievable",
         );
       });
-      cy.finishedLoading();
       cy.get("mat-row").should("contain.text", archivableName);
       cy.get("mat-row").should("contain.text", onTapeName);
     });
