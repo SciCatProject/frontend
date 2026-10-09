@@ -14,6 +14,8 @@ const initialDatasetState: DatasetState = {
 
   facetCounts: {},
   facetCountsIsLoading: false,
+  origDatablocksCountIsLoading: false,
+  relatedDatasetsCountIsLoading: false,
   metadataKeys: ["test"],
   hasPrefilledFilters: false,
   searchTerms: "run",
@@ -28,8 +30,8 @@ const initialDatasetState: DatasetState = {
     modeToggle: ArchViewMode.all,
     text: "",
     creationTime: {
-      begin: "2019-10-03",
-      end: "2019-10-04",
+      $gte: { $date: "2019-10-03" },
+      $lte: { $date: "2019-10-04" },
     },
     type: [],
     creationLocation: [],
@@ -200,7 +202,10 @@ describe("test dataset selectors", () => {
         fromDatasetSelectors.selectCreationTimeFilter.projector(
           initialDatasetState.filters,
         ),
-      ).toEqual({ begin: "2019-10-03", end: "2019-10-04" });
+      ).toEqual({
+        $gte: { $date: "2019-10-03" },
+        $lte: { $date: "2019-10-04" },
+      });
     });
   });
 

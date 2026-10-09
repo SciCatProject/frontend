@@ -1,11 +1,11 @@
 import { createAction, props } from "@ngrx/store";
 import {
   OutputAttachmentV3Dto,
-  OutputDatasetObsoleteDto,
+  PartialOutputDatasetDto,
   PartialUpdateProposalDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { DateRange, FacetCounts } from "state-management/state/proposals.store";
+import { DateRange, FacetCounts } from "state-management/models";
 
 export const fetchProposalsAction = createAction(
   "[Proposal] Fetch Proposals",
@@ -91,7 +91,7 @@ export const fetchProposalDatasetsAction = createAction(
 export const fetchProposalDatasetsCompleteAction = createAction(
   "[Proposal] Fetch Datasets Complete",
   props<{
-    datasets: OutputDatasetObsoleteDto[];
+    datasets: PartialOutputDatasetDto[];
     limit: number;
     skip: number;
   }>(),
@@ -162,9 +162,6 @@ export const removeAttachmentFailedAction = createAction(
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");
 export const clearProposalsFiltersAction = createAction(
   "[Proposal] Clear Filters",
-);
-export const clearCurrentProposalStateAction = createAction(
-  "[Proposal] Clear Current Proposal State",
 );
 
 export const fetchRelatedProposalsAction = createAction(

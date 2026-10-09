@@ -1,16 +1,15 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
+import { initialDatasetState } from "state-management/state/datasets.store";
+import { ArchViewMode, FacetCounts, ScientificCondition } from "../models";
+import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
 import {
-  FacetCounts,
-  initialDatasetState,
-} from "state-management/state/datasets.store";
-import { ArchViewMode, ScientificCondition } from "../models";
-import { createMock, mockAttachment as attachment } from "shared/MockStubs";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+  OrigDatablock,
+  OutputDatasetDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
-const derivedDataset = createMock<OutputDatasetObsoleteDto>({
+const derivedDataset = createMock<OutputDatasetDto>({
   pid: "testPid",
-  investigator: "",
   inputDatasets: [],
   usedSoftware: [],
   owner: "",
@@ -19,21 +18,21 @@ const derivedDataset = createMock<OutputDatasetObsoleteDto>({
   creationTime: new Date().toString(),
   type: "derived",
   ownerGroup: "",
+  datasetName: "test name",
   numberOfFilesArchived: 0,
   accessGroups: [],
   createdAt: "",
   createdBy: "",
   creationLocation: "",
-  principalInvestigator: "",
+  principalInvestigators: [],
   updatedAt: "",
   updatedBy: "",
-  attachments: [],
 });
 
-const dataset = createMock<OutputDatasetObsoleteDto>({
+const dataset = createMock<OutputDatasetDto>({
   ...derivedDataset,
   type: "raw",
-  origdatablocks: undefined,
+  datasetName: "test name",
 });
 
 describe("DatasetsReducer", () => {
@@ -78,6 +77,31 @@ describe("DatasetsReducer", () => {
     it("should set currentSet property", () => {
       const action = fromActions.fetchDatasetCompleteAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.currentSet).toEqual(dataset);
+    });
+
+    it("should keep the loaded origdatablocks page of the same dataset", () => {
+      const origdatablocks = [createMock<OrigDatablock>({})];
+      const action = fromActions.fetchDatasetCompleteAction({ dataset });
+      const state = fromDatasets.datasetsReducer(
+        { ...initialDatasetState, currentSet: { ...dataset, origdatablocks } },
+        action,
+      );
+
+      expect(state.currentSet).toEqual({ ...dataset, origdatablocks });
+    });
+
+    it("should drop the origdatablocks of a different dataset", () => {
+      const origdatablocks = [createMock<OrigDatablock>({})];
+      const action = fromActions.fetchDatasetCompleteAction({ dataset });
+      const state = fromDatasets.datasetsReducer(
+        {
+          ...initialDatasetState,
+          currentSet: { ...dataset, pid: "otherPid", origdatablocks },
+        },
+        action,
+      );
 
       expect(state.currentSet).toEqual(dataset);
     });
@@ -239,7 +263,7 @@ describe("DatasetsReducer", () => {
       initialDatasetState.currentSet = dataset;
 
       const attachmentId = "testId";
-      attachment.id = attachmentId;
+      attachment.aid = attachmentId;
       initialDatasetState.currentSet.attachments = [attachment];
 
       const action = fromActions.removeAttachmentCompleteAction({
@@ -449,11 +473,14 @@ describe("DatasetsReducer", () => {
       const action = fromActions.addDatasetFilterAction({
         filterType: "dateRange",
         key: "creationTime",
-        value: { begin, end },
+        value: { $gte: { $date: begin }, $lte: { $date: end } },
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.filters.creationTime).toEqual({ begin, end });
+      expect(state.filters.creationTime).toEqual({
+        $gte: { $date: begin },
+        $lte: { $date: end },
+      });
     });
   });
 

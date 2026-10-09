@@ -319,15 +319,6 @@ describe("Proposal Actions", () => {
       });
     });
 
-    describe("clearCurrentProposalStateAction", () => {
-      it("should create an action", () => {
-        const action = fromActions.clearCurrentProposalStateAction();
-        expect({ ...action }).toEqual({
-          type: "[Proposal] Clear Current Proposal State",
-        });
-      });
-    });
-
     describe("setInitialProposalsFiltersAction", () => {
       it("should create an action", () => {
         const fields = {

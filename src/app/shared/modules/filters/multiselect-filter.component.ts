@@ -3,7 +3,7 @@ import { createSuggestionObserver, getFacetCount } from "./utils";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { AppConfigService } from "app-config.service";
-import { FacetCount } from "state-management/state/datasets.store";
+import { FacetCount } from "state-management/models";
 
 export type MultiSelectFilterValue = {
   key: string;

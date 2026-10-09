@@ -43,24 +43,21 @@ const reducer = createReducer(
 
   on(
     fromActions.fetchDatasetCompleteAction,
-    (state, { dataset }): DatasetState => ({
-      ...state,
-      currentSet: {
-        ...dataset,
-        origdatablocks: state.currentSet?.origdatablocks,
-      },
-    }),
+    (state, { dataset }): DatasetState => {
+      // origdatablocks are paginated by the datafiles tab, keep the loaded
+      // page while the same dataset is refetched with other includes
+      const loadedOrigDatablocks = state.currentSet?.origdatablocks;
+      const keepLoadedPage =
+        loadedOrigDatablocks &&
+        (!state.currentSet.pid || state.currentSet.pid === dataset.pid);
+      return {
+        ...state,
+        currentSet: keepLoadedPage
+          ? { ...dataset, origdatablocks: loadedOrigDatablocks }
+          : { ...dataset },
+      };
+    },
   ),
-
-  on(fromActions.fetchDatablocksCompleteAction, (state, { datablocks }) => {
-    return {
-      ...state,
-      currentSet: {
-        ...state.currentSet,
-        datablocks,
-      },
-    };
-  }),
 
   on(
     fromActions.fetchOrigDatablocksCompleteAction,
@@ -74,16 +71,25 @@ const reducer = createReducer(
       };
     },
   ),
+  on(fromActions.fetchOrigDatablocksCountAction, (state): DatasetState => ({
+    ...state,
+    origDatablocksCountIsLoading: true,
+  })),
 
-  on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) => {
+  on(fromActions.fetchOrigDatablocksCountCompleteAction, (state, { count }) => {
     return {
       ...state,
-      currentSet: {
-        ...state.currentSet,
-        attachments,
-      },
+      origDatablocksCount: count,
+      origDatablocksCountIsLoading: false,
     };
   }),
+  on(
+    fromActions.fetchOrigDatablocksCountFailedAction,
+    (state): DatasetState => ({
+      ...state,
+      origDatablocksCountIsLoading: false,
+    }),
+  ),
 
   on(
     fromActions.fetchRelatedDatasetsCompleteAction,
@@ -92,11 +98,26 @@ const reducer = createReducer(
       relatedDatasets,
     }),
   ),
+
+  on(fromActions.fetchRelatedDatasetsCountAction, (state): DatasetState => ({
+    ...state,
+    relatedDatasetsCountIsLoading: true,
+  })),
+
   on(
     fromActions.fetchRelatedDatasetsCountCompleteAction,
     (state, { count }): DatasetState => ({
       ...state,
       relatedDatasetsCount: count,
+      relatedDatasetsCountIsLoading: false,
+    }),
+  ),
+
+  on(
+    fromActions.fetchRelatedDatasetsCountFailedAction,
+    (state): DatasetState => ({
+      ...state,
+      relatedDatasetsCountIsLoading: false,
     }),
   ),
 
@@ -159,8 +180,8 @@ const reducer = createReducer(
     fromActions.addAttachmentCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id,
+        const attachments = (state.currentSet.attachments || []).filter(
+          (existingAttachment) => existingAttachment.aid !== attachment.aid,
         );
         attachments.push(attachment);
         const currentSet = { ...state.currentSet, attachments };
@@ -174,8 +195,8 @@ const reducer = createReducer(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id,
+        const attachments = (state.currentSet.attachments || []).filter(
+          (existingAttachment) => existingAttachment.aid !== attachment.aid,
         );
         attachments.push(attachment);
         const currentSet = { ...state.currentSet, attachments };
@@ -189,8 +210,8 @@ const reducer = createReducer(
     fromActions.removeAttachmentCompleteAction,
     (state, { attachmentId }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
-          (attachment) => attachment.id !== attachmentId,
+        const attachments = (state.currentSet.attachments || []).filter(
+          (attachment) => attachment.aid !== attachmentId,
         );
         const currentSet = { ...state.currentSet, attachments };
         return { ...state, currentSet };

@@ -18,9 +18,15 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-// Benign browser warning from Angular Material layout; not an app error.
+
+// Benign browser warning (e.g. from Angular Material overlays) that Cypress
+// would otherwise treat as an uncaught application error.
 Cypress.on("uncaught:exception", (err) => {
-    if (err.message.includes("ResizeObserver loop")) {
-        return false;
-    }
+  if (
+    err.message.includes(
+      "ResizeObserver loop completed with undelivered notifications",
+    )
+  ) {
+    return false;
+  }
 });
