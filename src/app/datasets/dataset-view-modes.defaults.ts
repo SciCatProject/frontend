@@ -9,11 +9,11 @@ import { ArchViewMode, DatasetViewMode } from "state-management/models";
  * match on them (see configurable-actions.defaults.ts).
  */
 export const DEFAULT_DATASET_VIEW_MODES: DatasetViewMode[] = [
-  { id: ArchViewMode.all, label: "All", query: {} },
+  { id: ArchViewMode.all, label: "All", where: {} },
   {
     id: ArchViewMode.archivable,
     label: "Archivable",
-    query: {
+    where: {
       "datasetlifecycle.archivable": true,
       "datasetlifecycle.retrievable": false,
     },
@@ -21,7 +21,7 @@ export const DEFAULT_DATASET_VIEW_MODES: DatasetViewMode[] = [
   {
     id: ArchViewMode.retrievable,
     label: "Retrievable",
-    query: {
+    where: {
       "datasetlifecycle.retrievable": true,
       "datasetlifecycle.archivable": false,
     },
@@ -29,7 +29,7 @@ export const DEFAULT_DATASET_VIEW_MODES: DatasetViewMode[] = [
   {
     id: ArchViewMode.work_in_progress,
     label: "Work In Progress",
-    query: {
+    where: {
       $or: [
         {
           "datasetlifecycle.retrievable": false,
@@ -47,7 +47,7 @@ export const DEFAULT_DATASET_VIEW_MODES: DatasetViewMode[] = [
   {
     id: ArchViewMode.system_error,
     label: "System Error",
-    query: {
+    where: {
       $or: [
         {
           "datasetlifecycle.retrievable": true,
@@ -65,7 +65,7 @@ export const DEFAULT_DATASET_VIEW_MODES: DatasetViewMode[] = [
   {
     id: ArchViewMode.user_error,
     label: "User Error",
-    query: {
+    where: {
       $or: [{ "datasetlifecycle.archiveStatusMessage": "missingFilesError" }],
     },
   },

@@ -372,7 +372,7 @@ describe("AppConfigService", () => {
       expect(service.getConfig().datasetViews?.modes).toBeUndefined();
     });
 
-    [[], [{ id: "on-tape", label: "On tape", query: {} }]].forEach((modes) => {
+    [[], [{ id: "on-tape", label: "On tape", where: {} }]].forEach((modes) => {
       it(`should not override a deployment's own datasetViews.modes (${modes.length} entries)`, async () => {
         spyOn(service["http"], "get").and.returnValue(
           of({

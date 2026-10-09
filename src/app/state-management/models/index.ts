@@ -179,7 +179,8 @@ export enum ArchViewMode {
 export interface DatasetViewMode {
   id: string;
   label: string;
-  query: Record<string, unknown>;
+  // Mongo query, as the where of the v4 dataset filter
+  where: Record<string, unknown>;
   tooltip?: string;
 }
 

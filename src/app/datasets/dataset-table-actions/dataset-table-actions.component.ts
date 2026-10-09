@@ -77,7 +77,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
    */
   onModeChange(mode: DatasetViewMode): void {
     this.store.dispatch(
-      setArchiveViewModeAction({ modeToggle: mode.id, mode: mode.query }),
+      setArchiveViewModeAction({ modeToggle: mode.id, mode: mode.where }),
     );
     this.store.dispatch(clearSelectionAction());
   }

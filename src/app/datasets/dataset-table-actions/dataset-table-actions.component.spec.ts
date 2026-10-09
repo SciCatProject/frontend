@@ -98,8 +98,8 @@ describe("DatasetTableActionsComponent", () => {
 
   it("should render configured view mode labels", () => {
     component.modes = [
-      { id: "to-tape", label: "Ready for tape", query: {} },
-      { id: "on-tape", label: "On tape", query: {} },
+      { id: "to-tape", label: "Ready for tape", where: {} },
+      { id: "on-tape", label: "On tape", where: {} },
     ];
     fixture.detectChanges();
 
@@ -126,7 +126,7 @@ describe("DatasetTableActionsComponent", () => {
       const viewMode: DatasetViewMode = {
         id: "on-tape",
         label: "On tape",
-        query: { "datasetlifecycle.retrievable": true },
+        where: { "datasetlifecycle.retrievable": true },
       };
 
       component.onModeChange(viewMode);
