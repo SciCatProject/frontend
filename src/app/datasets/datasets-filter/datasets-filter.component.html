@@ -31,6 +31,25 @@
           Public data
         </button>
       </div>
+      <mat-form-field *ngIf="viewModes.length > 0" data-cy="dataset-view-modes">
+        <mat-label>{{ viewModesLabel }}</mat-label>
+        <mat-select
+          [value]="currentViewMode"
+          (selectionChange)="onViewModeChange($event.value)"
+        >
+          <mat-option *ngIf="!hasAllViewMode" [value]="allViewModeId">
+            All
+          </mat-option>
+          <mat-option
+            *ngFor="let viewMode of viewModes"
+            [value]="viewMode.id"
+            [matTooltip]="viewMode.tooltip ?? ''"
+            matTooltipPosition="after"
+          >
+            {{ viewMode.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </ng-template>
     <ng-container *ngFor="let filter of filtersList">
       <shared-filter

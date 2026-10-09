@@ -3,12 +3,15 @@ import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 import { cloneDeep, isEqual } from "lodash-es";
 import {
+  selectArchiveViewMode,
   selectFacetCountByKey,
   selectFilterByKey,
   selectHasAppliedFilters,
   selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import {
+  ArchViewMode,
+  DatasetViewMode,
   DateRange,
   DateRangeFilter,
   ScientificCondition,
@@ -16,9 +19,11 @@ import {
 import {
   addDatasetFilterAction,
   clearFacetsAction,
+  clearSelectionAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
   removeDatasetFilterAction,
+  setArchiveViewModeAction,
   setFiltersAction,
   setPublicViewModeAction,
 } from "state-management/actions/datasets.actions";
@@ -73,6 +78,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   loggedIn$ = this.store.select(selectIsLoggedIn);
 
   currentPublicViewMode: boolean | "" = "";
+
+  viewModes: DatasetViewMode[] = this.appConfig.datasetViews?.modes ?? [];
+
+  viewModesLabel = this.appConfig.datasetViews?.label ?? "Archive status";
+
+  // the unfiltered view gets an implicit "All" option unless configured
+  allViewModeId: string = ArchViewMode.all;
+
+  hasAllViewMode = this.viewModes.some((m) => m.id === ArchViewMode.all);
+
+  currentViewMode: string = ArchViewMode.all;
 
   humanNameMap: { [key: string]: string } = {};
 
@@ -150,6 +166,21 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         this.currentPublicViewMode = publicViewMode;
       }),
     );
+
+    this.subscriptions.push(
+      this.store.select(selectArchiveViewMode).subscribe((viewMode) => {
+        this.currentViewMode = viewMode;
+      }),
+    );
+  }
+
+  onViewModeChange(id: string) {
+    const where = this.viewModes.find((m) => m.id === id)?.where ?? {};
+
+    this.store.dispatch(
+      setArchiveViewModeAction({ modeToggle: id, mode: where }),
+    );
+    this.store.dispatch(clearSelectionAction());
   }
 
   onViewPublicChange(value: boolean) {
