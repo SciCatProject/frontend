@@ -168,6 +168,8 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
         proposalId: this.proposalId,
         skip: 0,
         limit: this.defaultPageSize,
+        sortColumn: "creationTime",
+        sortDirection: "desc",
       }),
     );
 
@@ -267,7 +269,8 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
     };
-    const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
+    const { sortColumn = "creationTime", sortDirection = "desc" } =
+      this.route.snapshot.queryParams;
 
     this.router.navigate([], {
       queryParams,
