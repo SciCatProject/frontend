@@ -609,10 +609,12 @@ describe("Dataset Actions", () => {
   describe("setArchViewModeAction", () => {
     it("should create an action", () => {
       const modeToggle = ArchViewMode.all;
-      const action = fromActions.setArchiveViewModeAction({ modeToggle });
+      const mode = {};
+      const action = fromActions.setArchiveViewModeAction({ modeToggle, mode });
       expect({ ...action }).toEqual({
         type: "[Dataset] Set Archive View Mode",
         modeToggle,
+        mode,
       });
     });
   });
