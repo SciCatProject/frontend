@@ -2,6 +2,7 @@ import { Action, createReducer, on } from "@ngrx/store";
 import {
   initialDatasetState,
   DatasetState,
+  BATCH_ADDED_FROM_DETAILS,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
 import { ArchViewMode, ScientificCondition } from "state-management/models";
@@ -138,11 +139,11 @@ const reducer = createReducer(
     ...state,
     batch,
   })),
-  on(fromActions.addToBatchAction, (state) => {
+  on(fromActions.addToBatchAction, (state, { addedFrom }) => {
     const batchedPids = state.batch.map((dataset) => dataset.pid);
-    const addition = state.selectedSets.filter(
-      (dataset) => batchedPids.indexOf(dataset.pid) === -1,
-    );
+    const addition = state.selectedSets
+      .filter((dataset) => batchedPids.indexOf(dataset.pid) === -1)
+      .map((dataset) => (addedFrom ? { ...dataset, addedFrom } : dataset));
     const batch = [...state.batch, ...addition];
     return { ...state, batch };
   }),
@@ -153,7 +154,10 @@ const reducer = createReducer(
     if (state.batch.some((d) => d.pid === state.currentSet.pid)) {
       return state;
     }
-    const batch = [...state.batch, state.currentSet];
+    const batch = [
+      ...state.batch,
+      { ...state.currentSet, addedFrom: BATCH_ADDED_FROM_DETAILS },
+    ];
     return { ...state, batch };
   }),
   on(fromActions.storeBatchAction, (state, { batch }) => ({ ...state, batch })),
