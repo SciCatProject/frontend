@@ -3,7 +3,15 @@
   class="array-layout"
   >
   <mat-card-title class="array-layout-toolbar">
-    <h2 class="mat-h2 array-layout-title">{{ label }}</h2>
+    <h2 class="mat-h2 array-layout-title">{{ label }} <mat-icon
+      *ngIf="description"
+      matSuffix
+      class="field-description-icon"
+      [matTooltip]="description"
+      matTooltipPosition="above"
+    >
+      info_outline
+    </mat-icon></h2>
     <span></span>
     <mat-icon
       *ngIf="this.error?.length"

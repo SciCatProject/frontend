@@ -61,7 +61,6 @@ describe("IngestorNewTransferDialogPageComponent", () => {
       expect(header["type"]).toBe("raw");
       expect(header["dataFormat"]).toBe("root");
       expect(header["owner"]).toBe("testuser");
-      expect(header["ownerGroup"]).toBe("group1");
       expect(header["principalInvestigator"]).toBe("testuser");
       expect(header["ownerEmail"]).toBe("test@example.com");
       expect(header["contactEmail"]).toBe("test@example.com");

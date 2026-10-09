@@ -1,0 +1,19 @@
+<mat-form-field [ngStyle]="{ display: hidden ? 'none' : '' }" class="custom-input-box">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    matInput
+    [id]="id"
+    [formControl]="form"
+    (input)="onChange($event)"
+  />
+  <mat-icon
+    *ngIf="description"
+    matSuffix
+    class="field-description-icon"
+    [matTooltip]="description"
+    matTooltipPosition="above"
+  >
+    info_outline
+  </mat-icon>
+  <mat-error>{{ error }}</mat-error>
+</mat-form-field>
