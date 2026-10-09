@@ -7,12 +7,12 @@ preset that filters the list. Configure them as `modes` in the
 ```json
 "datasetViews": {
   "modes": [
-    { "id": "all", "label": "All", "query": {} },
+    { "id": "all", "label": "All", "where": {} },
     {
       "id": "archivable",
       "label": "Ready to archive",
       "tooltip": "Datasets that can be sent to tape",
-      "query": {
+      "where": {
         "datasetlifecycle.archivable": true,
         "datasetlifecycle.retrievable": false
       }
@@ -20,7 +20,7 @@ preset that filters the list. Configure them as `modes` in the
     {
       "id": "retrievable",
       "label": "On tape",
-      "query": {
+      "where": {
         "datasetlifecycle.retrievable": true,
         "datasetlifecycle.archivable": false
       }
@@ -33,11 +33,11 @@ preset that filters the list. Configure them as `modes` in the
 | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `id`      | yes      | Stable identifier. Batch actions see it as `#currentArchViewMode`, so changing it can break their `hidden` expressions. |
 | `label`   | yes      | Text shown on the toggle.                                                                                               |
-| `query`   | yes      | Mongo query merged into the v4 dataset query. Use `{}` for an unfiltered view.                                          |
+| `where`   | yes      | Mongo query merged into the `where` of the v4 dataset filter. Use `{}` for an unfiltered view.                          |
 | `tooltip` | no       | Tooltip shown on hover.                                                                                                 |
 
 The list starts in the `all` view with no filter applied. Include a view with
-`"id": "all"` and `"query": {}` so users can get back to the unfiltered list.
+`"id": "all"` and `"where": {}` so users can get back to the unfiltered list.
 
 ## Defaults
 

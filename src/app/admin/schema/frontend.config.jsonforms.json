@@ -131,16 +131,16 @@
         "properties": {
           "modes": {
             "type": "array",
-            "description": "Named query presets shown as view toggles on the dataset list. The id is stored in the filters and used by batch actions (#currentArchViewMode), so keep it stable. The query (a Mongo filter) can't be edited here: set it in the JSON config. If not set and archiveWorkflowEnabled is true, the built-in archive workflow views are used; an empty list hides the toggles.",
+            "description": "Named query presets shown as view toggles on the dataset list. The id is stored in the filters and used by batch actions (#currentArchViewMode), so keep it stable. The where (a Mongo query) can't be edited here: set it in the JSON config. If not set and archiveWorkflowEnabled is true, the built-in archive workflow views are used; an empty list hides the toggles.",
             "items": {
               "type": "object",
               "properties": {
                 "id": { "type": "string" },
                 "label": { "type": "string" },
                 "tooltip": { "type": "string" },
-                "query": {
+                "where": {
                   "type": "object",
-                  "description": "Mongo filter for the view; edit it in the JSON config."
+                  "description": "Mongo query for the view, as the where of the v4 dataset filter; edit it in the JSON config."
                 }
               },
               "required": ["id", "label"]
