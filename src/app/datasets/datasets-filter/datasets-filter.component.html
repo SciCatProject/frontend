@@ -50,6 +50,15 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-checkbox
+        *ngIf="selectedViewModeCheckbox as checkbox"
+        class="view-mode-checkbox"
+        data-cy="dataset-view-mode-checkbox"
+        [checked]="currentViewModeChecked"
+        (change)="onViewModeCheckboxChange($event.checked)"
+      >
+        {{ checkbox.label }}
+      </mat-checkbox>
     </ng-template>
     <ng-container *ngFor="let filter of filtersList">
       <shared-filter

@@ -270,7 +270,11 @@ export const setPidTermsAction = createAction(
 );
 export const setArchiveViewModeAction = createAction(
   "[Dataset] Set Archive View Mode",
-  props<{ modeToggle: string; mode: Record<string, unknown> }>(),
+  props<{
+    modeToggle: string;
+    mode: Record<string, unknown>;
+    checked?: boolean;
+  }>(),
 );
 export const setPublicViewModeAction = createAction(
   "[Dataset] Set Public View Mode",
