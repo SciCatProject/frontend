@@ -2,7 +2,7 @@ import { testData } from "../../fixtures/testData";
 
 const archivableName = "Cypress view archivable";
 const onTapeName = "Cypress view on tape";
-const mineName = "Cypress view archivable and mine";
+const mineName = "Cypress view mine";
 
 const toTape = {
   id: "to-tape",
