@@ -12,25 +12,28 @@ it will produce errors when changing the schema. */
 @Component({
   selector: "app-metadata-editor",
   styleUrls: ["./ingestor-metadata-editor.component.scss"],
-  template: `<ng-container class="editor-container" *ngIf="editorInitialized">
-    <jsonforms
-      *ngIf="renderView === 'requiredOnly'"
-      [data]="visualData"
-      [schema]="reducedSchema"
-      [renderers]="combinedRenderers"
-      (dataChange)="onDataChange($event)"
-      (errors)="onErrors($event)"
-    ></jsonforms>
-
-    <jsonforms
-      *ngIf="renderView === 'all'"
-      [data]="visualData"
-      [schema]="schema"
-      [renderers]="combinedRenderers"
-      (dataChange)="onDataChange($event)"
-      (errors)="onErrors($event)"
-    ></jsonforms>
-  </ng-container>`,
+  template: `@if (editorInitialized) {
+    <ng-container class="editor-container">
+      @if (renderView === "requiredOnly") {
+        <jsonforms
+          [data]="visualData"
+          [schema]="reducedSchema"
+          [renderers]="combinedRenderers"
+          (dataChange)="onDataChange($event)"
+          (errors)="onErrors($event)"
+        ></jsonforms>
+      }
+      @if (renderView === "all") {
+        <jsonforms
+          [data]="visualData"
+          [schema]="schema"
+          [renderers]="combinedRenderers"
+          (dataChange)="onDataChange($event)"
+          (errors)="onErrors($event)"
+        ></jsonforms>
+      }
+    </ng-container>
+  }`,
   standalone: false,
 })
 export class IngestorMetadataEditorComponent implements OnInit {
