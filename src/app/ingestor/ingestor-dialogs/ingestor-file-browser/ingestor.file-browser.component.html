@@ -10,71 +10,84 @@
   </button>
 </div>
 <mat-dialog-content class="mat-typography" disableClose="true">
-  <div *ngIf="false" class="file-browser-view-toggle">
-    <button
-      mat-button
-      disabled="true"
-      (click)="toggleView()"
-      [matTooltip]="isListView ? 'Switch to Tree View' : 'Switch to List View'"
-    >
-      <mat-icon *ngIf="isListView">account_tree</mat-icon>
-      <mat-icon *ngIf="!isListView">list</mat-icon>
-    </button>
-  </div>
-  <div *ngIf="isListView && activeNode !== null">
-    <mat-list class="ingestor-file-list">
-      <div mat-subheader>Selected Path</div>
-      <mat-list-item class="mat-elevation-z2">
-        <mat-icon matListItemIcon>{{
-          activeNode.probablyDataset ? "folder_special" : "folder"
-        }}</mat-icon>
-        <div matListItemTitle>{{ activeNode.path }}</div>
-      </mat-list-item>
-      <i *ngIf="activeNode.probablyDataset" class="green-text"
-        >This node is probably a valid data set.</i
+  @if (false) {
+    <div class="file-browser-view-toggle">
+      <button
+        mat-button
+        disabled="true"
+        (click)="toggleView()"
+        [matTooltip]="
+          isListView ? 'Switch to Tree View' : 'Switch to List View'
+        "
       >
-      <div mat-subheader>Children</div>
-
-      <mat-paginator
-        *ngIf="true"
-        [length]="activeNodeChildrenTotal"
-        [pageSize]="browseFolderPageSize"
-        aria-label="Select page"
-        [hidePageSize]="true"
-        [showFirstLastButtons]="false"
-        [pageIndex]="browseFolderPage"
-        (page)="onFileBrowserChildrenPageChange($event)"
-      >
-      </mat-paginator>
-
-      <mat-list-item
-        *ngIf="!goBackNode.isRootNode"
-        (click)="onLoadFolderNode(goBackNode)"
-        class="mat-elevation-z2 mat-list-item-hover"
-      >
-        <mat-icon matListItemIcon>folder</mat-icon>
-        <div matListItemTitle>{{ goBackNode.name }}</div>
-        <div matListItemLine>{{ goBackNode.path }}</div>
-      </mat-list-item>
-      <ng-container
-        *ngFor="let folder of activeNode.childrenNodes; trackBy: trackByFn"
-      >
-        <mat-list-item
-          (click)="onLoadFolderNode(folder)"
-          class="mat-elevation-z2 mat-list-item-hover"
-        >
+        @if (isListView) {
+          <mat-icon>account_tree</mat-icon>
+        }
+        @if (!isListView) {
+          <mat-icon>list</mat-icon>
+        }
+      </button>
+    </div>
+  }
+  @if (isListView && activeNode !== null) {
+    <div>
+      <mat-list class="ingestor-file-list">
+        <div mat-subheader>Selected Path</div>
+        <mat-list-item class="mat-elevation-z2">
           <mat-icon matListItemIcon>{{
-            folder.probablyDataset ? "folder_special" : "folder"
+            activeNode.probablyDataset ? "folder_special" : "folder"
           }}</mat-icon>
-          <div matListItemTitle>{{ folder.name }}</div>
-          <div matListItemLine>{{ folder.path }}</div>
+          <div matListItemTitle>{{ activeNode.path }}</div>
         </mat-list-item>
-      </ng-container>
-    </mat-list>
-  </div>
-  <div *ngIf="!isListView && activeNode !== null">
-    <!-- Tree view content goes here -->
-  </div>
+        @if (activeNode.probablyDataset) {
+          <i class="green-text">This node is probably a valid data set.</i>
+        }
+        <div mat-subheader>Children</div>
+        @if (true) {
+          <mat-paginator
+            [length]="activeNodeChildrenTotal"
+            [pageSize]="browseFolderPageSize"
+            aria-label="Select page"
+            [hidePageSize]="true"
+            [showFirstLastButtons]="false"
+            [pageIndex]="browseFolderPage"
+            (page)="onFileBrowserChildrenPageChange($event)"
+          >
+          </mat-paginator>
+        }
+        @if (!goBackNode.isRootNode) {
+          <mat-list-item
+            (click)="onLoadFolderNode(goBackNode)"
+            class="mat-elevation-z2 mat-list-item-hover"
+          >
+            <mat-icon matListItemIcon>folder</mat-icon>
+            <div matListItemTitle>{{ goBackNode.name }}</div>
+            <div matListItemLine>{{ goBackNode.path }}</div>
+          </mat-list-item>
+        }
+        @for (
+          folder of activeNode.childrenNodes;
+          track trackByFn($index, folder)
+        ) {
+          <mat-list-item
+            (click)="onLoadFolderNode(folder)"
+            class="mat-elevation-z2 mat-list-item-hover"
+          >
+            <mat-icon matListItemIcon>{{
+              folder.probablyDataset ? "folder_special" : "folder"
+            }}</mat-icon>
+            <div matListItemTitle>{{ folder.name }}</div>
+            <div matListItemLine>{{ folder.path }}</div>
+          </mat-list-item>
+        }
+      </mat-list>
+    </div>
+  }
+  @if (!isListView && activeNode !== null) {
+    <div>
+      <!-- Tree view content goes here -->
+    </div>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
