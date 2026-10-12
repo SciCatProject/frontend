@@ -1,10 +1,11 @@
 <div class="configurable-actions">
-  <configurable-action
-    *ngFor="let actionConfig of sortedActionsConfig"
-    [actionConfig]="actionConfig"
-    [actionItems]="actionItems"
-    [buttonStyle]="buttonsStyle"
-    (actionFinished)="actionFinished.emit($event)"
-  >
-  </configurable-action>
+  @for (actionConfig of sortedActionsConfig; track actionConfig) {
+    <configurable-action
+      [actionConfig]="actionConfig"
+      [actionItems]="actionItems"
+      [buttonStyle]="buttonsStyle"
+      (actionFinished)="actionFinished.emit($event)"
+    >
+    </configurable-action>
+  }
 </div>
