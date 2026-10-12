@@ -47,10 +47,17 @@ export class AnyOfRendererComponent extends JsonFormsControl {
       (option: any) => option.title || option.type || JSON.stringify(option),
     );
 
-    if (this.options.includes("null") && !props.data) {
-      this.selectedTabIndex = this.options.indexOf("null");
-      this.notNullOptionSelected = false;
-    }
+    const isEmptyObject =
+      props.data !== null &&
+      typeof props.data === "object" &&
+      !Array.isArray(props.data) &&
+      isEmpty(props.data);
+
+    this.notNullOptionSelected =
+      !this.options.includes("null") ||
+      (props.data !== null &&
+        props.data !== undefined &&
+        (!isEmptyObject || this.notNullOptionSelected));
 
     this.filteredOptions = this.options.filter((option) => option !== "null");
     this.tabAmount = this.filteredOptions.length;

@@ -196,8 +196,8 @@ export class IngestorExtractorMetadataDialogPageComponent
     const result = IngestorMetadataEditorHelper.processMetadataErrors(
       errors,
       this.metadataSchemaAcquisition,
-      //this.activeRenderView,
-      "requiredOnly",
+      this.activeRenderView,
+      //"requiredOnly",
     );
 
     this.isAcquisitionMetadataOk = result.isValid;
