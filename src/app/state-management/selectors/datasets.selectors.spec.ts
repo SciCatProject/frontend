@@ -298,6 +298,31 @@ describe("test dataset selectors", () => {
       );
       expect(fullqueryKeys).toContain("query");
     });
+
+    it("should include the archive view mode query", () => {
+      const mode = {
+        "datasetlifecycle.archivable": true,
+        "datasetlifecycle.retrievable": false,
+      };
+      const { query } = fromDatasetSelectors.selectFullqueryParams.projector({
+        ...initialDatasetState,
+        filters: { ...initialDatasetState.filters, mode },
+      });
+      expect(query).toEqual(jasmine.objectContaining(mode));
+      expect(query).not.toEqual(jasmine.objectContaining({ mode }));
+    });
+
+    it("should not add anything for an empty mode", () => {
+      const { query } = fromDatasetSelectors.selectFullqueryParams.projector({
+        ...initialDatasetState,
+        filters: { ...initialDatasetState.filters, mode: {} },
+      });
+      expect(query).toEqual(
+        fromDatasetSelectors.selectFullqueryParams.projector(
+          initialDatasetState,
+        ).query,
+      );
+    });
   });
 
   describe("selectFullfacetParams", () => {
