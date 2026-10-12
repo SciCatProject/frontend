@@ -197,7 +197,6 @@ export class IngestorExtractorMetadataDialogPageComponent
       errors,
       this.metadataSchemaAcquisition,
       this.activeRenderView,
-      //"requiredOnly",
     );
 
     this.isAcquisitionMetadataOk = result.isValid;

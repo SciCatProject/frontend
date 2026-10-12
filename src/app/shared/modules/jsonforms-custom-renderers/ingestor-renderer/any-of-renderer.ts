@@ -112,21 +112,9 @@ export class AnyOfRendererComponent extends JsonFormsControl {
 
   public onEnableCheckboxChange(event: MatCheckboxChange) {
     this.notNullOptionSelected = event.checked;
-
-    const updatedData =
-      this.rendererService.getState().jsonforms.core.data ?? {};
-
-    // Update the data in the correct path
-    const pathSegments = this.passedProps.path.split(".");
-    let current = updatedData ?? {};
-    for (let i = 0; i < pathSegments.length - 1; i++) {
-      current = current[pathSegments[i]];
-    }
-    current[pathSegments[pathSegments.length - 1]] = !this.notNullOptionSelected
-      ? null
-      : {};
-
-    this.rendererService.setData(updatedData);
+    this.onChange({
+      value: event.checked ? {} : null,
+    });
   }
 }
 

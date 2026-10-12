@@ -60,7 +60,12 @@ export class IngestorMetadataEditorComponent implements OnInit {
     // This is necessary, otherwise the error checks will not work correctly
     // Fill empty boolean with false to avoid undefined errors
     const containsOnlyDefaults = (value: unknown): boolean => {
-      if (value === null || value === undefined || value === false) {
+      if (
+        value === null ||
+        value === undefined ||
+        value === false ||
+        value === ""
+      ) {
         return true;
       }
       return (
