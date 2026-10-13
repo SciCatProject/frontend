@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "app-routing/auth.guard";
 import { JobsGuard } from "app-routing/jobs.guard";
-import { JobsDashboardNewComponent } from "jobs/jobs-dashboard-new/jobs-dashboard-new.component";
+import { JobsDashboardComponent } from "jobs/jobs-dashboard/jobs-dashboard.component";
 import { JobsDetailComponent } from "jobs/jobs-detail/jobs-detail.component";
 import { UserSettingsComponent } from "users/user-settings/user-settings.component";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
@@ -21,7 +21,7 @@ const routes: Routes = [
   },
   {
     path: "jobs",
-    component: JobsDashboardNewComponent,
+    component: JobsDashboardComponent,
     canActivate: [AuthGuard, JobsGuard],
   },
   {

@@ -1,40 +1,37 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { Sort } from "@angular/material/sort";
 import { OutputJobV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
-import { Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, filter, take } from "rxjs";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
-  selectJobs,
-  selectJobsCount,
-  selectJobsPerPage,
-  selectPage,
-  selectFilters,
-} from "state-management/selectors/jobs.selectors";
-import { DatePipe } from "@angular/common";
+  TablePagination,
+  TablePaginationMode,
+} from "shared/modules/dynamic-material-table/models/table-pagination.model";
 import {
-  TableColumn,
-  PageChangeEvent,
-  SortChangeEvent,
-} from "shared/modules/table/table.component";
-import { JobViewMode } from "state-management/models";
+  ITableSetting,
+  TableSettingEventType,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import {
+  IRowEvent,
+  ITableEvent,
+  RowEventType,
+  TableEventType,
+  TableSelectionMode,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
+import { TableConfigService } from "shared/services/table-config.service";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import {
   changePageAction,
-  setJobViewModeAction,
   fetchJobsAction,
+  setTextFilterAction,
   sortByColumnAction,
 } from "state-management/actions/jobs.actions";
-import {
-  selectCurrentUser,
-  selectProfile,
-} from "state-management/selectors/user.selectors";
+import { selectJobsDashboardPageViewModel } from "state-management/selectors/jobs.selectors";
 
-export interface JobsTableData {
-  id: string;
-  initiator: string;
-  type: string;
-  createdAt: string | null;
-  statusMessage: string;
-}
+type JobRow = OutputJobV3Dto & { jobId: string };
 
 @Component({
   selector: "app-jobs-dashboard",
@@ -43,169 +40,193 @@ export interface JobsTableData {
   standalone: false,
 })
 export class JobsDashboardComponent implements OnInit, OnDestroy {
-  jobsCount$ = this.store.select(selectJobsCount);
-  jobsPerPage$ = this.store.select(selectJobsPerPage);
-  currentPage$ = this.store.select(selectPage);
+  public vm$ = this.store.select(selectJobsDashboardPageViewModel);
 
-  jobs: JobsTableData[] = [];
-  profile: any;
-  email = "";
+  columns: TableField<any>[] = [];
+  setting: ITableSetting = {};
+
+  tableName = "jobsTable";
+  rowSelectionMode: TableSelectionMode = "none";
+  paginationMode: TablePaginationMode = "server-side";
+  pending = true;
+  globalTextSearch = "";
+
+  tableDefaultSettingsConfig: ITableSetting = {
+    visibleActionMenu: actionMenu,
+    settingList: [
+      {
+        visibleActionMenu: actionMenu,
+        isDefaultSetting: true,
+        isCurrentSetting: true,
+        columnSetting: [
+          { name: "jobId", header: "ID", index: 0 },
+          { name: "emailJobInitiator", header: "Initiator", index: 1 },
+          { name: "type", header: "Type", index: 2 },
+          {
+            name: "creationTime",
+            header: "Created at local time",
+            index: 3,
+            type: "date",
+            format: "medium",
+          },
+          {
+            name: "jobParams",
+            header: "Parameters",
+            index: 4,
+            customRender: (_, row) => JSON.stringify(row.jobParams),
+          },
+          { name: "jobStatusMessage", header: "Status", index: 5 },
+          {
+            name: "datasetList",
+            header: "Datasets",
+            index: 6,
+            customRender: (_, row) => JSON.stringify(row.datasetList),
+          },
+          {
+            name: "jobResultObject",
+            header: "Result",
+            index: 7,
+            customRender: (_, row) => JSON.stringify(row.jobResultObject),
+          },
+        ],
+      },
+    ],
+    rowStyle: {
+      "border-bottom": "1px solid #d2d2d2",
+    },
+  };
+
+  pagination: TablePagination = {
+    pageSize: 25,
+    pageIndex: 0,
+    pageSizeOptions: [5, 10, 25, 100],
+    length: 0,
+  };
+
+  dataSource: BehaviorSubject<JobRow[]> = new BehaviorSubject<JobRow[]>([]);
 
   subscriptions: Subscription[] = [];
 
-  modes = this.enumKeys(JobViewMode);
-  currentMode: "myJobs" | "allJobs" = "myJobs";
-
-  paginate = true;
-
-  tableColumns: TableColumn[] = [
-    {
-      name: "initiator",
-      icon: "mail",
-      sort: true,
-      inList: true,
-    },
-    { name: "type", icon: "bubble_chart", sort: true, inList: true },
-    {
-      name: "createdAt",
-      icon: "brightness_high",
-      sort: true,
-      inList: true,
-    },
-    {
-      name: "statusMessage",
-      icon: "comment",
-      sort: true,
-      inList: true,
-    },
-  ];
-
   constructor(
-    private datePipe: DatePipe,
     private router: Router,
     private store: Store,
+    private tableConfigService: TableConfigService,
   ) {}
 
-  private enumKeys<T>(enumType: T): (keyof T)[] {
-    return (Object.keys(enumType) as Array<keyof T>).filter(
-      (value) => isNaN(Number(value)) !== false,
-    );
-  }
-
-  formatTableData(jobs: OutputJobV3Dto[]): JobsTableData[] {
-    let tableData: JobsTableData[] = [];
-    if (jobs) {
-      tableData = jobs.map((job) => ({
-        id: job.id,
-        initiator: job.emailJobInitiator,
-        type: job.type,
-        createdAt: job.creationTime,
-        statusMessage: job.jobStatusMessage,
-      }));
-    }
-    return tableData;
-  }
-
-  onModeToggleChange() {
-    switch (this.currentMode) {
-      case "allJobs": {
-        this.onModeChange(JobViewMode.allJobs);
-        break;
-      }
-      case "myJobs": {
-        this.onModeChange(JobViewMode.myJobs);
-        break;
-      }
-    }
-  }
-
-  onModeChange(mode: JobViewMode) {
-    let viewMode: Record<string, string> | undefined = {};
-    switch (mode) {
-      case JobViewMode.allJobs: {
-        viewMode = undefined;
-        break;
-      }
-      case JobViewMode.myJobs: {
-        viewMode = { emailJobInitiator: this.email };
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-    this.store.dispatch(setJobViewModeAction({ mode: viewMode }));
-  }
-
-  onPageChange(event: PageChangeEvent) {
-    this.store.dispatch(
-      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
-    );
-  }
-
-  onRowClick(job: JobsTableData) {
-    const id = encodeURIComponent(job.id);
-    this.router.navigateByUrl("/user/jobs/" + id);
-  }
-
-  onSortChange(event: SortChangeEvent) {
-    // map column names back to original names
-    switch (event.active) {
-      case "statusMessage": {
-        event.active = "jobStatusMessage";
-        break;
-      }
-      case "initiator": {
-        event.active = "emailJobInitiator";
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-    const { active: column, direction } = event;
-    this.store.dispatch(sortByColumnAction({ column, direction }));
-  }
-
   ngOnInit() {
-    this.store.dispatch(fetchJobsAction());
-
+    // Table settings and the page limit come from the user settings,
+    // so wait for them before configuring the table and fetching jobs.
     this.subscriptions.push(
-      this.store.select(selectJobs).subscribe((jobs) => {
-        this.jobs = this.formatTableData(jobs);
-      }),
+      this.vm$
+        .pipe(
+          filter((vm) => vm.hasFetchedSettings),
+          take(1),
+        )
+        .subscribe((vm) => {
+          const { sortField, text } = vm.filters;
+          const [sortColumn, sortDirection] = sortField
+            ? sortField.split(":")
+            : [];
+
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              this.tableDefaultSettingsConfig,
+              vm.tableSettings?.columns || [],
+              sortColumn
+                ? {
+                    sortColumn: sortColumn === "id" ? "jobId" : sortColumn,
+                    sortDirection: sortDirection as "asc" | "desc",
+                  }
+                : null,
+            );
+
+          this.columns =
+            tableSettingsConfig.settingList.find((s) => s.isCurrentSetting)
+              ?.columnSetting ?? [];
+          this.setting = tableSettingsConfig;
+          this.globalTextSearch = text || "";
+
+          this.store.dispatch(fetchJobsAction());
+        }),
     );
 
     this.subscriptions.push(
-      this.store.select(selectCurrentUser).subscribe((current) => {
-        if (current) {
-          this.email = current.email;
-
-          if (!current.realm) {
-            this.store.select(selectProfile).subscribe((profile) => {
-              if (profile) {
-                this.profile = profile;
-                this.email = profile.email;
-              }
-              this.onModeChange(JobViewMode.myJobs);
-            });
-          } else {
-            this.onModeChange(JobViewMode.myJobs);
-          }
-        }
+      this.vm$.subscribe(({ jobs, count, filters, isLoading }) => {
+        this.dataSource.next(jobs.map((job) => ({ ...job, jobId: job.id })));
+        this.pending = false;
+        this.pagination = {
+          ...this.pagination,
+          pageIndex: filters.skip / filters.limit,
+          pageSize: filters.limit,
+          length: count,
+          isLoading,
+        };
       }),
     );
+  }
 
-    this.subscriptions.push(
-      this.store.select(selectFilters).subscribe((filters) => {
-        this.router.navigate(["/user/jobs"], {
-          queryParams: { args: JSON.stringify(filters) },
-        });
+  onRowEvent(event: IRowEvent<JobRow>) {
+    if (event?.event === RowEventType.RowClick) {
+      const id = encodeURIComponent(event.sender.row.jobId);
+      this.router.navigateByUrl("/user/jobs/" + id);
+    }
+  }
+
+  onPaginationChange({ pageIndex, pageSize }: TablePagination) {
+    this.store.dispatch(changePageAction({ page: pageIndex, limit: pageSize }));
+  }
+
+  onTableEvent({ event, sender }: ITableEvent) {
+    if (event === TableEventType.SortChanged) {
+      const { active, direction } = sender as Sort;
+      // jobId is only a display alias for the backend "id" field
+      const column = active === "jobId" ? "id" : active;
+
+      this.store.dispatch(
+        sortByColumnAction({
+          column: direction ? column : "",
+          direction,
+        }),
+      );
+    }
+  }
+
+  saveTableSettings(setting: ITableSetting) {
+    const columnsSetting = setting.columnSetting.map((column, index) => {
+      const { name, display, width } = column;
+
+      return { name, display, order: index, width };
+    });
+
+    this.store.dispatch(
+      updateUserSettingsAction({
+        property: { fe_job_table_columns: columnsSetting },
       }),
     );
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.save ||
+      event.type === TableSettingEventType.create
+    ) {
+      this.saveTableSettings(event.setting);
+    }
+  }
+
+  onGlobalTextSearchChange(text: string) {
+    this.globalTextSearch = text;
+  }
+
+  onGlobalTextSearchAction() {
+    this.store.dispatch(setTextFilterAction({ text: this.globalTextSearch }));
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

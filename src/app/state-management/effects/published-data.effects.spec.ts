@@ -53,7 +53,15 @@ describe("PublishedDataEffects", () => {
         PublishedDataEffects,
         provideMockActions(() => actions),
         provideMockStore({
-          selectors: [{ selector: selectQueryParams, value: {} }],
+          selectors: [
+            {
+              selector: selectQueryParams,
+              value: {
+                filter: { where: { $text: { $search: "test" } } },
+                limits: { order: "createdAt:desc", skip: 0, limit: 25 },
+              },
+            },
+          ],
         }),
         {
           provide: PublishedDataV4Service,
@@ -100,6 +108,12 @@ describe("PublishedDataEffects", () => {
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchAllPublishedData$).toBeObservable(expected);
+        expect(
+          publishedDataApi.publishedDataV4ControllerFindAllV4,
+        ).toHaveBeenCalledWith(
+          JSON.stringify({ order: "createdAt:desc", skip: 0, limit: 25 }),
+          JSON.stringify({ where: { $text: { $search: "test" } } }),
+        );
       });
 
       it("should result in a fetchAllPublishedDataFailedAction", () => {
@@ -169,6 +183,11 @@ describe("PublishedDataEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
+      expect(
+        publishedDataApi.publishedDataV4ControllerCountV4,
+      ).toHaveBeenCalledWith(
+        JSON.stringify({ where: { $text: { $search: "test" } } }),
+      );
     });
 
     it("should result in a fetchCountFailedAction", () => {

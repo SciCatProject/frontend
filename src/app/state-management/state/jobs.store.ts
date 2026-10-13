@@ -22,6 +22,7 @@ export const initialJobsState: JobsState = {
 
   filters: {
     mode: undefined,
+    text: "",
     sortField: "creationTime:desc",
     skip: 0,
     limit: 25,

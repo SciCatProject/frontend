@@ -46,6 +46,11 @@ export const setJobViewModeAction = createAction(
   props<{ mode: Record<string, string> | undefined }>(),
 );
 
+export const setTextFilterAction = createAction(
+  "[Job] Set Text Filter",
+  props<{ text: string }>(),
+);
+
 export const setJobsLimitFilterAction = createAction(
   "[Job] Set Limit Filter",
   props<{ limit: number }>(),

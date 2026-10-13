@@ -26,17 +26,41 @@ export class JobEffects {
         fromActions.changePageAction,
         fromActions.sortByColumnAction,
         fromActions.setJobViewModeAction,
+        fromActions.setTextFilterAction,
       ),
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
-      switchMap((params) =>
-        this.jobsService.jobsControllerFindAllV3(JSON.stringify(params)).pipe(
-          switchMap((jobs) => [
-            fromActions.fetchJobsCompleteAction({ jobs }),
-            fromActions.fetchCountAction(),
-          ]),
-          catchError(() => of(fromActions.fetchJobsFailedAction())),
-        ),
+      switchMap(({ fields, limits }) =>
+        this.jobsService
+          .jobsControllerFullQueryV3(
+            JSON.stringify(fields),
+            JSON.stringify(limits),
+          )
+          .pipe(
+            switchMap((jobs) => [
+              fromActions.fetchJobsCompleteAction({ jobs }),
+              fromActions.fetchCountAction(),
+            ]),
+            catchError(() => of(fromActions.fetchJobsFailedAction())),
+          ),
+      ),
+    );
+  });
+
+  fetchCount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchCountAction),
+      concatLatestFrom(() => this.queryParams$),
+      switchMap(([, { fields }]) =>
+        this.jobsService
+          .jobsControllerFullFacetV3(JSON.stringify([]), JSON.stringify(fields))
+          .pipe(
+            map((res) => {
+              const count = res[0]?.all?.[0]?.totalSets ?? 0;
+              return fromActions.fetchCountCompleteAction({ count });
+            }),
+            catchError(() => of(fromActions.fetchCountFailedAction())),
+          ),
       ),
     );
   });
@@ -106,6 +130,10 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(
         fromActions.fetchJobsAction,
+        fromActions.changePageAction,
+        fromActions.sortByColumnAction,
+        fromActions.setJobViewModeAction,
+        fromActions.setTextFilterAction,
         fromActions.fetchCountAction,
         fromActions.fetchJobAction,
         fromActions.submitJobAction,

@@ -1,5 +1,5 @@
 import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
-import { GenericFilters } from "state-management/models";
+import { PublishedDataFilters } from "state-management/models";
 
 export interface PublishedDataState {
   publishedData: PublishedData[];
@@ -7,7 +7,7 @@ export interface PublishedDataState {
 
   totalCount: number;
 
-  filters: GenericFilters;
+  filters: PublishedDataFilters;
 
   publishedDataConfig?: any;
 }
@@ -19,7 +19,8 @@ export const initialPublishedDataState: PublishedDataState = {
   totalCount: 0,
 
   filters: {
-    sortField: "createdAt desc",
+    text: "",
+    sortField: "createdAt:desc",
     skip: 0,
     limit: 25,
   },

@@ -1,4 +1,4 @@
-import { GenericFilters } from "state-management/models";
+import { PublishedDataFilters } from "state-management/models";
 import { PublishedDataState } from "state-management/state/published-data.store";
 import * as fromSelectors from "./published-data.selectors";
 import { createMock } from "shared/MockStubs";
@@ -25,8 +25,9 @@ const publishedData = createMock<PublishedData>({
   status: PublishedData.StatusEnum.private,
 });
 
-const filters: GenericFilters = {
-  sortField: "publicationYear desc",
+const filters: PublishedDataFilters = {
+  text: "",
+  sortField: "publicationYear:desc",
   skip: 0,
   limit: 25,
 };
@@ -110,6 +111,8 @@ describe("Published Data Selectors", () => {
           initialPublishedDataState.filters.limit,
           initialPublishedDataState.filters,
           initialUserState.settings,
+          true,
+          false,
         ),
       ).toEqual({
         publishedData: [],
@@ -117,10 +120,13 @@ describe("Published Data Selectors", () => {
         currentPage: 0,
         publishedDataPerPage: 25,
         filters: {
-          sortField: "publicationYear desc",
+          text: "",
+          sortField: "publicationYear:desc",
           skip: 0,
           limit: 25,
         },
+        hasFetchedSettings: true,
+        isLoading: false,
         tablesSettings: {
           columns: initialUserState.settings.fe_publisheddata_table_columns,
         },
@@ -131,12 +137,20 @@ describe("Published Data Selectors", () => {
   describe("selectQueryParams", () => {
     it("should select query params from filters", () => {
       const { sortField, skip, limit } = filters;
-      const params = { order: sortField, skip, limit };
       expect(
         fromSelectors.selectQueryParams.projector(
           initialPublishedDataState.filters,
         ),
-      ).toEqual(params);
+      ).toEqual({ filter: {}, limits: { order: sortField, skip, limit } });
+    });
+
+    it("should add a full text search to the where filter", () => {
+      expect(
+        fromSelectors.selectQueryParams.projector({ ...filters, text: "doi" }),
+      ).toEqual({
+        filter: { where: { $text: { $search: "doi" } } },
+        limits: { order: "publicationYear:desc", skip: 0, limit: 25 },
+      });
     });
   });
 });

@@ -3,10 +3,7 @@ import { Store } from "@ngrx/store";
 import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
-import { BehaviorSubject, Subscription, take } from "rxjs";
-import { AppConfigService } from "app-config.service";
-import { ScicatDataService } from "shared/services/scicat-data-service";
-import { ExportExcelService } from "shared/services/export-excel.service";
+import { BehaviorSubject, Subscription, filter, take } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   TablePagination,
@@ -17,13 +14,17 @@ import {
   TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import { SciCatDataSource } from "shared/services/scicat.datasource";
 import {
   IRowEvent,
   RowEventType,
+  TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { TableConfigService } from "shared/services/table-config.service";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import {
+  changePageAction,
+  setTextFilterAction,
+} from "state-management/actions/published-data.actions";
 
 @Component({
   selector: "app-publisheddata-dashboard",
@@ -38,10 +39,12 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   setting: ITableSetting = {};
 
   tableName = "publishedDataTable";
-  rowSelectionMode: "single" | "multi" | "none" = "none";
+  rowSelectionMode: TableSelectionMode = "none";
   paginationMode: TablePaginationMode = "server-side";
-  pending = false;
+  pending = true;
   globalTextSearch = "";
+
+  defaultPageSize = 5;
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -66,104 +69,73 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   };
 
   pagination: TablePagination = {
-    pageSize: 5,
+    pageSize: this.defaultPageSize,
     pageIndex: 0,
     pageSizeOptions: [5, 10, 25, 100],
     length: 0,
   };
 
-  tableDefinition = {
-    collection: "publishedData",
-    columns: this.columns,
-    apiVersion: "v4",
-  };
-
   dataSource: BehaviorSubject<PublishedData[]> = new BehaviorSubject<
     PublishedData[]
   >([]);
-  scicatDataSource: SciCatDataSource;
 
   subscriptions: Subscription[] = [];
-  currentFilters: any = {};
 
   constructor(
     private router: Router,
     private store: Store,
-    private appConfigService: AppConfigService,
-    private dataService: ScicatDataService,
-    private exportService: ExportExcelService,
     private tableConfigService: TableConfigService,
     private route: ActivatedRoute,
-  ) {
-    this.scicatDataSource = new SciCatDataSource(
-      this.appConfigService,
-      this.dataService,
-      this.exportService,
-      this.tableDefinition,
-    );
-  }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
-      this.vm$.pipe(take(1)).subscribe((vm) => {
-        this.currentFilters = vm.filters;
+      this.vm$
+        .pipe(
+          filter((vm) => vm.hasFetchedSettings),
+          take(1),
+        )
+        .subscribe((vm) => {
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              this.tableDefaultSettingsConfig,
+              vm.tablesSettings?.columns || [],
+            );
 
-        const tableSettingsConfig =
-          this.tableConfigService.getTableSettingsConfig(
-            this.tableName,
-            this.tableDefaultSettingsConfig,
-            vm.tablesSettings?.columns || [],
-          );
+          this.columns =
+            tableSettingsConfig.settingList.find((s) => s.isCurrentSetting)
+              ?.columnSetting ?? [];
+          this.setting = tableSettingsConfig;
+        }),
+    );
 
-        const currentColumnSetting = tableSettingsConfig.settingList.find(
-          (s) => s.isCurrentSetting,
-        )?.columnSetting;
-
-        this.columns = currentColumnSetting;
-        this.setting = tableSettingsConfig;
-
+    this.subscriptions.push(
+      this.vm$.subscribe(({ publishedData, count, filters, isLoading }) => {
+        this.dataSource.next(publishedData);
+        this.pending = false;
         this.pagination = {
           ...this.pagination,
-          length: vm.count,
+          pageIndex: filters.skip / filters.limit,
+          pageSize: filters.limit,
+          length: count,
+          isLoading,
         };
       }),
     );
 
-    this.subscriptions.push(
-      this.scicatDataSource.loading$.subscribe((loading) => {
-        this.pagination = { ...this.pagination, isLoading: loading };
-      }),
-    );
-
+    // The URL is the source of truth for paging and text search
     this.subscriptions.push(
       this.route.queryParams.subscribe((queryParams) => {
         const pageIndex = +queryParams.pageIndex || 0;
-        const pageSize = +queryParams.pageSize || this.pagination.pageSize;
-        const globalSearch = queryParams.textSearch || undefined;
+        const pageSize = +queryParams.pageSize || this.defaultPageSize;
+        const text = queryParams.textSearch || "";
 
-        const filters = {
-          ...this.currentFilters,
-          skip: pageIndex * pageSize,
-          limit: pageSize,
-          globalSearch,
-        };
-        this.currentFilters = filters;
-        this.globalTextSearch = globalSearch || "";
-        this.pagination = { ...this.pagination, pageIndex, pageSize };
-
-        this.loadData(filters, pageIndex, pageSize);
-      }),
-    );
-
-    this.subscriptions.push(
-      this.scicatDataSource.connect().subscribe((data) => {
-        this.dataSource.next(data);
-      }),
-    );
-
-    this.subscriptions.push(
-      this.scicatDataSource.count$.subscribe((count) => {
-        this.pagination = { ...this.pagination, length: count };
+        this.globalTextSearch = text;
+        this.store.dispatch(setTextFilterAction({ text }));
+        this.store.dispatch(
+          changePageAction({ page: pageIndex, limit: pageSize }),
+        );
       }),
     );
   }
@@ -223,22 +195,6 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
       },
       queryParamsHandling: "merge",
     });
-  }
-
-  getSort(filters: any) {
-    const sortField = filters?.sortField;
-    return sortField ? sortField.split(" ") : ["", "asc"];
-  }
-
-  loadData(filters: any, pageIndex: number, pageSize: number) {
-    const [field, direction] = this.getSort(filters);
-    this.scicatDataSource.loadAllData(
-      filters,
-      field,
-      direction,
-      pageIndex,
-      pageSize,
-    );
   }
 
   ngOnDestroy() {

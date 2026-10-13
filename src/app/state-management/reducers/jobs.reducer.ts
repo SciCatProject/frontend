@@ -33,6 +33,11 @@ const reducer = createReducer(
     filters: { ...state.filters, mode, skip: 0 },
   })),
 
+  on(fromActions.setTextFilterAction, (state, { text }): JobsState => ({
+    ...state,
+    filters: { ...state.filters, text, skip: 0 },
+  })),
+
   on(fromActions.setJobsLimitFilterAction, (state, { limit }): JobsState => {
     const filters = { ...state.filters, limit, skip: 0 };
     return { ...state, filters };

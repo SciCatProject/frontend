@@ -76,6 +76,23 @@ describe("jobsReducer", () => {
     });
   });
 
+  describe("on setTextFilterAction", () => {
+    it("should set text filter and set skip filter to 0", () => {
+      const text = "archive";
+      const action = fromActions.setTextFilterAction({ text });
+      const state = jobsReducer(
+        {
+          ...initialJobsState,
+          filters: { ...initialJobsState.filters, skip: 50 },
+        },
+        action,
+      );
+
+      expect(state.filters.text).toEqual(text);
+      expect(state.filters.skip).toEqual(0);
+    });
+  });
+
   describe("on setJobsLimitFilterAction", () => {
     it("should set limit filter and set skip to 0", () => {
       const limit = 10;

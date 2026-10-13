@@ -1,6 +1,10 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { JobsState } from "state-management/state/jobs.store";
-import { selectHasFetchedSettings, selectSettings } from "./user.selectors";
+import {
+  selectHasFetchedSettings,
+  selectIsLoading,
+  selectSettings,
+} from "./user.selectors";
 
 const selectJobState = createFeatureSelector<JobsState>("jobs");
 
@@ -42,12 +46,15 @@ export const selectJobsPerPage = createSelector(
 );
 
 export const selectQueryParams = createSelector(selectFilters, (filters) => {
-  const { mode, sortField, skip, limit } = filters;
+  const { mode, text, sortField, skip, limit } = filters;
+  const fields: { mode?: Record<string, string>; text?: string } = {};
   if (mode) {
-    return { where: mode, order: sortField, skip, limit };
-  } else {
-    return { order: sortField, skip, limit };
+    fields.mode = mode;
   }
+  if (text) {
+    fields.text = text;
+  }
+  return { fields, limits: { order: sortField, skip, limit } };
 });
 
 export const selectJobsDashboardPageViewModel = createSelector(
@@ -58,6 +65,7 @@ export const selectJobsDashboardPageViewModel = createSelector(
   selectFilters,
   selectSettings,
   selectHasFetchedSettings,
+  selectIsLoading,
   (
     jobs,
     count,
@@ -66,6 +74,7 @@ export const selectJobsDashboardPageViewModel = createSelector(
     filters,
     settings,
     hasFetchedSettings,
+    isLoading,
   ) => ({
     jobs,
     count,
@@ -73,6 +82,7 @@ export const selectJobsDashboardPageViewModel = createSelector(
     jobsPerPage,
     filters,
     hasFetchedSettings,
+    isLoading,
     tableSettings: {
       columns: settings.fe_job_table_columns,
     },
