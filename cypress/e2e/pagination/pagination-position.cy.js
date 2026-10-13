@@ -26,7 +26,7 @@ positions.forEach((position) => {
     });
 
     it("shows paginators in the configured position and preserves paging", () => {
-      cy.visit("/user/datasets");
+      cy.visit("/datasets");
       cy.wait("@frontendConfig");
 
       const visiblePaginator =
