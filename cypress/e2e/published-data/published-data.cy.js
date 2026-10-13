@@ -9,8 +9,13 @@ describe("Datasets general", () => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
+  before(() => {
+    cy.removePublishedData();
+  });
+
   after(() => {
     cy.removeDatasets();
+    cy.removePublishedData();
   });
 
   describe("Published data creation, update and registration", () => {
@@ -167,9 +172,7 @@ describe("Datasets general", () => {
 
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
@@ -178,18 +181,13 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table").should(
-        "not.contain",
-        title,
-      );
+      cy.get("dynamic-mat-table mat-table").should("not.contain", title);
     });
 
     it("should not be able to publish invalid private published data", () => {
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
@@ -198,7 +196,7 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row")
+      cy.get("dynamic-mat-table mat-table mat-row")
         .contains(title)
         .first()
         .click();
@@ -217,9 +215,7 @@ describe("Datasets general", () => {
       const publisherIndetifierScheme = "publisher identifier scheme";
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
@@ -228,7 +224,7 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row")
+      cy.get("dynamic-mat-table mat-table mat-row")
         .contains(title)
         .first()
         .click();
@@ -295,9 +291,7 @@ describe("Datasets general", () => {
       cy.createDataset({ type: "raw", datasetName: newDatasetName });
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
@@ -306,7 +300,7 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row")
+      cy.get("dynamic-mat-table mat-table mat-row")
         .contains(title)
         .first()
         .click();
@@ -331,7 +325,9 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
+      cy.get(".dataset-table mat-row input[type='checkbox']:enabled")
+        .first()
+        .click();
 
       cy.get("#addToBatchButton").click();
 
@@ -347,9 +343,7 @@ describe("Datasets general", () => {
     it("should be able to publish their private published data", () => {
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
@@ -358,7 +352,7 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row")
+      cy.get("dynamic-mat-table mat-table mat-row")
         .contains(title)
         .first()
         .click();
@@ -373,9 +367,7 @@ describe("Datasets general", () => {
     it("should not be able to edit dataset list on a published data that is public", () => {
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
@@ -384,7 +376,7 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row")
+      cy.get("dynamic-mat-table mat-table mat-row")
         .contains(title)
         .first()
         .click();
@@ -398,9 +390,7 @@ describe("Datasets general", () => {
       cy.login(Cypress.env("guestUsername"), Cypress.env("guestPassword"));
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
@@ -409,18 +399,13 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row").should(
-        "contain",
-        title,
-      );
+      cy.get("dynamic-mat-table mat-table mat-row").should("contain", title);
     });
 
     it.skip("should be able to register their public published data", () => {
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
@@ -429,7 +414,7 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row")
+      cy.get("dynamic-mat-table mat-table mat-row")
         .contains(title)
         .first()
         .click();
@@ -536,21 +521,17 @@ describe("Datasets general", () => {
       const newCreatorName = "new creator name";
       cy.visit("/publishedDatasets");
 
-      cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
-        "exist",
-      );
+      cy.get("dynamic-mat-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]')
-        .clear()
-        .type(userPublishedDataTitle);
+      cy.get('[data-cy="text-search"]').clear().type(userPublishedDataTitle);
 
       cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row")
+      cy.get("dynamic-mat-table mat-table mat-row")
         .contains(userPublishedDataTitle)
         .first()
         .click();
