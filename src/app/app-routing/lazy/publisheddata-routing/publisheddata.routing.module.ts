@@ -20,6 +20,7 @@ const routes: Routes = [
   {
     path: ":id/edit",
     component: PublisheddataEditComponent,
+    data: { mode: "edit" },
     canActivate: [AuthGuard],
     canDeactivate: [leavingPageGuard],
   },

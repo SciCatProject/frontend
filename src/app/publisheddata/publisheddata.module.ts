@@ -13,7 +13,7 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { StoreModule } from "@ngrx/store";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard/publisheddata-dashboard.component";
-import { PublisheddataEditComponent } from "./publisheddata-edit/publisheddata-edit.component";
+import { PublisheddataEditModule } from "./publisheddata-edit/publisheddata-edit.module";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -31,7 +31,6 @@ import { DatasetsModule } from "datasets/datasets.module";
   declarations: [
     PublisheddataDetailsComponent,
     PublisheddataDashboardComponent,
-    PublisheddataEditComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +54,7 @@ import { DatasetsModule } from "datasets/datasets.module";
     MatOptionModule,
     MatExpansionModule,
     DatasetsModule,
+    PublisheddataEditModule,
   ],
 })
 export class PublisheddataModule {}
