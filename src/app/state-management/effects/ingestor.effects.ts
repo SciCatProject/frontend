@@ -11,6 +11,7 @@ import {
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Ingestor } from "shared/sdk/apis/ingestor.service";
 import {
+  OtherConfigurationsResponse,
   OtherHealthResponse,
   OtherVersionResponse,
   UserInfo,
@@ -33,34 +34,43 @@ export class IngestorEffects {
           switchMap((versionResponse) =>
             this.ingestor.getHealth().pipe(
               switchMap((healthResponse) =>
-                this.ingestor.getUserInfo().pipe(
-                  map((userInfoResponse) =>
-                    fromActions.connectIngestorSuccess({
-                      versionResponse: versionResponse as OtherVersionResponse,
-                      healthResponse: healthResponse as OtherHealthResponse,
-                      userInfoResponse: userInfoResponse as UserInfo,
-                      authIsDisabled: false,
-                    }),
-                  ),
-                  catchError((err) => {
-                    const errorMessage =
-                      err instanceof HttpErrorResponse
-                        ? (err.error?.message ?? err.error ?? err.message)
-                        : err.message;
-
-                    if (errorMessage.includes("disabled")) {
-                      return of(
+                this.ingestor.getConfigurations().pipe(
+                  catchError(() => of(null)),
+                  switchMap((configurations) =>
+                    this.ingestor.getUserInfo().pipe(
+                      map((userInfoResponse) =>
                         fromActions.connectIngestorSuccess({
-                          versionResponse:
-                            versionResponse as OtherVersionResponse,
+                          versionResponse: versionResponse as OtherVersionResponse,
                           healthResponse: healthResponse as OtherHealthResponse,
-                          userInfoResponse: null, // no UserInfo available
-                          authIsDisabled: true,
+                          userInfoResponse: userInfoResponse as UserInfo,
+                          authIsDisabled: false,
+                          configurations: 
+                            configurations as OtherConfigurationsResponse
                         }),
-                      );
-                    }
-                    return of(fromActions.connectIngestorFailure({ err }));
-                  }),
+                      ),
+                      catchError((err) => {
+                        const errorMessage =
+                          err instanceof HttpErrorResponse
+                            ? (err.error?.message ?? err.error ?? err.message)
+                            : err.message;
+
+                        if (errorMessage.includes("disabled")) {
+                          return of(
+                            fromActions.connectIngestorSuccess({
+                              versionResponse:
+                                versionResponse as OtherVersionResponse,
+                              healthResponse: healthResponse as OtherHealthResponse,
+                              userInfoResponse: null, // no UserInfo available
+                              authIsDisabled: true,
+                              configurations: 
+                                configurations as OtherConfigurationsResponse
+                            }),
+                          );
+                        }
+                        return of(fromActions.connectIngestorFailure({ err }));
+                      }),
+                    ),
+                  ),
                 ),
               ),
             ),

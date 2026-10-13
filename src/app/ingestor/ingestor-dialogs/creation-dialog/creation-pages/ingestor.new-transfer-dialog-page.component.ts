@@ -30,6 +30,7 @@ import {
   selectIngestorExtractionMethods,
   selectIngestorRenderView,
   selectUpdateEditorFromThirdParty,
+  selectIngestorStatus,
 } from "state-management/selectors/ingestor.selectors";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
@@ -52,6 +53,8 @@ export class IngestorNewTransferDialogPageComponent
   facilityBackend$ = this.store.select(selectIngestorEndpoint);
   ingestionObject$ = this.store.select(selectIngestionObject);
   vm$ = this.store.select(selectUserSettingsPageViewModel);
+  status$ = this.store.select(selectIngestorStatus);
+
   ingestorExtractionMethods$ = this.store.select(
     selectIngestorExtractionMethods,
   );
@@ -71,6 +74,8 @@ export class IngestorNewTransferDialogPageComponent
 
   userProfile: ReturnedUserDto | null = null;
   userGroups: string[] = [];
+
+  creationsLocations: string[] = []
 
   uiNextButtonReady = false;
 
@@ -103,6 +108,12 @@ export class IngestorNewTransferDialogPageComponent
         this.userGroups = settings.profile?.accessGroups ?? [];
       }),
     );
+
+    this.subscriptions.push(
+      this.status$.subscribe((status) => {
+        this.creationsLocations = status.configurations.creationLocations
+      })
+    )
 
     this.subscriptions.push(
       this.ingestionObject$.subscribe((ingestionObject) => {
@@ -246,6 +257,8 @@ export class IngestorNewTransferDialogPageComponent
       this.userProfile?.email;
     this.createNewTransferData.scicatHeader["contactEmail"] =
       this.userProfile?.email;
+    this.createNewTransferData.scicatHeader["creationLocations"] = 
+      this.creationsLocations?.length == 1 ? this.creationsLocations[0] : undefined;
 
     const creationTime = new Date();
     const formattedCreationTime = creationTime.toISOString();

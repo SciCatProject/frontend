@@ -21,12 +21,14 @@ describe("IngestorEffects", () => {
   const mockVersionResponse = { version: "1.0.0" };
   const mockHealthResponse = { status: "ok" };
   const mockUserInfoResponse = { logged_in: true };
+  const mockConfigurationsRepsonse = { creationLocations: ["/foo/bar/"]}
 
   beforeEach(() => {
     const ingestorSpy = jasmine.createSpyObj("Ingestor", [
       "getVersion",
       "getHealth",
       "getUserInfo",
+      "getConfigurations",
       "getTransferList",
       "getExtractionMethods",
       "getBrowseFilePath",
@@ -67,6 +69,8 @@ describe("IngestorEffects", () => {
       ingestorService.getVersion.and.returnValue(of(mockVersionResponse));
       ingestorService.getHealth.and.returnValue(of(mockHealthResponse));
       ingestorService.getUserInfo.and.returnValue(of(mockUserInfoResponse));
+      ingestorService.getConfigurations.and.returnValue(of(mockConfigurationsRepsonse));
+
 
       actions$ = of(fromActions.connectIngestor());
 
@@ -77,6 +81,7 @@ describe("IngestorEffects", () => {
             healthResponse: mockHealthResponse,
             userInfoResponse: mockUserInfoResponse,
             authIsDisabled: false,
+            configurations: mockConfigurationsRepsonse,
           }),
         );
         done();
@@ -88,6 +93,7 @@ describe("IngestorEffects", () => {
       ingestorService.getVersion.and.returnValue(of(mockVersionResponse));
       ingestorService.getHealth.and.returnValue(of(mockHealthResponse));
       ingestorService.getUserInfo.and.returnValue(throwError(() => error));
+      ingestorService.getConfigurations.and.returnValue(of(mockConfigurationsRepsonse));
 
       actions$ = of(fromActions.connectIngestor());
 
@@ -98,6 +104,7 @@ describe("IngestorEffects", () => {
             healthResponse: mockHealthResponse,
             userInfoResponse: null,
             authIsDisabled: true,
+            configurations: mockConfigurationsRepsonse,
           }),
         );
         done();
@@ -127,6 +134,34 @@ describe("IngestorEffects", () => {
         done();
       });
     });
+
+    it("should keep user info and set configurations to null when getConfigurations fails", (done) => {
+      ingestorService.getVersion.and.returnValue(of(mockVersionResponse));
+      ingestorService.getHealth.and.returnValue(of(mockHealthResponse));
+      ingestorService.getConfigurations.and.returnValue(
+        throwError(() => new Error("Failed to fetch configurations")),
+      );
+      ingestorService.getUserInfo.and.returnValue(of(mockUserInfoResponse));
+
+      actions$ = of(fromActions.connectIngestor());
+
+      effects.connectToIngestor$.subscribe({
+        next: (action) => {
+          expect(action).toEqual(
+            fromActions.connectIngestorSuccess({
+              versionResponse: mockVersionResponse,
+              healthResponse: mockHealthResponse,
+              userInfoResponse: mockUserInfoResponse,
+              authIsDisabled: false,
+              configurations: null,
+            }),
+          );
+          expect(ingestorService.getUserInfo).toHaveBeenCalled();
+          done();
+        },
+        error: done.fail,
+      });
+    });
   });
 
   describe("connectToIngestorSuccess$", () => {
@@ -137,6 +172,7 @@ describe("IngestorEffects", () => {
           healthResponse: mockHealthResponse,
           userInfoResponse: mockUserInfoResponse,
           authIsDisabled: false,
+          configurations: mockConfigurationsRepsonse,
         }),
       );
 

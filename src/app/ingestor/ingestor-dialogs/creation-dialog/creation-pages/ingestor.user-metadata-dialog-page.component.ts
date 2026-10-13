@@ -23,7 +23,6 @@ import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
-import { Ingestor } from "shared/sdk/apis/ingestor.service";
 
 @Component({
   selector: "ingestor-user-metadata-dialog",
@@ -70,7 +69,6 @@ export class IngestorUserMetadataDialogPageComponent
   constructor(
     private store: Store,
     private cdr: ChangeDetectorRef,
-    private ingestor: Ingestor,
   ) {}
 
   ngOnInit() {
@@ -83,6 +81,7 @@ export class IngestorUserMetadataDialogPageComponent
             this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
           this.metadataSchemaSample =
             this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
+          this.scicatHeaderSchema = getJsonSchemaFromDto();
         }
       }),
     );
@@ -110,41 +109,6 @@ export class IngestorUserMetadataDialogPageComponent
             fromActions.resetIngestionObjectFromThirdPartyFlag(),
           );
         }
-      }),
-    );
-
-    this.subscriptions.push(
-      this.ingestor.getConfigurations().subscribe({
-        next: (configurations) => {
-          const schema = getJsonSchemaFromDto();
-          const locations = configurations.creationLocations ?? [];
-
-          if (locations.length > 0) {
-            schema.properties.creationLocation = {
-              ...schema.properties.creationLocation,
-              enum: locations,
-            };
-          }
-
-          const header = this.createNewTransferData.scicatHeader as {
-            creationLocation?: string;
-          };
-
-          if (locations.length === 1 && !header.creationLocation) {
-            this.createNewTransferData = {
-              ...this.createNewTransferData,
-              scicatHeader: {
-                ...header,
-                creationLocation: locations[0],
-              },
-            };
-          }
-
-          this.scicatHeaderSchema = schema;
-        },
-        error: () => {
-          // Handle the failure using the existing ingestor error flow.
-        },
       }),
     );
   }
