@@ -9,6 +9,7 @@ import {
   GetBrowseDatasetResponse,
   GetExtractorResponse,
   GetTransferResponse,
+  OtherConfigurationsResponse,
   OtherHealthResponse,
   OtherVersionResponse,
   PostDatasetRequest,
@@ -35,10 +36,6 @@ export const INGESTOR_API_ENDPOINTS_V1 = {
   EXTRACTOR: "extractor",
   METADATA: "metadata",
 };
-
-export interface OtherConfigurationsResponse {
-  creationLocations?: string[];
-}
 
 @Injectable({
   providedIn: "root",
