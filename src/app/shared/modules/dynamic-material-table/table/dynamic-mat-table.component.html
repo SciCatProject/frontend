@@ -73,7 +73,7 @@
     </mat-form-field>
   </div>
   <div
-    *ngIf="pagination && appConfig.paginatorPosition !== 'bottom'"
+    *ngIf="pagination && appConfig.paginationPosition !== 'bottom'"
     class="paginator-container"
     [class.is-loading]="pagination?.isLoading"
   >
@@ -581,7 +581,7 @@
   </ng-container>
 </div>
 <div
-  *ngIf="pagination && appConfig.paginatorPosition !== 'top'"
+  *ngIf="pagination && appConfig.paginationPosition !== 'top'"
   class="paginator-container"
   [class.is-loading]="pagination?.isLoading"
 >
