@@ -135,6 +135,7 @@ export interface AppConfigInterface {
   archiveWorkflowEnabled: boolean;
   datasetJsonScientificMetadata: boolean;
   datasetPageSizeOptions?: number[];
+  paginatorPosition?: "top" | "bottom" | "both";
   datasetReduceEnabled: boolean;
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
