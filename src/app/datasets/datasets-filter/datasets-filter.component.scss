@@ -59,12 +59,7 @@ mat-card {
     }
 
     .datasets-filters-search-button {
-      width: 49%;
-      margin-left: 2%;
-    }
-
-    .datasets-filters-clear-all-button {
-      width: 49%;
+      margin-left: 16px;
     }
   }
 
@@ -85,9 +80,8 @@ mat-card {
 
 .public-toggle {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
   flex-wrap: wrap;
   button {
     border-radius: 18px;
@@ -101,5 +95,24 @@ mat-card {
       background-color: #e3f2fd;
       border-color: #1976d2;
     }
+  }
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+  
+  .datasets-filters-clear-all-button,
+  .datasets-filters-search-button {
+    width: auto;
+    margin: 0;
   }
 }
