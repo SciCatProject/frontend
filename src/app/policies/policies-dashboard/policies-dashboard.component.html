@@ -1,11 +1,10 @@
-<ng-container *ngIf="vm$ | async as vm">
+@if (vm$ | async; as vm) {
   <mat-tab-group (selectedTabChange)="onTabChange($event)">
     <mat-tab>
       <ng-template mat-tab-label>
         <ng-container> Readable </ng-container>
       </ng-template>
-
-      <ng-container *ngIf="vm.policies">
+      @if (vm.policies) {
         <div fxLayout="row">
           <div fxFlex="1"></div>
           <div fxFlex="98">
@@ -23,13 +22,12 @@
           </div>
           <div fxFlex="1"></div>
         </div>
-      </ng-container>
+      }
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label> Editable </ng-template>
-
       <div fxLayout="column" fxLayoutGap="row" fxLayoutAlign="end end">
-        <ng-template [ngIf]="editEnabled">
+        @if (editEnabled) {
           <button
             mat-button
             [disabled]="vm.selectedPolicies.length === 0"
@@ -39,10 +37,9 @@
           >
             <mat-icon>edit</mat-icon> Edit Selection
           </button>
-        </ng-template>
+        }
       </div>
-
-      <ng-container *ngIf="vm.editablePolicies">
+      @if (vm.editablePolicies) {
         <div fxLayout="row">
           <div fxFlex="1"></div>
           <div fxFlex="98">
@@ -63,7 +60,7 @@
           </div>
           <div fxFlex="1"></div>
         </div>
-      </ng-container>
+      }
     </mat-tab>
   </mat-tab-group>
-</ng-container>
+}
