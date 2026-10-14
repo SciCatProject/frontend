@@ -1,87 +1,85 @@
-<ng-container *ngIf="vm$ | async as vm">
-  <mat-tab-group
-    (selectedTabChange)="onTabChanged($event.index)"
-    [selectedIndex]="selectedTabIndex"
-    *ngIf="vm.proposal"
-  >
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <span
-          matTooltip="Complete information about the proposal"
-          matTooltipPosition="above"
-        >
-          <mat-icon> details </mat-icon>
-          {{ "Details" | translate: localization }}
-        </span>
-      </ng-template>
-      <ng-template matTabContent
-        ><proposal-detail [proposal]="proposal"></proposal-detail
-      ></ng-template>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <span
-          matTooltip="List of all datasets acquired under this proposal and all the children proposals"
-          matTooltipPosition="above"
-        >
-          <mat-icon> folder </mat-icon>
-          {{ "Datasets" | translate: localization }}
-        </span>
-      </ng-template>
-
-      <ng-template matTabContent>
-        <app-proposal-datasets
-          *ngIf="proposal"
-          [proposalId]="proposal.proposalId"
-        ></app-proposal-datasets>
-      </ng-template>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <span
-          matTooltip="List of all proposals that are directly related to the current proposal, both parent and children"
-          matTooltipPosition="above"
-        >
-          <mat-icon data-cy="related-proposals"> folder </mat-icon>
-          {{ "Related Proposals" | translate: localization }}
-        </span>
-      </ng-template>
-
-      <ng-template matTabContent>
-        <app-related-proposals *ngIf="proposal"></app-related-proposals>
-      </ng-template>
-    </mat-tab>
-
-    <mat-tab *ngIf="appConfig.logbookEnabled">
-      <ng-template mat-tab-label>
-        <span
-          matTooltip="All the entries recorded in the logbook related to this proposal"
-          matTooltipPosition="above"
-        >
-          <mat-icon> book </mat-icon>
-          {{ "Logbook" | translate: localization }}
-        </span>
-      </ng-template>
-
-      <ng-template matTabContent>
-        <app-proposal-logbook
-          *ngIf="proposal"
-          [proposalId]="proposal.proposalId"
-        ></app-proposal-logbook>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
-
-  <ng-template [ngIf]="!vm.proposal && (loading$ | async) === false">
+@if (vm$ | async; as vm) {
+  @if (vm.proposal) {
+    <mat-tab-group
+      (selectedTabChange)="onTabChanged($event.index)"
+      [selectedIndex]="selectedTabIndex"
+    >
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span
+            matTooltip="Complete information about the proposal"
+            matTooltipPosition="above"
+          >
+            <mat-icon> details </mat-icon>
+            {{ "Details" | translate: localization }}
+          </span>
+        </ng-template>
+        <ng-template matTabContent
+          ><proposal-detail [proposal]="proposal"></proposal-detail
+        ></ng-template>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span
+            matTooltip="List of all datasets acquired under this proposal and all the children proposals"
+            matTooltipPosition="above"
+          >
+            <mat-icon> folder </mat-icon>
+            {{ "Datasets" | translate: localization }}
+          </span>
+        </ng-template>
+        <ng-template matTabContent>
+          @if (proposal) {
+            <app-proposal-datasets
+              [proposalId]="proposal.proposalId"
+            ></app-proposal-datasets>
+          }
+        </ng-template>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span
+            matTooltip="List of all proposals that are directly related to the current proposal, both parent and children"
+            matTooltipPosition="above"
+          >
+            <mat-icon data-cy="related-proposals"> folder </mat-icon>
+            {{ "Related Proposals" | translate: localization }}
+          </span>
+        </ng-template>
+        <ng-template matTabContent>
+          @if (proposal) {
+            <app-related-proposals></app-related-proposals>
+          }
+        </ng-template>
+      </mat-tab>
+      @if (appConfig.logbookEnabled) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span
+              matTooltip="All the entries recorded in the logbook related to this proposal"
+              matTooltipPosition="above"
+            >
+              <mat-icon> book </mat-icon>
+              {{ "Logbook" | translate: localization }}
+            </span>
+          </ng-template>
+          <ng-template matTabContent>
+            @if (proposal) {
+              <app-proposal-logbook
+                [proposalId]="proposal.proposalId"
+              ></app-proposal-logbook>
+            }
+          </ng-template>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  }
+  @if (!vm.proposal && (loading$ | async) === false) {
     <error-page
       data-cy="proposal-not-found"
       [errorTitle]="'Proposal not found'"
-      [message]="
-        'The proposal you are trying to view either doesn\'t exist or you don\'t have permission to view it.'
-      "
+      [message]="'The proposal you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
     >
     </error-page>
-  </ng-template>
-</ng-container>
+  }
+}
