@@ -63,6 +63,7 @@ describe("IngestorNewTransferDialogPageComponent", () => {
       expect(header["owner"]).toBe("testuser");
       expect(header["principalInvestigator"]).toBe("testuser");
       expect(header["ownerEmail"]).toBe("test@example.com");
+      expect(header["ownerGroup"]).toBeUndefined();
       expect(header["contactEmail"]).toBe("test@example.com");
       expect(header["creationTime"]).toBeDefined();
       expect(new Date(header["creationTime"]).toString()).not.toBe(
