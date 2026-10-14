@@ -1,7 +1,7 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
 import { initialDatasetState } from "state-management/state/datasets.store";
-import { ArchViewMode, FacetCounts, ScientificCondition } from "../models";
+import { FacetCounts, ScientificCondition } from "../models";
 import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
 import {
   OrigDatablock,
@@ -364,13 +364,20 @@ describe("DatasetsReducer", () => {
   });
 
   describe("on setArchiveViewModeAction", () => {
-    it("should set mode to an empty object, set modetoggle and set skip to 0", () => {
-      const modeToggle = ArchViewMode.all;
+    it("should set mode and modeToggle from the action and set skip to 0", () => {
+      const modeToggle = "on-tape";
+      const mode = { "datasetlifecycle.retrievable": true };
 
-      const action = fromActions.setArchiveViewModeAction({ modeToggle });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+      const action = fromActions.setArchiveViewModeAction({ modeToggle, mode });
+      const state = fromDatasets.datasetsReducer(
+        {
+          ...initialDatasetState,
+          filters: { ...initialDatasetState.filters, skip: 50 },
+        },
+        action,
+      );
 
-      expect(state.filters.mode).toEqual({});
+      expect(state.filters.mode).toEqual(mode);
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
     });
