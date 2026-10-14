@@ -37,7 +37,7 @@ export const connectIngestorSuccess = createAction(
     userInfoResponse: UserInfo;
     authIsDisabled: boolean;
     healthResponse: OtherHealthResponse;
-    configurations: OtherConfigurationsResponse
+    configurations: OtherConfigurationsResponse;
   }>(),
 );
 

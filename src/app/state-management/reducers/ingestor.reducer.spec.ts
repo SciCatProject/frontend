@@ -115,7 +115,7 @@ describe("IngestorReducer", () => {
       const healthResponse = { status: "ok" };
       const userInfoResponse = { logged_in: true };
       const authIsDisabled = false;
-      const configurations = { creationLocations: ["/foo/bar"]} 
+      const configurations = { creationLocations: ["/foo/bar"] };
 
       const action = fromActions.connectIngestorSuccess({
         versionResponse,

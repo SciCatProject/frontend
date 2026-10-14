@@ -21,7 +21,7 @@ describe("IngestorEffects", () => {
   const mockVersionResponse = { version: "1.0.0" };
   const mockHealthResponse = { status: "ok" };
   const mockUserInfoResponse = { logged_in: true };
-  const mockConfigurationsRepsonse = { creationLocations: ["/foo/bar/"]}
+  const mockConfigurationsRepsonse = { creationLocations: ["/foo/bar/"] };
 
   beforeEach(() => {
     const ingestorSpy = jasmine.createSpyObj("Ingestor", [
@@ -69,8 +69,9 @@ describe("IngestorEffects", () => {
       ingestorService.getVersion.and.returnValue(of(mockVersionResponse));
       ingestorService.getHealth.and.returnValue(of(mockHealthResponse));
       ingestorService.getUserInfo.and.returnValue(of(mockUserInfoResponse));
-      ingestorService.getConfigurations.and.returnValue(of(mockConfigurationsRepsonse));
-
+      ingestorService.getConfigurations.and.returnValue(
+        of(mockConfigurationsRepsonse),
+      );
 
       actions$ = of(fromActions.connectIngestor());
 
@@ -93,7 +94,9 @@ describe("IngestorEffects", () => {
       ingestorService.getVersion.and.returnValue(of(mockVersionResponse));
       ingestorService.getHealth.and.returnValue(of(mockHealthResponse));
       ingestorService.getUserInfo.and.returnValue(throwError(() => error));
-      ingestorService.getConfigurations.and.returnValue(of(mockConfigurationsRepsonse));
+      ingestorService.getConfigurations.and.returnValue(
+        of(mockConfigurationsRepsonse),
+      );
 
       actions$ = of(fromActions.connectIngestor());
 

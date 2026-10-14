@@ -40,12 +40,13 @@ export class IngestorEffects {
                     this.ingestor.getUserInfo().pipe(
                       map((userInfoResponse) =>
                         fromActions.connectIngestorSuccess({
-                          versionResponse: versionResponse as OtherVersionResponse,
+                          versionResponse:
+                            versionResponse as OtherVersionResponse,
                           healthResponse: healthResponse as OtherHealthResponse,
                           userInfoResponse: userInfoResponse as UserInfo,
                           authIsDisabled: false,
-                          configurations: 
-                            configurations as OtherConfigurationsResponse
+                          configurations:
+                            configurations as OtherConfigurationsResponse,
                         }),
                       ),
                       catchError((err) => {
@@ -59,11 +60,12 @@ export class IngestorEffects {
                             fromActions.connectIngestorSuccess({
                               versionResponse:
                                 versionResponse as OtherVersionResponse,
-                              healthResponse: healthResponse as OtherHealthResponse,
+                              healthResponse:
+                                healthResponse as OtherHealthResponse,
                               userInfoResponse: null, // no UserInfo available
                               authIsDisabled: true,
-                              configurations: 
-                                configurations as OtherConfigurationsResponse
+                              configurations:
+                                configurations as OtherConfigurationsResponse,
                             }),
                           );
                         }

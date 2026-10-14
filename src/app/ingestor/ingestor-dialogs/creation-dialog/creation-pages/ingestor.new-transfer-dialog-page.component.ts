@@ -75,7 +75,7 @@ export class IngestorNewTransferDialogPageComponent
   userProfile: ReturnedUserDto | null = null;
   userGroups: string[] = [];
 
-  creationLocations: string[] = []
+  creationLocations: string[] = [];
 
   uiNextButtonReady = false;
 
@@ -112,8 +112,8 @@ export class IngestorNewTransferDialogPageComponent
     this.subscriptions.push(
       this.status$.subscribe((status) => {
         this.creationLocations = status.configurations?.creationLocations ?? [];
-      })
-    )
+      }),
+    );
 
     this.subscriptions.push(
       this.ingestionObject$.subscribe((ingestionObject) => {
@@ -257,8 +257,10 @@ export class IngestorNewTransferDialogPageComponent
       this.userProfile?.email;
     this.createNewTransferData.scicatHeader["contactEmail"] =
       this.userProfile?.email;
-    this.createNewTransferData.scicatHeader["creationLocation"] = 
-      this.creationLocations?.length == 1 ? this.creationLocations[0] : undefined;
+    this.createNewTransferData.scicatHeader["creationLocation"] =
+      this.creationLocations?.length == 1
+        ? this.creationLocations[0]
+        : undefined;
 
     const creationTime = new Date();
     const formattedCreationTime = creationTime.toISOString();

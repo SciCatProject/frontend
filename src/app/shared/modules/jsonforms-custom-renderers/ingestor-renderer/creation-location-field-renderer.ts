@@ -41,8 +41,7 @@ export class CreationLocationFieldComponent
 
     this.componentSubscriptions.push(
       this.status$.subscribe((status) => {
-        this.creationLocations =
-          status.configurations?.creationLocations ?? [];
+        this.creationLocations = status.configurations?.creationLocations ?? [];
 
         if (this.form.disabled) {
           this.form.enable();
