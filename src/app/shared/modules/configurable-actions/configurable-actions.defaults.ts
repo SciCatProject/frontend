@@ -61,7 +61,19 @@ export function buildDefaultBatchActions(
         '{"jobParams": {"username": "{{ @username }}"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "archive"}',
       hidden:
         "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
-      enabled: "@totalSize > 0",
+      enabled: {
+        conditions: [
+          {
+            condition: "#Length(@pids) > 0",
+            disabledTooltip: "Select one or more datasets to archive.",
+          },
+          {
+            condition: "@totalSize > 0",
+            disabledTooltip:
+              "The selected datasets have a total size of 0 bytes, so there is nothing to archive.",
+          },
+        ],
+      },
     },
     {
       id: "dc10cd56-6d0a-4f0a-899a-f9c6726465bf",
@@ -102,7 +114,19 @@ export function buildDefaultBatchActions(
         '{"jobParams": {"username": "{{ @username }}", "option": "{{ @dialog.option }}", "destinationPath": "/archive/retrieve"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "retrieve"}',
       hidden:
         "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
-      enabled: "@totalPackedSize > 0",
+      enabled: {
+        conditions: [
+          {
+            condition: "#Length(@pids) > 0",
+            disabledTooltip: "Select one or more datasets to retrieve.",
+          },
+          {
+            condition: "@totalPackedSize > 0",
+            disabledTooltip:
+              "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve.",
+          },
+        ],
+      },
     },
   ];
 }

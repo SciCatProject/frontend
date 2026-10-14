@@ -5,9 +5,10 @@ import { MatButtonModule } from "@angular/material/button";
 import { ConfigurableActionsComponent } from "./configurable-actions.component";
 import { ConfigurableActionComponent } from "./configurable-action.component";
 import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule],
   declarations: [ConfigurableActionsComponent, ConfigurableActionComponent],
   exports: [ConfigurableActionsComponent, ConfigurableActionComponent],
 })
