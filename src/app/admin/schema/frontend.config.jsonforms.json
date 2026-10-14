@@ -145,6 +145,24 @@
                 "where": {
                   "type": "object",
                   "description": "Mongo query for the view (required), as the where of the v4 dataset filter; edit it in the JSON config."
+                },
+                "checkbox": {
+                  "type": "object",
+                  "description": "Optional checkbox under the dropdown that narrows this view, e.g. to datasets the user can act on. Its where is combined with the view's where and can use #user.<field> placeholders such as #user.email or #user.accessGroups; edit it in the JSON config.",
+                  "properties": {
+                    "label": { "type": "string" },
+                    "default": {
+                      "type": "boolean",
+                      "description": "Ticked when the view is selected (default true)."
+                    },
+                    "where": { "type": "object" },
+                    "exemptGroups": {
+                      "type": "array",
+                      "description": "Users in any of these groups (e.g. admins) don't get the checkbox: it is hidden and its where is not applied.",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": ["label", "where"]
                 }
               },
               "required": ["id", "label", "where"]
@@ -906,11 +924,36 @@
             "options": {
               "labelRef": "#/items/properties/label",
               "detail": {
-                "type": "HorizontalLayout",
+                "type": "VerticalLayout",
                 "elements": [
-                  { "type": "Control", "scope": "#/properties/id" },
-                  { "type": "Control", "scope": "#/properties/label" },
-                  { "type": "Control", "scope": "#/properties/tooltip" }
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      { "type": "Control", "scope": "#/properties/id" },
+                      { "type": "Control", "scope": "#/properties/label" },
+                      { "type": "Control", "scope": "#/properties/tooltip" }
+                    ]
+                  },
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "label": "Checkbox label",
+                        "scope": "#/properties/checkbox/properties/label"
+                      },
+                      {
+                        "type": "Control",
+                        "label": "Checkbox ticked by default",
+                        "scope": "#/properties/checkbox/properties/default"
+                      },
+                      {
+                        "type": "Control",
+                        "label": "Groups without the checkbox",
+                        "scope": "#/properties/checkbox/properties/exemptGroups"
+                      }
+                    ]
+                  }
                 ]
               }
             }

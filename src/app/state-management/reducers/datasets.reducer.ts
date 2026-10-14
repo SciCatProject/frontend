@@ -295,9 +295,13 @@ const reducer = createReducer(
 
   on(
     fromActions.setArchiveViewModeAction,
-    (state, { modeToggle, mode }): DatasetState => {
+    (state, { modeToggle, mode, checked }): DatasetState => {
       const filters = { ...state.filters, skip: 0, mode, modeToggle };
-      return { ...state, filters };
+      return {
+        ...state,
+        filters,
+        viewModeChecked: checked ?? false,
+      };
     },
   ),
   on(
@@ -318,7 +322,13 @@ const reducer = createReducer(
     const limit = state.pagination.limit; // Save limit
     const filters = { ...initialDatasetState.filters, skip: 0, limit };
     const pagination = { skip: 0, limit };
-    return { ...state, filters, pagination, searchTerms: "" };
+    return {
+      ...state,
+      filters,
+      pagination,
+      searchTerms: "",
+      viewModeChecked: false,
+    };
   }),
 
   on(fromActions.setTextFilterAction, (state, { text }): DatasetState => {

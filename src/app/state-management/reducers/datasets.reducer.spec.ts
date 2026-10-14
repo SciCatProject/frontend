@@ -380,6 +380,18 @@ describe("DatasetsReducer", () => {
       expect(state.filters.mode).toEqual(mode);
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
+      expect(state.viewModeChecked).toBeFalse();
+    });
+
+    it("should store whether the view's checkbox is ticked", () => {
+      const action = fromActions.setArchiveViewModeAction({
+        modeToggle: "owned",
+        mode: { $and: [{}, { ownerGroup: { $in: ["p1234"] } }] },
+        checked: true,
+      });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.viewModeChecked).toBeTrue();
     });
   });
 
@@ -425,6 +437,24 @@ describe("DatasetsReducer", () => {
       expect(state.pagination.skip).toEqual(0);
       expect(state.pagination.limit).toEqual(limit);
       expect(state.searchTerms).toEqual("");
+    });
+
+    it("should reset the view checkbox together with the view", () => {
+      const sta = fromDatasets.datasetsReducer(
+        initialDatasetState,
+        fromActions.setArchiveViewModeAction({
+          modeToggle: "my-pi",
+          mode: {},
+          checked: true,
+        }),
+      );
+
+      const state = fromDatasets.datasetsReducer(
+        sta,
+        fromActions.clearFacetsAction(),
+      );
+
+      expect(state.viewModeChecked).toBeFalse();
     });
   });
 
