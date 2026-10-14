@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from "@angular/core";
-import { ArchViewMode, DatasetViewMode } from "state-management/models";
+import { ArchViewMode } from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
-  setArchiveViewModeAction,
   clearSelectionAction,
   addToBatchAction,
   clearBatchAction,
@@ -47,7 +46,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   @Input() selectedSets: PartialOutputDatasetDto[] | null = [];
 
   public currentArchViewMode: string = ArchViewMode.all;
-  modes: DatasetViewMode[] = this.appConfig.datasetViews?.modes ?? [];
 
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
 
@@ -69,17 +67,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
       ...action,
       disabled: true,
     }));
-  }
-
-  /**
-   * Handle changing of view mode and disabling selected rows
-   * @param mode
-   */
-  onModeChange(mode: DatasetViewMode): void {
-    this.store.dispatch(
-      setArchiveViewModeAction({ modeToggle: mode.id, mode: mode.where }),
-    );
-    this.store.dispatch(clearSelectionAction());
   }
 
   isEmptySelection(): boolean {
