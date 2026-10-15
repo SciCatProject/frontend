@@ -116,6 +116,11 @@ export const getExtractionMethodsFailure = createAction(
   props<{ err: Error }>(),
 );
 
+export const getConfigurationFailure = createAction(
+  "[Ingestor] Get Configuration Failure",
+  props<{ err: Error }>(),
+);
+
 export const getBrowseFilePath = createAction(
   "[Ingestor] Get Browse File Path",
   props<{ path: string; page: number; pageNumber: number }>(),

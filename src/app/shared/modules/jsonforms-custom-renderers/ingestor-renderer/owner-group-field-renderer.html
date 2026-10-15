@@ -27,10 +27,13 @@
   {{ ownerGroup }}
   </mat-option>
   </mat-autocomplete>
-  <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
-    description
-    }}
-  </mat-hint>
+  <mat-icon
+  *ngIf="description"
+  matSuffix
+  class="field-description-icon"
+  [matTooltip]="description"
+  matTooltipPosition="above"
+  >info_outline</mat-icon>
   <mat-error>{{ error }}</mat-error>
   </mat-form-field>
   <mat-form-field
