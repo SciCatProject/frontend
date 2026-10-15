@@ -30,7 +30,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-//import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+//import { DataFile } from "datasets/datafiles/datafiles.interfaces";
 import { AppConfigService } from "app-config.service";
 //import { boolean } from "mathjs";
 import {

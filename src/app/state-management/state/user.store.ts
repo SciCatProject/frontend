@@ -82,6 +82,7 @@ export const initialUserState: UserState = {
     fe_file_table_columns: [],
     fe_job_table_columns: [],
     fe_publisheddata_table_columns: [],
+    fe_datafiles_table_columns: [],
   },
 
   message: undefined,
