@@ -69,33 +69,6 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
 
   setting: ITableSetting = {};
 
-  tableColumns: TableField<any>[] = [
-    {
-      name: "name",
-      header: "Name",
-    },
-    {
-      name: "sourceFolder",
-      header: "Source Folder",
-    },
-    {
-      name: "size",
-      header: "Size",
-    },
-    {
-      name: "type",
-      header: "Type",
-    },
-    {
-      name: "creationTime",
-      header: "Creation Time",
-    },
-    {
-      name: "owner",
-      header: "Owner",
-    },
-  ];
-
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
     saveSettingMode: "none",
@@ -127,6 +100,7 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   };
 
   rowSelectionMode: TableSelectionMode = "none";
+  localization = "dataset";
 
   constructor(
     private datePipe: DatePipe,
