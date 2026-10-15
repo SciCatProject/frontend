@@ -21,6 +21,7 @@ const appConfig: AppConfigInterface = {
   datasetRelationshipsEnabled: true,
   datasetJsonScientificMetadata: true,
   datasetPageSizeOptions: [5, 10, 25, 100],
+  paginationPosition: "both",
   editDatasetEnabled: true,
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
@@ -268,6 +269,42 @@ describe("AppConfigService", () => {
       expect(service["appConfig"]).toEqual(appConfig);
     });
 
+    it("should default paginationPosition to both when missing", async () => {
+      const configWithoutPaginationPosition = {
+        ...appConfig,
+        paginationPosition: undefined,
+      };
+      spyOn(service["http"], "get").and.returnValue(
+        of(configWithoutPaginationPosition),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().paginationPosition).toBe("both");
+    });
+
+    ["top", "bottom", "both"].forEach((paginationPosition) => {
+      it(`should preserve a valid paginationPosition of ${paginationPosition}`, async () => {
+        spyOn(service["http"], "get").and.returnValue(
+          of({ ...appConfig, paginationPosition }),
+        );
+
+        await service.loadAppConfig();
+
+        expect(service.getConfig().paginationPosition).toBe(paginationPosition);
+      });
+    });
+
+    it("should default an invalid paginationPosition to both", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({ ...appConfig, paginationPosition: "invalid" }),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().paginationPosition).toBe("both");
+    });
+
     it("should default datasetPageSizeOptions when missing", async () => {
       const configWithoutDatasetPageSizeOptions = {
         ...appConfig,
@@ -508,6 +545,7 @@ describe("AppConfigService", () => {
             ? mergedConfig
             : mockConfigResponses["/assets/config.json"]),
           allowConfigOverrides: configOverrideEnabled,
+          paginationPosition: "both",
         });
         expect(service["http"].get).toHaveBeenCalledTimes(
           configOverrideEnabled ? 3 : 2,
