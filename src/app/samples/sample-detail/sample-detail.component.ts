@@ -111,6 +111,7 @@ export class SampleDetailComponent
   };
 
   rowSelectionMode: TableSelectionMode = "none";
+  localization = "dataset";
 
   constructor(
     private appConfigService: AppConfigService,
