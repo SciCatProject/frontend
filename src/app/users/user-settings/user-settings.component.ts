@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, DOCUMENT } from "@angular/core";
 import { Store } from "@ngrx/store";
 import {
   showMessageAction,
@@ -10,7 +10,7 @@ import {
   selectIsAdmin,
   selectUserSettingsPageViewModel,
 } from "state-management/selectors/user.selectors";
-import { DOCUMENT } from "@angular/common";
+
 import packageJson from "../../../../package.json";
 import { AppConfigService } from "app-config.service";
 

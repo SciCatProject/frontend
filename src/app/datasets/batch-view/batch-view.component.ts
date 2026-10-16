@@ -22,7 +22,7 @@ import {
   selectProfile,
   selectColumnsWithHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
 import { TableService } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
@@ -42,7 +42,7 @@ import {
   standalone: false,
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  batch$: Observable<OutputDatasetObsoleteDto[]> = this.store.select(
+  batch$: Observable<PartialOutputDatasetDto[]> = this.store.select(
     selectDatasetsInBatch,
   );
   userProfile$ = this.store.select(selectProfile);
@@ -56,7 +56,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   shareEnabled = this.appConfig.shareEnabled;
 
-  datasetList: OutputDatasetObsoleteDto[] = [];
+  datasetList: PartialOutputDatasetDto[] = [];
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
   actionItems: ActionItems = { datasets: [] };
@@ -77,7 +77,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearBatchAction());
   }
 
-  private storeBatch(datasetUpdatedBatch: OutputDatasetObsoleteDto[]) {
+  private storeBatch(datasetUpdatedBatch: PartialOutputDatasetDto[]) {
     this.store.dispatch(storeBatchAction({ batch: datasetUpdatedBatch }));
   }
 
@@ -100,7 +100,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     return this.appConfig.defaultDatasetsListSettings?.columns || [];
   }
 
-  private getExportColumns(): TableField<OutputDatasetObsoleteDto>[] {
+  private getExportColumns(): TableField<PartialOutputDatasetDto>[] {
     return this.datasetsListService
       .convertSavedDatasetColumns(this.getConfiguredDatasetColumns())
       .filter((column) => column.display !== "hidden")
@@ -109,13 +109,13 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         header: this.translateDatasetColumnHeader(column),
         toExport:
           column.toExport ||
-          ((row: OutputDatasetObsoleteDto) =>
+          ((row: PartialOutputDatasetDto) =>
             typeof row === "object" ? row[column.name] : ""),
       }));
   }
 
   private translateDatasetColumnHeader(
-    column: TableField<OutputDatasetObsoleteDto>,
+    column: TableField<PartialOutputDatasetDto>,
   ): string {
     return translateComponentLabel(
       this.translateService,
@@ -132,7 +132,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRemove(dataset: OutputDatasetObsoleteDto) {
+  onRemove(dataset: PartialOutputDatasetDto) {
     this.store.dispatch(removeFromBatchAction({ dataset }));
   }
 

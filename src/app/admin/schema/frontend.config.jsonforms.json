@@ -103,6 +103,29 @@
       "shoppingCartOnHeader": { "type": "boolean" },
       "tableSciDataEnabled": { "type": "boolean" },
       "datasetDetailsShowMissingProposalId": { "type": "boolean" },
+      "datasetDetailsTabsInclude": {
+        "type": "object",
+        "description": "Related documents included (looked up) with the dataset on the Details tab, defaults to [\"attachments\"]. The other tabs are not configurable: Attachments always includes attachments, Admin always includes datablocks and Datafiles loads its files page by page from the origdatablocks files endpoint. Unsupported values are ignored with a console error so the dataset can still load.",
+        "properties": {
+          "details": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruments",
+                "proposals",
+                "origdatablocks",
+                "datablocks",
+                "attachments",
+                "samples",
+                "all"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
@@ -425,6 +448,12 @@
                         ]
                       },
                       "source": { "type": "string" },
+                      "internalLinkLabel": {
+                        "type": "string",
+                        "title": "Internal Link Label",
+                        "description": "Related-document field to display (e.g. title for proposals, description for samples, name for instruments), or id (default) for the original ID. Falls back to the ID when unavailable.",
+                        "default": "id"
+                      },
                       "order": { "type": "number" }
                     },
                     "required": ["element", "source", "order"]
@@ -820,6 +849,20 @@
       },
       {
         "type": "Group",
+        "label": "Dataset Details Data",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "label": "Details",
+            "scope": "#/properties/datasetDetailsTabsInclude/properties/details"
+          }
+        ]
+      },
+      {
+        "type": "Group",
         "label": "Dataset Detail Component",
         "options": {
           "expandable": true
@@ -933,6 +976,17 @@
                           {
                             "type": "Control",
                             "scope": "#/properties/source"
+                          },
+                          {
+                            "type": "Control",
+                            "scope": "#/properties/internalLinkLabel",
+                            "rule": {
+                              "effect": "SHOW",
+                              "condition": {
+                                "scope": "#/properties/element",
+                                "schema": { "const": "internalLink" }
+                              }
+                            }
                           },
                           {
                             "type": "Control",

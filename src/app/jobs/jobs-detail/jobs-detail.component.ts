@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
-import { DOCUMENT } from "@angular/common";
+import { Component, OnDestroy, OnInit, Inject, DOCUMENT } from "@angular/core";
+
 import { fetchJobAction } from "state-management/actions/jobs.actions";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";

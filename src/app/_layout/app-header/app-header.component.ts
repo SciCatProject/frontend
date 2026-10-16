@@ -1,5 +1,4 @@
-import { DOCUMENT } from "@angular/common";
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, DOCUMENT } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
 import { logoutAction } from "state-management/actions/user.actions";

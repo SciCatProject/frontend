@@ -1,8 +1,13 @@
-import { Settings, Message, TableColumn, ScientificCondition } from "../models";
+import {
+  Settings,
+  Message,
+  TableColumn,
+  ScientificCondition,
+  FacetCount,
+} from "../models";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { Observable } from "rxjs";
-import { FacetCount } from "./datasets.store";
 
 export type FilterType =
   "text" | "dateRange" | "multiSelect" | "number" | "checkbox";

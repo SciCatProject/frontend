@@ -39,27 +39,21 @@ const tableDefaultSettingsConfig: ITableSetting = {
         {
           name: "proposalId",
           header: "Proposal ID",
-          icon: "perm_device_information",
         },
         {
           name: "relation",
-          icon: "compare_arrows",
         },
         {
           name: "title",
-          icon: "description",
         },
         {
           name: "abstract",
-          icon: "description",
         },
         {
           name: "email",
-          icon: "badge",
         },
         {
           name: "type",
-          icon: "text_format",
         },
       ],
     },

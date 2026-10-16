@@ -89,23 +89,23 @@ export const testData = {
     isPublished: false,
   },
   rawDataset: {
-    principalInvestigator: "string",
+    principalInvestigators: ["string"],
     endTime: "2019-10-31T14:44:46.143Z",
     creationLocation: "Cypress",
     dataFormat: "Nexus Version x.y",
     scientificMetadata: {
-      key_1:{
+      key_1: {
         human_name: "Key 1",
         value: "Value 1",
-        unit: ""
+        unit: "",
       },
       key_2: {
         human_name: "Key 2",
         value: 1,
         unit: "mm",
         valueSI: 0.01,
-        unitSI: "m"
-      }
+        unitSI: "m",
+      },
     },
     owner: "string",
     ownerEmail: "string@test.com",
@@ -122,12 +122,11 @@ export const testData = {
     datasetName: "Cypress Dataset",
     classification: "AV=medium,CO=low",
     license: "string",
-    version: "string",
     isPublished: false,
     ownerGroup: "ess",
     accessGroups: [],
-    sampleId: "string",
-    proposalId: "20170266",
+    sampleIds: ["string"],
+    proposalIds: ["20170266"],
     datasetlifecycle: {
       archivable: true,
       retrievable: false,
@@ -193,7 +192,8 @@ export const testData = {
     type: "ui_test",
     jobParams: {},
   },
-  testImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNkYPhfz0AEYBxVSF+FAP5FDvcfRYWgAAAAAElFTkSuQmCC",
+  testImage:
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNkYPhfz0AEYBxVSF+FAP5FDvcfRYWgAAAAAElFTkSuQmCC",
 };
 
 export const testConfig = {
@@ -439,4 +439,3 @@ export const personalizedDatasetsColumnsList = [
   "Start Time",
   "End Time",
 ];
-

@@ -33,6 +33,7 @@
           }
         ],
         "@angular-eslint/component-selector": "off",
+        "@angular-eslint/prefer-inject": "off",
         "@typescript-eslint/member-ordering": [
           "error",
           {
