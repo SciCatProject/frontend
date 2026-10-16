@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   amendPublishedDataAction,
+  clearCurrentPublishedDataAction,
   deletePublishedDataAction,
   fetchPublishedDataAction,
   fetchRelatedDatasetsAndAddToBatchAction,
@@ -16,6 +17,7 @@ import { selectCurrentPublishedData } from "state-management/selectors/published
 import { AppConfigService } from "app-config.service";
 import {
   selectIsAdmin,
+  selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 
@@ -31,6 +33,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   publishedData: PublishedData & { metadata?: any };
   subscriptions: Subscription[] = [];
   isLoggedIn$ = this.store.select(selectIsLoggedIn);
+  loading$ = this.store.select(selectIsLoading);
   appConfig = this.appConfigService.getConfig();
   show = false;
   landingPageUrl = "";
@@ -53,19 +56,18 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.currentData$.subscribe((data) => {
-        if (data) {
-          this.publishedData = data;
+        this.publishedData = data;
 
-          if (this.appConfig.landingPage) {
-            this.landingPageUrl =
-              this.appConfig.landingPage + encodeURIComponent(data.doi);
-          }
+        if (data && this.appConfig.landingPage) {
+          this.landingPageUrl =
+            this.appConfig.landingPage + encodeURIComponent(data.doi);
         }
       }),
     );
   }
 
   ngOnDestroy() {
+    this.store.dispatch(clearCurrentPublishedDataAction());
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
