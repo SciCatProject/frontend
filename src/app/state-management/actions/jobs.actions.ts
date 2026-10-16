@@ -28,6 +28,8 @@ export const fetchJobCompleteAction = createAction(
 );
 export const fetchJobFailedAction = createAction("[Job] Fetch Job Failed");
 
+export const clearCurrentJobAction = createAction("[Job] Clear Current Job");
+
 export const submitJobAction = createAction(
   "[Job] Submit Job",
   props<{ job: CreateJobDtoV3 }>(),

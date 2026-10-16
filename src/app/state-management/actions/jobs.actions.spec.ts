@@ -76,6 +76,13 @@ describe("Job Actions", () => {
     });
   });
 
+  describe("clearCurrentJobAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearCurrentJobAction();
+      expect({ ...action }).toEqual({ type: "[Job] Clear Current Job" });
+    });
+  });
+
   describe("submitJobAction", () => {
     it("should create an action", () => {
       const newJob = { ...job } as CreateJobDtoV3;

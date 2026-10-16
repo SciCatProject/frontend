@@ -19,6 +19,15 @@ const reducer = createReducer(
     currentJob: job,
   })),
 
+  on(
+    fromActions.fetchJobFailedAction,
+    fromActions.clearCurrentJobAction,
+    (state): JobsState => ({
+      ...state,
+      currentJob: undefined,
+    }),
+  ),
+
   on(fromActions.submitJobCompleteAction, (state): JobsState => ({
     ...state,
     submitError: undefined,

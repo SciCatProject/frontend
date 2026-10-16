@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit, Inject, DOCUMENT } from "@angular/core";
 
-import { fetchJobAction } from "state-management/actions/jobs.actions";
+import {
+  clearCurrentJobAction,
+  fetchJobAction,
+} from "state-management/actions/jobs.actions";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { selectCurrentJob } from "state-management/selectors/jobs.selectors";
@@ -8,6 +11,7 @@ import { Observable, Subscription } from "rxjs";
 import { OutputJobV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
 import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
+import { selectIsLoading } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-jobs-detail",
@@ -17,6 +21,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
   job$ = this.store.select(selectCurrentJob) as Observable<OutputJobV3Dto>;
+  loading$ = this.store.select(selectIsLoading);
   routeSubscription: Subscription = new Subscription();
 
   showJobParams = false;
@@ -40,6 +45,7 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.store.dispatch(clearCurrentJobAction());
     this.routeSubscription.unsubscribe();
   }
 

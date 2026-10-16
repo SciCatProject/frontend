@@ -46,6 +46,30 @@ describe("jobsReducer", () => {
     });
   });
 
+  describe("on fetchJobFailedAction", () => {
+    it("should clear currentJob", () => {
+      const action = fromActions.fetchJobFailedAction();
+      const state = jobsReducer(
+        { ...initialJobsState, currentJob: job },
+        action,
+      );
+
+      expect(state.currentJob).toBeUndefined();
+    });
+  });
+
+  describe("on clearCurrentJobAction", () => {
+    it("should clear currentJob", () => {
+      const action = fromActions.clearCurrentJobAction();
+      const state = jobsReducer(
+        { ...initialJobsState, currentJob: job },
+        action,
+      );
+
+      expect(state.currentJob).toBeUndefined();
+    });
+  });
+
   describe("on submitJobCompleteAction", () => {
     it("should set submitError to undefined", () => {
       const action = fromActions.submitJobCompleteAction({ job });

@@ -126,4 +126,13 @@
       </mat-card>
     </div>
   </div>
+} @else {
+  @if ((loading$ | async) === false) {
+    <error-page
+      data-cy="job-not-found"
+      [errorTitle]="'Job not found'"
+      [message]="'The job you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
+    >
+    </error-page>
+  }
 }
