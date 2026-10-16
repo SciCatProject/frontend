@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   amendPublishedDataAction,
+  clearCurrentPublishedDataAction,
   deletePublishedDataAction,
   fetchPublishedDataAction,
   fetchRelatedDatasetsAndAddToBatchAction,
@@ -55,19 +56,18 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.currentData$.subscribe((data) => {
-        if (data) {
-          this.publishedData = data;
+        this.publishedData = data;
 
-          if (this.appConfig.landingPage) {
-            this.landingPageUrl =
-              this.appConfig.landingPage + encodeURIComponent(data.doi);
-          }
+        if (data && this.appConfig.landingPage) {
+          this.landingPageUrl =
+            this.appConfig.landingPage + encodeURIComponent(data.doi);
         }
       }),
     );
   }
 
   ngOnDestroy() {
+    this.store.dispatch(clearCurrentPublishedDataAction());
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
