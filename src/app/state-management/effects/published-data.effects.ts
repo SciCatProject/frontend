@@ -25,6 +25,7 @@ import {
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
+import { BATCH_ADDED_FROM_PUBLISHED_DATA } from "state-management/state/datasets.store";
 import {
   showMessageAction,
   loadingAction,
@@ -374,7 +375,9 @@ export class PublishedDataEffects {
               datasetActions.selectDatasetsAction({
                 datasets: datasets as OutputDatasetDto[],
               }),
-              datasetActions.addToBatchAction(),
+              datasetActions.addToBatchAction({
+                addedFrom: BATCH_ADDED_FROM_PUBLISHED_DATA,
+              }),
               fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction({
                 publishedDataDoi,
               }),

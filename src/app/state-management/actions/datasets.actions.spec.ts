@@ -241,8 +241,11 @@ describe("Dataset Actions", () => {
 
   describe("addToBatchAction", () => {
     it("should create an action", () => {
-      const action = fromActions.addToBatchAction();
-      expect({ ...action }).toEqual({ type: "[Dataset] Add To Batch" });
+      const action = fromActions.addToBatchAction({ addedFrom: "archivable" });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Add To Batch",
+        addedFrom: "archivable",
+      });
     });
   });
 
