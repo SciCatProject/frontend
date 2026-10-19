@@ -1,7 +1,7 @@
-<ng-container *ngIf="vm$ | async as vm">
+@if (vm$ | async; as vm) {
   <div fxLayout="row" fxLayout.lt-lg="column">
     <div fxFlex="14" fxFlex.lt-xl="20">
-      <ng-template [ngIf]="appConfig.addSampleEnabled">
+      @if (appConfig.addSampleEnabled) {
         <button
           mat-stroked-button
           class="small-edit-sample"
@@ -9,8 +9,8 @@
         >
           <mat-icon>add_circle</mat-icon> Create Sample
         </button>
-      </ng-template>
-      <ng-template [ngIf]="appConfig.searchSamples">
+      }
+      @if (appConfig.searchSamples) {
         <mat-card class="big-search">
           <mat-card-header>
             <mat-card-title>Search</mat-card-title>
@@ -20,20 +20,19 @@
               [prefilledValue]="vm.textFilter"
               (search)="onTextSearchChange($event)"
             ></app-search-bar>
-
-            <shared-condition
-              #conditionFilter
-              *ngIf="appConfig.scienceSearchEnabled"
-              [showConditions]="true"
-              [metadataKeys]="vm.metadataKeys"
-              [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
-              [showConditionToggle]="false"
-              [conditionSettingScope]="'sample'"
-              [addConditionAction]="addCondition"
-              [removeConditionAction]="removeCondition"
-              [dialogTitle]="'Add Sample Metadata Key'"
-            ></shared-condition>
-
+            @if (appConfig.scienceSearchEnabled) {
+              <shared-condition
+                #conditionFilter
+                [showConditions]="true"
+                [metadataKeys]="vm.metadataKeys"
+                [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
+                [showConditionToggle]="false"
+                [conditionSettingScope]="'sample'"
+                [addConditionAction]="addCondition"
+                [removeConditionAction]="removeCondition"
+                [dialogTitle]="'Add Sample Metadata Key'"
+              ></shared-condition>
+            }
             <div class="section-container">
               <button
                 [disabled]="!vm.hasAppliedFilters"
@@ -66,14 +65,14 @@
             (searchBarFocus)="onTextSearchChange($event)"
           ></app-search-bar>
         </div>
-      </ng-template>
-      <ng-template [ngIf]="appConfig.addSampleEnabled">
+      }
+      @if (appConfig.addSampleEnabled) {
         <mat-card class="big-edit-sample" (click)="openDialog()">
           <mat-card-content>
             <mat-icon>add_circle</mat-icon> Create Sample
           </mat-card-content>
         </mat-card>
-      </ng-template>
+      }
     </div>
     <div fxFlex fxFlex.lt-xl="80">
       <dynamic-mat-table
@@ -95,4 +94,4 @@
       </dynamic-mat-table>
     </div>
   </div>
-</ng-container>
+}
