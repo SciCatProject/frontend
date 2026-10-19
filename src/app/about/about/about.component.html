@@ -1,1 +1,3 @@
-<div *ngIf="htmlContent" class="about" fxFlex="100%" [innerHTML]="htmlContent"></div>
+@if (htmlContent) {
+  <div class="about" fxFlex="100%" [innerHTML]="htmlContent"></div>
+}
