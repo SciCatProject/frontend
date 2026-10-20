@@ -84,10 +84,13 @@
           Share
         </button>
       </ng-container>
-      <configurable-actions *ngIf="appConfig.batchActionsEnabled"
-        [actionsConfig]="appConfig.batchActions" [actionItems]="actionItems"
+      <configurable-actions
+        *ngIf="appConfig.batchActionsEnabled"
+        [actionsConfig]="appConfig.batchActions"
+        [actionItems]="actionItems"
         [buttonsStyle]="actionButtonsStyle"
-        (actionFinished)="onActionFinished($event)">
+        (actionFinished)="onActionFinished($event)"
+      >
       </configurable-actions>
     </div>
 

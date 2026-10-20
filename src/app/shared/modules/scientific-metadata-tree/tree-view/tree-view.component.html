@@ -51,7 +51,11 @@
         ></row-menu>
         <span
           class="menu-spacer"
-          *ngIf="allowAddAsColumn && rowContextMenuItems.length > 0 && !canShowAddAsColumn(node)"
+          *ngIf="
+            allowAddAsColumn &&
+            rowContextMenuItems.length > 0 &&
+            !canShowAddAsColumn(node)
+          "
         ></span>
       </div>
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">

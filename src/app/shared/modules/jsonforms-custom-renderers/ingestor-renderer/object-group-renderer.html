@@ -1,6 +1,5 @@
 <mat-card class="anyof-group">
-  <mat-card-title
-    >
+  <mat-card-title>
     {{ objectTitle }}
     <span class="spacer"></span>
     <mat-icon
@@ -9,16 +8,16 @@
       matBadgeColor="warn"
       matTooltip="{{ this.error }}"
       matTooltipClass="error-message-tooltip"
-      >
+    >
       error_outline
     </mat-icon>
   </mat-card-title>
   <mat-card-content>
     <div *ngIf="errorRecursiveStructure === false">
       <jsonforms-outlet
-      [uischema]="detailUiSchema"
-      [schema]="scopedSchema"
-      [path]="propsPath"
+        [uischema]="detailUiSchema"
+        [schema]="scopedSchema"
+        [path]="propsPath"
       >
       </jsonforms-outlet>
     </div>
