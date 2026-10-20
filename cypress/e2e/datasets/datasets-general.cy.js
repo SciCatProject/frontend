@@ -593,7 +593,7 @@ describe("Datasets general", () => {
     });
     it("should be able to add condition with scientific notation value", () => {
       cy.addCondition({
-        field: "extra_entry_end_time",
+        key: "extra_entry_end_time",
         operator: "=",
         value: "3.1e4",
       });
@@ -672,14 +672,14 @@ describe("Datasets general", () => {
       cy.visit("/datasets");
       cy.finishedLoading();
 
-      cy.addCondition({ field: "extra_entry_end_time", value: "5" });
+      cy.addCondition({ key: "extra_entry_end_time", value: "5" });
 
       cy.get('[data-cy="condition-chip"]').should("have.length", 1);
 
       cy.visit("/samples");
       cy.finishedLoading();
 
-      cy.addCondition({ field: "test_characteristic", value: "10" });
+      cy.addCondition({ key: "test_characteristic", value: "10" });
 
       cy.get('[data-cy="condition-chip"]').should("have.length", 1);
 
@@ -716,7 +716,7 @@ describe("Datasets general", () => {
     });
 
     it("should persist condition values after navigating away and back", () => {
-      cy.addCondition({ field: "run_number", operator: ">", value: "19" });
+      cy.addCondition({ key: "run_number", operator: ">", value: "19" });
 
       cy.get(".dataset-table mat-row").first().click();
 
