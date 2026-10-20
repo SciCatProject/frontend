@@ -139,7 +139,8 @@ describe("Datasets general", () => {
         value: "1",
       });
 
-      cy.get('[data-cy="condition-add"]').click();
+      // the button of the group adds a filter joined by AND
+      cy.get('[data-cy="condition-add-and"]').click();
       cy.fillCondition(1, {
         key: "extra_entry_end_time",
         operator: "<",
@@ -355,7 +356,6 @@ describe("Datasets general", () => {
       cy.fillCondition(0, { field: "Keywords", value: "beam, test" });
       cy.get('[data-cy="condition-add"]').click();
       cy.fillCondition(1, {
-        join: "OR",
         exclude: true,
         key: "temperature",
         operator: ">",

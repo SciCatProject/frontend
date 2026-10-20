@@ -39,16 +39,20 @@
   min-height: 160px;
   max-height: 60vh;
   padding: 8px 24px 12px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  // only the rows scroll, Add filter stays below them
+  overflow: hidden;
 }
 
 .conditions {
   // lets the rows adapt to the width of the dialog, not of the window
   container-type: inline-size;
   display: flex;
+  flex: 0 1 auto;
   flex-direction: column;
   gap: 6px;
+  min-height: 0;
+  padding-right: 4px;
+  overflow-y: auto;
 }
 
 // the field, include and action cells keep their place for every kind of field
@@ -91,8 +95,7 @@
     border-left-color: #9e9e9e;
 
     mat-form-field,
-    condition-key-picker,
-    .quick-picks {
+    condition-key-picker {
       opacity: 0.45;
     }
   }
@@ -123,27 +126,6 @@
   }
 }
 
-.join-toggle {
-  ::ng-deep .mat-button-toggle {
-    width: 40px;
-    text-align: center;
-  }
-
-  --mat-button-toggle-height: 26px;
-  --mat-button-toggle-label-text-size: 0.6875rem;
-  --mat-button-toggle-label-text-weight: 600;
-
-  ::ng-deep .mat-button-toggle-label-content {
-    padding: 0;
-    line-height: 24px;
-  }
-
-  ::ng-deep .mat-button-toggle-checked {
-    color: var(--theme-primary-default-contrast, #fff);
-    background-color: var(--theme-primary-default);
-  }
-}
-
 .range-cell {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -160,214 +142,6 @@
 }
 
 // a dashed slot below the last row, it stays in view while the rows scroll
-.add-row {
-  position: sticky;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  min-height: 40px;
-  margin-top: 6px;
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--theme-primary-default);
-  cursor: pointer;
-  background: transparent;
-  border: 1px dashed color-mix(in srgb, var(--theme-primary-default) 35%, white);
-  border-radius: 8px;
-
-  &:hover {
-    background: color-mix(in srgb, var(--theme-primary-default) 8%, white);
-    border-color: var(--theme-primary-default);
-  }
-
-  mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-  }
-}
-
-.apply-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-right: 8px;
-  font-size: 0.8125rem;
-  color: #b00020;
-
-  mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-  }
-}
-
-.dialog-actions {
-  gap: 8px;
-  padding: 8px 24px 12px;
-
-  .spacer {
-    flex: 1;
-  }
-}
-
-.quick-picks {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  .quick-label {
-    flex-shrink: 0;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    opacity: 0.6;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.quick-pick {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 10px 2px 6px;
-  font: inherit;
-  font-size: 0.75rem;
-  color: inherit;
-  cursor: pointer;
-  background: transparent;
-  border: 1px dashed var(--theme-hover-lighter, #bdbdbd);
-  border-radius: 16px;
-  white-space: nowrap;
-
-  mat-icon {
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    color: var(--theme-primary-default);
-  }
-
-  &:hover,
-  &:focus-visible {
-    border-style: solid;
-    border-color: var(--theme-primary-default);
-    outline: none;
-  }
-}
-
-// narrow: join and actions, include and field, key, then operator, value, unit
-@container (max-width: 1020px) {
-  .condition-row {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-
-    .join-cell {
-      grid-column: 1 / span 3;
-    }
-
-    .exclude-button {
-      grid-column: span 2;
-    }
-
-    .row-actions {
-      grid-column: span 6;
-      justify-content: flex-end;
-    }
-
-    &.advanced {
-      .join-cell {
-        grid-row: 1;
-      }
-
-      .row-actions {
-        grid-column: 4 / span 3;
-        grid-row: 1;
-      }
-    }
-
-    // the cells of the field: key, operator, value, unit
-    > condition-key-picker,
-    .quick-picks,
-    .wide-value {
-      grid-column: 1 / -1;
-    }
-
-    > mat-form-field,
-    > .range-cell {
-      grid-column: span 2;
-    }
-
-    &.advanced > mat-form-field:first-of-type {
-      grid-column: span 4;
-    }
-
-    // no room for the icons, the quick picks share the line
-    .quick-pick {
-      flex: 1 1 auto;
-      justify-content: center;
-      padding: 2px 8px;
-
-      mat-icon {
-        display: none;
-      }
-    }
-  }
-}
-
-// the panels of the selects and the autocompletes are not inside the dialog
-::ng-deep .condition-panel .mat-mdc-option {
-  min-height: 34px;
-  font-size: 13px;
-}
-
-.action-button {
-  --mat-icon-button-state-layer-size: 28px;
-  --mdc-icon-button-state-layer-size: 28px;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-  }
-
-  &:not(.is-off) mat-icon {
-    color: var(--theme-primary-default);
-  }
-
-  &.is-off {
-    opacity: 1;
-    color: #757575;
-  }
-}
-
-.off-badge {
-  position: absolute;
-  top: -8px;
-  right: 12px;
-  z-index: 1;
-  line-height: 16px;
-  padding: 0 6px;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #fff;
-  background: #757575;
-  border-radius: 8px;
-}
 
 .empty-state {
   margin: 4px 0;
@@ -549,12 +323,284 @@
   background: var(--logic-color);
 }
 
-// the icon of a field, in the list and in the chosen value
-.option-icon {
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-  font-size: 18px;
-  vertical-align: middle;
+// rows joined by AND share a box, OR starts the next one
+.row-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &.boxed {
+    padding: 6px;
+    background: color-mix(in srgb, var(--theme-primary-default) 4%, white);
+    border: 1px solid
+      color-mix(in srgb, var(--theme-primary-default) 35%, white);
+    border-radius: 12px;
+  }
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #4a5563;
+
+  &::before,
+  &::after {
+    flex: 1;
+    height: 1px;
+    content: "";
+    background: var(--theme-hover-lighter, #d0d0d0);
+  }
+}
+
+// a row without a field has nothing else, so the field takes the space
+.condition-row .field-grow {
+  grid-column: span calc(var(--condition-wide-span) + 1);
+}
+
+// the handle to move a filter to another group
+.condition-row.advanced {
+  padding-left: 26px;
+}
+
+.drag-handle {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  display: inline-flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.45);
+  cursor: grab;
+  transform: translateY(-50%);
+
+  &:hover {
+    color: var(--theme-primary-default);
+  }
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.drag-preview {
+  padding: 8px 14px;
+  font-size: 0.8125rem;
+  background: #fff;
+  border: 1px solid var(--theme-primary-default);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.condition-row.cdk-drag-placeholder {
+  opacity: 0.35;
+}
+
+.row-group.cdk-drop-list-dragging .condition-row:not(.cdk-drag-placeholder) {
+  transition: transform 200ms ease;
+}
+
+// the buttons to add a filter: AND adds to the last group, OR starts a new one
+.add-actions {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.add-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+  padding: 0 14px 0 8px;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--theme-primary-default);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--theme-primary-default) 45%, white);
+  border-radius: 16px;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--theme-primary-default) 8%, white);
+    border-color: var(--theme-primary-default);
+  }
+}
+
+// a small icon that adds a filter to its group, joined by AND
+.add-and {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  color: var(--theme-primary-default);
+  cursor: pointer;
+  background: transparent;
+  border: 1px dashed color-mix(in srgb, var(--theme-primary-default) 55%, white);
+  border-radius: 50%;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--theme-primary-default) 10%, white);
+    border-color: var(--theme-primary-default);
+  }
+}
+
+// the message next to Apply
+.apply-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+  font-size: 0.8125rem;
+  color: #b00020;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+.dialog-actions {
+  gap: 8px;
+  padding: 8px 24px 12px;
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+// narrow: join and actions, exclude and field, key, then operator, value, unit
+@container (max-width: 1020px) {
+  .condition-row {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+
+    .join-cell {
+      grid-column: 1 / span 3;
+    }
+
+    .exclude-button {
+      grid-column: span 2;
+    }
+
+    .row-actions {
+      grid-column: span 6;
+      justify-content: flex-end;
+    }
+
+    &.advanced {
+      .join-cell {
+        grid-row: 1;
+      }
+
+      .row-actions {
+        grid-column: 4 / span 3;
+        grid-row: 1;
+      }
+    }
+
+    // the cells of the field: key, operator, value, unit
+    > condition-key-picker,
+    .wide-value {
+      grid-column: 1 / -1;
+    }
+
+    > mat-form-field,
+    > .range-cell {
+      grid-column: span 2;
+    }
+
+    &.advanced > mat-form-field:first-of-type {
+      grid-column: span 4;
+    }
+
+    // a row without a field has nothing else, the field takes the whole line
+    &.advanced > mat-form-field.field-grow:first-of-type {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+// the panels of the selects and the autocompletes are not inside the dialog
+::ng-deep .condition-panel .mat-mdc-option {
+  min-height: 34px;
+  font-size: 13px;
+}
+
+.action-button {
+  --mat-icon-button-state-layer-size: 28px;
+  --mdc-icon-button-state-layer-size: 28px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+
+  &:not(.is-off) mat-icon {
+    color: var(--theme-primary-default);
+  }
+
+  &.is-off {
+    opacity: 1;
+    color: #757575;
+  }
+}
+
+.off-badge {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  z-index: 1;
+  line-height: 16px;
+  padding: 0 6px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: #757575;
+  border-radius: 8px;
+}
+
+// the next line of a group: "and" in the column of the labels above, with the icon beside it
+.add-and-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 0 0 33px;
+
+  .and-label {
+    min-width: 40px;
+    font-size: 0.8125rem;
+    opacity: 0.65;
+  }
 }

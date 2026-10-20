@@ -7,11 +7,11 @@ import {
   effect,
   signal,
 } from "@angular/core";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { DateTime } from "luxon";
 import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import {
-  ConditionJoin,
   ConditionSettingScope,
   FilterCondition,
 } from "state-management/models";
@@ -22,12 +22,13 @@ import {
   METADATA_FIELD,
   getDatasetField,
   getFieldOptions,
-  getQuickPicks,
 } from "./condition-filter.fields";
 import { ConditionKeySource } from "./condition-filter.keys";
 import {
   RELATION_OPTIONS,
+  describeCondition,
   getRelationOption,
+  groupByJoin,
   isConditionComplete,
   isDatasetCondition,
   normalizeCondition,
@@ -118,6 +119,19 @@ const blankDraft = (): ConditionConfig => ({
   condition: { lhs: "", relation: "EQUAL_TO", rhs: "", unit: "" },
 });
 
+/** The rows of the groups: the first filter of a group is joined by OR, the others by AND. */
+const toRows = (groups: Row[][]): Row[] =>
+  groups
+    .filter((group) => group.length)
+    .flatMap((group, groupIndex) =>
+      group.map((row, index) => {
+        const first = index === 0;
+        const join =
+          groupIndex === 0 && first ? undefined : first ? "OR" : "AND";
+        return { ...row, condition: { ...row.condition, join } };
+      }),
+    );
+
 @Component({
   selector: "condition-filter-dialog",
   templateUrl: "./condition-filter-dialog.component.html",
@@ -139,7 +153,6 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
   /** Scientific metadata is one of the fields, it only asks for more once chosen. */
   readonly fieldOptions = getFieldOptions(this.datasetFields);
   /** One click starts a new row, the field dropdown has all other fields. */
-  readonly quickPicks = getQuickPicks(this.fieldOptions);
   /** The columns of a row: only the cells in the middle differ per kind of field. */
   readonly gridColumns = [
     this.advanced && "72px", // AND / OR
@@ -160,6 +173,15 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
   readonly touched = signal<ReadonlySet<number>>(new Set());
   /** Draws attention to a row for a moment. */
   readonly highlightId = signal<number | null>(null);
+
+  /** The rows as they are evaluated: AND inside a group, OR between groups. */
+  readonly groups = computed(() =>
+    groupByJoin(this.rows(), ({ condition }) => condition.join),
+  );
+
+  readonly dropListIds = computed(() =>
+    this.groups().map((_, index) => `condition-group-${index}`),
+  );
 
   readonly errors = computed(() => {
     const rows = this.rows();
@@ -257,6 +279,25 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
     return Array.isArray(rhs) ? rhs.some((bound) => !!bound) : !!rhs;
   }
 
+  /** Shows a new row and puts the cursor in it, so there is no need to scroll to it. */
+  private revealRow(id: number): void {
+    setTimeout(() => {
+      const row = this.host.nativeElement.querySelector(
+        `[data-row-id="${id}"]`,
+      );
+      row?.scrollIntoView({ block: "nearest" });
+      row
+        ?.querySelector<HTMLElement>(
+          "[data-cy=condition-field], [data-cy=condition-key]",
+        )
+        ?.focus();
+    });
+  }
+
+  private setGroups(groups: Row[][]): void {
+    this.rows.set(toRows(groups));
+  }
+
   private createRows(configs: ConditionConfig[]): Row[] {
     const drafts = configs.length ? configs.map(toDraft) : [blankDraft()];
     return drafts.map((draft) => this.createRow(draft));
@@ -331,12 +372,6 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
   }
 
   /** What the field dropdown shows: a dataset field or scientific metadata. */
-  getFieldOption(condition: FilterCondition) {
-    return this.fieldOptions.find(
-      (field) => field.value === this.getFieldValue(condition),
-    );
-  }
-
   getFieldValue(condition: FilterCondition): string {
     switch (this.getKind(condition)) {
       case "dataset":
@@ -361,8 +396,46 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
       : this.unitsService.getUnits(condition.lhs);
   }
 
+  /** Starts a new group, OR joins it to the ones above. */
   addRow(): void {
-    this.rows.update((rows) => [...rows, this.createRow(blankDraft())]);
+    const row = this.createRow(blankDraft());
+
+    if (this.advanced) {
+      this.setGroups([...this.groups(), [row]]);
+    } else {
+      this.rows.update((rows) => [...rows, row]);
+    }
+    this.revealRow(row.id);
+  }
+
+  /** A group that still has a row without a field has nothing to add AND to. */
+  canAddAnd(group: Row[]): boolean {
+    return group.every(({ condition }) => this.getKind(condition) !== "none");
+  }
+
+  /** Adds a filter to a group, AND joins it to the one before. */
+  addRowToGroup(groupIndex: number): void {
+    const row = this.createRow(blankDraft());
+    const groups = this.groups().map((group) => [...group]);
+    groups[groupIndex].push(row);
+    this.setGroups(groups);
+    this.revealRow(row.id);
+  }
+
+  /** Moves a filter into a group, or to another place in its own group. */
+  drop(event: CdkDragDrop<number>): void {
+    const groups = this.groups().map((group) => [...group]);
+    const [moved] = groups[event.previousContainer.data].splice(
+      event.previousIndex,
+      1,
+    );
+    groups[event.container.data].splice(event.currentIndex, 0, moved);
+    this.setGroups(groups);
+  }
+
+  /** What the dragged filter shows while it is moved. */
+  previewText(condition: FilterCondition): string {
+    return condition.lhs ? describeCondition(condition) : "New filter";
   }
 
   removeRow(id: number): void {
@@ -380,10 +453,6 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
 
   setEnabled(id: number, enabled: boolean): void {
     this.patch(id, (row) => ({ ...row, enabled }));
-  }
-
-  setJoin(id: number, join: ConditionJoin): void {
-    this.patchCondition(id, (condition) => ({ ...condition, join }));
   }
 
   setExclude(id: number, exclude: boolean): void {

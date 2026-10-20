@@ -1,9 +1,9 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
-import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -29,9 +29,9 @@ import { ConditionKeyPickerComponent } from "./condition-key-picker.component";
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    DragDropModule,
     MatAutocompleteModule,
     MatButtonModule,
-    MatButtonToggleModule,
     MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,

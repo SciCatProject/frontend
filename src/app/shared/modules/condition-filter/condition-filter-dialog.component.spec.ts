@@ -1,7 +1,13 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { of } from "rxjs";
 import { ConditionSettingScope } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
@@ -132,17 +138,6 @@ describe("ConditionFilterDialogComponent", () => {
       expect(labels).toContain("Scientific metadata");
       expect(labels).toEqual([...labels].sort((a, b) => a.localeCompare(b)));
       expect(labels.length).toBe(component.datasetFields.length + 1);
-    });
-
-    it("should offer quick picks in an empty row until a field is chosen", () => {
-      const picks = () => cells("[data-cy=condition-quick-picks] button");
-      expect(picks().length).toBe(component.quickPicks.length);
-
-      cells("[data-cy=condition-quick-keywords]")[0].click();
-      fixture.detectChanges();
-
-      expect(row().condition.lhs).toBe("keywords");
-      expect(picks().length).toBe(0);
     });
 
     it("should switch exclude on and off with its button", () => {
@@ -347,6 +342,157 @@ describe("ConditionFilterDialogComponent", () => {
 
       expect(component.errors().get(id(1))?.key).toBeDefined();
       expect(component.canApply()).toBeFalse();
+    });
+  });
+
+  describe("groups", () => {
+    const mk = (lhs: string, join?: "OR" | "AND"): ConditionConfig => ({
+      enabled: true,
+      condition: {
+        lhs,
+        relation: "EQUAL_TO_NUMERIC",
+        rhs: 1,
+        unit: "",
+        ...(join && { join }),
+      },
+    });
+
+    it("should give every group a box and divide the groups with OR", () => {
+      createComponent([mk("a"), mk("b", "OR"), mk("c", "AND"), mk("d", "AND")]);
+
+      const boxes = cells("[data-cy=condition-row-group]");
+
+      expect(component.groups().map((group) => group.length)).toEqual([1, 3]);
+      expect(boxes.length).toBe(2);
+      // a filter on its own has its box too, so the add icon belongs to it
+      expect(boxes[0].classList).toContain("boxed");
+      expect(boxes[1].classList).toContain("boxed");
+      expect(cells("[data-cy=condition-or-divider]").length).toBe(1);
+      expect(cells("[data-cy=condition-row]").length).toBe(4);
+    });
+
+    const fakeDrop = (
+      fromGroup: number,
+      previousIndex: number,
+      toGroup: number,
+      currentIndex: number,
+    ) =>
+      ({
+        previousContainer: { data: fromGroup },
+        container: { data: toGroup },
+        previousIndex,
+        currentIndex,
+      }) as unknown as CdkDragDrop<number>;
+
+    const lhsOrder = () =>
+      component.rows().map(({ condition }) => condition.lhs);
+    const joins = () => component.rows().map(({ condition }) => condition.join);
+
+    it("should add a filter to a group, joined by AND", () => {
+      createComponent([mk("a"), mk("b", "OR")]);
+
+      component.addRowToGroup(0);
+
+      expect(component.groups().map((group) => group.length)).toEqual([2, 1]);
+      expect(lhsOrder()).toEqual(["a", "", "b"]);
+      expect(joins()).toEqual([undefined, "AND", "OR"]);
+    });
+
+    it("should only offer Add AND in a group where every filter has a field", () => {
+      createComponent();
+      fixture.detectChanges();
+      expect(cells("[data-cy=condition-add-and]").length).toBe(0);
+
+      component.setField(id(), "keywords");
+      fixture.detectChanges();
+
+      expect(cells("[data-cy=condition-add-and]").length).toBe(1);
+    });
+
+    it("should start a new group with Add filter, joined by OR", () => {
+      createComponent([mk("a"), mk("b", "AND")]);
+
+      component.addRow();
+
+      expect(component.groups().map((group) => group.length)).toEqual([2, 1]);
+      expect(joins()).toEqual([undefined, "AND", "OR"]);
+    });
+
+    it("should not join the rows of samples", () => {
+      createComponent([mk("a")], "sample");
+
+      component.addRow();
+
+      expect(joins()).toEqual([undefined, undefined]);
+    });
+
+    it("should name the bottom button Add filter, it starts a new group", () => {
+      createComponent([mk("a")]);
+
+      expect(cells("[data-cy=condition-add]")[0].textContent).toContain(
+        "Add filter",
+      );
+    });
+
+    it("should show a new filter and put the cursor in it", fakeAsync(() => {
+      createComponent([mk("a")]);
+      const added = jasmine.createSpy("scrollIntoView");
+      Element.prototype.scrollIntoView = added;
+
+      component.addRow();
+      fixture.detectChanges();
+      tick();
+
+      const [, second] = cells("[data-cy=condition-row]");
+      expect(added).toHaveBeenCalled();
+      expect(second.getAttribute("data-row-id")).toBe(String(id(1)));
+    }));
+
+    it("should move a filter to another group", () => {
+      createComponent([mk("a"), mk("b", "AND"), mk("c", "OR")]);
+
+      // b leaves the first group and is put in front of c
+      component.drop(fakeDrop(0, 1, 1, 0));
+
+      expect(lhsOrder()).toEqual(["a", "b", "c"]);
+      expect(component.groups().map((group) => group.length)).toEqual([1, 2]);
+      expect(joins()).toEqual([undefined, "OR", "AND"]);
+    });
+
+    it("should remove a group that is left empty", () => {
+      createComponent([mk("a"), mk("b", "OR")]);
+
+      component.drop(fakeDrop(1, 0, 0, 1));
+      fixture.detectChanges();
+
+      expect(component.groups().length).toBe(1);
+      expect(joins()).toEqual([undefined, "AND"]);
+      expect(cells("[data-cy=condition-or-divider]").length).toBe(0);
+    });
+
+    it("should move a filter within its group", () => {
+      createComponent([mk("a"), mk("b", "AND"), mk("c", "OR")]);
+
+      component.drop(fakeDrop(0, 0, 0, 1));
+
+      expect(lhsOrder()).toEqual(["b", "a", "c"]);
+      expect(joins()).toEqual([undefined, "AND", "OR"]);
+    });
+
+    it("should offer a drag handle for each filter and an AND icon for each group", () => {
+      createComponent([mk("a"), mk("b", "OR")]);
+      fixture.detectChanges();
+      expect(cells("[data-cy=condition-drag-handle]").length).toBe(2);
+      expect(cells("[data-cy=condition-add-and]").length).toBe(2);
+      expect(cells("[data-cy=condition-add]").length).toBe(1);
+    });
+
+    it("should not box the rows of samples", () => {
+      createComponent([mk("a"), mk("b")], "sample");
+
+      expect(cells("[data-cy=condition-row-group]")[0].classList).not.toContain(
+        "boxed",
+      );
     });
   });
 
@@ -574,14 +720,13 @@ describe("ConditionFilterDialogComponent", () => {
       });
     });
 
-    it("should close with exclude and the join when they are set", () => {
+    it("should close with exclude and the join of a new group", () => {
       createComponent();
       setMetadata(0, "temperature");
       component.setValue(id(), "5");
       component.addRow();
       setMetadata(1, "pressure");
       component.setValue(id(1), "2");
-      component.setJoin(id(1), "OR");
       component.setExclude(id(1), true);
 
       component.apply();

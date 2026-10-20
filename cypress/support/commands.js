@@ -103,18 +103,14 @@ Cypress.Commands.add("openAdvancedSearch", () => {
  *   `key` picks scientific metadata first when the field is not set.
  *   Samples have no field, they only have keys.
  * - `operator` is the symbol of the operator, e.g. ">" or "Between".
- * - `join` is "AND" or "OR",
- *   `exclude` switches exclude on.
+ * - `exclude` switches exclude on.
  * The key is typed as it is, picking a suggestion is not needed.
  */
 Cypress.Commands.add(
   "fillCondition",
-  (index, { field, key, operator, value, min, max, unit, join, exclude }) => {
+  (index, { field, key, operator, value, min, max, unit, exclude }) => {
     const find = (name) => conditionRow(index).find(`[data-cy="${name}"]`);
 
-    if (join !== undefined) {
-      find("condition-join").contains("button", join).click();
-    }
     if (exclude) {
       find("condition-exclude").click();
     }
