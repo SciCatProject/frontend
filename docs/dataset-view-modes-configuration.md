@@ -1,12 +1,16 @@
 # Dataset view modes
 
-For logged-in users, the dataset filter panel shows a dropdown below the My
-data / Public data toggle. Each entry is a named query preset that filters the
-list. Configure it with the `datasetViews` block: `modes` are the entries and
-`label` is the dropdown label ("Archive status" by default):
+The dataset list can show a set of views above the table. Each view is a named
+query preset that filters the list. Configure them with the `datasetViews`
+block: `modes` are the views and `display` sets how they are shown:
+
+- `"buttons"` (default): a row of toggle buttons side by side.
+- `"dropdown"`: a single dropdown, labelled with `label` ("Archive status" by
+  default). Useful when there are many views.
 
 ```json
 "datasetViews": {
+  "display": "dropdown",
   "label": "Archive status",
   "modes": [
     { "id": "all", "label": "All", "where": {} },
@@ -34,18 +38,19 @@ list. Configure it with the `datasetViews` block: `modes` are the entries and
 | Field      | Required | Description                                                                                                             |
 | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `id`       | yes      | Stable identifier. Batch actions see it as `#currentArchViewMode`, so changing it can break their `hidden` expressions. |
-| `label`    | yes      | Text shown in the dropdown.                                                                                             |
+| `label`    | yes      | Text shown on the toggle or dropdown option.                                                                            |
 | `where`    | yes      | Mongo query merged into the `where` of the v4 dataset filter. Use `{}` for an unfiltered view.                          |
 | `tooltip`  | no       | Tooltip shown on hover.                                                                                                 |
-| `checkbox` | no       | Checkbox under the dropdown that narrows this view, see below.                                                          |
+| `checkbox` | no       | Checkbox under the views that narrows this view, see below.                                                             |
 
 The list starts in the `all` view with no filter applied, and the Clear
-button returns to it. If no entry has `"id": "all"`, an "All" option with an
-empty `where` is added at the top of the dropdown automatically.
+button returns to it. Include a view with `"id": "all"` and `"where": {}` so
+users can get back to the unfiltered list; in the dropdown, an "All" option is
+added at the top automatically if no entry has `"id": "all"`.
 
 ## Narrowing a view: the `checkbox`
 
-A view can have an optional checkbox, shown under the dropdown while that view
+A view can have an optional checkbox, shown below the views while that view
 is selected, that narrows it, typically to the datasets the user can act on:
 
 ```json
@@ -143,5 +148,5 @@ Retrieve batch actions only show up in the `archivable` and `retrievable`
 views. If you rename those ids, update the `hidden` expressions of your
 `batchActions` to match.
 
-To hide the dropdown while keeping `archiveWorkflowEnabled`, set
+To hide the views while keeping `archiveWorkflowEnabled`, set
 `"datasetViews": { "modes": [] }`.

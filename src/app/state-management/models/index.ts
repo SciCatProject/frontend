@@ -195,8 +195,11 @@ export interface DatasetViewModeCheckbox {
   exemptGroups?: string[];
 }
 
-// the dataset list views, shown as a dropdown in the filter panel
+// the dataset list views, shown above the dataset table
 export interface DatasetViewsConfig {
+  // side by side toggle buttons (default) or a dropdown
+  display?: "buttons" | "dropdown";
+  // label of the dropdown
   label?: string;
   modes?: DatasetViewMode[];
 }

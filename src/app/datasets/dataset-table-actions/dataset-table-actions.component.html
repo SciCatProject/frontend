@@ -1,3 +1,52 @@
+<div class="mode-container" *ngIf="modes.length > 0">
+  <mat-button-toggle-group
+    *ngIf="modesDisplay === 'buttons'; else modesDropdown"
+    [value]="currentArchViewMode"
+  >
+    <mat-button-toggle
+      *ngFor="let mode of modes"
+      (click)="onModeChange(mode.id)"
+      [value]="mode.id"
+      [ngClass]="mode.id"
+      [matTooltip]="mode.tooltip ?? ''"
+    >
+      {{ mode.label }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <ng-template #modesDropdown>
+    <mat-form-field data-cy="dataset-view-modes" subscriptSizing="dynamic">
+      <mat-label>{{ modesLabel }}</mat-label>
+      <mat-select
+        [value]="currentArchViewMode"
+        (selectionChange)="onModeChange($event.value)"
+      >
+        <mat-option *ngIf="!hasAllMode" [value]="allModeId">All</mat-option>
+        <mat-option
+          *ngFor="let mode of modes"
+          [value]="mode.id"
+          [matTooltip]="mode.tooltip ?? ''"
+          matTooltipPosition="after"
+        >
+          {{ mode.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-template>
+
+  <!-- hidden rather than removed, so the table doesn't move between views -->
+  <mat-checkbox
+    *ngIf="hasModeCheckbox"
+    class="mode-checkbox"
+    data-cy="dataset-view-mode-checkbox"
+    [class.hidden]="!selectedModeCheckbox"
+    [checked]="currentArchViewModeChecked"
+    (change)="onModeCheckboxChange($event.checked)"
+  >
+    {{ selectedModeCheckbox?.label }}
+  </mat-checkbox>
+</div>
+
 <div class="action-container" [class.hidden]="loading$ | async">
   <configurable-actions
     *ngIf="appConfig.batchActionsEnabled"

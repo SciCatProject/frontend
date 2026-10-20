@@ -129,13 +129,19 @@
       "datasetViews": {
         "type": "object",
         "properties": {
+          "display": {
+            "type": "string",
+            "enum": ["buttons", "dropdown"],
+            "default": "buttons",
+            "description": "How the views are shown above the dataset table: side by side toggle buttons or a dropdown."
+          },
           "label": {
             "type": "string",
-            "description": "Label of the view dropdown in the dataset filter panel, \"Archive status\" by default."
+            "description": "Label of the view dropdown, \"Archive status\" by default. Only used when display is dropdown."
           },
           "modes": {
             "type": "array",
-            "description": "Named query presets shown in the view dropdown of the dataset filter panel. The id is stored in the filters and used by batch actions (#currentArchViewMode), so keep it stable. The where (a Mongo query) is required but can't be edited here, so add new modes in the JSON config; a mode without a where would show the unfiltered list. If not set and archiveWorkflowEnabled is true, the built-in archive workflow views are used; an empty list hides the dropdown.",
+            "description": "Named query presets shown above the dataset table. The id is stored in the filters and used by batch actions (#currentArchViewMode), so keep it stable. The where (a Mongo query) is required but can't be edited here, so add new modes in the JSON config; a mode without a where would show the unfiltered list. If not set and archiveWorkflowEnabled is true, the built-in archive workflow views are used; an empty list hides them.",
             "items": {
               "type": "object",
               "properties": {
@@ -148,7 +154,7 @@
                 },
                 "checkbox": {
                   "type": "object",
-                  "description": "Optional checkbox under the dropdown that narrows this view, e.g. to datasets the user can act on. Its where is combined with the view's where and can use #user.<field> placeholders such as #user.email or #user.accessGroups; edit it in the JSON config.",
+                  "description": "Optional checkbox below the views that narrows this view, e.g. to datasets the user can act on. Its where is combined with the view's where and can use #user.<field> placeholders such as #user.email or #user.accessGroups; edit it in the JSON config.",
                   "properties": {
                     "label": { "type": "string" },
                     "default": {
@@ -956,6 +962,11 @@
           "expandable": true
         },
         "elements": [
+          {
+            "type": "Control",
+            "label": "Display",
+            "scope": "#/properties/datasetViews/properties/display"
+          },
           {
             "type": "Control",
             "label": "Dropdown label",

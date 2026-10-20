@@ -13,13 +13,10 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   clearFacetsAction,
-  clearSelectionAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
-  setArchiveViewModeAction,
   setPublicViewModeAction,
 } from "state-management/actions/datasets.actions";
-import { DatasetViewMode } from "state-management/models";
 import { of } from "rxjs";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -110,39 +107,8 @@ export class MockMatDialog {
   }
 }
 
-const viewModes: DatasetViewMode[] = [
-  { id: "all", label: "All", where: {} },
-  {
-    id: "to-tape",
-    label: "Ready for tape",
-    tooltip: "Datasets that can be archived",
-    where: { "datasetlifecycle.archivable": true },
-  },
-  {
-    id: "owned",
-    label: "Owned",
-    where: { "datasetlifecycle.archivable": true },
-    checkbox: {
-      label: "Only datasets owned by my groups",
-      where: { ownerGroup: { $in: "#user.accessGroups" } },
-      exemptGroups: ["admin"],
-    },
-  },
-  {
-    id: "owned-off",
-    label: "Owned, unticked",
-    where: {},
-    checkbox: {
-      label: "Only mine",
-      default: false,
-      where: { ownerGroup: { $in: "#user.accessGroups" } },
-    },
-  },
-];
-
 const getConfig = () => ({
   scienceSearchEnabled: false,
-  datasetViews: { modes: viewModes },
 });
 
 describe("DatasetsFilterComponent", () => {
@@ -298,193 +264,6 @@ describe("DatasetsFilterComponent", () => {
       );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(fetchFacetCountsAction());
-    });
-  });
-
-  describe("view modes", () => {
-    beforeEach(() => {
-      component.loggedIn$ = of(true);
-      fixture.detectChanges();
-    });
-
-    it("should render a labelled view mode select for logged in users", () => {
-      const compiled = fixture.debugElement.nativeElement;
-      const field = compiled.querySelector("[data-cy=dataset-view-modes]");
-      expect(field).toBeTruthy();
-      expect(field.textContent).toContain("Archive status");
-    });
-
-    it("should not render the view mode select for anonymous users", () => {
-      component.loggedIn$ = of(false);
-      fixture.detectChanges();
-
-      const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector("[data-cy=dataset-view-modes]")).toBeNull();
-    });
-
-    it("should not render the view mode select when none are configured", () => {
-      component.viewModes = [];
-      fixture.detectChanges();
-
-      const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector("[data-cy=dataset-view-modes]")).toBeNull();
-    });
-
-    it("should not add an implicit All option when one is configured", () => {
-      expect(component.hasAllViewMode).toBeTrue();
-    });
-  });
-
-  describe("#onViewModeChange()", () => {
-    it("should dispatch setArchiveViewModeAction with the view query and clear the selection", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      component.onViewModeChange("to-tape");
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "to-tape",
-          mode: { "datasetlifecycle.archivable": true },
-          checked: false,
-        }),
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
-    });
-
-    it("should dispatch an empty query for the implicit All option", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      component.onViewModeChange("all");
-
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "all",
-          mode: {},
-          checked: false,
-        }),
-      );
-    });
-
-    it("should tick a view's checkbox by default and add its query with the user's values", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-      component["user"] = { accessGroups: ["p1234"] };
-
-      component.onViewModeChange("owned");
-
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "owned",
-          mode: {
-            $and: [
-              { "datasetlifecycle.archivable": true },
-              { ownerGroup: { $in: ["p1234"] } },
-            ],
-          },
-          checked: true,
-        }),
-      );
-    });
-
-    it("should leave the checkbox unticked when its default is false", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      component.onViewModeChange("owned-off");
-
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "owned-off",
-          mode: {},
-          checked: false,
-        }),
-      );
-    });
-  });
-
-  describe("checkbox exemptGroups", () => {
-    it("should not tick or apply the checkbox for exempt users", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-      component["user"] = { accessGroups: ["admin"] };
-
-      component.onViewModeChange("owned");
-
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "owned",
-          mode: { "datasetlifecycle.archivable": true },
-          checked: false,
-        }),
-      );
-    });
-
-    it("should hide the checkbox for exempt users", () => {
-      component.loggedIn$ = of(true);
-      component["user"] = { accessGroups: ["admin"] };
-      component.currentViewMode = "owned";
-      fixture.detectChanges();
-
-      expect(
-        fixture.debugElement.nativeElement.querySelector(
-          "[data-cy=dataset-view-mode-checkbox]",
-        ),
-      ).toBeNull();
-    });
-  });
-
-  describe("#onViewModeCheckboxChange()", () => {
-    it("should apply or remove the checkbox query for the current view and clear the selection", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-      component["user"] = { accessGroups: ["p1234"] };
-      component.currentViewMode = "owned";
-
-      component.onViewModeCheckboxChange(false);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "owned",
-          mode: { "datasetlifecycle.archivable": true },
-          checked: false,
-        }),
-      );
-
-      component.onViewModeCheckboxChange(true);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "owned",
-          mode: {
-            $and: [
-              { "datasetlifecycle.archivable": true },
-              { ownerGroup: { $in: ["p1234"] } },
-            ],
-          },
-          checked: true,
-        }),
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
-    });
-  });
-
-  describe("view mode checkbox", () => {
-    beforeEach(() => {
-      component.loggedIn$ = of(true);
-    });
-
-    it("should show the checkbox only for views that configure one", () => {
-      component.currentViewMode = "to-tape";
-      fixture.detectChanges();
-      const compiled = fixture.debugElement.nativeElement;
-      expect(
-        compiled.querySelector("[data-cy=dataset-view-mode-checkbox]"),
-      ).toBeNull();
-
-      component.currentViewMode = "owned";
-      fixture.detectChanges();
-      const checkbox = compiled.querySelector(
-        "[data-cy=dataset-view-mode-checkbox]",
-      );
-      expect(checkbox).toBeTruthy();
-      expect(checkbox.textContent).toContain(
-        "Only datasets owned by my groups",
-      );
     });
   });
 });

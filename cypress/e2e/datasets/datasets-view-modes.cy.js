@@ -38,8 +38,26 @@ function visitWithConfig(overrides) {
   cy.finishedLoading();
 }
 
+function selectView(label, check, display = "buttons") {
+  expectListRequest(() => clickView(label, display), check);
+}
+
+function checkbox() {
+  return cy.get('[data-cy="dataset-view-mode-checkbox"]');
+}
+
 function openViews() {
   cy.get('[data-cy="dataset-view-modes"] mat-select').click();
+}
+
+// clicks the view's toggle, or picks it from the dropdown
+function clickView(label, display) {
+  if (display === "dropdown") {
+    openViews();
+    cy.contains("mat-option", label).click();
+  } else {
+    cy.contains("mat-button-toggle", label).click();
+  }
 }
 
 // runs an action and checks the where of the list request it triggers
@@ -54,17 +72,6 @@ function expectListRequest(action, check) {
     check(JSON.parse(url.searchParams.get("filter")).where);
   });
   cy.finishedLoading();
-}
-
-function selectView(label, check) {
-  expectListRequest(() => {
-    openViews();
-    cy.contains("mat-option", label).click();
-  }, check);
-}
-
-function checkbox() {
-  return cy.get('[data-cy="dataset-view-mode-checkbox"]');
 }
 
 describe("Datasets view modes", () => {
@@ -104,14 +111,14 @@ describe("Datasets view modes", () => {
       });
     });
 
-    it("should show an option per configured view, with its label and tooltip", () => {
-      openViews();
-      cy.get("mat-option").should("have.length", 3);
-      cy.get("mat-option").eq(0).should("contain.text", "All");
-      cy.get("mat-option").eq(1).should("contain.text", toTape.label);
-      cy.get("mat-option").eq(2).should("contain.text", onTape.label);
+    it("should show a toggle per configured view, with its label and tooltip", () => {
+      cy.get("mat-button-toggle").should("have.length", 3);
+      cy.get("mat-button-toggle").eq(0).should("contain.text", "All");
+      cy.get("mat-button-toggle").eq(1).should("contain.text", toTape.label);
+      cy.get("mat-button-toggle").eq(2).should("contain.text", onTape.label);
+      cy.get('[data-cy="dataset-view-modes"]').should("not.exist");
 
-      cy.contains("mat-option", toTape.label).trigger("mouseenter");
+      cy.contains("mat-button-toggle", toTape.label).trigger("mouseenter");
       cy.get(".mat-mdc-tooltip").should("contain.text", toTape.tooltip);
     });
 
@@ -135,6 +142,59 @@ describe("Datasets view modes", () => {
         );
       });
       cy.get("mat-row").should("contain.text", archivableName);
+      cy.get("mat-row").should("contain.text", onTapeName);
+    });
+  });
+
+  describe("configured views as a dropdown", () => {
+    beforeEach(() => {
+      visitWithConfig({
+        datasetViews: {
+          display: "dropdown",
+          label: "Tape status",
+          modes: [toTape, onTape],
+        },
+      });
+    });
+
+    it("should show a labelled option per configured view, plus All", () => {
+      cy.get("mat-button-toggle-group").should("not.exist");
+      cy.get('[data-cy="dataset-view-modes"]').should(
+        "contain.text",
+        "Tape status",
+      );
+
+      openViews();
+      cy.get("mat-option").should("have.length", 3);
+      cy.get("mat-option").eq(0).should("contain.text", "All");
+      cy.get("mat-option").eq(1).should("contain.text", toTape.label);
+      cy.get("mat-option").eq(2).should("contain.text", onTape.label);
+
+      cy.contains("mat-option", toTape.label).trigger("mouseenter");
+      cy.get(".mat-mdc-tooltip").should("contain.text", toTape.tooltip);
+    });
+
+    it("should filter the list by the selected view's where", () => {
+      selectView(
+        toTape.label,
+        (where) => {
+          expect(where).to.deep.include(toTape.where);
+        },
+        "dropdown",
+      );
+      cy.get("mat-row").should("contain.text", archivableName);
+      cy.get("mat-row").should("not.contain.text", onTapeName);
+
+      selectView(
+        "All",
+        (where) => {
+          expect(where).not.to.have.any.keys(
+            "datasetlifecycle.archivable",
+            "datasetlifecycle.retrievable",
+          );
+        },
+        "dropdown",
+      );
       cy.get("mat-row").should("contain.text", onTapeName);
     });
   });
@@ -174,6 +234,21 @@ describe("Datasets view modes", () => {
       checkbox().find("input").should("not.be.checked");
       cy.get("mat-row").should("contain.text", mineName);
       cy.get("mat-row").should("contain.text", archivableName);
+    });
+
+    it("should also be shown with the dropdown", () => {
+      visitWithConfig({
+        datasetViews: { display: "dropdown", modes: [toTapeMine] },
+      });
+
+      selectView(
+        toTape.label,
+        (where) => {
+          expect(where).to.deep.include(mineWhere);
+        },
+        "dropdown",
+      );
+      checkbox().find("input").should("be.checked");
     });
 
     it("should start unticked when its default is false", () => {
@@ -223,19 +298,18 @@ describe("Datasets view modes", () => {
     });
   });
 
-  it("should hide the view dropdown when no views are configured", () => {
+  it("should hide the views when none are configured", () => {
     visitWithConfig({
       archiveWorkflowEnabled: true,
       datasetViews: { modes: [] },
     });
 
     cy.get(".dataset-table mat-header-row").should("exist");
-    cy.get('[data-cy="dataset-view-modes"]').should("not.exist");
+    cy.get("mat-button-toggle-group").should("not.exist");
   });
 
   it("should use the built-in archive views when none are configured", () => {
     visitWithConfig({ archiveWorkflowEnabled: true, datasetViews: undefined });
-    openViews();
 
     [
       "All",
@@ -245,7 +319,7 @@ describe("Datasets view modes", () => {
       "System Error",
       "User Error",
     ].forEach((label, i) => {
-      cy.get("mat-option").eq(i).should("contain.text", label);
+      cy.get("mat-button-toggle").eq(i).should("contain.text", label);
     });
   });
 });
