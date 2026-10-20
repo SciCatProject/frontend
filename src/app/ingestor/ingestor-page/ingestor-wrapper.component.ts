@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Type } from "@angular/core";
 import { AppConfigService } from "app-config.service";
 import { IngestorMode } from "./helper/ingestor.component-helper";
 import { IngestorTransferComponent } from "./ingestor-transfer.component";
@@ -19,7 +19,9 @@ export class IngestorWrapperComponent {
   ingestorMode: IngestorMode = "creation";
 
   constructor(public appConfigService: AppConfigService) {}
-  getIngestorComponent() {
+  getIngestorComponent(): Type<
+    IngestorTransferComponent | IngestorCreationComponent
+  > {
     return this.appConfigService.getConfig().ingestorComponent?.ingestorEnabled
       ? IngestorTransferComponent
       : IngestorCreationComponent;
