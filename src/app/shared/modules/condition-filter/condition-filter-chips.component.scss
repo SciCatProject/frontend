@@ -36,14 +36,53 @@
   min-width: 0;
 }
 
+// one gap between chips, groups and AND / OR labels, the chips bring margins of their own
+.chips ::ng-deep .mdc-evolution-chip-set__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.chips ::ng-deep .mat-mdc-chip,
+.chips ::ng-deep .mdc-evolution-chip {
+  margin: 0;
+}
+
+.group-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// filters joined by AND are one group, so that it is visible what is checked first
+// one pill per group of filters joined by AND, the filters inside it are flat
+.group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 1px 4px 1px 2px;
+  background: #fff;
+  border: 1px solid #c3c8cf;
+  border-radius: 15px;
+}
+
 .join {
   align-self: center;
   white-space: nowrap;
-  margin: 0 0 0 8px;
+  margin: 0;
   font-size: 0.6875rem;
   font-weight: 700;
+  color: #8a94a1;
   text-transform: uppercase;
-  opacity: 0.6;
+}
+
+// OR is the same grey as AND, only darker
+.join.group-join {
+  color: #4a5563;
 }
 
 mat-chip-row {
@@ -51,21 +90,21 @@ mat-chip-row {
   --mat-chip-container-height: 26px;
   --mat-chip-label-text-size: 12px;
   --mat-chip-label-text-color: inherit;
-  --mat-chip-elevated-container-color: #fff;
-  --mat-chip-outline-width: 1px;
-  --mat-chip-outline-color: color-mix(
-    in srgb,
-    var(--theme-primary-default) 35%,
-    white
-  );
+  // no box of its own, the pill around the group is the only outline
+  --mat-chip-elevated-container-color: transparent;
+  --mat-chip-outline-width: 0;
 
   &:hover {
-    --mat-chip-outline-color: var(--theme-primary-default);
+    --mat-chip-elevated-container-color: color-mix(
+      in srgb,
+      var(--theme-primary-default) 10%,
+      white
+    );
   }
 
+  // an excluded filter has red text, it also starts with "not"
   &.excluded {
-    --mat-chip-outline-color: var(--theme-warn-default, #b00020);
-    border-left: 3px solid var(--theme-warn-default, #b00020);
+    --mat-chip-label-text-color: var(--theme-warn-default, #b00020);
   }
 }
 

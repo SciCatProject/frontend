@@ -4,6 +4,7 @@ import {
   conditionsToQuery,
   describeCondition,
   getRelationOption,
+  groupByJoin,
   isConditionComplete,
   isPlainConditionList,
   normalizeCondition,
@@ -393,6 +394,28 @@ describe("condition filter utils", () => {
           { "scientificMetadata.a.value": { $gt: 1 } },
         ],
       });
+    });
+  });
+
+  describe("groupByJoin", () => {
+    const join = (item: { join?: "AND" | "OR" }) => item.join;
+
+    it("should keep filters joined by AND in one group and start a new one at OR", () => {
+      const [a, b, c, d] = [
+        {},
+        { join: "OR" as const },
+        { join: "AND" as const },
+        {},
+      ];
+
+      expect(groupByJoin([a, b, c, d], join)).toEqual([[a], [b, c, d]]);
+    });
+
+    it("should start with a group even when the first filter says OR", () => {
+      const first = { join: "OR" as const };
+
+      expect(groupByJoin([first], join)).toEqual([[first]]);
+      expect(groupByJoin([], join)).toEqual([]);
     });
   });
 

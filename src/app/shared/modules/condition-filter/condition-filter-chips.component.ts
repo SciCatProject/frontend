@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ConditionConfig } from "state-management/state/user.store";
-import { describeCondition, getActiveConfigs } from "./condition-filter.utils";
+import {
+  describeCondition,
+  getActiveConfigs,
+  groupByJoin,
+} from "./condition-filter.utils";
 
 /** The applied filters as chips, the host connects the events to the button. */
 @Component({
@@ -18,4 +22,9 @@ export class ConditionFilterChipsComponent {
 
   readonly describe = describeCondition;
   readonly getActive = getActiveConfigs;
+
+  /** The groups the filter is evaluated with: AND inside a group, OR between groups. */
+  getGroups(active: ConditionConfig[]): ConditionConfig[][] {
+    return groupByJoin(active, ({ condition }) => condition.join);
+  }
 }

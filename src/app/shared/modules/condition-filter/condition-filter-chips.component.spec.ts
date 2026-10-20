@@ -76,6 +76,28 @@ describe("ConditionFilterChipsComponent", () => {
     expect(joins).toEqual(["and", "or"]);
   });
 
+  it("should put the filters that are joined by AND in one group", () => {
+    render([
+      config("a"),
+      config("b", { join: "OR" }),
+      config("c"),
+      config("d"),
+    ]);
+
+    const groups = Array.from<HTMLElement>(
+      fixture.nativeElement.querySelectorAll("[data-cy=condition-group]"),
+    );
+
+    // a on its own, then b AND c AND d
+    expect(
+      groups.map(
+        (group) => group.querySelectorAll("[data-cy=condition-chip]").length,
+      ),
+    ).toEqual([1, 3]);
+    expect(groups[0].classList).toContain("alone");
+    expect(groups[1].classList).not.toContain("alone");
+  });
+
   it("should show dataset fields and filters that are not included", () => {
     render([
       config("keywords", {

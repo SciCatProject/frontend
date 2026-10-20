@@ -1,5 +1,6 @@
 import * as Math from "mathjs";
 import {
+  ConditionJoin,
   FilterCondition,
   FilterConditionRelation,
 } from "state-management/models";
@@ -372,25 +373,38 @@ function conditionToExpression(
     : expression;
 }
 
+/** Filters joined by AND form one group, OR starts the next one, so AND is applied first. */
+export function groupByJoin<T>(
+  items: T[],
+  getJoin: (item: T) => ConditionJoin | undefined,
+): T[][] {
+  const groups: T[][] = [];
+
+  for (const item of items) {
+    if (!groups.length || getJoin(item) === "OR") {
+      groups.push([item]);
+    } else {
+      groups[groups.length - 1].push(item);
+    }
+  }
+  return groups;
+}
+
 /** The query of all filters, AND is applied before OR. */
 export function conditionsToQuery(
   conditions: FilterCondition[],
 ): Record<string, unknown> {
-  const groups: Record<string, unknown>[][] = [];
+  const items = conditions
+    .map((condition) => ({
+      join: condition.join,
+      expression: conditionToExpression(condition),
+    }))
+    .filter(({ expression }) => Object.keys(expression).length);
 
-  for (const condition of conditions) {
-    const expression = conditionToExpression(condition);
-    if (!Object.keys(expression).length) continue;
-
-    if (!groups.length || condition.join === "OR") {
-      groups.push([expression]);
-    } else {
-      groups[groups.length - 1].push(expression);
-    }
-  }
-
-  const queries = groups.map((group) =>
-    group.length === 1 ? group[0] : { $and: group },
+  const queries = groupByJoin(items, ({ join }) => join).map((group) =>
+    group.length === 1
+      ? group[0].expression
+      : { $and: group.map(({ expression }) => expression) },
   );
   return queries.length > 1 ? { $or: queries } : (queries[0] ?? {});
 }
