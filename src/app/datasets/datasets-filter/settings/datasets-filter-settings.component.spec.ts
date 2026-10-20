@@ -22,7 +22,6 @@ import {
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatChipsModule } from "@angular/material/chips";
@@ -79,10 +78,7 @@ describe("DatasetsFilterSettingsComponent", () => {
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
-      declarations: [
-        DatasetsFilterSettingsComponent,
-        SearchParametersDialogComponent,
-      ],
+      declarations: [DatasetsFilterSettingsComponent],
       providers: [AsyncPipe],
     });
     TestBed.overrideComponent(DatasetsFilterSettingsComponent, {

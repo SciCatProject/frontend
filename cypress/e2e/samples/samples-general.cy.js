@@ -17,31 +17,20 @@ describe("Samples general", () => {
       cy.visit("/samples");
       cy.finishedLoading();
 
-      cy.get('[data-cy="add-condition-button"]').click();
-      cy.get('input[name="lhs"]').type("test_characteristic");
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
-
-      cy.get("mat-option").contains("=").click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("10");
-        });
-
+      // applying the condition in the dialog filters the samples
       cy.intercept("GET", "**/samples/fullquery*").as("fullquery1");
-      cy.get('[data-cy="samples-filters-search-button"]').click();
+      cy.addCondition({
+        key: "test_characteristic",
+        operator: "=",
+        value: "10",
+      });
       cy.wait("@fullquery1").then((interception) => {
         const url = interception.request.url;
         const fields = new URL(url).searchParams.get("fields");
         cy.log("First apply - Fields:", fields);
+        expect(
+          fields.match(/test_characteristic/g) || [],
+        ).to.have.length.of.at.most(1);
       });
 
       cy.reload();
@@ -53,6 +42,9 @@ describe("Samples general", () => {
         const url = interception.request.url;
         const fields = new URL(url).searchParams.get("fields");
         cy.log("Second apply - Fields:", fields);
+        expect(
+          fields.match(/test_characteristic/g) || [],
+        ).to.have.length.of.at.most(1);
       });
 
       cy.intercept("GET", "**/samples/fullquery*").as("fullquery3");
@@ -61,11 +53,12 @@ describe("Samples general", () => {
         const url = interception.request.url;
         const fields = new URL(url).searchParams.get("fields");
         cy.log("Third apply - Fields:", fields);
+        expect(
+          fields.match(/test_characteristic/g) || [],
+        ).to.have.length.of.at.most(1);
       });
 
-      cy.get(".condition-panel").first().click();
-
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
   });
 

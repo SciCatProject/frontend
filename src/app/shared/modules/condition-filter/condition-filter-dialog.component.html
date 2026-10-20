@@ -1,0 +1,418 @@
+<div class="dialog-header">
+  <mat-icon class="dialog-icon">tune</mat-icon>
+  <div class="dialog-heading">
+    <h2 mat-dialog-title>
+      Advanced search
+      @if (advanced) {
+        <info-popup
+          title="AND, OR and Exclude"
+          label="AND, OR and Exclude"
+          data-cy="condition-help"
+        >
+          <dl class="logic-help">
+            <dt><span class="logic-badge and">AND</span></dt>
+            <dd>A result must match both filters.</dd>
+            <dt><span class="logic-badge or">OR</span></dt>
+            <dd>Matching either one is enough.</dd>
+            <dt><span class="logic-badge exclude">EXCLUDE</span></dt>
+            <dd>Leave out the results that match this filter.</dd>
+          </dl>
+        </info-popup>
+      }
+    </h2>
+    <p>
+      @if (advanced) {
+        Narrow the datasets down by their fields and scientific metadata.
+      } @else {
+        Narrow the samples down by their characteristics. All filters must
+        match.
+      }
+    </p>
+  </div>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    aria-label="Close"
+    data-cy="condition-dialog-close"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="dialog-body">
+  <div
+    class="conditions"
+    [style.--condition-columns]="gridColumns"
+    [style.--condition-wide-span]="wideValueSpan"
+  >
+    @for (row of rows(); track row.id; let index = $index) {
+      @let error = errors().get(row.id);
+      @let condition = row.condition;
+      @let kind = getKind(condition);
+      <div
+        class="condition-row"
+        [class.inactive]="!row.enabled"
+        [class.highlight]="row.id === highlightId()"
+        [class.excluded]="condition.exclude"
+        [class.advanced]="advanced"
+        role="listitem"
+        data-cy="condition-row"
+      >
+        @if (advanced) {
+          <div class="join-cell">
+            @if (!row.enabled) {
+              <span class="off-badge" data-cy="condition-off">OFF</span>
+            }
+            @if (index === 0) {
+              <span class="where">Where</span>
+            } @else {
+              <mat-button-toggle-group
+                class="join-toggle"
+                hideSingleSelectionIndicator
+                aria-label="Combine with the previous filter"
+                [value]="condition.join || 'AND'"
+                (change)="setJoin(row.id, $event.value)"
+                data-cy="condition-join"
+              >
+                <mat-button-toggle
+                  value="AND"
+                  matTooltip="Must match this filter and the one above"
+                  >AND</mat-button-toggle
+                >
+                <mat-button-toggle
+                  value="OR"
+                  matTooltip="Matching this filter or the ones above is enough, filters joined by AND are checked first"
+                  >OR</mat-button-toggle
+                >
+              </mat-button-toggle-group>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="exclude-button"
+            [class.on]="condition.exclude"
+            [matTooltip]="
+              condition.exclude
+                ? 'Excluded: matches are left out, click to include them'
+                : 'Exclude: leave out the matches'
+            "
+            [attr.aria-pressed]="!!condition.exclude"
+            aria-label="Exclude"
+            (click)="setExclude(row.id, !condition.exclude)"
+            data-cy="condition-exclude"
+          >
+            <mat-icon>remove_circle_outline</mat-icon>
+            Exclude
+          </button>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select
+              panelClass="condition-panel"
+              placeholder="Field"
+              aria-label="Field"
+              [panelWidth]="230"
+              [value]="getFieldValue(condition)"
+              (selectionChange)="setField(row.id, $event.value)"
+              data-cy="condition-field"
+            >
+              <mat-select-trigger>
+                @if (getFieldOption(condition); as selected) {
+                  <mat-icon class="option-icon">{{ selected.icon }}</mat-icon>
+                  {{ selected.label }}
+                }
+              </mat-select-trigger>
+              @for (field of fieldOptions; track field.value) {
+                <mat-option [value]="field.value" [attr.data-cy]="field.dataCy">
+                  <mat-icon class="option-icon">{{ field.icon }}</mat-icon>
+                  {{ field.label }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        @switch (kind) {
+          @case ("metadata") {
+            <condition-key-picker
+              [source]="keySource"
+              [key]="condition.lhs"
+              [error]="error?.quiet && !attempted() ? '' : error?.key"
+              (keyChange)="setKey(row.id, $event)"
+            ></condition-key-picker>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-select
+                panelClass="condition-panel"
+                aria-label="Operator"
+                [panelWidth]="190"
+                [value]="condition.relation"
+                (selectionChange)="setRelation(row.id, $event.value)"
+                data-cy="condition-operator"
+              >
+                @for (option of relationOptions; track option.value) {
+                  <mat-option [value]="option.value">
+                    <span class="op-symbol">{{ option.symbol }}</span>
+                    {{ option.label }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            @if (condition.relation === "RANGE") {
+              <div class="range-cell">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="Min"
+                    aria-label="Min"
+                    [value]="condition.rhs[0]"
+                    (input)="setBound(row.id, 0, $any($event.target).value)"
+                    (blur)="markTouched(row.id)"
+                    data-cy="condition-min"
+                  />
+                </mat-form-field>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="Max"
+                    aria-label="Max"
+                    [value]="condition.rhs[1]"
+                    (input)="setBound(row.id, 1, $any($event.target).value)"
+                    (blur)="markTouched(row.id)"
+                    data-cy="condition-max"
+                  />
+                </mat-form-field>
+              </div>
+            } @else {
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input
+                  matInput
+                  autocomplete="off"
+                  placeholder="Value"
+                  aria-label="Value"
+                  [value]="condition.rhs"
+                  (input)="setValue(row.id, $any($event.target).value)"
+                  (blur)="markTouched(row.id)"
+                  data-cy="condition-value"
+                />
+                @if (error?.value && touched().has(row.id)) {
+                  <mat-icon
+                    matSuffix
+                    class="error-icon"
+                    [matTooltip]="error.value"
+                    [attr.aria-label]="error.value"
+                    data-cy="condition-error"
+                    >error_outline</mat-icon
+                  >
+                }
+              </mat-form-field>
+            }
+
+            @if (unitsEnabled) {
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input
+                  matInput
+                  autocomplete="off"
+                  spellcheck="false"
+                  placeholder="Unit"
+                  aria-label="Unit"
+                  [value]="condition.unit || ''"
+                  [matAutocomplete]="units"
+                  (input)="setUnit(row.id, $any($event.target).value)"
+                  data-cy="condition-unit"
+                />
+                <mat-autocomplete
+                  class="condition-panel"
+                  #units="matAutocomplete"
+                  (optionSelected)="setUnit(row.id, $event.option.value)"
+                >
+                  @for (unit of getUnits(condition); track unit) {
+                    <mat-option [value]="unit">{{ unit }}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            }
+          }
+          @case ("dataset") {
+            @if (condition.relation === "RANGE") {
+              <mat-form-field
+                class="wide-value"
+                appearance="outline"
+                subscriptSizing="dynamic"
+                matTooltip="Type dates as yyyy-mm-dd, or pick them from the calendar"
+                matTooltipShowDelay="800"
+              >
+                <mat-date-range-input
+                  [rangePicker]="picker"
+                  data-cy="condition-date-range"
+                >
+                  <input
+                    matStartDate
+                    placeholder="yyyy-mm-dd"
+                    aria-label="Start date"
+                    [value]="toDate(condition.rhs[0])"
+                    (dateChange)="setDate(row.id, 0, $event.value)"
+                    (blur)="markTouched(row.id)"
+                    data-cy="condition-date-from"
+                  />
+                  <input
+                    matEndDate
+                    placeholder="yyyy-mm-dd"
+                    aria-label="End date"
+                    [value]="toDate(condition.rhs[1])"
+                    (dateChange)="setDate(row.id, 1, $event.value)"
+                    (blur)="markTouched(row.id)"
+                    data-cy="condition-date-to"
+                  />
+                </mat-date-range-input>
+                @if (error?.value && touched().has(row.id)) {
+                  <mat-icon
+                    matSuffix
+                    class="error-icon"
+                    [matTooltip]="error.value"
+                    [attr.aria-label]="error.value"
+                    data-cy="condition-error"
+                    >error_outline</mat-icon
+                  >
+                }
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            } @else {
+              <mat-form-field
+                class="wide-value"
+                appearance="outline"
+                subscriptSizing="dynamic"
+              >
+                <input
+                  matInput
+                  autocomplete="off"
+                  aria-label="Value"
+                  [placeholder]="getValuePlaceholder(condition)"
+                  [value]="condition.rhs"
+                  (input)="setValue(row.id, $any($event.target).value)"
+                  (blur)="markTouched(row.id)"
+                  data-cy="condition-value"
+                />
+                @if (error?.value && touched().has(row.id)) {
+                  <mat-icon
+                    matSuffix
+                    class="error-icon"
+                    [matTooltip]="error.value"
+                    [attr.aria-label]="error.value"
+                    data-cy="condition-error"
+                    >error_outline</mat-icon
+                  >
+                }
+              </mat-form-field>
+            }
+          }
+        }
+
+        @if (kind === "none") {
+          <div class="quick-picks wide-value" data-cy="condition-quick-picks">
+            <span class="quick-label">Quick pick</span>
+            @for (pick of quickPicks; track pick.value) {
+              <button
+                type="button"
+                class="quick-pick"
+                (click)="setField(row.id, pick.value)"
+                [attr.data-cy]="'condition-quick-' + pick.value"
+              >
+                <mat-icon>{{ pick.icon }}</mat-icon>
+                {{ pick.label }}
+              </button>
+            }
+          </div>
+        }
+
+        <div class="row-actions">
+          <button
+            mat-icon-button
+            type="button"
+            class="action-button"
+            [class.is-off]="!row.enabled"
+            [matTooltip]="
+              row.enabled
+                ? 'Active, click to keep the filter without using it'
+                : 'Switched off, click to use the filter'
+            "
+            [attr.aria-pressed]="row.enabled"
+            aria-label="Use this filter"
+            (click)="setEnabled(row.id, !row.enabled)"
+            data-cy="condition-toggle"
+          >
+            <mat-icon>{{
+              row.enabled ? "visibility" : "visibility_off"
+            }}</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            type="button"
+            class="action-button"
+            matTooltip="Remove filter"
+            aria-label="Remove filter"
+            (click)="removeRow(row.id)"
+            data-cy="condition-remove"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+    @if (!rows().length) {
+      <p class="empty-state" data-cy="condition-empty">
+        No filters yet. Add one to narrow down the results.
+      </p>
+    }
+  </div>
+
+  <button
+    type="button"
+    class="add-row"
+    (click)="addRow()"
+    data-cy="condition-add"
+  >
+    <mat-icon>add</mat-icon>
+    Add filter
+  </button>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+  <button
+    mat-stroked-button
+    type="button"
+    [disabled]="!rows().length"
+    (click)="clearAll()"
+    data-cy="condition-clear-all"
+  >
+    <mat-icon>clear_all</mat-icon>
+    Clear all
+  </button>
+  <span class="spacer"></span>
+  @if (attempted() && !canApply()) {
+    <span class="apply-hint" role="alert" data-cy="condition-apply-hint">
+      <mat-icon>error_outline</mat-icon>
+      {{ firstError() }}
+    </span>
+  }
+  <button mat-button type="button" mat-dialog-close data-cy="condition-cancel">
+    Cancel
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    (click)="apply()"
+    data-cy="condition-apply"
+  >
+    <mat-icon>search</mat-icon>
+    Apply
+  </button>
+</mat-dialog-actions>

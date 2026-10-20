@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
-import { provideMockStore } from "@ngrx/store/testing";
+import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
 import * as fromActions from "../actions/datasets.actions";
 import { DatasetEffects } from "./datasets.effects";
@@ -8,6 +8,7 @@ import { FacetCounts } from "state-management/models";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
+  selectConditionsCountQuery,
   selectCurrentDataset,
   selectRelatedDatasetsFilters,
 } from "state-management/selectors/datasets.selectors";
@@ -16,13 +17,12 @@ import {
   loadingCompleteAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
-import { ScientificCondition } from "state-management/models";
+import { FilterCondition } from "state-management/models";
 import { Type } from "@angular/core";
 import {
   DatasetsService,
   OrigdatablocksV4Service,
   OrigdatablocksPublicV4Service,
-  MetadataKeysV4Service,
   OutputDatasetDto,
   DatasetsV4Service,
   DatasetsPublicV4Service,
@@ -69,7 +69,6 @@ describe("DatasetEffects", () => {
   let datasetApi: jasmine.SpyObj<DatasetsService>;
   let origdatablocksApi: jasmine.SpyObj<OrigdatablocksV4Service>;
   let origdatablocksPublicApi: jasmine.SpyObj<OrigdatablocksPublicV4Service>;
-  let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
   let datasetsV4Service: jasmine.SpyObj<DatasetsV4Service>;
   let datasetsPublicV4Service: jasmine.SpyObj<DatasetsPublicV4Service>;
   let attachmentsV4Service: jasmine.SpyObj<AttachmentsV4Service>;
@@ -96,6 +95,7 @@ describe("DatasetEffects", () => {
               },
             },
             { selector: selectFullfacetParams, value: {} },
+            { selector: selectConditionsCountQuery, value: null },
             { selector: selectCurrentUser, value: { id: "testUser" } },
           ],
         }),
@@ -147,12 +147,6 @@ describe("DatasetEffects", () => {
             "origDatablocksPublicV4ControllerCountFilesPublicV4",
           ]),
         },
-        {
-          provide: MetadataKeysV4Service,
-          useValue: jasmine.createSpyObj("metadataKeysApi", [
-            "metadataKeysV4ControllerFindAllV4",
-          ]),
-        },
         { provide: AppConfigService, useValue: { getConfig } },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
@@ -163,7 +157,6 @@ describe("DatasetEffects", () => {
     datasetApi = injectedStub(DatasetsService);
     origdatablocksApi = injectedStub(OrigdatablocksV4Service);
     origdatablocksPublicApi = injectedStub(OrigdatablocksPublicV4Service);
-    metadataKeysApi = injectedStub(MetadataKeysV4Service);
     datasetsV4Service = injectedStub(DatasetsV4Service);
     datasetsPublicV4Service = injectedStub(DatasetsPublicV4Service);
     attachmentsV4Service = injectedStub(AttachmentsV4Service);
@@ -250,37 +243,64 @@ describe("DatasetEffects", () => {
     });
   });
 
-  describe("fetchMetadataKeys$", () => {
-    it("should result in a fetchMetadataKeysCompleteAction", () => {
-      const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysAction({});
-      const outcome = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys,
-      });
-
-      actions = hot("-a", { a: action });
-      const response = cold("-a|", {
-        a: [{ key: "test", humanReadable: "Test" }],
-      });
-      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
-        response,
-      );
-      const expected = cold("--b", { b: outcome });
-      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+  describe("fetchFacetCounts$ with conditions the facets can't take", () => {
+    const query = { $and: [{ keywords: { $in: ["beam"] } }] };
+    const facets = [{ all: [{ totalSets: 99 }], type: [] }];
+    const outcome = fromActions.fetchFacetCountsCompleteAction({
+      facetCounts: { type: [] },
+      allCounts: 5,
     });
 
-    it("should result in a fetchMetadataKeysFailedAction", () => {
-      const action = fromActions.fetchMetadataKeysAction({});
-      const outcome = fromActions.fetchMetadataKeysFailedAction();
+    beforeEach(() => {
+      TestBed.inject(MockStore).overrideSelector(
+        selectConditionsCountQuery,
+        query,
+      );
+      actions = hot("-a", { a: fromActions.fetchFacetCountsAction() });
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
+        cold("-a|", { a: facets }),
+      );
+    });
 
-      actions = hot("-a", { a: action });
-      const response = cold("-#", {});
-      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
-        response,
+    it("should take the total from the count of the datasets", () => {
+      datasetsV4Service.datasetsV4ControllerCountV4.and.returnValue(
+        cold("-a|", { a: { count: 5 } }),
       );
 
-      const expected = cold("--b", { b: outcome });
-      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+      expect(effects.fetchFacetCounts$).toBeObservable(
+        cold("---b", { b: outcome }),
+      );
+      expect(
+        datasetsV4Service.datasetsV4ControllerCountV4,
+      ).toHaveBeenCalledWith(JSON.stringify({ where: query }));
+    });
+
+    it("should count the public datasets when nobody is logged in", () => {
+      TestBed.inject(MockStore).overrideSelector(selectCurrentUser, null);
+      const publicApi = injectedStub(DatasetsPublicV4Service);
+      publicApi.datasetsPublicV4ControllerFullfacetV4.and.returnValue(
+        cold("-a|", { a: facets }),
+      );
+      publicApi.datasetsPublicV4ControllerCountPublicV4.and.returnValue(
+        cold("-a|", { a: { count: 5 } }),
+      );
+
+      expect(effects.fetchFacetCounts$).toBeObservable(
+        cold("---b", { b: outcome }),
+      );
+      expect(
+        publicApi.datasetsPublicV4ControllerCountPublicV4,
+      ).toHaveBeenCalledWith(JSON.stringify({ where: query }));
+    });
+
+    it("should fail when the datasets can't be counted", () => {
+      datasetsV4Service.datasetsV4ControllerCountV4.and.returnValue(
+        cold("-#", {}),
+      );
+
+      expect(effects.fetchFacetCounts$).toBeObservable(
+        cold("--b", { b: fromActions.fetchFacetCountsFailedAction() }),
+      );
     });
   });
 
@@ -296,58 +316,6 @@ describe("DatasetEffects", () => {
 
       const expected = cold("-b", { b: outcome });
       expect(effects.updateUserDatasetsLimit$).toBeObservable(expected);
-    });
-  });
-
-  describe("updateMetadataKeys$", () => {
-    describe("ofType addScientificConditionAction", () => {
-      it("should result in a fetchMetadataKeysAction", () => {
-        const condition: ScientificCondition = {
-          lhs: "test",
-          relation: "EQUAL_TO_NUMERIC",
-          rhs: 1000,
-          unit: "s",
-        };
-        const action = fromActions.addScientificConditionAction({ condition });
-        const outcome = fromActions.fetchMetadataKeysAction({});
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.updateMetadataKeys$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType removeScientificConditionAction", () => {
-      it("should result in a fetchMetadataKeysAction", () => {
-        const condition: ScientificCondition = {
-          lhs: "test",
-          relation: "EQUAL_TO_NUMERIC",
-          rhs: 1000,
-          unit: "s",
-        };
-        const action = fromActions.removeScientificConditionAction({
-          condition,
-        });
-        const outcome = fromActions.fetchMetadataKeysAction({});
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.updateMetadataKeys$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType clearFacetsAction", () => {
-      it("should result in a fetchMetadataKeysAction", () => {
-        const action = fromActions.clearFacetsAction();
-        const outcome = fromActions.fetchMetadataKeysAction({});
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.updateMetadataKeys$).toBeObservable(expected);
-      });
     });
   });
 
@@ -745,18 +713,6 @@ describe("DatasetEffects", () => {
       });
     });
 
-    describe("ofType fetchMetadataKeysAction", () => {
-      it("should dispatch a loadingAction", () => {
-        const action = fromActions.fetchMetadataKeysAction({});
-        const outcome = loadingAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loading$).toBeObservable(expected);
-      });
-    });
-
     describe("ofType fetchDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
         const pid = "testPid";
@@ -905,33 +861,6 @@ describe("DatasetEffects", () => {
     describe("ofType fetchFacetCountsFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchFacetCountsFailedAction();
-        const outcome = loadingCompleteAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loadingComplete$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType fetchMetadataKeysCompleteAction", () => {
-      it("should dispatch a loadingCompleteAction", () => {
-        const metadataKeys = ["test"];
-        const action = fromActions.fetchMetadataKeysCompleteAction({
-          metadataKeys,
-        });
-        const outcome = loadingCompleteAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loadingComplete$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType fetchMetadataKeysFailedAction", () => {
-      it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.fetchMetadataKeysFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

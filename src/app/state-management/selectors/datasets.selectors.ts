@@ -1,7 +1,12 @@
 import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { selectFilters as selectUserFilters } from "state-management/selectors/user.selectors";
-import { scientificConditionsToQuery } from "shared/modules/shared-condition/utils";
+import {
+  conditionsToQuery,
+  isPlainConditionList,
+  withPlainDates,
+  toFacetConditions,
+} from "shared/modules/condition-filter/condition-filter.utils";
 import { DateRange, DateRangeFilter } from "state-management/models";
 
 const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
@@ -14,11 +19,6 @@ export const selectDatasets = createSelector(
 export const selectSelectedDatasets = createSelector(
   selectDatasetState,
   (state) => state.selectedSets,
-);
-
-export const selectMetadataKeys = createSelector(
-  selectDatasetState,
-  (state) => state.metadataKeys,
 );
 
 export const selectDatasetsFacetCountsIsLoading = createSelector(
@@ -250,17 +250,18 @@ export const selectFullqueryParams = createSelector(
 
     const textQuery = text && text.trim() ? { $text: { $search: text } } : {};
 
-    const scientificQuery =
-      scientific && scientific.length > 0
-        ? scientificConditionsToQuery(scientific)
-        : {};
-
-    const query = {
+    const query: Record<string, unknown> = {
       ...baseQuery,
       ...(mode || {}),
       ...textQuery,
-      ...scientificQuery,
     };
+
+    // The conditions can contain $or, which the mode of the archive view
+    // already uses, so they are added as one more condition to match
+    const conditionsQuery = conditionsToQuery(scientific ?? []);
+    if (Object.keys(conditionsQuery).length) {
+      query.$and = [...((query.$and as unknown[]) ?? []), conditionsQuery];
+    }
 
     return { query, limits };
   },
@@ -272,11 +273,16 @@ export const selectFullfacetParams = createSelector(
   (state, userFilters) => {
     const filter = state.filters;
     const pagination = state.pagination;
-    const { skip, limit, sortField, modeToggle, ...theRest } = {
+    const { skip, limit, sortField, modeToggle, scientific, ...theRest } = {
       ...filter,
       ...pagination,
     };
-    const fields = restrictFilter(theRest);
+    const fields: Record<string, unknown> = restrictFilter(theRest);
+    // the facets only understand conditions on scientific metadata that all
+    // have to match, see selectConditionsCountQuery for the other ones
+    if (scientific?.length && isPlainConditionList(scientific)) {
+      fields.scientific = toFacetConditions(scientific);
+    }
     const facets = userFilters
       .filter(
         (f) => f.enabled && (f.type === "multiSelect" || f.type === "checkbox"),
@@ -285,6 +291,18 @@ export const selectFullfacetParams = createSelector(
 
     return { fields, facets };
   },
+);
+
+/**
+ * The facets can't take conditions with OR, "not include" or dataset fields,
+ * the total of datasets is counted with the query of the datasets instead.
+ * It is null when the facets take all conditions.
+ */
+export const selectConditionsCountQuery = createSelector(
+  selectFullqueryParams,
+  selectScientificConditions,
+  ({ query }, conditions) =>
+    isPlainConditionList(conditions) ? null : withPlainDates(query),
 );
 
 // === Misc. ===

@@ -23,6 +23,7 @@ import {
 import {
   clearDatasetsStateAction,
   setDatasetsLimitFilterAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
 import {
   clearJobsStateAction,
@@ -670,6 +671,59 @@ describe("UserEffects", () => {
 
       const expected = cold("-(bc)", { b: outcome1, c: outcome2 });
       expect(effects.setLimitFilters$).toBeObservable(expected);
+    });
+  });
+
+  describe("setConditions$", () => {
+    const filled = {
+      condition: {
+        lhs: "temperature",
+        relation: "EQUAL_TO" as const,
+        rhs: "20",
+        unit: "",
+      },
+      enabled: true,
+    };
+    const switchedOff = { ...filled, enabled: false };
+    const withoutValue = {
+      ...filled,
+      condition: { ...filled.condition, lhs: "pressure", rhs: "" },
+    };
+
+    it("should filter datasets by the enabled conditions that have a value", () => {
+      const configs = [filled, switchedOff, withoutValue];
+      const userSettings = {
+        externalSettings: {
+          fe_dataset_table_conditions: configs,
+          fe_sample_table_conditions: [],
+        },
+      } as unknown as UserSettings;
+
+      actions = hot("-a", {
+        a: fromActions.fetchUserSettingsCompleteAction({ userSettings }),
+      });
+
+      const expected = cold("-(bcd)", {
+        b: setScientificConditionsAction({
+          conditions: [
+            {
+              lhs: "temperature",
+              relation: "EQUAL_TO_NUMERIC",
+              rhs: 20,
+              unit: "",
+            },
+          ],
+        }),
+        c: fromActions.updateConditionsConfigs({
+          conditionConfigs: configs,
+          scope: "dataset",
+        }),
+        d: fromActions.updateConditionsConfigs({
+          conditionConfigs: [],
+          scope: "sample",
+        }),
+      });
+      expect(effects.setConditions$).toBeObservable(expected);
     });
   });
 

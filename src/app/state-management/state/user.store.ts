@@ -2,7 +2,7 @@ import {
   Settings,
   Message,
   TableColumn,
-  ScientificCondition,
+  FilterCondition,
   FacetCount,
 } from "../models";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
@@ -23,7 +23,7 @@ export interface FilterConfig {
 }
 
 export interface ConditionConfig {
-  condition: ScientificCondition;
+  condition: FilterCondition;
   enabled: boolean;
 }
 

@@ -14,15 +14,6 @@
           matTooltipPosition="after"
           formControlName="textField"
         />
-        <span
-          *ngIf="appConfig.autoApplyFilters"
-          matSuffix
-          class="enter-hint"
-          matTooltip="Press Enter to apply"
-          matTooltipPosition="after"
-          matTooltipShowDelay="500"
-          >↵</span
-        >
       </mat-form-field>
     </ng-container>
 
@@ -53,15 +44,6 @@
             (keydown.enter)="onApplyEnter($event)"
           />
         </mat-date-range-input>
-        <span
-          *ngIf="appConfig.autoApplyFilters"
-          matSuffix
-          class="enter-hint"
-          matTooltip="Press Enter to apply"
-          matTooltipPosition="after"
-          matTooltipShowDelay="500"
-          >↵</span
-        >
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>

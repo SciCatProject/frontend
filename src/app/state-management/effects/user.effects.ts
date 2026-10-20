@@ -37,10 +37,11 @@ import {
   selectConditions,
 } from "state-management/selectors/user.selectors";
 import {
-  addScientificConditionAction,
   clearDatasetsStateAction,
   setDatasetsLimitFilterAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
+import { toActiveConditions } from "shared/modules/condition-filter/condition-filter.utils";
 import {
   clearJobsStateAction,
   setJobsLimitFilterAction,
@@ -435,14 +436,11 @@ export class UserEffects {
             const actions = [];
 
             if (scope === "dataset") {
-              // TODO: Check with the types here. This is working better as it is now with the conditions and filters. We are leaving it for now as it was from before.
-              conditions
-                .filter((c) => c.enabled)
-                .forEach((c) => {
-                  actions.push(
-                    addScientificConditionAction({ condition: c.condition }),
-                  );
-                });
+              actions.push(
+                setScientificConditionsAction({
+                  conditions: toActiveConditions(conditions),
+                }),
+              );
             }
 
             actions.push(
@@ -617,6 +615,14 @@ export class UserEffects {
                 scope,
               }),
             );
+
+            if (scope === "dataset") {
+              actions.push(
+                setScientificConditionsAction({
+                  conditions: toActiveConditions(conditionConfigs),
+                }),
+              );
+            }
           },
         );
 

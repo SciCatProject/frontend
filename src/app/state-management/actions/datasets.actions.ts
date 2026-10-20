@@ -10,7 +10,7 @@ import {
   DatasetFilters,
   DateRangeFilter,
   FacetCounts,
-  ScientificCondition,
+  FilterCondition,
 } from "state-management/models";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 
@@ -34,18 +34,6 @@ export const fetchFacetCountsCompleteAction = createAction(
 );
 export const fetchFacetCountsFailedAction = createAction(
   "[Dataset] Fetch Facet Counts Failed",
-);
-
-export const fetchMetadataKeysAction = createAction(
-  "[Dataset] Fetch Metadata Keys",
-  props<{ searchTerm?: string }>(),
-);
-export const fetchMetadataKeysCompleteAction = createAction(
-  "[Dataset] Fetch Metadata Keys Complete",
-  props<{ metadataKeys: string[] }>(),
-);
-export const fetchMetadataKeysFailedAction = createAction(
-  "[Dataset] Fetch Metadata Keys Failed",
 );
 
 export const fetchDatasetAction = createAction(
@@ -315,13 +303,9 @@ export const removeDatasetFilterAction = createAction(
   }>(),
 );
 
-export const addScientificConditionAction = createAction(
-  "[Dataset] Add Scientific Condition",
-  props<{ condition: ScientificCondition }>(),
-);
-export const removeScientificConditionAction = createAction(
-  "[Dataset] Remove Scientific Condition",
-  props<{ condition: ScientificCondition }>(),
+export const setScientificConditionsAction = createAction(
+  "[Dataset] Set Scientific Conditions",
+  props<{ conditions: FilterCondition[] }>(),
 );
 
 export const clearDatasetsStateAction = createAction("[Dataset] Clear State");

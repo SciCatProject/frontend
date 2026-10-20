@@ -50,6 +50,7 @@ import { RowEventType } from "shared/modules/dynamic-material-table/models/table
 import { ActivatedRoute } from "@angular/router";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { TranslateService } from "@ngx-translate/core";
+import { MetadataKeySearchService } from "shared/modules/condition-filter/condition-filter.keys";
 import { DatasetsListService } from "shared/services/datasets-list.service";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
@@ -118,6 +119,12 @@ describe("DatasetTableComponent", () => {
           { provide: DatasetsService, useClass: MockDatasetApi },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: DatasetsListService, useClass: MockDatasetsListService },
+          {
+            provide: MetadataKeySearchService,
+            useValue: jasmine.createSpyObj("MetadataKeySearchService", [
+              "search",
+            ]),
+          },
         ],
       },
     });

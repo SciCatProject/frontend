@@ -1,0 +1,29 @@
+@if (configs$ | async; as configs) {
+  @let active = getActive(configs);
+  <button
+    type="button"
+    class="advanced-search"
+    [class.active]="active.length"
+    [class.icon-only]="iconOnly"
+    [class.open]="isOpen()"
+    [matTooltip]="iconOnly ? 'Advanced search' : ''"
+    aria-label="Advanced search"
+    (click)="open(configs)"
+    data-cy="advanced-search-button"
+  >
+    <mat-icon>tune</mat-icon>
+    @if (!iconOnly) {
+      Advanced search
+    }
+    @if (active.length) {
+      <span class="badge" data-cy="condition-count">{{ active.length }}</span>
+    }
+    @if (draft()) {
+      <span
+        class="draft-dot"
+        matTooltip="Changes that are not applied yet"
+        data-cy="condition-draft"
+      ></span>
+    }
+  </button>
+}

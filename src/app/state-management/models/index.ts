@@ -174,7 +174,7 @@ export enum JobViewMode {
   allJobs = "all jobs",
 }
 
-type ScientificConditionRelation =
+export type FilterConditionRelation =
   | "EQUAL_TO_NUMERIC"
   | "EQUAL_TO_STRING"
   | "GREATER_THAN"
@@ -182,15 +182,38 @@ type ScientificConditionRelation =
   | "GREATER_THAN_OR_EQUAL"
   | "LESS_THAN_OR_EQUAL"
   | "RANGE"
-  | "EQUAL_TO";
+  | "EQUAL_TO"
+  // dataset fields: the value is any of the given values, or contains the text
+  | "IN"
+  | "CONTAINS";
 
-export interface ScientificCondition {
+/** Where the field of a condition lives, scientific metadata when missing. */
+export type ConditionSource = "scientificMetadata" | "dataset";
+
+/** How a condition is combined with the one before it, AND when missing. */
+export type ConditionJoin = "AND" | "OR";
+
+/**
+ * A condition on a scientific metadata key or on a dataset field.
+ * `exclude`, `join` and `source` are only set when they differ from the
+ * default, so conditions saved before they existed keep their meaning.
+ */
+export interface FilterCondition {
   lhs: string;
-  relation: ScientificConditionRelation;
+  relation: FilterConditionRelation;
   rhs: string | number | (string | number)[];
   unit: string;
   unitsOptions?: string[];
   human_name?: string;
+  source?: ConditionSource;
+  /** "Not include": leaves out what matches the condition. */
+  exclude?: boolean;
+  join?: ConditionJoin;
+}
+
+export interface MetadataKey {
+  key: string;
+  humanReadableName?: string;
 }
 
 export interface GenericFilters {
@@ -208,14 +231,14 @@ export interface DatasetFilters extends GenericFilters {
   creationLocation: string[];
   keywords: string[];
   mode: Record<string, unknown>;
-  scientific: ScientificCondition[];
+  scientific: FilterCondition[];
   isPublished: boolean | "";
   pid: string | { $regex: string };
 }
 
 export interface SampleFilters extends GenericFilters {
   text: string;
-  characteristics: ScientificCondition[];
+  characteristics: FilterCondition[];
 }
 
 export interface LogbookFilters extends GenericFilters {

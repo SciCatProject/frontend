@@ -23,4 +23,23 @@
   [emptyMessage]="'No datasets available'"
   [emptyIcon]="'folder'"
 >
+  @if (appConfig.scienceSearchEnabled) {
+    <condition-filter-button
+      table-search-action
+      [iconOnly]="true"
+      scope="dataset"
+      [keySource]="keySource"
+      [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
+      (conditionsApplied)="onConditionsApplied($event)"
+    ></condition-filter-button>
+  }
+  @if (appConfig.scienceSearchEnabled) {
+    <condition-filter-chips
+      table-toolbar
+      [configs]="conditionConfigs$ | async"
+      (filterSelect)="conditionFilterButton.openFilter($event)"
+      (filterRemove)="conditionFilterButton.removeFilter($event)"
+      (clearAll)="conditionFilterButton.clearFilters()"
+    ></condition-filter-chips>
+  }
 </dynamic-mat-table>

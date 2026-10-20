@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 import { cloneDeep, isEqual } from "lodash-es";
@@ -8,11 +8,7 @@ import {
   selectHasAppliedFilters,
   selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
-import {
-  DateRange,
-  DateRangeFilter,
-  ScientificCondition,
-} from "state-management/models";
+import { DateRange, DateRangeFilter } from "state-management/models";
 import {
   addDatasetFilterAction,
   clearFacetsAction,
@@ -22,10 +18,7 @@ import {
   setFiltersAction,
   setPublicViewModeAction,
 } from "state-management/actions/datasets.actions";
-import {
-  updateConditionsConfigs,
-  updateUserSettingsAction,
-} from "state-management/actions/user.actions";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
 import {
@@ -34,16 +27,11 @@ import {
 } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
 import { Subscription } from "rxjs";
-import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FilterConfig } from "state-management/state/user.store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
-import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
-import {
-  addScientificConditionAction,
-  removeScientificConditionAction,
-} from "state-management/actions/datasets.actions";
+import { ConditionFilterService } from "shared/modules/condition-filter/condition-filter.service";
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -66,21 +54,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
 
-  metadataKeys$ = this.store.select(selectMetadataKeys);
-
-  @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
-
   loggedIn$ = this.store.select(selectIsLoggedIn);
 
   currentPublicViewMode: boolean | "" = "";
-
-  humanNameMap: { [key: string]: string } = {};
-
-  fieldTypeMap: { [key: string]: string } = {};
-
-  hoverKey: string | null = null;
-
-  tempConditionValues: string[] = [];
 
   constructor(
     private store: Store,
@@ -89,15 +65,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router,
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
+    private conditionFilterService: ConditionFilterService,
   ) {}
-
-  addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(addScientificConditionAction({ condition }));
-  };
-
-  removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(removeScientificConditionAction({ condition }));
-  };
 
   ngOnInit() {
     this.subscriptions.push(
@@ -173,17 +142,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.clearSearchBar = true;
 
     this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(
-      updateConditionsConfigs({
-        conditionConfigs: [],
-        scope: "dataset",
-      }),
-    );
-    this.store.dispatch(
-      updateUserSettingsAction({
-        property: { fe_dataset_table_conditions: [] },
-      }),
-    );
+    this.conditionFilterService.clear("dataset");
 
     this.activeFilters = {};
 
@@ -243,10 +202,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       },
       queryParamsHandling: "merge",
     });
-
-    if (this.conditionFilter) {
-      this.conditionFilter.applyConditions();
-    }
 
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());

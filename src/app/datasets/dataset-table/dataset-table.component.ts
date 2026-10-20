@@ -8,7 +8,7 @@ import {
   ViewChild,
   Input,
 } from "@angular/core";
-import { TableColumn } from "state-management/models";
+import { FilterCondition, TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import {
   BehaviorSubject,
@@ -28,6 +28,7 @@ import {
   setTextFilterAction,
   fetchFacetCountsAction,
   fetchDatasetsAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 
@@ -42,6 +43,12 @@ import {
   selectTextFilter,
 } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
+import { ConditionFilterButtonComponent } from "shared/modules/condition-filter/condition-filter-button.component";
+import { selectConditions } from "state-management/selectors/user.selectors";
+import {
+  ConditionKeySource,
+  MetadataKeySearchService,
+} from "shared/modules/condition-filter/condition-filter.keys";
 import {
   selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
@@ -94,6 +101,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   @ViewChild("datasetTable")
   datasetTable: DynamicMatTableComponent<PartialOutputDatasetDto>;
+
+  @ViewChild(ConditionFilterButtonComponent)
+  conditionFilterButton: ConditionFilterButtonComponent;
 
   selectionIds: string[] = [];
   appConfig = this.appConfigService.getConfig();
@@ -168,6 +178,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   globalTextSearch = "";
 
+  /** The metadata keys for the conditions, loaded page by page. */
+  keySource: ConditionKeySource;
+  conditionConfigs$ = this.store.select(selectConditions("dataset"));
+
   constructor(
     public appConfigService: AppConfigService,
     private store: Store,
@@ -175,7 +189,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
     private router: Router,
-  ) {}
+    metadataKeySearch: MetadataKeySearchService,
+  ) {
+    this.keySource = (term, skip, limit) =>
+      metadataKeySearch.search(term, skip, limit);
+  }
 
   private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
     return columns.map((column) => {
@@ -455,6 +473,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onTextSearchAction() {
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
+  }
+
+  onConditionsApplied(conditions: FilterCondition[]) {
+    this.store.dispatch(setScientificConditionsAction({ conditions }));
+    this.onTextSearchAction();
   }
 
   ngOnDestroy() {

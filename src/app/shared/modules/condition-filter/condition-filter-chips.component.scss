@@ -1,0 +1,94 @@
+:host {
+  display: block;
+}
+
+// a strip of its own, so that it is clear these filters are applied
+.applied-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 4px 10px;
+  background: color-mix(in srgb, var(--theme-primary-default) 7%, white);
+  border: 1px solid color-mix(in srgb, var(--theme-primary-default) 30%, white);
+  border-left: 4px solid var(--theme-primary-default);
+  border-radius: 8px;
+}
+
+.applied-label {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--theme-primary-default);
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+.chips {
+  flex: 1;
+  min-width: 0;
+}
+
+.join {
+  align-self: center;
+  white-space: nowrap;
+  margin: 0 0 0 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+mat-chip-row {
+  cursor: pointer;
+  --mat-chip-container-height: 26px;
+  --mat-chip-label-text-size: 12px;
+  --mat-chip-label-text-color: inherit;
+  --mat-chip-elevated-container-color: #fff;
+  --mat-chip-outline-width: 1px;
+  --mat-chip-outline-color: color-mix(
+    in srgb,
+    var(--theme-primary-default) 35%,
+    white
+  );
+
+  &:hover {
+    --mat-chip-outline-color: var(--theme-primary-default);
+  }
+
+  &.excluded {
+    --mat-chip-outline-color: var(--theme-warn-default, #b00020);
+    border-left: 3px solid var(--theme-warn-default, #b00020);
+  }
+}
+
+// short chips, the tooltip shows the whole filter
+.chip-text {
+  display: block;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clear-all {
+  flex-shrink: 0;
+  min-width: 0;
+  padding: 0 8px;
+  font-size: 0.75rem;
+  --mdc-text-button-container-height: 28px;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    margin: 0 2px 0 0;
+    font-size: 16px;
+  }
+}

@@ -1,7 +1,7 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
 import { initialDatasetState } from "state-management/state/datasets.store";
-import { ArchViewMode, FacetCounts, ScientificCondition } from "../models";
+import { ArchViewMode, FacetCounts, FilterCondition } from "../models";
 import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
 import {
   OrigDatablock,
@@ -58,18 +58,6 @@ describe("DatasetsReducer", () => {
 
       expect(state.facetCounts).toEqual(facetCounts);
       expect(state.totalCount).toEqual(allCounts);
-    });
-  });
-
-  describe("on fetchMetadataKeysCompleteAction", () => {
-    it("should set metadataKeys property", () => {
-      const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys,
-      });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.metadataKeys).toEqual(metadataKeys);
     });
   });
 
@@ -484,39 +472,34 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on addScientificConditionAction", () => {
-    it("should add scientific condition to scientific filter", () => {
-      const condition: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "EQUAL_TO_STRING",
-        rhs: "rhsTest",
-        unit: "",
-      };
+  describe("on setScientificConditionsAction", () => {
+    const condition: FilterCondition = {
+      lhs: "lhsTest",
+      relation: "EQUAL_TO_STRING",
+      rhs: "rhsTest",
+      unit: "",
+    };
 
-      const action = fromActions.addScientificConditionAction({ condition });
+    it("should set the scientific filter", () => {
+      const action = fromActions.setScientificConditionsAction({
+        conditions: [condition],
+      });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.filters.scientific).toContain(condition);
+      expect(state.filters.scientific).toEqual([condition]);
     });
-  });
 
-  describe("on removeScientificConditionAction", () => {
-    it("should remove scientific condition from scientific filter", () => {
-      const condition: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "EQUAL_TO_STRING",
-        rhs: "rhsTest",
-        unit: "",
-      };
-      const act = fromActions.addScientificConditionAction({ condition });
-      const sta = fromDatasets.datasetsReducer(initialDatasetState, act);
+    it("should replace the conditions that were set before", () => {
+      const first = fromDatasets.datasetsReducer(
+        initialDatasetState,
+        fromActions.setScientificConditionsAction({ conditions: [condition] }),
+      );
+      const state = fromDatasets.datasetsReducer(
+        first,
+        fromActions.setScientificConditionsAction({ conditions: [] }),
+      );
 
-      expect(sta.filters.scientific).toContain(condition);
-
-      const action = fromActions.removeScientificConditionAction({ condition });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.filters.scientific).not.toContain(condition);
+      expect(state.filters.scientific).toEqual([]);
     });
   });
 

@@ -454,6 +454,11 @@ cdk-virtual-scroll-viewport {
   background-color: #ffffff;
 }
 
+// after the stripes, which would hide the hover
+.mat-mdc-table .mat-mdc-row.table-row:not(.expanded-row):hover {
+  background-color: color-mix(in srgb, var(--theme-primary-default) 12%, white);
+}
+
 .table-header-controls {
   display: flex;
   align-items: center;
@@ -513,6 +518,20 @@ cdk-virtual-scroll-viewport {
     ::ng-deep .mat-mdc-form-field-infix {
       padding: 12px 20px;
       min-height: auto;
+    }
+
+    .search-action {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      margin-left: auto;
+      padding: 0 6px;
+      border-left: 1px solid var(--theme-hover-lighter);
+
+      // no divider without a button
+      &:not(:has(*)) {
+        display: none;
+      }
     }
 
     ::ng-deep .mat-mdc-form-field-icon-prefix .mat-icon {
@@ -683,6 +702,20 @@ mat-paginator {
   }
   to {
     transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.table-toolbar {
+  // same inset as the search box above
+  padding: 0 20px;
+  margin-bottom: 0.5rem;
+
+  &:empty {
+    display: none;
+  }
+
+  &.with-side-filter {
+    margin-left: 3rem;
   }
 }
 

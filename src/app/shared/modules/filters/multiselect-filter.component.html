@@ -20,15 +20,6 @@
     matTooltip="{{ tooltip }}"
     matTooltipPosition="after"
   />
-  <span
-    *ngIf="appConfig.autoApplyFilters"
-    matSuffix
-    class="enter-hint"
-    matTooltip="Press Enter to apply"
-    matTooltipPosition="after"
-    matTooltipShowDelay="500"
-    >↵</span
-  >
 
   <mat-autocomplete #mutiselection="matAutocomplete">
     <mat-option

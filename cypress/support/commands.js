@@ -88,6 +88,98 @@ Cypress.Commands.add("finishedLoading", (type) => {
     .should("not.exist");
 });
 
+// --- Advanced search (scientific metadata conditions) ---
+
+const conditionRow = (index) => cy.get('[data-cy="condition-row"]').eq(index);
+
+Cypress.Commands.add("openAdvancedSearch", () => {
+  cy.get('[data-cy="advanced-search-button"]').click();
+  cy.get("condition-filter-dialog").should("be.visible");
+});
+
+/**
+ * Fills the condition row at `index` of the open dialog.
+ * - `field` is "Scientific metadata" or the label of a dataset field,
+ *   `key` picks scientific metadata first when the field is not set.
+ *   Samples have no field, they only have keys.
+ * - `operator` is the symbol of the operator, e.g. ">" or "Between".
+ * - `join` is "AND" or "OR",
+ *   `exclude` switches exclude on.
+ * The key is typed as it is, picking a suggestion is not needed.
+ */
+Cypress.Commands.add(
+  "fillCondition",
+  (index, { field, key, operator, value, min, max, unit, join, exclude }) => {
+    const find = (name) => conditionRow(index).find(`[data-cy="${name}"]`);
+
+    if (join !== undefined) {
+      find("condition-join").contains("button", join).click();
+    }
+    if (exclude) {
+      find("condition-exclude").click();
+    }
+    if (field !== undefined || key !== undefined) {
+      conditionRow(index).then(($row) => {
+        if ($row.find('[data-cy="condition-field"]').length) {
+          find("condition-field").click();
+          cy.get("mat-option")
+            .contains(field ?? "Scientific metadata")
+            .click();
+        }
+      });
+    }
+    if (key !== undefined) {
+      find("condition-key").clear().type(`${key}{esc}`);
+    }
+    if (operator !== undefined) {
+      find("condition-operator").click();
+      cy.get("mat-option").contains(operator).click();
+    }
+    if (value !== undefined) {
+      find("condition-value").clear().type(value);
+    }
+    if (min !== undefined) {
+      find("condition-min").clear().type(min);
+    }
+    if (max !== undefined) {
+      find("condition-max").clear().type(max);
+    }
+    if (unit !== undefined) {
+      find("condition-unit").clear().type(`${unit}{esc}`);
+    }
+  },
+);
+
+/** Adds a condition to the ones that are already there and applies them. */
+Cypress.Commands.add("addCondition", (condition) => {
+  cy.openAdvancedSearch();
+  cy.get('[data-cy="condition-row"]')
+    .last()
+    .then(($row) => {
+      // the last row is taken, unless it is already filled in
+      if (
+        $row.find('[data-cy="condition-key"], [data-cy="condition-value"]')
+          .length
+      ) {
+        cy.get('[data-cy="condition-add"]').click();
+      }
+    });
+  cy.get('[data-cy="condition-row"]').then((rows) =>
+    cy.fillCondition(rows.length - 1, condition),
+  );
+  cy.get('[data-cy="condition-apply"]').click();
+  cy.get("condition-filter-dialog").should("not.exist");
+});
+
+/** Removes all conditions, they are saved with the user settings. */
+Cypress.Commands.add("removeConditions", () => {
+  cy.openAdvancedSearch();
+  // clearing applies at once and closes the dialog
+  cy.get('[data-cy="condition-clear-all"]').click();
+  cy.get("condition-filter-dialog").should("not.exist");
+  cy.get('[data-cy="condition-chip"]').should("not.exist");
+});
+
 Cypress.Commands.add("isLoading", (type) => {
   cy.intercept(lbBaseUrl, (req) => {
     req.on("response", (res) => res.delay(100)); // enough delay so that spinner appears

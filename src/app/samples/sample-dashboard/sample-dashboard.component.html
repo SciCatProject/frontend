@@ -21,17 +21,21 @@
               (search)="onTextSearchChange($event)"
             ></app-search-bar>
             @if (appConfig.scienceSearchEnabled) {
-              <shared-condition
-                #conditionFilter
-                [showConditions]="true"
-                [metadataKeys]="vm.metadataKeys"
-                [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
-                [showConditionToggle]="false"
-                [conditionSettingScope]="'sample'"
-                [addConditionAction]="addCondition"
-                [removeConditionAction]="removeCondition"
-                [dialogTitle]="'Add Sample Metadata Key'"
-              ></shared-condition>
+              <div class="condition-filter">
+                <condition-filter-button
+                  #conditionFilter
+                  scope="sample"
+                  [keySource]="keySource"
+                  [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
+                  (conditionsApplied)="onConditionsApplied($event)"
+                ></condition-filter-button>
+                <condition-filter-chips
+                  [configs]="conditionFilter.configs$ | async"
+                  (filterSelect)="conditionFilter.openFilter($event)"
+                  (filterRemove)="conditionFilter.removeFilter($event)"
+                  (clearAll)="conditionFilter.clearFilters()"
+                ></condition-filter-chips>
+              </div>
             }
             <div class="section-container">
               <button

@@ -1,0 +1,71 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.dropdown-icon {
+  opacity: 0.6;
+}
+
+.option-name {
+  margin-right: 8px;
+}
+
+.option-key {
+  font-family: monospace;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.error-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  font-size: 18px;
+  color: #b00020;
+  cursor: help;
+}
+
+// a quiet footer row: divider above, centered muted text
+.load-more {
+  display: block;
+  width: 100%;
+  min-height: 36px;
+  padding: 0;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: var(--theme-primary-default);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+
+  &:hover {
+    background: color-mix(
+      in srgb,
+      var(--theme-primary-default) 10%,
+      transparent
+    );
+  }
+}
+
+.load-more-option {
+  min-height: 36px;
+  padding: 0;
+  border-top: 1px solid var(--theme-hover-lighter, #e0e0e0);
+}
+
+.load-more-option ::ng-deep .mdc-list-item__primary-text {
+  display: block;
+  width: 100%;
+}
+
+.load-more .more {
+  font-weight: 700;
+}
