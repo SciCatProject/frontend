@@ -136,9 +136,166 @@ describe("DatasetTableActionsComponent", () => {
         setArchiveViewModeAction({
           modeToggle: "on-tape",
           mode: { "datasetlifecycle.retrievable": true },
+          checked: false,
         }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+    });
+  });
+
+  describe("view mode checkbox", () => {
+    const owned: DatasetViewMode = {
+      id: "owned",
+      label: "Owned",
+      where: { "datasetlifecycle.archivable": true },
+      checkbox: {
+        label: "Only datasets owned by my groups",
+        where: { ownerGroup: { $in: "#user.accessGroups" } },
+        exemptGroups: ["admin"],
+      },
+    };
+    const ownedOff: DatasetViewMode = {
+      id: "owned-off",
+      label: "Owned, unticked",
+      where: {},
+      checkbox: {
+        label: "Only mine",
+        default: false,
+        where: { ownerGroup: { $in: "#user.accessGroups" } },
+      },
+    };
+    const ownedQuery = {
+      $and: [
+        { "datasetlifecycle.archivable": true },
+        { ownerGroup: { $in: ["p1234"] } },
+      ],
+    };
+
+    beforeEach(() => {
+      component.modes = [
+        { id: "all", label: "All", where: {} },
+        owned,
+        ownedOff,
+      ];
+      component["user"] = { accessGroups: ["p1234"] };
+    });
+
+    it("should tick a view's checkbox by default and add its query with the user's values", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onModeChange(owned);
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "owned",
+          mode: ownedQuery,
+          checked: true,
+        }),
+      );
+    });
+
+    it("should leave the checkbox unticked when its default is false", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onModeChange(ownedOff);
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "owned-off",
+          mode: {},
+          checked: false,
+        }),
+      );
+    });
+
+    it("should apply or remove the checkbox query for the current view and clear the selection", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      component.currentArchViewMode = "owned";
+
+      component.onModeCheckboxChange(false);
+      expect(dispatchSpy.calls.allArgs()).toEqual([
+        [
+          setArchiveViewModeAction({
+            modeToggle: "owned",
+            mode: { "datasetlifecycle.archivable": true },
+            checked: false,
+          }),
+        ],
+        [clearSelectionAction()],
+      ]);
+
+      dispatchSpy.calls.reset();
+      component.onModeCheckboxChange(true);
+      expect(dispatchSpy.calls.allArgs()).toEqual([
+        [
+          setArchiveViewModeAction({
+            modeToggle: "owned",
+            mode: ownedQuery,
+            checked: true,
+          }),
+        ],
+        [clearSelectionAction()],
+      ]);
+    });
+
+    it("should disable the view buttons until the profile has loaded", () => {
+      component["user"] = null;
+      expect(component.profileLoaded).toBeFalse();
+
+      component["user"] = { accessGroups: ["p1234"] };
+      expect(component.profileLoaded).toBeTrue();
+    });
+
+    it("should show the checkbox only for views that configure one, keeping its space otherwise", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      component.currentArchViewMode = "all";
+      fixture.detectChanges();
+      const checkbox = compiled.querySelector(
+        "[data-cy=dataset-view-mode-checkbox]",
+      );
+      expect(checkbox).toBeTruthy();
+      expect(checkbox.classList).toContain("hidden");
+
+      component.currentArchViewMode = "owned";
+      fixture.detectChanges();
+      expect(checkbox.classList).not.toContain("hidden");
+      expect(checkbox.textContent).toContain(
+        "Only datasets owned by my groups",
+      );
+    });
+
+    it("should not reserve space for the checkbox when no view has one", () => {
+      component.modes = [{ id: "all", label: "All", where: {} }];
+      fixture.detectChanges();
+
+      expect(
+        fixture.debugElement.nativeElement.querySelector(
+          "[data-cy=dataset-view-mode-checkbox]",
+        ),
+      ).toBeNull();
+    });
+
+    it("should neither show nor apply the checkbox for exempt users", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      component["user"] = { accessGroups: ["admin"] };
+
+      component.onModeChange(owned);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "owned",
+          mode: { "datasetlifecycle.archivable": true },
+          checked: false,
+        }),
+      );
+
+      component.currentArchViewMode = "owned";
+      fixture.detectChanges();
+      // still there for the owned-off view, which has no exemptGroups
+      expect(
+        fixture.debugElement.nativeElement.querySelector(
+          "[data-cy=dataset-view-mode-checkbox]",
+        ).classList,
+      ).toContain("hidden");
     });
   });
 

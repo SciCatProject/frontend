@@ -295,8 +295,14 @@ const reducer = createReducer(
 
   on(
     fromActions.setArchiveViewModeAction,
-    (state, { modeToggle, mode }): DatasetState => {
-      const filters = { ...state.filters, skip: 0, mode, modeToggle };
+    (state, { modeToggle, mode, checked }): DatasetState => {
+      const filters = {
+        ...state.filters,
+        skip: 0,
+        mode,
+        modeToggle,
+        modeChecked: checked ?? false,
+      };
       return { ...state, filters };
     },
   ),

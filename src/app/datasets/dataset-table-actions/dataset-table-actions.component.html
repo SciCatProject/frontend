@@ -1,6 +1,7 @@
 <div class="mode-container">
   <mat-button-toggle-group
     [value]="currentArchViewMode"
+    [disabled]="!profileLoaded"
     *ngIf="modes.length > 0"
   >
     <mat-button-toggle
@@ -13,6 +14,17 @@
       {{ mode.label }}
     </mat-button-toggle>
   </mat-button-toggle-group>
+
+  <mat-checkbox
+    *ngIf="hasModeCheckbox"
+    class="mode-checkbox"
+    data-cy="dataset-view-mode-checkbox"
+    [class.hidden]="!selectedModeCheckbox"
+    [checked]="currentArchViewModeChecked"
+    (change)="onModeCheckboxChange($event.checked)"
+  >
+    {{ selectedModeCheckbox?.label }}
+  </mat-checkbox>
 </div>
 
 <div class="action-container" [class.hidden]="loading$ | async">

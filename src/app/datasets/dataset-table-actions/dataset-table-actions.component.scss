@@ -1,5 +1,13 @@
 .mode-container {
   float: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
+
+  .mode-checkbox.hidden {
+    visibility: hidden;
+  }
 
   .public-toggle {
     margin-right: 1em;
