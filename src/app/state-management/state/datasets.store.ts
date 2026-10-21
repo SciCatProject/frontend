@@ -98,6 +98,7 @@ export const initialDatasetState: DatasetState = {
   filters: {
     modeToggle: ArchViewMode.all,
     mode: {},
+    modeChecked: false,
     text: "",
     creationTime: null,
     type: [],
