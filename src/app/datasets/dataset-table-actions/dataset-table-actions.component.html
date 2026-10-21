@@ -1,6 +1,9 @@
 <div class="mode-container">
   @if (modes.length > 0) {
-    <mat-button-toggle-group [value]="currentArchViewMode">
+    <mat-button-toggle-group
+      [value]="currentArchViewMode"
+      [disabled]="!profileLoaded"
+    >
       @for (mode of modes; track mode.id) {
         <mat-button-toggle
           (click)="onModeChange(mode)"
@@ -12,6 +15,18 @@
         </mat-button-toggle>
       }
     </mat-button-toggle-group>
+  }
+
+  @if (hasModeCheckbox) {
+    <mat-checkbox
+      class="mode-checkbox"
+      data-cy="dataset-view-mode-checkbox"
+      [class.hidden]="!selectedModeCheckbox"
+      [checked]="currentArchViewModeChecked"
+      (change)="onModeCheckboxChange($event.checked)"
+    >
+      {{ selectedModeCheckbox?.label }}
+    </mat-checkbox>
   }
 </div>
 
