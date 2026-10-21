@@ -398,12 +398,8 @@ describe("ConditionFilterDialogComponent", () => {
       expect(joins()).toEqual([undefined, "AND", "OR"]);
     });
 
-    it("should only offer Add AND in a group where every filter has a field", () => {
+    it("should offer Add AND in every group, also while a filter has no field", () => {
       createComponent();
-      fixture.detectChanges();
-      expect(cells("[data-cy=condition-add-and]").length).toBe(0);
-
-      component.setField(id(), "keywords");
       fixture.detectChanges();
 
       expect(cells("[data-cy=condition-add-and]").length).toBe(1);

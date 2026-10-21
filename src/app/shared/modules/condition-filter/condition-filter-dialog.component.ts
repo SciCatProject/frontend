@@ -408,11 +408,6 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
     this.revealRow(row.id);
   }
 
-  /** A group that still has a row without a field has nothing to add AND to. */
-  canAddAnd(group: Row[]): boolean {
-    return group.every(({ condition }) => this.getKind(condition) !== "none");
-  }
-
   /** Adds a filter to a group, AND joins it to the one before. */
   addRowToGroup(groupIndex: number): void {
     const row = this.createRow(blankDraft());
