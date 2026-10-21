@@ -213,23 +213,37 @@ describe("DatasetTableActionsComponent", () => {
       component.currentArchViewMode = "owned";
 
       component.onModeCheckboxChange(false);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "owned",
-          mode: { "datasetlifecycle.archivable": true },
-          checked: false,
-        }),
-      );
+      expect(dispatchSpy.calls.allArgs()).toEqual([
+        [
+          setArchiveViewModeAction({
+            modeToggle: "owned",
+            mode: { "datasetlifecycle.archivable": true },
+            checked: false,
+          }),
+        ],
+        [clearSelectionAction()],
+      ]);
 
+      dispatchSpy.calls.reset();
       component.onModeCheckboxChange(true);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({
-          modeToggle: "owned",
-          mode: ownedQuery,
-          checked: true,
-        }),
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+      expect(dispatchSpy.calls.allArgs()).toEqual([
+        [
+          setArchiveViewModeAction({
+            modeToggle: "owned",
+            mode: ownedQuery,
+            checked: true,
+          }),
+        ],
+        [clearSelectionAction()],
+      ]);
+    });
+
+    it("should disable the view buttons until the profile has loaded", () => {
+      component["user"] = null;
+      expect(component.profileLoaded).toBeFalse();
+
+      component["user"] = { accessGroups: ["p1234"] };
+      expect(component.profileLoaded).toBeTrue();
     });
 
     it("should show the checkbox only for views that configure one, keeping its space otherwise", () => {

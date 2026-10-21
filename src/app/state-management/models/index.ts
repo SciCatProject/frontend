@@ -237,6 +237,8 @@ export interface DatasetFilters extends GenericFilters {
   creationLocation: string[];
   keywords: string[];
   mode: Record<string, unknown>;
+  // whether the view's checkbox is ticked; mode already includes its where
+  modeChecked: boolean;
   scientific: ScientificCondition[];
   isPublished: boolean | "";
   pid: string | { $regex: string };

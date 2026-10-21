@@ -28,6 +28,7 @@ const initialDatasetState: DatasetState = {
   filters: {
     mode: {},
     modeToggle: ArchViewMode.all,
+    modeChecked: false,
     text: "",
     creationTime: {
       $gte: { $date: "2019-10-03" },
@@ -44,7 +45,6 @@ const initialDatasetState: DatasetState = {
     isPublished: false,
     pid: "",
   },
-  viewModeChecked: false,
   pagination: {
     skip: 0,
     limit: 30,
@@ -327,12 +327,33 @@ describe("test dataset selectors", () => {
   });
 
   describe("view mode checkbox", () => {
-    const state = { ...initialDatasetState, viewModeChecked: true };
+    const state = {
+      ...initialDatasetState,
+      filters: { ...initialDatasetState.filters, modeChecked: true },
+    };
 
     it("should select whether the view's checkbox is ticked", () => {
       expect(
-        fromDatasetSelectors.selectArchiveViewModeChecked.projector(state),
+        fromDatasetSelectors.selectArchiveViewModeChecked.projector(
+          state.filters,
+        ),
       ).toBeTrue();
+    });
+
+    it("should not send it to the backend", () => {
+      const { query } =
+        fromDatasetSelectors.selectFullqueryParams.projector(state);
+      expect(query).not.toEqual(
+        jasmine.objectContaining({ modeChecked: jasmine.anything() }),
+      );
+
+      const { fields } = fromDatasetSelectors.selectFullfacetParams.projector(
+        state,
+        initialUserState.settings.fe_dataset_table_filters,
+      );
+      expect(fields).not.toEqual(
+        jasmine.objectContaining({ modeChecked: jasmine.anything() }),
+      );
     });
   });
 

@@ -12,6 +12,8 @@ const USER = "#user.";
 const PLACEHOLDER = /^#user\.[\w-]+(?:\.[\w-]+|\[\d+\])*$/;
 
 function resolvePlaceholder(value: string, user?: ViewModeUser | null) {
+  // the profile hasn't loaded yet, the query is rebuilt once it has
+  if (!user) return null;
   const resolved = get(user, value.slice(USER.length));
   if (resolved !== undefined) return resolved;
   console.warn(`Dataset view mode placeholder ${value} has no value`);
@@ -34,8 +36,8 @@ export function checkboxAppliesTo(
   user?: ViewModeUser | null,
 ): boolean {
   const checkbox = viewMode?.checkbox;
-  if (!checkbox) return false;
-  const groups = user?.accessGroups ?? [];
+  if (!checkbox || !user) return false;
+  const groups = user.accessGroups ?? [];
   return !(checkbox.exemptGroups ?? []).some((g) => groups.includes(g));
 }
 

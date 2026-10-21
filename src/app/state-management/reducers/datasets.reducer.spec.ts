@@ -380,7 +380,7 @@ describe("DatasetsReducer", () => {
       expect(state.filters.mode).toEqual(mode);
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
-      expect(state.viewModeChecked).toBeFalse();
+      expect(state.filters.modeChecked).toBeFalse();
     });
 
     it("should store whether the view's checkbox is ticked", () => {
@@ -391,7 +391,7 @@ describe("DatasetsReducer", () => {
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.viewModeChecked).toBeTrue();
+      expect(state.filters.modeChecked).toBeTrue();
     });
   });
 
@@ -417,6 +417,20 @@ describe("DatasetsReducer", () => {
       expect(state.filters.text).toEqual(values.text);
       expect(state.searchTerms).toEqual(values.text);
       expect(state.hasPrefilledFilters).toEqual(true);
+    });
+
+    it("should restore the view's checkbox together with its query", () => {
+      const values = {
+        modeToggle: "owned",
+        mode: { $and: [{}, { ownerGroup: { $in: ["p1234"] } }] },
+        modeChecked: true,
+      };
+      const action = fromActions.prefillFiltersAction({ values });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.filters.modeToggle).toEqual("owned");
+      expect(state.filters.mode).toEqual(values.mode);
+      expect(state.filters.modeChecked).toBeTrue();
     });
   });
 
@@ -454,7 +468,7 @@ describe("DatasetsReducer", () => {
         fromActions.clearFacetsAction(),
       );
 
-      expect(state.viewModeChecked).toBeFalse();
+      expect(state.filters.modeChecked).toBeFalse();
     });
   });
 

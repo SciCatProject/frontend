@@ -59,7 +59,16 @@ describe("dataset view modes utils", () => {
       });
     });
 
-    it("should use null, with a warning, without a user or for unknown fields", () => {
+    it("should use null, with a warning, for unknown fields", () => {
+      const warnSpy = spyOn(console, "warn");
+
+      expect(resolveUserPlaceholders({ a: "#user.unknown" }, user)).toEqual({
+        a: null,
+      });
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("should use null, without a warning, before the profile has loaded", () => {
       const warnSpy = spyOn(console, "warn");
 
       expect(
@@ -74,10 +83,7 @@ describe("dataset view modes utils", () => {
         contactEmail: null,
         ownerGroup: { $in: null },
       });
-      expect(resolveUserPlaceholders({ a: "#user.unknown" }, user)).toEqual({
-        a: null,
-      });
-      expect(warnSpy).toHaveBeenCalledTimes(3);
+      expect(warnSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -160,6 +166,13 @@ describe("dataset view modes utils", () => {
           { "datasetlifecycle.archivable": true },
           { ownerGroup: { $in: ["p1234"] } },
         ],
+      });
+    });
+
+    it("should not apply the checkbox before the profile has loaded", () => {
+      expect(checkboxAppliesTo(viewMode, null)).toBeFalse();
+      expect(buildViewModeQuery(viewMode, true, null)).toEqual({
+        "datasetlifecycle.archivable": true,
       });
     });
 
