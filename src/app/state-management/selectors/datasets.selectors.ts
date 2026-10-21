@@ -139,6 +139,11 @@ export const selectArchiveViewMode = createSelector(
   (filters) => filters.modeToggle,
 );
 
+export const selectArchiveViewModeChecked = createSelector(
+  selectDatasetState,
+  (state) => state.viewModeChecked,
+);
+
 export const selectPublicViewMode = createSelector(
   selectFilters,
   (filters) => filters.isPublished,

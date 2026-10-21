@@ -44,6 +44,7 @@ const initialDatasetState: DatasetState = {
     isPublished: false,
     pid: "",
   },
+  viewModeChecked: false,
   pagination: {
     skip: 0,
     limit: 30,
@@ -322,6 +323,16 @@ describe("test dataset selectors", () => {
           initialDatasetState,
         ).query,
       );
+    });
+  });
+
+  describe("view mode checkbox", () => {
+    const state = { ...initialDatasetState, viewModeChecked: true };
+
+    it("should select whether the view's checkbox is ticked", () => {
+      expect(
+        fromDatasetSelectors.selectArchiveViewModeChecked.projector(state),
+      ).toBeTrue();
     });
   });
 

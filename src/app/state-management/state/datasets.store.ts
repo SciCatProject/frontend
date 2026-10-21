@@ -47,6 +47,7 @@ export interface DatasetState {
   keywordsTerms: string;
   pidTerms: string;
   filters: DatasetFilters;
+  viewModeChecked: boolean;
   pagination: Pagination;
 
   relatedDatasetsFilters: {
@@ -95,6 +96,7 @@ export const initialDatasetState: DatasetState = {
     isPublished: "",
     pid: "",
   },
+  viewModeChecked: false,
   pagination: {
     skip: 0,
     limit: 25,
