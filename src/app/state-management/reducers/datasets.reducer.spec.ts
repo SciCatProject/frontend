@@ -52,14 +52,19 @@ describe("DatasetsReducer", () => {
   });
 
   describe("on fetchDatasetsFailedAction", () => {
-    it("should clear the datasets of the previous query", () => {
+    it("should clear the datasets of the previous query and their selection", () => {
       const action = fromActions.fetchDatasetsFailedAction();
       const state = fromDatasets.datasetsReducer(
-        { ...initialDatasetState, datasets: [dataset] },
+        {
+          ...initialDatasetState,
+          datasets: [dataset],
+          selectedSets: [dataset],
+        },
         action,
       );
 
       expect(state.datasets).toEqual([]);
+      expect(state.selectedSets).toEqual([]);
     });
   });
 
