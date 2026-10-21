@@ -6,7 +6,6 @@ import {
   OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
-  ArchViewMode,
   DatasetFilters,
   DateRangeFilter,
   FacetCounts,
@@ -271,7 +270,7 @@ export const setPidTermsAction = createAction(
 );
 export const setArchiveViewModeAction = createAction(
   "[Dataset] Set Archive View Mode",
-  props<{ modeToggle: ArchViewMode }>(),
+  props<{ modeToggle: string; mode: Record<string, unknown> }>(),
 );
 export const setPublicViewModeAction = createAction(
   "[Dataset] Set Public View Mode",
