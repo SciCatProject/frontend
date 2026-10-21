@@ -16,9 +16,11 @@ const reducer = createReducer(
     }),
   ),
   // the previous rows belong to another query, don't let them be selected
+  // or acted on
   on(fromActions.fetchDatasetsFailedAction, (state): DatasetState => ({
     ...state,
     datasets: [],
+    selectedSets: [],
   })),
 
   on(fromActions.fetchFacetCountsAction, (state): DatasetState => ({
