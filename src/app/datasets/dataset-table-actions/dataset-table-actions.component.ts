@@ -94,10 +94,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearSelectionAction());
   }
 
-  get profileLoaded(): boolean {
-    return !!this.user;
-  }
-
   get selectedMode(): DatasetViewMode | undefined {
     return this.modes.find((m) => m.id === this.currentArchViewMode);
   }

@@ -238,14 +238,6 @@ describe("DatasetTableActionsComponent", () => {
       ]);
     });
 
-    it("should disable the view buttons until the profile has loaded", () => {
-      component["user"] = null;
-      expect(component.profileLoaded).toBeFalse();
-
-      component["user"] = { accessGroups: ["p1234"] };
-      expect(component.profileLoaded).toBeTrue();
-    });
-
     it("should show the checkbox only for views that configure one, keeping its space otherwise", () => {
       const compiled = fixture.debugElement.nativeElement;
       component.currentArchViewMode = "all";
