@@ -1,186 +1,186 @@
 <div style="margin-top: 1em">
-  <div *ngIf="hasBatch; else empty_batch">
-    <div style="text-align: right; margin-bottom: 1em">
-      <div *ngIf="editingPublishedDataDoi">
-        You are currently editing
-        <a (click)="onCancelEdit()">{{ editingPublishedDataDoi }}</a>
-        dataset list.
-      </div>
-      <button
-        *ngIf="editingPublishedDataDoi"
-        mat-button
-        id="changeSelectionButton"
-        (click)="onChangeSelection()"
-        class="button"
-        color="primary"
-      >
-        <mat-icon> edit </mat-icon>
-        Select new datasets
-      </button>
-      <button
-        *ngIf="editingPublishedDataDoi"
-        mat-button
-        id="saveChangesButton"
-        (click)="onSaveChanges()"
-        class="button"
-        color="primary"
-      >
-        <mat-icon> save </mat-icon>
-        Save Changes
-      </button>
-      <button
-        *ngIf="editingPublishedDataDoi"
-        mat-button
-        id="cancelButton"
-        (click)="onCancelEdit()"
-        class="button"
-        color="warn"
-      >
-        <mat-icon> close </mat-icon>
-        Cancel
-      </button>
-      <button
-        *ngIf="!editingPublishedDataDoi"
-        (click)="onEmpty()"
-        mat-button
-        class="button"
-        color="primary"
-      >
-        <mat-icon> remove_circle_outline </mat-icon>
-        Empty Selection
-      </button>
-      <button
-        *ngIf="!editingPublishedDataDoi"
-        mat-button
-        id="exportCsvButton"
-        (click)="onExportCsv()"
-        class="button"
-        color="primary"
-      >
-        <mat-icon> download </mat-icon>
-        Export CSV
-      </button>
-      <button
-        *ngIf="!editingPublishedDataDoi"
-        mat-button
-        id="publishButton"
-        (click)="onPublish()"
-        class="button"
-        color="primary"
-      >
-        <mat-icon> school </mat-icon>
-        Publish
-      </button>
-      <ng-container *ngIf="shareEnabled">
-        <button
-          *ngIf="!editingPublishedDataDoi"
-          mat-button
-          (click)="onShare()"
-          id="shareButton"
-          class="button"
-          color="primary"
-        >
-          <mat-icon> share </mat-icon>
-          Share
-        </button>
-      </ng-container>
-      <configurable-actions *ngIf="appConfig.batchActionsEnabled"
-        [actionsConfig]="appConfig.batchActions" [actionItems]="actionItems"
-        [buttonsStyle]="actionButtonsStyle"
-        (actionFinished)="onActionFinished($event)">
-      </configurable-actions>
-    </div>
-
-    <mat-table
-      [dataSource]="batch$"
-      class="mat-elevation-z2"
-      style="margin-left: 1em"
-      data-cy="batch-table"
-    >
-      <ng-container matColumnDef="remove">
-        <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <mat-icon> remove_circle </mat-icon>
-            </div>
-            <div>Remove</div>
+  @if (hasBatch) {
+    <div>
+      <div style="text-align: right; margin-bottom: 1em">
+        @if (editingPublishedDataDoi) {
+          <div>
+            You are currently editing
+            <a (click)="onCancelEdit()">{{ editingPublishedDataDoi }}</a>
+            dataset list.
           </div>
-        </mat-header-cell>
-
-        <mat-cell *matCellDef="let dataset">
-          <button mat-icon-button color="warn" (click)="onRemove(dataset)">
-            <mat-icon> remove_circle </mat-icon>
+        }
+        @if (editingPublishedDataDoi) {
+          <button
+            mat-button
+            id="changeSelectionButton"
+            (click)="onChangeSelection()"
+            class="button"
+            color="primary"
+          >
+            <mat-icon> edit </mat-icon>
+            Select new datasets
           </button>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="pid">
-        <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <mat-icon> perm_contact_calendar </mat-icon>
-            </div>
-            <div>PID</div>
-          </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let dataset">{{ dataset.pid }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="sourceFolder">
-        <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <mat-icon> folder </mat-icon>
-            </div>
-            <div>Source Folder</div>
-          </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let dataset">{{
-          dataset.sourceFolder
-        }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="size">
-        <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <mat-icon> save </mat-icon>
-            </div>
-            <div>Size</div>
-          </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let dataset">
-          {{ dataset.size | filesize }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="creationTime">
-        <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <mat-icon> calendar_today </mat-icon>
-            </div>
-            <div>Creation Time</div>
-          </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let dataset">
-          {{ dataset.creationTime | date }}
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row
-        class="datasets-header first-header-row"
-        *matHeaderRowDef="visibleColumns"
+        }
+        @if (editingPublishedDataDoi) {
+          <button
+            mat-button
+            id="saveChangesButton"
+            (click)="onSaveChanges()"
+            class="button"
+            color="primary"
+          >
+            <mat-icon> save </mat-icon>
+            Save Changes
+          </button>
+        }
+        @if (editingPublishedDataDoi) {
+          <button
+            mat-button
+            id="cancelButton"
+            (click)="onCancelEdit()"
+            class="button"
+            color="warn"
+          >
+            <mat-icon> close </mat-icon>
+            Cancel
+          </button>
+        }
+        @if (!editingPublishedDataDoi) {
+          <button (click)="onEmpty()" mat-button class="button" color="primary">
+            <mat-icon> remove_circle_outline </mat-icon>
+            Empty Selection
+          </button>
+        }
+        @if (!editingPublishedDataDoi) {
+          <button
+            mat-button
+            id="exportCsvButton"
+            (click)="onExportCsv()"
+            class="button"
+            color="primary"
+          >
+            <mat-icon> download </mat-icon>
+            Export CSV
+          </button>
+        }
+        @if (!editingPublishedDataDoi) {
+          <button
+            mat-button
+            id="publishButton"
+            (click)="onPublish()"
+            class="button"
+            color="primary"
+          >
+            <mat-icon> school </mat-icon>
+            Publish
+          </button>
+        }
+        @if (shareEnabled) {
+          @if (!editingPublishedDataDoi) {
+            <button
+              mat-button
+              (click)="onShare()"
+              id="shareButton"
+              class="button"
+              color="primary"
+            >
+              <mat-icon> share </mat-icon>
+              Share
+            </button>
+          }
+        }
+        @if (appConfig.batchActionsEnabled) {
+          <configurable-actions
+            [actionsConfig]="appConfig.batchActions"
+            [actionItems]="actionItems"
+            [buttonsStyle]="actionButtonsStyle"
+            (actionFinished)="onActionFinished($event)"
+          >
+          </configurable-actions>
+        }
+      </div>
+      <mat-table
+        [dataSource]="batch$"
+        class="mat-elevation-z2"
+        style="margin-left: 1em"
+        data-cy="batch-table"
       >
-      </mat-header-row>
-
-      <mat-row *matRowDef="let dataset; columns: visibleColumns"> </mat-row>
-    </mat-table>
-  </div>
-
-  <ng-template #empty_batch>
+        <ng-container matColumnDef="remove">
+          <mat-header-cell *matHeaderCellDef>
+            <div fxLayout="column" style="align-items: center">
+              <div>
+                <mat-icon> remove_circle </mat-icon>
+              </div>
+              <div>Remove</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let dataset">
+            <button mat-icon-button color="warn" (click)="onRemove(dataset)">
+              <mat-icon> remove_circle </mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="pid">
+          <mat-header-cell *matHeaderCellDef>
+            <div fxLayout="column" style="align-items: center">
+              <div>
+                <mat-icon> perm_contact_calendar </mat-icon>
+              </div>
+              <div>PID</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let dataset">{{ dataset.pid }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="sourceFolder">
+          <mat-header-cell *matHeaderCellDef>
+            <div fxLayout="column" style="align-items: center">
+              <div>
+                <mat-icon> folder </mat-icon>
+              </div>
+              <div>Source Folder</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let dataset">{{
+            dataset.sourceFolder
+          }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="size">
+          <mat-header-cell *matHeaderCellDef>
+            <div fxLayout="column" style="align-items: center">
+              <div>
+                <mat-icon> save </mat-icon>
+              </div>
+              <div>Size</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let dataset">
+            {{ dataset.size | filesize }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="creationTime">
+          <mat-header-cell *matHeaderCellDef>
+            <div fxLayout="column" style="align-items: center">
+              <div>
+                <mat-icon> calendar_today </mat-icon>
+              </div>
+              <div>Creation Time</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let dataset">
+            {{ dataset.creationTime | date }}
+          </mat-cell>
+        </ng-container>
+        <mat-header-row
+          class="datasets-header first-header-row"
+          *matHeaderRowDef="visibleColumns"
+        >
+        </mat-header-row>
+        <mat-row *matRowDef="let dataset; columns: visibleColumns"> </mat-row>
+      </mat-table>
+    </div>
+  } @else {
     <mat-card class="empty-batch-message">
       <mat-icon>info</mat-icon> There are no datasets in the batch.
     </mat-card>
-  </ng-template>
+  }
 </div>
