@@ -73,7 +73,7 @@
     </mat-form-field>
   </div>
   <div
-    *ngIf="pagination"
+    *ngIf="pagination && appConfig.paginationPosition !== 'bottom'"
     class="paginator-container"
     [class.is-loading]="pagination?.isLoading"
   >
@@ -581,19 +581,23 @@
   </ng-container>
 </div>
 <div
-  *ngIf="pagination"
-  class="paginator-container"
-  [class.is-loading]="pagination?.isLoading"
+  class="table-footer-controls"
 >
-  <mat-paginator
-    class="datasets-paginator datasets-footer-paginator"
-    [pageSizeOptions]="pagination.pageSizeOptions"
-    [pageIndex]="pagination.pageIndex"
-    [length]="pagination.length"
-    [pageSize]="pagination.pageSize"
-    (page)="pagination_onChange($event)"
+  <div
+    *ngIf="pagination && appConfig.paginationPosition !== 'top'"
+    class="paginator-container"
+    [class.is-loading]="pagination?.isLoading"
   >
-  </mat-paginator>
+    <mat-paginator
+      class="datasets-paginator datasets-footer-paginator"
+      [pageSizeOptions]="pagination.pageSizeOptions"
+      [pageIndex]="pagination.pageIndex"
+      [length]="pagination.length"
+      [pageSize]="pagination.pageSize"
+      (page)="pagination_onChange($event)"
+    >
+    </mat-paginator>
+  </div>
 </div>
 <!-- Context Menu -->
 <div

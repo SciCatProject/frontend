@@ -66,4 +66,12 @@ describe("ProposalTableComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should render the shared table with the proposal table class", () => {
+    const table = fixture.nativeElement.querySelector(
+      "dynamic-mat-table.proposal-table",
+    );
+
+    expect(table).not.toBeNull();
+  });
 });

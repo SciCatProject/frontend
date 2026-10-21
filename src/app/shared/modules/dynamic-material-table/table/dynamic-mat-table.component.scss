@@ -461,6 +461,7 @@ cdk-virtual-scroll-viewport {
   justify-content: space-between;
   gap: 1rem;
   margin: 0.5rem 0;
+  width: 100%;
 
   &.with-side-filter {
     margin-left: 3rem;
@@ -478,30 +479,35 @@ cdk-virtual-scroll-viewport {
     }
   }
 
+  .global-search-wrapper,
+  .paginator-container {
+    box-sizing: border-box;
+    height: 48px;
+    background-color: white;
+    border: 1px solid var(--theme-primary-default);
+    border-radius: 10px;
+
+    &:hover,
+    &:focus-within {
+      border-color: var(--theme-primary-default);
+    }
+  }
+
   .global-search-wrapper {
-    padding: 0 20px;
+    padding: 5px 20px;
     flex: 1 1 auto;
-    width: 100%;
-    min-width: 500px;
-    max-width: 33%;
+    width: auto;
+    min-width: 0;
+    max-width: none;
 
     mat-form-field {
       width: 100%;
     }
 
     ::ng-deep .mat-mdc-text-field-wrapper {
-      background-color: white;
-      border-radius: 24px;
-      border: 1px solid var(--theme-hover-lighter);
+      background-color: transparent;
+      border: 0;
       padding: 0 8px;
-
-      &:hover {
-        border-color: var(--theme-primary-default);
-      }
-    }
-
-    ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--focused {
-      border-color: var(--theme-primary-default);
     }
 
     ::ng-deep .mat-mdc-form-field-underline,
@@ -511,7 +517,7 @@ cdk-virtual-scroll-viewport {
     }
 
     ::ng-deep .mat-mdc-form-field-infix {
-      padding: 12px 20px;
+      padding: 8px 20px;
       min-height: auto;
     }
 
@@ -521,18 +527,31 @@ cdk-virtual-scroll-viewport {
   }
 }
 
+.table-footer-controls {
+  display: flex;
+  margin: 5px 0;
+
+  .paginator-container {
+    box-sizing: border-box;
+    height: 48px;
+    background-color: white;
+    border: 1px solid var(--theme-primary-default);
+    border-radius: 10px;
+    margin-left: auto;
+  }
+}
 // Root level paginator container (bottom of table)
 mat-paginator {
   //flex: 1 1 auto;
   white-space: nowrap;
+  height: 30px;
   //min-width: fit-content;
 }
 
 ::ng-deep mat-paginator.mat-mdc-paginator {
-  border: 1px solid var(--theme-hover-lighter);
-  border-radius: 24px;
-  margin-right: 10px;
-  margin-bottom: 5px;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
 
   /* Target the paginator's form field */
   mat-form-field.mat-mdc-form-field.mat-mdc-paginator-page-size-select {
@@ -591,12 +610,38 @@ mat-paginator {
 
 .paginator-container {
   display: flex;
-  flex: 1;
-  height: 48px;
-  //border: 1px solid var(--theme-hover-lighter);
-  //border-radius: 24px;
+  flex: 0 0 auto;
+  width: auto;
+  min-width: fit-content;
   justify-content: flex-end;
   align-items: center;
+}
+
+@media (max-width: 768px) {
+  .table-header-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .table-header-controls.with-side-filter {
+    margin-left: 0;
+  }
+
+  .table-header-controls .global-search-wrapper,
+  .table-header-controls .paginator-container {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .table-header-controls .paginator-container {
+    justify-content: stretch;
+  }
+
+  .table-header-controls .paginator-container mat-paginator {
+    width: 100%;
+  }
 }
 
 .paginator-container.is-loading {
