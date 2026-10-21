@@ -1,10 +1,12 @@
 <div class="configurable-actions">
-  <configurable-action
-    *ngFor="let actionConfig of sortedActionsConfig"
-    [actionConfig]="actionConfig"
-    [actionItems]="actionItems"
-    [buttonStyle]="buttonsStyle"
-    (actionFinished)="actionFinished.emit($event)"
-  >
-  </configurable-action>
+  <ng-container *ngIf="profileReady$ | async">
+    <configurable-action
+      *ngFor="let actionConfig of sortedActionsConfig"
+      [actionConfig]="actionConfig"
+      [actionItems]="actionItems"
+      [buttonStyle]="buttonsStyle"
+      (actionFinished)="actionFinished.emit($event)"
+    >
+    </configurable-action>
+  </ng-container>
 </div>

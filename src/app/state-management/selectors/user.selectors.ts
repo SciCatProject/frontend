@@ -151,6 +151,11 @@ export const selectHasFetchedSettings = createSelector(
   (state) => state.hasFetchedSettings,
 );
 
+export const selectHasFetchedProfile = createSelector(
+  selectUserState,
+  (state) => state.hasFetchedProfile,
+);
+
 export const selectColumnsWithHasFetchedSettings = createSelector(
   selectColumns,
   selectHasFetchedSettings,

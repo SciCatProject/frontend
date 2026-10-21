@@ -167,6 +167,7 @@ export const initialUserState: UserState = {
 
   conditions: [],
   hasFetchedSettings: false,
+  hasFetchedProfile: false,
 };
 
 describe("User Selectors", () => {
@@ -277,6 +278,17 @@ describe("User Selectors", () => {
       expect(
         fromSelectors.selectIsLoggedIn.projector(initialUserState),
       ).toEqual(false);
+    });
+  });
+
+  describe("selectHasFetchedProfile", () => {
+    it("should select hasFetchedProfile", () => {
+      expect(
+        fromSelectors.selectHasFetchedProfile.projector({
+          ...initialUserState,
+          hasFetchedProfile: true,
+        }),
+      ).toEqual(true);
     });
   });
 

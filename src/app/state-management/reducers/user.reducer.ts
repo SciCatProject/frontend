@@ -33,14 +33,19 @@ const reducer = createReducer(
 
   on(
     fromActions.loginCompleteAction,
-    (state, { user, accountType }): UserState => ({
-      ...state,
-      currentUser: user,
-      accountType,
-      isLoggingIn: false,
-      isLoggedIn: true,
-      hasFetchedSettings: false,
-    }),
+    (state, { user, accountType }): UserState => {
+      const sameUser = state.currentUser?.id === user.id;
+      return {
+        ...state,
+        currentUser: user,
+        profile: sameUser ? state.profile : null,
+        hasFetchedProfile: sameUser ? state.hasFetchedProfile : false,
+        accountType,
+        isLoggingIn: false,
+        isLoggedIn: true,
+        hasFetchedSettings: false,
+      };
+    },
   ),
   on(fromActions.loginFailedAction, (state): UserState => ({
     ...state,
@@ -59,11 +64,23 @@ const reducer = createReducer(
 
   on(
     fromActions.fetchUserIdentityCompleteAction,
-    (state, { userIdentity }): UserState => ({
-      ...state,
-      profile: userIdentity.profile,
-    }),
+    (state, { userIdentity }): UserState => {
+      // the user has no identity: nothing to wait for
+      if (!userIdentity) return { ...state, hasFetchedProfile: true };
+      // ignore late responses for a previous session or user
+      if (userIdentity.userId !== state.currentUser?.id) return state;
+      return {
+        ...state,
+        profile: userIdentity.profile,
+        hasFetchedProfile: true,
+      };
+    },
   ),
+
+  on(fromActions.fetchUserIdentityFailedAction, (state): UserState => ({
+    ...state,
+    hasFetchedProfile: true,
+  })),
 
   on(
     fromActions.fetchUserSettingsCompleteAction,

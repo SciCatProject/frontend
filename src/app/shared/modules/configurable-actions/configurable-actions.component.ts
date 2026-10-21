@@ -6,6 +6,13 @@ import {
 } from "./configurable-action.interfaces";
 
 import { AppConfigService } from "app-config.service";
+import { Store } from "@ngrx/store";
+import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
+import {
+  selectHasFetchedProfile,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "configurable-actions",
@@ -26,7 +33,19 @@ export class ConfigurableActionsComponent {
     error?: Error;
   }>();
 
-  constructor(public appConfigService: AppConfigService) {}
+  // actions read the user's groups and #user fields: for a logged-in user,
+  // wait until the profile request has finished
+  profileReady$ = combineLatest([
+    this.store.select(selectIsLoggedIn),
+    this.store.select(selectHasFetchedProfile),
+  ]).pipe(
+    map(([loggedIn, hasFetchedProfile]) => !loggedIn || hasFetchedProfile),
+  );
+
+  constructor(
+    public appConfigService: AppConfigService,
+    private store: Store,
+  ) {}
 
   get maxFileSize(): number {
     return this.appConfigService.getConfig().maxDirectDownloadSize || 0;

@@ -57,6 +57,47 @@ describe("UserReducer", () => {
       expect(state.isLoggingIn).toEqual(false);
       expect(state.isLoggedIn).toEqual(true);
     });
+
+    const user1 = { id: "user1", authStrategy: "", email: "", username: "" };
+    const profile = { accessGroups: ["p1234"] };
+
+    it("should drop the profile of a previous user", () => {
+      const action = fromActions.loginCompleteAction({
+        user: { ...user1, id: "user2" },
+        accountType: "test",
+      });
+      const state = userReducer(
+        {
+          ...initialUserState,
+          currentUser: user1,
+          profile,
+          hasFetchedProfile: true,
+        },
+        action,
+      );
+
+      expect(state.profile).toBeNull();
+      expect(state.hasFetchedProfile).toBeFalse();
+    });
+
+    it("should keep the profile when the same user completes the login again", () => {
+      const action = fromActions.loginCompleteAction({
+        user: user1,
+        accountType: "test",
+      });
+      const state = userReducer(
+        {
+          ...initialUserState,
+          currentUser: user1,
+          profile,
+          hasFetchedProfile: true,
+        },
+        action,
+      );
+
+      expect(state.profile).toEqual(profile);
+      expect(state.hasFetchedProfile).toBeTrue();
+    });
   });
 
   describe("on loginFailedAction", () => {
@@ -87,32 +128,85 @@ describe("UserReducer", () => {
   });
 
   describe("on fetchUserIdentityCompleteAction", () => {
-    it("should set profile", () => {
-      const userIdentity: UserIdentity = {
-        authStrategy: "",
-        created: "",
-        credentials: {},
-        externalId: "",
-        modified: "",
-        profile: {
-          accessGroups: [],
-          displayName: "",
-          email: "",
-          emails: [],
-          id: "",
-          oidcClaims: [],
-          thumbnailPhoto: "",
-          username: "",
-        },
-        provider: "",
-        userId: "",
-      };
+    const profile = {
+      accessGroups: ["p1234"],
+      displayName: "",
+      email: "",
+      emails: [],
+      id: "",
+      oidcClaims: [],
+      thumbnailPhoto: "",
+      username: "",
+    };
+    const identityOf = (userId: string): UserIdentity => ({
+      authStrategy: "",
+      created: "",
+      credentials: {},
+      externalId: "",
+      modified: "",
+      profile,
+      provider: "",
+      userId,
+    });
+    const loggedInAs = (id: string) => ({
+      ...initialUserState,
+      currentUser: { id, authStrategy: "", email: "", username: "" },
+    });
+
+    it("should set the profile of the current user", () => {
       const action = fromActions.fetchUserIdentityCompleteAction({
-        userIdentity,
+        userIdentity: identityOf("user1"),
+      });
+      const state = userReducer(loggedInAs("user1"), action);
+
+      expect(state.profile).toEqual(profile);
+      expect(state.hasFetchedProfile).toBeTrue();
+    });
+
+    it("should ignore the profile of another user", () => {
+      const action = fromActions.fetchUserIdentityCompleteAction({
+        userIdentity: identityOf("user1"),
+      });
+      const state = userReducer(
+        { ...loggedInAs("user2"), profile: null },
+        action,
+      );
+
+      expect(state.profile).toBeNull();
+      expect(state.hasFetchedProfile).toBeFalse();
+    });
+
+    it("should ignore a late response after logout", () => {
+      const action = fromActions.fetchUserIdentityCompleteAction({
+        userIdentity: identityOf("user1"),
+      });
+      const state = userReducer(
+        { ...initialUserState, currentUser: undefined, profile: null },
+        action,
+      );
+
+      expect(state.profile).toBeNull();
+    });
+  });
+
+  describe("when the user has no identity", () => {
+    it("should stop waiting for the profile", () => {
+      const action = fromActions.fetchUserIdentityCompleteAction({
+        userIdentity: null,
       });
       const state = userReducer(initialUserState, action);
 
-      expect(state.profile).toEqual(userIdentity.profile);
+      expect(state.profile).toBeNull();
+      expect(state.hasFetchedProfile).toBeTrue();
+    });
+  });
+
+  describe("on fetchUserIdentityFailedAction", () => {
+    it("should stop waiting for the profile", () => {
+      const action = fromActions.fetchUserIdentityFailedAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state.hasFetchedProfile).toBeTrue();
     });
   });
 

@@ -9,7 +9,11 @@ import { PipesModule } from "shared/pipes/pipes.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
-import { StoreModule } from "@ngrx/store";
+import { MockStore, provideMockStore } from "@ngrx/store/testing";
+import {
+  selectHasFetchedProfile,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
 import { MockMatDialogRef, MockUserApi } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
@@ -37,9 +41,16 @@ describe("1010: ConfigurableActionsComponent", () => {
         MatDialogModule,
         RouterModule,
         RouterModule.forRoot([]),
-        StoreModule.forRoot({}),
       ],
       declarations: [ConfigurableActionsComponent],
+      providers: [
+        provideMockStore({
+          selectors: [
+            { selector: selectIsLoggedIn, value: false },
+            { selector: selectHasFetchedProfile, value: false },
+          ],
+        }),
+      ],
     });
     TestBed.overrideComponent(ConfigurableActionsComponent, {
       set: {
@@ -118,6 +129,25 @@ describe("1010: ConfigurableActionsComponent", () => {
     const htmlElement: HTMLElement = fixture.nativeElement;
     const htmlActions = htmlElement.querySelectorAll("configurable-action");
     expect(htmlActions.length).toEqual(mockActionsConfig.length);
+  });
+
+  it("0062: a logged-in user's actions should wait for the profile request", () => {
+    const store = TestBed.inject(MockStore);
+    const htmlElement: HTMLElement = fixture.nativeElement;
+    store.overrideSelector(selectIsLoggedIn, true);
+    store.overrideSelector(selectHasFetchedProfile, false);
+    store.refreshState();
+    fixture.detectChanges();
+    expect(htmlElement.querySelectorAll("configurable-action").length).toEqual(
+      0,
+    );
+
+    store.overrideSelector(selectHasFetchedProfile, true);
+    store.refreshState();
+    fixture.detectChanges();
+    expect(htmlElement.querySelectorAll("configurable-action").length).toEqual(
+      mockActionsConfig.length,
+    );
   });
 
   it("0070: there should be 0 actions with no actions configured", async () => {

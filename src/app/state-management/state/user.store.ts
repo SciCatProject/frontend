@@ -43,6 +43,8 @@ export interface UserState {
   isLoggedIn: boolean;
 
   hasFetchedSettings: boolean;
+  // the identity request finished, even without a profile (e.g. it failed)
+  hasFetchedProfile: boolean;
 
   isLoading: boolean;
 
@@ -92,6 +94,7 @@ export const initialUserState: UserState = {
   isLoading: false,
 
   hasFetchedSettings: false,
+  hasFetchedProfile: false,
 
   columns: [],
 
