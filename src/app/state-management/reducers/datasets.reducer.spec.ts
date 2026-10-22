@@ -36,6 +36,11 @@ const dataset = createMock<OutputDatasetDto>({
 });
 
 describe("DatasetsReducer", () => {
+  const onThirdPage = {
+    ...initialDatasetState,
+    pagination: { skip: 50, limit: 25 },
+  };
+
   describe("on fetchDatasetsCompleteAction", () => {
     it("should set datasets property", () => {
       const datasets = [dataset];
@@ -43,6 +48,23 @@ describe("DatasetsReducer", () => {
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.datasets).toEqual(datasets);
+    });
+  });
+
+  describe("on fetchDatasetsFailedAction", () => {
+    it("should clear the datasets of the previous query and their selection", () => {
+      const action = fromActions.fetchDatasetsFailedAction();
+      const state = fromDatasets.datasetsReducer(
+        {
+          ...initialDatasetState,
+          datasets: [dataset],
+          selectedSets: [dataset],
+        },
+        action,
+      );
+
+      expect(state.datasets).toEqual([]);
+      expect(state.selectedSets).toEqual([]);
     });
   });
 
@@ -58,6 +80,25 @@ describe("DatasetsReducer", () => {
 
       expect(state.facetCounts).toEqual(facetCounts);
       expect(state.totalCount).toEqual(allCounts);
+    });
+  });
+
+  describe("on fetchFacetCountsFailedAction", () => {
+    it("should clear the facet counts of the previous query but keep the total", () => {
+      const action = fromActions.fetchFacetCountsFailedAction();
+      const state = fromDatasets.datasetsReducer(
+        {
+          ...initialDatasetState,
+          facetCounts: { type: [{ _id: "raw", count: 3 }] },
+          totalCount: 3,
+          facetCountsIsLoading: true,
+        },
+        action,
+      );
+
+      expect(state.facetCounts).toEqual({});
+      expect(state.totalCount).toEqual(3);
+      expect(state.facetCountsIsLoading).toBeFalse();
     });
   });
 
@@ -350,6 +391,16 @@ describe("DatasetsReducer", () => {
       expect(state.filters.sortField).toEqual(sortField);
       expect(state.filters.skip).toEqual(0);
     });
+
+    it("should go back to the first page, keeping the page size", () => {
+      const action = fromActions.sortByColumnAction({
+        column: "test",
+        direction: "asc",
+      });
+      const state = fromDatasets.datasetsReducer(onThirdPage, action);
+
+      expect(state.pagination).toEqual({ skip: 0, limit: 25 });
+    });
   });
 
   describe("on setSearchTermsAction", () => {
@@ -373,6 +424,15 @@ describe("DatasetsReducer", () => {
       expect(state.filters.mode).toEqual({});
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
+    });
+
+    it("should go back to the first page, keeping the page size", () => {
+      const action = fromActions.setArchiveViewModeAction({
+        modeToggle: ArchViewMode.archivable,
+      });
+      const state = fromDatasets.datasetsReducer(onThirdPage, action);
+
+      expect(state.pagination).toEqual({ skip: 0, limit: 25 });
     });
   });
 
@@ -430,6 +490,13 @@ describe("DatasetsReducer", () => {
 
       expect(state.filters.text).toEqual(text);
       expect(state.filters.skip).toEqual(0);
+    });
+
+    it("should go back to the first page, keeping the page size", () => {
+      const action = fromActions.setTextFilterAction({ text: "test" });
+      const state = fromDatasets.datasetsReducer(onThirdPage, action);
+
+      expect(state.pagination).toEqual({ skip: 0, limit: 25 });
     });
   });
 

@@ -15,6 +15,13 @@ const reducer = createReducer(
       datasets,
     }),
   ),
+  // the previous rows belong to another query, don't let them be selected
+  // or acted on
+  on(fromActions.fetchDatasetsFailedAction, (state): DatasetState => ({
+    ...state,
+    datasets: [],
+    selectedSets: [],
+  })),
 
   on(fromActions.fetchFacetCountsAction, (state): DatasetState => ({
     ...state,
@@ -31,8 +38,11 @@ const reducer = createReducer(
     }),
   ),
 
+  // the previous counts belong to another query, don't keep showing them;
+  // totalCount is kept, 0 would disable the paginator while rows are shown
   on(fromActions.fetchFacetCountsFailedAction, (state): DatasetState => ({
     ...state,
+    facetCounts: {},
     facetCountsIsLoading: false,
   })),
 
@@ -281,7 +291,8 @@ const reducer = createReducer(
     (state, { column, direction }): DatasetState => {
       const sortField = column + (direction ? ":" + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
-      return { ...state, filters };
+      const pagination = { ...state.pagination, skip: 0 };
+      return { ...state, filters, pagination };
     },
   ),
   on(fromActions.setSearchTermsAction, (state, { terms }): DatasetState => ({
@@ -362,7 +373,8 @@ const reducer = createReducer(
         }
       }
       const filters = { ...state.filters, skip: 0, mode, modeToggle };
-      return { ...state, filters };
+      const pagination = { ...state.pagination, skip: 0 };
+      return { ...state, filters, pagination };
     },
   ),
   on(
@@ -388,7 +400,8 @@ const reducer = createReducer(
 
   on(fromActions.setTextFilterAction, (state, { text }): DatasetState => {
     const filters = { ...state.filters, text, skip: 0 };
-    return { ...state, filters };
+    const pagination = { ...state.pagination, skip: 0 };
+    return { ...state, filters, pagination };
   }),
 
   on(
