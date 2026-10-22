@@ -2,90 +2,91 @@
   class="table-header-controls"
   [class.with-side-filter]="sideFilterCollapsed"
 >
-  <div
-    class="real-time-toggle-wrapper"
-    *ngIf="showRealTimeToggle && appConfig?.realTimeUpdatesEnabled"
-  >
-    <mat-slide-toggle
-      [checked]="realTimeEnabled"
-      (change)="realTimeToggle.emit($event.checked)"
-      data-cy="real-time-toggle"
-    >
-      Live updates
-    </mat-slide-toggle>
-
-    <mat-icon
-      *ngIf="realTimeEnabled && eventsService.connectionError$ | async"
-      class="connection-error-icon"
-      matTooltip="Live updates are currently unavailable. Please check with your administrator."
-      matTooltipPosition="above"
-      aria-label="Live updates are currently unavailable. Please check with your administrator."
-      data-cy="live-updates-error"
-    >
-      cloud_off
-    </mat-icon>
-  </div>
-  <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
-    <mat-form-field>
-      <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
-        >search</mat-icon
+  @if (showRealTimeToggle && appConfig?.realTimeUpdatesEnabled) {
+    <div class="real-time-toggle-wrapper">
+      <mat-slide-toggle
+        [checked]="realTimeEnabled"
+        (change)="realTimeToggle.emit($event.checked)"
+        data-cy="real-time-toggle"
       >
-      <input
-        [(ngModel)]="globalTextSearch"
-        type="text"
-        matInput
-        [placeholder]="globalTextSearchPlaceholder"
-        (ngModelChange)="this.globalSearchUpdate.next($event)"
-        (keydown.enter)="onGlobalTextSearchApply()"
-        (keydown.escape)="onGlobalTextSearchClear()"
-        data-cy="text-search"
-      />
-      <span
-        matSuffix
-        class="enter-hint"
-        matTooltip="Press Enter to search"
-        matTooltipPosition="below"
-        matTooltipShowDelay="500"
-        >↵</span
-      >
-      <button
-        mat-icon-button
-        matSuffix
-        *ngIf="globalTextSearch"
-        (click)="onGlobalTextSearchClear()"
-        type="button"
-        matTooltip="Clear search"
-        data-cy="search-clear-button"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        matSuffix
-        *ngIf="globalTextSearch"
-        (click)="onGlobalTextSearchApply()"
-        type="button"
-        matTooltip="Apply search"
-        data-cy="search-button"
-      >
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
-  </div>
-  <div
-    *ngIf="pagination"
-    class="paginator-container"
-    [class.is-loading]="pagination?.isLoading"
-  >
-    <mat-paginator
-      class="datasets-paginator datasets-header-paginator"
-      [pageSizeOptions]="pagination.pageSizeOptions"
-      [pageIndex]="pagination.pageIndex"
-      [length]="pagination.length"
-      [pageSize]="pagination.pageSize"
-      (page)="pagination_onChange($event)"
-    ></mat-paginator>
-  </div>
+        Live updates
+      </mat-slide-toggle>
+      @if (realTimeEnabled && eventsService.connectionError$ | async) {
+        <mat-icon
+          class="connection-error-icon"
+          matTooltip="Live updates are currently unavailable. Please check with your administrator."
+          matTooltipPosition="above"
+          aria-label="Live updates are currently unavailable. Please check with your administrator."
+          data-cy="live-updates-error"
+        >
+          cloud_off
+        </mat-icon>
+      }
+    </div>
+  }
+  @if (showGlobalTextSearch) {
+    <div class="global-search-wrapper">
+      <mat-form-field>
+        @if (!globalTextSearch) {
+          <mat-icon matPrefix style="color: gray">search</mat-icon>
+        }
+        <input
+          [(ngModel)]="globalTextSearch"
+          type="text"
+          matInput
+          [placeholder]="globalTextSearchPlaceholder"
+          (ngModelChange)="this.globalSearchUpdate.next($event)"
+          (keydown.enter)="onGlobalTextSearchApply()"
+          (keydown.escape)="onGlobalTextSearchClear()"
+          data-cy="text-search"
+        />
+        <span
+          matSuffix
+          class="enter-hint"
+          matTooltip="Press Enter to search"
+          matTooltipPosition="below"
+          matTooltipShowDelay="500"
+          >↵</span
+        >
+        @if (globalTextSearch) {
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="onGlobalTextSearchClear()"
+            type="button"
+            matTooltip="Clear search"
+            data-cy="search-clear-button"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        @if (globalTextSearch) {
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="onGlobalTextSearchApply()"
+            type="button"
+            matTooltip="Apply search"
+            data-cy="search-button"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+  }
+  @if (pagination) {
+    <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
+      <mat-paginator
+        class="datasets-paginator datasets-header-paginator"
+        [pageSizeOptions]="pagination.pageSizeOptions"
+        [pageIndex]="pagination.pageIndex"
+        [length]="pagination.length"
+        [pageSize]="pagination.pageSize"
+        (page)="pagination_onChange($event)"
+      ></mat-paginator>
+    </div>
+  }
 </div>
 <div
   #tbl
@@ -113,14 +114,15 @@
         class="row-checkbox"
         style="z-index: 2"
       >
-        <mat-checkbox
-          style="z-index: 10"
-          (change)="$event ? masterToggle($event) : null"
-          [checked]="rowSelectionModel.hasValue() && isAllSelected()"
-          [indeterminate]="rowSelectionModel.hasValue() && !isAllSelected()"
-          *ngIf="rowSelectionMode === 'multi'"
-        >
-        </mat-checkbox>
+        @if (rowSelectionMode === "multi") {
+          <mat-checkbox
+            style="z-index: 10"
+            (change)="$event ? masterToggle($event) : null"
+            [checked]="rowSelectionModel.hasValue() && isAllSelected()"
+            [indeterminate]="rowSelectionModel.hasValue() && !isAllSelected()"
+          >
+          </mat-checkbox>
+        }
         <!-- <mat-icon *ngIf="rowSelectionMode === 'single'">indeterminate_check_box</mat-icon> -->
       </mat-header-cell>
       <!-- DATA -->
@@ -142,329 +144,316 @@
     </ng-container>
 
     <!-- Table Columns -->
-    <ng-container
-      *ngFor="let column of columns; let i = index; trackBy: trackColumn"
-      [matColumnDef]="column.name"
-      [sticky]="column.sticky === 'start' ? true : false"
-      [stickyEnd]="column.sticky === 'end' ? true : false"
-    >
-      <!-- HEADER -->
-      <mat-header-cell
-        *matHeaderCellDef
-        cdkDrag
-        [cdkDragDisabled]="column?.draggable === false"
-        cdkDragBoundary="mat-header-row"
-        cdkDropListLockAxis="x"
-        [ngClass]="headerClass(column)"
-        [cdkDragData]="{ name: column.name }"
-        [ngStyle]="column.style"
-        [class.active-resize]="resizeColumn.columnIndex === i"
-        [class.active-sort]="sort.direction && sort.active === column.name"
-        cdkDragBoundary="mat-header-row"
+    @for (column of columns; track trackColumn($index, column); let i = $index) {
+      <ng-container
+        [matColumnDef]="column.name"
+        [sticky]="column.sticky === 'start' ? true : false"
+        [stickyEnd]="column.sticky === 'end' ? true : false"
       >
-        <!-- class="left-resize-handler" -->
-        <div
-          class="resize-handler"
-          [ngClass]="{
-            'left-resize-handler': tableSetting.direction === 'ltr',
-            'right-resize-handler': tableSetting.direction === 'rtl',
-          }"
-          (mousedown)="onResizeColumn($event, i, 'left')"
-        ></div>
-        <mat-icon
-          class="column-icon"
-          [ngStyle]="{ color: column?.iconColor }"
-          >{{ column?.icon }}</mat-icon
+        <!-- HEADER -->
+        <mat-header-cell
+          *matHeaderCellDef
+          cdkDrag
+          [cdkDragDisabled]="column?.draggable === false"
+          cdkDragBoundary="mat-header-row"
+          cdkDropListLockAxis="x"
+          [ngClass]="headerClass(column)"
+          [cdkDragData]="{ name: column.name }"
+          [ngStyle]="column.style"
+          [class.active-resize]="resizeColumn.columnIndex === i"
+          [class.active-sort]="sort.direction && sort.active === column.name"
+          cdkDragBoundary="mat-header-row"
         >
-        <mat-icon
-          *ngIf="column?.draggable !== false"
-          class="drag-indicator"
-          cdkDragHandle
-          >drag_indicator</mat-icon
+          <!-- class="left-resize-handler" -->
+          <div
+            class="resize-handler"
+            [ngClass]="{
+              'left-resize-handler': tableSetting.direction === 'ltr',
+              'right-resize-handler': tableSetting.direction === 'rtl',
+            }"
+            (mousedown)="onResizeColumn($event, i, 'left')"
+          ></div>
+          <mat-icon
+            class="column-icon"
+            [ngStyle]="{ color: column?.iconColor }"
+            >{{ column?.icon }}</mat-icon
+          >
+          @if (column?.draggable !== false) {
+            <mat-icon class="drag-indicator" cdkDragHandle
+              >drag_indicator</mat-icon
+            >
+          }
+          <div
+            mat-sort-header
+            [matTooltip]="
+              column.tooltip || column.header || column.name
+                | translate: localization
+            "
+            matTooltipClass="cell-tooltip"
+            matTooltipPosition="above"
+            matTooltipShowDelay="500"
+            [disabled]="column.sort === 'none'"
+            class="header-caption"
+          >
+            {{ column.header || column.name | translate: localization }}
+          </div>
+          <!-- class="right-resize-handler" -->
+          <div
+            class="resize-handler"
+            [ngClass]="{
+              'right-resize-handler': tableSetting.direction === 'ltr',
+              'left-resize-handler': tableSetting.direction === 'rtl',
+            }"
+            (mousedown)="onResizeColumn($event, i, 'right')"
+          ></div>
+        </mat-header-cell>
+        <!-- DATA -->
+        <mat-cell
+          *matCellDef="let row"
+          #cell
+          (mouseenter)="tooltip_onChanged(column, row, cell, true)"
+          (mouseleave)="tooltip_onChanged(column, row, cell, false)"
+          [class]="row[column.cellClass]"
+          (click)="onCellClick($event, row, column)"
+          [ngClass]="cellClass(row?.option, column)"
+          [ngStyle]="cellStyle(row?.option, column)"
+          (contextmenu)="onContextMenu($event, column, row)"
         >
-        <div
-          mat-sort-header
-          [matTooltip]="
-            column.tooltip || column.header || column.name
-              | translate: localization
-          "
-          matTooltipClass="cell-tooltip"
-          matTooltipPosition="above"
-          matTooltipShowDelay="500"
-          [disabled]="column.sort === 'none'"
-          class="header-caption"
-        >
-          {{ column.header || column.name | translate: localization }}
-        </div>
-
-        <!-- class="right-resize-handler" -->
-        <div
-          class="resize-handler"
-          [ngClass]="{
-            'right-resize-handler': tableSetting.direction === 'ltr',
-            'left-resize-handler': tableSetting.direction === 'rtl',
-          }"
-          (mousedown)="onResizeColumn($event, i, 'right')"
-        ></div>
-      </mat-header-cell>
-      <!-- DATA -->
-      <mat-cell
-        *matCellDef="let row"
-        #cell
-        (mouseenter)="tooltip_onChanged(column, row, cell, true)"
-        (mouseleave)="tooltip_onChanged(column, row, cell, false)"
-        [class]="row[column.cellClass]"
-        (click)="onCellClick($event, row, column)"
-        [ngClass]="cellClass(row?.option, column)"
-        [ngStyle]="cellStyle(row?.option, column)"
-        (contextmenu)="onContextMenu($event, column, row)"
-      >
-        <!-- The render image is specific for the dataset table as the "thumbnail" pipe is designed to work only with datasets. Maybe this should be reviewed later and have a more general solution where we render images in columns -->
-        <ng-container *ngIf="column.renderImage; else renderColumn">
-          <img
-            src="{{ row.pid | thumbnail | async }}"
-            height="42px"
-            loading="lazy"
-          />
-        </ng-container>
-        <ng-template #renderColumn>
-          <ng-container *ngIf="column.customRender; else regularColumnRender">
-            <label
-              *ngIf="
+          <!-- The render image is specific for the dataset table as the "thumbnail" pipe is designed to work only with datasets. Maybe this should be reviewed later and have a more general solution where we render images in columns -->
+          @if (column.renderImage) {
+            <img
+              src="{{ row.pid | thumbnail | async }}"
+              height="42px"
+              loading="lazy"
+            />
+          } @else {
+            @if (column.customRender) {
+              @if (
                 !column.dynamicCellComponent &&
                 (column.hoverContent ? column.hoverOnCell === true : true)
-              "
-              (click)="onLabelClick($event, row, column)"
-              [class.rtl-cell]="direction === 'rtl'"
-              [class.ltr-cell]="direction === 'ltr'"
-              [ngStyle]="ellipsis(column)"
-              class="label-cell"
-            >
-              <ng-container *ngIf="column.hoverOnCell; else noHoverCell">
-                <span class="cell-with-icon">
-                  <mat-icon
-                    class="cell-icon"
-                    [class.pinned]="isHoverCardPinned(row, column)"
-                    fontIcon="description"
-                    #hoverOriginSpan="cdkOverlayOrigin"
-                    cdkOverlayOrigin
-                    (mouseenter)="onHoverCardTriggerEnter(row, column)"
-                    (mouseleave)="onHoverCardTriggerLeave(row, column)"
-                    (click)="togglePinnedHoverCard($event, row, column)"
-                  ></mat-icon>
-                  <span
-                    class="cell-text"
-                    [innerHTML]="columnName(row, column)"
-                  ></span>
-                </span>
-                <ng-template
-                  cdkConnectedOverlay
-                  [cdkConnectedOverlayOrigin]="hoverOriginSpan"
-                  [cdkConnectedOverlayOpen]="isHoverCardOpen(row, column)"
-                  [cdkConnectedOverlayPositions]="metadataOverlayPositions"
-                  [cdkConnectedOverlayHasBackdrop]="
-                    isHoverCardPinned(row, column)
-                  "
-                  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-                  (backdropClick)="closePinnedHoverCard()"
+              ) {
+                <label
+                  (click)="onLabelClick($event, row, column)"
+                  [class.rtl-cell]="direction === 'rtl'"
+                  [class.ltr-cell]="direction === 'ltr'"
+                  [ngStyle]="ellipsis(column)"
+                  class="label-cell"
                 >
-                  <mat-card
-                    class="hover-card"
-                    [class.metadata-hover-card]="
-                      isScientificMetadataColumn(column)
-                    "
-                    (mouseenter)="onHoverCardContentEnter(row, column)"
-                    (mouseleave)="onHoverCardContentLeave(row, column)"
-                    (click)="stopEventPropagation($event)"
-                  >
-                    <mat-card-title class="hover-card-title">
-                      {{
-                        column.header || column.name | translate: localization
-                      }}
-                    </mat-card-title>
-                    <ng-container
-                      *ngIf="
-                        isScientificMetadataColumn(column);
-                        else metadataNameHoverContentCard
+                  @if (column.hoverOnCell) {
+                    <span class="cell-with-icon">
+                      <mat-icon
+                        class="cell-icon"
+                        [class.pinned]="isHoverCardPinned(row, column)"
+                        fontIcon="description"
+                        #hoverOriginSpan="cdkOverlayOrigin"
+                        cdkOverlayOrigin
+                        (mouseenter)="onHoverCardTriggerEnter(row, column)"
+                        (mouseleave)="onHoverCardTriggerLeave(row, column)"
+                        (click)="togglePinnedHoverCard($event, row, column)"
+                      ></mat-icon>
+                      <span
+                        class="cell-text"
+                        [innerHTML]="columnName(row, column)"
+                      ></span>
+                    </span>
+                    <ng-template
+                      cdkConnectedOverlay
+                      [cdkConnectedOverlayOrigin]="hoverOriginSpan"
+                      [cdkConnectedOverlayOpen]="isHoverCardOpen(row, column)"
+                      [cdkConnectedOverlayPositions]="metadataOverlayPositions"
+                      [cdkConnectedOverlayHasBackdrop]="
+                        isHoverCardPinned(row, column)
                       "
+                      cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                      (backdropClick)="closePinnedHoverCard()"
                     >
-                      <div mat-card-content class="hover-card-content">
-                        <div
-                          *ngIf="
-                            hasScientificMetadata(row, column);
-                            else emptyScientificMetadata
-                          "
-                          class="scientific-metadata-hover-content"
-                        >
+                      <mat-card
+                        class="hover-card"
+                        [class.metadata-hover-card]="
+                          isScientificMetadataColumn(column)
+                        "
+                        (mouseenter)="onHoverCardContentEnter(row, column)"
+                        (mouseleave)="onHoverCardContentLeave(row, column)"
+                        (click)="stopEventPropagation($event)"
+                      >
+                        <mat-card-title class="hover-card-title">
+                          {{
+                            column.header || column.name
+                              | translate: localization
+                          }}
+                        </mat-card-title>
+                        @if (isScientificMetadataColumn(column)) {
+                          <div mat-card-content class="hover-card-content">
+                            @if (hasScientificMetadata(row, column)) {
+                              <div class="scientific-metadata-hover-content">
+                                <tree-view
+                                  [metadata]="
+                                    getScientificMetadata(row, column)
+                                  "
+                                ></tree-view>
+                              </div>
+                            } @else {
+                              <div class="hover-card-empty">No content</div>
+                            }
+                          </div>
+                        } @else {
+                          <div
+                            mat-card-content
+                            class="hover-card-content"
+                            [innerHTML]="metadataNameHoverContent(row)"
+                          ></div>
+                        }
+                      </mat-card>
+                    </ng-template>
+                  } @else {
+                    <span
+                      class="tooltip-anchor"
+                      [innerHTML]="columnName(row, column)"
+                      matTooltip="{{ columnName(row, column) }}"
+                      matTooltipPosition="above"
+                      matTooltipShowDelay="500"
+                    ></span>
+                  }
+                </label>
+              }
+            } @else {
+              @if (
+                !column.dynamicCellComponent &&
+                (column.hoverContent ? column.hoverOnCell === true : true)
+              ) {
+                <label
+                  (click)="onLabelClick($event, row, column)"
+                  [class.rtl-cell]="direction === 'rtl'"
+                  [class.ltr-cell]="direction === 'ltr'"
+                  [ngStyle]="ellipsis(column)"
+                  class="label-cell"
+                >
+                  <span
+                    matTooltip="{{ getColumnValue(row, column) }}"
+                    matTooltipPosition="above"
+                    matTooltipShowDelay="500"
+                  >
+                    {{ getColumnValue(row, column) }}
+                  </span>
+                </label>
+              }
+            }
+          }
+          @if (column.renderContentIcon) {
+            @if (column.contentIconLink) {
+              @if (renderContentIconLink(row, column)) {
+                <a
+                  [href]="renderContentIconLink(row, column)"
+                  target="_blank"
+                  class="content-icon-link"
+                >
+                  <mat-icon
+                    [ngClass]="column.contentIconClass"
+                    [matTooltip]="column.contentIconTooltip"
+                    >{{ column.renderContentIcon(column, row) }}</mat-icon
+                  ></a
+                >
+              }
+            } @else {
+              @if (!!column.renderContentIcon(column, row)) {
+                <mat-icon
+                  [ngClass]="column.contentIconClass"
+                  [matTooltip]="column.contentIconTooltip"
+                  >{{ column.renderContentIcon(column, row) }}</mat-icon
+                >
+              }
+            }
+          }
+          @if (column.dynamicCellComponent) {
+            <ng-container
+              appDynamicCell
+              [component]="column.dynamicCellComponent"
+              [column]="column"
+              [row]="row"
+              [onRowEvent]="onRowEvent"
+            >
+            </ng-container>
+          }
+          <!-- Hover Content Cell for abstract and other cells -->
+          @if (column.hoverContent && !column.hoverOnCell) {
+            <span
+              class="icon-wrapper"
+              [class.pinned]="pinnedHoverKey && isHoverCardPinned(row, column)"
+              [class.not-pinned]="
+                pinnedHoverKey && !isHoverCardPinned(row, column)
+              "
+              #hoverOrigin="cdkOverlayOrigin"
+              cdkOverlayOrigin
+              (mouseenter)="onHoverCardTriggerEnter(row, column)"
+              (mouseleave)="onHoverCardTriggerLeave(row, column)"
+              (click)="togglePinnedHoverCard($event, row, column)"
+            >
+              <mat-icon class="hover-icon" fontIcon="description"></mat-icon>
+              <ng-template
+                cdkConnectedOverlay
+                [cdkConnectedOverlayOrigin]="hoverOrigin"
+                [cdkConnectedOverlayOpen]="isHoverCardOpen(row, column)"
+                [cdkConnectedOverlayPositions]="overlayPositions"
+                [cdkConnectedOverlayHasBackdrop]="
+                  isHoverCardPinned(row, column)
+                "
+                cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                (backdropClick)="closePinnedHoverCard()"
+              >
+                <mat-card
+                  class="hover-card"
+                  [class.metadata-hover-card]="
+                    isScientificMetadataColumn(column)
+                  "
+                  [class.pinned-card]="pinnedHoverKey"
+                  (mouseenter)="onHoverCardContentEnter(row, column)"
+                  (mouseleave)="onHoverCardContentLeave(row, column)"
+                  (click)="stopEventPropagation($event)"
+                >
+                  <mat-card-title class="hover-card-title">
+                    {{ column.header || column.name | translate: localization }}
+                    @if (pinnedHoverKey) {
+                      <mat-icon
+                        class="pinned-icon"
+                        aria-label="Pinned hover card"
+                        >push_pin</mat-icon
+                      >
+                    }
+                  </mat-card-title>
+                  @if (isScientificMetadataColumn(column)) {
+                    <div mat-card-content class="hover-card-content">
+                      @if (hasScientificMetadata(row, column)) {
+                        <div class="scientific-metadata-hover-content">
                           <tree-view
                             [metadata]="getScientificMetadata(row, column)"
                           ></tree-view>
                         </div>
-                      </div>
-                    </ng-container>
-                    <ng-template #metadataNameHoverContentCard>
-                      <div
-                        mat-card-content
-                        class="hover-card-content"
-                        [innerHTML]="metadataNameHoverContent(row)"
-                      ></div>
-                    </ng-template>
-                  </mat-card>
-                </ng-template>
-              </ng-container>
-              <ng-template #noHoverCell>
-                <span
-                  class="tooltip-anchor"
-                  [innerHTML]="columnName(row, column)"
-                  matTooltip="{{ columnName(row, column) }}"
-                  matTooltipPosition="above"
-                  matTooltipShowDelay="500"
-                ></span>
-              </ng-template>
-            </label>
-          </ng-container>
-          <ng-template #regularColumnRender>
-            <label
-              *ngIf="
-                !column.dynamicCellComponent &&
-                (column.hoverContent ? column.hoverOnCell === true : true)
-              "
-              (click)="onLabelClick($event, row, column)"
-              [class.rtl-cell]="direction === 'rtl'"
-              [class.ltr-cell]="direction === 'ltr'"
-              [ngStyle]="ellipsis(column)"
-              class="label-cell"
-            >
-              <span
-                matTooltip="{{ getColumnValue(row, column) }}"
-                matTooltipPosition="above"
-                matTooltipShowDelay="500"
-              >
-                {{ getColumnValue(row, column) }}
-              </span>
-            </label>
-          </ng-template>
-        </ng-template>
-
-        <ng-container *ngIf="column.renderContentIcon">
-          <ng-container *ngIf="column.contentIconLink; else regularIconRender">
-            <a
-              *ngIf="renderContentIconLink(row, column)"
-              [href]="renderContentIconLink(row, column)"
-              target="_blank"
-              class="content-icon-link"
-            >
-              <mat-icon
-                [ngClass]="column.contentIconClass"
-                [matTooltip]="column.contentIconTooltip"
-                >{{ column.renderContentIcon(column, row) }}</mat-icon
-              ></a
-            >
-          </ng-container>
-          <ng-template #regularIconRender>
-            <mat-icon
-              [ngClass]="column.contentIconClass"
-              *ngIf="!!column.renderContentIcon(column, row)"
-              [matTooltip]="column.contentIconTooltip"
-              >{{ column.renderContentIcon(column, row) }}</mat-icon
-            >
-          </ng-template>
-        </ng-container>
-
-        <ng-container
-          *ngIf="column.dynamicCellComponent"
-          appDynamicCell
-          [component]="column.dynamicCellComponent"
-          [column]="column"
-          [row]="row"
-          [onRowEvent]="onRowEvent"
-        >
-        </ng-container>
-
-        <!-- Hover Content Cell for abstract and other cells -->
-        <ng-container *ngIf="column.hoverContent && !column.hoverOnCell">
-          <span
-            class="icon-wrapper"
-            [class.pinned]="pinnedHoverKey && isHoverCardPinned(row, column)"
-            [class.not-pinned]="
-              pinnedHoverKey && !isHoverCardPinned(row, column)
-            "
-            #hoverOrigin="cdkOverlayOrigin"
-            cdkOverlayOrigin
-            (mouseenter)="onHoverCardTriggerEnter(row, column)"
-            (mouseleave)="onHoverCardTriggerLeave(row, column)"
-            (click)="togglePinnedHoverCard($event, row, column)"
-          >
-            <mat-icon class="hover-icon" fontIcon="description"></mat-icon>
-            <ng-template
-              cdkConnectedOverlay
-              [cdkConnectedOverlayOrigin]="hoverOrigin"
-              [cdkConnectedOverlayOpen]="isHoverCardOpen(row, column)"
-              [cdkConnectedOverlayPositions]="overlayPositions"
-              [cdkConnectedOverlayHasBackdrop]="isHoverCardPinned(row, column)"
-              cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-              (backdropClick)="closePinnedHoverCard()"
-            >
-              <mat-card
-                class="hover-card"
-                [class.metadata-hover-card]="isScientificMetadataColumn(column)"
-                [class.pinned-card]="pinnedHoverKey"
-                (mouseenter)="onHoverCardContentEnter(row, column)"
-                (mouseleave)="onHoverCardContentLeave(row, column)"
-                (click)="stopEventPropagation($event)"
-              >
-                <mat-card-title class="hover-card-title">
-                  {{ column.header || column.name | translate: localization }}
-                  <mat-icon
-                    *ngIf="pinnedHoverKey"
-                    class="pinned-icon"
-                    aria-label="Pinned hover card"
-                    >push_pin</mat-icon
-                  >
-                </mat-card-title>
-                <ng-container
-                  *ngIf="
-                    isScientificMetadataColumn(column);
-                    else standardHoverContentCard
-                  "
-                >
-                  <div mat-card-content class="hover-card-content">
-                    <div
-                      *ngIf="
-                        hasScientificMetadata(row, column);
-                        else emptyScientificMetadata
-                      "
-                      class="scientific-metadata-hover-content"
-                    >
-                      <tree-view
-                        [metadata]="getScientificMetadata(row, column)"
-                      ></tree-view>
+                      } @else {
+                        <div class="hover-card-empty">No content</div>
+                      }
                     </div>
-                  </div>
-                </ng-container>
-                <ng-template #standardHoverContentCard>
-                  <div mat-card-content class="hover-card-content">
-                    {{ getColumnValue(row, column) || "No content" }}
-                  </div>
-                </ng-template>
-              </mat-card>
-            </ng-template>
-          </span>
-        </ng-container>
-      </mat-cell>
-      <!-- FOOTER -->
-      <mat-footer-cell *matFooterCellDef [ngStyle]="column.style">
-        <div *ngFor="let footer of column?.footer" class="footer-column">
-          <div [style.height.px]="footerHeight" class="footer-row">
-            <span> {{ footer.aggregateText }}</span>
-          </div>
-        </div>
-      </mat-footer-cell>
-    </ng-container>
-
-    <ng-template #emptyScientificMetadata>
-      <div class="hover-card-empty">No content</div>
-    </ng-template>
+                  } @else {
+                    <div mat-card-content class="hover-card-content">
+                      {{ getColumnValue(row, column) || "No content" }}
+                    </div>
+                  }
+                </mat-card>
+              </ng-template>
+            </span>
+          }
+        </mat-cell>
+        <!-- FOOTER -->
+        <mat-footer-cell *matFooterCellDef [ngStyle]="column.style">
+          @for (footer of column?.footer; track footer) {
+            <div class="footer-column">
+              <div [style.height.px]="footerHeight" class="footer-row">
+                <span> {{ footer.aggregateText }}</span>
+              </div>
+            </div>
+          }
+        </mat-footer-cell>
+      </ng-container>
+    }
 
     <ng-container matColumnDef="progress">
       <mat-header-cell
@@ -480,51 +469,52 @@
     </ng-container>
 
     <!-- Expanded Content Column - The detail row is made up of Dynamic Cell -->
-    <ng-container *ngIf="expandColumn.length > 0" matColumnDef="expandedDetail">
-      <td
-        mat-cell
-        *matCellDef="let row"
-        [attr.colspan]="displayedColumns.length"
-        class="expanded-detail-cell"
-      >
-        <div
-          class="expanded-detail"
-          [@detailExpand]="row === expandedElement ? 'expanded' : 'collapsed'"
+    @if (expandColumn.length > 0) {
+      <ng-container matColumnDef="expandedDetail">
+        <td
+          mat-cell
+          *matCellDef="let row"
+          [attr.colspan]="displayedColumns.length"
+          class="expanded-detail-cell"
         >
-          <ng-container
-            appDynamicCell
-            [component]="expandComponent"
-            [row]="row"
-            [onRowEvent]="onRowEvent"
+          <div
+            class="expanded-detail"
+            [@detailExpand]="row === expandedElement ? 'expanded' : 'collapsed'"
           >
-          </ng-container>
-        </div>
-      </td>
-    </ng-container>
+            <ng-container
+              appDynamicCell
+              [component]="expandComponent"
+              [row]="row"
+              [onRowEvent]="onRowEvent"
+            >
+            </ng-container>
+          </div>
+        </td>
+      </ng-container>
+    }
 
     <!-- Table Menu[ Sort, Visible, Export] -->
-    <ng-container
-      matColumnDef="table-menu"
-      [stickyEnd]="true"
-      *ngIf="setting?.visibleTableMenu !== false"
-    >
-      <mat-header-cell *matHeaderCellDef class="table-menu">
-        <table-menu
-          [(tableSetting)]="tableSetting"
-          (menuActionChange)="tableMenuActionChange($event)"
-          [localization]="localization"
-        ></table-menu>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row" class="table-menu">
-        <row-menu
-          *ngIf="rowContextMenuItems && rowContextMenuItems.length > 0"
-          [rowActionMenu]="row?.actionMenu"
-          [actionMenus]="rowContextMenuItems"
-          [tableSetting]="tableSetting"
-          (rowActionChange)="rowMenuActionChange($event, row)"
-        ></row-menu>
-      </mat-cell>
-    </ng-container>
+    @if (setting?.visibleTableMenu !== false) {
+      <ng-container matColumnDef="table-menu" [stickyEnd]="true">
+        <mat-header-cell *matHeaderCellDef class="table-menu">
+          <table-menu
+            [(tableSetting)]="tableSetting"
+            (menuActionChange)="tableMenuActionChange($event)"
+            [localization]="localization"
+          ></table-menu>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="table-menu">
+          @if (rowContextMenuItems && rowContextMenuItems.length > 0) {
+            <row-menu
+              [rowActionMenu]="row?.actionMenu"
+              [actionMenus]="rowContextMenuItems"
+              [tableSetting]="tableSetting"
+              (rowActionChange)="rowMenuActionChange($event, row)"
+            ></row-menu>
+          }
+        </mat-cell>
+      </ng-container>
+    }
 
     <!-- Row Table[Header, Data, Footer] -->
     <mat-row
@@ -544,57 +534,56 @@
     >
     </mat-row>
 
-    <ng-container *ngIf="expandColumn.length > 0">
+    @if (expandColumn.length > 0) {
       <tr
         mat-row
         *matRowDef="let expandRow; columns: expandColumn"
         class="detail-row"
       ></tr>
-    </ng-container>
+    }
     <mat-header-row
       class="header"
       [@tableAnimation]
       *matHeaderRowDef="displayedColumns; sticky: sticky"
     ></mat-header-row>
-    <ng-container *ngIf="displayedFooter.length > 0">
+    @if (displayedFooter.length > 0) {
       <mat-footer-row
         class="footer"
         [@tableAnimation]
         *matFooterRowDef="displayedFooter"
       ></mat-footer-row>
-    </ng-container>
+    }
     <mat-header-row
       class="progress"
       *matHeaderRowDef="progressColumn; sticky: sticky"
       [style.top.px]="headerHeight - 5"
     ></mat-header-row>
   </mat-table>
-  <ng-container *ngIf="showNoData && init === true">
-    <app-empty-content
-      *ngIf="standardDataSource.data.length === 0"
-      [message]="emptyMessage"
-      [icon]="emptyIcon"
-      [showReload]="showReload"
-      (reload)="reload_onClick()"
+  @if (showNoData && init === true) {
+    @if (standardDataSource.data.length === 0) {
+      <app-empty-content
+        [message]="emptyMessage"
+        [icon]="emptyIcon"
+        [showReload]="showReload"
+        (reload)="reload_onClick()"
+      >
+      </app-empty-content>
+    }
+  }
+</div>
+@if (pagination) {
+  <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
+    <mat-paginator
+      class="datasets-paginator datasets-footer-paginator"
+      [pageSizeOptions]="pagination.pageSizeOptions"
+      [pageIndex]="pagination.pageIndex"
+      [length]="pagination.length"
+      [pageSize]="pagination.pageSize"
+      (page)="pagination_onChange($event)"
     >
-    </app-empty-content>
-  </ng-container>
-</div>
-<div
-  *ngIf="pagination"
-  class="paginator-container"
-  [class.is-loading]="pagination?.isLoading"
->
-  <mat-paginator
-    class="datasets-paginator datasets-footer-paginator"
-    [pageSizeOptions]="pagination.pageSizeOptions"
-    [pageIndex]="pagination.pageIndex"
-    [length]="pagination.length"
-    [pageSize]="pagination.pageSize"
-    (page)="pagination_onChange($event)"
-  >
-  </mat-paginator>
-</div>
+    </mat-paginator>
+  </div>
+}
 <!-- Context Menu -->
 <div
   style="visibility: hidden; position: fixed"
@@ -604,7 +593,7 @@
 ></div>
 <mat-menu #contextMenu="matMenu">
   <ng-template matMenuContent let-item="item">
-    <ng-container *ngFor="let menu of contextMenuItems">
+    @for (menu of contextMenuItems; track menu) {
       <button
         mat-button
         type="button"
@@ -621,7 +610,9 @@
           >{{ menu.text }}</span
         >
       </button>
-      <mat-divider *ngIf="menu.divider === true"></mat-divider>
-    </ng-container>
+      @if (menu.divider === true) {
+        <mat-divider></mat-divider>
+      }
+    }
   </ng-template>
 </mat-menu>
