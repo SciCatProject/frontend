@@ -71,7 +71,7 @@
     "@angular-eslint/schematics": "^20.7.0",
     "@angular-eslint/template-parser": "^20.7.0",
     "@angular/build": "^20.3.35",
-    "@angular/cli": "^20.3.35",
+    "@angular/cli": "^22.2.4",
     "@angular/compiler-cli": "^20.3.30",
     "@betterer/cli": "^5.3.6",
     "@betterer/typescript": "^5.3.6",
