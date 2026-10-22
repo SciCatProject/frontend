@@ -20,6 +20,8 @@ import { ConditionFilterService } from "./condition-filter.service";
 import {
   ConditionFilterDialogComponent,
   ConditionFilterDialogData,
+  dialogWidth,
+  needsWideDialog,
 } from "./condition-filter-dialog.component";
 import { getActiveConfigs, toActiveConditions } from "./condition-filter.utils";
 
@@ -40,9 +42,9 @@ export class ConditionFilterButtonComponent implements OnInit {
   @Output() conditionsApplied = new EventEmitter<FilterCondition[]>();
 
   configs$: Observable<ConditionConfig[]>;
-  /** Edits that were closed without applying, they come back when the dialog opens again. */
   /** True while the dialog is open. */
   readonly isOpen = signal(false);
+  /** Edits that were closed without applying, they come back when the dialog opens again. */
   readonly draft = signal<ConditionConfig[] | null>(null);
   readonly getActive = getActiveConfigs;
 
@@ -87,7 +89,7 @@ export class ConditionFilterButtonComponent implements OnInit {
           keySource: this.keySource,
           unitsEnabled: this.unitsEnabled,
         },
-        width: "1120px",
+        width: dialogWidth(needsWideDialog(draft ?? configs)),
         maxWidth: "95vw",
         autoFocus: highlightIndex >= 0 ? false : "[data-cy=condition-field]",
       })

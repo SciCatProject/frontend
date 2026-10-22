@@ -6,7 +6,13 @@
     [class.active]="active.length"
     [class.icon-only]="iconOnly"
     [class.open]="isOpen()"
-    [matTooltip]="iconOnly ? 'Advanced search' : ''"
+    [matTooltip]="
+      draft()
+        ? 'Changes are not applied yet, open to apply them'
+        : iconOnly
+          ? 'Advanced search'
+          : ''
+    "
     aria-label="Advanced search"
     (click)="open(configs)"
     data-cy="advanced-search-button"
@@ -19,11 +25,9 @@
       <span class="badge" data-cy="condition-count">{{ active.length }}</span>
     }
     @if (draft()) {
-      <span
-        class="draft-dot"
-        matTooltip="Changes that are not applied yet"
-        data-cy="condition-draft"
-      ></span>
+      <span class="draft-dot" aria-hidden="true" data-cy="condition-draft"
+        >!</span
+      >
     }
   </button>
 }

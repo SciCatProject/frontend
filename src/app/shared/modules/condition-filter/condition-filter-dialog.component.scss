@@ -6,13 +6,20 @@
 
 .dialog-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 12px 12px 8px 24px;
 
   .dialog-icon {
+    // in line with the title, which is 32px high
+    margin-top: 4px;
     color: var(--theme-primary-default);
     flex-shrink: 0;
+  }
+
+  // the close button is 48px high, the title 32px
+  > button {
+    margin-top: -8px;
   }
 
   .dialog-heading {
@@ -20,8 +27,16 @@
     min-width: 0;
 
     h2 {
+      display: flex;
+      gap: 6px;
+      align-items: center;
       margin: 0;
       padding: 0;
+
+      // the dialog title has a 40px strut of its own, it would push the text down
+      &::before {
+        display: none;
+      }
     }
 
     p {
@@ -51,22 +66,25 @@
   flex-direction: column;
   gap: 6px;
   min-height: 0;
-  padding-right: 4px;
+  // the room below the last row is for the tap area of its buttons, it would make a scrollbar
+  padding: 2px 4px 2px 0;
   overflow-y: auto;
 }
 
-// the field, include and action cells keep their place for every kind of field
+// the NOT, field and remove cells keep their place for every kind of field
 .condition-row {
   display: grid;
   grid-template-columns: var(--condition-columns);
   align-items: center;
   gap: 8px;
-}
-
-.condition-row {
   position: relative;
   padding: 4px 10px;
-  border: 1px solid var(--theme-hover-lighter, #e0e0e0);
+  transition:
+    background 0.4s,
+    box-shadow 0.4s,
+    border-color 0.4s;
+  background: color-mix(in srgb, var(--theme-primary-default) 4%, white);
+  border: 1px solid color-mix(in srgb, var(--theme-primary-default) 35%, white);
   border-left: 3px solid var(--theme-success-default, #2e7d32);
   border-radius: 8px;
 
@@ -85,21 +103,6 @@
     border-left-color: var(--theme-warn-default, #b00020);
   }
 
-  // a condition that is switched off is clearly not used
-  &.inactive {
-    background: repeating-linear-gradient(
-      135deg,
-      transparent 0 6px,
-      rgba(128, 128, 128, 0.1) 6px 12px
-    );
-    border-left-color: #9e9e9e;
-
-    mat-form-field,
-    condition-key-picker {
-      opacity: 0.45;
-    }
-  }
-
   mat-form-field {
     min-width: 0;
   }
@@ -111,18 +114,6 @@
 
   .wide-value {
     grid-column: span var(--condition-wide-span);
-  }
-}
-
-.join-cell {
-  grid-column: 1;
-  display: flex;
-  align-items: center;
-
-  .where {
-    padding-left: 4px;
-    font-size: 0.8125rem;
-    opacity: 0.65;
   }
 }
 
@@ -140,8 +131,6 @@
   align-items: center;
   justify-content: flex-end;
 }
-
-// a dashed slot below the last row, it stays in view while the rows scroll
 
 .empty-state {
   margin: 4px 0;
@@ -174,37 +163,91 @@
     color-mix(in srgb, var(--theme-primary-default) 30%, transparent);
 }
 
-.condition-row {
-  transition:
-    background 0.4s,
-    box-shadow 0.4s,
-    border-color 0.4s;
+// the icon of the kind of filter, in the field dropdown and the help
+.field-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  font-size: 18px;
+  color: var(--theme-primary-default);
 }
 
-// off: include, on: exclude
-.exclude-button {
-  grid-column: 2;
+// the icon and the name of the field close together, in the field and in its list
+mat-select-trigger {
   display: inline-flex;
-  gap: 3px;
+  gap: 6px;
+  align-items: center;
+  vertical-align: middle;
+}
+
+// the list: the same room left and right, the icon next to the name
+::ng-deep .condition-panel .mat-mdc-option {
+  padding-right: 12px;
+  padding-left: 12px;
+
+  .mat-icon.field-icon {
+    margin-right: 6px;
+  }
+
+  .mat-pseudo-checkbox-minimal {
+    margin-inline-end: 0;
+  }
+}
+
+// the help popup: what each kind of filter takes, with an example of what is typed
+.guide-item {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  align-items: start;
+  gap: 0 8px;
+
+  .field-icon {
+    margin-top: 1px;
+  }
+}
+
+.guide-title {
+  display: block;
+}
+
+.guide-example {
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  opacity: 0.8;
+
+  code {
+    padding: 1px 6px;
+    font-family: inherit;
+    font-weight: 600;
+    background: #fff;
+    border: 1px solid var(--theme-hover-lighter, #d0d0d0);
+    border-radius: 6px;
+  }
+}
+
+// the content of the help popup
+.help {
+  display: grid;
+  gap: 14px;
+}
+
+// off: the matches are kept, on: NOT leaves them out
+.exclude-button {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 26px;
-  padding: 0 8px 0 6px;
+  padding: 0 8px;
   font: inherit;
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: #757575;
   cursor: pointer;
   background: transparent;
   border: 1px solid var(--theme-hover-lighter, #d0d0d0);
   border-radius: 13px;
-
-  mat-icon {
-    width: 14px;
-    height: 14px;
-    margin: 0;
-    font-size: 14px;
-  }
 
   &:hover {
     color: var(--theme-warn-default, #b00020);
@@ -281,135 +324,10 @@
   margin: 0 12px;
 }
 
-// the content of the AND / OR help popup
-.logic-help {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px;
-  align-items: center;
-  margin: 0;
-
-  dt,
-  dd {
-    margin: 0;
-  }
-}
-
-.logic-badge {
-  display: inline-block;
-  min-width: 64px;
-  padding: 2px 0;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  text-align: center;
-  color: var(--theme-primary-default-contrast, #fff);
-  background: var(--theme-primary-default);
-  border-radius: 4px;
-}
-
-// AND and OR share the theme colour, exclude is red
-.logic-badge.and,
-.logic-badge.or {
-  --logic-color: var(--theme-primary-default, #1976d2);
-}
-
-.logic-badge.exclude {
-  --logic-color: var(--theme-warn-default, #b00020);
-}
-
-.logic-badge.and,
-.logic-badge.or,
-.logic-badge.exclude {
-  background: var(--logic-color);
-}
-
-// rows joined by AND share a box, OR starts the next one
-.row-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  &.boxed {
-    padding: 6px;
-    background: color-mix(in srgb, var(--theme-primary-default) 4%, white);
-    border: 1px solid
-      color-mix(in srgb, var(--theme-primary-default) 35%, white);
-    border-radius: 12px;
-  }
-}
-
-.or-divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #4a5563;
-
-  &::before,
-  &::after {
-    flex: 1;
-    height: 1px;
-    content: "";
-    background: var(--theme-hover-lighter, #d0d0d0);
-  }
-}
-
-// a row without a field has nothing else, so the field takes the space
-.condition-row .field-grow {
-  grid-column: span calc(var(--condition-wide-span) + 1);
-}
-
-// the handle to move a filter to another group
-.condition-row.advanced {
-  padding-left: 26px;
-}
-
-.drag-handle {
-  position: absolute;
-  top: 50%;
-  left: 3px;
-  display: inline-flex;
-  align-items: center;
-  color: rgba(0, 0, 0, 0.45);
-  cursor: grab;
-  transform: translateY(-50%);
-
-  &:hover {
-    color: var(--theme-primary-default);
-  }
-
-  mat-icon {
-    width: 20px;
-    height: 20px;
-    font-size: 20px;
-  }
-}
-
-.drag-preview {
-  padding: 8px 14px;
-  font-size: 0.8125rem;
-  background: #fff;
-  border: 1px solid var(--theme-primary-default);
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-}
-
-.condition-row.cdk-drag-placeholder {
-  opacity: 0.35;
-}
-
-.row-group.cdk-drop-list-dragging .condition-row:not(.cdk-drag-placeholder) {
-  transition: transform 200ms ease;
-}
-
-// the buttons to add a filter: AND adds to the last group, OR starts a new one
 .add-actions {
   display: flex;
   flex-shrink: 0;
   justify-content: center;
-  gap: 8px;
   margin-top: 8px;
 }
 
@@ -442,32 +360,6 @@
   }
 }
 
-// a small icon that adds a filter to its group, joined by AND
-.add-and {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  padding: 0;
-  color: var(--theme-primary-default);
-  cursor: pointer;
-  background: transparent;
-  border: 1px dashed color-mix(in srgb, var(--theme-primary-default) 55%, white);
-  border-radius: 50%;
-
-  mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-  }
-
-  &:hover {
-    background: color-mix(in srgb, var(--theme-primary-default) 10%, white);
-    border-color: var(--theme-primary-default);
-  }
-}
-
 // the message next to Apply
 .apply-hint {
   display: inline-flex;
@@ -493,54 +385,54 @@
   }
 }
 
-// narrow: join and actions, exclude and field, key, then operator, value, unit
-@container (max-width: 1020px) {
-  .condition-row {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+// narrow: NOT, field and remove on the first line, then the key, then operator, value, unit
+@mixin stacked-row {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 
-    .join-cell {
-      grid-column: 1 / span 3;
-    }
+  .row-actions {
+    grid-column: span 6;
+    justify-content: flex-end;
+  }
 
+  &.advanced {
     .exclude-button {
-      grid-column: span 2;
+      grid-column: 1;
+      grid-row: 1;
     }
 
     .row-actions {
-      grid-column: span 6;
-      justify-content: flex-end;
+      grid-column: 6;
+      grid-row: 1;
     }
 
-    &.advanced {
-      .join-cell {
-        grid-row: 1;
-      }
-
-      .row-actions {
-        grid-column: 4 / span 3;
-        grid-row: 1;
-      }
+    > mat-form-field:first-of-type {
+      grid-column: 2 / span 4;
+      grid-row: 1;
     }
+  }
 
-    // the cells of the field: key, operator, value, unit
-    > condition-key-picker,
-    .wide-value {
-      grid-column: 1 / -1;
-    }
+  // the cells of the field: key, operator, value, unit
+  > condition-key-picker,
+  .wide-value {
+    grid-column: 1 / -1;
+  }
 
-    > mat-form-field,
-    > .range-cell {
-      grid-column: span 2;
-    }
+  > mat-form-field:not(:first-of-type):not(.wide-value),
+  > .range-cell {
+    grid-column: span 2;
+  }
+}
 
-    &.advanced > mat-form-field:first-of-type {
-      grid-column: span 4;
-    }
+// rows with scientific metadata need about 900px, the compact ones about 560px
+@container (max-width: 900px) {
+  .condition-row:not(.compact) {
+    @include stacked-row;
+  }
+}
 
-    // a row without a field has nothing else, the field takes the whole line
-    &.advanced > mat-form-field.field-grow:first-of-type {
-      grid-column: 1 / -1;
-    }
+@container (max-width: 560px) {
+  .condition-row.compact {
+    @include stacked-row;
   }
 }
 
@@ -564,43 +456,22 @@
     width: 18px;
     height: 18px;
     font-size: 18px;
-  }
-
-  &:not(.is-off) mat-icon {
     color: var(--theme-primary-default);
   }
+}
 
-  &.is-off {
-    opacity: 1;
-    color: #757575;
+// a phone: less room around the dialog
+@media (max-width: 600px) {
+  .dialog-header {
+    padding-left: 16px;
   }
-}
 
-.off-badge {
-  position: absolute;
-  top: -8px;
-  right: 12px;
-  z-index: 1;
-  line-height: 16px;
-  padding: 0 6px;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #fff;
-  background: #757575;
-  border-radius: 8px;
-}
+  .dialog-body {
+    padding: 8px 12px 12px;
+  }
 
-// the next line of a group: "and" in the column of the labels above, with the icon beside it
-.add-and-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 0 0 33px;
-
-  .and-label {
-    min-width: 40px;
-    font-size: 0.8125rem;
-    opacity: 0.65;
+  .dialog-actions {
+    flex-wrap: wrap;
+    padding: 8px 12px 12px;
   }
 }

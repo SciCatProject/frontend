@@ -103,7 +103,7 @@ Cypress.Commands.add("openAdvancedSearch", () => {
  *   `key` picks scientific metadata first when the field is not set.
  *   Samples have no field, they only have keys.
  * - `operator` is the symbol of the operator, e.g. ">" or "Between".
- * - `exclude` switches exclude on.
+ * - `exclude` switches NOT on.
  * The key is typed as it is, picking a suggestion is not needed.
  */
 Cypress.Commands.add(

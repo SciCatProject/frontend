@@ -38,9 +38,10 @@
 }
 
 .popup {
-  width: 340px;
-  max-width: 90vw;
-  font-size: 0.8125rem;
+  width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+  font-size: 0.875rem;
   line-height: 1.45;
   color: rgba(0, 0, 0, 0.87);
   // grey, so that it stands out from the white dialog it opens over
@@ -96,5 +97,5 @@
 }
 
 .popup-body {
-  padding: 12px 14px;
+  padding: 14px 18px 18px;
 }

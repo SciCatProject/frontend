@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
-import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatChipsModule } from "@angular/material/chips";
@@ -11,7 +10,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { InfoPopupModule } from "shared/modules/info-popup/info-popup.module";
 import { ConditionFilterButtonComponent } from "./condition-filter-button.component";
@@ -29,7 +27,6 @@ import { ConditionKeyPickerComponent } from "./condition-key-picker.component";
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    DragDropModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatChipsModule,
@@ -39,7 +36,6 @@ import { ConditionKeyPickerComponent } from "./condition-key-picker.component";
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    MatSlideToggleModule,
     MatTooltipModule,
     InfoPopupModule,
   ],

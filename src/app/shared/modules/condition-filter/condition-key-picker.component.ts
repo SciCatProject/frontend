@@ -10,7 +10,7 @@ import {
   Subject,
   catchError,
   debounceTime,
-  distinctUntilChanged,
+  filter,
   map,
   of,
   switchMap,
@@ -23,6 +23,9 @@ import { ConditionKeySource, KEY_PAGE_SIZE } from "./condition-filter.keys";
 /** The list is wider than the field to fit the name and the key, if there is room. */
 const WIDE_PANEL_WIDTH = 420;
 const WIDE_PANEL_MIN_VIEWPORT = 700;
+
+/** The search waits until typing has stopped for this long. */
+export const SEARCH_DEBOUNCE_MS = 250;
 
 /** Picks a scientific metadata key, loaded page by page, or lets the user type one. */
 @Component({
@@ -70,7 +73,11 @@ export class ConditionKeyPickerComponent implements OnDestroy {
       });
 
     this.typed$
-      .pipe(debounceTime(250), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(
+        debounceTime(SEARCH_DEBOUNCE_MS),
+        filter((term) => term !== this.loadedTerm),
+        takeUntil(this.destroy$),
+      )
       .subscribe((term) => this.load(term));
   }
 
@@ -103,7 +110,10 @@ export class ConditionKeyPickerComponent implements OnDestroy {
 
   onInput(text: string): void {
     this.keyChange.emit(text);
-    this.typed$.next(text.trim());
+    const term = text.trim();
+    // the list says it is loading at once, not only after the search started
+    this.loading.set(term !== this.loadedTerm);
+    this.typed$.next(term);
   }
 
   onSelected(key: string): void {

@@ -1,10 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { FilterCondition } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
-import {
-  describeCondition,
-  getActiveConfigs,
-  groupByJoin,
-} from "./condition-filter.utils";
+import { describeCondition, getActiveConfigs } from "./condition-filter.utils";
 
 /** The applied filters as chips, the host connects the events to the button. */
 @Component({
@@ -23,8 +20,8 @@ export class ConditionFilterChipsComponent {
   readonly describe = describeCondition;
   readonly getActive = getActiveConfigs;
 
-  /** The groups the filter is evaluated with: AND inside a group, OR between groups. */
-  getGroups(active: ConditionConfig[]): ConditionConfig[][] {
-    return groupByJoin(active, ({ condition }) => condition.join);
+  /** The filter without its NOT, the chip shows that as a tag of its own. */
+  text(condition: FilterCondition): string {
+    return describeCondition({ ...condition, exclude: false });
   }
 }

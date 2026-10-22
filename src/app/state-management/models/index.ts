@@ -190,13 +190,10 @@ export type FilterConditionRelation =
 /** Where the field of a condition lives, scientific metadata when missing. */
 export type ConditionSource = "scientificMetadata" | "dataset";
 
-/** How a condition is combined with the one before it, AND when missing. */
-export type ConditionJoin = "AND" | "OR";
-
 /**
  * A condition on a scientific metadata key or on a dataset field.
- * `exclude`, `join` and `source` are only set when they differ from the
- * default, so conditions saved before they existed keep their meaning.
+ * `exclude` and `source` are only set when they differ from the default,
+ * so conditions saved before they existed keep their meaning.
  */
 export interface FilterCondition {
   lhs: string;
@@ -206,9 +203,8 @@ export interface FilterCondition {
   unitsOptions?: string[];
   human_name?: string;
   source?: ConditionSource;
-  /** "Not include": leaves out what matches the condition. */
+  /** NOT: leaves out what matches the condition. */
   exclude?: boolean;
-  join?: ConditionJoin;
 }
 
 export interface MetadataKey {

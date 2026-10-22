@@ -43,6 +43,17 @@ describe("InfoPopupComponent", () => {
     expect(trigger().getAttribute("aria-expanded")).toBe("true");
   });
 
+  it("should stay inside the window, no taller than the room beside the icon", () => {
+    trigger().click();
+    fixture.detectChanges();
+
+    const { top, bottom, left, right } = popup().getBoundingClientRect();
+    expect(left).toBeGreaterThanOrEqual(0);
+    expect(right).toBeLessThanOrEqual(window.innerWidth);
+    expect(top).toBeGreaterThanOrEqual(0);
+    expect(bottom).toBeLessThanOrEqual(window.innerHeight);
+  });
+
   it("should close when the icon is clicked again", () => {
     trigger().click();
     fixture.detectChanges();

@@ -329,7 +329,6 @@ describe("test dataset selectors", () => {
         rhs: ["beam"],
         unit: "",
         source: "dataset",
-        join: "OR",
       };
 
       it("should not add anything without conditions", () => {
@@ -343,14 +342,14 @@ describe("test dataset selectors", () => {
         ]);
       });
 
-      it("should keep the $or of the archive view mode when conditions have an OR", () => {
+      it("should keep the $or of the archive view mode when conditions are combined", () => {
         const mode = { $or: [{ "datasetlifecycle.archivable": true }] };
         const query = withConditions([temperature, keywords], mode);
 
         expect(query.$or).toEqual(mode.$or);
         expect(query.$and).toEqual([
           {
-            $or: [
+            $and: [
               { "scientificMetadata.temperature.value": { $gt: 20 } },
               { keywords: { $in: ["beam"] } },
             ],
@@ -410,16 +409,7 @@ describe("test dataset selectors", () => {
       expect(facetFields([plain]).scientific).toEqual([plain]);
     });
 
-    it("should only send what the facets understand", () => {
-      const { scientific } = facetFields([{ ...plain, join: "AND" }]);
-
-      expect(scientific).toEqual([plain]);
-    });
-
-    it("should leave out conditions with OR, not include or dataset fields", () => {
-      expect(
-        facetFields([plain, { ...plain, join: "OR" }]).scientific,
-      ).toBeUndefined();
+    it("should leave out conditions with NOT or on dataset fields", () => {
       expect(
         facetFields([{ ...plain, exclude: true }]).scientific,
       ).toBeUndefined();
@@ -467,7 +457,7 @@ describe("test dataset selectors", () => {
       expect(projector(params, [{ ...plain, exclude: true }])).toEqual(
         params.query,
       );
-      expect(projector(params, [plain, { ...plain, join: "OR" }])).toEqual(
+      expect(projector(params, [{ ...plain, source: "dataset" }])).toEqual(
         params.query,
       );
     });

@@ -724,3 +724,11 @@ mat-paginator {
     max-width: 100%;
   }
 }
+
+// the search box follows the screen instead of its 500px minimum
+@media (max-width: 600px) {
+  .table-header-controls .global-search-wrapper {
+    min-width: 0;
+    padding: 0 8px;
+  }
+}

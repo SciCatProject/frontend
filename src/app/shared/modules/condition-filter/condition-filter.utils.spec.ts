@@ -4,8 +4,8 @@ import {
   conditionsToQuery,
   describeCondition,
   getRelationOption,
-  groupByJoin,
   isConditionComplete,
+  metadataPath,
   isPlainConditionList,
   normalizeCondition,
   splitValues,
@@ -182,16 +182,14 @@ describe("condition filter utils", () => {
         condition({
           source: "scientificMetadata",
           exclude: false,
-          join: "AND",
         }),
       );
       expect("source" in normalized).toBeFalse();
       expect("exclude" in normalized).toBeFalse();
-      expect("join" in normalized).toBeFalse();
 
-      expect(
-        normalizeCondition(condition({ exclude: true, join: "OR" })),
-      ).toEqual(jasmine.objectContaining({ exclude: true, join: "OR" }));
+      expect(normalizeCondition(condition({ exclude: true }))).toEqual(
+        jasmine.objectContaining({ exclude: true }),
+      );
     });
   });
 
@@ -259,7 +257,7 @@ describe("condition filter utils", () => {
       ).toBe('Dataset name contains "ref"');
     });
 
-    it("should start with not for a condition that is not included", () => {
+    it("should start with not for a condition with NOT", () => {
       expect(describeCondition(condition({ exclude: true }))).toBe(
         "not temperature = 20",
       );
@@ -267,8 +265,8 @@ describe("condition filter utils", () => {
   });
 
   describe("conditionsToQuery", () => {
-    const metadata = (lhs: string, rhs: number, join?: "OR") =>
-      condition({ lhs, relation: "GREATER_THAN", rhs, join });
+    const metadata = (lhs: string, rhs: number) =>
+      condition({ lhs, relation: "GREATER_THAN", rhs });
 
     it("should give an empty query without conditions", () => {
       expect(conditionsToQuery([])).toEqual({});
@@ -304,7 +302,7 @@ describe("condition filter utils", () => {
       });
     });
 
-    it("should need all conditions to match by default", () => {
+    it("should need all conditions to match", () => {
       expect(conditionsToQuery([metadata("a", 1), metadata("b", 2)])).toEqual({
         $and: [
           { "scientificMetadata.a.value": { $gt: 1 } },
@@ -325,34 +323,7 @@ describe("condition filter utils", () => {
       ]);
     });
 
-    it("should apply AND before OR", () => {
-      // a AND b OR c is (a AND b) OR c
-      expect(
-        conditionsToQuery([
-          metadata("a", 1),
-          metadata("b", 2),
-          metadata("c", 3, "OR"),
-        ]),
-      ).toEqual({
-        $or: [
-          {
-            $and: [
-              { "scientificMetadata.a.value": { $gt: 1 } },
-              { "scientificMetadata.b.value": { $gt: 2 } },
-            ],
-          },
-          { "scientificMetadata.c.value": { $gt: 3 } },
-        ],
-      });
-    });
-
-    it("should ignore the join of the first condition", () => {
-      expect(conditionsToQuery([metadata("a", 1, "OR")])).toEqual({
-        "scientificMetadata.a.value": { $gt: 1 },
-      });
-    });
-
-    it("should leave out what a condition that is not included matches", () => {
+    it("should leave out what a condition with NOT matches", () => {
       expect(
         conditionsToQuery([
           condition({ relation: "LESS_THAN", rhs: 5, exclude: true }),
@@ -386,10 +357,10 @@ describe("condition filter utils", () => {
       expect(
         conditionsToQuery([
           datasetCondition({ rhs: ["beam"], exclude: true }),
-          metadata("a", 1, "OR"),
+          metadata("a", 1),
         ]),
       ).toEqual({
-        $or: [
+        $and: [
           { $nor: [{ keywords: { $in: ["beam"] } }] },
           { "scientificMetadata.a.value": { $gt: 1 } },
         ],
@@ -397,54 +368,55 @@ describe("condition filter utils", () => {
     });
   });
 
-  describe("groupByJoin", () => {
-    const join = (item: { join?: "AND" | "OR" }) => item.join;
-
-    it("should keep filters joined by AND in one group and start a new one at OR", () => {
-      const [a, b, c, d] = [
-        {},
-        { join: "OR" as const },
-        { join: "AND" as const },
-        {},
-      ];
-
-      expect(groupByJoin([a, b, c, d], join)).toEqual([[a], [b, c, d]]);
+  describe("metadata keys in the query", () => {
+    it("should leave a plain key as it is", () => {
+      expect(metadataPath("sample_temperature")).toBe(
+        "scientificMetadata.sample_temperature",
+      );
     });
 
-    it("should start with a group even when the first filter says OR", () => {
-      const first = { join: "OR" as const };
+    it("should write a key with a space, a colon or a slash like the backend stores it", () => {
+      expect(metadataPath("silicon BC offset")).toBe(
+        "scientificMetadata.silicon%20BC%20offset",
+      );
+      expect(metadataPath("BL17:Chop:Skf1:EnergyReq")).toBe(
+        "scientificMetadata.BL17%3AChop%3ASkf1%3AEnergyReq",
+      );
+      expect(metadataPath("entry:AI6/data/Decimation factor")).toBe(
+        "scientificMetadata.entry%3AAI6%2Fdata%2FDecimation%20factor",
+      );
+    });
 
-      expect(groupByJoin([first], join)).toEqual([[first]]);
-      expect(groupByJoin([], join)).toEqual([]);
+    it("should still go one level down at a dot", () => {
+      expect(metadataPath("parent.child key")).toBe(
+        "scientificMetadata.parent.child%20key",
+      );
+    });
+
+    it("should use the written key in the query", () => {
+      expect(
+        conditionsToQuery([
+          condition({ lhs: "BL17:Chop", relation: "GREATER_THAN", rhs: 1 }),
+        ]),
+      ).toEqual({ "scientificMetadata.BL17%3AChop.value": { $gt: 1 } });
     });
   });
 
   describe("isPlainConditionList", () => {
-    it("should accept metadata conditions that all have to match", () => {
+    it("should accept metadata conditions", () => {
       expect(isPlainConditionList([])).toBeTrue();
-      expect(
-        isPlainConditionList([condition(), condition({ join: "AND" })]),
-      ).toBeTrue();
+      expect(isPlainConditionList([condition(), condition()])).toBeTrue();
     });
 
     it("should not accept what the facets can't take", () => {
       expect(isPlainConditionList([datasetCondition()])).toBeFalse();
       expect(isPlainConditionList([condition({ exclude: true })])).toBeFalse();
-      expect(
-        isPlainConditionList([condition(), condition({ join: "OR" })]),
-      ).toBeFalse();
-    });
-
-    it("should accept a join on the first condition, it is not used", () => {
-      expect(isPlainConditionList([condition({ join: "OR" })])).toBeTrue();
     });
   });
 
   describe("toFacetConditions", () => {
     it("should only keep what the facets take", () => {
-      expect(
-        toFacetConditions([condition({ exclude: false, join: "AND" })]),
-      ).toEqual([
+      expect(toFacetConditions([condition({ exclude: false })])).toEqual([
         { lhs: "temperature", relation: "EQUAL_TO", rhs: "20", unit: "" },
       ]);
     });

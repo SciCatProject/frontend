@@ -9,7 +9,10 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { Observable, Subject, of } from "rxjs";
 import { MetadataKey } from "state-management/models";
 import { ConditionFilterModule } from "./condition-filter.module";
-import { ConditionKeyPickerComponent } from "./condition-key-picker.component";
+import {
+  ConditionKeyPickerComponent,
+  SEARCH_DEBOUNCE_MS,
+} from "./condition-key-picker.component";
 import { KEY_PAGE_SIZE } from "./condition-filter.keys";
 
 describe("ConditionKeyPickerComponent", () => {
@@ -118,15 +121,41 @@ describe("ConditionKeyPickerComponent", () => {
     expect(changed.calls.allArgs()).toEqual([["te"], ["temp"]]);
     expect(source).not.toHaveBeenCalled();
 
-    tick(250);
+    tick(SEARCH_DEBOUNCE_MS);
 
     expect(source).toHaveBeenCalledOnceWith("temp", 0, KEY_PAGE_SIZE);
     flush();
   }));
 
+  it("should say it is loading as soon as something is typed", fakeAsync(() => {
+    component.onOpened();
+    tick();
+    expect(component.loading()).toBeFalse();
+
+    component.onInput("temp");
+    expect(component.loading()).toBeTrue();
+    expect(source).toHaveBeenCalledTimes(1);
+
+    tick(SEARCH_DEBOUNCE_MS);
+    expect(component.loading()).toBeFalse();
+  }));
+
+  it("should not wait for a search that is already listed", fakeAsync(() => {
+    component.onOpened();
+    tick();
+
+    component.onInput("temp");
+    tick(SEARCH_DEBOUNCE_MS);
+    component.onInput("temp ");
+    expect(component.loading()).toBeFalse();
+    tick(SEARCH_DEBOUNCE_MS);
+
+    expect(source).toHaveBeenCalledTimes(2);
+  }));
+
   it("should list all keys again when the list opens after a search", fakeAsync(() => {
     component.onInput("temp");
-    tick(250);
+    tick(SEARCH_DEBOUNCE_MS);
     component.onOpened();
     tick();
 
@@ -139,7 +168,7 @@ describe("ConditionKeyPickerComponent", () => {
     source.and.returnValue(of([{ key: "temperature" }]));
 
     component.onInput("temp");
-    tick(250);
+    tick(SEARCH_DEBOUNCE_MS);
 
     expect(keysOf()).toEqual(["temperature"]);
   }));

@@ -1,5 +1,6 @@
 import {
   DATASET_FIELDS,
+  FIELD_TYPES,
   METADATA_FIELD,
   getDatasetField,
   getFieldOptions,
@@ -25,6 +26,24 @@ describe("condition filter fields", () => {
     expect(options.length).toBe(DATASET_FIELDS.length + 1);
     expect(options.some(({ value }) => value === METADATA_FIELD)).toBeTrue();
     expect(labels).toEqual([...labels].sort((a, b) => a.localeCompare(b)));
+  });
+
+  it("should give every field one of the four kinds of filter, each with an icon", () => {
+    const options = getFieldOptions(DATASET_FIELDS);
+    const kinds = new Set(options.map(({ type }) => type));
+
+    expect(kinds).toEqual(new Set(["text", "list", "date", "metadata"]));
+    expect(
+      Object.values(FIELD_TYPES).every(({ icon, label }) => icon && label),
+    ).toBeTrue();
+    expect(options.find(({ value }) => value === "keywords").type).toBe("list");
+    expect(options.find(({ value }) => value === "owner").type).toBe("text");
+    expect(options.find(({ value }) => value === "creationTime").type).toBe(
+      "date",
+    );
+    expect(options.find(({ value }) => value === METADATA_FIELD).type).toBe(
+      "metadata",
+    );
   });
 
   it("should only list scientific metadata without dataset fields", () => {

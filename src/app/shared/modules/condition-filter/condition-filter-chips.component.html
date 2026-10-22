@@ -11,52 +11,34 @@
     </span>
 
     <mat-chip-set class="chips" aria-label="Applied filters">
-      @for (group of getGroups(active); track $index; let firstGroup = $first) {
-        <!-- the OR stays with the group after it when the row wraps -->
-        <span class="group-item">
-          @if (!firstGroup) {
-            <span
-              class="join group-join"
+      @for (config of active; track config) {
+        <mat-chip-row
+          [class.excluded]="config.condition.exclude"
+          [matTooltip]="describe(config.condition)"
+          matTooltipShowDelay="300"
+          (removed)="filterRemove.emit(config)"
+          (click)="filterSelect.emit(config)"
+          data-cy="condition-chip"
+        >
+          @if (config.condition.exclude) {
+            <mat-icon
+              class="not-icon"
               aria-hidden="true"
-              data-cy="condition-join-label"
-              >or</span
+              data-cy="condition-chip-not"
+              >block</mat-icon
             >
+            <span class="cdk-visually-hidden">NOT</span>
           }
-          <span
-            class="group"
-            [class.alone]="group.length === 1"
-            data-cy="condition-group"
+          <span class="chip-text">{{ text(config.condition) }}</span>
+          <button
+            matChipRemove
+            type="button"
+            aria-label="Remove filter"
+            (click)="$event.stopPropagation()"
           >
-            @for (config of group; track config; let first = $first) {
-              @if (!first) {
-                <span
-                  class="join"
-                  aria-hidden="true"
-                  data-cy="condition-join-label"
-                  >and</span
-                >
-              }
-              <mat-chip-row
-                [class.excluded]="config.condition.exclude"
-                [matTooltip]="describe(config.condition)"
-                matTooltipShowDelay="300"
-                (removed)="filterRemove.emit(config)"
-                (click)="filterSelect.emit(config)"
-                data-cy="condition-chip"
-              >
-                <span class="chip-text">{{ describe(config.condition) }}</span>
-                <button
-                  matChipRemove
-                  type="button"
-                  aria-label="Remove filter"
-                  (click)="$event.stopPropagation()"
-                >
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip-row>
-            }
-          </span>
-        </span>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
       }
     </mat-chip-set>
 
@@ -67,8 +49,8 @@
       (click)="clearAll.emit()"
       data-cy="condition-chips-clear"
     >
-      <mat-icon>clear_all</mat-icon>
-      Clear all
+      <mat-icon>playlist_remove</mat-icon>
+      Clear
     </button>
   </section>
 }

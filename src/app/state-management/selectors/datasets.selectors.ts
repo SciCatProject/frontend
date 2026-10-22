@@ -256,8 +256,8 @@ export const selectFullqueryParams = createSelector(
       ...textQuery,
     };
 
-    // The conditions can contain $or, which the mode of the archive view
-    // already uses, so they are added as one more condition to match
+    // The conditions have a $and, which the mode of the archive view can
+    // have too, so they are added as one more condition to match
     const conditionsQuery = conditionsToQuery(scientific ?? []);
     if (Object.keys(conditionsQuery).length) {
       query.$and = [...((query.$and as unknown[]) ?? []), conditionsQuery];
@@ -278,8 +278,8 @@ export const selectFullfacetParams = createSelector(
       ...pagination,
     };
     const fields: Record<string, unknown> = restrictFilter(theRest);
-    // the facets only understand conditions on scientific metadata that all
-    // have to match, see selectConditionsCountQuery for the other ones
+    // the facets only understand conditions on scientific metadata,
+    // see selectConditionsCountQuery for the other ones
     if (scientific?.length && isPlainConditionList(scientific)) {
       fields.scientific = toFacetConditions(scientific);
     }
@@ -294,7 +294,7 @@ export const selectFullfacetParams = createSelector(
 );
 
 /**
- * The facets can't take conditions with OR, "not include" or dataset fields,
+ * The facets can't take conditions with NOT or on dataset fields,
  * the total of datasets is counted with the query of the datasets instead.
  * It is null when the facets take all conditions.
  */

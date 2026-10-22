@@ -7,7 +7,6 @@ import {
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { of } from "rxjs";
 import { ConditionSettingScope } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
@@ -16,13 +15,18 @@ import {
   ConditionFilterDialogComponent,
   ConditionFilterDialogData,
   METADATA_FIELD,
+  dialogWidth,
+  needsWideDialog,
 } from "./condition-filter-dialog.component";
 
 describe("ConditionFilterDialogComponent", () => {
   let component: ConditionFilterDialogComponent;
   let fixture: ComponentFixture<ConditionFilterDialogComponent>;
   let dialogData: ConditionFilterDialogData;
-  const dialogRef = jasmine.createSpyObj("MatDialogRef", ["close"]);
+  const dialogRef = jasmine.createSpyObj("MatDialogRef", [
+    "close",
+    "updateSize",
+  ]);
 
   const saved = (
     overrides: Partial<ConditionConfig["condition"]> = {},
@@ -72,7 +76,7 @@ describe("ConditionFilterDialogComponent", () => {
   const closedWith = () => dialogRef.close.calls.mostRecent().args[0];
   // minmax(a, b) is one column
   const tracks = () =>
-    component.gridColumns.match(/minmax\([^)]+\)|\S+/g).length;
+    component.gridColumns().match(/minmax\([^)]+\)|\S+/g).length;
   const cells = (selector: string): HTMLElement[] =>
     Array.from(fixture.nativeElement.querySelectorAll(selector));
 
@@ -99,7 +103,7 @@ describe("ConditionFilterDialogComponent", () => {
     createComponent();
 
     expect(component.rows().length).toBe(1);
-    expect(component.getKind(row().condition)).toBe("none");
+    expect(component.getKind(row().condition)).toBe("metadata");
     expect(component.canApply()).toBeTrue();
   });
 
@@ -125,11 +129,22 @@ describe("ConditionFilterDialogComponent", () => {
   describe("kinds of fields", () => {
     beforeEach(() => createComponent());
 
-    it("should only show the field of a new row, the other cells follow its kind", () => {
-      expect(cells("[data-cy=condition-key]").length).toBe(0);
-      expect(cells("[data-cy=condition-operator]").length).toBe(0);
-      expect(cells("[data-cy=condition-value]").length).toBe(0);
-      expect(cells("[data-cy=condition-unit]").length).toBe(0);
+    it("should start a new row on scientific metadata", () => {
+      expect(component.getFieldValue(row().condition)).toBe(METADATA_FIELD);
+      expect(cells("[data-cy=condition-key]").length).toBe(1);
+      expect(cells("[data-cy=condition-operator]").length).toBe(1);
+      expect(cells("[data-cy=condition-value]").length).toBe(1);
+      expect(cells("[data-cy=condition-unit]").length).toBe(1);
+    });
+
+    it("should show the icon of the kind of filter of the chosen field", () => {
+      component.setField(id(), "keywords");
+      fixture.detectChanges();
+
+      expect(component.getFieldOption(row().condition).type).toBe("list");
+      expect(
+        cells("[data-cy=condition-field] .field-icon")[0].textContent,
+      ).toContain("data_array");
     });
 
     it("should list scientific metadata with the other fields, in alphabetical order", () => {
@@ -140,7 +155,7 @@ describe("ConditionFilterDialogComponent", () => {
       expect(labels.length).toBe(component.datasetFields.length + 1);
     });
 
-    it("should switch exclude on and off with its button", () => {
+    it("should switch NOT on and off with its button", () => {
       setMetadata(0, "temperature");
       fixture.detectChanges();
       const button = cells("[data-cy=condition-exclude]")[0];
@@ -295,37 +310,67 @@ describe("ConditionFilterDialogComponent", () => {
   });
 
   describe("layout", () => {
-    it("should have a column for every cell of a row", () => {
-      createComponent();
+    it("should only have the cells of a dataset field while no row has metadata", () => {
+      createComponent([savedDatasetField()]);
 
-      // join, exclude, field, key, operator, value, unit, actions
-      expect(tracks()).toBe(8);
-      expect(component.wideValueSpan).toBe(4);
+      // not, field, value, remove
+      expect(tracks()).toBe(4);
+      expect(component.wideValueSpan()).toBe(1);
+      expect(component.wide()).toBeFalse();
+    });
+
+    it("should have a column for every cell of a metadata row", () => {
+      createComponent([saved()]);
+
+      // not, field, key, operator, value, unit, remove
+      expect(tracks()).toBe(7);
+      expect(component.wideValueSpan()).toBe(4);
+      expect(component.wide()).toBeTrue();
     });
 
     it("should leave out the unit column without units", () => {
-      createComponent([], "dataset", false);
+      createComponent([saved()], "dataset", false);
 
+      expect(tracks()).toBe(6);
+      expect(component.wideValueSpan()).toBe(3);
+    });
+
+    it("should get wide once a row is about scientific metadata", () => {
+      createComponent([savedDatasetField()]);
+      expect(component.wide()).toBeFalse();
+
+      component.setField(id(), METADATA_FIELD);
+
+      expect(component.wide()).toBeTrue();
       expect(tracks()).toBe(7);
-      expect(component.wideValueSpan).toBe(3);
     });
 
     it("should only have the cells of metadata for samples", () => {
       createComponent([], "sample");
 
-      // key, operator, value, unit, actions
+      // key, operator, value, unit, remove
       expect(tracks()).toBe(5);
+      expect(component.wide()).toBeTrue();
+    });
+
+    it("should size the dialog to what its rows need", () => {
+      expect(dialogWidth(false)).toBe("860px");
+      expect(dialogWidth(true)).toBe("1160px");
+      // no filters yet: the new one is about scientific metadata
+      expect(needsWideDialog([])).toBeTrue();
+      expect(needsWideDialog([saved()])).toBeTrue();
+      expect(needsWideDialog([savedDatasetField()])).toBeFalse();
     });
   });
 
   describe("samples", () => {
     beforeEach(() => createComponent([], "sample"));
 
-    it("should only offer metadata keys, without joins and exclude", () => {
+    it("should only offer metadata keys, without NOT", () => {
       expect(component.advanced).toBeFalse();
       expect(component.datasetFields).toEqual([]);
       expect(cells("[data-cy=condition-field]").length).toBe(0);
-      expect(cells("[data-cy=condition-include]").length).toBe(0);
+      expect(cells("[data-cy=condition-exclude]").length).toBe(0);
       expect(cells("[data-cy=condition-key]").length).toBe(1);
     });
 
@@ -345,89 +390,31 @@ describe("ConditionFilterDialogComponent", () => {
     });
   });
 
-  describe("groups", () => {
-    const mk = (lhs: string, join?: "OR" | "AND"): ConditionConfig => ({
+  describe("rows", () => {
+    const mk = (lhs: string): ConditionConfig => ({
       enabled: true,
-      condition: {
-        lhs,
-        relation: "EQUAL_TO_NUMERIC",
-        rhs: 1,
-        unit: "",
-        ...(join && { join }),
-      },
+      condition: { lhs, relation: "EQUAL_TO_NUMERIC", rhs: 1, unit: "" },
     });
 
-    it("should give every group a box and divide the groups with OR", () => {
-      createComponent([mk("a"), mk("b", "OR"), mk("c", "AND"), mk("d", "AND")]);
-
-      const boxes = cells("[data-cy=condition-row-group]");
-
-      expect(component.groups().map((group) => group.length)).toEqual([1, 3]);
-      expect(boxes.length).toBe(2);
-      // a filter on its own has its box too, so the add icon belongs to it
-      expect(boxes[0].classList).toContain("boxed");
-      expect(boxes[1].classList).toContain("boxed");
-      expect(cells("[data-cy=condition-or-divider]").length).toBe(1);
-      expect(cells("[data-cy=condition-row]").length).toBe(4);
-    });
-
-    const fakeDrop = (
-      fromGroup: number,
-      previousIndex: number,
-      toGroup: number,
-      currentIndex: number,
-    ) =>
-      ({
-        previousContainer: { data: fromGroup },
-        container: { data: toGroup },
-        previousIndex,
-        currentIndex,
-      }) as unknown as CdkDragDrop<number>;
-
-    const lhsOrder = () =>
-      component.rows().map(({ condition }) => condition.lhs);
-    const joins = () => component.rows().map(({ condition }) => condition.join);
-
-    it("should add a filter to a group, joined by AND", () => {
-      createComponent([mk("a"), mk("b", "OR")]);
-
-      component.addRowToGroup(0);
-
-      expect(component.groups().map((group) => group.length)).toEqual([2, 1]);
-      expect(lhsOrder()).toEqual(["a", "", "b"]);
-      expect(joins()).toEqual([undefined, "AND", "OR"]);
-    });
-
-    it("should offer Add AND in every group, also while a filter has no field", () => {
-      createComponent();
-      fixture.detectChanges();
-
-      expect(cells("[data-cy=condition-add-and]").length).toBe(1);
-    });
-
-    it("should start a new group with Add filter, joined by OR", () => {
-      createComponent([mk("a"), mk("b", "AND")]);
+    it("should add a filter below the others", () => {
+      createComponent([mk("a"), mk("b")]);
 
       component.addRow();
 
-      expect(component.groups().map((group) => group.length)).toEqual([2, 1]);
-      expect(joins()).toEqual([undefined, "AND", "OR"]);
+      expect(component.rows().map(({ condition }) => condition.lhs)).toEqual([
+        "a",
+        "b",
+        "",
+      ]);
+      expect(cells("[data-cy=condition-row]").length).toBe(2);
     });
 
-    it("should not join the rows of samples", () => {
-      createComponent([mk("a")], "sample");
+    it("should offer one Add filter button", () => {
+      createComponent([mk("a"), mk("b")]);
 
-      component.addRow();
-
-      expect(joins()).toEqual([undefined, undefined]);
-    });
-
-    it("should name the bottom button Add filter, it starts a new group", () => {
-      createComponent([mk("a")]);
-
-      expect(cells("[data-cy=condition-add]")[0].textContent).toContain(
-        "Add filter",
-      );
+      const buttons = cells("[data-cy=condition-add]");
+      expect(buttons.length).toBe(1);
+      expect(buttons[0].textContent).toContain("Add filter");
     });
 
     it("should show a new filter and put the cursor in it", fakeAsync(() => {
@@ -443,53 +430,6 @@ describe("ConditionFilterDialogComponent", () => {
       expect(added).toHaveBeenCalled();
       expect(second.getAttribute("data-row-id")).toBe(String(id(1)));
     }));
-
-    it("should move a filter to another group", () => {
-      createComponent([mk("a"), mk("b", "AND"), mk("c", "OR")]);
-
-      // b leaves the first group and is put in front of c
-      component.drop(fakeDrop(0, 1, 1, 0));
-
-      expect(lhsOrder()).toEqual(["a", "b", "c"]);
-      expect(component.groups().map((group) => group.length)).toEqual([1, 2]);
-      expect(joins()).toEqual([undefined, "OR", "AND"]);
-    });
-
-    it("should remove a group that is left empty", () => {
-      createComponent([mk("a"), mk("b", "OR")]);
-
-      component.drop(fakeDrop(1, 0, 0, 1));
-      fixture.detectChanges();
-
-      expect(component.groups().length).toBe(1);
-      expect(joins()).toEqual([undefined, "AND"]);
-      expect(cells("[data-cy=condition-or-divider]").length).toBe(0);
-    });
-
-    it("should move a filter within its group", () => {
-      createComponent([mk("a"), mk("b", "AND"), mk("c", "OR")]);
-
-      component.drop(fakeDrop(0, 0, 0, 1));
-
-      expect(lhsOrder()).toEqual(["b", "a", "c"]);
-      expect(joins()).toEqual([undefined, "AND", "OR"]);
-    });
-
-    it("should offer a drag handle for each filter and an AND icon for each group", () => {
-      createComponent([mk("a"), mk("b", "OR")]);
-      fixture.detectChanges();
-      expect(cells("[data-cy=condition-drag-handle]").length).toBe(2);
-      expect(cells("[data-cy=condition-add-and]").length).toBe(2);
-      expect(cells("[data-cy=condition-add]").length).toBe(1);
-    });
-
-    it("should not box the rows of samples", () => {
-      createComponent([mk("a"), mk("b")], "sample");
-
-      expect(cells("[data-cy=condition-row-group]")[0].classList).not.toContain(
-        "boxed",
-      );
-    });
   });
 
   describe("validation", () => {
@@ -542,22 +482,12 @@ describe("ConditionFilterDialogComponent", () => {
       expect(component.canApply()).toBeFalse();
     });
 
-    it("should not apply scientific metadata without a key", () => {
-      component.setField(id(), METADATA_FIELD);
-      fixture.detectChanges();
-
-      expect(component.canApply()).toBeFalse();
-      expect(cells("[data-cy=condition-error]").length).toBe(0);
+    it("should leave out a row that is still empty", () => {
+      expect(component.canApply()).toBeTrue();
 
       component.apply();
-      fixture.detectChanges();
 
-      expect(dialogRef.close).not.toHaveBeenCalled();
-      expect(cells("[data-cy=condition-error]").length).toBe(1);
-    });
-
-    it("should not complain about a row with no field chosen", () => {
-      expect(component.canApply()).toBeTrue();
+      expect(dialogRef.close).toHaveBeenCalledOnceWith([]);
     });
 
     it("should allow the same key twice, both conditions are kept", () => {
@@ -568,13 +498,6 @@ describe("ConditionFilterDialogComponent", () => {
       setMetadata(1, "temperature");
       component.setValue(id(1), "9");
       component.setRelation(id(1), "LESS_THAN");
-
-      expect(component.canApply()).toBeTrue();
-    });
-
-    it("should let users switch off a condition instead of giving it a value", () => {
-      setMetadata(0, "temperature");
-      component.setEnabled(id(), false);
 
       expect(component.canApply()).toBeTrue();
     });
@@ -610,16 +533,6 @@ describe("ConditionFilterDialogComponent", () => {
       expect(component.rows().length).toBe(0);
       expect(cells("[data-cy=condition-row]").length).toBe(0);
       expect(cells("[data-cy=condition-empty]").length).toBe(1);
-    });
-
-    it("should mark a condition that is switched off", () => {
-      setMetadata(0, "temperature");
-      expect(cells("[data-cy=condition-off]").length).toBe(0);
-
-      component.setEnabled(id(), false);
-      fixture.detectChanges();
-
-      expect(cells("[data-cy=condition-off]").length).toBe(1);
     });
 
     it("should clear all filters at once and close", () => {
@@ -669,17 +582,6 @@ describe("ConditionFilterDialogComponent", () => {
       expect(dialogRef.close).toHaveBeenCalledOnceWith([saved()]);
     });
 
-    it("should keep the switched off state", () => {
-      createComponent([saved()]);
-      component.setEnabled(id(), false);
-
-      component.apply();
-
-      expect(dialogRef.close).toHaveBeenCalledWith([
-        { ...saved(), enabled: false },
-      ]);
-    });
-
     it("should close with an empty list when everything was cleared", () => {
       createComponent([saved()]);
       component.removeRow(id());
@@ -716,7 +618,7 @@ describe("ConditionFilterDialogComponent", () => {
       });
     });
 
-    it("should close with exclude and the join of a new group", () => {
+    it("should close with NOT only on the filters that have it", () => {
       createComponent();
       setMetadata(0, "temperature");
       component.setValue(id(), "5");
@@ -728,11 +630,8 @@ describe("ConditionFilterDialogComponent", () => {
       component.apply();
 
       const [first, second] = closedWith();
-      expect("join" in first.condition).toBeFalse();
       expect("exclude" in first.condition).toBeFalse();
-      expect(second.condition).toEqual(
-        jasmine.objectContaining({ join: "OR", exclude: true }),
-      );
+      expect(second.condition.exclude).toBeTrue();
     });
   });
 });

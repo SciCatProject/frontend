@@ -1,6 +1,5 @@
 import * as Math from "mathjs";
 import {
-  ConditionJoin,
   FilterCondition,
   FilterConditionRelation,
 } from "state-management/models";
@@ -108,14 +107,12 @@ export function isConditionComplete(condition: FilterCondition): boolean {
 function withoutDefaults({
   source,
   exclude,
-  join,
   ...condition
 }: FilterCondition): FilterCondition {
   return {
     ...condition,
     ...(source === "dataset" && { source }),
     ...(exclude && { exclude }),
-    ...(join === "OR" && { join }),
   };
 }
 
@@ -219,6 +216,14 @@ function describeValue(condition: FilterCondition): string {
   return `${condition.lhs} ${symbol} ${condition.rhs}${unit}`;
 }
 
+/**
+ * The path of a metadata key in the query. The backend stores the keys URL-encoded,
+ * a key with a space or a colon is only found when it is written the same way.
+ * A dot still goes one level down, the parts of the key are encoded one by one.
+ */
+export const metadataPath = (key: string): string =>
+  `scientificMetadata.${key.split(".").map(encodeURIComponent).join(".")}`;
+
 export function convertToSIUnit(
   lhs: string,
   rhs: number,
@@ -254,8 +259,8 @@ export function conditionToMongoQuery(
 
   const query: Record<string, any> = {};
   const valuePath = unit
-    ? `scientificMetadata.${lhs}.valueSI`
-    : `scientificMetadata.${lhs}.value`;
+    ? `${metadataPath(lhs)}.valueSI`
+    : `${metadataPath(lhs)}.value`;
 
   let queryValue = rhs;
   let queryUnit = unit;
@@ -320,7 +325,7 @@ export function conditionToMongoQuery(
   }
 
   if (queryUnit) {
-    query[`scientificMetadata.${lhs}.unitSI`] = { $eq: queryUnit };
+    query[`${metadataPath(lhs)}.unitSI`] = { $eq: queryUnit };
   }
   return query;
 }
@@ -360,7 +365,7 @@ function startOfDay(date: string, addDays = 0): string {
   return new Date(year, month - 1, day + addDays).toISOString();
 }
 
-/** The query of one condition, exclude leaves out what matches. */
+/** The query of one condition, NOT leaves out what matches. */
 function conditionToExpression(
   condition: FilterCondition,
 ): Record<string, unknown> {
@@ -373,40 +378,17 @@ function conditionToExpression(
     : expression;
 }
 
-/** Filters joined by AND form one group, OR starts the next one, so AND is applied first. */
-export function groupByJoin<T>(
-  items: T[],
-  getJoin: (item: T) => ConditionJoin | undefined,
-): T[][] {
-  const groups: T[][] = [];
-
-  for (const item of items) {
-    if (!groups.length || getJoin(item) === "OR") {
-      groups.push([item]);
-    } else {
-      groups[groups.length - 1].push(item);
-    }
-  }
-  return groups;
-}
-
-/** The query of all filters, AND is applied before OR. */
+/** The query of all filters, every one of them has to match. */
 export function conditionsToQuery(
   conditions: FilterCondition[],
 ): Record<string, unknown> {
-  const items = conditions
-    .map((condition) => ({
-      join: condition.join,
-      expression: conditionToExpression(condition),
-    }))
-    .filter(({ expression }) => Object.keys(expression).length);
+  const expressions = conditions
+    .map(conditionToExpression)
+    .filter((expression) => Object.keys(expression).length);
 
-  const queries = groupByJoin(items, ({ join }) => join).map((group) =>
-    group.length === 1
-      ? group[0].expression
-      : { $and: group.map(({ expression }) => expression) },
-  );
-  return queries.length > 1 ? { $or: queries } : (queries[0] ?? {});
+  return expressions.length > 1
+    ? { $and: expressions }
+    : (expressions[0] ?? {});
 }
 
 /** The count takes plain dates, `{ $date: x }` as used by the list fails there. */
@@ -426,13 +408,10 @@ export function withPlainDates<T>(value: T): T {
   return value;
 }
 
-/** The facets only take metadata filters that all have to match. */
+/** The facets only take conditions on scientific metadata, without NOT. */
 export function isPlainConditionList(conditions: FilterCondition[]): boolean {
   return conditions.every(
-    (condition, index) =>
-      !isDatasetCondition(condition) &&
-      !condition.exclude &&
-      (index === 0 || condition.join !== "OR"),
+    (condition) => !isDatasetCondition(condition) && !condition.exclude,
   );
 }
 

@@ -21,11 +21,14 @@
   [cdkConnectedOverlayPositions]="positions"
   (overlayOutsideClick)="onOutsideClick($event)"
   (overlayKeydown)="onKeydown($event)"
+  (positionChange)="fit()"
   (detach)="close()"
 >
   <div
     class="popup"
     role="dialog"
+    [style.max-height.px]="maxHeight()"
+    [style.max-width.px]="maxWidth()"
     [attr.aria-label]="title || label"
     data-cy="info-popup"
   >

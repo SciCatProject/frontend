@@ -139,8 +139,7 @@ describe("Datasets general", () => {
         value: "1",
       });
 
-      // the button of the group adds a filter joined by AND
-      cy.get('[data-cy="condition-add-and"]').click();
+      cy.get('[data-cy="condition-add"]').click();
       cy.fillCondition(1, {
         key: "extra_entry_end_time",
         operator: "<",
@@ -150,7 +149,6 @@ describe("Datasets general", () => {
       cy.get('[data-cy="condition-apply"]').click();
 
       cy.get('[data-cy="condition-chip"]').should("have.length", 2);
-      cy.get('[data-cy="condition-join-label"]').should("contain", "and");
 
       cy.removeConditions();
     });
@@ -172,12 +170,6 @@ describe("Datasets general", () => {
         operator: "<",
         value: "3",
       });
-
-      // switch the condition off and on again
-      cy.get('[data-cy="condition-toggle"]').click();
-      cy.get('[data-cy="condition-row"]').should("have.class", "inactive");
-      cy.get('[data-cy="condition-toggle"]').click();
-      cy.get('[data-cy="condition-row"]').should("not.have.class", "inactive");
 
       cy.get('[data-cy="condition-apply"]').click();
 
@@ -333,8 +325,9 @@ describe("Datasets general", () => {
       cy.finishedLoading();
 
       cy.openAdvancedSearch();
-      cy.get('[data-cy="condition-key"]').should("not.exist");
-      cy.get('[data-cy="condition-value"]').should("not.exist");
+      // a new filter is about scientific metadata
+      cy.get('[data-cy="condition-key"]').should("exist");
+      cy.get('[data-cy="condition-value"]').should("exist");
 
       cy.fillCondition(0, { field: "Keywords" });
       cy.get('[data-cy="condition-value"]').should("exist");
@@ -348,7 +341,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="condition-unit"]').should("exist");
     });
 
-    it("should combine dataset fields and metadata with OR and exclude", () => {
+    it("should combine dataset fields and metadata with NOT", () => {
       cy.visit("/datasets");
       cy.finishedLoading();
 
@@ -369,8 +362,9 @@ describe("Datasets general", () => {
         .should("contain", "Keywords: beam, test");
       cy.get('[data-cy="condition-chip"]')
         .last()
-        .should("contain", "not temperature > 5");
-      cy.get('[data-cy="condition-join-label"]').should("contain", "or");
+        .should("contain", "temperature > 5")
+        .find('[data-cy="condition-chip-not"]')
+        .should("exist");
 
       cy.removeConditions();
     });
@@ -433,9 +427,6 @@ describe("Datasets general", () => {
       cy.get("mat-option").eq(2).should("contain.text", "bar m^3/s/m^2");
 
       cy.get("mat-option").eq(0).click();
-
-      // the pre-configured condition is switched off
-      cy.get('[data-cy="condition-toggle"]').click();
 
       cy.get('[data-cy="condition-apply"]').click();
 
