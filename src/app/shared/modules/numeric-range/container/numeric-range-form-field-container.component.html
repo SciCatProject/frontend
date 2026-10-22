@@ -20,43 +20,44 @@
     [dynamicSyncValidators]="dynamicSyncValidators"
   ></ngx-numeric-range-form-field-control>
 
-  <mat-icon
-    (click)="onReset()"
-    *ngIf="
-      resettable &&
-      !readonly &&
-      !minReadonly &&
-      !maxReadonly &&
-      (minControl.value !== null || maxControl.value !== null) &&
-      !formGroup.disabled
-    "
-    color="primary"
-    class="pointer"
-    matSuffix
-    >close
-  </mat-icon>
+  @if (
+    resettable &&
+    !readonly &&
+    !minReadonly &&
+    !maxReadonly &&
+    (minControl.value !== null || maxControl.value !== null) &&
+    !formGroup.disabled
+  ) {
+    <mat-icon (click)="onReset()" color="primary" class="pointer" matSuffix
+      >close
+    </mat-icon>
+  }
 
-  <mat-error
-    *ngIf="minControl.hasError('required') || maxControl.hasError('required')"
-  >
-    {{ requiredErrorMessage }}
-  </mat-error>
+  @if (minControl.hasError("required") || maxControl.hasError("required")) {
+    <mat-error>
+      {{ requiredErrorMessage }}
+    </mat-error>
+  }
 
-  <mat-error *ngIf="minControl.hasError('min') || maxControl.hasError('min')">
-    {{ minErrorMessage }}
-  </mat-error>
+  @if (minControl.hasError("min") || maxControl.hasError("min")) {
+    <mat-error>
+      {{ minErrorMessage }}
+    </mat-error>
+  }
 
-  <mat-error *ngIf="minControl.hasError('max') || maxControl.hasError('max')">
-    {{ maxErrorMessage }}
-  </mat-error>
+  @if (minControl.hasError("max") || maxControl.hasError("max")) {
+    <mat-error>
+      {{ maxErrorMessage }}
+    </mat-error>
+  }
 
-  <mat-error
-    *ngIf="
-      formGroup.hasError('notValidRange') &&
-      !minControl.errors &&
-      !maxControl.errors
-    "
-  >
-    {{ invalidRangeErrorMessage }}
-  </mat-error>
+  @if (
+    formGroup.hasError("notValidRange") &&
+    !minControl.errors &&
+    !maxControl.errors
+  ) {
+    <mat-error>
+      {{ invalidRangeErrorMessage }}
+    </mat-error>
+  }
 </mat-form-field>
