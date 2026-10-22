@@ -1,16 +1,16 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { FilterCondition } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
-import { describeCondition, getActiveConfigs } from "./condition-filter.utils";
+import { describeCondition, getActiveConfigs } from "./advanced-search.utils";
 
 /** The applied filters as chips, the host connects the events to the button. */
 @Component({
-  selector: "condition-filter-chips",
-  templateUrl: "./condition-filter-chips.component.html",
-  styleUrls: ["./condition-filter-chips.component.scss"],
+  selector: "advanced-search-chips",
+  templateUrl: "./advanced-search-chips.component.html",
+  styleUrls: ["./advanced-search-chips.component.scss"],
   standalone: false,
 })
-export class ConditionFilterChipsComponent {
+export class AdvancedSearchChipsComponent {
   @Input() configs: ConditionConfig[] | null = [];
 
   @Output() filterSelect = new EventEmitter<ConditionConfig>();

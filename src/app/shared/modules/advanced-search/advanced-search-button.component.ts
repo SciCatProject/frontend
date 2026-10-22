@@ -15,23 +15,27 @@ import {
 } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
 import { selectConditions } from "state-management/selectors/user.selectors";
-import { ConditionKeySource } from "./condition-filter.keys";
-import { ConditionFilterService } from "./condition-filter.service";
+import { ConditionKeySource } from "./advanced-search.keys";
+import { AdvancedSearchService } from "./advanced-search.service";
 import {
-  ConditionFilterDialogComponent,
-  ConditionFilterDialogData,
+  AdvancedSearchDialogComponent,
+  AdvancedSearchDialogData,
   DIALOG_WIDTH,
-} from "./condition-filter-dialog.component";
-import { getActiveConfigs, toActiveConditions } from "./condition-filter.utils";
+} from "./advanced-search-dialog.component";
+import {
+  getActiveConfigs,
+  toActiveConditions,
+  withoutSwitchedOff,
+} from "./advanced-search.utils";
 
 /** "Advanced search" button, it owns the saved filters and opens the dialog. */
 @Component({
-  selector: "condition-filter-button",
-  templateUrl: "./condition-filter-button.component.html",
-  styleUrls: ["./condition-filter-button.component.scss"],
+  selector: "advanced-search-button",
+  templateUrl: "./advanced-search-button.component.html",
+  styleUrls: ["./advanced-search-button.component.scss"],
   standalone: false,
 })
-export class ConditionFilterButtonComponent implements OnInit {
+export class AdvancedSearchButtonComponent implements OnInit {
   @Input({ required: true }) scope: ConditionSettingScope;
   @Input({ required: true }) keySource: ConditionKeySource;
   @Input() unitsEnabled = false;
@@ -50,12 +54,12 @@ export class ConditionFilterButtonComponent implements OnInit {
   constructor(
     private store: Store,
     private dialog: MatDialog,
-    private conditionFilterService: ConditionFilterService,
+    private advancedSearchService: AdvancedSearchService,
   ) {}
 
   private save(configs: ConditionConfig[]): void {
     this.draft.set(null);
-    this.conditionFilterService.save(this.scope, configs);
+    this.advancedSearchService.save(this.scope, configs);
     this.conditionsApplied.emit(toActiveConditions(configs));
   }
 
@@ -67,22 +71,33 @@ export class ConditionFilterButtonComponent implements OnInit {
     this.configs$ = this.store.select(selectConditions(this.scope));
   }
 
-  /** Opens the dialog, with the edits that were not applied if there are any. */
+  /** How many saved filters wait for a value, they are not applied until they have one. */
+  getWaiting(configs: ConditionConfig[]): number {
+    return (
+      withoutSwitchedOff(configs).length - getActiveConfigs(configs).length
+    );
+  }
+
+  /**
+   * Opens the dialog, with the edits that were not applied if there are any. A filter that older
+   * settings switched off is left out, one that has no value yet is shown to be filled in.
+   */
   open(configs: ConditionConfig[], highlight?: ConditionConfig): void {
     const draft = this.draft();
+    const shown = withoutSwitchedOff(configs);
     // the position of a saved filter is not the one in edits
-    const highlightIndex = draft ? -1 : configs.indexOf(highlight);
+    const highlightIndex = draft ? -1 : shown.indexOf(highlight);
 
     this.isOpen.set(true);
     this.dialog
       .open<
-        ConditionFilterDialogComponent,
-        ConditionFilterDialogData,
+        AdvancedSearchDialogComponent,
+        AdvancedSearchDialogData,
         ConditionConfig[]
-      >(ConditionFilterDialogComponent, {
+      >(AdvancedSearchDialogComponent, {
         data: {
           scope: this.scope,
-          configs: draft ?? configs,
+          configs: draft ?? shown,
           highlightIndex,
           draftChange: (edits) => this.draft.set(edits),
           keySource: this.keySource,
@@ -108,7 +123,9 @@ export class ConditionFilterButtonComponent implements OnInit {
 
   removeFilter(removed: ConditionConfig): void {
     this.withSaved((configs) =>
-      this.save(configs.filter((config) => config !== removed)),
+      this.save(
+        withoutSwitchedOff(configs).filter((config) => config !== removed),
+      ),
     );
   }
 

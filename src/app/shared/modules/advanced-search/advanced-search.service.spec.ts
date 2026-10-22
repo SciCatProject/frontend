@@ -5,15 +5,14 @@ import {
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { ConditionConfig } from "state-management/state/user.store";
-import { ConditionFilterService } from "./condition-filter.service";
+import { AdvancedSearchService } from "./advanced-search.service";
 
-describe("ConditionFilterService", () => {
-  let service: ConditionFilterService;
+describe("AdvancedSearchService", () => {
+  let service: AdvancedSearchService;
   let dispatchSpy: jasmine.Spy;
 
   const configs: ConditionConfig[] = [
     {
-      enabled: true,
       condition: {
         lhs: "temperature",
         relation: "GREATER_THAN",
@@ -25,7 +24,7 @@ describe("ConditionFilterService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideMockStore({})] });
-    service = TestBed.inject(ConditionFilterService);
+    service = TestBed.inject(AdvancedSearchService);
     dispatchSpy = spyOn(TestBed.inject(MockStore), "dispatch");
   });
 

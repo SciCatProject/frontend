@@ -94,7 +94,7 @@ const conditionRow = (index) => cy.get('[data-cy="condition-row"]').eq(index);
 
 Cypress.Commands.add("openAdvancedSearch", () => {
   cy.get('[data-cy="advanced-search-button"]').click();
-  cy.get("condition-filter-dialog").should("be.visible");
+  cy.get("advanced-search-dialog").should("be.visible");
 });
 
 /**
@@ -174,7 +174,7 @@ Cypress.Commands.add("addCondition", (condition) => {
     cy.fillCondition(rows.length - 1, condition),
   );
   cy.get('[data-cy="condition-apply"]').click();
-  cy.get("condition-filter-dialog").should("not.exist");
+  cy.get("advanced-search-dialog").should("not.exist");
 });
 
 /** Removes all conditions, they are saved with the user settings. */
@@ -182,7 +182,7 @@ Cypress.Commands.add("removeConditions", () => {
   cy.openAdvancedSearch();
   // clearing applies at once and closes the dialog
   cy.get('[data-cy="condition-clear-all"]').click();
-  cy.get("condition-filter-dialog").should("not.exist");
+  cy.get("advanced-search-dialog").should("not.exist");
   cy.get('[data-cy="condition-chip"]').should("not.exist");
 });
 

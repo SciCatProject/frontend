@@ -24,7 +24,11 @@ export interface FilterConfig {
 
 export interface ConditionConfig {
   condition: FilterCondition;
-  enabled: boolean;
+  /**
+   * Older settings can have it: a filter that was switched off, it is not used. There is no
+   * way to switch a filter off any more, nothing writes it and a missing one means on.
+   */
+  enabled?: boolean;
 }
 
 // NOTE It IS ok to make up a state of other sub states

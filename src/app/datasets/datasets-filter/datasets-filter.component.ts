@@ -31,7 +31,7 @@ import { FilterConfig } from "state-management/state/user.store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
-import { ConditionFilterService } from "shared/modules/condition-filter/condition-filter.service";
+import { AdvancedSearchService } from "shared/modules/advanced-search/advanced-search.service";
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -65,7 +65,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router,
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
-    private conditionFilterService: ConditionFilterService,
+    private advancedSearchService: AdvancedSearchService,
   ) {}
 
   ngOnInit() {
@@ -142,7 +142,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.clearSearchBar = true;
 
     this.store.dispatch(clearFacetsAction());
-    this.conditionFilterService.clear("dataset");
+    this.advancedSearchService.clear("dataset");
 
     this.activeFilters = {};
 

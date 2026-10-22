@@ -12,10 +12,11 @@ import { ADAuthService } from "users/adauth.service";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import * as fromActions from "state-management/actions/user.actions";
-import { hot, cold } from "jasmine-marbles";
+import { hot, cold, getTestScheduler } from "jasmine-marbles";
+import { toArray } from "rxjs/operators";
 import { MessageType } from "state-management/models";
 import { Router } from "@angular/router";
-import { provideMockStore } from "@ngrx/store/testing";
+import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import {
   selectColumns,
   selectCurrentUser,
@@ -637,6 +638,61 @@ describe("UserEffects", () => {
       expect(effects.fetchUserSettings$).toBeObservable(expected);
     });
 
+    describe("predefined conditions of the samples", () => {
+      const predefined = {
+        condition: {
+          lhs: "material",
+          relation: "EQUAL_TO_STRING" as const,
+          rhs: "steel",
+          unit: "",
+        },
+      };
+
+      const settingsAfterFetch = (externalSettings: object) => {
+        spyOn(TestBed.inject(AppConfigService), "getConfig").and.returnValue({
+          defaultSamplesListSettings: { conditions: [predefined] },
+        } as never);
+        actions = hot("-a", { a: fromActions.fetchUserSettingsAction({ id }) });
+        userApi.usersControllerGetSettingsV3.and.returnValue(
+          cold("-a|", { a: { externalSettings } as unknown as UserSettings }),
+        );
+
+        let settings: Record<string, unknown>;
+        effects.fetchUserSettings$.subscribe((action) => {
+          settings = (action as { userSettings: UserSettings }).userSettings
+            .externalSettings;
+        });
+        getTestScheduler().flush();
+        return settings;
+      };
+
+      it("should be the sample conditions of a user that has none", () => {
+        expect(
+          settingsAfterFetch({ fe_sample_table_conditions: [] })
+            .fe_sample_table_conditions,
+        ).toEqual([predefined]);
+      });
+
+      it("should be the sample conditions of a user whose settings are new", () => {
+        expect(settingsAfterFetch({}).fe_sample_table_conditions).toEqual([
+          predefined,
+        ]);
+      });
+
+      it("should not replace the sample conditions the user has", () => {
+        const own = [{ condition: { ...predefined.condition, lhs: "own" } }];
+
+        expect(
+          settingsAfterFetch({ fe_sample_table_conditions: own })
+            .fe_sample_table_conditions,
+        ).toEqual(own);
+      });
+
+      it("should leave the dataset conditions alone", () => {
+        expect(settingsAfterFetch({}).fe_dataset_table_conditions).toEqual([]);
+      });
+    });
+
     it("should result in a fetchUserSettingsFailedAction", () => {
       const action = fromActions.fetchUserSettingsAction({ id });
       const outcome = fromActions.fetchUserSettingsFailedAction();
@@ -671,6 +727,135 @@ describe("UserEffects", () => {
 
       const expected = cold("-(bc)", { b: outcome1, c: outcome2 });
       expect(effects.setLimitFilters$).toBeObservable(expected);
+    });
+  });
+
+  describe("loadDefaultSettings$", () => {
+    const predefined = (lhs: string) => ({
+      condition: {
+        lhs,
+        relation: "EQUAL_TO_STRING" as const,
+        rhs: "steel",
+        unit: "",
+      },
+    });
+    const noSettings = {
+      fe_dataset_table_conditions: [],
+      fe_sample_table_conditions: [],
+    };
+
+    // the conditions that are put in the store, by scope
+    const loaded = (config: object, settings: object = noSettings) => {
+      TestBed.inject(MockStore).setState({ users: { settings } });
+      actions = hot("(a|)", {
+        a: fromActions.loadDefaultSettings({ config } as never),
+      });
+
+      let emitted: {
+        type: string;
+        scope?: string;
+        conditionConfigs?: unknown;
+      }[];
+      effects.loadDefaultSettings$
+        .pipe(toArray())
+        .subscribe((all) => (emitted = all as typeof emitted));
+      getTestScheduler().flush();
+
+      const conditionsOf = (scope: string) =>
+        emitted.find(
+          (action) =>
+            action.type === fromActions.updateConditionsConfigs.type &&
+            action.scope === scope,
+        )?.conditionConfigs;
+      return {
+        dataset: conditionsOf("dataset"),
+        sample: conditionsOf("sample"),
+      };
+    };
+
+    it("should start the dataset list with the predefined conditions", () => {
+      const conditions = [predefined("material")];
+
+      const { dataset } = loaded({
+        defaultDatasetsListSettings: { conditions },
+      });
+
+      expect(dataset).toEqual(conditions);
+    });
+
+    it("should start the sample list with the predefined conditions", () => {
+      const conditions = [predefined("material")];
+
+      const { sample, dataset } = loaded({
+        defaultSamplesListSettings: { conditions },
+      });
+
+      expect(sample).toEqual(conditions);
+      expect(dataset).toEqual([]);
+    });
+
+    it("should keep the predefined conditions of the datasets and the samples apart", () => {
+      const datasets = [predefined("temperature")];
+      const samples = [predefined("material")];
+
+      const { dataset, sample } = loaded({
+        defaultDatasetsListSettings: { conditions: datasets },
+        defaultSamplesListSettings: { conditions: samples },
+      });
+
+      expect(dataset).toEqual(datasets);
+      expect(sample).toEqual(samples);
+    });
+
+    it("should start without conditions when nothing is predefined", () => {
+      const { dataset, sample } = loaded({});
+
+      expect(dataset).toEqual([]);
+      expect(sample).toEqual([]);
+    });
+
+    it("should keep the conditions the user has instead of the predefined ones", () => {
+      const own = [predefined("own_key")];
+
+      const { dataset, sample } = loaded(
+        {
+          defaultDatasetsListSettings: { conditions: [predefined("a")] },
+          defaultSamplesListSettings: { conditions: [predefined("b")] },
+        },
+        {
+          fe_dataset_table_conditions: own,
+          fe_sample_table_conditions: own,
+        },
+      );
+
+      expect(dataset).toEqual(own);
+      expect(sample).toEqual(own);
+    });
+
+    it("should filter the datasets by the predefined conditions that are not switched off", () => {
+      const conditions = [
+        predefined("on"),
+        { ...predefined("off"), enabled: false },
+      ];
+      TestBed.inject(MockStore).setState({ users: { settings: noSettings } });
+      actions = hot("(a|)", {
+        a: fromActions.loadDefaultSettings({
+          config: { defaultDatasetsListSettings: { conditions } },
+        } as never),
+      });
+
+      let filtered: unknown;
+      effects.loadDefaultSettings$.pipe(toArray()).subscribe((all) => {
+        filtered = (
+          all.find(
+            (action) => action.type === setScientificConditionsAction.type,
+          ) as ReturnType<typeof setScientificConditionsAction>
+        ).conditions;
+      });
+
+      getTestScheduler().flush();
+
+      expect(filtered).toEqual([predefined("on").condition]);
     });
   });
 

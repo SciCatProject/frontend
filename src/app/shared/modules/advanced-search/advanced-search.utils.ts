@@ -4,7 +4,7 @@ import {
   FilterConditionRelation,
 } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
-import { getDatasetField } from "./condition-filter.fields";
+import { getDatasetField } from "./advanced-search.fields";
 
 export interface RelationOption {
   value: FilterConditionRelation;
@@ -71,13 +71,24 @@ export function getRelationOption(
   );
 }
 
-/** The filters that are switched on and complete, the ones that are applied. */
+/**
+ * Only older settings can say a filter is off, a filter is on unless it says so. A filter that
+ * is off is left out completely: it is not shown, not counted and not applied.
+ */
+export function withoutSwitchedOff(
+  configs: ConditionConfig[],
+): ConditionConfig[] {
+  return configs.filter(({ enabled }) => enabled !== false);
+}
+
+const isActive = (config: ConditionConfig): boolean =>
+  config.enabled !== false && isConditionComplete(config.condition);
+
+/** The filters that are not switched off and complete, the ones that are applied. */
 export function getActiveConfigs(
   configs: ConditionConfig[],
 ): ConditionConfig[] {
-  return configs.filter(
-    ({ enabled, condition }) => enabled && isConditionComplete(condition),
-  );
+  return configs.filter(isActive);
 }
 
 /** A condition can only filter once it has a value (or a bound for ranges). */
@@ -175,14 +186,12 @@ function normalizeValue(condition: FilterCondition): FilterCondition {
   return { ...condition, rhs, unit };
 }
 
-/** The conditions that are sent to the backend, enabled and filled in only. */
+/** The conditions that are sent to the backend, filled in and not switched off. */
 export function toActiveConditions(
   configs: ConditionConfig[] = [],
 ): FilterCondition[] {
   return configs
-    .filter(
-      ({ enabled, condition }) => enabled && isConditionComplete(condition),
-    )
+    .filter(isActive)
     .map(({ condition }) => normalizeCondition(condition));
 }
 

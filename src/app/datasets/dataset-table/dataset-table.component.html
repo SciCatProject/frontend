@@ -24,22 +24,22 @@
   [emptyIcon]="'folder'"
 >
   @if (appConfig.scienceSearchEnabled) {
-    <condition-filter-button
+    <advanced-search-button
       table-search-action
       [iconOnly]="true"
       scope="dataset"
       [keySource]="keySource"
       [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
       (conditionsApplied)="onConditionsApplied($event)"
-    ></condition-filter-button>
+    ></advanced-search-button>
   }
   @if (appConfig.scienceSearchEnabled) {
-    <condition-filter-chips
+    <advanced-search-chips
       table-toolbar
       [configs]="conditionConfigs$ | async"
-      (filterSelect)="conditionFilterButton.openFilter($event)"
-      (filterRemove)="conditionFilterButton.removeFilter($event)"
-      (clearAll)="conditionFilterButton.clearFilters()"
-    ></condition-filter-chips>
+      (filterSelect)="advancedSearchButton.openFilter($event)"
+      (filterRemove)="advancedSearchButton.removeFilter($event)"
+      (clearAll)="advancedSearchButton.clearFilters()"
+    ></advanced-search-chips>
   }
 </dynamic-mat-table>

@@ -1,5 +1,6 @@
 @if (configs$ | async; as configs) {
   @let active = getActive(configs);
+  @let waiting = getWaiting(configs);
   <button
     type="button"
     class="advanced-search"
@@ -9,9 +10,11 @@
     [matTooltip]="
       draft()
         ? 'Changes are not applied yet, open to apply them'
-        : iconOnly
-          ? 'Advanced search'
-          : ''
+        : waiting
+          ? 'A filter has no value yet and is not applied, open to fill it in'
+          : iconOnly
+            ? 'Advanced search'
+            : ''
     "
     aria-label="Advanced search"
     (click)="open(configs)"
@@ -26,6 +29,10 @@
     }
     @if (draft()) {
       <span class="draft-dot" aria-hidden="true" data-cy="condition-draft"
+        >!</span
+      >
+    } @else if (waiting) {
+      <span class="draft-dot" aria-hidden="true" data-cy="condition-waiting"
         >!</span
       >
     }

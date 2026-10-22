@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ConditionConfig } from "state-management/state/user.store";
-import { ConditionFilterModule } from "./condition-filter.module";
-import { ConditionFilterChipsComponent } from "./condition-filter-chips.component";
+import { AdvancedSearchModule } from "./advanced-search.module";
+import { AdvancedSearchChipsComponent } from "./advanced-search-chips.component";
 
-describe("ConditionFilterChipsComponent", () => {
-  let component: ConditionFilterChipsComponent;
-  let fixture: ComponentFixture<ConditionFilterChipsComponent>;
+describe("AdvancedSearchChipsComponent", () => {
+  let component: AdvancedSearchChipsComponent;
+  let fixture: ComponentFixture<AdvancedSearchChipsComponent>;
 
   const config = (
     lhs: string,
     condition: Partial<ConditionConfig["condition"]> = {},
-    enabled = true,
+    enabled?: boolean,
   ): ConditionConfig => ({
     enabled,
     condition: {
@@ -38,9 +38,9 @@ describe("ConditionFilterChipsComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ConditionFilterModule, NoopAnimationsModule],
+      imports: [AdvancedSearchModule, NoopAnimationsModule],
     });
-    fixture = TestBed.createComponent(ConditionFilterChipsComponent);
+    fixture = TestBed.createComponent(AdvancedSearchChipsComponent);
     component = fixture.componentInstance;
   });
 

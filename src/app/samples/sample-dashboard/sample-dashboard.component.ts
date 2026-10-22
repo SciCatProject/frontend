@@ -45,9 +45,9 @@ import { updateUserSettingsAction } from "state-management/actions/user.actions"
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import { ConditionFilterService } from "shared/modules/condition-filter/condition-filter.service";
-import { staticKeySource } from "shared/modules/condition-filter/condition-filter.keys";
-import { toActiveConditions } from "shared/modules/condition-filter/condition-filter.utils";
+import { AdvancedSearchService } from "shared/modules/advanced-search/advanced-search.service";
+import { staticKeySource } from "shared/modules/advanced-search/advanced-search.keys";
+import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
 
 @Component({
   selector: "sample-dashboard",
@@ -141,7 +141,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private tableConfigService: TableConfigService,
     public dialog: MatDialog,
-    private conditionFilterService: ConditionFilterService,
+    private advancedSearchService: AdvancedSearchService,
   ) {}
 
   ngOnInit() {
@@ -255,7 +255,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   reset() {
     this.store.dispatch(setTextFilterAction({ text: "" }));
     this.onConditionsApplied([]);
-    this.conditionFilterService.clear("sample");
+    this.advancedSearchService.clear("sample");
 
     this.store.dispatch(fetchSamplesAction());
   }

@@ -9,7 +9,7 @@ import {
 
 /** Keeps the configured conditions in the store and in the user settings. */
 @Injectable({ providedIn: "root" })
-export class ConditionFilterService {
+export class AdvancedSearchService {
   constructor(private store: Store) {}
 
   save(scope: ConditionSettingScope, configs: ConditionConfig[]): void {

@@ -5,7 +5,7 @@ import { MetadataKey } from "state-management/models";
 import {
   MetadataKeySearchService,
   staticKeySource,
-} from "./condition-filter.keys";
+} from "./advanced-search.keys";
 
 describe("condition filter keys", () => {
   describe("MetadataKeySearchService", () => {

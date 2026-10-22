@@ -12,17 +12,17 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { InfoPopupModule } from "shared/modules/info-popup/info-popup.module";
-import { ConditionFilterButtonComponent } from "./condition-filter-button.component";
-import { ConditionFilterDialogComponent } from "./condition-filter-dialog.component";
-import { ConditionFilterChipsComponent } from "./condition-filter-chips.component";
-import { ConditionKeyPickerComponent } from "./condition-key-picker.component";
+import { AdvancedSearchButtonComponent } from "./advanced-search-button.component";
+import { AdvancedSearchDialogComponent } from "./advanced-search-dialog.component";
+import { AdvancedSearchChipsComponent } from "./advanced-search-chips.component";
+import { AdvancedSearchKeyPickerComponent } from "./advanced-search-key-picker.component";
 
 @NgModule({
   declarations: [
-    ConditionFilterButtonComponent,
-    ConditionFilterChipsComponent,
-    ConditionFilterDialogComponent,
-    ConditionKeyPickerComponent,
+    AdvancedSearchButtonComponent,
+    AdvancedSearchChipsComponent,
+    AdvancedSearchDialogComponent,
+    AdvancedSearchKeyPickerComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +39,6 @@ import { ConditionKeyPickerComponent } from "./condition-key-picker.component";
     MatTooltipModule,
     InfoPopupModule,
   ],
-  exports: [ConditionFilterButtonComponent, ConditionFilterChipsComponent],
+  exports: [AdvancedSearchButtonComponent, AdvancedSearchChipsComponent],
 })
-export class ConditionFilterModule {}
+export class AdvancedSearchModule {}

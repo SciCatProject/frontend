@@ -22,7 +22,7 @@ import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatChipsModule } from "@angular/material/chips";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { ConditionFilterModule } from "shared/modules/condition-filter/condition-filter.module";
+import { AdvancedSearchModule } from "shared/modules/advanced-search/advanced-search.module";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 
@@ -46,7 +46,7 @@ import { instrumentsReducer } from "state-management/reducers/instruments.reduce
     SharedScicatFrontendModule,
     StoreModule.forFeature("samples", samplesReducer),
     MatExpansionModule,
-    ConditionFilterModule,
+    AdvancedSearchModule,
     StoreModule.forFeature("instruments", instrumentsReducer),
   ],
   exports: [SampleDetailComponent, SampleDialogComponent],

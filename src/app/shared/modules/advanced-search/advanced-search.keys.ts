@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { MetadataKeysV4Service } from "@scicatproject/scicat-sdk-ts-angular";
 import { Observable, map, take } from "rxjs";
 import { MetadataKey } from "state-management/models";
-import { escapeRegex } from "./condition-filter.utils";
+import { escapeRegex } from "./advanced-search.utils";
 
 /** How many keys are listed at first, and how many more when scrolling. */
 export const KEY_PAGE_SIZE = 20;

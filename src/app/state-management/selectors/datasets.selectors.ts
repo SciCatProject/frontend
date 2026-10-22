@@ -6,7 +6,7 @@ import {
   isPlainConditionList,
   withPlainDates,
   toFacetConditions,
-} from "shared/modules/condition-filter/condition-filter.utils";
+} from "shared/modules/advanced-search/advanced-search.utils";
 import { DateRange, DateRangeFilter } from "state-management/models";
 
 const selectDatasetState = createFeatureSelector<DatasetState>("datasets");

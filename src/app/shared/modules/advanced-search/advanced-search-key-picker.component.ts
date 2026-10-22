@@ -18,7 +18,7 @@ import {
   tap,
 } from "rxjs";
 import { MetadataKey } from "state-management/models";
-import { ConditionKeySource, KEY_PAGE_SIZE } from "./condition-filter.keys";
+import { ConditionKeySource, KEY_PAGE_SIZE } from "./advanced-search.keys";
 
 /** The list is wider than the field to fit the name and the key, if there is room. */
 const WIDE_PANEL_WIDTH = 420;
@@ -29,12 +29,12 @@ export const SEARCH_DEBOUNCE_MS = 250;
 
 /** Picks a scientific metadata key, loaded page by page, or lets the user type one. */
 @Component({
-  selector: "condition-key-picker",
-  templateUrl: "./condition-key-picker.component.html",
-  styleUrls: ["./condition-key-picker.component.scss"],
+  selector: "advanced-search-key-picker",
+  templateUrl: "./advanced-search-key-picker.component.html",
+  styleUrls: ["./advanced-search-key-picker.component.scss"],
   standalone: false,
 })
-export class ConditionKeyPickerComponent implements OnDestroy {
+export class AdvancedSearchKeyPickerComponent implements OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly requests$ = new Subject<{ term: string; skip: number }>();
   private readonly typed$ = new Subject<string>();

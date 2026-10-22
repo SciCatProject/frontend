@@ -43,12 +43,12 @@ import {
   selectTextFilter,
 } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
-import { ConditionFilterButtonComponent } from "shared/modules/condition-filter/condition-filter-button.component";
+import { AdvancedSearchButtonComponent } from "shared/modules/advanced-search/advanced-search-button.component";
 import { selectConditions } from "state-management/selectors/user.selectors";
 import {
   ConditionKeySource,
   MetadataKeySearchService,
-} from "shared/modules/condition-filter/condition-filter.keys";
+} from "shared/modules/advanced-search/advanced-search.keys";
 import {
   selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
@@ -102,8 +102,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   @ViewChild("datasetTable")
   datasetTable: DynamicMatTableComponent<PartialOutputDatasetDto>;
 
-  @ViewChild(ConditionFilterButtonComponent)
-  conditionFilterButton: ConditionFilterButtonComponent;
+  @ViewChild(AdvancedSearchButtonComponent)
+  advancedSearchButton: AdvancedSearchButtonComponent;
 
   selectionIds: string[] = [];
   appConfig = this.appConfigService.getConfig();

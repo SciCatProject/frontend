@@ -1,29 +1,30 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { By } from "@angular/platform-browser";
 import { MatDialog } from "@angular/material/dialog";
+import { MatTooltip } from "@angular/material/tooltip";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { Subject, of } from "rxjs";
 import {
   ConditionConfig,
   initialUserState,
 } from "state-management/state/user.store";
-import { ConditionFilterModule } from "./condition-filter.module";
-import { ConditionFilterButtonComponent } from "./condition-filter-button.component";
-import { ConditionFilterService } from "./condition-filter.service";
-import { ConditionFilterDialogComponent } from "./condition-filter-dialog.component";
+import { AdvancedSearchModule } from "./advanced-search.module";
+import { AdvancedSearchButtonComponent } from "./advanced-search-button.component";
+import { AdvancedSearchService } from "./advanced-search.service";
+import { AdvancedSearchDialogComponent } from "./advanced-search-dialog.component";
 
-describe("ConditionFilterButtonComponent", () => {
-  let component: ConditionFilterButtonComponent;
-  let fixture: ComponentFixture<ConditionFilterButtonComponent>;
+describe("AdvancedSearchButtonComponent", () => {
+  let component: AdvancedSearchButtonComponent;
+  let fixture: ComponentFixture<AdvancedSearchButtonComponent>;
   let dialog: jasmine.SpyObj<MatDialog>;
-  let conditionFilterService: jasmine.SpyObj<ConditionFilterService>;
+  let advancedSearchService: jasmine.SpyObj<AdvancedSearchService>;
   let applied: jasmine.Spy;
 
   const config = (
     lhs: string,
     overrides: Partial<ConditionConfig> = {},
   ): ConditionConfig => ({
-    enabled: true,
     condition: { lhs, relation: "GREATER_THAN", rhs: 20, unit: "" },
     ...overrides,
   });
@@ -54,20 +55,20 @@ describe("ConditionFilterButtonComponent", () => {
 
   beforeEach(() => {
     dialog = jasmine.createSpyObj("MatDialog", ["open"]);
-    conditionFilterService = jasmine.createSpyObj("ConditionFilterService", [
+    advancedSearchService = jasmine.createSpyObj("AdvancedSearchService", [
       "save",
     ]);
 
     TestBed.configureTestingModule({
-      imports: [ConditionFilterModule, NoopAnimationsModule],
+      imports: [AdvancedSearchModule, NoopAnimationsModule],
       providers: [
         provideMockStore({ initialState: { users: initialUserState } }),
         { provide: MatDialog, useValue: dialog },
-        { provide: ConditionFilterService, useValue: conditionFilterService },
+        { provide: AdvancedSearchService, useValue: advancedSearchService },
       ],
     });
 
-    fixture = TestBed.createComponent(ConditionFilterButtonComponent);
+    fixture = TestBed.createComponent(AdvancedSearchButtonComponent);
     component = fixture.componentInstance;
     component.scope = "dataset";
     component.keySource = () => of([]);
@@ -96,7 +97,7 @@ describe("ConditionFilterButtonComponent", () => {
     );
   });
 
-  it("should count the filters that are applied", () => {
+  it("should count the filters that are applied, not the ones older settings switched off", () => {
     render([
       config("temperature"),
       config("pressure", { enabled: false }),
@@ -113,6 +114,36 @@ describe("ConditionFilterButtonComponent", () => {
     expect(find("[data-cy=condition-count]").textContent).toBe("1");
   });
 
+  it("should open the dialog without the filters older settings switched off, with the ones that need a value", () => {
+    dialog.open.and.returnValue({ afterClosed: () => of(undefined) } as never);
+    const applied = config("temperature");
+    const incomplete = config("pressure", {
+      condition: {
+        lhs: "pressure",
+        relation: "GREATER_THAN",
+        rhs: "",
+        unit: "",
+      },
+    });
+    const switchedOff = config("old_filter", { enabled: false });
+    render([incomplete, applied, switchedOff]);
+
+    clickSearchButton();
+
+    expect(lastDialogData().configs).toEqual([incomplete, applied]);
+  });
+
+  it("should highlight the filter of a chip by its place among the ones that are shown", () => {
+    dialog.open.and.returnValue({ afterClosed: () => of(undefined) } as never);
+    const switchedOff = config("old_filter", { enabled: false });
+    const [first, second] = [config("temperature"), config("pressure")];
+    render([switchedOff, first, second]);
+
+    component.openFilter(second);
+
+    expect(lastDialogData().highlightIndex).toBe(1);
+  });
+
   it("should open the dialog with the saved filters and save what was applied", () => {
     const saved = [config("temperature")];
     const result = [config("pressure")];
@@ -122,7 +153,7 @@ describe("ConditionFilterButtonComponent", () => {
     clickSearchButton();
 
     expect(dialog.open).toHaveBeenCalledWith(
-      ConditionFilterDialogComponent,
+      AdvancedSearchDialogComponent,
       jasmine.objectContaining({
         data: jasmine.objectContaining({
           scope: "dataset",
@@ -131,7 +162,7 @@ describe("ConditionFilterButtonComponent", () => {
         }),
       }),
     );
-    expect(conditionFilterService.save).toHaveBeenCalledOnceWith(
+    expect(advancedSearchService.save).toHaveBeenCalledOnceWith(
       "dataset",
       result,
     );
@@ -159,8 +190,56 @@ describe("ConditionFilterButtonComponent", () => {
 
     clickSearchButton();
 
-    expect(conditionFilterService.save).not.toHaveBeenCalled();
+    expect(advancedSearchService.save).not.toHaveBeenCalled();
     expect(applied).not.toHaveBeenCalled();
+  });
+
+  describe("the mark for filters that are not applied", () => {
+    const withoutValue = (lhs: string) =>
+      config(lhs, {
+        condition: { lhs, relation: "GREATER_THAN", rhs: "", unit: "" },
+      });
+    const tooltipOf = () =>
+      fixture.debugElement
+        .query(By.css("[data-cy=advanced-search-button]"))
+        .injector.get(MatTooltip).message;
+
+    it("should show when a saved filter has no value yet", () => {
+      render([config("temperature"), withoutValue("pressure")]);
+
+      expect(find("[data-cy=condition-waiting]")).not.toBeNull();
+      expect(find("[data-cy=condition-draft]")).toBeNull();
+      expect(find("[data-cy=condition-count]").textContent).toBe("1");
+      expect(tooltipOf()).toContain("has no value yet");
+    });
+
+    it("should count only the filters that wait for a value", () => {
+      expect(
+        component.getWaiting([
+          config("temperature"),
+          withoutValue("pressure"),
+          withoutValue("humidity"),
+          config("old_filter", { enabled: false }),
+        ]),
+      ).toBe(2);
+    });
+
+    it("should not show for filters that are complete or switched off", () => {
+      render([config("temperature"), config("old", { enabled: false })]);
+
+      expect(find("[data-cy=condition-waiting]")).toBeNull();
+      expect(find("[data-cy=condition-draft]")).toBeNull();
+    });
+
+    it("should leave the mark of edits that were not applied as it is", () => {
+      render([withoutValue("pressure")]);
+      component.draft.set([config("humidity")]);
+      fixture.detectChanges();
+
+      expect(find("[data-cy=condition-draft]")).not.toBeNull();
+      expect(find("[data-cy=condition-waiting]")).toBeNull();
+      expect(tooltipOf()).toContain("Changes are not applied yet");
+    });
   });
 
   it("should keep edits that were not applied and bring them back", () => {
@@ -219,11 +298,23 @@ describe("ConditionFilterButtonComponent", () => {
 
     component.removeFilter(first);
 
-    expect(conditionFilterService.save).toHaveBeenCalledOnceWith("dataset", [
+    expect(advancedSearchService.save).toHaveBeenCalledOnceWith("dataset", [
       second,
     ]);
     expect(applied).toHaveBeenCalledOnceWith([
       { lhs: "pressure", relation: "GREATER_THAN", rhs: 20, unit: "" },
+    ]);
+  });
+
+  it("should leave out the saved filters that are not applied when one is removed", () => {
+    const switchedOff = config("old_filter", { enabled: false });
+    const [first, second] = [config("temperature"), config("pressure")];
+    render([switchedOff, first, second]);
+
+    component.removeFilter(first);
+
+    expect(advancedSearchService.save).toHaveBeenCalledOnceWith("dataset", [
+      second,
     ]);
   });
 
@@ -232,7 +323,7 @@ describe("ConditionFilterButtonComponent", () => {
 
     component.clearFilters();
 
-    expect(conditionFilterService.save).toHaveBeenCalledOnceWith("dataset", []);
+    expect(advancedSearchService.save).toHaveBeenCalledOnceWith("dataset", []);
     expect(applied).toHaveBeenCalledOnceWith([]);
   });
 });

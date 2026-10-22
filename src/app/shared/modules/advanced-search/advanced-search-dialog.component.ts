@@ -24,17 +24,17 @@ import {
   METADATA_FIELD,
   getDatasetField,
   getFieldOptions,
-} from "./condition-filter.fields";
-import { ConditionKeySource } from "./condition-filter.keys";
+} from "./advanced-search.fields";
+import { ConditionKeySource } from "./advanced-search.keys";
 import {
   RELATION_OPTIONS,
   getRelationOption,
   isConditionComplete,
   isDatasetCondition,
   normalizeCondition,
-} from "./condition-filter.utils";
+} from "./advanced-search.utils";
 
-export interface ConditionFilterDialogData {
+export interface AdvancedSearchDialogData {
   scope: ConditionSettingScope;
   configs: ConditionConfig[];
   /** Loads the scientific metadata keys, page by page. */
@@ -67,7 +67,6 @@ const toDraft = ({ condition }: ConditionConfig): ConditionConfig => {
     if (condition.relation === "RANGE") {
       const [from, to] = Array.isArray(condition.rhs) ? condition.rhs : [];
       return {
-        enabled: true,
         condition: {
           ...condition,
           rhs: [String(from ?? ""), String(to ?? "")],
@@ -78,14 +77,13 @@ const toDraft = ({ condition }: ConditionConfig): ConditionConfig => {
     const rhs = Array.isArray(condition.rhs)
       ? condition.rhs.join(", ")
       : String(condition.rhs ?? "");
-    return { enabled: true, condition: { ...condition, rhs } };
+    return { condition: { ...condition, rhs } };
   }
 
   const rhs = Array.isArray(condition.rhs)
     ? condition.rhs.map((bound) => String(bound ?? ""))
     : String(condition.rhs ?? "");
   return {
-    enabled: true,
     condition: {
       ...condition,
       relation: getRelationOption(condition.relation).value,
@@ -117,7 +115,6 @@ export const DIALOG_WIDTH = "1200px";
 
 /** A new filter is about scientific metadata, the field dropdown has the other fields. */
 const blankDraft = (): ConditionConfig => ({
-  enabled: true,
   condition: {
     lhs: "",
     relation: "EQUAL_TO",
@@ -128,13 +125,13 @@ const blankDraft = (): ConditionConfig => ({
 });
 
 @Component({
-  selector: "condition-filter-dialog",
-  templateUrl: "./condition-filter-dialog.component.html",
-  styleUrls: ["./condition-filter-dialog.component.scss"],
+  selector: "advanced-search-dialog",
+  templateUrl: "./advanced-search-dialog.component.html",
+  styleUrls: ["./advanced-search-dialog.component.scss"],
   providers: [{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }],
   standalone: false,
 })
-export class ConditionFilterDialogComponent implements AfterViewInit {
+export class AdvancedSearchDialogComponent implements AfterViewInit {
   private nextId = 0;
   // the picker resets what was typed when it gets a new date object, so the same text gives the same object
   private readonly dates = new Map<string, DateTime>();
@@ -200,8 +197,8 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
   readonly attempted = signal(false);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ConditionFilterDialogData,
-    private dialogRef: MatDialogRef<ConditionFilterDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: AdvancedSearchDialogData,
+    private dialogRef: MatDialogRef<AdvancedSearchDialogComponent>,
     private unitsService: UnitsService,
     private host: ElementRef<HTMLElement>,
   ) {
@@ -218,9 +215,7 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
         first = false;
         return;
       }
-      this.data.draftChange?.(
-        rows.map(({ enabled, condition }) => ({ enabled, condition })),
-      );
+      this.data.draftChange?.(rows.map(({ condition }) => ({ condition })));
     });
   }
 
@@ -460,8 +455,7 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
     this.dialogRef.close(
       this.rows()
         .filter(({ condition }) => condition.lhs.trim())
-        .map(({ enabled, condition }) => ({
-          enabled,
+        .map(({ condition }) => ({
           condition: isConditionComplete(condition)
             ? normalizeCondition(condition)
             : condition,

@@ -4,7 +4,7 @@ import {
   METADATA_FIELD,
   getDatasetField,
   getFieldOptions,
-} from "./condition-filter.fields";
+} from "./advanced-search.fields";
 
 describe("condition filter fields", () => {
   it("should give every dataset field a unique key and a label", () => {

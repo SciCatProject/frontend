@@ -8,16 +8,16 @@ import {
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { Observable, Subject, of } from "rxjs";
 import { MetadataKey } from "state-management/models";
-import { ConditionFilterModule } from "./condition-filter.module";
+import { AdvancedSearchModule } from "./advanced-search.module";
 import {
-  ConditionKeyPickerComponent,
+  AdvancedSearchKeyPickerComponent,
   SEARCH_DEBOUNCE_MS,
-} from "./condition-key-picker.component";
-import { KEY_PAGE_SIZE } from "./condition-filter.keys";
+} from "./advanced-search-key-picker.component";
+import { KEY_PAGE_SIZE } from "./advanced-search.keys";
 
-describe("ConditionKeyPickerComponent", () => {
-  let component: ConditionKeyPickerComponent;
-  let fixture: ComponentFixture<ConditionKeyPickerComponent>;
+describe("AdvancedSearchKeyPickerComponent", () => {
+  let component: AdvancedSearchKeyPickerComponent;
+  let fixture: ComponentFixture<AdvancedSearchKeyPickerComponent>;
   let source: jasmine.Spy<
     (term: string, skip: number, limit: number) => Observable<MetadataKey[]>
   >;
@@ -37,10 +37,10 @@ describe("ConditionKeyPickerComponent", () => {
     changed = jasmine.createSpy("keyChange");
 
     TestBed.configureTestingModule({
-      imports: [ConditionFilterModule, NoopAnimationsModule],
+      imports: [AdvancedSearchModule, NoopAnimationsModule],
     });
 
-    fixture = TestBed.createComponent(ConditionKeyPickerComponent);
+    fixture = TestBed.createComponent(AdvancedSearchKeyPickerComponent);
     component = fixture.componentInstance;
     component.source = source;
     component.keyChange.subscribe(changed);

@@ -42,7 +42,7 @@ const apply = () => {
     "datasetList",
   );
   cy.get('[data-cy="condition-apply"]').click();
-  cy.get("condition-filter-dialog").should("not.exist");
+  cy.get("advanced-search-dialog").should("not.exist");
   cy.wait("@datasetList");
   cy.finishedLoading();
 };
@@ -426,7 +426,7 @@ describe("Datasets advanced search", () => {
       shows(names.alpha);
 
       chips().first().click();
-      cy.get("condition-filter-dialog").should("be.visible");
+      cy.get("advanced-search-dialog").should("be.visible");
       row(0).find('[data-cy="condition-value"]').should("have.value", "beam");
       cy.fillCondition(0, { value: "gamma" });
       apply();

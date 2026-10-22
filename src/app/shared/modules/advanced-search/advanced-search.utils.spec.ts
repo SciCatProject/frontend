@@ -10,9 +10,10 @@ import {
   normalizeCondition,
   splitValues,
   toActiveConditions,
+  withoutSwitchedOff,
   toFacetConditions,
   withPlainDates,
-} from "./condition-filter.utils";
+} from "./advanced-search.utils";
 
 const condition = (
   overrides: Partial<FilterCondition> = {},
@@ -193,22 +194,35 @@ describe("condition filter utils", () => {
     });
   });
 
+  describe("withoutSwitchedOff", () => {
+    const config = (enabled?: boolean): ConditionConfig => ({
+      condition: condition(),
+      ...(enabled !== undefined && { enabled }),
+    });
+
+    it("should leave out only what older settings switched off", () => {
+      const [missing, on, off] = [config(), config(true), config(false)];
+
+      expect(withoutSwitchedOff([missing, on, off])).toEqual([missing, on]);
+    });
+  });
+
   describe("toActiveConditions", () => {
     const config = (
       overrides: Partial<ConditionConfig> & { rhs?: string } = {},
     ): ConditionConfig => ({
-      enabled: true,
       condition: condition({ rhs: overrides.rhs ?? "20" }),
       ...overrides,
     });
 
-    it("should keep enabled conditions that have a value, normalized", () => {
+    it("should keep conditions that have a value, normalized, without them saying they are on", () => {
       expect(toActiveConditions([config()])).toEqual([
         condition({ relation: "EQUAL_TO_NUMERIC", rhs: 20 }),
       ]);
+      expect(toActiveConditions([config({ enabled: true })]).length).toBe(1);
     });
 
-    it("should skip switched off and empty conditions", () => {
+    it("should skip conditions that older settings switched off, and empty ones", () => {
       expect(
         toActiveConditions([config({ enabled: false }), config({ rhs: "" })]),
       ).toEqual([]);

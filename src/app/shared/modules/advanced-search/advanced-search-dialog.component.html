@@ -160,13 +160,13 @@
 
         @switch (kind) {
           @case ("metadata") {
-            <condition-key-picker
+            <advanced-search-key-picker
               class="cell-key"
               [source]="keySource"
               [key]="condition.lhs"
               [error]="error?.key"
               (keyChange)="setKey(row.id, $event)"
-            ></condition-key-picker>
+            ></advanced-search-key-picker>
 
             <mat-form-field
               class="cell-op"

@@ -10,23 +10,22 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { of } from "rxjs";
 import { ConditionSettingScope } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
-import { ConditionFilterModule } from "./condition-filter.module";
+import { AdvancedSearchModule } from "./advanced-search.module";
 import {
-  ConditionFilterDialogComponent,
-  ConditionFilterDialogData,
+  AdvancedSearchDialogComponent,
+  AdvancedSearchDialogData,
   METADATA_FIELD,
-} from "./condition-filter-dialog.component";
+} from "./advanced-search-dialog.component";
 
-describe("ConditionFilterDialogComponent", () => {
-  let component: ConditionFilterDialogComponent;
-  let fixture: ComponentFixture<ConditionFilterDialogComponent>;
-  let dialogData: ConditionFilterDialogData;
+describe("AdvancedSearchDialogComponent", () => {
+  let component: AdvancedSearchDialogComponent;
+  let fixture: ComponentFixture<AdvancedSearchDialogComponent>;
+  let dialogData: AdvancedSearchDialogData;
   const dialogRef = jasmine.createSpyObj("MatDialogRef", ["close"]);
 
   const saved = (
     overrides: Partial<ConditionConfig["condition"]> = {},
   ): ConditionConfig => ({
-    enabled: true,
     condition: {
       lhs: "temperature",
       relation: "EQUAL_TO_NUMERIC",
@@ -61,7 +60,7 @@ describe("ConditionFilterDialogComponent", () => {
       unitsEnabled,
       draftChange,
     };
-    fixture = TestBed.createComponent(ConditionFilterDialogComponent);
+    fixture = TestBed.createComponent(AdvancedSearchDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   };
@@ -82,7 +81,7 @@ describe("ConditionFilterDialogComponent", () => {
     dialogRef.close.calls.reset();
 
     TestBed.configureTestingModule({
-      imports: [ConditionFilterModule, NoopAnimationsModule],
+      imports: [AdvancedSearchModule, NoopAnimationsModule],
       providers: [
         provideLuxonDateAdapter(),
         { provide: MAT_DIALOG_DATA, useFactory: () => dialogData },
@@ -485,7 +484,6 @@ describe("ConditionFilterDialogComponent", () => {
 
   describe("rows", () => {
     const mk = (lhs: string): ConditionConfig => ({
-      enabled: true,
       condition: { lhs, relation: "EQUAL_TO_NUMERIC", rhs: 1, unit: "" },
     });
 
@@ -673,6 +671,14 @@ describe("ConditionFilterDialogComponent", () => {
       component.apply();
 
       expect(dialogRef.close).toHaveBeenCalledOnceWith([saved()]);
+    });
+
+    it("should not write whether a filter is on, a filter is on", () => {
+      createComponent([saved()]);
+
+      component.apply();
+
+      expect("enabled" in closedWith()[0]).toBeFalse();
     });
 
     it("should close with an empty list when everything was cleared", () => {

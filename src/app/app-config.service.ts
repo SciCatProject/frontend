@@ -208,6 +208,8 @@ export interface AppConfigInterface {
   metadataEditingUnitListDisabled?: boolean;
   defaultDatasetsListSettings?: ListSettings;
   defaultProposalsListSettings?: ListSettings;
+  /** Samples only have the conditions of the advanced search to predefine. */
+  defaultSamplesListSettings?: Pick<ListSettings, "conditions">;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
   datasetDetailComponent?: DatasetDetailComponentConfig;

@@ -21,20 +21,20 @@
               (search)="onTextSearchChange($event)"
             ></app-search-bar>
             @if (appConfig.scienceSearchEnabled) {
-              <div class="condition-filter">
-                <condition-filter-button
-                  #conditionFilter
+              <div class="advanced-search">
+                <advanced-search-button
+                  #advancedSearch
                   scope="sample"
                   [keySource]="keySource"
                   [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
                   (conditionsApplied)="onConditionsApplied($event)"
-                ></condition-filter-button>
-                <condition-filter-chips
-                  [configs]="conditionFilter.configs$ | async"
-                  (filterSelect)="conditionFilter.openFilter($event)"
-                  (filterRemove)="conditionFilter.removeFilter($event)"
-                  (clearAll)="conditionFilter.clearFilters()"
-                ></condition-filter-chips>
+                ></advanced-search-button>
+                <advanced-search-chips
+                  [configs]="advancedSearch.configs$ | async"
+                  (filterSelect)="advancedSearch.openFilter($event)"
+                  (filterRemove)="advancedSearch.removeFilter($event)"
+                  (clearAll)="advancedSearch.clearFilters()"
+                ></advanced-search-chips>
               </div>
             }
             <div class="section-container">
