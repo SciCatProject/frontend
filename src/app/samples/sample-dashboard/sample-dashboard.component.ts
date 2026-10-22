@@ -15,7 +15,7 @@ import {
   selectMetadataKeyOptions,
   selectSampleDashboardPageViewModel,
 } from "state-management/selectors/samples.selectors";
-import { selectConditions } from "state-management/selectors/user.selectors";
+import { selectFetchedConditions } from "state-management/selectors/user.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
@@ -204,11 +204,15 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         ),
     );
 
-    // the saved conditions are the ones shown in the filter, so apply them
+    // The saved conditions are the ones shown in the filter, so apply them. The page can be
+    // there before the settings are, the conditions are only the saved ones once they are.
     this.subscriptions.push(
       this.store
-        .select(selectConditions("sample"))
-        .pipe(take(1))
+        .select(selectFetchedConditions("sample"))
+        .pipe(
+          filter((configs) => configs !== null),
+          take(1),
+        )
         .subscribe((configs) => {
           const characteristics = toActiveConditions(configs);
           if (characteristics.length) {

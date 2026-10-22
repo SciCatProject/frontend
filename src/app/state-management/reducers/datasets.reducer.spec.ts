@@ -1,11 +1,13 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
+import { fetchUserSettingsCompleteAction } from "../actions/user.actions";
 import { initialDatasetState } from "state-management/state/datasets.store";
 import { ArchViewMode, FacetCounts, FilterCondition } from "../models";
 import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
 import {
   OrigDatablock,
   OutputDatasetDto,
+  UserSettings,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 const derivedDataset = createMock<OutputDatasetDto>({
@@ -519,6 +521,65 @@ describe("DatasetsReducer", () => {
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.pidTerms).toEqual(pid);
+    });
+  });
+
+  describe("on fetchUserSettingsCompleteAction", () => {
+    const saved = (rhs: string, enabled?: boolean) => ({
+      ...(enabled !== undefined && { enabled }),
+      condition: {
+        lhs: "temperature",
+        relation: "EQUAL_TO" as const,
+        rhs,
+        unit: "",
+      },
+    });
+    const complete = (conditions: unknown) =>
+      fetchUserSettingsCompleteAction({
+        userSettings: {
+          externalSettings: { fe_dataset_table_conditions: conditions },
+        } as unknown as UserSettings,
+      });
+
+    it("should filter by the saved conditions that are applied, in the same step as the settings", () => {
+      const state = fromDatasets.datasetsReducer(
+        initialDatasetState,
+        complete([saved("20"), saved("30", false), saved("")]),
+      );
+
+      expect(state.filters.scientific).toEqual([
+        {
+          lhs: "temperature",
+          relation: "EQUAL_TO_NUMERIC",
+          rhs: 20,
+          unit: "",
+        },
+      ]);
+    });
+
+    it("should not filter without saved conditions", () => {
+      expect(
+        fromDatasets.datasetsReducer(initialDatasetState, complete([])).filters
+          .scientific,
+      ).toEqual([]);
+      expect(
+        fromDatasets.datasetsReducer(initialDatasetState, complete(undefined))
+          .filters.scientific,
+      ).toEqual([]);
+    });
+
+    it("should leave the other filters as they are", () => {
+      const before = {
+        ...initialDatasetState,
+        filters: { ...initialDatasetState.filters, text: "beam" },
+      };
+
+      const state = fromDatasets.datasetsReducer(
+        before,
+        complete([saved("1")]),
+      );
+
+      expect(state.filters.text).toBe("beam");
     });
   });
 });

@@ -78,27 +78,27 @@ describe("Datasets advanced search", () => {
 
     cy.visit("/datasets");
     cy.finishedLoading();
-    // filters are saved with the user settings, a failed test must not leave any behind
-    cy.get("body").then(($body) => {
-      if ($body.find('[data-cy="condition-chip"]').length) {
-        cy.removeConditions();
-      }
-    });
   });
 
   afterEach(() => {
+    // the filters are saved with the user settings, a test that failed must not leave any
+    // behind: they would filter the datasets of every test that comes after it
+    cy.visit("/datasets");
+    cy.finishedLoading();
+    cy.removeConditions();
+
     cy.removeDatasets();
   });
 
   describe("text field, contains", () => {
     it("should find a part of the text, in any case", () => {
       cy.openAdvancedSearch();
-      cy.fillCondition(0, { field: "Dataset name", value: "SEARCH ETA" });
+      cy.fillCondition(0, { field: "Dataset name", value: "ARCH BET" });
       apply();
 
       chips()
         .should("have.length", 1)
-        .and("contain", 'Dataset name contains "SEARCH ETA"');
+        .and("contain", 'Dataset name contains "ARCH BET"');
       shows(names.beta);
 
       cy.removeConditions();

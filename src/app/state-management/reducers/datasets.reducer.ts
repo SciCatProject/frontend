@@ -4,7 +4,9 @@ import {
   DatasetState,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
+import { fetchUserSettingsCompleteAction } from "state-management/actions/user.actions";
 import { ArchViewMode, FilterCondition } from "state-management/models";
+import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -438,6 +440,21 @@ const reducer = createReducer(
     (state, { conditions }): DatasetState => ({
       ...state,
       filters: { ...state.filters, scientific: conditions },
+    }),
+  ),
+
+  // The list is fetched as soon as the settings are there, which is before an effect of this
+  // action could set the saved filters. They are set here, so the first fetch is filtered.
+  on(
+    fetchUserSettingsCompleteAction,
+    (state, { userSettings }): DatasetState => ({
+      ...state,
+      filters: {
+        ...state.filters,
+        scientific: toActiveConditions(
+          userSettings.externalSettings?.["fe_dataset_table_conditions"],
+        ),
+      },
     }),
   ),
 );
