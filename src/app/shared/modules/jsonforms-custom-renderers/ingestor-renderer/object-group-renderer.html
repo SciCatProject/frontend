@@ -1,7 +1,17 @@
 <mat-card class="anyof-group">
   <mat-card-title
     >
-    {{ objectTitle }}
+    {{ objectTitle }} 
+    &nbsp;
+    <mat-icon
+      *ngIf="description"
+      matSuffix
+      class="field-description-icon"
+      [matTooltip]="description"
+      matTooltipPosition="above"
+    >
+      info_outline
+    </mat-icon>
     <span class="spacer"></span>
     <mat-icon
       *ngIf="this.error !== null && this.error !== ''"
