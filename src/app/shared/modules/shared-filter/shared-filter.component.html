@@ -1,7 +1,7 @@
 <!-- shared-filter.component.html -->
 <form [formGroup]="filterForm" data-cy="shared-filter-form">
-  <ng-container [ngSwitch]="filterType">
-    <ng-container *ngSwitchDefault>
+  @switch (filterType) {
+    @default {
       <mat-form-field [id]="key">
         <mat-label>{{ label }} </mat-label>
         <input
@@ -15,9 +15,8 @@
           formControlName="textField"
         />
       </mat-form-field>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'dateRange'">
+    }
+    @case ("dateRange") {
       <mat-form-field
         class="date-range-field"
         [matTooltip]="tooltip"
@@ -47,9 +46,8 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'checkbox'">
+    }
+    @case ("checkbox") {
       <div
         class="collapsible-filter-wrapper"
         [class.collapsed]="collapsible && collapsed"
@@ -59,52 +57,55 @@
           [class.clickable]="collapsible"
           (click)="toggleCollapse()"
           >{{ label | translate: localization }}
-          <span *ngIf="shouldShowBadge" class="filter-badge">{{
-            badgeCount
-          }}</span
-          ><mat-icon *ngIf="collapsible" class="icon-collapse">
-            {{ collapsed ? "expand_more" : "expand_less" }}
-          </mat-icon></mat-label
-        >
-        <mat-form-field
-          *ngIf="showCheckboxSearch"
-          appearance="outline"
-          class="facet-search"
-          floatLabel="always"
-        >
-          <mat-label>Find filter</mat-label>
-          <input
-            matInput
-            type="search"
-            formControlName="textField"
-            placeholder="{{ placeholder }}"
-          />
-        </mat-form-field>
-        <ng-container *ngIf="visibleFacetCounts?.length > 0; else noItems">
+          @if (shouldShowBadge) {
+            <span class="filter-badge">{{ badgeCount }}</span>
+          }
+          @if (collapsible) {
+            <mat-icon class="icon-collapse">
+              {{ collapsed ? "expand_more" : "expand_less" }}
+            </mat-icon>
+          }
+        </mat-label>
+        @if (showCheckboxSearch) {
+          <mat-form-field
+            appearance="outline"
+            class="facet-search"
+            floatLabel="always"
+          >
+            <mat-label>Find filter</mat-label>
+            <input
+              matInput
+              type="search"
+              formControlName="textField"
+              placeholder="{{ placeholder }}"
+            />
+          </mat-form-field>
+        }
+        @if (visibleFacetCounts?.length > 0) {
           <div class="checkbox-list">
-            <mat-checkbox
-              *ngFor="let field of visibleFacetCounts; trackBy: trackById"
-              [checked]="
-                filterForm.get('selectedIds')!.value?.includes(field._id)
-              "
-              (change)="onToggleCheckbox(field._id, $event.checked)"
-            >
-              {{ field.label ?? field._id }} ({{ field.count }})
-            </mat-checkbox>
+            @for (field of visibleFacetCounts; track trackById($index, field)) {
+              <mat-checkbox
+                [checked]="
+                  filterForm.get('selectedIds')!.value?.includes(field._id)
+                "
+                (change)="onToggleCheckbox(field._id, $event.checked)"
+              >
+                {{ field.label ?? field._id }} ({{ field.count }})
+              </mat-checkbox>
+            }
           </div>
-          <div class="show-more-btn" *ngIf="hasMore">
-            <button mat-button (click)="onShowMore()">Show more...</button>
-          </div>
-        </ng-container>
-        <ng-template #noItems>
+          @if (hasMore) {
+            <div class="show-more-btn">
+              <button mat-button (click)="onShowMore()">Show more...</button>
+            </div>
+          }
+        } @else {
           <div class="empty-text">No options found</div>
-        </ng-template>
+        }
       </div>
-
       <mat-divider />
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'multiSelect'">
+    }
+    @case ("multiSelect") {
       <multiselect-filter
         [key]="key"
         [label]="label"
@@ -114,14 +115,14 @@
         [currentFilter$]="currentFilter$"
         (keydown.enter)="onApplyEnter($event)"
       ></multiselect-filter>
-    </ng-container>
-    <ng-container *ngSwitchCase="'number'">
+    }
+    @case ("number") {
       <ngx-numeric-range-form-field
         formControlName="numberRange"
         [label]="label"
         [key]="key"
         (numericRangeChanged)="onNumericRangeChange($event)"
       ></ngx-numeric-range-form-field>
-    </ng-container>
-  </ng-container>
+    }
+  }
 </form>

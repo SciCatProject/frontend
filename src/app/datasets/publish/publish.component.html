@@ -33,27 +33,28 @@
             ></textarea>
           </mat-form-field>
 
-          <mat-expansion-panel
-            *ngIf="!isSchemaEmpty()"
-            (opened)="panelOpenState.set(true)"
-            (closed)="panelOpenState.set(false)"
-          >
-            <mat-expansion-panel-header>
-              <mat-panel-title> Metadata </mat-panel-title>
-              <mat-panel-description>
-                Here you can add metadata to your published data.
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <jsonforms
-              [data]="metadata"
-              [schema]="schema"
-              [uischema]="uiSchema"
-              [renderers]="renderers"
-              [ajv]="ajvService.getAjv()"
-              (errors)="onErrors($event)"
-              (dataChange)="onMetadataChange($event)"
-            ></jsonforms>
-          </mat-expansion-panel>
+          @if (!isSchemaEmpty()) {
+            <mat-expansion-panel
+              (opened)="panelOpenState.set(true)"
+              (closed)="panelOpenState.set(false)"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title> Metadata </mat-panel-title>
+                <mat-panel-description>
+                  Here you can add metadata to your published data.
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <jsonforms
+                [data]="metadata"
+                [schema]="schema"
+                [uischema]="uiSchema"
+                [renderers]="renderers"
+                [ajv]="ajvService.getAjv()"
+                (errors)="onErrors($event)"
+                (dataChange)="onMetadataChange($event)"
+              ></jsonforms>
+            </mat-expansion-panel>
+          }
 
           <button
             id="saveButton"
