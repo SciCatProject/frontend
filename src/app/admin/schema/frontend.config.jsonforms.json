@@ -350,6 +350,35 @@
           }
         }
       },
+      "defaultDatafilesListSettings": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "header": { "type": "string" },
+                "enabled": { "type": "boolean" },
+                "width": { "type": "number" },
+                "type": {
+                  "type": "string",
+                  "enum": ["standard", "date"]
+                },
+                "format": { "type": "string" },
+                "pipe": {
+                  "type": "string",
+                  "enum": ["date", "filesize", "timeduration"]
+                },
+                "emptyValue": { "type": "string" },
+                "icon": { "type": "string" }
+              },
+              "required": ["name"]
+            }
+          }
+        }
+      },
       "labelsLocalization": {
         "type": "object",
         "properties": {
@@ -1079,6 +1108,25 @@
                   {
                     "type": "Control",
                     "scope": "#/properties/defaultProposalsListSettings/properties/filters",
+                    "options": { "showSortButtons": true }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Group",
+            "label": "Default Datafiles List Settings",
+            "options": { "expandable": true },
+            "elements": [
+              {
+                "type": "Group",
+                "options": { "expandable": true },
+                "label": "Columns list",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/defaultDatafilesListSettings/properties/columns",
                     "options": { "showSortButtons": true }
                   }
                 ]
