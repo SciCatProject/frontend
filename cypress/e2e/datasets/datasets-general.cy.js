@@ -341,7 +341,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="condition-unit"]').should("exist");
     });
 
-    it("should combine dataset fields and metadata with NOT", () => {
+    it("should combine dataset fields and metadata, and exclude", () => {
       cy.visit("/datasets");
       cy.finishedLoading();
 

@@ -15,18 +15,13 @@ import {
   ConditionFilterDialogComponent,
   ConditionFilterDialogData,
   METADATA_FIELD,
-  dialogWidth,
-  needsWideDialog,
 } from "./condition-filter-dialog.component";
 
 describe("ConditionFilterDialogComponent", () => {
   let component: ConditionFilterDialogComponent;
   let fixture: ComponentFixture<ConditionFilterDialogComponent>;
   let dialogData: ConditionFilterDialogData;
-  const dialogRef = jasmine.createSpyObj("MatDialogRef", [
-    "close",
-    "updateSize",
-  ]);
+  const dialogRef = jasmine.createSpyObj("MatDialogRef", ["close"]);
 
   const saved = (
     overrides: Partial<ConditionConfig["condition"]> = {},
@@ -74,9 +69,6 @@ describe("ConditionFilterDialogComponent", () => {
   const row = (index = 0) => component.rows()[index];
   const id = (index = 0) => row(index).id;
   const closedWith = () => dialogRef.close.calls.mostRecent().args[0];
-  // minmax(a, b) is one column
-  const tracks = () =>
-    component.gridColumns().match(/minmax\([^)]+\)|\S+/g).length;
   const cells = (selector: string): HTMLElement[] =>
     Array.from(fixture.nativeElement.querySelectorAll(selector));
 
@@ -133,8 +125,8 @@ describe("ConditionFilterDialogComponent", () => {
       expect(component.getFieldValue(row().condition)).toBe(METADATA_FIELD);
       expect(cells("[data-cy=condition-key]").length).toBe(1);
       expect(cells("[data-cy=condition-operator]").length).toBe(1);
-      expect(cells("[data-cy=condition-value]").length).toBe(1);
-      expect(cells("[data-cy=condition-unit]").length).toBe(1);
+      expect(cells(".value-unit [data-cy=condition-value]").length).toBe(1);
+      expect(cells(".value-unit [data-cy=condition-unit]").length).toBe(1);
     });
 
     it("should show the icon of the kind of filter of the chosen field", () => {
@@ -155,7 +147,7 @@ describe("ConditionFilterDialogComponent", () => {
       expect(labels.length).toBe(component.datasetFields.length + 1);
     });
 
-    it("should switch NOT on and off with its button", () => {
+    it("should switch exclude on and off with its checkbox", () => {
       setMetadata(0, "temperature");
       fixture.detectChanges();
       const button = cells("[data-cy=condition-exclude]")[0];
@@ -310,63 +302,164 @@ describe("ConditionFilterDialogComponent", () => {
   });
 
   describe("layout", () => {
-    it("should only have the cells of a dataset field while no row has metadata", () => {
+    it("should grey out the key and the operator of a dataset field", () => {
       createComponent([savedDatasetField()]);
 
-      // not, field, value, remove
-      expect(tracks()).toBe(4);
-      expect(component.wideValueSpan()).toBe(1);
-      expect(component.wide()).toBeFalse();
+      const [key, operator] = cells(".static-cell");
+      expect(key.textContent.trim()).toBe("—");
+      expect(operator.textContent.trim()).toBe("Any of");
+      expect(cells(".static-cell").length).toBe(2);
+      expect(cells("[data-cy=condition-key]").length).toBe(0);
+      expect(cells("[data-cy=condition-operator]").length).toBe(0);
+      expect(cells("[data-cy=condition-unit]").length).toBe(0);
     });
 
-    it("should have a column for every cell of a metadata row", () => {
+    it("should say how each kind of dataset field is matched", () => {
+      createComponent();
+
+      const operatorOf = (field: string) => {
+        component.setField(id(), field);
+        return component.getOperatorText(row().condition);
+      };
+
+      expect(operatorOf("keywords")).toBe("Any of");
+      expect(operatorOf("datasetName")).toBe("Contains");
+      expect(operatorOf("creationTime")).toBe("Between");
+    });
+
+    it("should have the key, operator, value and unit of metadata, none of them greyed out", () => {
       createComponent([saved()]);
 
-      // not, field, key, operator, value, unit, remove
-      expect(tracks()).toBe(7);
-      expect(component.wideValueSpan()).toBe(4);
-      expect(component.wide()).toBeTrue();
+      expect(cells(".static-cell").length).toBe(0);
+      expect(cells("[data-cy=condition-key]").length).toBe(1);
+      expect(cells("[data-cy=condition-operator]").length).toBe(1);
+      expect(cells("[data-cy=condition-value]").length).toBe(1);
+      expect(cells("[data-cy=condition-unit]").length).toBe(1);
     });
 
-    it("should leave out the unit column without units", () => {
+    it("should leave out the unit without units", () => {
       createComponent([saved()], "dataset", false);
 
-      expect(tracks()).toBe(6);
-      expect(component.wideValueSpan()).toBe(3);
+      expect(cells("[data-cy=condition-unit]").length).toBe(0);
+      expect(cells(".value-unit [data-cy=condition-value]").length).toBe(1);
     });
 
-    it("should get wide once a row is about scientific metadata", () => {
-      createComponent([savedDatasetField()]);
-      expect(component.wide()).toBeFalse();
+    it("should let the unit be emptied again once it is chosen", () => {
+      createComponent([saved()]);
+      expect(cells("[data-cy=condition-unit-clear]").length).toBe(1);
 
-      component.setField(id(), METADATA_FIELD);
+      cells("[data-cy=condition-unit-clear]")[0].click();
+      fixture.detectChanges();
 
-      expect(component.wide()).toBeTrue();
-      expect(tracks()).toBe(7);
+      expect(row().condition.unit).toBe("");
+      expect(cells("[data-cy=condition-unit-clear]").length).toBe(0);
+      expect(component.canApply()).toBeTrue();
     });
 
-    it("should only have the cells of metadata for samples", () => {
-      createComponent([], "sample");
+    it("should only clear the unit, not open the units", () => {
+      createComponent([saved()]);
+      const input = cells("[data-cy=condition-unit]")[0] as HTMLInputElement;
 
-      // key, operator, value, unit, remove
-      expect(tracks()).toBe(5);
-      expect(component.wide()).toBeTrue();
+      cells("[data-cy=condition-unit-clear]")[0].click();
+      fixture.detectChanges();
+
+      expect(row().condition.unit).toBe("");
+      expect(input.value).toBe("");
+      expect(document.activeElement).not.toBe(input);
+      expect(document.querySelectorAll("mat-option").length).toBe(0);
     });
 
-    it("should size the dialog to what its rows need", () => {
-      expect(dialogWidth(false)).toBe("860px");
-      expect(dialogWidth(true)).toBe("1160px");
-      // no filters yet: the new one is about scientific metadata
-      expect(needsWideDialog([])).toBeTrue();
-      expect(needsWideDialog([saved()])).toBeTrue();
-      expect(needsWideDialog([savedDatasetField()])).toBeFalse();
+    it("should close the units when the unit is cleared while they are open", () => {
+      createComponent([saved()]);
+      const input = cells("[data-cy=condition-unit]")[0] as HTMLInputElement;
+      input.focus();
+      input.dispatchEvent(new Event("focusin"));
+      fixture.detectChanges();
+      expect(document.querySelectorAll("mat-option").length).toBeGreaterThan(0);
+
+      cells("[data-cy=condition-unit-clear]")[0].click();
+      fixture.detectChanges();
+
+      expect(row().condition.unit).toBe("");
+      expect(document.querySelectorAll("mat-option").length).toBe(0);
+    });
+
+    it("should empty the unit by deleting its text", () => {
+      createComponent([saved()]);
+      const input = cells("[data-cy=condition-unit]")[0] as HTMLInputElement;
+      expect(input.value).toBe("celsius");
+
+      input.value = "";
+      input.dispatchEvent(new Event("input"));
+      fixture.detectChanges();
+
+      expect(row().condition.unit).toBe("");
+      expect(input.value).toBe("");
+      expect(component.canApply()).toBeTrue();
+    });
+
+    it("should narrow the units down by what is typed", () => {
+      createComponent([saved({ lhs: "length", unit: "milli" })]);
+      const typed = (unit: string) =>
+        component.getUnits({ ...row().condition, unit });
+
+      expect(typed("milli")).toEqual(["millimeters"]);
+      expect(typed("MILLIM")).toEqual(["millimeters"]);
+      expect(typed("zzz")).toEqual([]);
+    });
+
+    it("should list all the units again when the unit is complete or empty", () => {
+      createComponent([saved({ lhs: "length", unit: "meters" })]);
+      const all = component.getUnits({ ...row().condition, unit: "" });
+
+      expect(all.length).toBeGreaterThan(3);
+      expect(
+        component.getUnits({ ...row().condition, unit: "meters" }),
+      ).toEqual(all);
+      expect(component.getUnits({ ...row().condition, unit: "  " })).toEqual(
+        all,
+      );
+    });
+
+    it("should apply a value without a unit", () => {
+      createComponent([saved()]);
+      component.setUnit(id(), "");
+
+      component.apply();
+
+      expect(closedWith()[0].condition.unit).toBe("");
+    });
+
+    it("should have a heading for every column", () => {
+      createComponent([saved()]);
+      const heads = cells(".column-heads span").map((head) =>
+        head.textContent.trim(),
+      );
+
+      expect(heads).toEqual([
+        "Exclude",
+        "Field type",
+        "Field",
+        "Operator",
+        "Value",
+        "",
+      ]);
+    });
+
+    it("should not have the exclude and field type columns for samples", () => {
+      createComponent([saved()], "sample");
+      const heads = cells(".column-heads span").map((head) =>
+        head.textContent.trim(),
+      );
+
+      expect(heads).toEqual(["Field", "Operator", "Value", ""]);
     });
   });
 
   describe("samples", () => {
     beforeEach(() => createComponent([], "sample"));
 
-    it("should only offer metadata keys, without NOT", () => {
+    it("should only offer metadata keys, without exclude", () => {
       expect(component.advanced).toBeFalse();
       expect(component.datasetFields).toEqual([]);
       expect(cells("[data-cy=condition-field]").length).toBe(0);
@@ -618,7 +711,7 @@ describe("ConditionFilterDialogComponent", () => {
       });
     });
 
-    it("should close with NOT only on the filters that have it", () => {
+    it("should close with exclude only on the filters that have it", () => {
       createComponent();
       setMetadata(0, "temperature");
       component.setValue(id(), "5");

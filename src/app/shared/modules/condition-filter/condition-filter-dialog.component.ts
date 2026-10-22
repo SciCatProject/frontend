@@ -112,14 +112,8 @@ const DATE_FORMATS = {
   },
 };
 
-/** The dialog is only as wide as its rows need: scientific metadata takes more room. */
-export const dialogWidth = (wide: boolean): string =>
-  wide ? "1160px" : "860px";
-
-/** For the button, the dialog opens at the width its filters need. */
-export const needsWideDialog = (configs: ConditionConfig[]): boolean =>
-  !configs.length ||
-  configs.some(({ condition }) => !isDatasetCondition(condition));
+/** The width of the dialog, narrower windows get 95% of their width. */
+export const DIALOG_WIDTH = "1200px";
 
 /** A new filter is about scientific metadata, the field dropdown has the other fields. */
 const blankDraft = (): ConditionConfig => ({
@@ -157,34 +151,6 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
   readonly fieldOptions = getFieldOptions(this.datasetFields);
   /** One click starts a new row, the field dropdown has all other fields. */
   readonly rows = signal<Row[]>(this.createRows(this.data.configs));
-  /** Scientific metadata needs the width of a key, an operator, a value and a unit. */
-  readonly wide = computed(
-    () =>
-      !this.advanced ||
-      this.rows().some(
-        ({ condition }) => this.getKind(condition) === "metadata",
-      ),
-  );
-  /** The columns of a row, only the cells in the middle differ per kind of field. */
-  readonly gridColumns = computed(() =>
-    this.wide()
-      ? [
-          this.advanced && "60px", // not
-          this.advanced && "200px", // field
-          "minmax(150px, 1.4fr)", // key
-          "minmax(120px, 1fr)", // operator
-          "minmax(110px, 1.1fr)", // value
-          this.unitsEnabled && "minmax(120px, 1fr)", // unit
-          "36px", // remove
-        ]
-          .filter(Boolean)
-          .join(" ")
-      : "60px 200px minmax(200px, 1fr) 36px",
-  );
-  /** A dataset field only has a value, it takes the place of the key, operator and unit. */
-  readonly wideValueSpan = computed(() =>
-    !this.wide() ? 1 : this.unitsEnabled ? 4 : 3,
-  );
   // value errors are only shown once the user left the value, not while typing
   readonly touched = signal<ReadonlySet<number>>(new Set());
   /** Draws attention to a row for a moment. */
@@ -244,8 +210,6 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
       this.highlightId.set(target.id);
       setTimeout(() => this.highlightId.set(null), HIGHLIGHT_MS);
     }
-    effect(() => this.dialogRef.updateSize(dialogWidth(this.wide())));
-
     let first = true;
     effect(() => {
       const rows = this.rows();
@@ -383,6 +347,18 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
     return this.fieldOptions.find((option) => option.value === value);
   }
 
+  /** A dataset field has one way of matching, shown where the operator would be. */
+  getOperatorText({ relation }: FilterCondition): string {
+    switch (relation) {
+      case "RANGE":
+        return "Between";
+      case "IN":
+        return "Any of";
+      default:
+        return "Contains";
+    }
+  }
+
   /** A dataset field has no operator, the placeholder tells how it matches. */
   getValuePlaceholder(condition: FilterCondition): string {
     return condition.relation === "IN"
@@ -390,10 +366,16 @@ export class ConditionFilterDialogComponent implements AfterViewInit {
       : "Contains this text, e.g. beam";
   }
 
+  /** The units of the key, narrowed down by what is typed, all of them when the unit is complete. */
   getUnits(condition: FilterCondition): string[] {
-    return condition.unitsOptions?.length
+    const units = condition.unitsOptions?.length
       ? condition.unitsOptions
       : this.unitsService.getUnits(condition.lhs);
+    const typed = (condition.unit || "").trim().toLowerCase();
+
+    return !typed || units.some((unit) => unit.toLowerCase() === typed)
+      ? units
+      : units.filter((unit) => unit.toLowerCase().includes(typed));
   }
 
   addRow(): void {

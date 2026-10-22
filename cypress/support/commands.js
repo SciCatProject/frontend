@@ -103,16 +103,20 @@ Cypress.Commands.add("openAdvancedSearch", () => {
  *   `key` picks scientific metadata first when the field is not set.
  *   Samples have no field, they only have keys.
  * - `operator` is the symbol of the operator, e.g. ">" or "Between".
- * - `exclude` switches NOT on.
+ * - `from` and `to` are the dates of Creation time, typed as yyyy-mm-dd.
+ * - `exclude` ticks Exclude.
  * The key is typed as it is, picking a suggestion is not needed.
  */
 Cypress.Commands.add(
   "fillCondition",
-  (index, { field, key, operator, value, min, max, unit, exclude }) => {
+  (
+    index,
+    { field, key, operator, value, min, max, unit, exclude, from, to },
+  ) => {
     const find = (name) => conditionRow(index).find(`[data-cy="${name}"]`);
 
     if (exclude) {
-      find("condition-exclude").click();
+      find("condition-exclude").check();
     }
     if (field !== undefined || key !== undefined) {
       conditionRow(index).then(($row) => {
@@ -139,6 +143,12 @@ Cypress.Commands.add(
     }
     if (max !== undefined) {
       find("condition-max").clear().type(max);
+    }
+    if (from !== undefined) {
+      find("condition-date-from").clear().type(from).blur();
+    }
+    if (to !== undefined) {
+      find("condition-date-to").clear().type(to).blur();
     }
     if (unit !== undefined) {
       find("condition-unit").clear().type(`${unit}{esc}`);

@@ -1,14 +1,23 @@
 :host {
+  --line: #eaecf0;
+  --field-border: #d0d5dd;
+  --muted: #667085;
+  --faint: #98a2b3;
+  --warn: var(--theme-warn-default, #b00020);
+
   display: flex;
   flex-direction: column;
   max-height: inherit;
+  color: #1d2939;
+  background: #fff;
 }
 
 .dialog-header {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 12px 12px 8px 24px;
+  gap: 14px;
+  padding: 20px 16px 16px 28px;
+  border-bottom: 1px solid var(--line);
 
   .dialog-icon {
     // in line with the title, which is 32px high
@@ -28,10 +37,12 @@
 
     h2 {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       align-items: center;
       margin: 0;
       padding: 0;
+      font-size: 1.375rem;
+      font-weight: 600;
 
       // the dialog title has a 40px strut of its own, it would push the text down
       &::before {
@@ -40,70 +51,103 @@
     }
 
     p {
-      margin: 2px 0 0;
-      font-size: 0.8125rem;
-      opacity: 0.7;
+      margin: 4px 0 0;
+      font-size: 0.9375rem;
+      color: var(--muted);
     }
   }
 }
 
 .dialog-body {
+  // the rows follow the width of the dialog, not of the window
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-height: 160px;
-  max-height: 60vh;
-  padding: 8px 24px 12px;
+  min-height: 180px;
+  max-height: 64vh;
+  padding: 20px 28px 0;
   // only the rows scroll, Add filter stays below them
   overflow: hidden;
 }
 
 .conditions {
-  // lets the rows adapt to the width of the dialog, not of the window
-  container-type: inline-size;
   display: flex;
   flex: 0 1 auto;
   flex-direction: column;
-  gap: 6px;
   min-height: 0;
-  // the room below the last row is for the tap area of its buttons, it would make a scrollbar
-  padding: 2px 4px 2px 0;
+  // the room around the rows is for the tap area of their buttons, it would make a scrollbar
+  padding: 0 4px 2px 0;
   overflow-y: auto;
 }
 
-// the NOT, field and remove cells keep their place for every kind of field
+// the heads and the rows share the columns, a dataset field leaves the key and the operator
+// greyed out
+.column-heads,
 .condition-row {
   display: grid;
-  grid-template-columns: var(--condition-columns);
+  grid-template-columns: minmax(150px, 1fr) 170px minmax(300px, 1.7fr) 40px;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
+
+  &.advanced {
+    grid-template-columns:
+      104px 220px minmax(150px, 1fr) 160px minmax(300px, 1.7fr)
+      40px;
+  }
+}
+
+.column-heads {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0 8px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+
+.condition-row {
   position: relative;
-  padding: 4px 10px;
+  padding: 14px 8px;
+  border-bottom: 1px solid var(--line);
   transition:
     background 0.4s,
-    box-shadow 0.4s,
-    border-color 0.4s;
-  background: color-mix(in srgb, var(--theme-primary-default) 4%, white);
-  border: 1px solid color-mix(in srgb, var(--theme-primary-default) 35%, white);
-  border-left: 3px solid var(--theme-success-default, #2e7d32);
-  border-radius: 8px;
+    box-shadow 0.4s;
 
-  // compact form fields with small text
-  --mat-form-field-container-height: 32px;
-  --mat-form-field-container-vertical-padding: 5px;
-  --mat-form-field-container-text-size: 13px;
-  --mat-form-field-container-text-line-height: 20px;
-  --mat-select-trigger-text-size: 13px;
-  --mat-select-trigger-text-line-height: 20px;
-  --mat-icon-button-state-layer-size: 32px;
-  --mdc-icon-button-state-layer-size: 32px;
-  font-size: 13px;
+  // roomier fields with larger text
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 8px;
+  --mat-form-field-container-text-size: 14px;
+  --mat-form-field-container-text-line-height: 22px;
+  --mat-select-trigger-text-size: 14px;
+  --mat-select-trigger-text-line-height: 22px;
+  --mat-icon-button-state-layer-size: 36px;
+  --mdc-icon-button-state-layer-size: 36px;
+  --mdc-outlined-text-field-outline-color: var(--field-border);
+  --mat-form-field-outlined-outline-color: var(--field-border);
+  font-size: 14px;
 
-  &.excluded {
-    border-left-color: var(--theme-warn-default, #b00020);
+  &:hover {
+    background: #fcfcfd;
   }
 
-  mat-form-field {
+  // a filter that leaves out what matches: a red line and a faint red wash
+  &.excluded {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--warn) 9%, white),
+      #fff 50%
+    );
+    box-shadow: inset 4px 0 0 var(--warn);
+  }
+
+  mat-form-field,
+  condition-key-picker {
+    display: block;
     min-width: 0;
   }
 
@@ -111,41 +155,149 @@
   ::ng-deep .mat-mdc-form-field-subscript-wrapper {
     min-height: 0;
   }
+}
 
-  .wide-value {
-    grid-column: span var(--condition-wide-span);
+// the filter whose chip was clicked
+.condition-row.highlight {
+  background: color-mix(in srgb, var(--theme-primary-default) 9%, white);
+  box-shadow: inset 0 0 0 2px var(--theme-primary-default);
+}
+
+.exclude-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 8px;
+  font-size: 0.9375rem;
+  cursor: pointer;
+
+  input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--warn);
   }
 }
 
-.range-cell {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
+// not used for this kind of field, greyed out
+.static-cell {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 14px;
+  color: var(--faint);
+  user-select: none;
+  background: #f9fafb;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+// the value and its unit are one control
+.value-unit {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid var(--field-border);
+  border-radius: 8px;
+
+  mat-form-field {
+    flex: 1 1 0;
+    // the border is the one of the whole control
+    --mdc-outlined-text-field-outline-color: transparent;
+    --mdc-outlined-text-field-hover-outline-color: transparent;
+    --mdc-outlined-text-field-focus-outline-color: transparent;
+    --mat-form-field-outlined-outline-color: transparent;
+    --mat-form-field-outlined-hover-outline-color: transparent;
+    --mat-form-field-outlined-focus-outline-color: transparent;
+  }
+
+  mat-form-field + mat-form-field {
+    border-left: 1px solid var(--line);
+  }
+
+  .unit {
+    flex: 0 0 34%;
+  }
+
+  &:hover {
+    border-color: var(--faint);
+  }
+
+  &:focus-within {
+    border-color: var(--theme-primary-default);
+    box-shadow: 0 0 0 3px
+      color-mix(in srgb, var(--theme-primary-default) 22%, transparent);
+  }
+
+  &:has(.error-icon) {
+    border-color: #b00020;
+  }
+}
+
+// the unit can be cleared with the × in it
+.clear-unit {
+  --mat-icon-button-state-layer-size: 28px;
+  --mdc-icon-button-state-layer-size: 28px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: var(--faint);
+  }
+
+  &:hover mat-icon {
+    color: var(--theme-primary-default);
+  }
 }
 
 .row-actions {
-  // always the last column, whatever the cells before it take
-  grid-column: -2 / -1;
   display: flex;
-  gap: 0;
   align-items: center;
   justify-content: flex-end;
 }
 
+.action-button {
+  --mat-icon-button-state-layer-size: 32px;
+  --mdc-icon-button-state-layer-size: 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    color: var(--faint);
+  }
+
+  &:hover mat-icon {
+    color: var(--warn);
+  }
+}
+
 .empty-state {
-  margin: 4px 0;
-  padding: 14px;
-  font-size: 0.8125rem;
+  margin: 12px 0;
+  padding: 24px;
+  font-size: 0.9375rem;
+  color: var(--muted);
   text-align: center;
-  border: 1px dashed var(--theme-hover-lighter, #bdbdbd);
-  border-radius: 8px;
-  opacity: 0.7;
+  border: 1px dashed var(--field-border);
+  border-radius: 10px;
 }
 
 // the symbol first and in a column of its own, so the words line up
 .op-symbol {
   display: inline-block;
-  width: 18px;
+  width: 20px;
   font-weight: 600;
   text-align: center;
 }
@@ -155,39 +307,34 @@
   white-space: nowrap;
 }
 
-// the filter whose chip was clicked
-.condition-row.highlight {
-  background: color-mix(in srgb, var(--theme-primary-default) 10%, white);
-  border-color: var(--theme-primary-default);
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--theme-primary-default) 30%, transparent);
-}
-
 // the icon of the kind of filter, in the field dropdown and the help
 .field-icon {
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
   color: var(--theme-primary-default);
 }
 
 // the icon and the name of the field close together, in the field and in its list
 mat-select-trigger {
   display: inline-flex;
-  gap: 6px;
+  gap: 8px;
   align-items: center;
   vertical-align: middle;
 }
 
-// the list: the same room left and right, the icon next to the name
+// the panels of the selects and the autocompletes are not inside the dialog:
+// the same room left and right, the icon next to the name
 ::ng-deep .condition-panel .mat-mdc-option {
-  padding-right: 12px;
-  padding-left: 12px;
+  min-height: 40px;
+  padding-right: 14px;
+  padding-left: 14px;
+  font-size: 14px;
 
   .mat-icon.field-icon {
-    margin-right: 6px;
+    margin-right: 8px;
   }
 
   .mat-pseudo-checkbox-minimal {
@@ -198,7 +345,7 @@ mat-select-trigger {
 // the help popup: what each kind of filter takes, with an example of what is typed
 .guide-item {
   display: grid;
-  grid-template-columns: 18px 1fr;
+  grid-template-columns: 20px 1fr;
   align-items: start;
   gap: 0 8px;
 
@@ -226,39 +373,9 @@ mat-select-trigger {
   }
 }
 
-// the content of the help popup
 .help {
   display: grid;
   gap: 14px;
-}
-
-// off: the matches are kept, on: NOT leaves them out
-.exclude-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 26px;
-  padding: 0 8px;
-  font: inherit;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #757575;
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid var(--theme-hover-lighter, #d0d0d0);
-  border-radius: 13px;
-
-  &:hover {
-    color: var(--theme-warn-default, #b00020);
-    border-color: var(--theme-warn-default, #b00020);
-  }
-
-  &.on {
-    color: #fff;
-    background: var(--theme-warn-default, #b00020);
-    border-color: var(--theme-warn-default, #b00020);
-  }
 }
 
 // a field with an error has a red outline and an icon, the tooltip says what is wrong
@@ -271,30 +388,36 @@ mat-select-trigger {
   --mat-form-field-outlined-focus-outline-color: #b00020;
 }
 
+// inside the value and unit control the red border is the one of the control
+.condition-row .value-unit mat-form-field:has(.error-icon) {
+  --mdc-outlined-text-field-outline-color: transparent;
+  --mdc-outlined-text-field-hover-outline-color: transparent;
+  --mdc-outlined-text-field-focus-outline-color: transparent;
+  --mat-form-field-outlined-outline-color: transparent;
+  --mat-form-field-outlined-hover-outline-color: transparent;
+  --mat-form-field-outlined-focus-outline-color: transparent;
+}
+
 .error-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   margin-right: 6px;
-  font-size: 18px;
+  font-size: 20px;
   color: #b00020;
   cursor: help;
 }
 
 // the calendar button must not make the field taller than the others
 .condition-row ::ng-deep .mat-datepicker-toggle .mat-mdc-icon-button {
-  --mdc-icon-button-state-layer-size: 28px;
-  --mat-icon-button-state-layer-size: 28px;
-  width: 28px;
-  height: 28px;
+  --mdc-icon-button-state-layer-size: 32px;
+  --mat-icon-button-state-layer-size: 32px;
+  width: 32px;
+  height: 32px;
   padding: 4px;
 }
 
 .condition-row ::ng-deep .mat-mdc-form-field-icon-suffix {
   padding: 0 4px 0 0;
-}
-
-.condition-row ::ng-deep .mat-date-range-input-container {
-  align-items: center;
 }
 
 // the two dates share the whole field equally
@@ -327,36 +450,34 @@ mat-select-trigger {
 .add-actions {
   display: flex;
   flex-shrink: 0;
-  justify-content: center;
-  margin-top: 8px;
+  justify-content: flex-start;
+  // the same room above and below the button, the rows keep 2px of their own
+  margin: 18px 0 20px;
 }
 
 .add-button {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  height: 32px;
-  padding: 0 14px 0 8px;
+  gap: 6px;
+  height: 40px;
+  padding: 0 18px 0 12px;
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   color: var(--theme-primary-default);
   cursor: pointer;
-  background: transparent;
-  border: 1px solid color-mix(in srgb, var(--theme-primary-default) 45%, white);
-  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--theme-primary-default);
+  border-radius: 8px;
 
   mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
   }
 
   &:hover {
-    background: color-mix(in srgb, var(--theme-primary-default) 8%, white);
-    border-color: var(--theme-primary-default);
+    background: color-mix(in srgb, var(--theme-primary-default) 7%, white);
   }
 }
 
@@ -364,99 +485,107 @@ mat-select-trigger {
 .apply-hint {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   margin-right: 8px;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: #b00020;
 
   mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
   }
 }
 
+// Clear is quiet, Cancel is secondary, Apply is the one that stands out
 .dialog-actions {
-  gap: 8px;
-  padding: 8px 24px 12px;
+  gap: 12px;
+  padding: 16px 28px;
+  background: #fcfcfd;
+  border-top: 1px solid var(--line);
 
   .spacer {
     flex: 1;
   }
-}
 
-// narrow: NOT, field and remove on the first line, then the key, then operator, value, unit
-@mixin stacked-row {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-
-  .row-actions {
-    grid-column: span 6;
-    justify-content: flex-end;
+  .clear-button {
+    color: var(--muted);
   }
 
-  &.advanced {
-    .exclude-button {
-      grid-column: 1;
+  button[mat-flat-button] {
+    height: 44px;
+    padding: 0 24px;
+    font-size: 0.9375rem;
+  }
+}
+
+// narrower than the columns need: a card for each filter, the headings are in the placeholders
+@container (max-width: 1100px) {
+  .column-heads {
+    display: none;
+  }
+
+  // twice, to win over the columns of the advanced rows above
+  .condition-row.condition-row {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    padding: 16px 8px;
+
+    .exclude-check {
+      grid-column: 1 / span 3;
       grid-row: 1;
     }
 
     .row-actions {
-      grid-column: 6;
+      grid-column: 4 / -1;
       grid-row: 1;
     }
 
-    > mat-form-field:first-of-type {
-      grid-column: 2 / span 4;
-      grid-row: 1;
+    .cell-type {
+      grid-column: 1 / -1;
+      grid-row: 2;
     }
-  }
 
-  // the cells of the field: key, operator, value, unit
-  > condition-key-picker,
-  .wide-value {
-    grid-column: 1 / -1;
-  }
+    .cell-key {
+      grid-column: 1 / -1;
+      grid-row: 3;
+    }
 
-  > mat-form-field:not(:first-of-type):not(.wide-value),
-  > .range-cell {
-    grid-column: span 2;
-  }
-}
+    // a dataset field has no key and one way of matching, nothing to show
+    .static-cell {
+      display: none;
+    }
 
-// rows with scientific metadata need about 900px, the compact ones about 560px
-@container (max-width: 900px) {
-  .condition-row:not(.compact) {
-    @include stacked-row;
-  }
-}
+    .cell-op {
+      grid-column: 1 / span 2;
+      grid-row: 4;
+    }
 
-@container (max-width: 560px) {
-  .condition-row.compact {
-    @include stacked-row;
-  }
-}
+    .value-unit {
+      grid-column: 1 / -1;
+      grid-row: 4;
+    }
 
-// the panels of the selects and the autocompletes are not inside the dialog
-::ng-deep .condition-panel .mat-mdc-option {
-  min-height: 34px;
-  font-size: 13px;
-}
+    &.metadata .value-unit {
+      grid-column: 3 / -1;
+    }
 
-.action-button {
-  --mat-icon-button-state-layer-size: 28px;
-  --mdc-icon-button-state-layer-size: 28px;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+    // samples have no field type and no exclude
+    &:not(.advanced) {
+      .cell-key {
+        grid-column: 1 / span 5;
+        grid-row: 1;
+      }
 
-  mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-    color: var(--theme-primary-default);
+      .row-actions {
+        grid-column: 6;
+      }
+
+      .cell-op,
+      .value-unit {
+        grid-row: 2;
+      }
+    }
   }
 }
 
@@ -467,11 +596,11 @@ mat-select-trigger {
   }
 
   .dialog-body {
-    padding: 8px 12px 12px;
+    padding: 12px 12px 8px;
   }
 
   .dialog-actions {
     flex-wrap: wrap;
-    padding: 8px 12px 12px;
+    padding: 12px;
   }
 }

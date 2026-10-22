@@ -20,8 +20,7 @@ import { ConditionFilterService } from "./condition-filter.service";
 import {
   ConditionFilterDialogComponent,
   ConditionFilterDialogData,
-  dialogWidth,
-  needsWideDialog,
+  DIALOG_WIDTH,
 } from "./condition-filter-dialog.component";
 import { getActiveConfigs, toActiveConditions } from "./condition-filter.utils";
 
@@ -89,7 +88,7 @@ export class ConditionFilterButtonComponent implements OnInit {
           keySource: this.keySource,
           unitsEnabled: this.unitsEnabled,
         },
-        width: dialogWidth(needsWideDialog(draft ?? configs)),
+        width: DIALOG_WIDTH,
         maxWidth: "95vw",
         autoFocus: highlightIndex >= 0 ? false : "[data-cy=condition-field]",
       })
