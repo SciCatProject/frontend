@@ -1,13 +1,12 @@
 <mat-form-field [id]="key">
   <mat-label>{{ label }} </mat-label>
   <mat-chip-grid #chipList>
-    <mat-chip-row
-      *ngFor="let item of currentFilter$ | async"
-      [removable]="true"
-      (removed)="itemRemoved(item)"
-      >{{ getLabel(item) || "No item" }}
-      <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip-row>
+    @for (item of currentFilter$ | async; track item) {
+      <mat-chip-row [removable]="true" (removed)="itemRemoved(item)"
+        >{{ getLabel(item) || "No item" }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip-row>
+    }
   </mat-chip-grid>
   <input
     #input
@@ -20,23 +19,23 @@
     matTooltip="{{ tooltip }}"
     matTooltipPosition="after"
   />
-  <span
-    *ngIf="appConfig.autoApplyFilters"
-    matSuffix
-    class="enter-hint"
-    matTooltip="Press Enter to apply"
-    matTooltipPosition="after"
-    matTooltipShowDelay="500"
-    >↵</span
-  >
+  @if (appConfig.autoApplyFilters) {
+    <span
+      matSuffix
+      class="enter-hint"
+      matTooltip="Press Enter to apply"
+      matTooltipPosition="after"
+      matTooltipShowDelay="500"
+      >↵</span
+    >
+  }
 
   <mat-autocomplete #mutiselection="matAutocomplete">
-    <mat-option
-      (onSelectionChange)="itemSelected(fc)"
-      *ngFor="let fc of suggestions$ | async"
-    >
-      <span>{{ getLabel(fc._id) }} | </span>
-      <small>{{ getFacetCount(fc) }}</small>
-    </mat-option>
+    @for (fc of suggestions$ | async; track fc) {
+      <mat-option (onSelectionChange)="itemSelected(fc)">
+        <span>{{ getLabel(fc._id) }} | </span>
+        <small>{{ getFacetCount(fc) }}</small>
+      </mat-option>
+    }
   </mat-autocomplete>
 </mat-form-field>
