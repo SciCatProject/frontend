@@ -14,7 +14,7 @@
   </mat-card-header>
 
   <mat-card-content>
-    <ng-template [ngIf]="this.loggedIn$ | async">
+    @if (this.loggedIn$ | async) {
       <div class="public-toggle">
         <button
           mat-stroked-button
@@ -31,42 +31,44 @@
           Public data
         </button>
       </div>
-    </ng-template>
-    <ng-container *ngFor="let filter of filtersList">
-      <shared-filter
-        *ngIf="filter.enabled"
-        [key]="filter.key"
-        [label]="filter.label"
-        [clear]="clearSearchBar"
-        [tooltip]="filter.description"
-        [filterType]="filter.type"
-        [prefilled]="activeFilters[filter.key] || null"
-        [currentFilter$]="getFilterByKey$(filter.key)"
-        [facetCounts$]="getFilterFacetCounts$(filter.key)"
-        (textChange)="setFilter(filter.key, $event)"
-        (dateRangeChange)="setDateFilter(filter.key, $event)"
-        (selectionChange)="selectionChange($event)"
-        (checkBoxChange)="setFilter(filter.key, $event)"
-        (numericRangeChange)="numericRangeChange(filter.key, $event)"
-        [filterValue]="activeFilters[filter.key]"
-        [collapsible]="filter.type === 'checkbox'"
-        (applyEnterKey)="applyFilters()"
-      ></shared-filter>
-    </ng-container>
+    }
+    @for (filter of filtersList; track filter) {
+      @if (filter.enabled) {
+        <shared-filter
+          [key]="filter.key"
+          [label]="filter.label"
+          [clear]="clearSearchBar"
+          [tooltip]="filter.description"
+          [filterType]="filter.type"
+          [prefilled]="activeFilters[filter.key] || null"
+          [currentFilter$]="getFilterByKey$(filter.key)"
+          [facetCounts$]="getFilterFacetCounts$(filter.key)"
+          (textChange)="setFilter(filter.key, $event)"
+          (dateRangeChange)="setDateFilter(filter.key, $event)"
+          (selectionChange)="selectionChange($event)"
+          (checkBoxChange)="setFilter(filter.key, $event)"
+          (numericRangeChange)="numericRangeChange(filter.key, $event)"
+          [filterValue]="activeFilters[filter.key]"
+          [collapsible]="filter.type === 'checkbox'"
+          (applyEnterKey)="applyFilters()"
+        ></shared-filter>
+      }
+    }
 
-    <shared-condition
-      #conditionFilter
-      *ngIf="appConfig.scienceSearchEnabled"
-      data-cy="scientific-condition-filter-list"
-      [showConditions]="true"
-      [metadataKeys]="metadataKeys$ | async"
-      [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
-      [showConditionToggle]="true"
-      [conditionSettingScope]="'dataset'"
-      [addConditionAction]="addCondition"
-      [removeConditionAction]="removeCondition"
-      [dialogTitle]="'Add Dataset Metadata Key'"
-    ></shared-condition>
+    @if (appConfig.scienceSearchEnabled) {
+      <shared-condition
+        #conditionFilter
+        data-cy="scientific-condition-filter-list"
+        [showConditions]="true"
+        [metadataKeys]="metadataKeys$ | async"
+        [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
+        [showConditionToggle]="true"
+        [conditionSettingScope]="'dataset'"
+        [addConditionAction]="addCondition"
+        [removeConditionAction]="removeCondition"
+        [dialogTitle]="'Add Dataset Metadata Key'"
+      ></shared-condition>
+    }
 
     <div class="section-container">
       <button

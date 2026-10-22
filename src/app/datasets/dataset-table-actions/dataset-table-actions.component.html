@@ -1,41 +1,43 @@
 <div class="mode-container">
-  <mat-button-toggle-group
-    [value]="currentArchViewMode"
-    *ngIf="appConfig.archiveWorkflowEnabled"
-  >
-    <mat-button-toggle
-      *ngFor="let mode of modes"
-      (click)="onModeChange(mode)"
-      [value]="mode"
-      [ngClass]="mode"
-    >
-      {{ mode | titlecase }}
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+  @if (appConfig.archiveWorkflowEnabled) {
+    <mat-button-toggle-group [value]="currentArchViewMode">
+      @for (mode of modes; track mode) {
+        <mat-button-toggle
+          (click)="onModeChange(mode)"
+          [value]="mode"
+          [ngClass]="mode"
+        >
+          {{ mode | titlecase }}
+        </mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+  }
 </div>
 
 <div class="action-container" [class.hidden]="loading$ | async">
-  <configurable-actions
-    *ngIf="appConfig.batchActionsEnabled"
-    [actionsConfig]="batchActionsConfig"
-    [actionItems]="actionItems"
-    [buttonsStyle]="actionButtonsStyle"
-    (actionFinished)="onActionFinished($event)"
-  >
-  </configurable-actions>
+  @if (appConfig.batchActionsEnabled) {
+    <configurable-actions
+      [actionsConfig]="batchActionsConfig"
+      [actionItems]="actionItems"
+      [buttonsStyle]="actionButtonsStyle"
+      (actionFinished)="onActionFinished($event)"
+    >
+    </configurable-actions>
+  }
 
-  <button
-    id="addToBatchButton"
-    mat-button
-    [disabled]="isEmptySelection()"
-    *ngIf="appConfig.shoppingCartEnabled"
-    class="add-batch"
-    (click)="onAddToBatch()"
-    color="primary"
-  >
-    <mat-icon>library_add</mat-icon>
-    Add to Selection
-  </button>
+  @if (appConfig.shoppingCartEnabled) {
+    <button
+      id="addToBatchButton"
+      mat-button
+      [disabled]="isEmptySelection()"
+      class="add-batch"
+      (click)="onAddToBatch()"
+      color="primary"
+    >
+      <mat-icon>library_add</mat-icon>
+      Add to Selection
+    </button>
+  }
 </div>
 
 <div style="clear: both"></div>
