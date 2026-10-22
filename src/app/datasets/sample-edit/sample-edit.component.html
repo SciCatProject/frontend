@@ -79,10 +79,10 @@
 <mat-dialog-actions>
   <button mat-button (click)="cancel()">Cancel</button>
   <button mat-button [disabled]="isInvalid()" (click)="save()">Save</button>
-  <mat-error *ngIf="sample?.hasError('isCurrentSample')">
-    This is the current sample
-  </mat-error>
-  <mat-error *ngIf="sample?.hasError('required')">
-    Please choose a sample
-  </mat-error>
+  @if (sample?.hasError("isCurrentSample")) {
+    <mat-error> This is the current sample </mat-error>
+  }
+  @if (sample?.hasError("required")) {
+    <mat-error> Please choose a sample </mat-error>
+  }
 </mat-dialog-actions>
