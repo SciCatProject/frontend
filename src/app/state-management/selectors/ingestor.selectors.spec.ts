@@ -17,6 +17,7 @@ describe("Ingestor Selectors", () => {
       versionResponse: { version: "1.0.0" },
       healthResponse: { status: "ok" },
       validEndpoint: true,
+      configurations: { creationLocations: ["/foo/bar"] },
     },
     ingestorAuth: {
       userInfoResponse: null,
@@ -67,6 +68,7 @@ describe("Ingestor Selectors", () => {
       versionResponse: { version: "1.0.0" },
       healthResponse: { status: "ok" },
       validEndpoint: true,
+      configurations: { creationLocations: ["/foo/bar"] },
     });
   });
 

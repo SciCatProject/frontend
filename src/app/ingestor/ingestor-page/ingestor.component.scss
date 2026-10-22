@@ -244,20 +244,26 @@ mat-divider {
 }
 
 ::ng-deep .ingestor-creation-dialog {
-  .mat-mdc-dialog-surface {
-    max-height: calc(100dvh - 24px);
+  max-height: calc(100dvh - 32px);
+
+  ingestor-new-transfer-dialog-page {
     display: flex;
     flex-direction: column;
+    max-height: calc(100dvh - 32px);
+    min-height: 0;
+    box-sizing: border-box;
 
-    @supports not (height: 1dvh) {
-      max-height: calc(100vh - 24px);
+    .mat-mdc-dialog-content {
+      flex: 1 1 auto;
+      min-height: 0;
+      max-height: none;
+      overflow-y: auto;
     }
-  }
 
-  .mat-mdc-dialog-content {
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: none;
-    flex: 1 1 auto;
+    .experimental-warning-banner,
+    .ingestor-dialog-header,
+    .mat-mdc-dialog-actions {
+      flex-shrink: 0;
+    }
   }
 }
