@@ -51,6 +51,7 @@
         <img
           data-cy="attachment-thumbnail"
           [src]="getImageUrl(attachment.thumbnail)"
+          (error)="onAttachmentImageError($event)"
           (click)="openAttachment(attachment.thumbnail)"
         />
 
