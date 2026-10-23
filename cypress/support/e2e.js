@@ -30,3 +30,18 @@ Cypress.on("uncaught:exception", (err) => {
     return false;
   }
 });
+
+// The app asks for /api/v3/admin/config on its own address, where nginx answers with index.html and
+// no Cache-Control. Chrome keeps that answer for a while and a later page load does not make the
+// request, so cy.intercept("**/admin/config") would never see it. Without the cache, every load does.
+beforeEach(() => {
+  if (Cypress.isBrowser(["chrome", "chromium", "edge"])) {
+    cy.wrap(
+      Cypress.automation("remote:debugger:protocol", {
+        command: "Network.setCacheDisabled",
+        params: { cacheDisabled: true },
+      }),
+      { log: false },
+    );
+  }
+});

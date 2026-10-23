@@ -78,6 +78,9 @@ describe("Datasets advanced search", () => {
 
     cy.visit("/datasets");
     cy.finishedLoading();
+
+    // start without the filters a user may have saved before
+    cy.removeConditions();
   });
 
   afterEach(() => {
