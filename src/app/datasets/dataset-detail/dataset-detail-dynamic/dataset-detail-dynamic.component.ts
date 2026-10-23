@@ -282,6 +282,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     this.attachmentService.openAttachment(encoded);
   }
 
+  onAttachmentImageError(event: Event): void {
+    const image = event.target as HTMLImageElement;
+    image.onerror = null;
+    image.src = this.attachmentService.getUnknownFileIcon();
+  }
+
   isUnsupportedFieldType(fieldType: string): boolean {
     const supportedTypes = Object.values(DatasetViewFieldType) as string[];
     return !supportedTypes.includes(fieldType);
