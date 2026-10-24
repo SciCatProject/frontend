@@ -544,7 +544,10 @@
           { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
-          { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetRelationshipsEnabled"
+          },
           {
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"
@@ -893,7 +896,8 @@
                     "elements": [
                       { "type": "Control", "scope": "#/properties/label" },
                       { "type": "Control", "scope": "#/properties/type" },
-                      { "type": "Control", "scope": "#/properties/order" }]
+                      { "type": "Control", "scope": "#/properties/order" }
+                    ]
                   },
                   {
                     "type": "HorizontalLayout",

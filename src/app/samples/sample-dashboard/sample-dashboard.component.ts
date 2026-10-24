@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { OutputSampleDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -8,9 +8,14 @@ import {
   setTextFilterAction,
   prefillFiltersAction,
   fetchMetadataKeysAction,
+  setCharacteristicsFilterAction,
 } from "state-management/actions/samples.actions";
 import { BehaviorSubject, combineLatest, Subscription } from "rxjs";
-import { selectSampleDashboardPageViewModel } from "state-management/selectors/samples.selectors";
+import {
+  selectMetadataKeyOptions,
+  selectSampleDashboardPageViewModel,
+} from "state-management/selectors/samples.selectors";
+import { selectFetchedConditions } from "state-management/selectors/user.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
@@ -18,7 +23,7 @@ import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.compo
 
 import deepEqual from "deep-equal";
 import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
-import { SampleFilters } from "state-management/models";
+import { SampleFilters, FilterCondition } from "state-management/models";
 import { AppConfigService } from "app-config.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -40,12 +45,9 @@ import { updateUserSettingsAction } from "state-management/actions/user.actions"
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
-import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
-import {
-  addCharacteristicsFilterAction,
-  removeCharacteristicsFilterAction,
-} from "state-management/actions/samples.actions";
-import { ScientificCondition } from "state-management/models";
+import { AdvancedSearchService } from "shared/modules/advanced-search/advanced-search.service";
+import { staticKeySource } from "shared/modules/advanced-search/advanced-search.keys";
+import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
 
 @Component({
   selector: "sample-dashboard",
@@ -56,7 +58,7 @@ import { ScientificCondition } from "state-management/models";
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
 
-  @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
+  keySource = staticKeySource(this.store.select(selectMetadataKeyOptions));
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -99,8 +101,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
-  metadataKeys: string[] = [];
-
   dialogConfig: MatDialogConfig = new MatDialogConfig();
 
   name = "";
@@ -141,6 +141,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private tableConfigService: TableConfigService,
     public dialog: MatDialog,
+    private advancedSearchService: AdvancedSearchService,
   ) {}
 
   ngOnInit() {
@@ -192,12 +193,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.vm$.subscribe((vm) => {
-        this.metadataKeys = vm.metadataKeys;
-      }),
-    );
-
-    this.subscriptions.push(
       this.route.queryParams
         .pipe(
           map((params) => params.args),
@@ -208,19 +203,29 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(prefillFiltersAction({ values: filters })),
         ),
     );
+
+    // The saved conditions are the ones shown in the filter, so apply them. The page can be
+    // there before the settings are, the conditions are only the saved ones once they are.
+    this.subscriptions.push(
+      this.store
+        .select(selectFetchedConditions("sample"))
+        .pipe(
+          filter((configs) => configs !== null),
+          take(1),
+        )
+        .subscribe((configs) => {
+          const characteristics = toActiveConditions(configs);
+          if (characteristics.length) {
+            this.onConditionsApplied(characteristics);
+          }
+        }),
+    );
   }
 
-  addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      addCharacteristicsFilterAction({ characteristic: condition }),
-    );
-  };
-
-  removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      removeCharacteristicsFilterAction({ lhs: condition.lhs }),
-    );
-  };
+  /** The filters changing fetches the samples, see ngOnInit. */
+  onConditionsApplied(characteristics: FilterCondition[]) {
+    this.store.dispatch(setCharacteristicsFilterAction({ characteristics }));
+  }
 
   formatTableData(samples: OutputSampleDto[]): any {
     if (samples) {
@@ -248,21 +253,13 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
-    if (this.conditionFilter) {
-      this.conditionFilter.applyConditions();
-    }
     this.store.dispatch(fetchSamplesAction());
   }
 
   reset() {
     this.store.dispatch(setTextFilterAction({ text: "" }));
-
-    this.vm$.pipe(take(1)).subscribe((vm) => {
-      vm.characteristicsFilter?.forEach((c) => {
-        this.store.dispatch(removeCharacteristicsFilterAction({ lhs: c.lhs }));
-      });
-    });
-    this.conditionFilter?.clearConditions();
+    this.onConditionsApplied([]);
+    this.advancedSearchService.clear("sample");
 
     this.store.dispatch(fetchSamplesAction());
   }

@@ -1,5 +1,5 @@
 import * as fromDatasetSelectors from "./datasets.selectors";
-import { ArchViewMode } from "../models";
+import { ArchViewMode, FilterCondition } from "../models";
 import { DatasetState } from "../state/datasets.store";
 import { mockDataset as dataset } from "shared/MockStubs";
 import { initialUserState } from "./user.selectors.spec";
@@ -16,7 +16,6 @@ const initialDatasetState: DatasetState = {
   facetCountsIsLoading: false,
   origDatablocksCountIsLoading: false,
   relatedDatasetsCountIsLoading: false,
-  metadataKeys: ["test"],
   hasPrefilledFilters: false,
   searchTerms: "run",
   keywordsTerms: "",
@@ -71,14 +70,6 @@ describe("test dataset selectors", () => {
           initialDatasetState,
         ),
       ).toEqual([]);
-    });
-  });
-
-  describe("selectMetadataKeys", () => {
-    it("should select the array of metadata keys", () => {
-      expect(
-        fromDatasetSelectors.selectMetadataKeys.projector(initialDatasetState),
-      ).toEqual(["test"]);
     });
   });
 
@@ -312,6 +303,61 @@ describe("test dataset selectors", () => {
       expect(query).not.toEqual(jasmine.objectContaining({ mode }));
     });
 
+    describe("with conditions", () => {
+      const withConditions = (
+        conditions: FilterCondition[],
+        mode: Record<string, unknown> = {},
+      ) =>
+        fromDatasetSelectors.selectFullqueryParams.projector({
+          ...initialDatasetState,
+          filters: {
+            ...initialDatasetState.filters,
+            mode,
+            scientific: conditions,
+          },
+        }).query;
+
+      const temperature: FilterCondition = {
+        lhs: "temperature",
+        relation: "GREATER_THAN",
+        rhs: 20,
+        unit: "",
+      };
+      const keywords: FilterCondition = {
+        lhs: "keywords",
+        relation: "IN",
+        rhs: ["beam"],
+        unit: "",
+        source: "dataset",
+      };
+
+      it("should not add anything without conditions", () => {
+        expect(withConditions([])).toEqual(withConditions([], {}));
+        expect(withConditions([]).$and).toBeUndefined();
+      });
+
+      it("should add the conditions as one more thing to match", () => {
+        expect(withConditions([temperature]).$and).toEqual([
+          { "scientificMetadata.temperature.value": { $gt: 20 } },
+        ]);
+      });
+
+      it("should keep the $or of the archive view mode when conditions are combined", () => {
+        const mode = { $or: [{ "datasetlifecycle.archivable": true }] };
+        const query = withConditions([temperature, keywords], mode);
+
+        expect(query.$or).toEqual(mode.$or);
+        expect(query.$and).toEqual([
+          {
+            $and: [
+              { "scientificMetadata.temperature.value": { $gt: 20 } },
+              { keywords: { $in: ["beam"] } },
+            ],
+          },
+        ]);
+      });
+    });
+
     it("should not add anything for an empty mode", () => {
       const { query } = fromDatasetSelectors.selectFullqueryParams.projector({
         ...initialDatasetState,
@@ -339,6 +385,81 @@ describe("test dataset selectors", () => {
         "keywords",
       ]);
       expect(fullfacetKeys).toContain("facets");
+    });
+  });
+
+  describe("selectFullfacetParams with conditions", () => {
+    const facetFields = (conditions: FilterCondition[]) =>
+      fromDatasetSelectors.selectFullfacetParams.projector(
+        {
+          ...initialDatasetState,
+          filters: { ...initialDatasetState.filters, scientific: conditions },
+        },
+        initialUserState.settings.fe_dataset_table_filters,
+      ).fields as Record<string, unknown>;
+
+    const plain: FilterCondition = {
+      lhs: "temperature",
+      relation: "GREATER_THAN",
+      rhs: 20,
+      unit: "",
+    };
+
+    it("should send the conditions that all have to match on metadata", () => {
+      expect(facetFields([plain]).scientific).toEqual([plain]);
+    });
+
+    it("should leave out conditions with NOT or on dataset fields", () => {
+      expect(
+        facetFields([{ ...plain, exclude: true }]).scientific,
+      ).toBeUndefined();
+      expect(
+        facetFields([{ ...plain, source: "dataset" }]).scientific,
+      ).toBeUndefined();
+    });
+  });
+
+  describe("selectConditionsCountQuery", () => {
+    const params = {
+      query: { $and: [{ type: { $in: ["raw"] } }] },
+      limits: { skip: 0, limit: 25, sort: {} },
+    };
+    const plain: FilterCondition = {
+      lhs: "a",
+      relation: "LESS_THAN",
+      rhs: 1,
+      unit: "",
+    };
+
+    it("should be empty when the facets take all conditions", () => {
+      const { projector } = fromDatasetSelectors.selectConditionsCountQuery;
+
+      expect(projector(params, [])).toBeNull();
+      expect(projector(params, [plain])).toBeNull();
+    });
+
+    it("should give the count plain dates", () => {
+      const { projector } = fromDatasetSelectors.selectConditionsCountQuery;
+      const query = {
+        creationTime: { $gte: { $date: "2026-01-01T00:00:00.000Z" } },
+      };
+
+      expect(
+        projector({ query, limits: params.limits }, [
+          { ...plain, exclude: true },
+        ]),
+      ).toEqual({ creationTime: { $gte: "2026-01-01T00:00:00.000Z" } });
+    });
+
+    it("should be the query of the datasets when the facets can't take a condition", () => {
+      const { projector } = fromDatasetSelectors.selectConditionsCountQuery;
+
+      expect(projector(params, [{ ...plain, exclude: true }])).toEqual(
+        params.query,
+      );
+      expect(projector(params, [{ ...plain, source: "dataset" }])).toEqual(
+        params.query,
+      );
     });
   });
 

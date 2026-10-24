@@ -121,7 +121,7 @@ describe("Datasets general", () => {
       });
     });
 
-    it("should not be able to add duplicated conditions ", () => {
+    it("should allow the same key twice, e.g. for a lower and an upper bound", () => {
       cy.visit("/datasets");
 
       cy.get(".user-button").click();
@@ -132,45 +132,28 @@ describe("Datasets general", () => {
 
       cy.visit("/datasets");
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
+      cy.openAdvancedSearch();
+      cy.fillCondition(0, {
+        key: "extra_entry_end_time",
+        operator: ">",
+        value: "1",
       });
 
-      cy.get('input[name="lhs"]').type("extra_entry_end_time");
-
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
-
-      cy.get("mat-option").contains(">").click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("1");
-        });
-
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
+      cy.get('[data-cy="condition-add"]').click();
+      cy.fillCondition(1, {
+        key: "extra_entry_end_time",
+        operator: "<",
+        value: "5",
       });
 
-      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+      cy.get('[data-cy="condition-apply"]').click();
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get('[data-cy="condition-chip"]').should("have.length", 2);
 
-      cy.get(".snackbar-warning")
-        .should("contain", "Field already used")
-        .contains("Close")
-        .click();
+      cy.removeConditions();
     });
 
-    it("should be able to manage conditions using expansion panels", () => {
+    it("should be able to manage conditions in the dialog and on their chips", () => {
       cy.visit("/datasets");
 
       cy.get(".user-button").click();
@@ -181,254 +164,213 @@ describe("Datasets general", () => {
 
       cy.visit("/datasets");
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
+      cy.openAdvancedSearch();
+      cy.fillCondition(0, {
+        key: "extra_entry_end_time",
+        operator: "<",
+        value: "3",
       });
 
-      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+      cy.get('[data-cy="condition-apply"]').click();
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.get('[data-cy="condition-chip"]')
+        .should("have.length", 1)
+        .and("contain", "extra_entry_end_time < 3");
+      cy.get('[data-cy="condition-count"]').should("contain", "1");
 
-      // expand the condition
-      cy.get(".condition-panel").first().click();
-      // change operator
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
+      // remove the condition from its chip
+      cy.get('[data-cy="condition-chip"] button').click();
 
-      cy.get("mat-option").contains("<").click();
+      cy.get('[data-cy="condition-chip"]').should("have.length", 0);
+    });
 
-      // change value
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("3");
-        });
+    it("should only apply a condition once it has a value", () => {
+      cy.visit("/datasets");
 
-      // disable the condition
-      cy.get("mat-slide-toggle").click();
-      cy.get(".condition-panel").should("have.class", "disabled");
+      cy.openAdvancedSearch();
+      cy.fillCondition(0, { key: "extra_entry_end_time" });
+      cy.get('[data-cy="condition-apply"]').click();
+      cy.get('[data-cy="condition-apply-hint"]').should("be.visible");
+      cy.get('[data-cy="condition-error"]').should("exist");
 
-      // enable it again
-      cy.get("mat-slide-toggle").click();
+      cy.fillCondition(0, { value: "1" });
+      cy.get('[data-cy="condition-apply-hint"]').should("not.exist");
 
-      // remove the condition
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.get('[data-cy="condition-cancel"]').click();
 
-      cy.get('[data-cy="scientific-condition-filter-list"]')
-        .find(".condition-panel")
-        .should("have.length", 0);
+      cy.get('[data-cy="condition-chip"]').should("not.exist");
     });
 
     it("should search by human name", () => {
       cy.visit("/datasets");
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
-      });
+      cy.openAdvancedSearch();
+      cy.fillCondition(0, { field: "Scientific metadata" });
+      cy.get('[data-cy="condition-key"]').type("Temperature Human");
+      cy.get('[data-cy="condition-key-option"]')
+        .contains("Temperature Human Name")
+        .click();
+      cy.fillCondition(0, { value: "1" });
+      cy.get('[data-cy="condition-apply"]').click();
 
-      cy.get('input[name="lhs"]').type("Temperature Human Name");
+      cy.get('[data-cy="condition-chip"]')
+        .should("have.length", 1)
+        .and("contain", "temperature");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
 
     it("should search by metadata name", () => {
       cy.visit("/datasets");
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
-      });
+      cy.addCondition({ key: "temperature", value: "1" });
 
-      cy.get('input[name="lhs"]').type("temperature");
+      cy.get('[data-cy="condition-chip"]').should("contain", "temperature");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
 
     it("should be able to add a field outside the capped list", () => {
       cy.visit("/datasets");
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
-      });
+      cy.addCondition({ key: "invalid_field_name", value: "1" });
 
-      cy.get('input[name="lhs"]').type("invalid_field_name");
+      cy.get('[data-cy="condition-chip"]').should(
+        "contain",
+        "invalid_field_name",
+      );
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
 
-    it("should display equal sign in condition preview", () => {
+    it("should display equal sign in condition chip", () => {
       cy.visit("/datasets");
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
+      cy.addCondition({
+        key: "test_number",
+        operator: "=",
+        value: "5",
+        unit: "km",
       });
 
-      cy.get('input[name="lhs"]').type("test_number");
-
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
-
-      cy.get("mat-option").contains("is equal to").click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("5");
-          cy.get("input[matInput]").eq(1).clear().type("km");
-        });
-
-      cy.get(".condition-panel")
-        .first()
-        .find("mat-panel-title")
+      cy.get('[data-cy="condition-chip"]')
         .should("contain", "=")
-        .and("contain", "5");
+        .and("contain", "5")
+        .and("contain", "km");
 
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
 
     it("should display range values correctly when switching from equal to", () => {
       cy.visit("/datasets");
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
+      cy.openAdvancedSearch();
+      cy.fillCondition(0, {
+        key: "test_number",
+        operator: "=",
+        value: "abcdefgh",
       });
 
-      cy.get('input[name="lhs"]').type("test_number");
-
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
-
-      cy.get("mat-option").contains("is equal to").click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("abcdefgh");
-        });
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
-
-      cy.get("mat-option").contains("is in range").click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("6");
-          cy.get("input[matInput]").eq(1).clear().type("10");
-        });
+      cy.fillCondition(0, { operator: "Between" });
+      cy.fillCondition(0, { min: "6", max: "10" });
+      cy.get('[data-cy="condition-apply"]').click();
 
       // Verify that condition does not show all dataset when wrong range is given
-
-      cy.get(".condition-panel")
+      cy.get('[data-cy="condition-chip"]')
         .first()
-        .find("mat-panel-title")
         .should("contain", "6")
-        .and("contain", "<->")
+        .and("contain", "–")
         .and("contain", "10");
-
-      cy.get('[data-cy="filter-search-button"]').click();
 
       cy.get(".dataset-table mat-table").should("exist");
 
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
 
     it("should be able to add a condition with range values that contains decimals", () => {
       cy.visit("/datasets");
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
+      cy.addCondition({
+        key: "temperature",
+        operator: "Between",
+        min: "24.5",
+        max: "25.5",
+        unit: "celsius",
       });
-
-      cy.get('input[name="lhs"]').type("temperature");
-
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
-
-      cy.get("mat-option").contains("is in range").click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("24.5");
-          cy.get("input[matInput]").eq(1).clear().type("25.5");
-          cy.get("input[matInput]").eq(2).clear().type("celsius");
-        });
-
-      cy.get('[data-cy="filter-search-button"]').click();
 
       cy.get(".dataset-table mat-table").should("exist");
 
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
 
-    it("should search a metadata key when pressing Enter", () => {
-      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-        const testConfig = {
-          ...baseConfig,
-          autoApplyFilters: true,
-        };
-        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-      });
-
+    it("should suggest metadata keys while typing", () => {
       cy.visit("/datasets");
-      cy.wait("@getConfig", { timeout: 20000 });
       cy.finishedLoading();
 
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
+      cy.openAdvancedSearch();
+      cy.fillCondition(0, { field: "Scientific metadata" });
+      cy.get('[data-cy="condition-key"]').type("extra_entry");
+
+      cy.get('[data-cy="condition-key-option"]')
+        .contains("extra_entry_end_time")
+        .click();
+      cy.get('[data-cy="condition-key"]').should(
+        "have.value",
+        "extra_entry_end_time",
+      );
+    });
+
+    it("should only ask for the key, operator and value of scientific metadata", () => {
+      cy.visit("/datasets");
+      cy.finishedLoading();
+
+      cy.openAdvancedSearch();
+      // a new filter is about scientific metadata
+      cy.get('[data-cy="condition-key"]').should("exist");
+      cy.get('[data-cy="condition-value"]').should("exist");
+
+      cy.fillCondition(0, { field: "Keywords" });
+      cy.get('[data-cy="condition-value"]').should("exist");
+      cy.get('[data-cy="condition-key"]').should("not.exist");
+      cy.get('[data-cy="condition-operator"]').should("not.exist");
+      cy.get('[data-cy="condition-unit"]').should("not.exist");
+
+      cy.fillCondition(0, { field: "Scientific metadata" });
+      cy.get('[data-cy="condition-key"]').should("exist");
+      cy.get('[data-cy="condition-operator"]').should("exist");
+      cy.get('[data-cy="condition-unit"]').should("exist");
+    });
+
+    it("should combine dataset fields and metadata, and exclude", () => {
+      cy.visit("/datasets");
+      cy.finishedLoading();
+
+      cy.openAdvancedSearch();
+      cy.fillCondition(0, { field: "Keywords", value: "beam, test" });
+      cy.get('[data-cy="condition-add"]').click();
+      cy.fillCondition(1, {
+        exclude: true,
+        key: "temperature",
+        operator: ">",
+        value: "5",
       });
+      cy.get('[data-cy="condition-apply"]').click();
 
-      cy.get('input[name="lhs"]').type("extra_entry_end_time{enter}");
+      cy.get('[data-cy="condition-chip"]')
+        .should("have.length", 2)
+        .first()
+        .should("contain", "Keywords: beam, test");
+      cy.get('[data-cy="condition-chip"]')
+        .last()
+        .should("contain", "temperature > 5")
+        .find('[data-cy="condition-chip-not"]')
+        .should("exist");
 
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
   });
 
-  describe("Units options in condition panel units dropdown", () => {
+  describe("Units options in condition units dropdown", () => {
     beforeEach(() => {
       cy.createDataset({
         type: "raw",
@@ -462,7 +404,6 @@ describe("Datasets general", () => {
                     "bar m^3/s/m^2",
                   ],
                 },
-                enabled: false,
               },
             ],
           },
@@ -476,13 +417,9 @@ describe("Datasets general", () => {
     });
 
     it("should display limited options in units dropdown", () => {
-      cy.get(".condition-panel").first().click();
+      cy.openAdvancedSearch();
 
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").last().click();
-        });
+      cy.get('[data-cy="condition-unit"]').first().click();
 
       cy.get("mat-option").eq(0).should("contain.text", "mbar l/s/cm^2");
       cy.get("mat-option").eq(1).should("contain.text", "Pa m^3/s/m^2");
@@ -490,13 +427,11 @@ describe("Datasets general", () => {
 
       cy.get("mat-option").eq(0).click();
 
-      cy.get("mat-slide-toggle").click();
+      cy.get('[data-cy="condition-apply"]').click();
 
-      cy.get('[data-cy="filter-search-button"]').click();
+      cy.get('[data-cy="condition-chip"]').should("have.length", 1);
 
-      cy.get(".condition-panel").first().click();
-
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
   });
 
@@ -575,7 +510,6 @@ describe("Datasets general", () => {
                   rhs: 1,
                   unit: "",
                 },
-                enabled: true,
               },
             ],
           },
@@ -591,8 +525,7 @@ describe("Datasets general", () => {
     });
 
     it("should check if pre-configured conditions are applied", () => {
-      cy.scrollTo("bottom");
-      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel')
+      cy.get('[data-cy="condition-chip"]')
         .should("contain.text", "extra_entry_end_time")
         .and("contain.text", ">")
         .and("contain.text", "1");
@@ -612,8 +545,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get(".condition-panel").first().click();
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
   });
 
@@ -635,7 +567,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe("Scientific notation in condition panel test", () => {
+  describe("Scientific notation in condition test", () => {
     beforeEach(() => {
       cy.createDataset({
         type: "raw",
@@ -649,35 +581,16 @@ describe("Datasets general", () => {
       cy.visit("/datasets");
     });
     it("should be able to add condition with scientific notation value", () => {
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
+      cy.addCondition({
+        key: "extra_entry_end_time",
+        operator: "=",
+        value: "3.1e4",
       });
 
-      cy.get('input[name="lhs"]').type("extra_entry_end_time");
-
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
-
-      cy.get("mat-option").contains("=").click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("3.1e4");
-        });
-
-      cy.get('[data-cy="filter-search-button"]').click();
-
       cy.get(".dataset-table mat-table").should("exist");
+      cy.get('[data-cy="condition-chip"]').should("contain", "31000");
 
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
   });
 
@@ -748,43 +661,31 @@ describe("Datasets general", () => {
       cy.visit("/datasets");
       cy.finishedLoading();
 
-      cy.get('[data-cy="add-condition-button"]').click();
-      cy.get('input[name="lhs"]').type("extra_entry_end_time");
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.addCondition({ key: "extra_entry_end_time", value: "5" });
 
-      cy.get(".condition-panel").should("have.length", 1);
+      cy.get('[data-cy="condition-chip"]').should("have.length", 1);
 
       cy.visit("/samples");
       cy.finishedLoading();
 
-      cy.get('[data-cy="add-condition-button"]').click();
-      cy.get('input[name="lhs"]').type("test_characteristic");
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+      cy.addCondition({ key: "test_characteristic", value: "10" });
 
-      cy.get(".condition-panel").should("have.length", 1);
-
-      cy.get(".condition-panel").first().click();
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("10");
-        });
-      cy.get('[data-cy="samples-filters-search-button"]').click();
+      cy.get('[data-cy="condition-chip"]').should("have.length", 1);
 
       // Clear conditions on samples page
       cy.get('[data-cy="samples-filters-clear-button"]').click();
 
-      cy.get(".condition-panel").should("have.length", 0);
+      cy.get('[data-cy="condition-chip"]').should("have.length", 0);
 
       // Navigate back to datasets and verify condition is still there
       cy.visit("/datasets");
       cy.finishedLoading();
 
-      cy.get(".condition-panel").should("have.length", 1);
-      cy.get(".condition-panel").should("contain.text", "extra_entry_end_time");
+      cy.get('[data-cy="condition-chip"]')
+        .should("have.length", 1)
+        .and("contain.text", "extra_entry_end_time");
 
-      cy.get(".condition-panel").first().click();
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
     afterEach(() => {
       cy.removeSamples();
@@ -804,30 +705,7 @@ describe("Datasets general", () => {
     });
 
     it("should persist condition values after navigating away and back", () => {
-      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-        cy.get('[data-cy="add-condition-button"]').click();
-      });
-
-      cy.get('input[name="lhs"]').type("run_number");
-
-      cy.get("mat-dialog-container").find('button[type="submit"]').click();
-
-      cy.get(".condition-panel").first().click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("mat-select").click();
-        });
-      cy.get("mat-option").contains(">").click();
-
-      cy.get(".condition-panel")
-        .first()
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("19");
-        });
-
-      cy.get('[data-cy="filter-search-button"]').click();
+      cy.addCondition({ key: "run_number", operator: ">", value: "19" });
 
       cy.get(".dataset-table mat-row").first().click();
 
@@ -836,15 +714,12 @@ describe("Datasets general", () => {
 
       cy.go("back");
 
-      cy.get(".condition-panel")
+      cy.get('[data-cy="condition-chip"]')
         .first()
-        .find("mat-panel-title")
         .should("contain", ">")
         .and("contain", "19");
 
-      cy.get(".condition-panel").first().click();
-
-      cy.get('[data-cy="remove-condition-button"]').click();
+      cy.removeConditions();
     });
   });
 

@@ -40,14 +40,6 @@
           (keydown.escape)="onGlobalTextSearchClear()"
           data-cy="text-search"
         />
-        <span
-          matSuffix
-          class="enter-hint"
-          matTooltip="Press Enter to search"
-          matTooltipPosition="below"
-          matTooltipShowDelay="500"
-          >↵</span
-        >
         @if (globalTextSearch) {
           <button
             mat-icon-button
@@ -72,6 +64,11 @@
             <mat-icon>search</mat-icon>
           </button>
         }
+        <!-- Last, so that it stays in place when the other buttons show up -->
+        <!-- Inside the search box, e.g. <button table-search-action> -->
+        <span matSuffix class="search-action">
+          <ng-content select="[table-search-action]"></ng-content>
+        </span>
       </mat-form-field>
     </div>
   }
@@ -87,6 +84,10 @@
       ></mat-paginator>
     </div>
   }
+</div>
+<!-- Under the search box, e.g. the applied filters <div table-toolbar> -->
+<div class="table-toolbar" [class.with-side-filter]="sideFilterCollapsed">
+  <ng-content select="[table-toolbar]"></ng-content>
 </div>
 <div
   #tbl

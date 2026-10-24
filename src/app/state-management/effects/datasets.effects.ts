@@ -10,7 +10,6 @@ import {
   OrigDatablock,
   OrigdatablocksV4Service,
   OrigdatablocksPublicV4Service,
-  MetadataKeysV4Service,
   DatasetsV4Service,
   DatasetsPublicV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -18,6 +17,7 @@ import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
+  selectConditionsCountQuery,
   selectDatasetsInBatch,
   selectCurrentDataset,
   selectRelatedDatasetsFilters,
@@ -31,7 +31,7 @@ import {
   tap,
   filter,
 } from "rxjs/operators";
-import { of } from "rxjs";
+import { forkJoin, Observable, of } from "rxjs";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
@@ -49,6 +49,7 @@ export class DatasetEffects {
   relatedDatasetsFilters$ = this.store.select(selectRelatedDatasetsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   fullfacetParams$ = this.store.select(selectFullfacetParams);
+  conditionsCountQuery$ = this.store.select(selectConditionsCountQuery);
   filesFilters$ = this.store.select(selectFilesFilters);
   datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
   currentUser$ = this.store.select(selectCurrentUser);
@@ -111,8 +112,12 @@ export class DatasetEffects {
         fromActions.setPublicViewModeAction,
         fromActions.sortByColumnAction,
       ),
-      concatLatestFrom(() => [this.fullfacetParams$, this.currentUser$]),
-      mergeMap(([, params, user]) => {
+      concatLatestFrom(() => [
+        this.fullfacetParams$,
+        this.currentUser$,
+        this.conditionsCountQuery$,
+      ]),
+      mergeMap(([, params, user, countQuery]) => {
         const { fields, facets } = params;
 
         const filter = {
@@ -126,11 +131,21 @@ export class DatasetEffects {
               filter,
             );
 
-        return apiCall$.pipe(
-          map((res) => {
+        // the facets can't take all kinds of conditions, then the datasets are
+        // counted with the query of the datasets, see selectConditionsCountQuery
+        const counts$ = countQuery
+          ? forkJoin({
+              facets: apiCall$,
+              total: this.countDatasets(user, countQuery),
+            })
+          : apiCall$.pipe(map((facets) => ({ facets, total: null })));
+
+        return counts$.pipe(
+          map(({ facets: res, total }) => {
             const { all, ...facetCounts } = res[0];
 
-            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+            const allCounts =
+              total ?? (all && all.length > 0 ? all[0].totalSets : 0);
             return fromActions.fetchFacetCountsCompleteAction({
               facetCounts,
               allCounts,
@@ -142,56 +157,12 @@ export class DatasetEffects {
     );
   });
 
-  fetchMetadataKeys$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchMetadataKeysAction),
-      switchMap(({ searchTerm }) => {
-        const filter = {
-          where: {},
-          fields: ["key", "humanReadableName"],
-        };
-
-        if (searchTerm && searchTerm.trim()) {
-          filter.where = {
-            $or: [
-              { key: { $regex: searchTerm, $options: "i" } },
-              { humanReadableName: { $regex: searchTerm, $options: "i" } },
-            ],
-          };
-        }
-
-        return this.metadataKeysV4Service
-          .metadataKeysV4ControllerFindAllV4(JSON.stringify(filter))
-          .pipe(
-            map((metadataKeys) => {
-              const keys = metadataKeys.map((dto) => dto.key);
-              return fromActions.fetchMetadataKeysCompleteAction({
-                metadataKeys: keys,
-              });
-            }),
-            catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
-          );
-      }),
-    );
-  });
-
   updateUserDatasetsLimit$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.changePageAction),
       map(({ limit }) =>
         updateUserSettingsAction({ property: { datasetCount: limit } }),
       ),
-    );
-  });
-
-  updateMetadataKeys$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(
-        fromActions.addScientificConditionAction,
-        fromActions.removeScientificConditionAction,
-        fromActions.clearFacetsAction,
-      ),
-      map(() => fromActions.fetchMetadataKeysAction({})),
     );
   });
 
@@ -526,7 +497,6 @@ export class DatasetEffects {
       ofType(
         fromActions.fetchDatasetsAction,
         fromActions.fetchFacetCountsAction,
-        fromActions.fetchMetadataKeysAction,
         fromActions.fetchDatasetAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
@@ -549,8 +519,6 @@ export class DatasetEffects {
         fromActions.fetchRelatedDatasetsFailedAction,
         fromActions.fetchFacetCountsCompleteAction,
         fromActions.fetchFacetCountsFailedAction,
-        fromActions.fetchMetadataKeysCompleteAction,
-        fromActions.fetchMetadataKeysFailedAction,
         fromActions.fetchDatasetCompleteAction,
         fromActions.fetchDatasetFailedAction,
         fromActions.addDatasetCompleteAction,
@@ -612,11 +580,23 @@ export class DatasetEffects {
     private origdatablocksPublicService: OrigdatablocksPublicV4Service,
     private store: Store,
     private appConfigService: AppConfigService,
-    private metadataKeysV4Service: MetadataKeysV4Service,
     private datasetsV4Service: DatasetsV4Service,
     private datasetsPublicV4Service: DatasetsPublicV4Service,
     private attachmentsV4Service: AttachmentsV4Service,
   ) {}
+
+  private countDatasets(
+    user: unknown,
+    query: Record<string, unknown>,
+  ): Observable<number> {
+    const filter = JSON.stringify({ where: query });
+    const count$ = user
+      ? this.datasetsV4Service.datasetsV4ControllerCountV4(filter)
+      : this.datasetsPublicV4Service.datasetsPublicV4ControllerCountPublicV4(
+          filter,
+        );
+    return count$.pipe(map(({ count }) => count));
+  }
 
   private storeBatch(batch: CurrentDataset[], userId: string) {
     const json = JSON.stringify(batch);

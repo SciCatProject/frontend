@@ -4,7 +4,9 @@ import {
   DatasetState,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
-import { ArchViewMode, ScientificCondition } from "state-management/models";
+import { fetchUserSettingsCompleteAction } from "state-management/actions/user.actions";
+import { ArchViewMode, FilterCondition } from "state-management/models";
+import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -35,11 +37,6 @@ const reducer = createReducer(
     ...state,
     facetCountsIsLoading: false,
   })),
-
-  on(
-    fromActions.fetchMetadataKeysCompleteAction,
-    (state, { metadataKeys }): DatasetState => ({ ...state, metadataKeys }),
-  ),
 
   on(
     fromActions.fetchDatasetCompleteAction,
@@ -439,48 +436,26 @@ const reducer = createReducer(
   ),
 
   on(
-    fromActions.addScientificConditionAction,
-    (state, { condition }): DatasetState => {
-      const currentFilters = state.filters;
-      const currentScientific = currentFilters.scientific;
-
-      // Custom comparison function to check if two conditions are equal
-      const areConditionsEqual = (
-        cond1: ScientificCondition,
-        cond2: ScientificCondition,
-      ) => {
-        return (
-          cond1.lhs === cond2.lhs &&
-          cond1.relation === cond2.relation &&
-          cond1.rhs === cond2.rhs &&
-          cond1.unit === cond2.unit
-        );
-      };
-
-      // Check if the condition already exists in the scientific array
-      const conditionExists = currentScientific.some((existingCondition) =>
-        areConditionsEqual(existingCondition, condition),
-      );
-
-      const filters = {
-        ...currentFilters,
-        scientific: conditionExists
-          ? currentScientific
-          : [...currentScientific, condition],
-      };
-      return { ...state, filters };
-    },
+    fromActions.setScientificConditionsAction,
+    (state, { conditions }): DatasetState => ({
+      ...state,
+      filters: { ...state.filters, scientific: conditions },
+    }),
   ),
+
+  // The list is fetched as soon as the settings are there, which is before an effect of this
+  // action could set the saved filters. They are set here, so the first fetch is filtered.
   on(
-    fromActions.removeScientificConditionAction,
-    (state, { condition }): DatasetState => {
-      const currentFilters = state.filters;
-      const scientific = [...currentFilters.scientific];
-      const index = scientific.indexOf(condition);
-      scientific.splice(index, 1);
-      const filters = { ...currentFilters, scientific };
-      return { ...state, filters };
-    },
+    fetchUserSettingsCompleteAction,
+    (state, { userSettings }): DatasetState => ({
+      ...state,
+      filters: {
+        ...state.filters,
+        scientific: toActiveConditions(
+          userSettings.externalSettings?.["fe_dataset_table_conditions"],
+        ),
+      },
+    }),
   ),
 );
 
