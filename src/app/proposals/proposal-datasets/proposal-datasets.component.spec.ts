@@ -119,8 +119,8 @@ describe("ViewProposalPageComponent", () => {
           proposalId,
           limit: event.pageSize,
           skip: event.pageIndex * event.pageSize,
-          sortColumn: undefined,
-          sortDirection: undefined,
+          sortColumn: "creationTime",
+          sortDirection: "desc",
         }),
       );
     });
