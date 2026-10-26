@@ -47,6 +47,15 @@ describe("MetadataViewComponent", () => {
         minCutoff: 0.001,
         maxCutoff: 1000,
       },
+      scientificMetadataContextMenu: {
+        enabled: true,
+        addAsColumn: false,
+        copyName: true,
+        copyMachineName: true,
+        copyValue: true,
+        copyFullValue: true,
+        copyFullEntry: true,
+      },
     } as any);
 
     TestBed.configureTestingModule({
@@ -109,12 +118,15 @@ describe("MetadataViewComponent", () => {
 
   it("should expose the add-as-column row action when enabled in config", () => {
     appConfigService.getConfig.and.returnValue({
-      addScientificMetadataKeysAsColumn: true,
       metadataFloatFormatEnabled: true,
-      metadataFloatFormat: {
-        significantDigits: 3,
-        minCutoff: 0.001,
-        maxCutoff: 1000,
+      scientificMetadataContextMenu: {
+        enabled: true,
+        addAsColumn: true,
+        copyName: true,
+        copyMachineName: true,
+        copyValue: true,
+        copyFullValue: true,
+        copyFullEntry: true,
       },
     } as any);
 
@@ -132,7 +144,7 @@ describe("MetadataViewComponent", () => {
       jasmine.objectContaining({ name: "copyValue", text: "Copy value" }),
       jasmine.objectContaining({
         name: "copyFullValue",
-        text: "Copy value with unit",
+        text: "Copy full value",
       }),
       jasmine.objectContaining({
         name: "copyFullEntry",
@@ -144,9 +156,12 @@ describe("MetadataViewComponent", () => {
   it("should configure individual metadata menu actions", () => {
     appConfigService.getConfig.and.returnValue({
       scientificMetadataContextMenu: {
+        enabled: true,
         copyName: false,
         copyFullValue: false,
         copyFullEntry: false,
+        copyMachineName: true,
+        copyValue: true,
       },
     } as any);
 
@@ -175,8 +190,10 @@ describe("MetadataViewComponent", () => {
 
   it("should require both add-as-column configuration flags", () => {
     appConfigService.getConfig.and.returnValue({
-      addScientificMetadataKeysAsColumn: true,
-      scientificMetadataContextMenu: { addAsColumn: false },
+      scientificMetadataContextMenu: {
+        enabled: true,
+        addAsColumn: false,
+      },
     } as any);
 
     const configuredFixture = TestBed.createComponent(MetadataViewComponent);
@@ -326,12 +343,10 @@ describe("MetadataViewComponent", () => {
   describe("#onRowEvent()", () => {
     it("should delegate the selected scientific metadata entry to the shared service", async () => {
       appConfigService.getConfig.and.returnValue({
-        addScientificMetadataKeysAsColumn: true,
         metadataFloatFormatEnabled: true,
-        metadataFloatFormat: {
-          significantDigits: 3,
-          minCutoff: 0.001,
-          maxCutoff: 1000,
+        scientificMetadataContextMenu: {
+          enabled: true,
+          addAsColumn: true,
         },
       } as any);
 
@@ -366,8 +381,16 @@ describe("MetadataViewComponent", () => {
 
     it("should not delegate when add-as-column is disabled in config", async () => {
       appConfigService.getConfig.and.returnValue({
-        addScientificMetadataKeysAsColumn: false,
         metadataFloatFormatEnabled: true,
+        scientificMetadataContextMenu: {
+          enabled: true,
+          addAsColumn: false,
+          copyName: true,
+          copyMachineName: true,
+          copyValue: true,
+          copyFullValue: true,
+          copyFullEntry: true,
+        },
       } as any);
 
       const disabledFixture = TestBed.createComponent(MetadataViewComponent);

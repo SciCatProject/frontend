@@ -44,38 +44,7 @@ import { Message, MessageType } from "state-management/models";
   standalone: false,
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
-  private readonly contextMenuActions: ContextMenuItem[] = [
-    {
-      name: "addAsColumn",
-      text: "Add as column",
-      color: undefined,
-    },
-    {
-      name: "copyName",
-      text: "Copy name",
-      color: undefined,
-    },
-    {
-      name: "copyMachineName",
-      text: "Copy machine name",
-      color: undefined,
-    },
-    {
-      name: "copyValue",
-      text: "Copy value",
-      color: undefined,
-    },
-    {
-      name: "copyFullValue",
-      text: "Copy full value",
-      color: undefined,
-    },
-    {
-      name: "copyFullEntry",
-      text: "Copy full entry",
-      color: undefined,
-    },
-  ];
+  private readonly contextMenuActions: ContextMenuItem[];
 
   @Input() metadata: object = {};
 
@@ -237,6 +206,35 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     public linkyPipe: LinkyPipe,
     public prettyUnit: PrettyUnitPipe,
   ) {
+    this.contextMenuActions = [
+      this.scientificMetadataColumnsService.addAsColumnAction,
+      {
+        name: "copyName",
+        text: "Copy name",
+        color: undefined,
+      },
+      {
+        name: "copyMachineName",
+        text: "Copy machine name",
+        color: undefined,
+      },
+      {
+        name: "copyValue",
+        text: "Copy value",
+        color: undefined,
+      },
+      {
+        name: "copyFullValue",
+        text: "Copy full value",
+        color: undefined,
+      },
+      {
+        name: "copyFullEntry",
+        text: "Copy full entry",
+        color: undefined,
+      },
+    ];
+
     const contextMenuConfig: ScientificMetadataContextMenuConfig =
       this.appConfigService.getConfig().scientificMetadataContextMenu ?? {};
 
