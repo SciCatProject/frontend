@@ -87,7 +87,9 @@ describe("MetadataViewComponent", () => {
   });
 
   it("should expose a stable scientific metadata table identifier", () => {
-    expect(fixture.nativeElement.querySelector("#scientific-metadata-table")).toBeTruthy();
+    expect(
+      fixture.nativeElement.querySelector("#scientific-metadata-table"),
+    ).toBeTruthy();
     expect(
       fixture.nativeElement
         .querySelector("#scientific-metadata-table")
@@ -101,7 +103,7 @@ describe("MetadataViewComponent", () => {
       "copyMachineName",
       "copyValue",
       "copyFullValue",
-      "copyEntry",
+      "copyFullEntry",
     ]);
   });
 
@@ -121,6 +123,7 @@ describe("MetadataViewComponent", () => {
     enabledFixture.detectChanges();
 
     expect(enabledComponent.rowContextMenuItems).toEqual([
+      scientificMetadataColumnsService.addAsColumnAction,
       jasmine.objectContaining({ name: "copyName", text: "Copy name" }),
       jasmine.objectContaining({
         name: "copyMachineName",
@@ -129,11 +132,62 @@ describe("MetadataViewComponent", () => {
       jasmine.objectContaining({ name: "copyValue", text: "Copy value" }),
       jasmine.objectContaining({
         name: "copyFullValue",
-        text: "Copy full value",
+        text: "Copy value with unit",
       }),
-      jasmine.objectContaining({ name: "copyEntry", text: "Copy entry" }),
-      scientificMetadataColumnsService.addAsColumnAction,
+      jasmine.objectContaining({
+        name: "copyFullEntry",
+        text: "Copy full entry",
+      }),
     ]);
+  });
+
+  it("should configure individual metadata menu actions", () => {
+    appConfigService.getConfig.and.returnValue({
+      scientificMetadataContextMenu: {
+        copyName: false,
+        copyFullValue: false,
+        copyFullEntry: false,
+      },
+    } as any);
+
+    const configuredFixture = TestBed.createComponent(MetadataViewComponent);
+    const configuredComponent = configuredFixture.componentInstance;
+    configuredFixture.detectChanges();
+
+    expect(
+      configuredComponent.rowContextMenuItems.map((action) => action.name),
+    ).toEqual(["copyMachineName", "copyValue"]);
+    expect(configuredComponent.rowContextMenuEnabled).toBeTrue();
+  });
+
+  it("should disable the metadata menu from configuration", () => {
+    appConfigService.getConfig.and.returnValue({
+      scientificMetadataContextMenu: { enabled: false },
+    } as any);
+
+    const disabledFixture = TestBed.createComponent(MetadataViewComponent);
+    const disabledComponent = disabledFixture.componentInstance;
+    disabledFixture.detectChanges();
+
+    expect(disabledComponent.rowContextMenuEnabled).toBeFalse();
+    expect(disabledComponent.rowContextMenuItems).toEqual([]);
+  });
+
+  it("should require both add-as-column configuration flags", () => {
+    appConfigService.getConfig.and.returnValue({
+      addScientificMetadataKeysAsColumn: true,
+      scientificMetadataContextMenu: { addAsColumn: false },
+    } as any);
+
+    const configuredFixture = TestBed.createComponent(MetadataViewComponent);
+    const configuredComponent = configuredFixture.componentInstance;
+    configuredFixture.detectChanges();
+
+    expect(
+      configuredComponent.rowContextMenuItems.some(
+        (action) => action.name === "addAsColumn",
+      ),
+    ).toBeFalse();
   });
 
   describe("#createMetadataArray()", () => {
@@ -232,7 +286,7 @@ describe("MetadataViewComponent", () => {
       } as any);
       await component.onRowEvent({
         event: RowEventType.RowActionMenu,
-        sender: { row, action: { name: "copyEntry" } },
+        sender: { row, action: { name: "copyFullEntry" } },
       } as any);
 
       expect(writeText.calls.allArgs()).toEqual([
@@ -321,6 +375,9 @@ describe("MetadataViewComponent", () => {
       disabledFixture.detectChanges();
 
       expect(disabledComponent.rowContextMenuItems.length).toBe(5);
+      expect(
+        disabledComponent.rowContextMenuItems.every((action) => !action.icon),
+      ).toBeTrue();
 
       await disabledComponent.onRowEvent({
         event: RowEventType.RowActionMenu,

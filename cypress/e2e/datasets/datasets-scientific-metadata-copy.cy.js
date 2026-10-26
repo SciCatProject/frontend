@@ -16,17 +16,17 @@ const copyActions = [
   "Copy name",
   "Copy machine name",
   "Copy value",
-  "Copy full value",
-  "Copy entry",
+  "Copy value with unit",
+  "Copy full entry",
 ];
 
-const openDatasetDetails = () => {
+const openDatasetDetails = (name = datasetName) => {
   cy.get(".dataset-table mat-table mat-header-row").should("exist");
   cy.finishedLoading();
-  cy.get('[data-cy="text-search"]').clear().type(datasetName);
+  cy.get('[data-cy="text-search"]').clear().type(name);
   cy.get('[data-cy="search-button"]').click();
   cy.isLoading();
-  cy.get("mat-row").contains(datasetName).click();
+  cy.get("mat-row").contains(name).click();
   cy.isLoading();
   cy.finishedLoading();
 };
@@ -77,6 +77,8 @@ describe("Datasets Scientific Metadata Copy Actions", () => {
       .should("exist");
 
     openMetadataRowMenu("Key 2");
+    cy.get("body .metadata-entry-context-menu").should("be.visible");
+    cy.get("body .metadata-entry-context-menu mat-icon").should("not.exist");
     cy.wrap(copyActions).each((action) => {
       cy.get("body")
         .contains("button.button-menu", action)
@@ -93,20 +95,85 @@ describe("Datasets Scientific Metadata Copy Actions", () => {
       { row: "Key 2", action: "Copy value", expected: "1" },
       {
         row: "Key 2",
-        action: "Copy full value",
+        action: "Copy value with unit",
         expected: JSON.stringify({ value: 1, unit: "mm" }),
       },
       {
         row: "Key 2",
-        action: "Copy entry",
+        action: "Copy full entry",
         expected: JSON.stringify(scientificMetadata.key_2),
       },
-      { row: "Key 1", action: "Copy full value", expected: "Value 1" },
+      { row: "Key 1", action: "Copy value with unit", expected: "Value 1" },
     ];
 
     cy.wrap(copyCases).each(({ row, action, expected }) => {
       copyFromMetadataRow(row, action);
       expectClipboard(expected);
     });
+  });
+});
+
+const configuredDatasetName =
+  "Cypress Configured Scientific Metadata Menu Dataset";
+const configuredScientificMetadata = {
+  configured_key: {
+    human_name: "Configured Key",
+    value: 2,
+    unit: "mm",
+  },
+};
+
+describe("Datasets Scientific Metadata Context Menu Configuration", () => {
+  beforeEach(() => {
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+    cy.intercept("GET", "**/admin/config", {
+      addScientificMetadataKeysAsColumn: true,
+      scientificMetadataContextMenu: {
+        enabled: true,
+        copyName: false,
+        copyMachineName: false,
+        copyValue: true,
+        copyFullValue: true,
+        copyFullEntry: false,
+        addAsColumn: true,
+      },
+    }).as("getScientificMetadataMenuConfig");
+    cy.createDataset({
+      type: "raw",
+      datasetName: configuredDatasetName,
+      scientificMetadata: configuredScientificMetadata,
+    });
+    cy.visit("/datasets");
+  });
+
+  after(() => {
+    cy.removeDatasets();
+  });
+
+  it("should show and apply configured scientific metadata menu actions", () => {
+    openDatasetDetails(configuredDatasetName);
+
+    openMetadataRowMenu("Configured Key");
+    cy.get("body .metadata-entry-context-menu")
+      .should("be.visible")
+      .within(() => {
+        cy.contains("button.button-menu", "Add as column").should("be.visible");
+        cy.contains("button.button-menu", "Copy value").should("be.visible");
+        cy.contains("button.button-menu", "Copy value with unit").should(
+          "be.visible",
+        );
+        cy.contains("button.button-menu", "Copy name").should("not.exist");
+        cy.contains("button.button-menu", "Copy machine name").should(
+          "not.exist",
+        );
+        cy.contains("button.button-menu", "Copy full entry").should(
+          "not.exist",
+        );
+      });
+
+    cy.get("body")
+      .contains("button.button-menu", "Copy value with unit")
+      .click();
+    expectClipboard(JSON.stringify({ value: 2, unit: "mm" }));
   });
 });

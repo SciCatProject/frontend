@@ -18,6 +18,18 @@
       },
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
       "addScientificMetadataKeysAsColumn": { "type": "boolean" },
+      "scientificMetadataContextMenu": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean", "default": false },
+          "copyName": { "type": "boolean", "default": false },
+          "copyMachineName": { "type": "boolean", "default": false },
+          "copyValue": { "type": "boolean", "default": false },
+          "copyFullValue": { "type": "boolean", "default": false },
+          "copyFullEntry": { "type": "boolean", "default": false },
+          "addAsColumn": { "type": "boolean", "default": false }
+        }
+      },
       "allowConfigOverrides": { "type": "boolean" },
       "dateFormat": { "type": "string" },
       "timezone": { "type": "string" },
@@ -536,6 +548,10 @@
           { "type": "Control", "scope": "#/properties/statusBannerMessage" },
           { "type": "Control", "scope": "#/properties/statusBannerCode" },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/addScientificMetadataKeysAsColumn"
+          },
           { "type": "Control", "scope": "#/properties/tableSciDataEnabled" },
           {
             "type": "Control",
@@ -544,7 +560,10 @@
           { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
-          { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetRelationshipsEnabled"
+          },
           {
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"
@@ -893,7 +912,8 @@
                     "elements": [
                       { "type": "Control", "scope": "#/properties/label" },
                       { "type": "Control", "scope": "#/properties/type" },
-                      { "type": "Control", "scope": "#/properties/order" }]
+                      { "type": "Control", "scope": "#/properties/order" }
+                    ]
                   },
                   {
                     "type": "HorizontalLayout",
@@ -1182,6 +1202,50 @@
             "type": "Control",
             "scope": "#/properties/defaultTab/properties/proposal",
             "label": "Default Proposal Tab"
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Scientific Metadata Context Menu",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/scientificMetadataContextMenu/properties/enabled",
+            "label": "Enable Context Menu"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/scientificMetadataContextMenu/properties/copyName",
+            "label": "Enable \"Copy Name\""
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/scientificMetadataContextMenu/properties/copyMachineName",
+            "label": "Enable \"Copy Machine Name\""
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/scientificMetadataContextMenu/properties/copyValue",
+            "label": "Enable \"Copy Value\""
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/scientificMetadataContextMenu/properties/copyFullValue",
+            "label": "Enable \"Copy Full Value\""
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/scientificMetadataContextMenu/properties/copyFullEntry",
+            "label": "Enable \"Copy Full Entry\""
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/scientificMetadataContextMenu/properties/addAsColumn",
+            "label": "Enable \"Add as Column\""
           }
         ]
       }

@@ -29,7 +29,10 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ContextMenuItem } from "shared/modules/dynamic-material-table/models/context-menu.model";
 import { ScientificMetadataColumnsService } from "shared/services/scientific-metadata-columns.service";
-import { AppConfigService } from "app-config.service";
+import {
+  AppConfigService,
+  ScientificMetadataContextMenuConfig,
+} from "app-config.service";
 import { Store } from "@ngrx/store";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
@@ -41,36 +44,36 @@ import { Message, MessageType } from "state-management/models";
   standalone: false,
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
-  private readonly copyActions: ContextMenuItem[] = [
+  private readonly contextMenuActions: ContextMenuItem[] = [
+    {
+      name: "addAsColumn",
+      text: "Add as column",
+      color: undefined,
+    },
     {
       name: "copyName",
       text: "Copy name",
       color: undefined,
-      icon: "content_copy",
     },
     {
       name: "copyMachineName",
       text: "Copy machine name",
       color: undefined,
-      icon: "content_copy",
     },
     {
       name: "copyValue",
       text: "Copy value",
       color: undefined,
-      icon: "content_copy",
     },
     {
       name: "copyFullValue",
       text: "Copy full value",
       color: undefined,
-      icon: "content_copy",
     },
     {
-      name: "copyEntry",
-      text: "Copy entry",
+      name: "copyFullEntry",
+      text: "Copy full entry",
       color: undefined,
-      icon: "content_copy",
     },
   ];
 
@@ -116,6 +119,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   showGlobalTextSearch = false;
 
   rowContextMenuItems: ContextMenuItem[];
+  rowContextMenuEnabled = true;
   canAddScientificMetadataKeysAsColumn: boolean;
 
   tableDefaultSettingsConfig: ITableSetting = {
@@ -234,15 +238,23 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     public linkyPipe: LinkyPipe,
     public prettyUnit: PrettyUnitPipe,
   ) {
-    this.canAddScientificMetadataKeysAsColumn =
-      this.appConfigService.getConfig().addScientificMetadataKeysAsColumn ===
-      true;
-    this.rowContextMenuItems = [
-      ...this.copyActions,
-      ...(this.canAddScientificMetadataKeysAsColumn
-        ? [this.scientificMetadataColumnsService.addAsColumnAction]
-        : []),
-    ];
+    const contextMenuConfig: ScientificMetadataContextMenuConfig =
+      this.appConfigService.getConfig().scientificMetadataContextMenu ?? {};
+
+    this.rowContextMenuEnabled = contextMenuConfig.enabled == true;
+    console.log(this.rowContextMenuEnabled)
+
+    const configuredContextMenuActions = this.contextMenuActions.filter((action) => {
+      const configKey =
+        action.name as keyof ScientificMetadataContextMenuConfig;
+
+      return contextMenuConfig[configKey] == true;
+    });
+
+    this.rowContextMenuItems = this.rowContextMenuEnabled
+      ? configuredContextMenuActions
+      : [];
+    console.log(this.rowContextMenuItems);
   }
 
   private getCopyValue(
@@ -260,7 +272,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         return this.serializeForClipboard(
           row.unit ? { value: row.rawValue, unit: row.unit } : row.rawValue,
         );
-      case "copyEntry":
+      case "copyFullEntry":
         return this.serializeForClipboard(row.originalEntry);
       default:
         return undefined;

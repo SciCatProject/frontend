@@ -21,7 +21,7 @@
   }
 }
 
-.metadataTable-add-column-enabled {
+.metadataTable-raw-context-menu-enabled {
   ::ng-deep mat-cell.mat-column-table-menu {
     order: -1;
     padding-left: 20px !important;
@@ -48,6 +48,17 @@
   ::ng-deep mat-header-row.header::before {
     content: "";
     flex: 0 0 42px;
+  }
+}
+
+::ng-deep .metadata-entry-context-menu {
+  width: min-content !important;
+  min-width: min-content !important;
+  max-width: none !important;
+
+  .button-menu {
+    white-space: nowrap;
+    justify-content: left;
   }
 }
 
