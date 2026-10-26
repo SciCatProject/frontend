@@ -16,7 +16,7 @@ const copyActions = [
   "Copy name",
   "Copy machine name",
   "Copy value",
-  "Copy value with unit",
+  "Copy full value",
   "Copy full entry",
 ];
 
@@ -95,7 +95,7 @@ describe("Datasets Scientific Metadata Copy Actions", () => {
       { row: "Key 2", action: "Copy value", expected: "1" },
       {
         row: "Key 2",
-        action: "Copy value with unit",
+        action: "Copy full value",
         expected: JSON.stringify({ value: 1, unit: "mm" }),
       },
       {
@@ -103,7 +103,7 @@ describe("Datasets Scientific Metadata Copy Actions", () => {
         action: "Copy full entry",
         expected: JSON.stringify(scientificMetadata.key_2),
       },
-      { row: "Key 1", action: "Copy value with unit", expected: "Value 1" },
+      { row: "Key 1", action: "Copy full value", expected: "Value 1" },
     ];
 
     cy.wrap(copyCases).each(({ row, action, expected }) => {
@@ -158,7 +158,7 @@ describe("Datasets Scientific Metadata Context Menu Configuration", () => {
       .within(() => {
         cy.contains("button.button-menu", "Add as column").should("be.visible");
         cy.contains("button.button-menu", "Copy value").should("be.visible");
-        cy.contains("button.button-menu", "Copy value with unit").should(
+        cy.contains("button.button-menu", "Copy full value").should(
           "be.visible",
         );
         cy.contains("button.button-menu", "Copy name").should("not.exist");
@@ -171,7 +171,7 @@ describe("Datasets Scientific Metadata Context Menu Configuration", () => {
       });
 
     cy.get("body")
-      .contains("button.button-menu", "Copy value with unit")
+      .contains("button.button-menu", "Copy full value")
       .click();
     expectClipboard(JSON.stringify({ value: 2, unit: "mm" }));
   });

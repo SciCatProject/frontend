@@ -1230,7 +1230,7 @@
           {
             "type": "Control",
             "scope": "#/properties/scientificMetadataContextMenu/properties/copyFullValue",
-            "label": "Enable \"Copy Full Value\""
+            "label": "Enable \"Copy full value\""
           },
           {
             "type": "Control",

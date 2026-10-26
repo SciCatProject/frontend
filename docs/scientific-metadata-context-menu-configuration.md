@@ -14,7 +14,7 @@ The available settings are:
 - **Enable "Copy Name"**
 - **Enable "Copy Machine Name"**
 - **Enable "Copy Value"**
-- **Enable "Copy Value with Unit"**
+- **Enable "Copy full value"**
 - **Enable "Copy Full Entry"**
 - **Enable "Add as Column"**
 
