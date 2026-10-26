@@ -33,8 +33,41 @@ describe("MetadataViewComponent", () => {
             color: "primary",
             icon: "view_column",
           },
+          copyNameAction: {
+            name: "copyName",
+            text: "Copy name",
+            color: undefined,
+          },
+          copyMachineNameAction: {
+            name: "copyMachineName",
+            text: "Copy machine name",
+            color: undefined,
+          },
+          copyValueAction: {
+            name: "copyValue",
+            text: "Copy value",
+            color: undefined,
+          },
+          copyFullValueAction: {
+            name: "copyFullValue",
+            text: "Copy full value",
+            color: undefined,
+          },
+          copyFullEntryAction: {
+            name: "copyFullEntry",
+            text: "Copy full entry",
+            color: undefined,
+          },
         },
       );
+    (scientificMetadataColumnsService as any).contextMenuActions = [
+      scientificMetadataColumnsService.addAsColumnAction,
+      scientificMetadataColumnsService.copyNameAction,
+      scientificMetadataColumnsService.copyMachineNameAction,
+      scientificMetadataColumnsService.copyValueAction,
+      scientificMetadataColumnsService.copyFullValueAction,
+      scientificMetadataColumnsService.copyFullEntryAction,
+    ];
     store = jasmine.createSpyObj<Store>("Store", ["dispatch", "select"]);
     appConfigService = jasmine.createSpyObj<AppConfigService>(
       "AppConfigService",

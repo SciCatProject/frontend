@@ -17,7 +17,6 @@
         }
       },
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
-      "addScientificMetadataKeysAsColumn": { "type": "boolean" },
       "scientificMetadataContextMenu": {
         "type": "object",
         "properties": {
@@ -548,10 +547,6 @@
           { "type": "Control", "scope": "#/properties/statusBannerMessage" },
           { "type": "Control", "scope": "#/properties/statusBannerCode" },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
-          {
-            "type": "Control",
-            "scope": "#/properties/addScientificMetadataKeysAsColumn"
-          },
           { "type": "Control", "scope": "#/properties/tableSciDataEnabled" },
           {
             "type": "Control",

@@ -127,7 +127,6 @@ describe("Datasets Scientific Metadata Context Menu Configuration", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.intercept("GET", "**/admin/config", {
-      addScientificMetadataKeysAsColumn: true,
       scientificMetadataContextMenu: {
         enabled: true,
         copyName: false,

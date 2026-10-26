@@ -138,7 +138,6 @@ export interface ScientificMetadataContextMenuConfig {
 
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
-  addScientificMetadataKeysAsColumn?: boolean;
   scientificMetadataContextMenu?: ScientificMetadataContextMenuConfig;
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;

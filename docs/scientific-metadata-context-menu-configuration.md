@@ -74,20 +74,18 @@ The context-menu trigger is hidden when the complete menu is disabled.
 
 ## Add as column
 
-The **Add as column** action is controlled by two settings. Both must allow the action:
+The **Add as column** action is controlled by `scientificMetadataContextMenu.addAsColumn`. The complete menu must also be enabled:
 
 ```json
 {
-  "addScientificMetadataKeysAsColumn": true,
   "scientificMetadataContextMenu": {
+    "enabled": true,
     "addAsColumn": true
   }
 }
 ```
 
-`addScientificMetadataKeysAsColumn` enables the application feature, while `scientificMetadataContextMenu.addAsColumn` controls whether the action is shown in the metadata context menu.
-
-If either setting is `false`, the **Add as column** action is not available.
+The same action configuration is used by the scientific metadata table and tree views.
 
 ## Action behavior
 
@@ -132,7 +130,6 @@ Object values are copied as JSON. Scalar values are copied as text.
 
 ```json
 {
-  "addScientificMetadataKeysAsColumn": true,
   "scientificMetadataContextMenu": {
     "enabled": true,
     "copyName": true,
