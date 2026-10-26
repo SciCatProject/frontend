@@ -281,6 +281,21 @@ function resolveUrl(url: string): string {
   return new URL(url, document.baseURI).href;
 }
 
+// Accepts a single URL as shorthand for a one-element list
+function normalizeAdditionalConfigs(value: unknown): string[] {
+  if (value === undefined || value === null) {
+    return [];
+  }
+  const urls = typeof value === "string" ? [value] : value;
+  if (!Array.isArray(urls) || urls.some((url) => typeof url !== "string")) {
+    console.error(
+      "additionalConfigs must be a URL or a list of URLs; ignoring it.",
+    );
+    return [];
+  }
+  return urls;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -313,7 +328,10 @@ export class AppConfigService {
       );
     }
     const bootstrap = mergeConfigs(config ?? {}, configOverrideRequest ?? {});
-    if (!bootstrap.additionalConfigs?.length) {
+    const additionalConfigs = normalizeAdditionalConfigs(
+      bootstrap.additionalConfigs,
+    );
+    if (!additionalConfigs.length) {
       return bootstrap;
     }
 
@@ -323,10 +341,7 @@ export class AppConfigService {
     if (overridesAllowed) {
       localConfigs[CONFIG_OVERRIDE_URL] = configOverrideRequest ?? {};
     }
-    return this.loadAdditionalConfigs(
-      bootstrap.additionalConfigs,
-      localConfigs,
-    );
+    return this.loadAdditionalConfigs(additionalConfigs, localConfigs);
   }
 
   /**
@@ -347,12 +362,17 @@ export class AppConfigService {
     const fetched = new Map(
       Object.entries(localConfigs).map(([url, c]) => [resolveUrl(url), c]),
     );
-    let config: Partial<AppConfigInterface> = {};
-    for (const url of urls.slice(0, MAX_ADDITIONAL_CONFIGS)) {
-      const source =
-        fetched.get(resolveUrl(url)) ?? (await this.fetchAdditionalConfig(url));
-      config = mergeConfigs(config, omit(source, "additionalConfigs"));
-    }
+    const sources = await Promise.all(
+      urls
+        .slice(0, MAX_ADDITIONAL_CONFIGS)
+        .map(
+          (url) =>
+            fetched.get(resolveUrl(url)) ?? this.fetchAdditionalConfig(url),
+        ),
+    );
+    const config = mergeConfigs(
+      ...sources.map((source) => omit(source, "additionalConfigs")),
+    );
     return { ...config, additionalConfigs: urls };
   }
 

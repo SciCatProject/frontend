@@ -1,11 +1,12 @@
 import { HttpClient } from "@angular/common/http";
-import { TestBed } from "@angular/core/testing";
+import { TestBed, fakeAsync, tick } from "@angular/core/testing";
 import {
   AppConfigInterface,
   AppConfigService,
   HelpMessages,
 } from "app-config.service";
 import { Observable, of, throwError } from "rxjs";
+import { delay } from "rxjs/operators";
 import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfigInterface = {
@@ -601,6 +602,48 @@ describe("AppConfigService", () => {
         siteTitle: "ext",
         additionalConfigs: ["/ext.json"],
       });
+    });
+
+    it("should fetch the sources in parallel", fakeAsync(() => {
+      const list = ["/a.json", "/b.json"];
+      spyOn(service["http"], "get").and.callFake(
+        (url: string): Observable<any> =>
+          url === CONFIG
+            ? of({ additionalConfigs: list })
+            : of({ siteTitle: url }).pipe(delay(1000)),
+      );
+
+      let result: Partial<AppConfigInterface> | undefined;
+      service["mergeConfig"]().then((r) => (result = r));
+      tick(1000);
+
+      expect(result).toEqual({ siteTitle: "/b.json", additionalConfigs: list });
+    }));
+
+    it("should treat a single URL string as a one-element list", async () => {
+      mockHttpGet({
+        [CONFIG]: { facility: "root", additionalConfigs: "/ext.json" as any },
+        "/ext.json": { siteTitle: "ext" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({
+        siteTitle: "ext",
+        additionalConfigs: ["/ext.json"],
+      });
+    });
+
+    it("should ignore additionalConfigs that is not a URL or list of URLs", async () => {
+      const bootstrap = {
+        facility: "root",
+        additionalConfigs: { a: 1 } as any,
+      };
+      mockHttpGet({ [CONFIG]: bootstrap });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual(bootstrap);
     });
 
     it("should use the list from config.override.json when overrides are allowed", async () => {
