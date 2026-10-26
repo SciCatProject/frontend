@@ -120,7 +120,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   rowContextMenuItems: ContextMenuItem[];
   rowContextMenuEnabled = true;
-  canAddScientificMetadataKeysAsColumn: boolean;
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -401,7 +400,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     }
 
     if (
-      this.canAddScientificMetadataKeysAsColumn &&
+      this.rowContextMenuEnabled &&
+      this.rowContextMenuItems.some((item) => item.name === "addAsColumn") &&
       sender.action?.name ===
         this.scientificMetadataColumnsService.addAsColumnAction.name
     ) {
