@@ -30,3 +30,16 @@ Cypress.on("uncaught:exception", (err) => {
     return false;
   }
 });
+
+// Requests served from the browser HTTP cache never reach the Cypress proxy,
+// so cy.intercept() (e.g. on "**/admin/config") would never fire.
+beforeEach(() => {
+  if (Cypress.isBrowser({ family: "chromium" })) {
+    cy.wrap(
+      Cypress.automation("remote:debugger:protocol", {
+        command: "Network.clearBrowserCache",
+      }),
+      { log: false },
+    );
+  }
+});
