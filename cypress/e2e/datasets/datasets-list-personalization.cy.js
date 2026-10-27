@@ -139,11 +139,24 @@ describe("1000 - Datasets list personalization", () => {
     // Apply
     cy.contains("mat-icon", "done").closest("button").click();
 
+    // Applying keeps the column menu open (apply_onClick stops propagation).
+    // Close it explicitly; otherwise its backdrop can still cover the table
+    // menu button on slow runners. Escape closes the submenu, then the menu.
+    cy.get("body").type("{esc}{esc}");
+    cy.get(".cdk-overlay-backdrop").should("not.exist");
+
     cy.finishedLoading();
+
+    cy.intercept("PATCH", /\/api\/v3\/users\/[^/]+\/settings(\/external)?$/).as(
+      "saveSettings",
+    );
 
     cy.contains("mat-icon", "more_vert").closest("button").click();
 
     cy.contains("button.mat-mdc-menu-item", "Save table setting").click();
+
+    // Make sure the settings are stored before reloading the app.
+    cy.wait("@saveSettings");
 
     cy.visit("/datasets");
 
