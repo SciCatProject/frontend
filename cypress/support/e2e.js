@@ -30,3 +30,17 @@ Cypress.on("uncaught:exception", (err) => {
     return false;
   }
 });
+
+// Disable the browser HTTP cache for every test. Cached responses can cause tests to
+// fail with "No request ever occurred" (e.g. cy.wait("@getConfig")).
+beforeEach(() => {
+  if (Cypress.isBrowser({ family: "chromium" })) {
+    cy.wrap(
+      Cypress.automation("remote:debugger:protocol", {
+        command: "Network.setCacheDisabled",
+        params: { cacheDisabled: true },
+      }),
+      { log: false },
+    );
+  }
+});
