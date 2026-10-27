@@ -92,7 +92,8 @@ Cypress.Commands.add("finishedLoading", (type) => {
 // wait until the resulting list request has completed. The intercept is
 // registered right before clicking search so that cy.wait() matches the
 // request triggered by this search, not an earlier one.
-const tableListRequest = /\/api\/v4\/(datasets(\/public)?|publisheddata)(\?|$)/;
+const tableListRequest =
+  /\/api\/v4\/(datasets(\/public)?|publisheddata)(\?|$)/i;
 
 Cypress.Commands.add("searchTable", (text) => {
   cy.get('[data-cy="text-search"]').clear().type(text);
@@ -106,7 +107,7 @@ Cypress.Commands.add("searchTable", (text) => {
 // details page actually happened before continuing.
 Cypress.Commands.add("openDataset", (name) => {
   cy.get("mat-row").contains(name).first().click();
-  cy.location("pathname").should("match", /^\/datasets\/[^/]+/);
+  cy.location("pathname").should("match", /^\/datasets\/[^/]+/i);
   cy.finishedLoading();
 });
 
