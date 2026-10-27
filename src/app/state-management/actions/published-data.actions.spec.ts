@@ -181,4 +181,14 @@ describe("Published Data Actions", () => {
       expect({ ...action }).toEqual({ type: "[PublischedData] Clear State" });
     });
   });
+
+  describe("clearCurrentPublishedDataAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearCurrentPublishedDataAction();
+
+      expect({ ...action }).toEqual({
+        type: "[PublishedData] Clear Current Published Data",
+      });
+    });
+  });
 });
