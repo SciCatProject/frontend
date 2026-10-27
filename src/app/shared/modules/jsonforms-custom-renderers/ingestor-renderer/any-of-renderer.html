@@ -1,7 +1,6 @@
 <mat-card class="anyof-group">
   <mat-card-title
-    >{{ anyOfTitle }} 
-    
+    >{{ anyOfTitle }}
     <span class="spacer">&nbsp;<mat-icon
       *ngIf="description"
       matSuffix
@@ -11,42 +10,46 @@
     >
       info_outline
     </mat-icon></span>
-    <mat-checkbox
-    *ngIf="options.includes('null')"
-    [(ngModel)]="notNullOptionSelected"
-    (change)="onEnableCheckboxChange($event)"
-    >
-    Enabled
-    
-    </mat-checkbox>
-   
-  </mat-card-title
-    >
-  <mat-card-content *ngIf="notNullOptionSelected">
-    <mat-tab-group *ngIf="tabAmount > 1">
-      animationDuration="0ms" [selectedIndex]="selectedTabIndex" >
-      <mat-tab *ngFor="let option of filteredOptions" label="{{ option }}">
-        <div class="mat-tab-content-renderer" *ngIf="option !== 'null'">
+    @if (options.includes("null")) {
+      <mat-checkbox
+        [(ngModel)]="notNullOptionSelected"
+        (change)="onEnableCheckboxChange($event)"
+      >
+        Enabled
+      </mat-checkbox>
+    }
+  </mat-card-title>
+  @if (notNullOptionSelected) {
+    <mat-card-content>
+      @if (tabAmount > 1) {
+        <mat-tab-group>
+          animationDuration="0ms" [selectedIndex]="selectedTabIndex" >
+          @for (option of filteredOptions; track option) {
+            <mat-tab label="{{ option }}">
+              @if (option !== "null") {
+                <div class="mat-tab-content-renderer">
+                  <jsonforms-outlet
+                    [uischema]="getUISchema(option)"
+                    [schema]="getTabSchema(option)"
+                    [path]="propsPath"
+                  >
+                  </jsonforms-outlet>
+                </div>
+              }
+            </mat-tab>
+          }
+        </mat-tab-group>
+      }
+      @if (tabAmount === 1) {
+        <div>
           <jsonforms-outlet
-          [uischema]="getUISchema(option)"
-          [schema]="getTabSchema(option)"
-          [path]="propsPath"
+            [uischema]="getUISchema(options[0])"
+            [schema]="getTabSchema(options[0])"
+            [path]="propsPath"
           >
           </jsonforms-outlet>
         </div>
-      </mat-tab>
-    </mat-tab-group>
-
-    <div *ngIf="tabAmount === 1">
-      <jsonforms-outlet
-      [uischema]="getUISchema(options[0])"
-      [schema]="getTabSchema(options[0])"
-      [path]="propsPath"
-      >
-      </jsonforms-outlet>
-      
-    </div>
-    
-  </mat-card-content>
-      
+      }
+    </mat-card-content>
+  }
 </mat-card>

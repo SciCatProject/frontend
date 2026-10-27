@@ -13,28 +13,33 @@
       info_outline
     </mat-icon>
     <span class="spacer"></span>
-    <mat-icon
-      *ngIf="this.error !== null && this.error !== ''"
-      color="warn"
-      matBadgeColor="warn"
-      matTooltip="{{ this.error }}"
-      matTooltipClass="error-message-tooltip"
+    @if (this.error !== null && this.error !== "") {
+      <mat-icon
+        color="warn"
+        matBadgeColor="warn"
+        matTooltip="{{ this.error }}"
+        matTooltipClass="error-message-tooltip"
       >
-      error_outline
-    </mat-icon>
+        error_outline
+      </mat-icon>
+    }
   </mat-card-title>
   <mat-card-content>
-    <div *ngIf="errorRecursiveStructure === false">
-      <jsonforms-outlet
-      [uischema]="detailUiSchema"
-      [schema]="scopedSchema"
-      [path]="propsPath"
-      >
-      </jsonforms-outlet>
-    </div>
-    <p *ngIf="errorRecursiveStructure">
-      <mat-icon color="warn">error_outline</mat-icon>
-      Recursive data structure in selected JSON Schema detected.
-    </p>
+    @if (errorRecursiveStructure === false) {
+      <div>
+        <jsonforms-outlet
+          [uischema]="detailUiSchema"
+          [schema]="scopedSchema"
+          [path]="propsPath"
+        >
+        </jsonforms-outlet>
+      </div>
+    }
+    @if (errorRecursiveStructure) {
+      <p>
+        <mat-icon color="warn">error_outline</mat-icon>
+        Recursive data structure in selected JSON Schema detected.
+      </p>
+    }
   </mat-card-content>
 </mat-card>

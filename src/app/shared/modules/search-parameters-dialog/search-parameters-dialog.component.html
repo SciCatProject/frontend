@@ -60,12 +60,13 @@
             </div>
             <div class="parameter-option">
               <div class="human-name">
-                <span *ngIf="getHumanName(key); else metadataKey">
-                  {{ getHumanName(key) }}
-                </span>
-                <ng-template #metadataKey>
+                @if (getHumanName(key)) {
+                  <span>
+                    {{ getHumanName(key) }}
+                  </span>
+                } @else {
                   <span style="font-style: italic">{{ key }}</span>
-                </ng-template>
+                }
 
                 <!-- Hover overlay -->
                 <ng-template
@@ -79,23 +80,24 @@
                       Name Details
                     </mat-card-title>
                     <div mat-card-content class="hover-card-content">
-                      <ng-container *ngIf="getHumanName(key); else rawNameOnly">
+                      @if (getHumanName(key)) {
                         <strong>Human readable name: </strong>
                         {{ getHumanName(key) }}
                         <br />
                         <strong>Metadata name:</strong> {{ key }}
-                      </ng-container>
+                      } @else {
+                        <strong>Metadata name:</strong>
+                        <span style="font-style: italic">{{ key }}</span>
+                      }
                     </div>
-                    <ng-template #rawNameOnly>
-                      <strong>Metadata name:</strong>
-                      <span style="font-style: italic">{{ key }}</span>
-                    </ng-template>
                   </mat-card>
                 </ng-template>
               </div>
-              <div class="raw-name" *ngIf="getHumanName(key)">
-                {{ key }}
-              </div>
+              @if (getHumanName(key)) {
+                <div class="raw-name">
+                  {{ key }}
+                </div>
+              }
             </div>
           </td>
         </ng-container>
@@ -109,12 +111,10 @@
           "
         ></tr>
       </table>
-      <app-empty-content
-        *ngIf="!parameterKeys?.length"
-        message="No metadata keys found."
-        icon="folder"
-      >
-      </app-empty-content>
+      @if (!parameterKeys?.length) {
+        <app-empty-content message="No metadata keys found." icon="folder">
+        </app-empty-content>
+      }
     </div>
   </mat-dialog-content>
   <mat-dialog-actions [attr.align]="'end'">
