@@ -127,7 +127,6 @@ jobs:
             done
           ' > monitor.log 2>&1 &
 
-                ## Pinned to Chrome 154 (runner image 20261012 moved to 155 when E2E started failing, see #2645)
       - name: Set up Chrome
         id: setup-chrome
         uses: browser-actions/setup-chrome@v2
