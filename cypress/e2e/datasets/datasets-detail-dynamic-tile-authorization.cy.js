@@ -105,14 +105,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
     it("1010:0010:0010: should show all tiles to admin user", () => {
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
+      cy.searchTable("Cypress");
 
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
+      cy.openDataset("Cypress Dataset");
 
       // Admin user should see all sections
       cy.get('[data-cy="section-label"]').should("contain", "Admin Only Section");
@@ -148,14 +143,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
+      cy.searchTable("Cypress");
 
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
+      cy.openDataset("Cypress Dataset");
 
       // Archive Manager should see public and archiveManager sections
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
@@ -191,14 +181,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
+      cy.searchTable("Cypress");
 
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
+      cy.openDataset("Cypress Dataset");
 
       // Guest user (user1) should only see public section
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
@@ -237,14 +222,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       cy.wait("@getFrontendConfigNoIndicator");
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
+      cy.searchTable("Cypress");
 
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
+      cy.openDataset("Cypress Dataset");
 
       // Non authenticated user should only see public section
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
@@ -291,14 +271,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
     it("1010:0020:0010: should show all tiles to admin user", () => {
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
+      cy.searchTable("Cypress");
 
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
+      cy.openDataset("Cypress Dataset");
 
       // Admin user should see all sections
       cy.get('[data-cy="section-label"]').should("contain", "Admin Only Section");
@@ -358,14 +333,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
+      cy.searchTable("Cypress");
 
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
+      cy.openDataset("Cypress Dataset");
 
       // Archive Manager should see public and archiveManager sections
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
@@ -400,14 +370,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
+      cy.searchTable("Cypress");
 
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
+      cy.openDataset("Cypress Dataset");
 
       // Guest user (user1) should only see public section
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
@@ -446,14 +411,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
+      cy.searchTable("Cypress");
 
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
+      cy.openDataset("Cypress Dataset");
 
       // Non authenticated user should only see public section
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
