@@ -190,12 +190,23 @@ describe("1000 - Datasets list personalization", () => {
     cy.get("#usernameInput").type(username).should("have.value", username);
     cy.get("#passwordInput").type(password).should("have.value", password);
 
+    cy.intercept("POST", "**/auth/login").as("loginRequest");
     cy.get("button[type=submit]").click();
+
+    // Wait until the login has actually completed before reloading the app;
+    // otherwise cy.visit() can abort the login request and the datasets list
+    // is rendered for an anonymous user (with the default columns).
+    cy.wait("@loginRequest")
+      .its("response.statusCode")
+      .should("be.oneOf", [200, 201]);
+    cy.get(".user-button").should("contain.text", username);
 
     cy.finishedLoading();
 
     // visit the datasets list
     cy.visit("/datasets");
+
+    cy.get(".user-button").should("contain.text", username);
 
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
@@ -297,12 +308,23 @@ describe("1000 - Datasets list personalization", () => {
     cy.get("#usernameInput").type(username).should("have.value", username);
     cy.get("#passwordInput").type(password).should("have.value", password);
 
+    cy.intercept("POST", "**/auth/login").as("loginRequest");
     cy.get("button[type=submit]").click();
+
+    // Wait until the login has actually completed before reloading the app;
+    // otherwise cy.visit() can abort the login request and the datasets list
+    // is rendered for an anonymous user (with the default columns).
+    cy.wait("@loginRequest")
+      .its("response.statusCode")
+      .should("be.oneOf", [200, 201]);
+    cy.get(".user-button").should("contain.text", username);
 
     cy.finishedLoading();
 
     // visit the datasets list
     cy.visit("/datasets");
+
+    cy.get(".user-button").should("contain.text", username);
 
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
