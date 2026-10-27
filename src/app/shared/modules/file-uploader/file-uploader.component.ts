@@ -148,6 +148,12 @@ export class FileUploaderComponent {
     this.attachmentService.openAttachment(encoded);
   }
 
+  onAttachmentImageError(event: Event): void {
+    const image = event.target as HTMLImageElement;
+    image.onerror = null;
+    image.src = this.attachmentService.getUnknownFileIcon();
+  }
+
   onDownloadAttachment(
     attachment: OutputAttachmentV3Dto | OutputAttachmentV4Dto,
   ) {
