@@ -26,21 +26,15 @@ const reducer = createReducer(
       return { ...state, currentLogbook };
     },
   ),
-  on(
-    fromActions.fetchLogbookFailedAction,
-    (state): LogbookState => ({
-      ...state,
-      currentLogbook: undefined,
-    }),
-  ),
+  on(fromActions.fetchLogbookFailedAction, (state): LogbookState => ({
+    ...state,
+    currentLogbook: undefined,
+  })),
 
-  on(
-    fromActions.clearLogbookAction,
-    (state): LogbookState => ({
-      ...state,
-      currentLogbook: undefined,
-    }),
-  ),
+  on(fromActions.clearLogbookAction, (state): LogbookState => ({
+    ...state,
+    currentLogbook: undefined,
+  })),
 
   on(
     fromActions.fetchCountCompleteAction,
@@ -92,10 +86,9 @@ const reducer = createReducer(
     },
   ),
 
-  on(
-    fromActions.clearLogbooksStateAction,
-    (): LogbookState => ({ ...initialLogbookState }),
-  ),
+  on(fromActions.clearLogbooksStateAction, (): LogbookState => ({
+    ...initialLogbookState,
+  })),
 );
 
 export const logbooksReducer = (

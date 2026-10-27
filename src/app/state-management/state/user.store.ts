@@ -1,15 +1,16 @@
-import { Settings, Message, TableColumn, ScientificCondition } from "../models";
+import {
+  Settings,
+  Message,
+  TableColumn,
+  ScientificCondition,
+  FacetCount,
+} from "../models";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { Observable } from "rxjs";
-import { FacetCount } from "./datasets.store";
 
 export type FilterType =
-  | "text"
-  | "dateRange"
-  | "multiSelect"
-  | "number"
-  | "checkbox";
+  "text" | "dateRange" | "multiSelect" | "number" | "checkbox";
 
 export interface FilterConfig {
   key: string;
@@ -79,7 +80,9 @@ export const initialUserState: UserState = {
     fe_sample_table_conditions: [],
     fe_instrument_table_columns: [],
     fe_file_table_columns: [],
-  }, // TODO sync with server settings?
+    fe_job_table_columns: [],
+    fe_publisheddata_table_columns: [],
+  },
 
   message: undefined,
 

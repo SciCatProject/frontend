@@ -116,7 +116,6 @@ describe("DatasetFileUploaderComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         removeAttachmentAction({
-          datasetId: component.dataset.pid,
           attachmentId,
         }),
       );

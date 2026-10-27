@@ -14,6 +14,7 @@ Configurable actions are special buttons in the ESS user interface that help you
 - **Generate notebooks** (for Jupyter or SciWyrm)
 - **Create download links**
 - **Change dataset status** (publish/unpublish)
+- **Ask for extra input in a dialog** before running an action
 - And more, as new options are added
 
 ## Common Button Types
@@ -25,6 +26,7 @@ Configurable actions are special buttons in the ESS user interface that help you
 | "Publish"               | Make your dataset publicly available        |
 | "Unpublish"             | Make your dataset private again             |
 | "ESS"                   | Link to an ESS webpage                      |
+| "Dialog"-based actions  | Ask for confirmation or user input first    |
 
 *(Note: The actual icon may look different in your UI.)*
 

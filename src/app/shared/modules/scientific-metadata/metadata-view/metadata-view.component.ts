@@ -167,7 +167,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               return row.unit ? this.prettyUnit.transform(row.unit) : "--";
             },
             renderContentIcon: (column, row) => {
-              return row.validUnit === false ? "error" : "";
+              return row.type === "quantity" && row.validUnit === false
+                ? "error"
+                : "";
             },
             contentIconTooltip: "Unrecognized unit, conversion disabled",
             contentIconClass: "general-warning",

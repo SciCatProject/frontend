@@ -4,12 +4,19 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  Input,
   ViewEncapsulation,
+  ViewChild,
+  Input,
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { BehaviorSubject, Subscription, lastValueFrom, take } from "rxjs";
+import {
+  BehaviorSubject,
+  Subscription,
+  combineLatest,
+  combineLatestWith,
+  filter,
+} from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   clearSelectionAction,
@@ -29,18 +36,19 @@ import {
   selectDatasetsPerPage,
   selectPage,
   selectTotalSets,
+  selectSelectedDatasets,
   selectDatasetsInBatch,
+  selectDatasetsFacetCountsIsLoading,
+  selectTextFilter,
 } from "state-management/selectors/datasets.selectors";
-import { get as lodashGet } from "lodash-es";
 import { AppConfigService } from "app-config.service";
 import {
   selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
 } from "state-management/selectors/user.selectors";
 import {
-  DatasetClass,
-  OutputDatasetObsoleteDto,
   Instrument,
+  PartialOutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -61,15 +69,13 @@ import {
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { ActivatedRoute } from "@angular/router";
-import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
-import { DatePipe } from "@angular/common";
-import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
-import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { DatasetsListService } from "shared/services/datasets-list.service";
 import { DatasetInlineEditCellComponent } from "./dataset-inline-edit-cell.component";
+import { Router } from "@angular/router";
+import { DynamicMatTableComponent } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.component";
 
 export interface SortChangeEvent {
   active: string;
@@ -85,8 +91,11 @@ export interface SortChangeEvent {
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  selectionIds: string[] = [];
 
+  @ViewChild("datasetTable")
+  datasetTable: DynamicMatTableComponent<PartialOutputDatasetDto>;
+
+  selectionIds: string[] = [];
   appConfig = this.appConfigService.getConfig();
   currentPage$ = this.store.select(selectPage);
   datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
@@ -94,22 +103,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   currentUser$ = this.store.select(selectCurrentUser);
   datasets$ = this.store.select(selectDatasets);
   selectedDatasets$ = this.store.select(selectDatasetsInBatch);
+  selectedRows$ = this.store.select(selectSelectedDatasets);
   selectColumnsWithFetchedSettings$ = this.store.select(
     selectColumnsWithHasFetchedSettings,
   );
+  isFacetCountsLoading$ = this.store.select(selectDatasetsFacetCountsIsLoading);
   instruments$ = this.store.select(selectInstruments);
 
-  @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
+  @Input() selectedSets: PartialOutputDatasetDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
     pageIndex: number;
     pageSize: number;
   }>();
 
-  datasets: OutputDatasetObsoleteDto[] = [];
+  datasets: PartialOutputDatasetDto[] = [];
   instruments: Instrument[] = [];
   instrumentMap: Map<string, Instrument> = new Map();
 
-  @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
+  @Output() rowClick = new EventEmitter<PartialOutputDatasetDto>();
   @Output() textSearch = new EventEmitter<string>();
 
   tableDefaultSettingsConfig: ITableSetting = {
@@ -139,8 +150,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   paginationMode: TablePaginationMode = "server-side";
 
-  dataSource: BehaviorSubject<OutputDatasetObsoleteDto[]> = new BehaviorSubject<
-    OutputDatasetObsoleteDto[]
+  dataSource: BehaviorSubject<PartialOutputDatasetDto[]> = new BehaviorSubject<
+    PartialOutputDatasetDto[]
   >([]);
 
   pagination: TablePagination = {};
@@ -163,6 +174,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
+    private router: Router,
   ) {}
 
   private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
@@ -191,7 +203,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  getTablePaginationConfig(dataCount = 0): TablePagination {
+  getTablePaginationConfig(dataCount = 0, isLoading = false): TablePagination {
     const { queryParams } = this.route.snapshot;
 
     const { skip = 0, limit = 25 } = JSON.parse(queryParams.args ?? "{}");
@@ -201,6 +213,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       pageIndex: skip / limit || 0,
       pageSize: limit || this.defaultPageSize,
       length: dataCount,
+      isLoading,
     };
   }
 
@@ -264,7 +277,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowEvent({ event, sender }: IRowEvent<OutputDatasetObsoleteDto>) {
+  onRowEvent({ event, sender }: IRowEvent<PartialOutputDatasetDto>) {
     if (event === RowEventType.RowClick) {
       const dataset = sender.row;
       this.rowClick.emit(dataset);
@@ -301,7 +314,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSelect(event: MatCheckboxChange, dataset: OutputDatasetObsoleteDto): void {
+  onSelect(event: MatCheckboxChange, dataset: PartialOutputDatasetDto): void {
     if (event.checked) {
       this.store.dispatch(selectDatasetAction({ dataset }));
     } else {
@@ -336,68 +349,87 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.datasets$.subscribe((datasets) => {
-        this.currentUser$.subscribe((currentUser) => {
-          this.datasetCount$.subscribe(async (count) => {
-            const defaultTableColumns = await lastValueFrom(
-              this.selectColumnsWithFetchedSettings$.pipe(take(1)),
-            );
-
-            if (
-              defaultTableColumns.hasFetchedSettings &&
-              defaultTableColumns.columns.length
-            ) {
-              const userConfigColumns = defaultTableColumns.columns;
-
-              if (!currentUser) {
-                this.rowSelectionMode = "none";
-              } else {
-                this.rowSelectionMode = "multi";
-              }
-
-              if (userConfigColumns) {
-                this.dataSource.next(datasets);
-                this.pending = false;
-
-                const tableSort = this.getTableSort();
-                const paginationConfig = this.getTablePaginationConfig(count);
-
-                const defaultConfigColumns =
-                  this.appConfig?.defaultDatasetsListSettings?.columns;
-
-                const userTableConfigColumns =
-                  this.datasetsListService.convertSavedDatasetColumns(
-                    userConfigColumns,
-                  );
-
-                this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-                  this.datasetsListService.convertSavedDatasetColumns(
-                    defaultConfigColumns as TableColumn[],
-                  );
-
-                const tableSettingsConfig =
-                  this.tableConfigService.getTableSettingsConfig(
-                    this.tableName,
-                    this.tableDefaultSettingsConfig,
-                    userTableConfigColumns,
-                    tableSort,
-                  );
-
-                if (tableSettingsConfig?.settingList.length) {
-                  this.initTable(tableSettingsConfig, paginationConfig);
-                }
-              }
-            }
-          });
-        });
-      }),
+      combineLatest([this.selectedRows$, this.selectedDatasets$]).subscribe(
+        ([selectedRows, datasetsInBatch]) => {
+          // Only clear internal selection when neither active selection nor
+          // cart membership remains; this preserves indeterminate header state
+          // after "Add to Selection" while still resetting after submit success.
+          if (selectedRows.length === 0 && datasetsInBatch.length === 0) {
+            this.datasetTable?.clearSelection();
+          }
+        },
+      ),
     );
 
     this.subscriptions.push(
-      this.route.queryParams.subscribe((queryParams) => {
-        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
-        this.globalTextSearch = searchQuery.text || "";
-      }),
+      this.datasets$
+        .pipe(
+          combineLatestWith(
+            this.currentUser$,
+            this.datasetCount$,
+            this.isFacetCountsLoading$,
+            this.selectColumnsWithFetchedSettings$.pipe(
+              filter(
+                ({ hasFetchedSettings, columns }) =>
+                  hasFetchedSettings && columns.length > 0,
+              ),
+            ),
+          ),
+        )
+        .subscribe(
+          ([
+            datasets,
+            currentUser,
+            count,
+            isFacetCountsLoading,
+            defaultTableColumns,
+          ]) => {
+            const userConfigColumns = defaultTableColumns.columns;
+
+            this.rowSelectionMode = currentUser ? "multi" : "none";
+            if (userConfigColumns) {
+              this.dataSource.next(datasets);
+              this.pending = false;
+
+              const tableSort = this.getTableSort();
+              const paginationConfig = this.getTablePaginationConfig(
+                count,
+                isFacetCountsLoading,
+              );
+
+              const defaultConfigColumns =
+                this.appConfig?.defaultDatasetsListSettings?.columns;
+              const userTableConfigColumns =
+                this.datasetsListService.convertSavedDatasetColumns(
+                  userConfigColumns,
+                );
+
+              this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+                this.datasetsListService.convertSavedDatasetColumns(
+                  defaultConfigColumns as TableColumn[],
+                );
+
+              const tableSettingsConfig =
+                this.tableConfigService.getTableSettingsConfig(
+                  this.tableName,
+                  this.tableDefaultSettingsConfig,
+                  userTableConfigColumns,
+                  tableSort,
+                );
+              if (tableSettingsConfig?.settingList.length) {
+                this.initTable(tableSettingsConfig, paginationConfig);
+              }
+            }
+          },
+        ),
+    );
+    this.subscriptions.push(
+      this.route.queryParams
+        .pipe(combineLatestWith(this.store.select(selectTextFilter)))
+        .subscribe(([queryParams, storeSearchTerm]) => {
+          const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+          this.globalTextSearch = searchQuery.text || storeSearchTerm || "";
+        }),
     );
   }
 
@@ -405,6 +437,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.globalTextSearch = term;
     this.store.dispatch(setSearchTermsAction({ terms: term }));
     this.store.dispatch(setTextFilterAction({ text: term }));
+
+    const { queryParams } = this.route.snapshot;
+    const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+
+    this.router.navigate([], {
+      queryParams: {
+        searchQuery: JSON.stringify({
+          ...searchQuery,
+          text: term,
+        }),
+      },
+      queryParamsHandling: "merge",
+    });
   }
 
   onTextSearchAction() {

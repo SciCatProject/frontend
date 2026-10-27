@@ -137,7 +137,49 @@ mat-card {
 }
 
 .attachments-footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* Restricted access indicator */
+.restricted-indicator {
+  margin-left: auto;
   display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
+  align-items: center;
+
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    opacity: 0.7;
+    cursor: default;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+button[mat-icon-button].copy-button {
+  width: 16px;
+  height: 16px;
+  padding: 0px;
+  --mat-icon-button-ripple-color: transparent;
+  --mat-icon-button-hover-state-layer-opacity: 0;
+  --mat-icon-button-focus-state-layer-opacity: 0;
+  --mat-icon-button-pressed-state-layer-opacity: 0;
+}
+
+button[mat-icon-button].copy-button .mat-mdc-button-touch-target {
+  width: 16px;
+  height: 16px;
+}
+
+button[mat-icon-button].copy-button mat-icon {
+  margin-left: 10px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
 }

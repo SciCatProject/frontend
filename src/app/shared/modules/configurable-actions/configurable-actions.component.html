@@ -1,10 +1,11 @@
-<ng-template [ngIf]="visible">
-  <div class="configurable-actions">
+<div class="configurable-actions">
+  @for (actionConfig of sortedActionsConfig; track actionConfig) {
     <configurable-action
-      *ngFor="let actionConfig of sortedActionsConfig"
       [actionConfig]="actionConfig"
       [actionItems]="actionItems"
+      [buttonStyle]="buttonsStyle"
+      (actionFinished)="actionFinished.emit($event)"
     >
     </configurable-action>
-  </div>
-</ng-template>
+  }
+</div>

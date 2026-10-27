@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { InstrumentState } from "state-management/state/instruments.store";
 import { selectSettings } from "./user.selectors";
+import { selectCurrentDataset } from "./datasets.selectors";
 
 const selectInstrumentState =
   createFeatureSelector<InstrumentState>("instruments");
@@ -15,9 +16,19 @@ export const selectCurrentInstrument = createSelector(
   (state) => state.currentInstrument,
 );
 
+export const selectCurrentDatasetInstruments = createSelector(
+  selectCurrentDataset,
+  (dataset) => dataset?.instruments ?? [],
+);
+
 export const selectInstrumentsCount = createSelector(
   selectInstrumentState,
   (state) => state.totalCount,
+);
+
+export const selectInstrumentsCountIsLoading = createSelector(
+  selectInstrumentState,
+  (state) => state.instrumentsCountIsLoading,
 );
 
 export const selectFilters = createSelector(
@@ -38,11 +49,13 @@ export const selectInstrumentsPerPage = createSelector(
 export const selectInstrumentsWithCountAndTableSettings = createSelector(
   selectInstruments,
   selectInstrumentsCount,
+  selectInstrumentsCountIsLoading,
   selectSettings,
-  (instruments, count, settings) => {
+  (instruments, count, isLoading, settings) => {
     return {
       instruments,
       count,
+      isLoading,
       tablesSettings: {
         columns: settings.fe_instrument_table_columns,
       },

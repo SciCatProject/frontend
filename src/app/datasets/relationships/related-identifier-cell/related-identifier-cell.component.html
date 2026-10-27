@@ -1,0 +1,9 @@
+@switch (entry.identifierType) {
+    @case ('URL') {
+        <a [href]="entry.identifier">{{entry.externalId ?? entry.identifier}}</a>
+    } @case ('DOI') {
+        <a [href]="doiUrl(entry.identifier)">{{entry.identifier}}</a>
+    } @default {
+        {{entry.identifier}}
+    }
+}

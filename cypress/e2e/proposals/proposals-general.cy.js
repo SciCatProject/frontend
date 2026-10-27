@@ -9,7 +9,10 @@ describe("Proposals general", () => {
   const proposalLabelsConfig = testConfig.proposalViewCustomLabels;
   beforeEach(() => {
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-      const mergedConfig = mergeConfig(baseConfig, proposalLabelsConfig);
+      const mergedConfig = mergeConfig(baseConfig, {
+        ...proposalLabelsConfig,
+        jsonMetadataEnabled: false,
+      });
       cy.intercept("GET", "**/admin/config", mergedConfig).as(
         "getFrontendConfig",
       );
@@ -156,9 +159,10 @@ describe("Proposals general", () => {
 
       cy.get('[data-cy="proposal-metadata-card"]').should("exist");
 
-      cy.get('[data-cy="proposal-metadata-card"] [role="tab"]')
-        .contains("Edit")
-        .click();
+      cy.contains(
+        '[data-cy="proposal-metadata-card"] [role="tab"]',
+        "Edit",
+      ).click();
 
       cy.get('[data-cy="add-new-row"]').click();
 
@@ -487,7 +491,6 @@ describe("Proposals general", () => {
       cy.get('[role="menu"] button').contains("Default setting").click();
 
       cy.get("body").type("{esc}");
-      
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Save table setting").click();
 

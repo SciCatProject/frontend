@@ -15,6 +15,7 @@ const initialFilesState: FilesState = {
   origDatablocks: [],
   currentOrigDatablock: origDatablock,
   totalCount: 0,
+  filesCountIsLoading: false,
 
   filters: filesFilters,
 };
@@ -50,11 +51,13 @@ describe("Files Selectors", () => {
         fromSelectors.selectFilesWithCountAndTableSettings.projector(
           fromSelectors.selectAllOrigDatablocks.projector(initialFilesState),
           fromSelectors.selectOrigDatablocksCount.projector(initialFilesState),
+          fromSelectors.selectFilesCountIsLoading.projector(initialFilesState),
           selectSettings.projector(initialUserState),
         ),
       ).toEqual({
         origDatablocks: [],
         count: 0,
+        isLoading: false,
         tablesSettings: {
           columns: initialUserState.settings.fe_file_table_columns,
         },

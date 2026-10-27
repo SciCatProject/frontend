@@ -1,5 +1,4 @@
-import { DOCUMENT } from "@angular/common";
-import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
+import { Component, OnDestroy, OnInit, Inject, DOCUMENT } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
@@ -124,6 +123,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginLdapEnabled = this.appConfig.loginLdapEnabled;
     this.loginLocalEnabled = this.appConfig.loginLocalEnabled;
     this.oAuth2Endpoints = this.appConfig.oAuth2Endpoints;
+
+    const storedRedirect = sessionStorage.getItem("postLoginRedirect");
+    if (storedRedirect) {
+      this.returnUrl = storedRedirect;
+      sessionStorage.removeItem("postLoginRedirect");
+    }
 
     this.proceedSubscription = this.vm$
       .pipe(filter((vm) => vm.isLoggedIn))

@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
@@ -7,6 +7,10 @@ import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConnectedPosition } from "@angular/cdk/overlay";
+import { Store } from "@ngrx/store";
+import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
+import { fetchMetadataKeysAction } from "state-management/actions/datasets.actions";
+import { Subscription } from "rxjs";
 
 export interface SearchParametersDialogData {
   parameterKeys: string[];
@@ -22,7 +26,8 @@ export interface SearchParametersDialogData {
   styleUrls: ["./search-parameters-dialog.component.scss"],
   standalone: false,
 })
-export class SearchParametersDialogComponent {
+export class SearchParametersDialogComponent implements OnInit, OnDestroy {
+  subscription: Subscription;
   appConfig = this.appConfigService.getConfig();
   unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
 
@@ -73,19 +78,6 @@ export class SearchParametersDialogComponent {
     ),
   );
 
-  filteredKeys$ = this.parametersForm.get("lhs")?.valueChanges.pipe(
-    startWith(""),
-    map((value: string) => {
-      const searchTerm = value.toLowerCase();
-      return this.parameterKeys.filter((key) => {
-        const keyMatches = key.toLowerCase().includes(searchTerm);
-        const humanName = this.humanNameMap[key]?.toLowerCase() || "";
-        const humanNameMatches = humanName.includes(searchTerm);
-        return keyMatches || humanNameMatches;
-      });
-    }),
-  );
-
   constructor(
     public appConfigService: AppConfigService,
     @Inject(MAT_DIALOG_DATA)
@@ -93,11 +85,21 @@ export class SearchParametersDialogComponent {
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
     private snackBar: MatSnackBar,
+    private store: Store,
   ) {
     if (this.data.condition?.lhs) {
       this.getUnits(this.data.condition.lhs);
     }
     this.humanNameMap = data.humanNameMap || {};
+  }
+
+  ngOnInit(): void {
+    this.subscription = this.store
+      .select(selectMetadataKeys)
+      .subscribe((keys) => {
+        this.parameterKeys = keys;
+      });
+    this.store.dispatch(fetchMetadataKeysAction({ searchTerm: "" }));
   }
 
   add = (): void => {
@@ -123,7 +125,14 @@ export class SearchParametersDialogComponent {
     this.dialogRef.close({ data: { lhs: metadataKey, relation, rhs, unit } });
   };
 
-  cancel = (): void => this.dialogRef.close();
+  cancel = (): void => {
+    this.dialogRef.close();
+  };
+
+  searchMetadataKeys = (): void => {
+    const searchTerm = this.parametersForm.get("lhs")?.value || "";
+    this.store.dispatch(fetchMetadataKeysAction({ searchTerm }));
+  };
 
   getUnits = (parameterKey: string): void => {
     this.units = this.unitsService.getUnits(parameterKey);
@@ -147,5 +156,9 @@ export class SearchParametersDialogComponent {
 
   getHumanName(key: string): string {
     return this.humanNameMap[key] || "";
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

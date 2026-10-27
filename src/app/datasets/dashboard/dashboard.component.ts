@@ -11,7 +11,6 @@ import {
   fetchFacetCountsAction,
   prefillBatchAction,
   prefillFiltersAction,
-  addDatasetAction,
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
   changePageAction,
@@ -23,15 +22,13 @@ import {
 import {
   selectHasPrefilledFilters,
   selectCurrentDataset,
-  selectSelectedDatasets,
   selectPagination,
   selectIsBatchNonEmpty,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
-import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
-import { combineLatest, Subscription, lastValueFrom } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import {
   selectProfile,
   selectCurrentUser,
@@ -40,7 +37,7 @@ import {
   selectHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
 import {
-  OutputDatasetObsoleteDto,
+  PartialOutputDatasetDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { loadDefaultSettings } from "state-management/actions/user.actions";
@@ -58,8 +55,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readyToFetch$ = this.store
     .select(selectHasPrefilledFilters)
     .pipe(filter((has) => has));
+
   loggedIn$ = this.store.select(selectIsLoggedIn);
-  selectedSets$ = this.store.select(selectSelectedDatasets);
   selectColumns$ = this.store.select(selectColumns);
   selectHasFetchedSettings$ = this.store.select(selectHasFetchedSettings);
 
@@ -101,7 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  onRowClick(dataset: OutputDatasetObsoleteDto): void {
+  onRowClick(dataset: PartialOutputDatasetDto): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }
@@ -114,7 +111,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
-    this.store.dispatch(fetchMetadataKeysAction());
+    this.store.dispatch(fetchMetadataKeysAction({}));
 
     this.subscriptions.push(
       combineLatest([
@@ -131,11 +128,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           ]),
           distinctUntilChanged(deepEqual),
         )
-        .subscribe(async ([pagination, loggedIn]) => {
-          const hasFetchedSettings = await lastValueFrom(
-            this.selectHasFetchedSettings$.pipe(take(1)),
-          );
-
+        .subscribe(async ([pagination, loggedIn, hasFetchedSettings]) => {
           if (!hasFetchedSettings) {
             return;
           }

@@ -68,21 +68,17 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         columnSetting: [
           {
             name: "sampleId",
-            icon: "fingerprint",
             header: "Sample ID",
           },
           {
             name: "description",
-            icon: "description",
           },
           {
             name: "owner",
-            icon: "face",
           },
           {
             name: "createdAt",
             header: "Creation time",
-            icon: "date_range",
             customRender: (column, row) => {
               return this.datePipe.transform(row[column.name]);
             },
@@ -90,7 +86,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
           {
             name: "ownerGroup",
             header: "Owner group",
-            icon: "group",
           },
         ],
       },
@@ -152,14 +147,17 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      this.vm$.subscribe(({ samples, tableSettings, count }) => {
+      this.vm$.subscribe(({ samples, tableSettings, count, isLoading }) => {
         this.tablesSettings = tableSettings;
         this.dataSource.next(samples);
         this.pending = false;
 
         const savedTableConfigColumns = tableSettings?.columns;
         const tableSort = this.getTableSort();
-        const paginationConfig = this.getTablePaginationConfig(count);
+        const paginationConfig = this.getTablePaginationConfig(
+          count,
+          isLoading,
+        );
 
         const tableSettingsConfig =
           this.tableConfigService.getTableSettingsConfig(
@@ -289,7 +287,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  getTablePaginationConfig(dataCount = 0): TablePagination {
+  getTablePaginationConfig(dataCount = 0, isLoading = false): TablePagination {
     const { queryParams } = this.route.snapshot;
 
     if (!queryParams.args) {
@@ -303,6 +301,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
       pageIndex: queryArgsParsed.skip / queryArgsParsed.limit,
       pageSize: queryArgsParsed.limit || this.defaultPageSize,
       length: dataCount,
+      isLoading,
     };
   }
 

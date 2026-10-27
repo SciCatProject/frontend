@@ -27,7 +27,14 @@
   </mat-button-toggle-group>
 </div>
 
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+<mat-tree
+  class="treeView"
+  [class.treeView-add-column-enabled]="
+    allowAddAsColumn && rowContextMenuItems.length > 0
+  "
+  [dataSource]="dataSource"
+  [treeControl]="treeControl"
+>
   <!-- Key - Value -->
   <mat-tree-node
     *matTreeNodeDef="let node"
@@ -35,10 +42,28 @@
     [style.display]="isVisible(0, node) ? 'flex' : 'none'"
   >
     <section>
+      <div class="menu-cell">
+        @if (canShowAddAsColumn(node)) {
+          <row-menu
+            [actionMenus]="rowContextMenuItems"
+            [tableSetting]="tableSetting"
+            (rowActionChange)="onRowActionChange(node, $event)"
+          ></row-menu>
+        }
+        @if (
+          allowAddAsColumn &&
+          rowContextMenuItems.length > 0 &&
+          !canShowAddAsColumn(node)
+        ) {
+          <span class="menu-spacer"></span>
+        }
+      </div>
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">
         <label class="label-cell">{{ node.key }}</label>
       </div>
-      <div class="value-cell">{{ getValueRepresentation(node) | formatNumber }}</div>
+      <div class="value-cell">
+        {{ getValueRepresentation(node) | formatNumber }}
+      </div>
     </section>
   </mat-tree-node>
   <!-- Only Key -->
@@ -47,6 +72,11 @@
     [style.display]="isVisible(0, node) ? 'flex' : 'none'"
   >
     <section>
+      <div class="menu-cell">
+        @if (allowAddAsColumn && rowContextMenuItems.length > 0) {
+          <span class="menu-spacer"></span>
+        }
+      </div>
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">
         <button
           mat-icon-button

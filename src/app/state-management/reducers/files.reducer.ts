@@ -15,13 +15,21 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.fetchCountCompleteAction,
-    (state, { count }): FilesState => ({
-      ...state,
-      totalCount: count,
-    }),
-  ),
+  on(fromActions.fetchCountAction, (state): FilesState => ({
+    ...state,
+    filesCountIsLoading: true,
+  })),
+
+  on(fromActions.fetchCountCompleteAction, (state, { count }): FilesState => ({
+    ...state,
+    totalCount: count,
+    filesCountIsLoading: false,
+  })),
+
+  on(fromActions.fetchCountFailedAction, (state): FilesState => ({
+    ...state,
+    filesCountIsLoading: false,
+  })),
 
   on(
     fromActions.fetchOrigDatablockCompleteAction,
@@ -31,12 +39,9 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.clearOrigDatablockStateAction,
-    (): FilesState => ({
-      ...initialFilesState,
-    }),
-  ),
+  on(fromActions.clearOrigDatablockStateAction, (): FilesState => ({
+    ...initialFilesState,
+  })),
 );
 
 export const filesReducer = (state: FilesState | undefined, action: Action) => {

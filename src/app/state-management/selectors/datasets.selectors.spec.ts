@@ -13,6 +13,9 @@ const initialDatasetState: DatasetState = {
   totalCount: 0,
 
   facetCounts: {},
+  facetCountsIsLoading: false,
+  origDatablocksCountIsLoading: false,
+  relatedDatasetsCountIsLoading: false,
   metadataKeys: ["test"],
   hasPrefilledFilters: false,
   searchTerms: "run",
@@ -27,8 +30,8 @@ const initialDatasetState: DatasetState = {
     modeToggle: ArchViewMode.all,
     text: "",
     creationTime: {
-      begin: "2019-10-03",
-      end: "2019-10-04",
+      $gte: { $date: "2019-10-03" },
+      $lte: { $date: "2019-10-04" },
     },
     type: [],
     creationLocation: [],
@@ -125,6 +128,14 @@ describe("test dataset selectors", () => {
     });
   });
 
+  describe("selectCurrentRelationships", () => {
+    it("should select the relationships from the current dataset", () => {
+      expect(
+        fromDatasetSelectors.selectCurrentRelationships.projector(dataset),
+      ).toEqual([]);
+    });
+  });
+
   describe("selectFilters", () => {
     it("should select the dataset filters", () => {
       const filters = initialDatasetState.filters;
@@ -191,7 +202,10 @@ describe("test dataset selectors", () => {
         fromDatasetSelectors.selectCreationTimeFilter.projector(
           initialDatasetState.filters,
         ),
-      ).toEqual({ begin: "2019-10-03", end: "2019-10-04" });
+      ).toEqual({
+        $gte: { $date: "2019-10-03" },
+        $lte: { $date: "2019-10-04" },
+      });
     });
   });
 
@@ -283,6 +297,31 @@ describe("test dataset selectors", () => {
         ),
       );
       expect(fullqueryKeys).toContain("query");
+    });
+
+    it("should include the archive view mode query", () => {
+      const mode = {
+        "datasetlifecycle.archivable": true,
+        "datasetlifecycle.retrievable": false,
+      };
+      const { query } = fromDatasetSelectors.selectFullqueryParams.projector({
+        ...initialDatasetState,
+        filters: { ...initialDatasetState.filters, mode },
+      });
+      expect(query).toEqual(jasmine.objectContaining(mode));
+      expect(query).not.toEqual(jasmine.objectContaining({ mode }));
+    });
+
+    it("should not add anything for an empty mode", () => {
+      const { query } = fromDatasetSelectors.selectFullqueryParams.projector({
+        ...initialDatasetState,
+        filters: { ...initialDatasetState.filters, mode: {} },
+      });
+      expect(query).toEqual(
+        fromDatasetSelectors.selectFullqueryParams.projector(
+          initialDatasetState,
+        ).query,
+      );
     });
   });
 

@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, OnInit } from "@angular/core";
 import { createSuggestionObserver, getFacetCount } from "./utils";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { AppConfigService } from "app-config.service";
-import { FacetCount } from "state-management/state/datasets.store";
+import { FacetCount } from "state-management/models";
 
 export type MultiSelectFilterValue = {
   key: string;
@@ -17,7 +17,10 @@ export type MultiSelectFilterValue = {
   styleUrls: ["multiselect-filter.component.scss"],
   standalone: false,
 })
-export class MultiSelectFilterComponent extends ClearableInputComponent {
+export class MultiSelectFilterComponent
+  extends ClearableInputComponent
+  implements OnInit
+{
   protected readonly getFacetCount = getFacetCount;
   @Input() key = "";
   @Input() label = "";

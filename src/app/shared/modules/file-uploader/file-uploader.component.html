@@ -1,51 +1,52 @@
-<mat-card
-  *ngIf="isOwner"
-  class="dropzone"
-  appDragAndDrop
-  (fileDropped)="onFileDropped($event)"
->
-  <mat-card-content>
-    <input
-      class="instructions"
-      type="file"
-      #fileDropRef
-      id="fileDropRef"
-      accept="image/*,application/pdf"
-      multiple
-      (change)="onFilePicked($event.target['files'])"
-    />
-
-    <div fxLayout="column" style="align-items: center">
-      <div class="instructions">Drop a file here</div>
-      <div class="instructions">or</div>
-      <div class="instructions">
-        <button mat-raised-button color="accent" (click)="triggerFileDrop()">
-          Browse
-        </button>
+@if (isOwner) {
+  <mat-card
+    class="dropzone"
+    appDragAndDrop
+    (fileDropped)="onFileDropped($event)"
+  >
+    <mat-card-content>
+      <input
+        class="instructions"
+        type="file"
+        #fileDropRef
+        id="fileDropRef"
+        accept="image/*,application/pdf"
+        multiple
+        (change)="onFilePicked($event.target['files'])"
+      />
+      <div fxLayout="column" style="align-items: center">
+        <div class="instructions">Drop a file here</div>
+        <div class="instructions">or</div>
+        <div class="instructions">
+          <button mat-raised-button color="accent" (click)="triggerFileDrop()">
+            Browse
+          </button>
+        </div>
+        <div class="instructions font-small">
+          Accepted file formats: image/*, application/pdf
+        </div>
       </div>
-      <div class="instructions font-small">
-        Accepted file formats: image/*, application/pdf
-      </div>
-    </div>
-  </mat-card-content>
-</mat-card>
+    </mat-card-content>
+  </mat-card>
+}
 
-<mat-card class="file-picker" *ngIf="isOwner">
-  <mat-card-content>
-    <div class="mat-headline-6">
-      Choose an image to upload
-      <div class="font-small">
-        Accepted file formats: image/*, application/pdf
+@if (isOwner) {
+  <mat-card class="file-picker">
+    <mat-card-content>
+      <div class="mat-headline-6">
+        Choose an image to upload
+        <div class="font-small">
+          Accepted file formats: image/*, application/pdf
+        </div>
       </div>
-    </div>
-
-    <button mat-raised-button color="accent" (click)="triggerFileDrop()">
-      Browse
-    </button>
-  </mat-card-content>
-</mat-card>
+      <button mat-raised-button color="accent" (click)="triggerFileDrop()">
+        Browse
+      </button>
+    </mat-card-content>
+  </mat-card>
+}
 <div class="grid-container">
-  <ng-template ngFor let-attachment [ngForOf]="attachments">
+  @for (attachment of attachments; track attachment) {
     <mat-card class="attachment-card">
       <mat-card-content class="attachment-content">
         <img
@@ -53,29 +54,34 @@
           [src]="getImageUrl(attachment.thumbnail)"
           (click)="openAttachment(attachment.thumbnail)"
         />
-
-        <form
-          *ngIf="isOwner"
-          (submit)="onSubmitCaption(attachment.id, caption.value)"
-        >
-          <mat-form-field>
-            <mat-label>Caption</mat-label>
-            <input
-              matInput
-              id="caption"
-              value="{{ attachment.caption }}"
-              #caption
-            />
-          </mat-form-field>
-          <button
-            mat-stroked-button
-            type="submit"
-            color="primary"
-            class="submit-button"
+        @if (isOwner) {
+          <form
+            (submit)="
+              onSubmitCaption(
+                attachmentIdWithLegacyFallback(attachment),
+                caption.value
+              )
+            "
           >
-            Submit
-          </button>
-        </form>
+            <mat-form-field>
+              <mat-label>Caption</mat-label>
+              <input
+                matInput
+                id="caption"
+                value="{{ attachment.caption }}"
+                #caption
+              />
+            </mat-form-field>
+            <button
+              mat-stroked-button
+              type="submit"
+              color="primary"
+              class="submit-button"
+            >
+              Submit
+            </button>
+          </form>
+        }
       </mat-card-content>
       <mat-card-actions>
         <button
@@ -86,16 +92,19 @@
           <mat-icon>download</mat-icon>
           Download
         </button>
-        <button
-          *ngIf="isOwner"
-          mat-button
-          class="delete-button"
-          (click)="onDeleteAttachment(attachment.id)"
-        >
-          <mat-icon>delete</mat-icon>
-          Remove
-        </button>
+        @if (isOwner) {
+          <button
+            mat-button
+            class="delete-button"
+            (click)="
+              onDeleteAttachment(attachmentIdWithLegacyFallback(attachment))
+            "
+          >
+            <mat-icon>delete</mat-icon>
+            Remove
+          </button>
+        }
       </mat-card-actions>
     </mat-card>
-  </ng-template>
+  }
 </div>

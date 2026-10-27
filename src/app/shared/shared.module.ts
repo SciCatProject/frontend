@@ -27,7 +27,6 @@ import { ConfigurableActionsModule } from "./modules/configurable-actions/config
 import { NgxNumericRangeFormFieldModule } from "./modules/numeric-range/ngx-numeric-range-form-field.module";
 import { EmptyContentModule } from "./modules/generic-empty-content/empty-content.module";
 import { JsonformsAccordionRendererService } from "./services/jsonforms-accordion-renderer.service";
-import { TranslateModule } from "@ngx-translate/core";
 import { JsonPreviewDialogModule } from "./modules/json-preview-dialog/json-preview-dialog.module";
 import { DatasetsListService } from "./services/datasets-list.service";
 import { AjvService } from "./services/ajv.service";
@@ -50,7 +49,6 @@ import { AjvService } from "./services/ajv.service";
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
-    TranslateModule,
     ConfigurableActionsModule,
     NgxNumericRangeFormFieldModule,
     EmptyContentModule,

@@ -1,49 +1,50 @@
-import { NO_ERRORS_SCHEMA } from "@angular/compiler";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-import { ActivatedRoute, Router } from "@angular/router";
-import { AppConfigService } from "app-config.service";
-import {
-  MockActivatedRoute,
-  MockAppConfigService,
-  MockAuthService,
-  MockHttp,
-  MockRouter,
-} from "shared/MockStubs";
-import { ExportExcelService } from "shared/services/export-excel.service";
 import { JobsDashboardNewComponent } from "./jobs-dashboard-new.component";
-import { SharedTableModule } from "shared/modules/shared-table/shared-table.module";
-import { SharedScicatFrontendModule } from "shared/shared.module";
-import { HttpClient } from "@angular/common/http";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { InternalStorage } from "shared/services/auth/base.storage";
-import { AuthService } from "shared/services/auth/auth.service";
-import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { Router } from "@angular/router";
+import { AppConfigService } from "app-config.service";
+import { ScicatDataService } from "shared/services/scicat-data-service";
+import { ExportExcelService } from "shared/services/export-excel.service";
+import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { provideMockStore } from "@ngrx/store/testing";
+import { selectJobsDashboardPageViewModel } from "state-management/selectors/jobs.selectors";
+
+const getConfig = () => ({});
 
 describe("JobsDashboardNewComponent", () => {
   let component: JobsDashboardNewComponent;
   let fixture: ComponentFixture<JobsDashboardNewComponent>;
 
-  beforeEach(waitForAsync(() => {
-    const appconfig = new MockAppConfigService(null);
-    const authService = new MockAuthService();
+  const router = {
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
+  };
 
+  const jobsVm = {
+    jobs: [],
+    count: 0,
+    filters: {
+      skip: 0,
+      limit: 5,
+      sortField: "creationTime:desc",
+      mode: undefined,
+    },
+    tableSettings: { columns: [] },
+  };
+
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [JobsDashboardNewComponent],
-      imports: [
-        SharedTableModule,
-        SharedScicatFrontendModule,
-        BrowserAnimationsModule,
-      ],
       providers: [
-        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        { provide: Router, useValue: router },
+        { provide: AppConfigService, useValue: { getConfig } },
+        { provide: ScicatDataService, useValue: {} },
         { provide: ExportExcelService, useValue: {} },
-        { provide: Router, useClass: MockRouter },
-        { provide: HttpClient, useClass: MockHttp },
-        { provide: AppConfigService, useValue: appconfig },
-        { provide: AuthService, useValue: authService },
-        { provide: InternalStorage },
-        provideLuxonDateAdapter(),
+        provideMockStore({
+          selectors: [
+            { selector: selectJobsDashboardPageViewModel, value: jobsVm },
+          ],
+        }),
       ],
     }).compileComponents();
   }));
@@ -60,5 +61,20 @@ describe("JobsDashboardNewComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#onRowEvent", () => {
+    it("should navigate to a Job detail", () => {
+      const job = { jobId: "job-1" };
+      const id = encodeURIComponent(job.jobId);
+
+      component.onRowEvent({
+        event: RowEventType.RowClick,
+        sender: { row: job },
+      } as any);
+
+      expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
+      expect(router.navigateByUrl).toHaveBeenCalledWith("/user/jobs/" + id);
+    });
   });
 });

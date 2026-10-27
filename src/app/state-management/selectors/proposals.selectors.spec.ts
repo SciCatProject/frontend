@@ -39,6 +39,7 @@ const initialProposalsState: ProposalsState = {
 
   relatedProposals: [],
   relatedProposalsCount: 0,
+  relatedProposalsCountIsLoading: false,
   relatedProposalsFilters: {
     skip: 0,
     limit: 25,
@@ -47,7 +48,9 @@ const initialProposalsState: ProposalsState = {
 
   proposalsCount: 0,
   datasetsCount: 0,
+  datasetsCountIsLoading: false,
   facetCounts: {},
+  facetCountsIsLoading: false,
 
   hasPrefilledFilters: true,
 
@@ -212,6 +215,7 @@ describe("Proposal Selectors", () => {
           ),
           initialProposalsState.datasetsCount,
           initialProposalsState.datasetFilters.limit,
+          initialProposalsState.datasetsCountIsLoading,
         ),
       ).toEqual({
         proposal,
@@ -219,6 +223,7 @@ describe("Proposal Selectors", () => {
         currentPage: 0,
         datasetCount: 0,
         datasetsPerPage: 25,
+        isLoading: false,
       });
     });
   });
@@ -359,10 +364,12 @@ describe("Proposal Selectors", () => {
       expect(
         fromSelectors.selectRelatedProposalsPageViewModel.projector(
           initialProposalsState,
+          initialProposalsState.relatedProposalsCountIsLoading,
         ),
       ).toEqual({
         relatedProposals: initialProposalsState.relatedProposals,
         relatedProposalsCount: initialProposalsState.relatedProposalsCount,
+        isLoading: initialProposalsState.relatedProposalsCountIsLoading,
       });
     });
 

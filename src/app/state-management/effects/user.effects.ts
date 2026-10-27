@@ -246,6 +246,27 @@ export class UserEffects {
     );
   });
 
+  sessionTimeout$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.sessionTimeoutAction),
+      filter(() => this.authService.isAuthenticated()),
+      switchMap(() => {
+        this.authService.clear();
+        return of(
+          clearDatasetsStateAction(),
+          clearInstrumentsStateAction(),
+          clearJobsStateAction(),
+          clearLogbooksStateAction(),
+          clearPoliciesStateAction(),
+          clearProposalsStateAction(),
+          clearPublishedDataStateAction(),
+          clearSamplesStateAction(),
+          fromActions.logoutCompleteAction({ logoutURL: "/login" }),
+        );
+      }),
+    );
+  });
+
   logoutNavigate$ = createEffect(
     () => {
       return this.actions$.pipe(
@@ -627,11 +648,7 @@ export class UserEffects {
               fromActions.setTableColumnsAction({
                 columns: columnsConfig,
                 scope: s.scope as
-                  | "dataset"
-                  | "proposal"
-                  | "sample"
-                  | "instrument"
-                  | "file",
+                  "dataset" | "proposal" | "sample" | "instrument" | "file",
               }),
             );
           },

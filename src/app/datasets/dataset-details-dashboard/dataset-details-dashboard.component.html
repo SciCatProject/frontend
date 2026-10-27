@@ -1,49 +1,45 @@
-<ng-template [ngIf]="dataset">
-  <div
-    fxLayout="row"
-    fxLayoutAlign="end center"
-    *ngIf="appConfig.shoppingCartEnabled"
-    class="cart-button-row"
-  >
-    <button
-      id="addToBatchButton"
-      mat-button
-      (click)="onAddToBatch()"
-      [disabled]="isInBatch$ | async"
-      color="primary"
-      class="add-batch"
-    >
-      <mat-icon>my_library_add</mat-icon>
-      Add to Selection
-    </button>
-  </div>
-  <nav mat-tab-nav-bar [tabPanel]="tabPanel">
-    <ng-container *ngFor="let link of navLinks">
+@if (dataset) {
+  @if (appConfig.shoppingCartEnabled) {
+    <div fxLayout="row" fxLayoutAlign="end center" class="cart-button-row">
+      <button
+        id="addToBatchButton"
+        mat-button
+        (click)="onAddToBatch()"
+        [disabled]="isInBatch$ | async"
+        color="primary"
+        class="add-batch"
+      >
+        <mat-icon>my_library_add</mat-icon>
+        Add to Selection
+      </button>
+    </div>
+  }
+  <nav data-cy="dataset-dashboard-tabs" mat-tab-nav-bar [tabPanel]="tabPanel">
+    @for (link of navLinks; track link) {
       <a
         mat-tab-link
-        *ngIf="link.enabled"
         routerLink="{{ link.location }}"
         routerLinkActive
         #rla="routerLinkActive"
         [routerLinkActiveOptions]="routerLinkActiveOptions"
         [active]="rla.isActive"
         [replaceUrl]="true"
-        (click)="onTabSelected(link.label)"
       >
         <mat-icon>{{ link.icon }}</mat-icon>
         <span>{{ link.label }}</span>
       </a>
-    </ng-container>
+    }
   </nav>
-</ng-template>
-<ng-template [ngIf]="!dataset">
-  <error-page
-    *ngIf="(loading$ | async) === false"
-    [errorTitle]="'Dataset not found'"
-    [message]="'The dataset you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
-  >
-  </error-page>
-</ng-template>
+}
+@if (!dataset) {
+  @if ((loading$ | async) === false) {
+    <error-page
+      [errorTitle]="'Dataset not found'"
+      [message]="'The dataset you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
+    >
+    </error-page>
+  }
+}
 <mat-tab-nav-panel #tabPanel>
   <router-outlet></router-outlet>
 </mat-tab-nav-panel>

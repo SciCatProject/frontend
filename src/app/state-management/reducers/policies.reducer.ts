@@ -15,13 +15,10 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.fetchCountCompleteAction,
-    (state, { count }): PolicyState => ({
-      ...state,
-      totalCount: count,
-    }),
-  ),
+  on(fromActions.fetchCountCompleteAction, (state, { count }): PolicyState => ({
+    ...state,
+    totalCount: count,
+  })),
 
   on(
     fromActions.fetchEditablePoliciesCompleteAction,
@@ -61,13 +58,10 @@ const reducer = createReducer(
     const selectedPolicies = state.editablePolicies;
     return { ...state, selectedPolicies };
   }),
-  on(
-    fromActions.clearSelectionAction,
-    (state): PolicyState => ({
-      ...state,
-      selectedPolicies: [],
-    }),
-  ),
+  on(fromActions.clearSelectionAction, (state): PolicyState => ({
+    ...state,
+    selectedPolicies: [],
+  })),
 
   on(fromActions.changePageAction, (state, { page, limit }): PolicyState => {
     const skip = page * limit;
@@ -100,10 +94,9 @@ const reducer = createReducer(
     },
   ),
 
-  on(
-    fromActions.clearPoliciesStateAction,
-    (): PolicyState => ({ ...initialPolicyState }),
-  ),
+  on(fromActions.clearPoliciesStateAction, (): PolicyState => ({
+    ...initialPolicyState,
+  })),
 );
 
 export const policiesReducer = (

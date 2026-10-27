@@ -3,11 +3,11 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { combineLatest, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
+import { CurrentDataset } from "state-management/state/datasets.store";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,7 @@ import {
 export class OwnershipService {
   public isOwner = false;
   checkDatasetAccess(
-    dataset: OutputDatasetObsoleteDto | undefined,
+    dataset: CurrentDataset | undefined,
     store: Store,
     router: Router,
   ) {

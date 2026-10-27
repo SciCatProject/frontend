@@ -5,7 +5,6 @@ import {
   AppConfigService,
   HelpMessages,
 } from "app-config.service";
-import { time } from "node:console";
 import { Observable, of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
@@ -19,6 +18,7 @@ const appConfig: AppConfigInterface = {
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
+  datasetRelationshipsEnabled: true,
   datasetJsonScientificMetadata: true,
   datasetPageSizeOptions: [5, 10, 25, 100],
   editDatasetEnabled: true,
@@ -94,6 +94,8 @@ const appConfig: AppConfigInterface = {
   datafilesActions: [],
   datasetSelectionActionsEnabled: false,
   datasetSelectionActions: [],
+  batchActionsEnabled: true,
+  batchActions: [],
   defaultDatasetsListSettings: {
     columns: [
       {
@@ -224,6 +226,20 @@ const appConfig: AppConfigInterface = {
   ingestorComponent: {
     ingestorEnabled: true,
   },
+  helpSettings: {
+    enabled: false,
+    htmlContent: "This is not my help",
+  },
+  aboutSettings: {
+    enabled: false,
+    htmlContent: "This is not my about",
+  },
+  datasetDetailComponent: {
+    enableCustomizedComponent: false,
+    customization: [],
+    tileRestrictedIconVisible: false,
+    tileRestrictedIconGroups: ["admin"],
+  },
 };
 
 describe("AppConfigService", () => {
@@ -267,6 +283,82 @@ describe("AppConfigService", () => {
         5, 10, 25, 100,
       ]);
     });
+
+    it("should not override a deployment's own batchActions when batchActionsEnabled is already truthy", async () => {
+      spyOn(service["http"], "get").and.returnValue(of(appConfig));
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().batchActionsEnabled).toBe(true);
+      expect(service.getConfig().batchActions).toEqual([]);
+    });
+
+    [undefined, false].forEach((batchActionsEnabled) => {
+      it(`should default batchActionsEnabled/batchActions to the built-in Archive/Retrieve actions when archiveWorkflowEnabled is true and batchActionsEnabled is ${batchActionsEnabled}`, async () => {
+        const configWithoutBatchActions = {
+          ...appConfig,
+          archiveWorkflowEnabled: true,
+          batchActionsEnabled,
+          batchActions: undefined,
+        };
+        spyOn(service["http"], "get").and.returnValue(
+          of(configWithoutBatchActions),
+        );
+
+        await service.loadAppConfig();
+
+        const config = service.getConfig();
+        expect(config.batchActionsEnabled).toBe(true);
+        expect(config.batchActions?.map((action) => action.label)).toEqual([
+          "Archive",
+          "Retrieve",
+        ]);
+      });
+    });
+
+    it("should not default batchActions when archiveWorkflowEnabled is false", async () => {
+      const configWithoutArchiveWorkflow = {
+        ...appConfig,
+        archiveWorkflowEnabled: false,
+        batchActionsEnabled: undefined,
+        batchActions: undefined,
+      };
+      spyOn(service["http"], "get").and.returnValue(
+        of(configWithoutArchiveWorkflow),
+      );
+
+      await service.loadAppConfig();
+
+      const config = service.getConfig();
+      expect(config.batchActionsEnabled).toBeUndefined();
+      expect(config.batchActions).toBeUndefined();
+    });
+
+    it("should populate the defaulted Retrieve action's dialog options from retrieveDestinations", async () => {
+      const configWithoutBatchActions = {
+        ...appConfig,
+        archiveWorkflowEnabled: true,
+        batchActionsEnabled: undefined,
+        batchActions: undefined,
+        retrieveDestinations: [
+          { option: "PSI", tooltip: "Copy to PSI" },
+          { option: "URLs", tooltip: "Get download URLs" },
+        ],
+      };
+      spyOn(service["http"], "get").and.returnValue(
+        of(configWithoutBatchActions),
+      );
+
+      await service.loadAppConfig();
+
+      const retrieveAction = service
+        .getConfig()
+        .batchActions?.find((action) => action.label === "Retrieve");
+      expect(retrieveAction?.dialog?.fields[0].options).toEqual([
+        { option: "PSI", tooltip: "Copy to PSI" },
+        { option: "URLs", tooltip: "Get download URLs" },
+      ]);
+    });
   });
 
   describe("#getConfig()", () => {
@@ -288,6 +380,20 @@ describe("AppConfigService", () => {
             authURL: "abcd",
           },
         ],
+        helpSettings: {
+          enabled: false,
+          htmlContent: "This is the mockConfigResponses config.json help",
+        },
+        aboutSettings: {
+          enabled: false,
+          htmlContent: "This is the mockConfigResponses config.json about",
+        },
+        datasetDetailComponent: {
+          enableCustomizedComponent: false,
+          customization: [],
+          tileRestrictedIconVisible: false,
+          tileRestrictedIconGroups: ["admin"],
+        },
       },
       "/assets/config.override.json": {
         accessTokenPrefix: "Bearer ",
@@ -295,6 +401,22 @@ describe("AppConfigService", () => {
         addDatasetEnabled: true,
         mainMenu: { nonAuthenticatedUser: { files: true } },
         oAuth2Endpoints: [],
+        helpSettings: {
+          enabled: false,
+          htmlContent:
+            "This is the mockConfigResponses config.override.json help",
+        },
+        aboutSettings: {
+          enabled: false,
+          htmlContent:
+            "This is the mockConfigResponses config.override.json about",
+        },
+        datasetDetailComponent: {
+          enableCustomizedComponent: false,
+          customization: [],
+          tileRestrictedIconVisible: false,
+          tileRestrictedIconGroups: ["admin"],
+        },
       },
     };
 
@@ -312,6 +434,22 @@ describe("AppConfigService", () => {
       oAuth2Endpoints: [],
       dateFormat: "yyyy-MM-dd HH:mm",
       timezone: "UTC",
+      helpSettings: {
+        enabled: false,
+        htmlContent:
+          "This is the mockConfigResponses config.override.json help",
+      },
+      aboutSettings: {
+        enabled: false,
+        htmlContent:
+          "This is the mockConfigResponses config.override.json about",
+      },
+      datasetDetailComponent: {
+        enableCustomizedComponent: false,
+        customization: [],
+        tileRestrictedIconVisible: false,
+        tileRestrictedIconGroups: ["admin"],
+      },
     };
 
     const mockHttpGet = (

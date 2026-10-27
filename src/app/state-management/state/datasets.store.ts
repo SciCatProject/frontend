@@ -1,30 +1,46 @@
-import { DatasetFilters, ArchViewMode } from "state-management/models";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
-
-export interface FacetCount {
-  _id: string;
-  label?: string;
-  count: number;
-}
-
-export interface FacetCounts {
-  [field: string]: FacetCount[];
-}
+import {
+  DatasetFilters,
+  ArchViewMode,
+  FacetCounts,
+} from "state-management/models";
+import {
+  PartialOutputDatasetDto,
+  OutputAttachmentV4Dto,
+  Datablock,
+  OrigDatablock,
+  HistoryClass,
+  Instrument,
+  ProposalClass,
+  OutputSampleDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface Pagination {
   skip: number;
   limit: number;
 }
 
+export type CurrentDataset = PartialOutputDatasetDto & {
+  attachments?: OutputAttachmentV4Dto[];
+  datablocks?: Datablock[];
+  origdatablocks?: OrigDatablock[];
+  history?: HistoryClass[];
+  proposals?: ProposalClass[];
+  samples?: OutputSampleDto[];
+  instruments?: Instrument[];
+};
+
 export interface DatasetState {
-  datasets: OutputDatasetObsoleteDto[];
-  selectedSets: OutputDatasetObsoleteDto[];
-  currentSet: OutputDatasetObsoleteDto | undefined;
-  relatedDatasets: OutputDatasetObsoleteDto[];
+  datasets: PartialOutputDatasetDto[];
+  selectedSets: PartialOutputDatasetDto[];
+  currentSet: CurrentDataset | undefined;
+  relatedDatasets: PartialOutputDatasetDto[];
   relatedDatasetsCount: number;
   totalCount: number;
 
   facetCounts: FacetCounts;
+  facetCountsIsLoading: boolean;
+  origDatablocksCountIsLoading: boolean;
+  relatedDatasetsCountIsLoading: boolean;
   metadataKeys: string[];
   hasPrefilledFilters: boolean;
   searchTerms: string;
@@ -39,9 +55,11 @@ export interface DatasetState {
     sortField: string;
   };
 
-  batch: OutputDatasetObsoleteDto[];
+  batch: CurrentDataset[];
 
   openwhiskResult: Record<string, unknown> | undefined;
+
+  origDatablocksCount?: number;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -53,6 +71,9 @@ export const initialDatasetState: DatasetState = {
   totalCount: 0,
 
   facetCounts: {},
+  facetCountsIsLoading: false,
+  origDatablocksCountIsLoading: false,
+  relatedDatasetsCountIsLoading: false,
   metadataKeys: [],
   hasPrefilledFilters: false,
   searchTerms: "",
@@ -87,4 +108,6 @@ export const initialDatasetState: DatasetState = {
   batch: [],
 
   openwhiskResult: undefined,
+
+  origDatablocksCount: 0,
 };

@@ -4,40 +4,37 @@
       <div fxLayout="row" fxLayout.xs="column" class="dashboard-header">
         <div class="action-column" fxFlex="14" fxFlex.lt-xl="20"></div>
         <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
-          <ng-template [ngIf]="this.loggedIn$ | async">
-            <dataset-table-actions
-              [selectedSets]="selectedSets$ | async"
-            ></dataset-table-actions>
-          </ng-template>
+          @if (this.loggedIn$ | async) {
+            <dataset-table-actions></dataset-table-actions>
+          }
         </div>
       </div>
 
       <div fxLayout="row" fxLayout.xs="column">
         <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
           <datasets-filter></datasets-filter>
-          <ng-template [ngIf]="this.loggedIn$ | async">
+          @if (this.loggedIn$ | async) {
             <ingestor-creation
               #ingestor
               style="display: none"
             ></ingestor-creation>
-            <mat-card
-              *ngIf="appConfig.addDatasetEnabled"
-              class="add-card"
-              (click)="openDialog()"
-            >
-              <mat-card-content>
-                <mat-icon> add_circle </mat-icon>
-                Create Dataset
-              </mat-card-content>
-            </mat-card>
-            <div *ngIf="!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)">
-              <batch-card></batch-card>
-            </div>
-          </ng-template>
+            @if (appConfig.addDatasetEnabled) {
+              <mat-card class="add-card" (click)="openDialog()">
+                <mat-card-content>
+                  <mat-icon> add_circle </mat-icon>
+                  Create Dataset
+                </mat-card-content>
+              </mat-card>
+            }
+            @if (!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)) {
+              <div>
+                <batch-card></batch-card>
+              </div>
+            }
+          }
         </div>
         <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
           <dataset-table
-            [selectedSets]="selectedSets$ | async"
             (rowClick)="onRowClick($event)"
             (pageChange)="onPageChange($event)"
           ></dataset-table>

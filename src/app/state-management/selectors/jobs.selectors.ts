@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { JobsState } from "state-management/state/jobs.store";
+import { selectHasFetchedSettings, selectSettings } from "./user.selectors";
 
 const selectJobState = createFeatureSelector<JobsState>("jobs");
 
@@ -48,3 +49,32 @@ export const selectQueryParams = createSelector(selectFilters, (filters) => {
     return { order: sortField, skip, limit };
   }
 });
+
+export const selectJobsDashboardPageViewModel = createSelector(
+  selectJobs,
+  selectJobsCount,
+  selectPage,
+  selectJobsPerPage,
+  selectFilters,
+  selectSettings,
+  selectHasFetchedSettings,
+  (
+    jobs,
+    count,
+    currentPage,
+    jobsPerPage,
+    filters,
+    settings,
+    hasFetchedSettings,
+  ) => ({
+    jobs,
+    count,
+    currentPage,
+    jobsPerPage,
+    filters,
+    hasFetchedSettings,
+    tableSettings: {
+      columns: settings.fe_job_table_columns,
+    },
+  }),
+);

@@ -140,6 +140,8 @@ export const logoutCompleteAction = createAction(
 );
 export const logoutFailedAction = createAction("[User] Logout Failed");
 
+export const sessionTimeoutAction = createAction("[User] Session Timeout");
+
 export const addCustomColumnsAction = createAction(
   "[User] Add Custom Columns",
   props<{ names: string[]; scope: "dataset" | "sample" }>(),

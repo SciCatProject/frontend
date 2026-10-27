@@ -7,33 +7,24 @@ import {
 
 const reducer = createReducer(
   initialUsersState,
-  on(
-    fromActions.loadUsers,
-    (state): UsersState => ({
-      ...state,
-      loading: true,
-      error: null,
-    }),
-  ),
+  on(fromActions.loadUsers, (state): UsersState => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
 
-  on(
-    fromActions.loadUsersSuccess,
-    (state, { users }): UsersState => ({
-      ...state,
-      users,
-      loading: false,
-      error: null,
-    }),
-  ),
+  on(fromActions.loadUsersSuccess, (state, { users }): UsersState => ({
+    ...state,
+    users,
+    loading: false,
+    error: null,
+  })),
 
-  on(
-    fromActions.loadUsersFailure,
-    (state, { error }): UsersState => ({
-      ...state,
-      loading: false,
-      error,
-    }),
-  ),
+  on(fromActions.loadUsersFailure, (state, { error }): UsersState => ({
+    ...state,
+    loading: false,
+    error,
+  })),
 );
 
 export const usersReducer = (state: UsersState | undefined, action: Action) =>

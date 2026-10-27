@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { updateConfiguration } from "state-management/actions/runtime-config.action";
 import { selectConfig } from "state-management/selectors/runtime-config.selectors";
@@ -28,7 +28,7 @@ import { AppConfigInterface } from "app-config.service";
   styleUrls: ["./admin-config-edit.component.scss"],
   standalone: false,
 })
-export class AdminConfigEditComponent implements OnInit {
+export class AdminConfigEditComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   config$ = this.store.select(selectConfig);
   data$ = this.config$.pipe(

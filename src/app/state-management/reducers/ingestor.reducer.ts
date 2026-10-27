@@ -29,14 +29,11 @@ const reducer = createReducer(
       ingestorBrowserActiveNode: ingestorBrowserActiveNode,
     }),
   ),
-  on(
-    fromActions.getBrowseFilePathFailure,
-    (state, { err }): IngestorState => ({
-      ...state,
-      ingestorBrowserActiveNode: null,
-      error: JSON.stringify(err),
-    }),
-  ),
+  on(fromActions.getBrowseFilePathFailure, (state, { err }): IngestorState => ({
+    ...state,
+    ingestorBrowserActiveNode: null,
+    error: JSON.stringify(err),
+  })),
   on(
     fromActions.getExtractionMethodsSuccess,
     (state, { extractionMethods }): IngestorState => ({
@@ -59,13 +56,10 @@ const reducer = createReducer(
       ingestorEndpoint,
     }),
   ),
-  on(
-    fromActions.connectIngestor,
-    (state): IngestorState => ({
-      ...state,
-      connectingBackend: true,
-    }),
-  ),
+  on(fromActions.connectIngestor, (state): IngestorState => ({
+    ...state,
+    connectingBackend: true,
+  })),
   on(
     fromActions.connectIngestorSuccess,
     (
@@ -85,18 +79,15 @@ const reducer = createReducer(
       },
     }),
   ),
-  on(
-    fromActions.connectIngestorFailure,
-    (state, { err }): IngestorState => ({
-      ...state,
-      connectingBackend: false,
-      ingestorStatus: {
-        ...state.ingestorStatus,
-        validEndpoint: false,
-      },
-      error: JSON.stringify(err),
-    }),
-  ),
+  on(fromActions.connectIngestorFailure, (state, { err }): IngestorState => ({
+    ...state,
+    connectingBackend: false,
+    ingestorStatus: {
+      ...state.ingestorStatus,
+      validEndpoint: false,
+    },
+    error: JSON.stringify(err),
+  })),
   on(
     fromActions.updateTransferListSuccess,
     (state, { transferList, page, pageNumber }): IngestorState => ({
@@ -172,52 +163,43 @@ const reducer = createReducer(
       },
     }),
   ),
-  on(
-    fromActions.createDatasetSuccess,
-    (state, { dataset }): IngestorState => ({
-      ...state,
-      ingestionObjectApiInformation: {
-        ...state.ingestionObjectApiInformation,
-        ingestionRequestErrorMessage: "",
+  on(fromActions.createDatasetSuccess, (state, { dataset }): IngestorState => ({
+    ...state,
+    ingestionObjectApiInformation: {
+      ...state.ingestionObjectApiInformation,
+      ingestionRequestErrorMessage: "",
+    },
+    ingestionObject: {
+      ...state.ingestionObject,
+      ingestionRequest: {
+        transferId: dataset.pid,
+        status: dataset.datasetName,
       },
-      ingestionObject: {
-        ...state.ingestionObject,
-        ingestionRequest: {
-          transferId: dataset.pid,
-          status: dataset.datasetName,
-        },
-      },
-    }),
-  ),
-  on(
-    fromActions.ingestDatasetFailure,
-    (state, { err }): IngestorState => ({
-      ...state,
-      ingestionObjectApiInformation: {
-        ...state.ingestionObjectApiInformation,
-        ingestionRequestErrorMessage:
-          (err as any).error ??
-          (err as any).error?.error ??
-          err.message ??
-          JSON.stringify(err),
-      },
-      error: JSON.stringify(err),
-    }),
-  ),
-  on(
-    fromActions.resetIngestDataset,
-    (state): IngestorState => ({
-      ...state,
-      ingestionObject: {
-        ...state.ingestionObject,
-        ingestionRequest: null,
-      },
-      ingestionObjectApiInformation: {
-        ...state.ingestionObjectApiInformation,
-        ingestionRequestErrorMessage: "",
-      },
-    }),
-  ),
+    },
+  })),
+  on(fromActions.ingestDatasetFailure, (state, { err }): IngestorState => ({
+    ...state,
+    ingestionObjectApiInformation: {
+      ...state.ingestionObjectApiInformation,
+      ingestionRequestErrorMessage:
+        (err as any).error ??
+        (err as any).error?.error ??
+        err.message ??
+        JSON.stringify(err),
+    },
+    error: JSON.stringify(err),
+  })),
+  on(fromActions.resetIngestDataset, (state): IngestorState => ({
+    ...state,
+    ingestionObject: {
+      ...state.ingestionObject,
+      ingestionRequest: null,
+    },
+    ingestionObjectApiInformation: {
+      ...state.ingestionObjectApiInformation,
+      ingestionRequestErrorMessage: "",
+    },
+  })),
   on(
     fromActions.resetIngestorComponent,
     (): IngestorState => initialIngestorState,

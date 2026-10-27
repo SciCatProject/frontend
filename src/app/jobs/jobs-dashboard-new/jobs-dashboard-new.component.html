@@ -1,7 +1,22 @@
-<shared-table
+<dynamic-mat-table
+  [tableName]="tableName"
+  [columns]="columns"
   [dataSource]="dataSource"
-  [columnsdef]="columns"
-  [pageSize]="5"
-  (rowClick)="onRowClick($event)"
+  [pagination]="pagination"
+  [pagingMode]="paginationMode"
+  [setting]="setting"
+  [pending]="pending"
+  [rowSelectionMode]="rowSelectionMode"
+  [showGlobalTextSearch]="true"
+  [globalTextSearch]="globalTextSearch"
+  [globalTextSearchPlaceholder]="'Initiator, Type, Parameters...'"
+  (globalTextSearchChange)="onGlobalTextSearchChange($event)"
+  (globalTextSearchApply)="onGlobalTextSearchAction()"
+  (onRowEvent)="onRowEvent($event)"
+  (settingChange)="onSettingChange($event)"
+  (paginationChange)="onPaginationChange($event)"
+  [emptyMessage]="'No jobs available'"
+  [emptyIcon]="'folder'"
+  class="mat-elevation-z2"
 >
-</shared-table>
+</dynamic-mat-table>

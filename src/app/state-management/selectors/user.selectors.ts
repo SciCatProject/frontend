@@ -18,6 +18,11 @@ export const selectProfile = createSelector(
   (state) => state.profile,
 );
 
+export const selectUserAccessGroups = createSelector(
+  selectProfile,
+  (profile) => profile?.accessGroups ?? [],
+);
+
 export const selectCurrentUserName = createSelector(
   selectProfile,
   selectCurrentUser,
@@ -147,9 +152,7 @@ export const selectHasFetchedSettings = createSelector(
 );
 
 export const selectColumnsWithHasFetchedSettings = createSelector(
-  selectUserState,
-  (state) => ({
-    columns: state.settings.fe_dataset_table_columns,
-    hasFetchedSettings: state.hasFetchedSettings,
-  }),
+  selectColumns,
+  selectHasFetchedSettings,
+  (columns, hasFetchedSettings) => ({ columns, hasFetchedSettings }),
 );

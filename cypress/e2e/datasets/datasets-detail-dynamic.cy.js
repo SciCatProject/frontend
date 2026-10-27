@@ -1,14 +1,15 @@
 import { testConfig } from "../../fixtures/testData";
 import { mergeConfig } from "../../support/utils";
 
-describe("Datasets Detail View Dynamic", () => {
-  const dynamicComponentConfig = testConfig.dynamicDetialViewComponent;
+describe("0050: Datasets Detail View Dynamic", () => {
+  const dynamicComponentConfig = testConfig.dynamicDetailViewComponent;
   const customizedLabelSets = dynamicComponentConfig.labelsLocalization.dataset;
   const customizedComponents =
     dynamicComponentConfig.datasetDetailComponent.customization;
 
   beforeEach(() => {
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+      baseConfig.datasetDetailComponent.customization = [];
       const mergedConfig = mergeConfig(baseConfig, dynamicComponentConfig);
       cy.intercept("GET", "**/admin/config", mergedConfig).as(
         "getFrontendConfig",
@@ -25,7 +26,7 @@ describe("Datasets Detail View Dynamic", () => {
     cy.removeDatasets();
   });
 
-  it("should load datasets with customized labels", () => {
+  it("0010: should load datasets with customized labels", () => {
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
@@ -45,7 +46,7 @@ describe("Datasets Detail View Dynamic", () => {
     });
   });
 
-  it("should order sections based on customized settings", () => {
+  it("0020: should order sections based on customized settings", () => {
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
@@ -69,7 +70,7 @@ describe("Datasets Detail View Dynamic", () => {
     });
   });
 
-  it("should order fields based on customized settings", () => {
+  it("0030: should order fields based on customized settings", () => {
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
@@ -97,7 +98,7 @@ describe("Datasets Detail View Dynamic", () => {
       });
   });
 
-  it("should render attachments section with customized settings", () => {
+  it("0040: should render attachments section with customized settings", () => {
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
@@ -128,15 +129,24 @@ describe("Datasets Detail View Dynamic", () => {
 
     cy.get('[data-cy="section-label"]')
       .contains(customizedLabelSets["Section Label Attachments"])
-      .parent()
-      .find("img")
+      .closest('mat-card')
+      .find('mat-card-content [data-cy="attachment-thumbnail"]')
       .should("have.length", expectedImageCount)
       .each(($img) => {
         cy.wrap($img).should("have.attr", "class").and("contain", expectedSize);
       });
   });
 
-  it("should render tabs correctly on reload", () => {
+  it("0050: should render tabs correctly on reload", () => {
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+    cy.finishedLoading();
+
+    cy.get('[data-cy="text-search"]').clear().type("Cypress");
+    cy.get('[data-cy="search-button"]').click();
+
+    cy.isLoading();
+
     cy.get("mat-row").contains("Cypress Dataset").click();
 
     cy.reload();

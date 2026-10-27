@@ -5,6 +5,7 @@ export interface InstrumentState {
   instruments: Instrument[];
   currentInstrument: Instrument | undefined;
   totalCount: number;
+  instrumentsCountIsLoading: boolean;
 
   filters: GenericFilters;
 }
@@ -13,6 +14,7 @@ export const initialInstrumentState: InstrumentState = {
   instruments: [],
   currentInstrument: undefined,
   totalCount: 0,
+  instrumentsCountIsLoading: false,
 
   filters: {
     sortField: "name asc",

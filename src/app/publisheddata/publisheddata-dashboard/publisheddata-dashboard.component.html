@@ -1,11 +1,21 @@
-<shared-table
+<dynamic-mat-table
+  [tableName]="tableName"
+  [columns]="columns"
   [dataSource]="dataSource"
-  [columnsdef]="columns"
-  [pageSize]="5"
-  (rowClick)="onRowClick($event)"
-  (selectAll)="onSelectAll($event)"
-  (selectOne)="onSelectOne($event)"
-  (shareClick)="onShareClick()"
-  [select]="select"
+  [pagination]="pagination"
+  [pagingMode]="paginationMode"
+  [setting]="setting"
+  [pending]="pending"
+  [rowSelectionMode]="rowSelectionMode"
+  [showGlobalTextSearch]="true"
+  [globalTextSearch]="globalTextSearch"
+  [globalTextSearchPlaceholder]="'Title, Creator, DOI...'"
+  (onRowEvent)="onRowEvent($event)"
+  (settingChange)="onSettingChange($event)"
+  (paginationChange)="onPaginationChange($event)"
+  (globalTextSearchChange)="onGlobalTextSearchChange($event)"
+  (globalTextSearchApply)="onGlobalTextSearchAction()"
+  [emptyMessage]="'No published data available'"
+  [emptyIcon]="'folder'"
 >
-</shared-table>
+</dynamic-mat-table>

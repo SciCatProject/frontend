@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { first, switchMap } from "rxjs/operators";
 
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -12,11 +11,9 @@ import {
 } from "state-management/actions/datasets.actions";
 import { Message, MessageType, TableColumn } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 import { ActivatedRoute, Router } from "@angular/router";
-import { ArchivingService } from "../archiving.service";
-import { Observable, Subscription, combineLatest } from "rxjs";
+import { Observable, Subscription, combineLatest, first } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
 import { AppConfigService } from "app-config.service";
@@ -25,7 +22,7 @@ import {
   selectProfile,
   selectColumnsWithHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
 import { TableService } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
@@ -33,6 +30,10 @@ import { DatasetsListService } from "shared/services/datasets-list.service";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 import { TranslateService } from "@ngx-translate/core";
 import { translateComponentLabel } from "shared/pipes/component-translate.pipe";
+import {
+  ActionButtonStyle,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "batch-view",
@@ -41,7 +42,7 @@ import { translateComponentLabel } from "shared/pipes/component-translate.pipe";
   standalone: false,
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  batch$: Observable<OutputDatasetObsoleteDto[]> = this.store.select(
+  batch$: Observable<PartialOutputDatasetDto[]> = this.store.select(
     selectDatasetsInBatch,
   );
   userProfile$ = this.store.select(selectProfile);
@@ -55,15 +56,16 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   shareEnabled = this.appConfig.shareEnabled;
 
-  datasetList: OutputDatasetObsoleteDto[] = [];
+  datasetList: PartialOutputDatasetDto[] = [];
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
+  actionItems: ActionItems = { datasets: [] };
+  actionButtonsStyle: ActionButtonStyle = { raised: false, color: "primary" };
 
   constructor(
     public appConfigService: AppConfigService,
     private dialog: MatDialog,
     private store: Store,
-    private archivingSrv: ArchivingService,
     private router: Router,
     private route: ActivatedRoute,
     private tableService: TableService,
@@ -75,7 +77,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearBatchAction());
   }
 
-  private storeBatch(datasetUpdatedBatch: OutputDatasetObsoleteDto[]) {
+  private storeBatch(datasetUpdatedBatch: PartialOutputDatasetDto[]) {
     this.store.dispatch(storeBatchAction({ batch: datasetUpdatedBatch }));
   }
 
@@ -98,7 +100,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     return this.appConfig.defaultDatasetsListSettings?.columns || [];
   }
 
-  private getExportColumns(): TableField<OutputDatasetObsoleteDto>[] {
+  private getExportColumns(): TableField<PartialOutputDatasetDto>[] {
     return this.datasetsListService
       .convertSavedDatasetColumns(this.getConfiguredDatasetColumns())
       .filter((column) => column.display !== "hidden")
@@ -107,13 +109,13 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         header: this.translateDatasetColumnHeader(column),
         toExport:
           column.toExport ||
-          ((row: OutputDatasetObsoleteDto) =>
+          ((row: PartialOutputDatasetDto) =>
             typeof row === "object" ? row[column.name] : ""),
       }));
   }
 
   private translateDatasetColumnHeader(
-    column: TableField<OutputDatasetObsoleteDto>,
+    column: TableField<PartialOutputDatasetDto>,
   ): string {
     return translateComponentLabel(
       this.translateService,
@@ -130,7 +132,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRemove(dataset: OutputDatasetObsoleteDto) {
+  onRemove(dataset: PartialOutputDatasetDto) {
     this.store.dispatch(removeFromBatchAction({ dataset }));
   }
 
@@ -240,62 +242,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  onArchive() {
-    this.batch$
-      .pipe(
-        first(),
-        switchMap((datasets) => this.archivingSrv.archive(datasets)),
-      )
-      .subscribe(
-        () => this.clearBatch(),
-        (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000,
-              },
-            }),
-          ),
-      );
-  }
-
-  onRetrieve() {
-    const dialogOptions = this.archivingSrv.retriveDialogOptions(
-      this.appConfig.retrieveDestinations,
-    );
-    const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
-    const destPath = { destinationPath: "/archive/retrieve" };
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && this.datasetList) {
-        const locationOption = this.archivingSrv.generateOptionLocation(
-          result,
-          this.appConfig.retrieveDestinations,
-        );
-        const extra = { ...destPath, ...locationOption };
-        this.archivingSrv.retrieve(this.datasetList, extra).subscribe(
-          () => this.clearBatch(),
-          (err) =>
-            this.store.dispatch(
-              showMessageAction({
-                message: {
-                  type: MessageType.Error,
-                  content: err.message,
-                  duration: 5000,
-                },
-              }),
-            ),
-        );
-      }
-
-      this.router.navigate([], {
-        queryParams: { retrieve: null },
-        queryParamsHandling: "merge",
-      });
-    });
-  }
-
   onSaveChanges() {
     this.store.dispatch(
       resyncPublishedDataAction({
@@ -344,12 +290,17 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       })
       .unsubscribe();
     this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
+
     this.store.dispatch(prefillBatchAction());
     this.subscriptions.push(
       this.batch$.subscribe((result) => {
         if (result) {
           this.datasetList = result;
           this.hasBatch = result.length > 0;
+          this.actionItems = {
+            datasets: result,
+            user: this.userProfile,
+          };
         }
       }),
     );
@@ -359,11 +310,12 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         if (queryParams["share"] === "true") {
           this.onShare();
         }
-        if (queryParams["retrieve"] === "true") {
-          this.onRetrieve();
-        }
       }),
     );
+  }
+
+  onActionFinished(event: { success: boolean }) {
+    if (event.success) return this.clearBatch();
   }
 
   ngOnDestroy() {

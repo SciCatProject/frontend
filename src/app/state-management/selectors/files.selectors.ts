@@ -19,13 +19,32 @@ export const selectOrigDatablocksCount = createSelector(
   (state) => state.totalCount,
 );
 
+export const selectFilesFilters = createSelector(selectFilesState, (state) => {
+  const filters = state.filters;
+
+  const { sortField, skip, limit } = filters;
+
+  return {
+    sortField,
+    skip,
+    limit,
+  };
+});
+
+export const selectFilesCountIsLoading = createSelector(
+  selectFilesState,
+  (state) => state.filesCountIsLoading,
+);
+
 export const selectFilesWithCountAndTableSettings = createSelector(
   selectAllOrigDatablocks,
   selectOrigDatablocksCount,
+  selectFilesCountIsLoading,
   selectSettings,
-  (origDatablocks, count, settings) => ({
+  (origDatablocks, count, isLoading, settings) => ({
     origDatablocks,
     count,
+    isLoading,
     tablesSettings: {
       columns: settings.fe_file_table_columns,
     },

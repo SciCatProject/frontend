@@ -6,7 +6,12 @@ import {
   showMessageAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
-import { Message, MessageType, TableColumn } from "state-management/models";
+import {
+  getSettingKey,
+  Message,
+  MessageType,
+  TableColumn,
+} from "state-management/models";
 import {
   selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
@@ -104,7 +109,7 @@ export class ScientificMetadataColumnsService {
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
-          columns: nextColumns,
+          [getSettingKey("dataset", "columns")]: nextColumns,
         },
       }),
     );

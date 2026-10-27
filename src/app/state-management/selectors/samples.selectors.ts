@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "state-management/state/samples.store";
 import { selectCurrentUser, selectSettings } from "./user.selectors";
+import { selectCurrentDataset } from "./datasets.selectors";
 
 const selectSampleState = createFeatureSelector<SampleState>("samples");
 
@@ -19,6 +20,11 @@ export const selectCurrentSample = createSelector(
   (state) => state.currentSample,
 );
 
+export const selectCurrentDatasetSamples = createSelector(
+  selectCurrentDataset,
+  (dataset) => dataset?.samples ?? [],
+);
+
 export const selectCurrentAttachments = createSelector(
   selectSampleState,
   (state) => state.attachments,
@@ -34,9 +40,19 @@ export const selectSamplesCount = createSelector(
   (state) => state.samplesCount,
 );
 
+export const selectSamplesCountIsLoading = createSelector(
+  selectSampleState,
+  (state) => state.samplesCountIsLoading,
+);
+
 export const selectDatasetsCount = createSelector(
   selectSampleState,
   (state) => state.datasetsCount,
+);
+
+export const selectDatasetsCountIsLoading = createSelector(
+  selectSampleState,
+  (state) => state.datasetsCountIsLoading,
 );
 
 export const selectHasPrefilledFilters = createSelector(
@@ -116,6 +132,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
   selectSettings,
   selectSamplesCount,
   selectHasAppliedFilters,
+  selectSamplesCountIsLoading,
   (
     samples,
     samplesPagination,
@@ -127,6 +144,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     settings,
     count,
     hasAppliedFilters,
+    isLoading,
   ) => ({
     samples,
     samplesPagination,
@@ -140,6 +158,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     },
     count,
     hasAppliedFilters,
+    isLoading,
   }),
 );
 
@@ -149,6 +168,7 @@ export const selectSampleDetailPageViewModel = createSelector(
   selectDatasetsPerPage,
   selectDatasetsPage,
   selectDatasetsCount,
+  selectDatasetsCountIsLoading,
   selectCurrentAttachments,
   selectCurrentUser,
   (
@@ -157,6 +177,7 @@ export const selectSampleDetailPageViewModel = createSelector(
     datasetsPerPage,
     datasetsPage,
     datasetsCount,
+    isLoading,
     attachments,
     user,
   ) => ({
@@ -165,6 +186,7 @@ export const selectSampleDetailPageViewModel = createSelector(
     datasetsPerPage,
     datasetsPage,
     datasetsCount,
+    isLoading,
     attachments,
     user,
   }),
@@ -189,7 +211,11 @@ export const selectDatasetsQueryParams = createSelector(
 );
 
 // Returns copy with null/undefined values and empty arrays removed
-const restrictFilter = (filter: any, allowedKeys?: string[]) => {
+const restrictFilter = (
+  filter: any,
+  allowedKeys?: string[],
+  wrapArrays = false,
+) => {
   const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);
     return value == null || (hasLength && value.length === 0);
@@ -198,6 +224,10 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
-    return isNully(val) ? obj : { ...obj, [key]: val };
+    if (isNully(val)) return obj;
+    return {
+      ...obj,
+      [key]: wrapArrays && Array.isArray(val) ? { $in: val } : val,
+    };
   }, {});
 };
