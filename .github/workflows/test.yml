@@ -127,6 +127,21 @@ jobs:
             done
           ' > monitor.log 2>&1 &
 
+                ## Pinned to Chrome 154 (runner image 20261012 moved to 155 when E2E started failing, see #2645)
+      - name: Set up Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: 154
+          install-dependencies: true
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v7
+        with:
+          config-file: cypress.config.ts
+          browser: ${{ steps.setup-chrome.outputs.chrome-path }}
+          install-command: npm install --omit peer
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v7
         with:
