@@ -210,6 +210,11 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.get("button[type=submit]").click();
 
+    // Wait for the login to complete before reloading the app; otherwise the
+    // visit below can happen while still logged out.
+    cy.url().should("not.include", "/login");
+    cy.get(".user-button").should("contain.text", username);
+
     cy.finishedLoading();
 
     // visit the datasets list
@@ -316,6 +321,11 @@ describe("1000 - Datasets list personalization", () => {
     cy.get("#passwordInput").type(password).should("have.value", password);
 
     cy.get("button[type=submit]").click();
+
+    // Wait for the login to complete before reloading the app; otherwise the
+    // visit below can happen while still logged out.
+    cy.url().should("not.include", "/login");
+    cy.get(".user-button").should("contain.text", username);
 
     cy.finishedLoading();
 
