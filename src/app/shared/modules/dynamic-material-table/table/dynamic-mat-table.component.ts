@@ -311,6 +311,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         }
       });
       this.tableSetting = value;
+      this.syncColumnSettingOrder();
       this.setDisplayedColumns();
     }
   }
