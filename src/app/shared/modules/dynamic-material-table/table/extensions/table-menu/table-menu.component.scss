@@ -102,25 +102,6 @@
   transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.done-setting {
-  width: 50% !important;
-  display: inline-flex;
-  text-align: center;
-  height: 42px;
-  mat-icon {
-    line-height: 38px !important;
-    opacity: 0.6;
-    transition: opacity 0.5s;
-    color: #616161;
-    width: 100%;
-    text-align: center;
-    margin: 0;
-  }
-  mat-icon:hover {
-    opacity: 1;
-  }
-}
-
 .column-setting {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   padding: 10px;
@@ -194,12 +175,4 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-}
-
-.column-config-apply {
-  border-top: 1px solid rgb(231, 231, 231);
-  position: sticky;
-  bottom: 0px;
-  z-index: 2147483647;
-  background-color: white;
 }

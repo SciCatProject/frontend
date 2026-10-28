@@ -35,6 +35,7 @@
     mat-menu-item
     type="button"
     color="primary"
+    #columnMenuTrigger="matMenuTrigger"
     [matMenuTriggerFor]="columnMenu"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
@@ -138,27 +139,6 @@
         </div>
       </div>
     </div>
-
-    <div class="column-config-apply">
-      <button
-        mat-menu-item
-        type="button"
-        color="primary"
-        class="done-setting"
-        (click)="apply_onClick($event)"
-      >
-        <mat-icon color="primary">done</mat-icon>
-      </button>
-      <button
-        mat-menu-item
-        type="button"
-        color="primary"
-        class="done-setting"
-        (click)="cancel_onClick()"
-      >
-        <mat-icon color="primary">clear</mat-icon>
-      </button>
-    </div>
   </ng-container>
 
   <ng-template #noColumns>
@@ -187,6 +167,7 @@
       <mat-radio-group
         class="radio"
         [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter"
+        (ngModelChange)="onColumnSettingChange()"
       >
         <mat-radio-button value="client-side" (click)="$event.stopPropagation()"
           >Filter local mode</mat-radio-button
@@ -208,6 +189,7 @@
       <mat-radio-group
         class="radio"
         [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort"
+        (ngModelChange)="onColumnSettingChange()"
       >
         <mat-radio-button value="client-side" (click)="$event.stopPropagation()"
           >Sort local mode</mat-radio-button
@@ -229,6 +211,7 @@
       <mat-radio-group
         class="radio"
         [(ngModel)]="currentTableSetting.columnSetting[currentColumn].printable"
+        (ngModelChange)="onColumnSettingChange()"
       >
         <mat-radio-button [value]="true" (click)="$event.stopPropagation()"
           >Print yes mode
@@ -250,6 +233,7 @@
       <mat-radio-group
         class="radio"
         [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky"
+        (ngModelChange)="onColumnSettingChange()"
       >
         <mat-radio-button value="none" (click)="$event.stopPropagation()"
           >Pin none mode

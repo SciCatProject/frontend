@@ -5,11 +5,16 @@ import {
   Output,
   Input,
   EventEmitter,
+  OnDestroy,
+  ViewChild,
 } from "@angular/core";
 import { moveItemInArray, CdkDragDrop } from "@angular/cdk/drag-drop";
+import { Subject, Subscription } from "rxjs";
+import { debounceTime } from "rxjs/operators";
+import { MatMenuTrigger } from "@angular/material/menu";
 import { TableService } from "../../dynamic-mat-table.service";
 import { ITableSetting } from "../../../models/table-setting.model";
-import { deepClone, isNullorUndefined } from "../../../cores/type";
+import { isNullorUndefined } from "../../../cores/type";
 import { AbstractField } from "../../../models/table-field.model";
 import { Direction } from "@angular/cdk/bidi";
 import {
@@ -24,7 +29,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class TableMenuComponent {
+export class TableMenuComponent implements OnDestroy {
   @Output() menuActionChange: EventEmitter<TableMenuActionChange> =
     new EventEmitter<TableMenuActionChange>();
 
@@ -37,7 +42,6 @@ export class TableMenuComponent {
   set tableSetting(value: ITableSetting) {
     value.settingList =
       value.settingList === undefined ? [] : value.settingList;
-    this.originalTableSetting = value;
     this.reverseDirection = value.direction === "rtl" ? "ltr" : "rtl";
     this.currentTableSetting = value;
   }
@@ -56,15 +60,40 @@ export class TableMenuComponent {
 
   @Output() tableSettingChange = new EventEmitter<ITableSetting>();
 
+  @ViewChild("columnMenuTrigger") columnMenuTrigger: MatMenuTrigger;
+
   currentColumn: number = null;
   reverseDirection: "auto" | Direction = "auto";
-  originalTableSetting: ITableSetting;
   currentTableSetting: ITableSetting;
+
+  private columnChange$ = new Subject<void>();
+  private columnChangeSub: Subscription;
 
   constructor(
     public tableService: TableService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) {
+    this.columnChangeSub = this.columnChange$
+      .pipe(debounceTime(500))
+      .subscribe(() => this.saveColumnSettings());
+  }
+
+  ngOnDestroy(): void {
+    this.columnChangeSub?.unsubscribe();
+    this.columnChange$.complete();
+  }
+
+  private scheduleColumnSave() {
+    this.columnChange$.next();
+  }
+
+  private saveColumnSettings() {
+    this.menuActionChange.emit({
+      type: TableMenuAction.TableSetting,
+      data: this.currentTableSetting,
+    });
+    this.columnMenuTrigger?.closeMenu();
+  }
 
   screenMode_onClick() {
     this.menuActionChange.emit({
@@ -84,27 +113,20 @@ export class TableMenuComponent {
       event.item.data.columnIndex,
       event.currentIndex,
     );
+    this.scheduleColumnSave();
   }
 
   toggleSelectedColumn(column: AbstractField) {
     column.display = column.display === "visible" ? "hidden" : "visible";
+    this.scheduleColumnSave();
   }
 
-  apply_onClick(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    this.menuActionChange.emit({
-      type: TableMenuAction.TableSetting,
-      data: this.currentTableSetting,
-    });
+  onColumnSettingChange() {
+    this.scheduleColumnSave();
   }
 
   setting_onClick(i) {
     this.currentColumn = i;
-  }
-
-  cancel_onClick() {
-    this.currentTableSetting = deepClone(this.originalTableSetting);
   }
 
   isVisible(visible: boolean) {
