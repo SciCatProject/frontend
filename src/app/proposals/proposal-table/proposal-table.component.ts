@@ -262,22 +262,9 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column) => {
-      const { name, display, index, width, type, format } = column;
-
-      return {
-        name,
-        enabled: !!(display === "visible"),
-        order: index,
-        width,
-        type,
-        format,
-      };
-    });
-
-    this.tableConfigService.persistColumns(
+    const columnsSetting = this.tableConfigService.saveColumns(
       this.tableName,
-      columnsSetting,
+      setting.columnSetting,
       this.currentUserId,
     );
 
