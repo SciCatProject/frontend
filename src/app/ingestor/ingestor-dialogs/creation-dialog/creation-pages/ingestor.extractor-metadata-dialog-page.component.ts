@@ -206,11 +206,11 @@ export class IngestorExtractorMetadataDialogPageComponent
   }
 
   validateNextButton(): void {
-    /*this.uiNextButtonReady =
+    this.uiNextButtonReady =
       this.isInstrumentMetadataOk &&
       this.isAcquisitionMetadataOk &&
-      this.extractorMetaDataReady;*/
+      this.extractorMetaDataReady;
 
-    this.uiNextButtonReady = this.extractorMetaDataReady;
+    //this.uiNextButtonReady = this.extractorMetaDataReady;
   }
 }

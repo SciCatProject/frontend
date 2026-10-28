@@ -59,21 +59,59 @@ export class IngestorMetadataEditorComponent implements OnInit {
     // Update the data with the same keys as the schema, including nested properties
     // This is necessary, otherwise the error checks will not work correctly
     // Fill empty boolean with false to avoid undefined errors
+    const containsOnlyDefaults = (value: unknown): boolean => {
+      if (
+        value === null ||
+        value === undefined ||
+        value === false ||
+        value === ""
+      ) {
+        return true;
+      }
+      return (
+        typeof value === "object" &&
+        Object.values(value).every(containsOnlyDefaults)
+      );
+    };
+
     const initializeVisualData = (schema: JsonSchema, target: any) => {
-      if (!schema.properties || Object.keys(schema.properties).length === 0) {
+      if (!schema.properties || target === null || typeof target !== "object") {
         return;
       }
+
       Object.keys(schema.properties).forEach((key) => {
         const property = schema.properties[key];
-        if (property.type === "object") {
-          if (target[key] === undefined || target[key] === null) {
-            target[key] = {};
-          }
-          initializeVisualData(property, target[key]);
+        const allowsNull = property.anyOf?.some(
+          (option) => option.type === "null",
+        );
+        const isDefaultObject =
+          target[key] !== null &&
+          typeof target[key] === "object" &&
+          !Array.isArray(target[key]) &&
+          containsOnlyDefaults(target[key]);
+
+        if (
+          allowsNull &&
+          (target[key] === null || target[key] === undefined || isDefaultObject)
+        ) {
+          target[key] = null;
+          return;
+        }
+
+        if (property.const !== undefined && target[key] === undefined) {
+          target[key] = property.const;
+        }
+
+        const objectSchema =
+          property.type === "object"
+            ? property
+            : property.anyOf?.find((option) => option.type === "object");
+
+        if (objectSchema) {
+          target[key] ??= {};
+          initializeVisualData(objectSchema, target[key]);
         } else if (property.type === "boolean") {
-          if (target[key] === undefined || target[key] === null) {
-            target[key] = false;
-          }
+          target[key] ??= false;
         }
       });
     };

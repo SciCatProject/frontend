@@ -127,12 +127,12 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
               : testData.origDataBlockLarge;
           origDataBlock.datasetId = response.body.pid;
 
-          cy.request({
+          return cy.request({
             method: "POST",
             url: lbBaseUrl + `/OrigDatablocks`,
             headers: getHeader(token),
             body: origDataBlock,
-          });
+          }).then(() => response.body);
         });
       } else if (type === "derived") {
         const dataset = { ...testData.derivedDataset, ...rest };
