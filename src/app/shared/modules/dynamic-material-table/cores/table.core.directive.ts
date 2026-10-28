@@ -318,7 +318,30 @@ export class TableCoreDirective<T extends TableRow> {
     if (this.tableColumns) {
       this.tableSetting.columnSetting = clone(this.tableColumns);
     }
+    this.syncColumnSettingOrder();
     this.setDisplayedColumns();
+  }
+
+  /**
+   * Keep the column setting list (used by the column-setting popup) in the same
+   * order as the table columns, so the popup always mirrors the table.
+   * Existing per-column settings (display/filter/sort/sticky/width...) are
+   * preserved; columns not present in the table are dropped.
+   */
+  public syncColumnSettingOrder() {
+    if (!this.tableColumns || !this.tableSetting?.columnSetting) {
+      return;
+    }
+
+    const settingByName = new Map(
+      this.tableSetting.columnSetting
+        .filter((c) => c && c.name)
+        .map((c) => [c.name, c]),
+    );
+
+    this.tableSetting.columnSetting = this.tableColumns
+      .map((column) => settingByName.get(column.name) || column)
+      .filter((column) => column !== undefined && column !== null);
   }
 
   updatePagination() {
@@ -425,6 +448,7 @@ export class TableCoreDirective<T extends TableRow> {
   refreshColumn(columns: TableField<T>[]) {
     const currentOffset = this.tableContainer.nativeElement.scrollTop;
     this.columns = columns;
+    this.syncColumnSettingOrder();
 
     setTimeout(() => {
       this.tableContainer.nativeElement.scrollTop = currentOffset;
