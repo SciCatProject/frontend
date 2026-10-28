@@ -144,10 +144,33 @@ export class TableConfigService {
           false;
       }
     } else {
-      tableSettingsConfig.settingList[savedTableSettingIndex].isCurrentSetting =
-        true;
-      tableSettingsConfig.settingList[savedTableSettingIndex].isDefaultSetting =
-        false;
+      const existingSetting =
+        tableSettingsConfig.settingList[savedTableSettingIndex];
+
+      // Re-merge the saved columns so a later change of the column order
+      // (e.g. after the user applies a new popup order) is reflected here
+      // instead of keeping a stale order from a previous initialization.
+      if (savedTableConfig && defaultSettingIndex >= 0) {
+        const defaultColumnSetting =
+          tableDefaultSettingsConfig.settingList[defaultSettingIndex]
+            .columnSetting;
+
+        existingSetting.columnSetting = this.mergeColumnSettings(
+          defaultColumnSetting,
+          savedTableConfig,
+        );
+      }
+
+      existingSetting.isCurrentSetting = true;
+      existingSetting.isDefaultSetting = false;
+
+      if (
+        defaultSettingIndex >= 0 &&
+        defaultSettingIndex !== savedTableSettingIndex
+      ) {
+        tableSettingsConfig.settingList[defaultSettingIndex].isCurrentSetting =
+          false;
+      }
     }
 
     if (tableSort) {
