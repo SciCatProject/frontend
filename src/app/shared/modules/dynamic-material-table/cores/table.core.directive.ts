@@ -318,30 +318,46 @@ export class TableCoreDirective<T extends TableRow> {
     if (this.tableColumns) {
       this.tableSetting.columnSetting = clone(this.tableColumns);
     }
-    this.syncColumnSettingOrder();
     this.setDisplayedColumns();
   }
 
   /**
-   * Keep the column setting list (used by the column-setting popup) in the same
-   * order as the table columns, so the popup always mirrors the table.
-   * Existing per-column settings (display/filter/sort/sticky/width...) are
-   * preserved; columns not present in the table are dropped.
+   * Reorder the displayed table columns to match the order of the column-setting
+   * popup (columnSetting). This is called when the user applies the column
+   * setting so a reorder performed by dragging inside the popup is reflected in
+   * the table. Columns missing from the table are ignored; table columns not
+   * present in the popup keep their relative order and are appended.
    */
-  public syncColumnSettingOrder() {
-    if (!this.tableColumns || !this.tableSetting?.columnSetting) {
+  public applyColumnSettingOrder() {
+    const columnSetting = this.tableSetting?.columnSetting;
+
+    if (!this.tableColumns || !columnSetting || columnSetting.length === 0) {
       return;
     }
 
-    const settingByName = new Map(
-      this.tableSetting.columnSetting
+    const orderByName = new Map(
+      columnSetting
         .filter((c) => c && c.name)
-        .map((c) => [c.name, c]),
+        .map((c, index) => [c.name, index]),
     );
 
-    this.tableSetting.columnSetting = this.tableColumns
-      .map((column) => settingByName.get(column.name) || column)
-      .filter((column) => column !== undefined && column !== null);
+    const ordered = [...this.tableColumns].sort((a, b) => {
+      const aIndex = orderByName.has(a.name)
+        ? orderByName.get(a.name)
+        : Number.MAX_SAFE_INTEGER;
+      const bIndex = orderByName.has(b.name)
+        ? orderByName.get(b.name)
+        : Number.MAX_SAFE_INTEGER;
+
+      return aIndex - bIndex;
+    });
+
+    const currentOrder = this.tableColumns.map((c) => c.name).join(",");
+    const newOrder = ordered.map((c) => c.name).join(",");
+
+    if (currentOrder !== newOrder) {
+      this.columns = ordered;
+    }
   }
 
   updatePagination() {
@@ -448,7 +464,6 @@ export class TableCoreDirective<T extends TableRow> {
   refreshColumn(columns: TableField<T>[]) {
     const currentOffset = this.tableContainer.nativeElement.scrollTop;
     this.columns = columns;
-    this.syncColumnSettingOrder();
 
     setTimeout(() => {
       this.tableContainer.nativeElement.scrollTop = currentOffset;

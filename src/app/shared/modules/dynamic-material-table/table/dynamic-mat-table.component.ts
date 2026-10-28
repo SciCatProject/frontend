@@ -311,7 +311,6 @@ export class DynamicMatTableComponent<T extends TableRow>
         }
       });
       this.tableSetting = value;
-      this.syncColumnSettingOrder();
       this.setDisplayedColumns();
     }
   }
@@ -666,6 +665,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         type: TableSettingEventType.apply,
         setting: this.tableSetting,
       });
+      this.applyColumnSettingOrder();
       this.refreshColumn(this.tableSetting.columnSetting);
     } else if (e.type === TableMenuAction.DefaultSimpleSetting) {
       const columns = [];
