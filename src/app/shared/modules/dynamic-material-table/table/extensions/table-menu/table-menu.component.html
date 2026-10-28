@@ -87,7 +87,7 @@
 
 <!-- Column Setting Sub Menu -->
 
-<mat-menu #columnMenu="matMenu">
+<mat-menu #columnMenu="matMenu" (menuOpened)="onColumnMenuOpened()">
   <ng-container
     *ngIf="currentTableSetting?.columnSetting?.length > 0; else noColumns"
   >

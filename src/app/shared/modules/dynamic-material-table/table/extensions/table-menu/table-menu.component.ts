@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Output,
   Input,
@@ -60,7 +61,10 @@ export class TableMenuComponent {
   originalTableSetting: ITableSetting;
   currentTableSetting: ITableSetting;
 
-  constructor(public tableService: TableService) {}
+  constructor(
+    public tableService: TableService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   screenMode_onClick() {
     this.menuActionChange.emit({
@@ -70,6 +74,10 @@ export class TableMenuComponent {
   }
 
   /***** Column Setting ******/
+  onColumnMenuOpened() {
+    this.cdr.markForCheck();
+  }
+
   columnMenuDropped(event: CdkDragDrop<any>): void {
     moveItemInArray(
       this.currentTableSetting.columnSetting,
