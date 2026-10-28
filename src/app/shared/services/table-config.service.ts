@@ -54,10 +54,16 @@ export class TableConfigService {
           return {
             ...defCol,
             ...saved,
+            // Persisted columns store visibility as the boolean `enabled`,
+            // while the table renders from `display`. Translate it back so a
+            // deselected column stays hidden after reload.
+            display: this.resolveDisplay(saved, defCol),
           };
         }
 
-        return saved.userAdded ? saved : null;
+        return saved.userAdded
+          ? { ...saved, display: this.resolveDisplay(saved, saved) }
+          : null;
       })
       .filter(Boolean);
 
@@ -68,6 +74,25 @@ export class TableConfigService {
     );
 
     return [...mergedColumns, ...extraColumns];
+  }
+
+  /**
+   * Resolve the `display` value for a merged column. Persisted settings store
+   * visibility as the boolean `enabled`; the table renders from `display`.
+   * Prefer an explicit `display` on the saved column, then translate `enabled`,
+   * and finally fall back to the default/saved column's own `display`.
+   */
+  private resolveDisplay(
+    saved: TableField<any>,
+    fallback: AbstractField,
+  ): AbstractField["display"] {
+    if (saved.display) {
+      return saved.display;
+    }
+    if (typeof saved.enabled === "boolean") {
+      return saved.enabled ? "visible" : "hidden";
+    }
+    return fallback?.display;
   }
 
   persistColumns(tableName: string, columns: unknown[], userId?: string) {
