@@ -216,4 +216,35 @@ describe("TableConfigService (fallback)", () => {
       expect(storage.set).toHaveBeenCalledWith(tableName, result, userId);
     });
   });
+
+  describe("mergeColumnSettings visibility", () => {
+    it("hides a column whose persisted setting has enabled=false", () => {
+      const defaults = [
+        { name: "jobId", header: "ID", display: "visible" },
+        { name: "type", header: "Type", display: "visible" },
+      ] as any;
+      const saved = [
+        { name: "jobId", enabled: false, order: 0 },
+        { name: "type", enabled: true, order: 1 },
+      ] as any;
+
+      const merged = service.mergeColumnSettings(defaults, saved);
+
+      const jobId = merged.find((c: any) => c.name === "jobId");
+      const type = merged.find((c: any) => c.name === "type");
+      expect((jobId as any).display).toBe("hidden");
+      expect((type as any).display).toBe("visible");
+    });
+
+    it("keeps an explicit display value over enabled", () => {
+      const defaults = [{ name: "jobId", display: "visible" }] as any;
+      const saved = [
+        { name: "jobId", enabled: false, display: "visible" },
+      ] as any;
+
+      const merged = service.mergeColumnSettings(defaults, saved);
+
+      expect((merged[0] as any).display).toBe("visible");
+    });
+  });
 });
