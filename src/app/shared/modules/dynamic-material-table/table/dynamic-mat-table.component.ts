@@ -661,12 +661,12 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   tableMenuActionChange(e: TableMenuActionChange) {
     if (e.type === TableMenuAction.TableSetting) {
+      this.applyColumnSettingOrder();
+      this.refreshColumn(this.tableSetting.columnSetting);
       this.settingChange.emit({
         type: TableSettingEventType.apply,
         setting: this.tableSetting,
       });
-      this.applyColumnSettingOrder();
-      this.refreshColumn(this.tableSetting.columnSetting);
     } else if (e.type === TableMenuAction.DefaultSimpleSetting) {
       const columns = [];
       const defaultColumns = this.setting.settingList.find(
