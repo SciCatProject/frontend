@@ -92,7 +92,7 @@
 
 <!-- Column Setting Sub Menu -->
 
-<mat-menu #columnMenu="matMenu">
+<mat-menu #columnMenu="matMenu" (menuOpened)="onColumnMenuOpened()">
   @if (currentTableSetting?.columnSetting?.length > 0) {
     <div
       class="va-mat-table-dragable-container"
