@@ -40,12 +40,12 @@
   }
 
   .success-icon {
-    color: mat.m2-get-color-from-palette($primary, "default");
+    color: mat.m2-get-color-from-palette($primary, 'default');
   }
 
   .green-text,
   .success-text {
-    color: mat.m2-get-color-from-palette($primary, "default");
+    color: mat.m2-get-color-from-palette($primary, 'default');
   }
 
   .last-used-facility-backends {
@@ -53,11 +53,11 @@
   }
 
   .ingestor-file-list .mat-list-item-hover:hover {
-    background-color: mat.m2-get-color-from-palette($primary, "lighter", 0.1);
+    background-color: mat.m2-get-color-from-palette($primary, 'lighter', 0.1);
   }
 
   .ingestor-file-list .mat-list-item-hover:active {
-    background-color: mat.m2-get-color-from-palette($primary, "lighter", 0.2);
+    background-color: mat.m2-get-color-from-palette($primary, 'lighter', 0.2);
   }
 }
 

@@ -1,6 +1,6 @@
 @if (currentDialogStep === "NEW_TRANSFER" && !showNoRightsDialog) {
-<ingestor-new-transfer-dialog-page
-  (nextStep)="
+  <ingestor-new-transfer-dialog-page
+    (nextStep)="
       onClickNext(
         createNewTransferData.editorMode === 'CREATION'
           ? createNewTransferData.selectedSchemaFileContent &&
@@ -10,21 +10,24 @@
           : 'USER_METADATA'
       )
     "
-></ingestor-new-transfer-dialog-page>
-} @if (currentDialogStep === "USER_METADATA" && !showNoRightsDialog) {
-<ingestor-user-metadata-dialog
-  (nextStep)="onClickNext('EXTRACTOR_METADATA')"
-  (backStep)="onClickNext('NEW_TRANSFER')"
-></ingestor-user-metadata-dialog>
-} @if (currentDialogStep === "EXTRACTOR_METADATA" && !showNoRightsDialog) {
-<ingestor-extractor-metadata-dialog-page
-  (nextStep)="onClickNext('CONFIRM_TRANSFER')"
-  (backStep)="onClickNext('USER_METADATA')"
-></ingestor-extractor-metadata-dialog-page>
-} @if (currentDialogStep === "CONFIRM_TRANSFER" && !showNoRightsDialog) {
-<ingestor-confirm-transfer-dialog-page
-  (nextStep)="onClickStartIngestion()"
-  (backStep)="
+  ></ingestor-new-transfer-dialog-page>
+}
+@if (currentDialogStep === "USER_METADATA" && !showNoRightsDialog) {
+  <ingestor-user-metadata-dialog
+    (nextStep)="onClickNext('EXTRACTOR_METADATA')"
+    (backStep)="onClickNext('NEW_TRANSFER')"
+  ></ingestor-user-metadata-dialog>
+}
+@if (currentDialogStep === "EXTRACTOR_METADATA" && !showNoRightsDialog) {
+  <ingestor-extractor-metadata-dialog-page
+    (nextStep)="onClickNext('CONFIRM_TRANSFER')"
+    (backStep)="onClickNext('USER_METADATA')"
+  ></ingestor-extractor-metadata-dialog-page>
+}
+@if (currentDialogStep === "CONFIRM_TRANSFER" && !showNoRightsDialog) {
+  <ingestor-confirm-transfer-dialog-page
+    (nextStep)="onClickStartIngestion()"
+    (backStep)="
       onClickNext(
         createNewTransferData.editorMode === 'CREATION'
           ? createNewTransferData.selectedSchemaFileContent &&
@@ -34,15 +37,17 @@
           : 'EXTRACTOR_METADATA'
       )
     "
-></ingestor-confirm-transfer-dialog-page>
-} @if (showNoRightsDialog) {
-<ingestor-no-rights-dialog-page
-  (nextStep)="onClickStartIngestion()"
-  (backStep)="onClickNext('EXTRACTOR_METADATA')"
-></ingestor-no-rights-dialog-page>
-} @if (currentDialogStep === "CUSTOM_METADATA" && !showNoRightsDialog) {
-<ingestor-custom-metadata-dialog
-  (nextStep)="onClickNext('CONFIRM_TRANSFER')"
-  (backStep)="onClickNext('NEW_TRANSFER')"
-></ingestor-custom-metadata-dialog>
-} >>>>>>> master
+  ></ingestor-confirm-transfer-dialog-page>
+}
+@if (showNoRightsDialog) {
+  <ingestor-no-rights-dialog-page
+    (nextStep)="onClickStartIngestion()"
+    (backStep)="onClickNext('EXTRACTOR_METADATA')"
+  ></ingestor-no-rights-dialog-page>
+}
+@if (currentDialogStep === "CUSTOM_METADATA" && !showNoRightsDialog) {
+  <ingestor-custom-metadata-dialog
+    (nextStep)="onClickNext('CONFIRM_TRANSFER')"
+    (backStep)="onClickNext('NEW_TRANSFER')"
+  ></ingestor-custom-metadata-dialog>
+}
