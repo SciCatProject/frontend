@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { TranslateService } from "@ngx-translate/core";
 import { TableMenuComponent } from "./table-menu.component";
@@ -47,9 +52,8 @@ describe("TableMenuComponent DOM popup drag + apply", () => {
   });
 
   function openColumnMenu() {
-    const trigger = fixture.nativeElement.querySelector(
-      ".main-menu",
-    )?.parentElement as HTMLButtonElement;
+    const trigger = fixture.nativeElement.querySelector(".main-menu")
+      ?.parentElement as HTMLButtonElement;
     trigger?.click();
     fixture.detectChanges();
     // find the "Column setting" button and click it
@@ -63,8 +67,11 @@ describe("TableMenuComponent DOM popup drag + apply", () => {
     fixture.detectChanges();
   }
 
-  it("clicking the real apply (done) button emits the reordered setting after a drag", () => {
+  it("auto-saves the reordered setting after a drag and closes the popup", fakeAsync(() => {
     openColumnMenu();
+
+    let emitted: any;
+    component.menuActionChange.subscribe((e) => (emitted = e));
 
     // perform the drag programmatically on the component (as cdk would)
     component.columnMenuDropped({
@@ -72,19 +79,9 @@ describe("TableMenuComponent DOM popup drag + apply", () => {
       currentIndex: 0,
     } as any);
 
-    let emitted: any;
-    component.menuActionChange.subscribe((e) => (emitted = e));
+    expect(emitted).toBeUndefined();
 
-    // click the real "done" (apply) button inside the open menu overlay
-    const doneBtn = Array.from(
-      document.querySelectorAll("button.done-setting"),
-    ).find((b) => b.querySelector("mat-icon")?.textContent?.includes("done")) as
-      | HTMLButtonElement
-      | undefined;
-
-    expect(doneBtn).toBeTruthy();
-    doneBtn!.click();
-    fixture.detectChanges();
+    tick(500);
 
     expect(emitted?.type).toBe(TableMenuAction.TableSetting);
     expect(emitted?.data.columnSetting.map((c: any) => c.name)).toEqual([
@@ -92,5 +89,12 @@ describe("TableMenuComponent DOM popup drag + apply", () => {
       "pid",
       "type",
     ]);
-  });
+    // popup closed after auto-save
+    expect(component.columnMenuTrigger?.menuOpen).toBeFalse();
+  }));
+
+  it("shows the column setting menu after opening", fakeAsync(() => {
+    openColumnMenu();
+    expect(component.columnMenuTrigger?.menuOpen).toBeTrue();
+  }));
 });

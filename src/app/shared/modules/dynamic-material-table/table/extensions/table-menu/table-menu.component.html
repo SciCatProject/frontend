@@ -147,26 +147,6 @@
         </div>
       }
     </div>
-    <div class="column-config-apply">
-      <button
-        mat-menu-item
-        type="button"
-        color="primary"
-        class="done-setting"
-        (click)="apply_onClick($event)"
-      >
-        <mat-icon color="primary">done</mat-icon>
-      </button>
-      <button
-        mat-menu-item
-        type="button"
-        color="primary"
-        class="done-setting"
-        (click)="cancel_onClick()"
-      >
-        <mat-icon color="primary">clear</mat-icon>
-      </button>
-    </div>
   } @else {
     <div mat-menu-item>No column</div>
   }
@@ -191,6 +171,7 @@
         <mat-radio-group
           class="radio"
           [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter"
+          (ngModelChange)="onColumnSettingChange()"
         >
           <mat-radio-button
             value="client-side"
@@ -213,6 +194,7 @@
         <mat-radio-group
           class="radio"
           [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort"
+          (ngModelChange)="onColumnSettingChange()"
         >
           <mat-radio-button
             value="client-side"
@@ -237,6 +219,7 @@
           [(ngModel)]="
             currentTableSetting.columnSetting[currentColumn].printable
           "
+          (ngModelChange)="onColumnSettingChange()"
         >
           <mat-radio-button [value]="true" (click)="$event.stopPropagation()"
             >Print yes mode
@@ -255,6 +238,7 @@
         <mat-radio-group
           class="radio"
           [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky"
+          (ngModelChange)="onColumnSettingChange()"
         >
           <mat-radio-button value="none" (click)="$event.stopPropagation()"
             >Pin none mode
