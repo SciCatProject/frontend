@@ -156,4 +156,64 @@ describe("TableConfigService (fallback)", () => {
 
     expect(result).toBe(columns);
   });
+
+  describe("buildColumnsSetting", () => {
+    it("builds persisted columns using array index as order and enabled from display", () => {
+      const result = service.buildColumnsSetting([
+        { name: "name", display: "visible", width: 100 },
+        { name: "pid", display: "hidden", type: "standard" },
+        { name: "type", display: "prevent-hidden" },
+      ] as any);
+
+      expect(result).toEqual([
+        jasmine.objectContaining({
+          name: "name",
+          enabled: true,
+          order: 0,
+          width: 100,
+        }),
+        jasmine.objectContaining({
+          name: "pid",
+          enabled: false,
+          order: 1,
+          type: "standard",
+        }),
+        jasmine.objectContaining({
+          name: "type",
+          enabled: true,
+          order: 2,
+        }),
+      ]);
+    });
+
+    it("maps printable and sticky through", () => {
+      const result = service.buildColumnsSetting([
+        { name: "name", display: "visible", printable: false, sticky: "start" },
+      ] as any);
+
+      expect(result[0]).toEqual(
+        jasmine.objectContaining({
+          name: "name",
+          printable: false,
+          sticky: "start",
+        }),
+      );
+    });
+  });
+
+  describe("saveColumns", () => {
+    it("builds the columns and persists them to storage", () => {
+      const tableName = "jobsTable";
+      const userId = "user-1";
+      const columnSetting = [
+        { name: "pid", display: "visible" },
+        { name: "name", display: "hidden" },
+      ] as any;
+
+      const result = service.saveColumns(tableName, columnSetting, userId);
+
+      expect(result.map((c) => c.name)).toEqual(["pid", "name"]);
+      expect(storage.set).toHaveBeenCalledWith(tableName, result, userId);
+    });
+  });
 });

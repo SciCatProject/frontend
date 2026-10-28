@@ -210,15 +210,9 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width } = column;
-
-      return { name, display, order: index, width };
-    });
-
-    this.tableConfigService.persistColumns(
+    const columnsSetting = this.tableConfigService.saveColumns(
       this.tableName,
-      columnsSetting,
+      setting.columnSetting,
       this.currentUserId,
     );
 

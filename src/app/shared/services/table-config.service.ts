@@ -6,6 +6,7 @@ import { ITableSetting } from "../modules/dynamic-material-table/models/table-se
 import { Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { TablePagination } from "../modules/dynamic-material-table/models/table-pagination.model";
+import { TableColumn } from "state-management/models";
 import { TableSettingsStorageService } from "./table-settings-storage.service";
 
 @Injectable({ providedIn: "root" })
@@ -75,6 +76,62 @@ export class TableConfigService {
     } catch (e) {
       // Ignore storage failures (private mode or quota), server update still happens below.
     }
+  }
+
+  /**
+   * Convert the table's live column setting (popup order) into the serializable
+   * shape that is persisted on the server / store. This is the single source of
+   * truth for how column order and column flags are saved, so every table stores
+   * columns consistently (order follows the array index).
+   */
+  buildColumnsSetting(columnSetting: TableField<any>[]): TableColumn[] {
+    return (columnSetting || []).map((column, index) => {
+      const {
+        name,
+        header,
+        display,
+        width,
+        type,
+        format,
+        path,
+        tooltip,
+        sort,
+        printable,
+        sticky,
+      } = column;
+
+      return {
+        name,
+        header,
+        enabled: display === "visible" || display === "prevent-hidden",
+        order: index,
+        width,
+        path,
+        userAdded: column.userAdded || undefined,
+        type,
+        format,
+        tooltip,
+        sort,
+        printable,
+        sticky,
+      } as TableColumn;
+    });
+  }
+
+  /**
+   * Centralized persistence of the column setting: builds the persisted column
+   * list (preserving the given order) and stores it in the local cache.
+   * Returns the built columns so callers can dispatch their scope-specific
+   * store action without mapping the columns themselves.
+   */
+  saveColumns(
+    tableName: string,
+    columnSetting: TableField<any>[],
+    userId?: string,
+  ): TableColumn[] {
+    const columns = this.buildColumnsSetting(columnSetting);
+    this.persistColumns(tableName, columns, userId);
+    return columns;
   }
 
   preferSavedColumns<T>(

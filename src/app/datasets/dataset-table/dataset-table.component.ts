@@ -242,47 +242,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   resolveColumnSource(storeColumns: TableColumn[]): TableColumn[] {
-    const persistedColumns = this.tableSettingsStorage.get(
+    return this.tableConfigService.preferSavedColumns(
       this.tableName,
+      storeColumns,
       this.currentUserId,
-    ) as TableColumn[] | undefined;
-
-    return persistedColumns && persistedColumns.length > 0
-      ? persistedColumns
-      : storeColumns;
+    );
   }
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, header, display, width, type, format, path, tooltip } =
-        column;
-
-      return {
-        name,
-        header,
-        enabled: !!(display === "visible"),
-        order: index,
-        width,
-        path,
-        userAdded: column.userAdded || undefined,
-        type,
-        format,
-        tooltip,
-      };
-    });
-
-    // Persist immediately to persistent local store as a fast fallback so UI changes
-    // survive short navigations / reloads even if the server/store hasn't updated yet.
-    try {
-      this.tableSettingsStorage.set(
-        this.tableName,
-        columnsSetting,
-        this.currentUserId,
-      );
-    } catch (e) {
-      // Ignore storage failures (private mode or quota), server update still happens below.
-    }
+    const columnsSetting = this.tableConfigService.saveColumns(
+      this.tableName,
+      setting.columnSetting,
+      this.currentUserId,
+    );
 
     // Update the in-memory store synchronously so the change is visible even if
     // the server round-trip hasn't completed (e.g. user navigates away and back).

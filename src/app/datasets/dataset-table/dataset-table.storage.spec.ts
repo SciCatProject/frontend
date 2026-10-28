@@ -30,7 +30,29 @@ describe("DatasetTableComponent (storage interactions)", () => {
       }),
     };
     const route: any = { snapshot: { queryParams: {} } };
-    const tableConfigService: any = {};
+    const tableConfigService: any = {
+      saveColumns: (
+        tableName: string,
+        columnSetting: any[],
+        userId?: string,
+      ) => {
+        const columns = (columnSetting || []).map((c, i) => ({
+          name: c.name,
+          order: i,
+          enabled: c.display === "visible",
+        }));
+        storageSpy.set(tableName, columns, userId);
+        return columns;
+      },
+      preferSavedColumns: (
+        tableName: string,
+        columns: any[] | undefined,
+        userId?: string,
+      ) => {
+        const persisted = storageSpy.get(tableName, userId) as any[];
+        return persisted && persisted.length > 0 ? persisted : (columns ?? []);
+      },
+    };
     const datasetsListService: any = {
       convertSavedDatasetColumns: (c: any) => c,
     };
