@@ -186,6 +186,23 @@ Cypress.Commands.add("removeConditions", () => {
   cy.get('[data-cy="condition-chip"]').should("not.exist");
 });
 
+/**
+ * Resets the settings that are saved in the backend for the logged in user,
+ * so that they don't leak between tests and the defaults of the config apply.
+ */
+Cypress.Commands.add("userSettingsReset", () => {
+  cy.getCookie("userId").then((userId) =>
+    cy.getToken().then((token) =>
+      cy.request({
+        method: "PATCH",
+        url: `${lbBaseUrl}/users/${encodeURIComponent(userId.value)}/settings`,
+        headers: getHeader(token),
+        body: { externalSettings: {} },
+      }),
+    ),
+  );
+});
+
 Cypress.Commands.add("isLoading", (type) => {
   cy.intercept(lbBaseUrl, (req) => {
     req.on("response", (res) => res.delay(100)); // enough delay so that spinner appears

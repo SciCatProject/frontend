@@ -3,6 +3,7 @@ import { testData } from "../../fixtures/testData";
 describe("Datasets general", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
+    cy.userSettingsReset();
   });
 
   afterEach(() => {
