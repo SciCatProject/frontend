@@ -94,22 +94,16 @@ export function getActiveConfigs(
 /** A condition can only filter once it has a value (or a bound for ranges). */
 export function isConditionComplete(condition: FilterCondition): boolean {
   if (!condition.lhs) return false;
-  if (isDatasetCondition(condition)) {
-    if (condition.relation === "RANGE") {
-      return (
-        Array.isArray(condition.rhs) &&
-        condition.rhs.some((bound) => !isBlank(bound))
-      );
-    }
-    return condition.relation === "IN"
-      ? splitValues(condition.rhs).length > 0
-      : datasetText(condition.rhs).trim() !== "";
-  }
   if (condition.relation === "RANGE") {
     return (
       Array.isArray(condition.rhs) &&
       condition.rhs.some((bound) => !isBlank(bound))
     );
+  }
+  if (isDatasetCondition(condition)) {
+    return condition.relation === "IN"
+      ? splitValues(condition.rhs).length > 0
+      : datasetText(condition.rhs).trim() !== "";
   }
   return !isBlank(condition.rhs);
 }
@@ -349,11 +343,13 @@ function datasetConditionToQuery({
 }: FilterCondition): Record<string, unknown> {
   if (relation === "RANGE") {
     const [from, to] = Array.isArray(rhs) ? rhs : [];
+    // a bound that is not a date (e.g. typed in the config) is left out
+    const start = isBlank(from) ? undefined : startOfDay(String(from));
+    // the end day is included, up to the start of the next day
+    const end = isBlank(to) ? undefined : startOfDay(String(to), 1);
     const range = {
-      // dates are typed like in the date filter of the sidebar, the list ignores plain text
-      ...(!isBlank(from) && { $gte: { $date: startOfDay(String(from)) } }),
-      // like the sidebar, the end day is included
-      ...(!isBlank(to) && { $lte: { $date: startOfDay(String(to), 1) } }),
+      ...(start && { $gte: { $date: start } }),
+      ...(end && { $lt: { $date: end } }),
     };
     return Object.keys(range).length ? { [lhs]: range } : {};
   }
@@ -368,10 +364,11 @@ function datasetConditionToQuery({
       };
 }
 
-/** The start of a day (`2026-01-31`) in the local time zone as an ISO string. */
-function startOfDay(date: string, addDays = 0): string {
+/** The start of a day (`2026-01-31`) in the local time zone as an ISO string, undefined for no date. */
+function startOfDay(date: string, addDays = 0): string | undefined {
   const [year, month, day] = date.split("-").map(Number);
-  return new Date(year, month - 1, day + addDays).toISOString();
+  const start = new Date(year, month - 1, day + addDays);
+  return isNaN(start.getTime()) ? undefined : start.toISOString();
 }
 
 /** The query of one condition, NOT leaves out what matches. */

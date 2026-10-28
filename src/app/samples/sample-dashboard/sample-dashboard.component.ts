@@ -204,8 +204,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         ),
     );
 
-    // The saved conditions are the ones shown in the filter, so apply them. The page can be
-    // there before the settings are, the conditions are only the saved ones once they are.
+    // The saved conditions are the ones shown as chips, so they replace the ones of the URL,
+    // also when there are none. The page can be there before the settings are.
     this.subscriptions.push(
       this.store
         .select(selectFetchedConditions("sample"))
@@ -213,12 +213,9 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
           filter((configs) => configs !== null),
           take(1),
         )
-        .subscribe((configs) => {
-          const characteristics = toActiveConditions(configs);
-          if (characteristics.length) {
-            this.onConditionsApplied(characteristics);
-          }
-        }),
+        .subscribe((configs) =>
+          this.onConditionsApplied(toActiveConditions(configs)),
+        ),
     );
   }
 

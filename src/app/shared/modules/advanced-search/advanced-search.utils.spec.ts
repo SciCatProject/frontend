@@ -110,8 +110,26 @@ describe("condition filter utils", () => {
       expect(conditionsToQuery([dates(["2026-01-01", "2026-01-31"])])).toEqual({
         creationTime: {
           $gte: { $date: new Date(2026, 0, 1).toISOString() },
-          $lte: { $date: new Date(2026, 1, 1).toISOString() },
+          $lt: { $date: new Date(2026, 1, 1).toISOString() },
         },
+      });
+    });
+
+    it("should leave out the next midnight, the end day is the last one", () => {
+      const { creationTime } = conditionsToQuery([
+        dates(["", "2026-01-31"]),
+      ]) as { creationTime: Record<string, unknown> };
+      expect(creationTime).toEqual({
+        $lt: { $date: new Date(2026, 1, 1).toISOString() },
+      });
+      expect(creationTime["$lte"]).toBeUndefined();
+    });
+
+    it("should leave out a bound that is not a date instead of failing", () => {
+      expect(() => conditionsToQuery([dates(["bad-date", ""])])).not.toThrow();
+      expect(conditionsToQuery([dates(["bad-date", ""])])).toEqual({});
+      expect(conditionsToQuery([dates(["bad-date", "2026-01-31"])])).toEqual({
+        creationTime: { $lt: { $date: new Date(2026, 1, 1).toISOString() } },
       });
     });
 
@@ -125,7 +143,7 @@ describe("condition filter utils", () => {
 
     it("should query with one date only", () => {
       expect(conditionsToQuery([dates(["", "2026-01-31"])])).toEqual({
-        creationTime: { $lte: { $date: new Date(2026, 1, 1).toISOString() } },
+        creationTime: { $lt: { $date: new Date(2026, 1, 1).toISOString() } },
       });
       expect(conditionsToQuery([dates(["", ""])])).toEqual({});
     });

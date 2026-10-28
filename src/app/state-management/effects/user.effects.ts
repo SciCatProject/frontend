@@ -358,11 +358,15 @@ export class UserEffects {
 
             for (const setting of settingsToCheck) {
               let items = externalSettings[setting];
+              const settingConfig = SETTINGS_CONFIG.find(
+                (s) => s.key === setting,
+              );
+              // cleared conditions stay cleared, the defaults are for conditions never saved
+              const keepEmpty =
+                settingConfig?.configKey === "conditions" &&
+                Array.isArray(items);
 
-              if (!Array.isArray(items) || items.length < 1) {
-                const settingConfig = SETTINGS_CONFIG.find(
-                  (s) => s.key === setting,
-                );
+              if (!keepEmpty && (!Array.isArray(items) || items.length < 1)) {
                 switch (settingConfig?.scope) {
                   case "dataset":
                     items =
@@ -442,24 +446,13 @@ export class UserEffects {
 
             const conditions = incoming.length > 0 ? incoming : [];
 
-            const actions = [];
-
-            if (scope === "dataset") {
-              actions.push(
-                setScientificConditionsAction({
-                  conditions: toActiveConditions(conditions),
-                }),
-              );
-            }
-
-            actions.push(
+            // the datasets reducer already filters by them, see fetchUserSettingsCompleteAction
+            return [
               fromActions.updateConditionsConfigs({
                 conditionConfigs: conditions,
                 scope,
               }),
-            );
-
-            return actions;
+            ];
           },
         ),
       ),

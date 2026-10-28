@@ -7,6 +7,7 @@ import * as fromActions from "state-management/actions/datasets.actions";
 import { fetchUserSettingsCompleteAction } from "state-management/actions/user.actions";
 import { ArchViewMode, FilterCondition } from "state-management/models";
 import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
+import deepEqual from "deep-equal";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -437,10 +438,16 @@ const reducer = createReducer(
 
   on(
     fromActions.setScientificConditionsAction,
-    (state, { conditions }): DatasetState => ({
-      ...state,
-      filters: { ...state.filters, scientific: conditions },
-    }),
+    (state, { conditions }): DatasetState => {
+      // the same conditions come again with the settings, the page stays then
+      if (deepEqual(conditions, state.filters.scientific)) return state;
+      return {
+        ...state,
+        filters: { ...state.filters, scientific: conditions },
+        // other filters can match fewer datasets, a later page could be empty
+        pagination: { ...state.pagination, skip: 0 },
+      };
+    },
   ),
 
   // The list is fetched as soon as the settings are there, which is before an effect of this

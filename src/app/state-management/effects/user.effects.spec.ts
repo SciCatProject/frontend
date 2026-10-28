@@ -666,11 +666,11 @@ describe("UserEffects", () => {
         return settings;
       };
 
-      it("should be the sample conditions of a user that has none", () => {
+      it("should keep the sample conditions a user cleared", () => {
         expect(
           settingsAfterFetch({ fe_sample_table_conditions: [] })
             .fe_sample_table_conditions,
-        ).toEqual([predefined]);
+        ).toEqual([]);
       });
 
       it("should be the sample conditions of a user whose settings are new", () => {
@@ -875,7 +875,7 @@ describe("UserEffects", () => {
       condition: { ...filled.condition, lhs: "pressure", rhs: "" },
     };
 
-    it("should filter datasets by the enabled conditions that have a value", () => {
+    it("should only keep the saved conditions, the datasets reducer already filters by them", () => {
       const configs = [filled, switchedOff, withoutValue];
       const userSettings = {
         externalSettings: {
@@ -888,17 +888,8 @@ describe("UserEffects", () => {
         a: fromActions.fetchUserSettingsCompleteAction({ userSettings }),
       });
 
-      const expected = cold("-(bcd)", {
-        b: setScientificConditionsAction({
-          conditions: [
-            {
-              lhs: "temperature",
-              relation: "EQUAL_TO_NUMERIC",
-              rhs: 20,
-              unit: "",
-            },
-          ],
-        }),
+      // setting them again would go back to the first page
+      const expected = cold("-(cd)", {
         c: fromActions.updateConditionsConfigs({
           conditionConfigs: configs,
           scope: "dataset",

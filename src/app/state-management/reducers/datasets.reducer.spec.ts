@@ -503,6 +503,33 @@ describe("DatasetsReducer", () => {
 
       expect(state.filters.scientific).toEqual([]);
     });
+
+    it("should go back to the first page", () => {
+      const onPage3 = {
+        ...initialDatasetState,
+        pagination: { skip: 50, limit: 25 },
+      };
+      const state = fromDatasets.datasetsReducer(
+        onPage3,
+        fromActions.setScientificConditionsAction({ conditions: [condition] }),
+      );
+
+      expect(state.pagination).toEqual({ skip: 0, limit: 25 });
+    });
+
+    it("should stay on the page when the conditions are the same", () => {
+      const onPage3 = {
+        ...initialDatasetState,
+        filters: { ...initialDatasetState.filters, scientific: [condition] },
+        pagination: { skip: 50, limit: 25 },
+      };
+      const state = fromDatasets.datasetsReducer(
+        onPage3,
+        fromActions.setScientificConditionsAction({ conditions: [condition] }),
+      );
+
+      expect(state.pagination).toEqual({ skip: 50, limit: 25 });
+    });
   });
 
   describe("on clearDatasetsStateAction", () => {
@@ -580,6 +607,20 @@ describe("DatasetsReducer", () => {
       );
 
       expect(state.filters.text).toBe("beam");
+    });
+
+    it("should stay on the page of the URL", () => {
+      const onPage3 = {
+        ...initialDatasetState,
+        pagination: { skip: 50, limit: 25 },
+      };
+
+      const state = fromDatasets.datasetsReducer(
+        onPage3,
+        complete([saved("1")]),
+      );
+
+      expect(state.pagination).toEqual({ skip: 50, limit: 25 });
     });
   });
 });
