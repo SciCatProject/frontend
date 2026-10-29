@@ -471,7 +471,8 @@ describe("Proposals general", () => {
         .find("input[type=checkbox]")
         .uncheck();
 
-      cy.contains(".column-config-apply button.done-setting", "done").click();
+      // Changes auto-save after a debounce and the popup closes automatically.
+      cy.waitForColumnAutoSave();
 
       cy.reload();
 

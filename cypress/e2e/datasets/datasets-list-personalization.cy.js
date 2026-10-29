@@ -126,8 +126,10 @@ describe("1000 - Datasets list personalization", () => {
       .find("input")
       .uncheck({ force: true });
 
-    // Apply
-    cy.contains("mat-icon", "done").closest("button").click();
+    // Changes auto-save after a debounce; wait for the popup to close.
+    cy.waitForColumnAutoSave();
+
+    cy.get("mat-table").should("exist");
 
     cy.get("mat-table")
       .find("mat-header-row.header")
@@ -172,8 +174,8 @@ describe("1000 - Datasets list personalization", () => {
       .find("input")
       .uncheck({ force: true });
 
-    // Apply
-    cy.contains("mat-icon", "done").closest("button").click();
+    // Changes auto-save after a debounce; wait for the popup to close.
+    cy.waitForColumnAutoSave();
 
     cy.finishedLoading();
 

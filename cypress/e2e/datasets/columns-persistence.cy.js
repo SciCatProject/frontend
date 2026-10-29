@@ -43,9 +43,8 @@ describe("Datasets columns persistence", () => {
       .first()
       .uncheck({ force: true });
 
-    // Apply persists the column setting automatically
-    cy.contains(".column-config-apply button.done-setting", "done").click();
-    cy.finishedLoading();
+    // Changes auto-save after a debounce and the popup closes automatically.
+    cy.waitForColumnAutoSave();
 
     // Applying the setting reloads the table data. In CI this is the first spec
     // to hit a freshly started backend, so give the table a generous window to
@@ -55,14 +54,7 @@ describe("Datasets columns persistence", () => {
       0,
     );
 
-    // The settings panel stays open after "done". Dismiss it; force-click
-    // the row to bypass any lingering overlay backdrop.
-    cy.get("body").type("{esc}");
-    cy.get(".column-config-apply button.done-setting").should("not.exist", {
-      timeout: 5000,
-    });
-
-    // Assert the deselected column is gone from the header right after applying.
+    // Assert the deselected column is gone from the header right after the save.
     cy.get("@removedColumn").then((text) => {
       cy.get("dynamic-mat-table mat-header-row.header").should(
         "not.contain",

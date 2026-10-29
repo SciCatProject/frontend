@@ -429,6 +429,86 @@ Cypress.Commands.add("removeJobs", () => {
   });
 });
 
+Cypress.Commands.add("openColumnSetting", () => {
+  cy.get("dynamic-mat-table table-menu button").first().click();
+  cy.get('[role="menu"] button').contains("Column setting").click();
+  cy.get('[role="menu"] mat-checkbox.column-config').should("exist");
+});
+
+// Reorder a table column by dragging its header to a target index using the CDK
+// drag handle. `from` and `to` are zero-based indexes into the draggable header
+// cells (excluding the row-checkbox and table-menu columns).
+Cypress.Commands.add("dragColumnHeader", (from, to) => {
+  const draggableHeaders =
+    "mat-header-row.header mat-header-cell:has(.drag-indicator)";
+
+  cy.get(draggableHeaders).then(($cells) => {
+    const source = $cells[from];
+    const target = $cells[to];
+    const sourceRect = source.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+
+    const startX = sourceRect.left + sourceRect.width / 2;
+    const startY = sourceRect.top + sourceRect.height / 2;
+    const endX = targetRect.left + targetRect.width / 2;
+    const endY = targetRect.top + targetRect.height / 2;
+
+    const handle = source.querySelector(".drag-indicator");
+    const pointerDown = new PointerEvent("pointerdown", {
+      bubbles: true,
+      cancelable: true,
+      clientX: startX,
+      clientY: startY,
+      pointerId: 1,
+      button: 0,
+      buttons: 1,
+    });
+    handle.dispatchEvent(pointerDown);
+
+    const pointerMove = new PointerEvent("pointermove", {
+      bubbles: true,
+      cancelable: true,
+      clientX: endX,
+      clientY: endY,
+      pointerId: 1,
+      button: 0,
+      buttons: 1,
+    });
+    document.dispatchEvent(pointerMove);
+
+    const pointerUp = new PointerEvent("pointerup", {
+      bubbles: true,
+      cancelable: true,
+      clientX: endX,
+      clientY: endY,
+      pointerId: 1,
+      button: 0,
+      buttons: 0,
+    });
+    document.dispatchEvent(pointerUp);
+  });
+});
+
+Cypress.Commands.add("toggleColumnInPopup", (label, checked = true) => {
+  cy.get('[role="menu"]')
+    .contains("mat-checkbox.column-config", label)
+    .find("input[type=checkbox]")
+    .then(($input) => {
+      const isChecked = $input.is(":checked");
+      if (isChecked !== checked) {
+        cy.wrap($input).click({ force: true });
+      }
+    });
+});
+
+// The column-settings popup auto-saves 6000 ms after the last change and then
+// closes itself. Waiting for the popup to disappear confirms the save happened.
+Cypress.Commands.add("waitForColumnAutoSave", () => {
+  cy.get('[role="menu"] mat-checkbox.column-config', { timeout: 15000 }).should(
+    "not.exist",
+  );
+});
+
 Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
   cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
