@@ -176,14 +176,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         this.actionItems.instruments = dataset.instruments ?? [];
       }),
     );
-
-    this.subscriptions.push(
-      this.store.select(selectCurrentUser).subscribe((user) => {
-        if (user) {
-          this.actionItems.user = user;
-        }
-      }),
-    );
   }
 
   /**

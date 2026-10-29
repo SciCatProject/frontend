@@ -27,6 +27,25 @@ export interface FacetCounts {
   [field: string]: FacetCount[];
 }
 
+export interface DateRange {
+  begin?: string;
+  end?: string;
+}
+
+export interface DateRangeFilter {
+  $gte?: { $date: string };
+  $lte?: { $date: string };
+}
+
+export interface FacetCount {
+  _id: string;
+  label?: string;
+  count: number;
+}
+export interface FacetCounts {
+  [field: string]: FacetCount[];
+}
+
 export interface Settings {
   tapeCopies: string;
   datasetCount: number;
