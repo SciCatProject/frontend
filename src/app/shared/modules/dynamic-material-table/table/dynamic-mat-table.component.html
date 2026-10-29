@@ -221,11 +221,31 @@
         >
           <!-- The render image is specific for the dataset table as the "thumbnail" pipe is designed to work only with datasets. Maybe this should be reviewed later and have a more general solution where we render images in columns -->
           @if (column.renderImage) {
+            @let thumbnail = row.pid | thumbnail | async;
             <img
-              src="{{ row.pid | thumbnail | async }}"
+              src="{{ thumbnail }}"
               height="42px"
               loading="lazy"
+              cdkOverlayOrigin
+              #thumbnailOrigin="cdkOverlayOrigin"
+              (mouseenter)="onHoverCardTriggerEnter(row, column)"
+              (mouseleave)="onHoverCardTriggerLeave(row, column)"
             />
+            <ng-template
+              cdkConnectedOverlay
+              [cdkConnectedOverlayOrigin]="thumbnailOrigin"
+              [cdkConnectedOverlayOpen]="
+                !!thumbnail && isHoverCardOpen(row, column)
+              "
+              [cdkConnectedOverlayPositions]="thumbnailPreviewPositions"
+            >
+              <img
+                class="thumbnail-preview"
+                data-cy="thumbnail-preview"
+                [src]="thumbnail"
+                alt=""
+              />
+            </ng-template>
           } @else {
             @if (column.customRender) {
               @if (
