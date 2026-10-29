@@ -114,11 +114,9 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
-    saveSettingMode: "none",
     settingList: [
       {
         visibleActionMenu: actionMenu,
-        saveSettingMode: "none",
         isDefaultSetting: true,
         isCurrentSetting: true,
         columnSetting: [],

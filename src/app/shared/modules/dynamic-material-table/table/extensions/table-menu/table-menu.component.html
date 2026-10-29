@@ -37,6 +37,7 @@
     mat-menu-item
     type="button"
     color="primary"
+    #columnMenuTrigger="matMenuTrigger"
     [matMenuTriggerFor]="columnMenu"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
