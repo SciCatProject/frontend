@@ -32,52 +32,6 @@ export class TableSettingsStorageService {
     return `${this.keyPrefix}.${userId || "anon"}.${tableName}.columns.${this.version}`;
   }
 
-  get(
-    tableName: string,
-    userId?: string,
-  ): StoredTableColumns["columns"] | undefined {
-    try {
-      const raw = localStorage.getItem(this.keyFor(tableName, userId));
-      if (!raw) return undefined;
-      const parsed = JSON.parse(raw) as StoredTableColumns;
-      if (!parsed || !parsed.columns) return undefined;
-      return parsed.columns;
-    } catch (e) {
-      // Parsing or access error — return undefined to let callers fall back
-      return undefined;
-    }
-  }
-
-  set(tableName: string, columns: unknown[], userId?: string) {
-    try {
-      const payload: StoredTableColumns = {
-        version: this.version,
-        columns,
-        savedAt: new Date().toISOString(),
-        userId,
-      };
-      localStorage.setItem(
-        this.keyFor(tableName, userId),
-        JSON.stringify(payload),
-      );
-
-      // notify same-tab subscribers
-      this.change$.next({ tableName, userId });
-      // other tabs will receive a 'storage' event automatically
-    } catch (e) {
-      // swallow storage errors (private mode, quota)
-    }
-  }
-
-  remove(tableName: string, userId?: string) {
-    try {
-      localStorage.removeItem(this.keyFor(tableName, userId));
-      this.change$.next({ tableName, userId });
-    } catch (e) {
-      // ignore
-    }
-  }
-
   private initCrossTabSync() {
     // Listen to storage events from other tabs/windows
     window.addEventListener("storage", (ev: StorageEvent) => {
@@ -189,6 +143,52 @@ export class TableSettingsStorageService {
       }
     } catch {
       // ignore storage iteration errors
+    }
+  }
+
+  get(
+    tableName: string,
+    userId?: string,
+  ): StoredTableColumns["columns"] | undefined {
+    try {
+      const raw = localStorage.getItem(this.keyFor(tableName, userId));
+      if (!raw) return undefined;
+      const parsed = JSON.parse(raw) as StoredTableColumns;
+      if (!parsed || !parsed.columns) return undefined;
+      return parsed.columns;
+    } catch (e) {
+      // Parsing or access error — return undefined to let callers fall back
+      return undefined;
+    }
+  }
+
+  set(tableName: string, columns: unknown[], userId?: string) {
+    try {
+      const payload: StoredTableColumns = {
+        version: this.version,
+        columns,
+        savedAt: new Date().toISOString(),
+        userId,
+      };
+      localStorage.setItem(
+        this.keyFor(tableName, userId),
+        JSON.stringify(payload),
+      );
+
+      // notify same-tab subscribers
+      this.change$.next({ tableName, userId });
+      // other tabs will receive a 'storage' event automatically
+    } catch (e) {
+      // swallow storage errors (private mode, quota)
+    }
+  }
+
+  remove(tableName: string, userId?: string) {
+    try {
+      localStorage.removeItem(this.keyFor(tableName, userId));
+      this.change$.next({ tableName, userId });
+    } catch (e) {
+      // ignore
     }
   }
 }

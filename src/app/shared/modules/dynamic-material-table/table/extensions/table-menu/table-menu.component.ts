@@ -30,6 +30,9 @@ import {
   standalone: false,
 })
 export class TableMenuComponent implements OnDestroy {
+  private columnChange$ = new Subject<void>();
+  private columnChangeSub: Subscription;
+
   @Output() menuActionChange: EventEmitter<TableMenuActionChange> =
     new EventEmitter<TableMenuActionChange>();
 
@@ -66,9 +69,6 @@ export class TableMenuComponent implements OnDestroy {
   reverseDirection: "auto" | Direction = "auto";
   currentTableSetting: ITableSetting;
 
-  private columnChange$ = new Subject<void>();
-  private columnChangeSub: Subscription;
-
   constructor(
     public tableService: TableService,
     private cdr: ChangeDetectorRef,
@@ -76,11 +76,6 @@ export class TableMenuComponent implements OnDestroy {
     this.columnChangeSub = this.columnChange$
       .pipe(debounceTime(6000))
       .subscribe(() => this.saveColumnSettings());
-  }
-
-  ngOnDestroy(): void {
-    this.columnChangeSub?.unsubscribe();
-    this.columnChange$.complete();
   }
 
   private scheduleColumnSave() {
@@ -93,6 +88,11 @@ export class TableMenuComponent implements OnDestroy {
       data: this.currentTableSetting,
     });
     this.columnMenuTrigger?.closeMenu();
+  }
+
+  ngOnDestroy(): void {
+    this.columnChangeSub?.unsubscribe();
+    this.columnChange$.complete();
   }
 
   screenMode_onClick() {
