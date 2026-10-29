@@ -21,6 +21,16 @@
         >
           cloud_off
         </mat-icon>
+      } @else if (realTimeEnabled && eventsService.evicted$ | async) {
+        <mat-icon
+          class="connection-error-icon"
+          matTooltip="Live updates paused: on in too many tabs. Toggling will pause your oldest tab."
+          matTooltipPosition="above"
+          aria-label="Live updates paused: on in too many tabs. Toggling will pause your oldest tab."
+          data-cy="live-updates-evicted"
+        >
+          sync_disabled
+        </mat-icon>
       }
     </div>
   }
