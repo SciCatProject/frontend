@@ -261,6 +261,23 @@ export class DynamicMatTableComponent<T extends TableRow>
       offsetX: 4,
     },
   ];
+  /** Overlay positions for the thumbnail preview, to the right of the thumbnail first */
+  thumbnailPreviewPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "start",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "center",
+      offsetX: -8,
+    },
+  ];
   /** Overlay positions for metadata hover */
   metadataOverlayPositions: ConnectedPosition[] = [
     {

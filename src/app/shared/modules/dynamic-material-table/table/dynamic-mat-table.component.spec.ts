@@ -102,6 +102,29 @@ describe("DynamicMatTableComponent", () => {
     expect(component.isHoverCardOpen(row, hoverColumn)).toBeFalse();
   });
 
+  it("opens the thumbnail preview on mouseenter and closes it on mouseleave", () => {
+    const row = { id: 1, pid: "pid-1" };
+    const imageColumn: TableField<any> = { name: "image", renderImage: true };
+
+    component.onHoverCardTriggerEnter(row, imageColumn);
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeTrue();
+
+    component.onHoverCardTriggerLeave(row, imageColumn);
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeFalse();
+  });
+
+  it("shows the preview of one row at a time", () => {
+    const row = { id: 1, pid: "pid-1" };
+    const otherRow = { id: 2, pid: "pid-2" };
+    const imageColumn: TableField<any> = { name: "image", renderImage: true };
+
+    component.onHoverCardTriggerEnter(row, imageColumn);
+    component.onHoverCardTriggerEnter(otherRow, imageColumn);
+
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeFalse();
+    expect(component.isHoverCardOpen(otherRow, imageColumn)).toBeTrue();
+  });
+
   it("closes a pinned hover card on document click", () => {
     const row = { id: 1 };
 
