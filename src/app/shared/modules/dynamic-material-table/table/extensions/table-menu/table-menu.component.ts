@@ -74,7 +74,7 @@ export class TableMenuComponent implements OnDestroy {
     private cdr: ChangeDetectorRef,
   ) {
     this.columnChangeSub = this.columnChange$
-      .pipe(debounceTime(500))
+      .pipe(debounceTime(600))
       .subscribe(() => this.saveColumnSettings());
   }
 
