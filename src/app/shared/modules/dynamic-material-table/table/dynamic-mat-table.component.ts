@@ -48,7 +48,7 @@ import {
   distinctUntilChanged,
   filter,
 } from "rxjs/operators";
-import { Subject, Subscription, timer } from "rxjs";
+import { combineLatest, Subject, Subscription, timer } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
 import {
@@ -683,11 +683,12 @@ export class DynamicMatTableComponent<T extends TableRow>
       });
     }
 
-    this.liveConnectionErrSub = this.eventsService.connectionError$.subscribe(
-      (hasError) => {
-        this.liveBorder = !hasError;
-      },
-    );
+    this.liveConnectionErrSub = combineLatest([
+      this.eventsService.connectionError$,
+      this.eventsService.evicted$,
+    ]).subscribe(([hasError, evicted]) => {
+      this.liveBorder = !hasError && !evicted;
+    });
   }
 
   public get inverseOfTranslation(): number {
