@@ -214,6 +214,11 @@ describe("EventsService: token expiry", () => {
     expect(evicted).toBeTrue();
     expect(MockEventSource.count).toBe(1);
 
+    // a new token after eviction must not reopen the stream
+    setToken("refreshed");
+    waitForRetry();
+    expect(MockEventSource.count).toBe(1);
+
     service.disconnect();
     expect(evicted).toBeFalse();
     discardPeriodicTasks();
