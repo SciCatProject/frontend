@@ -79,7 +79,8 @@ export class EventsService {
         es.close();
         this.ngZone.run(() => {
           this.evictedSubject.next(true);
-          observer.complete();
+          this.connectionSub?.unsubscribe();
+          this.connectionSub = null;
         });
       });
 
