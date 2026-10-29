@@ -257,7 +257,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
     updatedAt:
       "Date and time when this record was updated last. This field is managed by mongoose with through the timestamp settings. The field should be a string containing a date in ISO 8601 format (2024-02-27T12:26:57.313Z).",
     ownerGroup:
-      "Defines the group which owns the data, and therefore has unrestricted access to this data. Usually a pgroup like p12151.",
+      "Defines the group which owns the data, and therefore has unrestricted access to this data.",
     accessGroups:
       "Optional additional groups which have read access to the data. Users which are members in one of the groups listed here are allowed to access this data. The special group 'public' makes data available to all users.",
     instrumentGroup:
@@ -318,7 +318,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
     endTime:
       "End time of data acquisition for the current dataset. It is expected to be in ISO8601 format according to specifications for internet date/time format in RFC 3339, chapter 5.6.",
     creationLocation:
-      "Unique location identifier where data was acquired. Usually in the form /Site-name/facility-name/instrumentOrBeamline-name.",
+      "Unique location identifier where data was acquired. Usually in the form /Site-name/facility-name.",
     dataFormat:
       "Defines the format of the data files in this dataset, e.g Nexus Version x.y.",
     runNumber:

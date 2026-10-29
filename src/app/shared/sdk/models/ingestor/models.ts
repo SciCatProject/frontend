@@ -9,6 +9,7 @@ export * from './modelError';
 export * from './oidcCallbackOk';
 export * from './oidcCallbackOkOAuth2Token';
 export * from './oidcCallbackOkUserInfo';
+export * from './otherConfigurationsResponse';
 export * from './otherHealthResponse';
 export * from './otherVersionResponse';
 export * from './postDatasetRequest';

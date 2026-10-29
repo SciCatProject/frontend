@@ -41,7 +41,7 @@
     </mat-card-header>
     @if (isCardContentVisible.scicat) {
       <mat-card-content>
-        @if (!updateEditorFromThirdParty) {
+        @if (!updateEditorFromThirdParty && scicatHeaderSchema) {
           <app-metadata-editor
             #scicatHeaderEditor
             [schema]="scicatHeaderSchema"
