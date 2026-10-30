@@ -15,9 +15,13 @@ class MockEventSource {
   onmessage: ((e: { data: string }) => void) | null = null;
   onerror: (() => void) | null = null;
   closed = false;
+  listeners: Record<string, () => void> = {};
 
   constructor(public url: string) {
     MockEventSource.instances.push(this);
+  }
+  addEventListener(type: string, listener: () => void) {
+    this.listeners[type] = listener;
   }
   close() {
     this.closed = true;
@@ -190,6 +194,34 @@ describe("EventsService: token expiry", () => {
     waitForRetry();
 
     expect(fetchSpy.calls.count()).toBe(1);
+  }));
+
+  it("stops and flags the tab when the stream is evicted", fakeAsync(() => {
+    fetchSpy.and.returnValue(ticketOk("tkt-1"));
+    let evicted: boolean;
+    service.evicted$.subscribe((v) => (evicted = v));
+
+    service.connect();
+    setToken("good");
+    const stream = MockEventSource.last;
+    stream.onopen();
+    expect(evicted).toBeFalse();
+
+    stream.listeners["evicted"]();
+    waitForRetry();
+
+    expect(stream.closed).toBeTrue();
+    expect(evicted).toBeTrue();
+    expect(MockEventSource.count).toBe(1);
+
+    // a new token after eviction must not reopen the stream
+    setToken("refreshed");
+    waitForRetry();
+    expect(MockEventSource.count).toBe(1);
+
+    service.disconnect();
+    expect(evicted).toBeFalse();
+    discardPeriodicTasks();
   }));
 
   it("clears the error flag on disconnect", fakeAsync(() => {
