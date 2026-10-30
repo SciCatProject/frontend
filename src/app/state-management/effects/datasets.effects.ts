@@ -62,7 +62,7 @@ export class DatasetEffects {
         fromActions.setArchiveViewModeAction,
       ),
       concatLatestFrom(() => [this.fullqueryParams$, this.currentUser$]),
-      mergeMap(([, params, user]) => {
+      switchMap(([, params, user]) => {
         const config = this.appConfigService.getConfig();
         const defaultConfigColumns =
           config?.defaultDatasetsListSettings?.columns;
@@ -112,7 +112,7 @@ export class DatasetEffects {
         fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => [this.fullfacetParams$, this.currentUser$]),
-      mergeMap(([, params, user]) => {
+      switchMap(([, params, user]) => {
         const { fields, facets } = params;
 
         const filter = {
