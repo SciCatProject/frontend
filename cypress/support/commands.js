@@ -88,13 +88,27 @@ Cypress.Commands.add("finishedLoading", (type) => {
     .should("not.exist");
 });
 
-Cypress.Commands.add("isLoading", (type) => {
-  cy.intercept(lbBaseUrl, (req) => {
-    req.on("response", (res) => res.delay(100)); // enough delay so that spinner appears
-    cy.get('[data-cy="spinner"]');
-  });
+// Search a dynamic table (datasets or published data list) for `text` and
+// wait until the resulting list request has completed. The intercept is
+// registered right before clicking search so that cy.wait() matches the
+// request triggered by this search, not an earlier one.
+const tableListRequest =
+  /\/api\/v4\/(datasets(\/public)?|publisheddata)(\?|$)/i;
 
-  cy.get('[data-cy="spinner"]').should("not.exist");
+Cypress.Commands.add("searchTable", (text) => {
+  cy.get('[data-cy="text-search"]').clear().type(text);
+  cy.intercept({ method: "GET", url: tableListRequest }).as("tableSearch");
+  cy.get('[data-cy="search-button"]').click();
+  cy.wait("@tableSearch");
+  cy.finishedLoading();
+});
+
+// Open a dataset from the datasets table and make sure the navigation to the
+// details page actually happened before continuing.
+Cypress.Commands.add("openDataset", (name) => {
+  cy.get("mat-row").contains(name).first().click();
+  cy.location("pathname").should("match", /^\/datasets\/[^/]+/i);
+  cy.finishedLoading();
 });
 
 Cypress.Commands.add("createDataset", (overwrites = {}) => {

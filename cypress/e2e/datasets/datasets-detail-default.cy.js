@@ -34,14 +34,9 @@ describe("Datasets Detail View Default", () => {
 
     cy.finishedLoading();
 
-    cy.get('[data-cy="text-search"]').clear().type("Cypress");
-    cy.get('[data-cy="search-button"]').click();
+    cy.searchTable("Cypress");
 
-    cy.isLoading();
-
-    cy.get("mat-row").contains("Cypress Dataset").click();
-
-    cy.isLoading();
+    cy.openDataset("Cypress Dataset");
 
     cy.wrap([...fallbackLabelsToCheck, ...customizedLabelsToCheck]).each(
       (value) => {
