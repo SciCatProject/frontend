@@ -438,6 +438,10 @@ Cypress.Commands.add("openColumnSetting", () => {
 // Reorder a table column by dragging its header to a target index using the CDK
 // drag handle. `from` and `to` are zero-based indexes into the draggable header
 // cells (excluding the row-checkbox and table-menu columns).
+//
+// CDK DragDrop starts on `mousedown` (on the handle) and then listens to
+// `mousemove`/`mouseup` on the document, so we dispatch real mouse events and
+// move past the drag-start threshold before dropping.
 Cypress.Commands.add("dragColumnHeader", (from, to) => {
   const draggableHeaders =
     "mat-header-row.header mat-header-cell:has(.drag-indicator)";
@@ -453,39 +457,103 @@ Cypress.Commands.add("dragColumnHeader", (from, to) => {
     const endX = targetRect.left + targetRect.width / 2;
     const endY = targetRect.top + targetRect.height / 2;
 
-    const handle = source.querySelector(".drag-indicator");
-    const pointerDown = new PointerEvent("pointerdown", {
-      bubbles: true,
-      cancelable: true,
-      clientX: startX,
-      clientY: startY,
-      pointerId: 1,
-      button: 0,
-      buttons: 1,
-    });
-    handle.dispatchEvent(pointerDown);
+    cy.wrap(source.querySelector(".drag-indicator"))
+      .trigger("mousedown", {
+        which: 1,
+        button: 0,
+        clientX: startX,
+        clientY: startY,
+      })
+      .trigger("mousemove", {
+        which: 1,
+        button: 0,
+        clientX: startX + 10,
+        clientY: startY,
+      })
+      .wait(30)
+      .trigger("mousemove", {
+        which: 1,
+        button: 0,
+        clientX: endX,
+        clientY: endY,
+      })
+      .trigger("mousemove", {
+        which: 1,
+        button: 0,
+        clientX: endX,
+        clientY: endY,
+      });
 
-    const pointerMove = new PointerEvent("pointermove", {
-      bubbles: true,
-      cancelable: true,
-      clientX: endX,
-      clientY: endY,
-      pointerId: 1,
-      button: 0,
-      buttons: 1,
-    });
-    document.dispatchEvent(pointerMove);
+    cy.document()
+      .trigger("mousemove", {
+        which: 1,
+        button: 0,
+        clientX: endX,
+        clientY: endY,
+      })
+      .trigger("mouseup", {
+        which: 1,
+        button: 0,
+        clientX: endX,
+        clientY: endY,
+      });
+  });
+});
 
-    const pointerUp = new PointerEvent("pointerup", {
-      bubbles: true,
-      cancelable: true,
-      clientX: endX,
-      clientY: endY,
-      pointerId: 1,
-      button: 0,
-      buttons: 0,
-    });
-    document.dispatchEvent(pointerUp);
+// Drag a row within the column-settings popup from `from` to `to` (zero-based
+// indexes among the draggable rows).
+Cypress.Commands.add("dragPopupColumn", (from, to) => {
+  cy.get('[role="menu"] .dragable-row').then(($rows) => {
+    const source = $rows[from];
+    const target = $rows[to];
+    const sourceRect = source.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+
+    const startX = sourceRect.left + sourceRect.width / 2;
+    const startY = sourceRect.top + sourceRect.height / 2;
+    const endX = targetRect.left + targetRect.width / 2;
+    const endY = targetRect.top + targetRect.height / 2;
+
+    cy.wrap(source.querySelector("mat-icon"))
+      .trigger("mousedown", {
+        which: 1,
+        button: 0,
+        clientX: startX,
+        clientY: startY,
+      })
+      .trigger("mousemove", {
+        which: 1,
+        button: 0,
+        clientX: startX,
+        clientY: startY + 10,
+      })
+      .wait(30)
+      .trigger("mousemove", {
+        which: 1,
+        button: 0,
+        clientX: endX,
+        clientY: endY,
+      })
+      .trigger("mousemove", {
+        which: 1,
+        button: 0,
+        clientX: endX,
+        clientY: endY,
+      });
+
+    cy.document()
+      .trigger("mousemove", {
+        which: 1,
+        button: 0,
+        clientX: endX,
+        clientY: endY,
+      })
+      .trigger("mouseup", {
+        which: 1,
+        button: 0,
+        clientX: endX,
+        clientY: endY,
+      });
   });
 });
 

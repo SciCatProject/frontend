@@ -7,7 +7,7 @@ const headerLabels = () =>
     .not(".cdk-column-table-menu")
     .find(".mat-sort-header-content");
 
-const columnSettingLabels = () =>
+const popupLabels = () =>
   cy
     .get('[role="menu"] mat-checkbox.column-config')
     .should("have.length.greaterThan", 0)
@@ -25,6 +25,18 @@ describe("Datasets column order", () => {
 
   after(() => {
     cy.removeDatasets();
+  });
+
+  // The persistence layer stores the column order per user in localStorage under
+  // `scicat.table.<userId>.<tableName>.columns.v<n>`. Other specs (e.g. the
+  // datasets personalization) expect default columns, so drop these keys after
+  // each test to avoid leaking the reordered state across spec files.
+  afterEach(() => {
+    cy.window().then((win) => {
+      Object.keys(win.localStorage)
+        .filter((key) => key.startsWith("scicat.table."))
+        .forEach((key) => win.localStorage.removeItem(key));
+    });
   });
 
   beforeEach(() => {
@@ -48,17 +60,17 @@ describe("Datasets column order", () => {
     cy.get("dynamic-mat-table mat-table", { timeout: 20000 }).should("exist");
     cy.finishedLoading();
 
-    headerLabels().then((tableLabels) => {
-      cy.wrap(tableLabels).as("tableLabels");
+    headerLabels().then(($tableLabels) => {
+      const tableLabels = Cypress._.map($tableLabels, (el) =>
+        Cypress.$(el).text().trim(),
+      );
 
       cy.openColumnSetting();
 
-      columnSettingLabels().then((popupLabels) => {
-        // every header should appear in the popup in the same relative order
-        const filteredPopup = popupLabels.filter((l) =>
-          Array.from(tableLabels).includes(l),
-        );
-        expect(filteredPopup).to.deep.equal(Array.from(tableLabels));
+      popupLabels().then((popup) => {
+        // every visible header should appear in the popup in the same order
+        const filteredPopup = popup.filter((l) => tableLabels.includes(l));
+        expect(filteredPopup).to.deep.equal(tableLabels);
       });
 
       cy.get("body").type("{esc}");
@@ -70,17 +82,20 @@ describe("Datasets column order", () => {
     cy.get("dynamic-mat-table mat-table", { timeout: 20000 }).should("exist");
     cy.finishedLoading();
 
-    headerLabels().then((before) => {
-      const original = Array.from(before);
+    headerLabels().then(($before) => {
+      const original = Cypress._.map($before, (el) =>
+        Cypress.$(el).text().trim(),
+      );
       cy.wrap(original).as("originalOrder");
 
       // drag the first draggable column header to the third position
       cy.dragColumnHeader(0, 2);
       cy.finishedLoading();
 
-      headerLabels().then((after) => {
-        const reordered = Array.from(after);
-        // order changed and contains the same columns
+      headerLabels().then(($after) => {
+        const reordered = Cypress._.map($after, (el) =>
+          Cypress.$(el).text().trim(),
+        );
         expect(reordered).to.not.deep.equal(original);
         expect([...reordered].sort()).to.deep.equal([...original].sort());
         cy.wrap(reordered).as("reorderedOrder");
@@ -93,76 +108,41 @@ describe("Datasets column order", () => {
     cy.finishedLoading();
 
     cy.get("@reorderedOrder").then((reordered) => {
-      headerLabels().then((afterReload) => {
-        expect(Array.from(afterReload)).to.deep.equal(Array.from(reordered));
+      headerLabels().then(($afterReload) => {
+        const afterReload = Cypress._.map($afterReload, (el) =>
+          Cypress.$(el).text().trim(),
+        );
+        expect(afterReload).to.deep.equal(reordered);
       });
     });
   });
 
-  it("reflecting a popup drag in the table order", () => {
+  it("reflects a popup drag in the table order", () => {
     cy.visit("/datasets");
     cy.get("dynamic-mat-table mat-table", { timeout: 20000 }).should("exist");
     cy.finishedLoading();
 
     cy.openColumnSetting();
 
-    columnSettingLabels().then((popupLabels) => {
+    popupLabels().then((labelsBefore) => {
+      const lastIndex = labelsBefore.length - 1;
+      const movedLabel = labelsBefore[lastIndex];
+
       // drag the last popup column to the front
-      cy.get('[role="menu"] .dragable-row')
-        .last()
-        .find("mat-icon")
-        .first()
-        .then(($handle) => {
-          const row = $handle.closest(".dragable-row")[0];
-          const sourceRect = row.getBoundingClientRect();
-          const firstRow = document.querySelector(
-            '[role="menu"] .dragable-row',
-          );
-          const targetRect = firstRow.getBoundingClientRect();
-
-          const down = new PointerEvent("pointerdown", {
-            bubbles: true,
-            cancelable: true,
-            clientX: sourceRect.left + sourceRect.width / 2,
-            clientY: sourceRect.top + sourceRect.height / 2,
-            pointerId: 1,
-            button: 0,
-            buttons: 1,
-          });
-          $handle[0].dispatchEvent(down);
-
-          const move = new PointerEvent("pointermove", {
-            bubbles: true,
-            cancelable: true,
-            clientX: targetRect.left + targetRect.width / 2,
-            clientY: targetRect.top + targetRect.height / 2,
-            pointerId: 1,
-            button: 0,
-            buttons: 1,
-          });
-          document.dispatchEvent(move);
-
-          const up = new PointerEvent("pointerup", {
-            bubbles: true,
-            cancelable: true,
-            clientX: targetRect.left + targetRect.width / 2,
-            clientY: targetRect.top + targetRect.height / 2,
-            pointerId: 1,
-            button: 0,
-            buttons: 0,
-          });
-          document.dispatchEvent(up);
-        });
+      cy.dragPopupColumn(lastIndex, 0);
 
       // auto-save + popup closes after the debounce
       cy.waitForColumnAutoSave();
 
-      headerLabels().then((tableLabels) => {
+      headerLabels().then(($tableLabels) => {
+        const tableLabels = Cypress._.map($tableLabels, (el) =>
+          Cypress.$(el).text().trim(),
+        );
         const expected = [
-          popupLabels[popupLabels.length - 1],
-          ...popupLabels.slice(0, popupLabels.length - 1),
-        ].filter((l) => Array.from(tableLabels).includes(l));
-        expect(Array.from(tableLabels)).to.deep.equal(expected);
+          movedLabel,
+          ...labelsBefore.filter((l) => l !== movedLabel),
+        ].filter((l) => tableLabels.includes(l));
+        expect(tableLabels).to.deep.equal(expected);
       });
     });
   });
