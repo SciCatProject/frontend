@@ -449,9 +449,7 @@ Cypress.Commands.add("resetColumnSetting", () => {
 // Dispatch a synthetic mouse event directly on a DOM element. Using native
 // dispatchEvent (instead of cy.trigger) avoids Cypress actionability checks
 // (e.g. "element is hidden from view") which fail on the CDK drag handles.
-const dispatchMouse = (target, type, x, y) => {
-  const scrollX = window.scrollX || 0;
-  const scrollY = window.scrollY || 0;
+const dispatchMouse = (target, type, x, y, detail) => {
   const event = new MouseEvent(type, {
     bubbles: true,
     cancelable: true,
@@ -460,26 +458,39 @@ const dispatchMouse = (target, type, x, y) => {
     buttons: type === "mouseup" ? 0 : 1,
     // CDK ignores synthetic mousedowns with detail === 0 (treated as fake
     // screen-reader events), so set a non-zero detail for mousedown.
-    detail: type === "mousedown" ? 1 : 0,
+    detail: type === "mousedown" ? 1 : detail,
     clientX: x,
     clientY: y,
-    pageX: x + scrollX,
-    pageY: y + scrollY,
+  });
+  // pageX/pageY are not part of MouseEventInit and are ignored if passed to the
+  // constructor, but CDK computes the pointer position from pageX/pageY, so we
+  // must define them explicitly.
+  Object.defineProperty(event, "pageX", {
+    get: () => x + window.scrollX,
+  });
+  Object.defineProperty(event, "pageY", {
+    get: () => y + window.scrollY,
   });
   target.dispatchEvent(event);
 };
 
 // Perform a CDK drag from a source point to a target point. CDK DragDrop starts
 // on `mousedown` (on the handle) and then listens to `mousemove`/`mouseup` on the
-// document, requiring a move past the drag-start threshold before dragging.
+// document, requiring a move past the drag-start threshold before dragging and a
+// tick to process each step.
 const cdkDrag = (handle, startX, startY, endX, endY) => {
   dispatchMouse(handle, "mousedown", startX, startY);
-  // move past the drag threshold to actually start dragging
-  dispatchMouse(document, "mousemove", startX + 15, startY + 5);
-  dispatchMouse(document, "mousemove", startX + 30, startY);
-  cy.wait(50).then(() => {
+  cy.wait(30).then(() => {
+    // move past the drag threshold to actually start dragging
+    dispatchMouse(document, "mousemove", startX + 20, startY + 5);
+  });
+  cy.wait(30).then(() => {
     dispatchMouse(document, "mousemove", endX, endY);
+  });
+  cy.wait(30).then(() => {
     dispatchMouse(document, "mousemove", endX, endY);
+  });
+  cy.wait(30).then(() => {
     dispatchMouse(document, "mouseup", endX, endY);
   });
 };
