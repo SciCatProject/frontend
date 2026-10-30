@@ -458,6 +458,9 @@ const dispatchMouse = (target, type, x, y) => {
     view: window,
     button: 0,
     buttons: type === "mouseup" ? 0 : 1,
+    // CDK ignores synthetic mousedowns with detail === 0 (treated as fake
+    // screen-reader events), so set a non-zero detail for mousedown.
+    detail: type === "mousedown" ? 1 : 0,
     clientX: x,
     clientY: y,
     pageX: x + scrollX,
