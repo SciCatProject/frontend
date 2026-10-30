@@ -1,0 +1,56 @@
+@let active = getActive(configs ?? []);
+@if (active.length) {
+  <section
+    class="applied-filters"
+    aria-label="Applied filters"
+    data-cy="condition-applied"
+  >
+    <span class="applied-label">
+      <mat-icon>filter_alt</mat-icon>
+      Applied filters
+    </span>
+
+    <mat-chip-set class="chips" aria-label="Applied filters">
+      @for (config of active; track config) {
+        <mat-chip-row
+          [class.excluded]="config.condition.exclude"
+          [matTooltip]="describe(config.condition)"
+          matTooltipShowDelay="300"
+          (removed)="filterRemove.emit(config)"
+          (click)="filterSelect.emit(config)"
+          data-cy="condition-chip"
+        >
+          @if (config.condition.exclude) {
+            <mat-icon
+              class="not-icon"
+              aria-hidden="true"
+              data-cy="condition-chip-not"
+              >block</mat-icon
+            >
+            <span class="cdk-visually-hidden">Excluded:</span>
+          }
+          <span class="chip-text">{{ text(config.condition) }}</span>
+          <button
+            matChipRemove
+            type="button"
+            aria-label="Remove filter"
+            (click)="$event.stopPropagation()"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      }
+    </mat-chip-set>
+
+    <button
+      mat-button
+      type="button"
+      class="clear-all"
+      (click)="clearAll.emit()"
+      data-cy="condition-chips-clear"
+    >
+      <mat-icon>playlist_remove</mat-icon>
+      Clear
+    </button>
+  </section>
+}

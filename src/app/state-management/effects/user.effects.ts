@@ -37,10 +37,11 @@ import {
   selectConditions,
 } from "state-management/selectors/user.selectors";
 import {
-  addScientificConditionAction,
   clearDatasetsStateAction,
   setDatasetsLimitFilterAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
+import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
 import {
   clearJobsStateAction,
   setJobsLimitFilterAction,
@@ -357,11 +358,15 @@ export class UserEffects {
 
             for (const setting of settingsToCheck) {
               let items = externalSettings[setting];
+              const settingConfig = SETTINGS_CONFIG.find(
+                (s) => s.key === setting,
+              );
+              // cleared conditions stay cleared, the defaults are for conditions never saved
+              const keepEmpty =
+                settingConfig?.configKey === "conditions" &&
+                Array.isArray(items);
 
-              if (!Array.isArray(items) || items.length < 1) {
-                const settingConfig = SETTINGS_CONFIG.find(
-                  (s) => s.key === setting,
-                );
+              if (!keepEmpty && (!Array.isArray(items) || items.length < 1)) {
                 switch (settingConfig?.scope) {
                   case "dataset":
                     items =
@@ -374,6 +379,15 @@ export class UserEffects {
                       config.defaultProposalsListSettings?.[
                         settingConfig.configKey
                       ] || initialUserState.settings[setting];
+                    break;
+                  case "sample":
+                    // the conditions are the only thing of the samples that can be predefined
+                    items =
+                      (settingConfig.configKey === "conditions"
+                        ? config.defaultSamplesListSettings?.conditions
+                        : undefined) ||
+                      initialUserState.settings[setting] ||
+                      [];
                     break;
                   default:
                     items = initialUserState.settings[setting] || [];
@@ -432,27 +446,13 @@ export class UserEffects {
 
             const conditions = incoming.length > 0 ? incoming : [];
 
-            const actions = [];
-
-            if (scope === "dataset") {
-              // TODO: Check with the types here. This is working better as it is now with the conditions and filters. We are leaving it for now as it was from before.
-              conditions
-                .filter((c) => c.enabled)
-                .forEach((c) => {
-                  actions.push(
-                    addScientificConditionAction({ condition: c.condition }),
-                  );
-                });
-            }
-
-            actions.push(
+            // the datasets reducer already filters by them, see fetchUserSettingsCompleteAction
+            return [
               fromActions.updateConditionsConfigs({
                 conditionConfigs: conditions,
                 scope,
               }),
-            );
-
-            return actions;
+            ];
           },
         ),
       ),
@@ -546,8 +546,11 @@ export class UserEffects {
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loadDefaultSettings),
-      concatLatestFrom(() => this.store.select(selectConditions("dataset"))),
-      map(([{ config }, existingDatasetConditions]) => {
+      concatLatestFrom(() => [
+        this.store.select(selectConditions("dataset")),
+        this.store.select(selectConditions("sample")),
+      ]),
+      map(([{ config }, datasetConditions, sampleConditions]) => {
         const isAuthenticated = this.authService.isAuthenticated();
         const actions = [];
 
@@ -599,6 +602,7 @@ export class UserEffects {
                 break;
               case "sample":
                 defaultConditions =
+                  config.defaultSamplesListSettings?.conditions ||
                   initialUserState.settings.fe_sample_table_conditions;
                 break;
               default:
@@ -606,10 +610,12 @@ export class UserEffects {
                 break;
             }
 
-            const conditionConfigs =
-              scope === "dataset" && existingDatasetConditions?.length
-                ? existingDatasetConditions
-                : defaultConditions;
+            // the conditions the user has are kept, the predefined ones are for a start
+            const existing =
+              scope === "dataset" ? datasetConditions : sampleConditions;
+            const conditionConfigs = existing?.length
+              ? existing
+              : defaultConditions;
 
             actions.push(
               fromActions.updateConditionsConfigs({
@@ -617,6 +623,14 @@ export class UserEffects {
                 scope,
               }),
             );
+
+            if (scope === "dataset") {
+              actions.push(
+                setScientificConditionsAction({
+                  conditions: toActiveConditions(conditionConfigs),
+                }),
+              );
+            }
           },
         );
 

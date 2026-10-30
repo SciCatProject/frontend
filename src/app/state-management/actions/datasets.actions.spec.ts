@@ -3,7 +3,7 @@ import { FacetCounts } from "state-management/models";
 import {
   ArchViewMode,
   DatasetFilters,
-  ScientificCondition,
+  FilterCondition,
 } from "state-management/models";
 import {
   mockDataset as dataset,
@@ -90,37 +90,6 @@ describe("Dataset Actions", () => {
       const action = fromActions.fetchFacetCountsFailedAction();
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Facet Counts Failed",
-      });
-    });
-  });
-
-  describe("fetchMetadataKeysAction", () => {
-    it("should create an action", () => {
-      const action = fromActions.fetchMetadataKeysAction({});
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Metadata Keys",
-      });
-    });
-  });
-
-  describe("fetchMetadataKeysCompleteAction", () => {
-    it("should create an action", () => {
-      const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys,
-      });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Metadata Keys Complete",
-        metadataKeys,
-      });
-    });
-  });
-
-  describe("fetchMetadataKeysAction", () => {
-    it("should create an action", () => {
-      const action = fromActions.fetchMetadataKeysFailedAction();
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Metadata Keys Failed",
       });
     });
   });
@@ -693,34 +662,20 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addScientificConditionAction", () => {
+  describe("setScientificConditionsAction", () => {
     it("should create an action", () => {
-      const condition: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "LESS_THAN",
-        rhs: 5,
-        unit: "s",
-      };
-      const action = fromActions.addScientificConditionAction({ condition });
+      const conditions: FilterCondition[] = [
+        {
+          lhs: "lhsTest",
+          relation: "LESS_THAN",
+          rhs: 5,
+          unit: "s",
+        },
+      ];
+      const action = fromActions.setScientificConditionsAction({ conditions });
       expect({ ...action }).toEqual({
-        type: "[Dataset] Add Scientific Condition",
-        condition,
-      });
-    });
-  });
-
-  describe("removeScientificConditionAction", () => {
-    it("should create an action", () => {
-      const condition: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "LESS_THAN",
-        rhs: 5,
-        unit: "s",
-      };
-      const action = fromActions.removeScientificConditionAction({ condition });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Remove Scientific Condition",
-        condition,
+        type: "[Dataset] Set Scientific Conditions",
+        conditions,
       });
     });
   });

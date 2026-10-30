@@ -1,11 +1,13 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
+import { fetchUserSettingsCompleteAction } from "../actions/user.actions";
 import { initialDatasetState } from "state-management/state/datasets.store";
-import { ArchViewMode, FacetCounts, ScientificCondition } from "../models";
+import { ArchViewMode, FacetCounts, FilterCondition } from "../models";
 import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
 import {
   OrigDatablock,
   OutputDatasetDto,
+  UserSettings,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 const derivedDataset = createMock<OutputDatasetDto>({
@@ -58,18 +60,6 @@ describe("DatasetsReducer", () => {
 
       expect(state.facetCounts).toEqual(facetCounts);
       expect(state.totalCount).toEqual(allCounts);
-    });
-  });
-
-  describe("on fetchMetadataKeysCompleteAction", () => {
-    it("should set metadataKeys property", () => {
-      const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys,
-      });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.metadataKeys).toEqual(metadataKeys);
     });
   });
 
@@ -484,39 +474,61 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on addScientificConditionAction", () => {
-    it("should add scientific condition to scientific filter", () => {
-      const condition: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "EQUAL_TO_STRING",
-        rhs: "rhsTest",
-        unit: "",
-      };
+  describe("on setScientificConditionsAction", () => {
+    const condition: FilterCondition = {
+      lhs: "lhsTest",
+      relation: "EQUAL_TO_STRING",
+      rhs: "rhsTest",
+      unit: "",
+    };
 
-      const action = fromActions.addScientificConditionAction({ condition });
+    it("should set the scientific filter", () => {
+      const action = fromActions.setScientificConditionsAction({
+        conditions: [condition],
+      });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.filters.scientific).toContain(condition);
+      expect(state.filters.scientific).toEqual([condition]);
     });
-  });
 
-  describe("on removeScientificConditionAction", () => {
-    it("should remove scientific condition from scientific filter", () => {
-      const condition: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "EQUAL_TO_STRING",
-        rhs: "rhsTest",
-        unit: "",
+    it("should replace the conditions that were set before", () => {
+      const first = fromDatasets.datasetsReducer(
+        initialDatasetState,
+        fromActions.setScientificConditionsAction({ conditions: [condition] }),
+      );
+      const state = fromDatasets.datasetsReducer(
+        first,
+        fromActions.setScientificConditionsAction({ conditions: [] }),
+      );
+
+      expect(state.filters.scientific).toEqual([]);
+    });
+
+    it("should go back to the first page", () => {
+      const onPage3 = {
+        ...initialDatasetState,
+        pagination: { skip: 50, limit: 25 },
       };
-      const act = fromActions.addScientificConditionAction({ condition });
-      const sta = fromDatasets.datasetsReducer(initialDatasetState, act);
+      const state = fromDatasets.datasetsReducer(
+        onPage3,
+        fromActions.setScientificConditionsAction({ conditions: [condition] }),
+      );
 
-      expect(sta.filters.scientific).toContain(condition);
+      expect(state.pagination).toEqual({ skip: 0, limit: 25 });
+    });
 
-      const action = fromActions.removeScientificConditionAction({ condition });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+    it("should stay on the page when the conditions are the same", () => {
+      const onPage3 = {
+        ...initialDatasetState,
+        filters: { ...initialDatasetState.filters, scientific: [condition] },
+        pagination: { skip: 50, limit: 25 },
+      };
+      const state = fromDatasets.datasetsReducer(
+        onPage3,
+        fromActions.setScientificConditionsAction({ conditions: [condition] }),
+      );
 
-      expect(state.filters.scientific).not.toContain(condition);
+      expect(state.pagination).toEqual({ skip: 50, limit: 25 });
     });
   });
 
@@ -536,6 +548,79 @@ describe("DatasetsReducer", () => {
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.pidTerms).toEqual(pid);
+    });
+  });
+
+  describe("on fetchUserSettingsCompleteAction", () => {
+    const saved = (rhs: string, enabled?: boolean) => ({
+      ...(enabled !== undefined && { enabled }),
+      condition: {
+        lhs: "temperature",
+        relation: "EQUAL_TO" as const,
+        rhs,
+        unit: "",
+      },
+    });
+    const complete = (conditions: unknown) =>
+      fetchUserSettingsCompleteAction({
+        userSettings: {
+          externalSettings: { fe_dataset_table_conditions: conditions },
+        } as unknown as UserSettings,
+      });
+
+    it("should filter by the saved conditions that are applied, in the same step as the settings", () => {
+      const state = fromDatasets.datasetsReducer(
+        initialDatasetState,
+        complete([saved("20"), saved("30", false), saved("")]),
+      );
+
+      expect(state.filters.scientific).toEqual([
+        {
+          lhs: "temperature",
+          relation: "EQUAL_TO_NUMERIC",
+          rhs: 20,
+          unit: "",
+        },
+      ]);
+    });
+
+    it("should not filter without saved conditions", () => {
+      expect(
+        fromDatasets.datasetsReducer(initialDatasetState, complete([])).filters
+          .scientific,
+      ).toEqual([]);
+      expect(
+        fromDatasets.datasetsReducer(initialDatasetState, complete(undefined))
+          .filters.scientific,
+      ).toEqual([]);
+    });
+
+    it("should leave the other filters as they are", () => {
+      const before = {
+        ...initialDatasetState,
+        filters: { ...initialDatasetState.filters, text: "beam" },
+      };
+
+      const state = fromDatasets.datasetsReducer(
+        before,
+        complete([saved("1")]),
+      );
+
+      expect(state.filters.text).toBe("beam");
+    });
+
+    it("should stay on the page of the URL", () => {
+      const onPage3 = {
+        ...initialDatasetState,
+        pagination: { skip: 50, limit: 25 },
+      };
+
+      const state = fromDatasets.datasetsReducer(
+        onPage3,
+        complete([saved("1")]),
+      );
+
+      expect(state.pagination).toEqual({ skip: 50, limit: 25 });
     });
   });
 });
