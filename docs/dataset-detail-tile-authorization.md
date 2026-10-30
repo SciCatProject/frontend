@@ -157,6 +157,7 @@ Configured on each customization item within the `customization` array:
 
 | Key | Type | Required | Default | Description |
 |-----|------|----------|---------|-------------|
+| `datasetDetailComponent.enableCustomizedComponent` | boolean | No | — | **Deprecated.** Retained for backward compatibility only; omit it in new configurations. |
 | `datasetDetailComponent.authorization` | string[] | No | `null` | Global authorization for all tiles in the component |
 | `datasetDetailComponent.customization[].authorization` | string[] | No | `[]` | Tile-specific authorization (empty array means no restriction) |
 | `datasetDetailComponent.customization[].visible` | boolean | No | `true` | Controls whether the tile is visible (use `false` to hide) |
@@ -195,6 +196,7 @@ Used for environment-specific overrides without modifying the main configuration
 
 ```typescript
 export interface DatasetDetailComponentConfig {
+  /** @deprecated The dataset-details component is now the standard implementation. */
   enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
   authorization?: string[];  // Global authorization for all tiles
@@ -227,7 +229,7 @@ export interface CustomizationItem {
 **Path**: Admin Dashboard > Frontend Config > Dataset Detail Component section
 
 The admin UI provides form controls through JSONForms:
-- **Enable Customized Component**: Toggle switch for `enableCustomizedComponent`
+- **Enable Customized Component**: Toggle switch for `enableCustomizedComponent` (**deprecated**; retained only for backward compatibility)
 - **Show Restricted Tiles Indicator**: Toggle switch for `datasetDetailComponent.tileRestrictedIconVisible`
 - **Restricted Icon Groups**: Array of strings input for `datasetDetailComponent.tileRestrictedIconGroups`
 - **Authorization**: Array of strings input for global tile authorization

@@ -30,11 +30,13 @@ The frontend configuration contains a `datasetDetailComponent` default layout in
 
 The complete default is intentionally kept in the frontend configuration. The component also uses the same built-in layout when `customization` is missing or empty, which keeps deployments with a minimal backend configuration compatible.
 
+> **Deprecated:** `datasetDetailComponent.enableCustomizedComponent` is retained only for backward compatibility. The `dataset-details` component is now the standard implementation. New configurations should omit this option; existing `false` values continue to select the legacy implementation temporarily.
+
 ## Migration
 
 1. Remove any `enableCustomizedComponent: false` setting used solely to select the old page.
 2. Start from the `datasetDetailComponent` block in `src/assets/config.json` (or `CI/e2e/frontend.config.e2e.json` for the end-to-end configuration).
-3. Keep `enableCustomizedComponent` set to `true` and customize the `customization` sections as required.
+3. Omit the deprecated `enableCustomizedComponent` option and customize the `customization` sections as required.
 4. Do not add a separate static dataset details component; all new layout changes belong in the configuration.
 
-The `datasetDetailComponent` name remains the configuration API for backwards compatibility. `enableCustomizedComponent` is retained as a schema/configuration compatibility field, but component selection is now always the configurable implementation.
+The `datasetDetailComponent` name remains the configuration API for backward compatibility. The `enableCustomizedComponent` option is **deprecated** and retained only as a compatibility field. It should not be used in new configurations.
