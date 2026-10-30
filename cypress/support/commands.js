@@ -446,75 +446,77 @@ Cypress.Commands.add("resetColumnSetting", () => {
   cy.get("body").type("{esc}");
 });
 
-// Perform a CDK drag from a source point to a target point using Cypress
-// `.trigger()`, which sets pageX/pageY/detail correctly (CDK reads pageX/pageY).
-// `force: true` bypasses actionability checks on the CDK drag handles.
-const cdkDrag = ($handle, startX, startY, endX, endY) => {
-  cy.wrap($handle)
-    .trigger("mousedown", {
-      force: true,
-      which: 1,
+// Perform a real CDK drag. Must run inside the AUT window so that native
+// dispatchEvent + requestAnimationFrame timing behave like a real user drag.
+//
+// CDK requirements (verified against @angular/cdk drag-drop):
+//  - starts on `mousedown` (must have detail !== 0, else treated as fake)
+//  - reads the pointer position from `pageX`/`pageY` (not settable via
+//    MouseEventInit, so they are defined explicitly)
+//  - listens to `mousemove`/`mouseup` on the document
+//  - needs to move past the drag-start threshold before the drag begins
+const cdkDragInWindow = (win, handle, startX, startY, endX, endY) => {
+  const doc = handle.ownerDocument;
+  const dispatch = (target, type, x, y, detail) => {
+    const event = new win.MouseEvent(type, {
+      bubbles: true,
+      cancelable: true,
+      view: win,
       button: 0,
-      clientX: startX,
-      clientY: startY,
-    })
-    .wait(50);
-
-  // CDK binds mousemove/mouseup on the document. Dispatch on the document too,
-  // because starting the drag may detach/replace the original element.
-  cy.document()
-    .trigger("mousemove", {
-      force: true,
-      which: 1,
-      button: 0,
-      clientX: startX + 20,
-      clientY: startY + 5,
-    })
-    .wait(50)
-    .trigger("mousemove", {
-      force: true,
-      which: 1,
-      button: 0,
-      clientX: endX,
-      clientY: endY,
-    })
-    .wait(50)
-    .trigger("mousemove", {
-      force: true,
-      which: 1,
-      button: 0,
-      clientX: endX,
-      clientY: endY,
-    })
-    .wait(50)
-    .trigger("mouseup", {
-      force: true,
-      which: 1,
-      button: 0,
-      clientX: endX,
-      clientY: endY,
+      buttons: type === "mouseup" ? 0 : 1,
+      detail,
+      clientX: x,
+      clientY: y,
     });
+    Object.defineProperty(event, "pageX", { get: () => x + win.scrollX });
+    Object.defineProperty(event, "pageY", { get: () => y + win.scrollY });
+    target.dispatchEvent(event);
+  };
+
+  const frame = () => new Promise((r) => win.requestAnimationFrame(() => r()));
+
+  return (async () => {
+    dispatch(handle, "mousedown", startX, startY, 1);
+    await frame();
+    dispatch(doc, "mousemove", startX + 20, startY + 5, 0);
+    await frame();
+    dispatch(doc, "mousemove", endX, endY, 0);
+    await frame();
+    dispatch(doc, "mousemove", endX, endY, 0);
+    await frame();
+    dispatch(doc, "mouseup", endX, endY, 0);
+    await frame();
+  })();
 };
 
 // Reorder a table column by dragging its header to a target index using the CDK
 // drag handle. `from` and `to` are zero-based indexes into the draggable header
 // cells (excluding the row-checkbox and table-menu columns).
 Cypress.Commands.add("dragColumnHeader", (from, to) => {
-  const draggableHeaders =
-    "mat-header-row.header mat-header-cell:has(.drag-indicator)";
+  cy.window().then((win) => {
+    const cells = win.document.querySelectorAll(
+      "mat-header-row.header mat-header-cell",
+    );
+    const draggable = Array.from(cells).filter((c) =>
+      c.querySelector(".drag-indicator"),
+    );
+    const source = draggable[from];
+    const target = draggable[to];
+    const handle = source.querySelector(".drag-indicator");
+    const s = source.getBoundingClientRect();
+    const t = target.getBoundingClientRect();
 
-  cy.get(draggableHeaders).then(($cells) => {
-    const source = $cells[from];
-    const target = $cells[to];
-    const sourceRect = source.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
+    cy.log(
+      `dragColumnHeader ${from}->${to} start=(${s.left},${s.top}) size=(${s.width}x${s.height})`,
+    );
 
-    cdkDrag(
-      source.querySelector(".drag-indicator"),
-      sourceRect.left + sourceRect.width / 2,
-      sourceRect.top + sourceRect.height / 2,
-      targetRect.left + targetRect.width / 2,
-      targetRect.top + targetRect.height / 2,
+    return cdkDragInWindow(
+      win,
+      handle,
+      s.left + s.width / 2,
+      s.top + s.height / 2,
+      t.left + t.width / 2,
+      t.top + t.height / 2,
     );
   });
 });
@@ -522,18 +524,21 @@ Cypress.Commands.add("dragColumnHeader", (from, to) => {
 // Drag a row within the column-settings popup from `from` to `to` (zero-based
 // indexes among the draggable rows).
 Cypress.Commands.add("dragPopupColumn", (from, to) => {
-  cy.get('[role="menu"] .dragable-row').then(($rows) => {
-    const source = $rows[from];
-    const target = $rows[to];
-    const sourceRect = source.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
+  cy.window().then((win) => {
+    const rows = win.document.querySelectorAll('[role="menu"] .dragable-row');
+    const source = rows[from];
+    const target = rows[to];
+    const handle = source.querySelector("mat-icon");
+    const s = source.getBoundingClientRect();
+    const t = target.getBoundingClientRect();
 
-    cdkDrag(
-      source.querySelector("mat-icon"),
-      sourceRect.left + sourceRect.width / 2,
-      sourceRect.top + sourceRect.height / 2,
-      targetRect.left + targetRect.width / 2,
-      targetRect.top + targetRect.height / 2,
+    return cdkDragInWindow(
+      win,
+      handle,
+      s.left + s.width / 2,
+      s.top + s.height / 2,
+      t.left + t.width / 2,
+      t.top + t.height / 2,
     );
   });
 });
