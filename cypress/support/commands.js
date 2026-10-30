@@ -430,8 +430,9 @@ Cypress.Commands.add("removeJobs", () => {
 });
 
 Cypress.Commands.add("openColumnSetting", () => {
-  cy.get("dynamic-mat-table table-menu button").first().click();
-  cy.get('[role="menu"] button').contains("Column setting").click();
+  cy.get("dynamic-mat-table mat-header-row.header").should("exist");
+  cy.contains("mat-icon", "more_vert").closest("button").click();
+  cy.contains("button.mat-mdc-menu-item", "Column setting").click();
   cy.get('[role="menu"] mat-checkbox.column-config').should("exist");
 });
 
