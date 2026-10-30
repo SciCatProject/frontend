@@ -745,9 +745,8 @@ describe.skip("Datasets", () => {
         .click({ force: true });
       cy.get('[role="menu"]').contains("Type").click({ force: true });
 
-      cy.get('[role="menu"] .column-config-apply .done-setting')
-        .contains("done")
-        .click({ force: true });
+      // Changes auto-save after a debounce and the popup closes automatically.
+      cy.waitForColumnAutoSave();
 
       cy.contains(
         "dynamic-mat-table mat-header-row.header",

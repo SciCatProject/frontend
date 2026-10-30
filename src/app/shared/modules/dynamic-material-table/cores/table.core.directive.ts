@@ -321,6 +321,75 @@ export class TableCoreDirective<T extends TableRow> {
     this.setDisplayedColumns();
   }
 
+  /**
+   * Keep the column-setting popup (tableSetting.columnSetting) in the same order
+   * as the displayed table columns. Called after the table columns are reordered
+   * so any reorder performed on the table is reflected in the popup.
+   * Per-column settings are preserved; table columns not present in the popup
+   * are appended so no column is lost.
+   */
+  public syncColumnSettingOrder() {
+    if (!this.tableColumns || !this.tableSetting) {
+      return;
+    }
+
+    const current = this.tableSetting.columnSetting || [];
+    const settingByName = new Map(
+      current.filter((c) => c && c.name).map((c) => [c.name, c]),
+    );
+    const tableNames = new Set(this.tableColumns.map((c) => c.name));
+
+    const ordered = this.tableColumns.map(
+      (column) => settingByName.get(column.name) || column,
+    );
+
+    // Preserve any popup columns that are not in the table, so no column is lost.
+    const extras = current.filter(
+      (c) => c && c.name && !tableNames.has(c.name),
+    );
+
+    this.tableSetting.columnSetting = [...ordered, ...extras];
+  }
+
+  /**
+   * Reorder the displayed table columns to match the order of the column-setting
+   * popup (columnSetting). This is called when the user applies the column
+   * setting so a reorder performed by dragging inside the popup is reflected in
+   * the table. Columns missing from the table are ignored; table columns not
+   * present in the popup keep their relative order and are appended.
+   */
+  public applyColumnSettingOrder() {
+    const columnSetting = this.tableSetting?.columnSetting;
+
+    if (!this.tableColumns || !columnSetting || columnSetting.length === 0) {
+      return;
+    }
+
+    const orderByName = new Map(
+      columnSetting
+        .filter((c) => c && c.name)
+        .map((c, index) => [c.name, index]),
+    );
+
+    const ordered = [...this.tableColumns].sort((a, b) => {
+      const aIndex = orderByName.has(a.name)
+        ? orderByName.get(a.name)
+        : Number.MAX_SAFE_INTEGER;
+      const bIndex = orderByName.has(b.name)
+        ? orderByName.get(b.name)
+        : Number.MAX_SAFE_INTEGER;
+
+      return aIndex - bIndex;
+    });
+
+    const currentOrder = this.tableColumns.map((c) => c.name).join(",");
+    const newOrder = ordered.map((c) => c.name).join(",");
+
+    if (currentOrder !== newOrder) {
+      this.columns = ordered;
+    }
+  }
+
   updatePagination() {
     if (isNullorUndefined(this.tvsDataSource)) {
       return;
@@ -425,6 +494,7 @@ export class TableCoreDirective<T extends TableRow> {
   refreshColumn(columns: TableField<T>[]) {
     const currentOffset = this.tableContainer.nativeElement.scrollTop;
     this.columns = columns;
+    this.syncColumnSettingOrder();
 
     setTimeout(() => {
       this.tableContainer.nativeElement.scrollTop = currentOffset;

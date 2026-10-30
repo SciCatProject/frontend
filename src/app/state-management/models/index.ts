@@ -3,7 +3,10 @@ import {
   ConditionConfig,
 } from "state-management/state/user.store";
 import { IngestorAutodiscovery } from "ingestor/ingestor-page/helper/ingestor.component-helper";
-import { FieldSort } from "shared/modules/dynamic-material-table/models/table-field.model";
+import {
+  FieldSort,
+  FieldSticky,
+} from "shared/modules/dynamic-material-table/models/table-field.model";
 
 export interface DateRange {
   begin?: string;
@@ -54,6 +57,8 @@ export interface TableColumn {
   tooltip?: string;
   width?: number;
   sort?: FieldSort;
+  printable?: boolean;
+  sticky?: FieldSticky;
 }
 
 export interface LabelsLocalization {
