@@ -436,6 +436,16 @@ Cypress.Commands.add("openColumnSetting", () => {
   cy.get('[role="menu"] mat-checkbox.column-config').should("exist");
 });
 
+// Reset the table columns back to the configured default via the table menu,
+// so a following set of column changes is guaranteed to produce change events
+// (and therefore trigger the debounced auto-save).
+Cypress.Commands.add("resetColumnSetting", () => {
+  cy.get("dynamic-mat-table mat-header-row.header").should("exist");
+  cy.contains("mat-icon", "more_vert").closest("button").click();
+  cy.contains("button.mat-mdc-menu-item", "Default setting").click();
+  cy.get("body").type("{esc}");
+});
+
 // Reorder a table column by dragging its header to a target index using the CDK
 // drag handle. `from` and `to` are zero-based indexes into the draggable header
 // cells (excluding the row-checkbox and table-menu columns).

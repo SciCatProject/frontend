@@ -104,6 +104,9 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.finishedLoading();
 
+    // start from the default column set so the toggles below are real changes
+    cy.resetColumnSetting();
+
     cy.contains("mat-icon", "more_vert").closest("button").click();
 
     cy.contains("button.mat-mdc-menu-item", "Column setting").click();
@@ -151,6 +154,10 @@ describe("1000 - Datasets list personalization", () => {
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
+
+    // start from the default column set so the toggles below are real changes
+    // (otherwise the columns are already personalized and no change/save occurs)
+    cy.resetColumnSetting();
 
     cy.contains("mat-icon", "more_vert").closest("button").click();
 
