@@ -775,12 +775,12 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   tableMenuActionChange(e: TableMenuActionChange) {
     if (e.type === TableMenuAction.TableSetting) {
+      this.applyColumnSettingOrder();
+      this.refreshColumn(this.tableSetting.columnSetting);
       this.settingChange.emit({
         type: TableSettingEventType.apply,
         setting: this.tableSetting,
       });
-      this.applyColumnSettingOrder();
-      this.refreshColumn(this.tableSetting.columnSetting);
     } else if (e.type === TableMenuAction.DefaultSimpleSetting) {
       const columns = [];
       const defaultColumns = this.setting.settingList.find(
@@ -1126,6 +1126,13 @@ export class DynamicMatTableComponent<T extends TableRow>
 
     this.dragDropData.dropColumnIndex = to.index;
     this.moveColumn(from.index, to.index);
+    // Persist the new column order (same path as applying the column-setting
+    // popup) so a reorder performed by dragging the table header survives a
+    // reload / new session.
+    this.settingChange.emit({
+      type: TableSettingEventType.apply,
+      setting: this.tableSetting,
+    });
   }
 
   drop(event: CdkDragDrop<string[]>) {

@@ -446,13 +446,40 @@ Cypress.Commands.add("resetColumnSetting", () => {
   cy.get("body").type("{esc}");
 });
 
+// Dispatch a synthetic mouse event directly on a DOM element. Using native
+// dispatchEvent (instead of cy.trigger) avoids Cypress actionability checks
+// (e.g. "element is hidden from view") which fail on the CDK drag handles.
+const dispatchMouse = (target, type, x, y) => {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    cancelable: true,
+    view: window,
+    button: 0,
+    buttons: type === "mouseup" ? 0 : 1,
+    clientX: x,
+    clientY: y,
+  });
+  target.dispatchEvent(event);
+};
+
+// Perform a CDK drag from a source point to a target point. CDK DragDrop starts
+// on `mousedown` (on the handle) and then listens to `mousemove`/`mouseup` on the
+// document, requiring a move past the drag-start threshold before dragging.
+const cdkDrag = (handle, startX, startY, endX, endY) => {
+  dispatchMouse(handle, "mousedown", startX, startY);
+  // move past the drag threshold to actually start dragging
+  dispatchMouse(document, "mousemove", startX + 15, startY + 5);
+  dispatchMouse(document, "mousemove", startX + 30, startY);
+  cy.wait(50).then(() => {
+    dispatchMouse(document, "mousemove", endX, endY);
+    dispatchMouse(document, "mousemove", endX, endY);
+    dispatchMouse(document, "mouseup", endX, endY);
+  });
+};
+
 // Reorder a table column by dragging its header to a target index using the CDK
 // drag handle. `from` and `to` are zero-based indexes into the draggable header
 // cells (excluding the row-checkbox and table-menu columns).
-//
-// CDK DragDrop starts on `mousedown` (on the handle) and then listens to
-// `mousemove`/`mouseup` on the document, so we dispatch real mouse events and
-// move past the drag-start threshold before dropping.
 Cypress.Commands.add("dragColumnHeader", (from, to) => {
   const draggableHeaders =
     "mat-header-row.header mat-header-cell:has(.drag-indicator)";
@@ -463,51 +490,13 @@ Cypress.Commands.add("dragColumnHeader", (from, to) => {
     const sourceRect = source.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
 
-    const startX = sourceRect.left + sourceRect.width / 2;
-    const startY = sourceRect.top + sourceRect.height / 2;
-    const endX = targetRect.left + targetRect.width / 2;
-    const endY = targetRect.top + targetRect.height / 2;
-
-    cy.wrap(source.querySelector(".drag-indicator"))
-      .trigger("mousedown", {
-        which: 1,
-        button: 0,
-        clientX: startX,
-        clientY: startY,
-      })
-      .trigger("mousemove", {
-        which: 1,
-        button: 0,
-        clientX: startX + 10,
-        clientY: startY,
-      })
-      .wait(30)
-      .trigger("mousemove", {
-        which: 1,
-        button: 0,
-        clientX: endX,
-        clientY: endY,
-      })
-      .trigger("mousemove", {
-        which: 1,
-        button: 0,
-        clientX: endX,
-        clientY: endY,
-      });
-
-    cy.document()
-      .trigger("mousemove", {
-        which: 1,
-        button: 0,
-        clientX: endX,
-        clientY: endY,
-      })
-      .trigger("mouseup", {
-        which: 1,
-        button: 0,
-        clientX: endX,
-        clientY: endY,
-      });
+    cdkDrag(
+      source.querySelector(".drag-indicator"),
+      sourceRect.left + sourceRect.width / 2,
+      sourceRect.top + sourceRect.height / 2,
+      targetRect.left + targetRect.width / 2,
+      targetRect.top + targetRect.height / 2,
+    );
   });
 });
 
@@ -520,51 +509,13 @@ Cypress.Commands.add("dragPopupColumn", (from, to) => {
     const sourceRect = source.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
 
-    const startX = sourceRect.left + sourceRect.width / 2;
-    const startY = sourceRect.top + sourceRect.height / 2;
-    const endX = targetRect.left + targetRect.width / 2;
-    const endY = targetRect.top + targetRect.height / 2;
-
-    cy.wrap(source.querySelector("mat-icon"))
-      .trigger("mousedown", {
-        which: 1,
-        button: 0,
-        clientX: startX,
-        clientY: startY,
-      })
-      .trigger("mousemove", {
-        which: 1,
-        button: 0,
-        clientX: startX,
-        clientY: startY + 10,
-      })
-      .wait(30)
-      .trigger("mousemove", {
-        which: 1,
-        button: 0,
-        clientX: endX,
-        clientY: endY,
-      })
-      .trigger("mousemove", {
-        which: 1,
-        button: 0,
-        clientX: endX,
-        clientY: endY,
-      });
-
-    cy.document()
-      .trigger("mousemove", {
-        which: 1,
-        button: 0,
-        clientX: endX,
-        clientY: endY,
-      })
-      .trigger("mouseup", {
-        which: 1,
-        button: 0,
-        clientX: endX,
-        clientY: endY,
-      });
+    cdkDrag(
+      source.querySelector("mat-icon"),
+      sourceRect.left + sourceRect.width / 2,
+      sourceRect.top + sourceRect.height / 2,
+      targetRect.left + targetRect.width / 2,
+      targetRect.top + targetRect.height / 2,
+    );
   });
 });
 
