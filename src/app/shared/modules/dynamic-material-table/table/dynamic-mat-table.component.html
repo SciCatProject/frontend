@@ -238,6 +238,8 @@
                 !!thumbnail && isHoverCardOpen(row, column)
               "
               [cdkConnectedOverlayPositions]="thumbnailPreviewPositions"
+              [cdkConnectedOverlayPush]="true"
+              [cdkConnectedOverlayViewportMargin]="8"
             >
               <img
                 class="thumbnail-preview"

@@ -398,8 +398,9 @@ cdk-virtual-scroll-viewport {
 
 .thumbnail-preview {
   display: block;
-  height: 240px;
-  max-width: 400px;
+  height: 300px;
+  max-width: min(600px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
   object-fit: contain;
   background: white;
   border-radius: 4px;
