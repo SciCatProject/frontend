@@ -44,7 +44,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DatablocksComponent } from "./datablocks-table/datablocks-table.component";
 import { DatafilesComponent } from "./datafiles/datafiles.component";
 import { JsonScientificMetadataComponent } from "./jsonScientificMetadata/jsonScientificMetadata.component";
-import { DatasetDetailComponent } from "./dataset-detail/dataset-detail/dataset-detail.component";
+import { DatasetDetailComponent } from "./dataset-details/dataset-detail/dataset-detail.component";
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
 import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.component";
 import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dialog.component";
@@ -79,9 +79,9 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
-import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
-import { DatasetStatusBannerComponent } from "./dataset-detail/dataset-status-banner/dataset-status-banner.component";
+import { DatasetDetailsComponent } from "./dataset-details/dataset-details/dataset-details.component";
+import { DatasetDetailWrapperComponent } from "./dataset-details/dataset-detail-wrapper.component";
+import { DatasetStatusBannerComponent } from "./dataset-details/dataset-status-banner/dataset-status-banner.component";
 import { DatasetInlineEditCellComponent } from "./dataset-table/dataset-inline-edit-cell.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
@@ -175,7 +175,7 @@ import { filesReducer } from "state-management/reducers/files.reducer";
     DatafilesComponent,
     DatasetDetailWrapperComponent,
     DatasetDetailComponent,
-    DatasetDetailDynamicComponent,
+    DatasetDetailsComponent,
     DatasetStatusBannerComponent,
     DatasetTableComponent,
     DatasetInlineEditCellComponent,

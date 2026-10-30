@@ -70,7 +70,7 @@ Each section in the filtered `datasetView$` observable now includes a computed `
 - The section's `authorization` array
 - The current user's groups
 
-The `restrictedIconVisible` property is **not** a configuration option; it is computed and assigned to each section during the filtering process in `dataset-detail-dynamic.component.ts`.
+The `restrictedIconVisible` property is **not** a configuration option; it is computed and assigned to each section during the filtering process in `dataset-details.component.ts`.
 
 **Configuration:**
 ```json
@@ -91,9 +91,9 @@ The `restrictedIconVisible` property is **not** a configuration option; it is co
 
 **Files Involved:**
 - `src/app/state-management/models/index.ts` - Configuration interface (includes `DatasetDetailComponentConfig` with `tileRestrictedIconVisible` and `tileRestrictedIconGroups`)
-- `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.ts` - Logic (computes `restrictedIconVisible` at runtime)
-- `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.html` - Template
-- `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.scss` - Styling
+- `src/app/datasets/dataset-details/dataset-details/dataset-details.component.ts` - Logic (computes `restrictedIconVisible` at runtime)
+- `src/app/datasets/dataset-details/dataset-details/dataset-details.component.html` - Template
+- `src/app/datasets/dataset-details/dataset-details/dataset-details.component.scss` - Styling
 - `src/app/admin/schema/frontend.config.jsonforms.json` - Admin UI schema
 - `src/app/app-config.service.ts` - Configuration service
 
@@ -797,7 +797,7 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ### Q: Can I use authorization without enabling customized components?
 
-**A**: No. The `authorization` field is only applicable when `enableCustomizedComponent` is set to `true`. If customized components are disabled, the default dataset detail view is used, and tile-level authorization does not apply.
+**A**: No. The `authorization` field is only applicable when `enableCustomizedComponent` is set to `true`. The configurable dataset details component is always used. Tile-level authorization applies to configured sections; the built-in default layout has no section restrictions.
 
 ### Q: Can I use both global and tile-level authorization?
 
@@ -860,7 +860,7 @@ When enabled, tiles with restricted access (non-empty authorization array define
 
 ### Q: Can I use this feature with the default (non-customized) dataset detail view?
 
-**A**: No. Authorization only works when `enableCustomizedComponent` is `true` and you have defined custom tiles in the `customization` array. The default dataset detail view does not support tile-level authorization.
+**A**: No. Authorization only works when `enableCustomizedComponent` is `true` and you have defined custom tiles in the `customization` array. The built-in default layout does not define tile-level authorization; add `authorization` to a configured section to restrict it.
 
 ### Q: How do I migrate from an old configuration?
 
@@ -892,9 +892,9 @@ When enabled, tiles with restricted access (non-empty authorization array define
 | `src/app/admin/admin-config-edit/admin-config-edit.component.html` | Admin dashboard template |
 | `src/app/app-config.service.ts` | Configuration service and interfaces |
 | `src/app/state-management/models/index.ts` | TypeScript model interfaces |
-| `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.ts` | Dataset detail component logic |
-| `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.html` | Dataset detail component template |
-| `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.scss` | Dataset detail component styling |
+| `src/app/datasets/dataset-details/dataset-details/dataset-details.component.ts` | Dataset details component logic |
+| `src/app/datasets/dataset-details/dataset-details/dataset-details.component.html` | Dataset details component template |
+| `src/app/datasets/dataset-details/dataset-details/dataset-details.component.scss` | Dataset details component styling |
 | `src/assets/config.json` | Default frontend configuration |
 | `src/assets/config.override.json` | Environment-specific configuration overrides |
 

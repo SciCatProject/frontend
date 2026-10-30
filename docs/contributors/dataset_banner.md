@@ -78,7 +78,7 @@ The banner is rendered as a section of the dataset detail page's customizable la
 
 ```json
 "datasetDetailComponent": {
-  "enableCustomizedComponent": false,
+  "enableCustomizedComponent": true,
   "customization": [
     {
       "type": "statusBanner",
@@ -97,13 +97,13 @@ The banner is rendered as a section of the dataset detail page's customizable la
 
 If no `statusBanner` entry is present in `customization`, the banner component is never rendered, regardless of the `datasetStatusBanner` configuration.
 
-Note that the banner is currently only wired into the **dynamic** (customizable) dataset detail layout (`dataset-detail-dynamic`), not the legacy static layout.
+The dataset details page now always uses the configurable layout (`dataset-details`), so the banner is available in the default layout and in facility customizations.
 
 ## Implementation
 
-- `DatasetStatusBannerComponent` (`src/app/datasets/dataset-detail/dataset-status-banner/`) receives the current dataset as `@Input() datasetItem`. On `ngOnChanges`, it resolves the first matching rule into a `banner` field (or `undefined` if the feature is disabled, no dataset is available, or no rule matches), so the lookup runs once per dataset change rather than on every change-detection cycle.
+- `DatasetStatusBannerComponent` (`src/app/datasets/dataset-details/dataset-status-banner/`) receives the current dataset as `@Input() datasetItem`. On `ngOnChanges`, it resolves the first matching rule into a `banner` field (or `undefined` if the feature is disabled, no dataset is available, or no rule matches), so the lookup runs once per dataset change rather than on every change-detection cycle.
 - Field resolution uses lodash-es's `get` to walk the dot-path in `field` from the dataset root, returning `undefined` for any missing intermediate segment rather than throwing.
-- `DatasetDetailDynamicComponent` renders `<dataset-status-banner>` for any `statusBanner` section found in the configured `datasetView`, passing it the currently loaded dataset.
+- `DatasetDetailsComponent` renders `<dataset-status-banner>` for any `statusBanner` section found in the configured `datasetView`, passing it the currently loaded dataset.
 
 ### Tests
 

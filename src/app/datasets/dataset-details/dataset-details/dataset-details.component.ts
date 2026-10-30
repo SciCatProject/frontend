@@ -43,6 +43,7 @@ import {
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { CurrentDataset } from "state-management/state/datasets.store";
+import { DEFAULT_DATASET_DETAIL_CUSTOMIZATION } from "../default-dataset-detail.configuration";
 
 const RELATION_CONFIG: Record<
   string,
@@ -66,16 +67,16 @@ const RELATION_CONFIG: Record<
  * Component to show customizable details for a dataset, using the
  * form component
  * @export
- * @class DatasetDetailDynamicComponent
+ * @class DatasetDetailsComponent
  */
 @Component({
-  selector: "dataset-detail-dynamic",
-  templateUrl: "./dataset-detail-dynamic.component.html",
-  styleUrls: ["./dataset-detail-dynamic.component.scss"],
+  selector: "dataset-details",
+  templateUrl: "./dataset-details.component.html",
+  styleUrls: ["./dataset-details.component.scss"],
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
+export class DatasetDetailsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   datasetView$: Observable<CustomizationItem[]>;
@@ -134,10 +135,14 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       }),
     );
 
-    const sortedDatasetView = (
-      this.appConfig.datasetDetailComponent?.customization || []
-    )
-      .sort((a, b) => a.order - b.order)
+    const configuredCustomization =
+      this.appConfig.datasetDetailComponent?.customization;
+    const customization =
+      configuredCustomization && configuredCustomization.length > 0
+        ? configuredCustomization
+        : DEFAULT_DATASET_DETAIL_CUSTOMIZATION;
+
+    const sortedDatasetView = customization
       .map((section) => ({
         ...section,
         authorization: section.authorization ? [...section.authorization] : [],
@@ -146,7 +151,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
           section.fields && Array.isArray(section.fields)
             ? [...section.fields].sort((a, b) => a.order - b.order)
             : section.fields,
-      }));
+      }))
+      .sort((a, b) => a.order - b.order);
 
     this.datasetView$ = combineLatest([this.dataset$, this.userGroups$]).pipe(
       map(([dataset, userGroups]) =>

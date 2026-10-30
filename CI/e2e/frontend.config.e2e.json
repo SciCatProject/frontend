@@ -735,281 +735,225 @@
   "dateFormat": "yyyy-MM-dd HH:mm",
   "timezone": "UTC",
   "datasetDetailComponent": {
-    "enableCustomizedComponent": false,
+    "enableCustomizedComponent": true,
     "tileRestrictedIconVisible": true,
     "tileRestrictedIconGroups": [
       "admin"
     ],
     "customization": [
+  {
+    "type": "statusBanner",
+    "label": "Status Banner",
+    "order": -1,
+    "row": 1,
+    "col": 10
+  },
+  {
+    "type": "regular",
+    "label": "General Information",
+    "order": 0,
+    "row": 1,
+    "col": 10,
+    "fields": [
       {
-        "type": "regular",
-        "label": "Admin Only Section",
-        "order": 1,
-        "row": 1,
-        "col": 10,
-        "visible": true,
-        "authorization": [
-          "admin"
-        ],
-        "fields": [
-          {
-            "element": "text",
-            "source": "datasetName",
-            "order": 0
-          },
-          {
-            "element": "copy",
-            "source": "description",
-            "order": 1
-          }
-        ]
+        "element": "text",
+        "source": "datasetName",
+        "order": 0
       },
       {
-        "type": "regular",
-        "label": "Public Section",
-        "order": 2,
-        "row": 1,
-        "col": 10,
-        "visible": true,
-        "authorization": [],
-        "fields": [
-          {
-            "element": "text",
-            "source": "ownerEmail",
-            "order": 0
-          },
-          {
-            "element": "tag",
-            "source": "keywords",
-            "order": 1
-          }
-        ]
+        "element": "linky",
+        "source": "description",
+        "order": 1
       },
       {
-        "type": "regular",
-        "label": "Archive Manager Section",
-        "order": 3,
-        "row": 1,
-        "col": 10,
-        "visible": true,
-        "authorization": [
-          "archivemanager"
-        ],
-        "fields": [
-          {
-            "element": "text",
-            "source": "type",
-            "order": 0
-          },
-          {
-            "element": "date",
-            "source": "creationTime",
-            "order": 1
-          }
-        ]
+        "element": "copy",
+        "source": "pid",
+        "order": 2
       },
       {
-        "type": "regular",
-        "label": "Invisible Section",
-        "order": 4,
-        "row": 1,
-        "col": 10,
-        "visible": false,
-        "authorization": [],
-        "fields": [
-          {
-            "element": "text",
-            "source": "type",
-            "order": 0
-          },
-          {
-            "element": "date",
-            "source": "creationTime",
-            "order": 1
-          }
-        ]
+        "element": "text",
+        "source": "type",
+        "order": 3
       },
       {
-        "type": "regular",
-        "label": "General Information",
-        "order": 5,
-        "row": 1,
-        "col": 8,
-        "fields": [
-          {
-            "element": "text",
-            "source": "scientificMetadata.start_time",
-            "order": 0
-          },
-          {
-            "element": "copy",
-            "source": "scientificMetadata.run_number.value",
-            "order": 1
-          },
-          {
-            "element": "text",
-            "source": "creationTime",
-            "order": 2
-          },
-          {
-            "element": "text",
-            "source": "type",
-            "order": 3
-          },
-          {
-            "element": "text",
-            "source": "datasetName",
-            "order": 4
-          },
-          {
-            "element": "tag",
-            "source": "keywords",
-            "order": 5
-          }
-        ]
+        "element": "date",
+        "source": "creationTime",
+        "order": 4
       },
       {
-        "type": "attachments",
-        "label": "Gallery",
-        "order": 6,
-        "col": 2,
-        "row": 2,
-        "options": {
-          "limit": 5,
-          "size": "medium"
-        }
+        "element": "tag",
+        "source": "keywords",
+        "order": 5
       },
       {
-        "type": "regular",
-        "label": "Contact Information",
-        "order": 7,
-        "col": 2,
-        "row": 1,
-        "fields": [
-          {
-            "element": "text",
-            "source": "principalInvestigator",
-            "order": 0
-          },
-          {
-            "element": "linky",
-            "source": "contactEmail",
-            "order": 1
-          }
-        ]
-      },
-      {
-        "type": "regular",
-        "label": "Files Information",
-        "order": 8,
-        "col": 2,
-        "row": 1,
-        "fields": [
-          {
-            "element": "text",
-            "source": "scientificMetadata.runnumber",
-            "order": 0
-          },
-          {
-            "element": "text",
-            "source": "sourceFolderHost",
-            "order": 1
-          },
-          {
-            "element": "text",
-            "source": "numberOfFiles",
-            "order": 2
-          },
-          {
-            "element": "text",
-            "source": "size",
-            "order": 3
-          },
-          {
-            "element": "text",
-            "source": "numberOfFilesArchived",
-            "order": 4
-          },
-          {
-            "element": "text",
-            "source": "packedSize",
-            "order": 5
-          }
-        ]
-      },
-      {
-        "type": "regular",
-        "label": "Related Documents",
-        "order": 9,
-        "col": 4,
-        "row": 1,
-        "fields": [
-          {
-            "element": "internalLink",
-            "source": "proposalIds",
-            "order": 0
-          },
-          {
-            "element": "internalLink",
-            "source": "instrumentIds",
-            "order": 1
-          },
-          {
-            "element": "tag",
-            "source": "sampleIds",
-            "order": 2
-          },
-          {
-            "element": "tag",
-            "source": "inputDatasets",
-            "order": 3
-          },
-          {
-            "element": "internalLink",
-            "source": "creationLocation",
-            "order": 4
-          }
-        ]
-      },
-      {
-        "type": "attachments",
-        "label": "Gallery",
-        "order": 10,
-        "col": 1,
-        "row": 1,
-        "options": {
-          "limit": 2,
-          "size": "small"
-        }
-      },
-      {
-        "type": "scientificMetadata",
-        "label": "Scientific Metadata Table",
-        "viewMode": "table",
-        "order": 11,
-        "col": 9,
-        "row": 1
-      },
-      {
-        "type": "scientificMetadata",
-        "label": "Scientific Metadata JSON",
-        "viewMode": "json",
-        "order": 12
-      },
-      {
-        "type": "scientificMetadata",
-        "label": "Scientific Metadata Tree",
-        "viewMode": "tree",
-        "order": 13
-      },
-      {
-        "type": "datasetJsonView",
-        "label": "Dataset Json View",
-        "order": 14,
-        "col": 10,
-        "row": 2
+        "element": "tag",
+        "source": "sharedWith",
+        "order": 6
       }
     ]
+  },
+  {
+    "type": "regular",
+    "label": "Creator Information",
+    "order": 1,
+    "row": 1,
+    "col": 5,
+    "fields": [
+      {
+        "element": "text",
+        "source": "owner",
+        "order": 0
+      },
+      {
+        "element": "linky",
+        "source": "principalInvestigator",
+        "order": 1
+      },
+      {
+        "element": "text",
+        "source": "investigator",
+        "order": 2
+      },
+      {
+        "element": "linky",
+        "source": "orcidOfOwner",
+        "order": 3
+      },
+      {
+        "element": "linky",
+        "source": "contactEmail",
+        "order": 4
+      },
+      {
+        "element": "text",
+        "source": "ownerGroup",
+        "order": 5
+      },
+      {
+        "element": "text",
+        "source": "accessGroups",
+        "order": 6
+      }
+    ]
+  },
+  {
+    "type": "regular",
+    "label": "File Information",
+    "order": 2,
+    "row": 1,
+    "col": 5,
+    "fields": [
+      {
+        "element": "text",
+        "source": "sourceFolder",
+        "order": 0
+      },
+      {
+        "element": "text",
+        "source": "size",
+        "order": 1
+      },
+      {
+        "element": "text",
+        "source": "dataFormat",
+        "order": 2
+      }
+    ]
+  },
+  {
+    "type": "regular",
+    "label": "Related Documents",
+    "order": 3,
+    "row": 1,
+    "col": 10,
+    "fields": [
+      {
+        "element": "internalLink",
+        "source": "proposalIds",
+        "internalLinkLabel": "id",
+        "order": 0
+      },
+      {
+        "element": "internalLink",
+        "source": "sampleIds",
+        "internalLinkLabel": "description",
+        "order": 1
+      },
+      {
+        "element": "internalLink",
+        "source": "instrumentIds",
+        "internalLinkLabel": "name",
+        "order": 2
+      },
+      {
+        "element": "internalLink",
+        "source": "inputDatasets",
+        "internalLinkLabel": "id",
+        "order": 3
+      },
+      {
+        "element": "text",
+        "source": "creationLocation",
+        "order": 4
+      },
+      {
+        "element": "text",
+        "source": "techniques",
+        "order": 5
+      }
+    ]
+  },
+  {
+    "type": "regular",
+    "label": "Derived Data",
+    "order": 4,
+    "row": 1,
+    "col": 10,
+    "fields": [
+      {
+        "element": "text",
+        "source": "usedSoftware",
+        "order": 0
+      },
+      {
+        "element": "text",
+        "source": "jobParameters",
+        "order": 1
+      },
+      {
+        "element": "text",
+        "source": "jobLogData",
+        "order": 2
+      }
+    ]
+  },
+  {
+    "type": "attachments",
+    "label": "Attachments",
+    "order": 5,
+    "row": 1,
+    "col": 10,
+    "options": {
+      "limit": 100,
+      "size": "medium"
+    }
+  },
+  {
+    "type": "scientificMetadata",
+    "label": "Scientific Metadata",
+    "order": 6,
+    "row": 1,
+    "col": 10,
+    "viewMode": "table"
+  },
+  {
+    "type": "datasetJsonView",
+    "label": "Dataset Json View",
+    "order": 7,
+    "row": 1,
+    "col": 10
+  }
+]
   },
   "mainMenu": {
     "nonAuthenticatedUser": {
