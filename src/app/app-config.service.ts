@@ -126,9 +126,19 @@ export interface DatasetDetailsTabsInclude {
   details?: DatasetIncludeField[];
 }
 
+export interface ScientificMetadataContextMenuConfig {
+  enabled?: boolean;
+  copyName?: boolean;
+  copyMachineName?: boolean;
+  copyValue?: boolean;
+  copyFullValue?: boolean;
+  copyFullEntry?: boolean;
+  addAsColumn?: boolean;
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
-  addScientificMetadataKeysAsColumn?: boolean;
+  scientificMetadataContextMenu?: ScientificMetadataContextMenuConfig;
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;

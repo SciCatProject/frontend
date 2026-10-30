@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
 import { provideHttpClient } from "@angular/common/http";
 import { ScientificMetadataColumnsService } from "shared/services/scientific-metadata-columns.service";
+import { Store } from "@ngrx/store";
 
 const metadataFloatFormatConfig = {
   metadataFloatFormatEnabled: true,
@@ -21,7 +22,10 @@ const metadataFloatFormatConfig = {
 
 const addAsColumnEnabledConfig = {
   ...metadataFloatFormatConfig,
-  addScientificMetadataKeysAsColumn: true,
+  scientificMetadataContextMenu: {
+    enabled: true,
+    addAsColumn: true,
+  },
 };
 
 describe("TreeViewComponent", () => {
@@ -29,6 +33,7 @@ describe("TreeViewComponent", () => {
   let fixture: ComponentFixture<TreeViewComponent>;
   let scientificMetadataColumnsService: jasmine.SpyObj<ScientificMetadataColumnsService>;
   let appConfigService: jasmine.SpyObj<AppConfigService>;
+  let store: jasmine.SpyObj<Store>;
 
   beforeEach(waitForAsync(() => {
     TestBed.resetTestingModule();
@@ -36,7 +41,48 @@ describe("TreeViewComponent", () => {
       jasmine.createSpyObj<ScientificMetadataColumnsService>(
         "ScientificMetadataColumnsService",
         ["addMetadataColumn"],
+        {
+          addAsColumnAction: {
+            name: "addAsColumn",
+            text: "Add as column",
+            color: undefined,
+          },
+          copyNameAction: {
+            name: "copyName",
+            text: "Copy name",
+            color: undefined,
+          },
+          copyMachineNameAction: {
+            name: "copyMachineName",
+            text: "Copy machine name",
+            color: undefined,
+          },
+          copyValueAction: {
+            name: "copyValue",
+            text: "Copy value",
+            color: undefined,
+          },
+          copyFullValueAction: {
+            name: "copyFullValue",
+            text: "Copy full value",
+            color: undefined,
+          },
+          copyFullEntryAction: {
+            name: "copyFullEntry",
+            text: "Copy full entry",
+            color: undefined,
+          },
+        },
       );
+    (scientificMetadataColumnsService as any).contextMenuActions = [
+      scientificMetadataColumnsService.addAsColumnAction,
+      scientificMetadataColumnsService.copyNameAction,
+      scientificMetadataColumnsService.copyMachineNameAction,
+      scientificMetadataColumnsService.copyValueAction,
+      scientificMetadataColumnsService.copyFullValueAction,
+      scientificMetadataColumnsService.copyFullEntryAction,
+    ];
+    store = jasmine.createSpyObj<Store>("Store", ["dispatch"]);
     appConfigService = jasmine.createSpyObj<AppConfigService>(
       "AppConfigService",
       ["getConfig"],
@@ -58,6 +104,10 @@ describe("TreeViewComponent", () => {
         {
           provide: ScientificMetadataColumnsService,
           useValue: scientificMetadataColumnsService,
+        },
+        {
+          provide: Store,
+          useValue: store,
         },
         provideHttpClient(),
       ],

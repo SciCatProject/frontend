@@ -504,10 +504,15 @@
           ></table-menu>
         </mat-header-cell>
         <mat-cell *matCellDef="let row" class="table-menu">
-          @if (rowContextMenuItems && rowContextMenuItems.length > 0) {
+          @if (
+            rowContextMenuEnabled &&
+            rowContextMenuItems &&
+            rowContextMenuItems.length > 0
+          ) {
             <row-menu
               [rowActionMenu]="row?.actionMenu"
               [actionMenus]="rowContextMenuItems"
+              [menuClass]="rowContextMenuClass"
               [tableSetting]="tableSetting"
               (rowActionChange)="rowMenuActionChange($event, row)"
             ></row-menu>

@@ -12,12 +12,14 @@ import { AppConfigService } from "app-config.service";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ScientificMetadataColumnsService } from "shared/services/scientific-metadata-columns.service";
+import { Store } from "@ngrx/store";
 
 describe("MetadataViewComponent", () => {
   let component: MetadataViewComponent;
   let fixture: ComponentFixture<MetadataViewComponent>;
   let scientificMetadataColumnsService: jasmine.SpyObj<ScientificMetadataColumnsService>;
   let appConfigService: jasmine.SpyObj<AppConfigService>;
+  let store: jasmine.SpyObj<Store>;
 
   beforeEach(waitForAsync(() => {
     scientificMetadataColumnsService =
@@ -31,8 +33,42 @@ describe("MetadataViewComponent", () => {
             color: "primary",
             icon: "view_column",
           },
+          copyNameAction: {
+            name: "copyName",
+            text: "Copy name",
+            color: undefined,
+          },
+          copyMachineNameAction: {
+            name: "copyMachineName",
+            text: "Copy machine name",
+            color: undefined,
+          },
+          copyValueAction: {
+            name: "copyValue",
+            text: "Copy value",
+            color: undefined,
+          },
+          copyFullValueAction: {
+            name: "copyFullValue",
+            text: "Copy full value",
+            color: undefined,
+          },
+          copyFullEntryAction: {
+            name: "copyFullEntry",
+            text: "Copy full entry",
+            color: undefined,
+          },
         },
       );
+    (scientificMetadataColumnsService as any).contextMenuActions = [
+      scientificMetadataColumnsService.addAsColumnAction,
+      scientificMetadataColumnsService.copyNameAction,
+      scientificMetadataColumnsService.copyMachineNameAction,
+      scientificMetadataColumnsService.copyValueAction,
+      scientificMetadataColumnsService.copyFullValueAction,
+      scientificMetadataColumnsService.copyFullEntryAction,
+    ];
+    store = jasmine.createSpyObj<Store>("Store", ["dispatch", "select"]);
     appConfigService = jasmine.createSpyObj<AppConfigService>(
       "AppConfigService",
       ["getConfig"],
@@ -43,6 +79,15 @@ describe("MetadataViewComponent", () => {
         significantDigits: 3,
         minCutoff: 0.001,
         maxCutoff: 1000,
+      },
+      scientificMetadataContextMenu: {
+        enabled: true,
+        addAsColumn: false,
+        copyName: true,
+        copyMachineName: true,
+        copyValue: true,
+        copyFullValue: true,
+        copyFullEntry: true,
       },
     } as any);
 
@@ -57,6 +102,10 @@ describe("MetadataViewComponent", () => {
         {
           provide: ScientificMetadataColumnsService,
           useValue: scientificMetadataColumnsService,
+        },
+        {
+          provide: Store,
+          useValue: store,
         },
         ReplaceUnderscorePipe,
         TitleCasePipe,
@@ -79,18 +128,38 @@ describe("MetadataViewComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should hide the add-as-column row action by default", () => {
-    expect(component.rowContextMenuItems).toEqual([]);
+  it("should expose a stable scientific metadata table identifier", () => {
+    expect(
+      fixture.nativeElement.querySelector("#scientific-metadata-table"),
+    ).toBeTruthy();
+    expect(
+      fixture.nativeElement
+        .querySelector("#scientific-metadata-table")
+        .classList.contains("scientific-metadata-table"),
+    ).toBeTrue();
+  });
+
+  it("should expose copy row actions by default", () => {
+    expect(component.rowContextMenuItems.map((action) => action.name)).toEqual([
+      "copyName",
+      "copyMachineName",
+      "copyValue",
+      "copyFullValue",
+      "copyFullEntry",
+    ]);
   });
 
   it("should expose the add-as-column row action when enabled in config", () => {
     appConfigService.getConfig.and.returnValue({
-      addScientificMetadataKeysAsColumn: true,
       metadataFloatFormatEnabled: true,
-      metadataFloatFormat: {
-        significantDigits: 3,
-        minCutoff: 0.001,
-        maxCutoff: 1000,
+      scientificMetadataContextMenu: {
+        enabled: true,
+        addAsColumn: true,
+        copyName: true,
+        copyMachineName: true,
+        copyValue: true,
+        copyFullValue: true,
+        copyFullEntry: true,
       },
     } as any);
 
@@ -100,7 +169,75 @@ describe("MetadataViewComponent", () => {
 
     expect(enabledComponent.rowContextMenuItems).toEqual([
       scientificMetadataColumnsService.addAsColumnAction,
+      jasmine.objectContaining({ name: "copyName", text: "Copy name" }),
+      jasmine.objectContaining({
+        name: "copyMachineName",
+        text: "Copy machine name",
+      }),
+      jasmine.objectContaining({ name: "copyValue", text: "Copy value" }),
+      jasmine.objectContaining({
+        name: "copyFullValue",
+        text: "Copy full value",
+      }),
+      jasmine.objectContaining({
+        name: "copyFullEntry",
+        text: "Copy full entry",
+      }),
     ]);
+  });
+
+  it("should configure individual metadata menu actions", () => {
+    appConfigService.getConfig.and.returnValue({
+      scientificMetadataContextMenu: {
+        enabled: true,
+        copyName: false,
+        copyFullValue: false,
+        copyFullEntry: false,
+        copyMachineName: true,
+        copyValue: true,
+      },
+    } as any);
+
+    const configuredFixture = TestBed.createComponent(MetadataViewComponent);
+    const configuredComponent = configuredFixture.componentInstance;
+    configuredFixture.detectChanges();
+
+    expect(
+      configuredComponent.rowContextMenuItems.map((action) => action.name),
+    ).toEqual(["copyMachineName", "copyValue"]);
+    expect(configuredComponent.rowContextMenuEnabled).toBeTrue();
+  });
+
+  it("should disable the metadata menu from configuration", () => {
+    appConfigService.getConfig.and.returnValue({
+      scientificMetadataContextMenu: { enabled: false },
+    } as any);
+
+    const disabledFixture = TestBed.createComponent(MetadataViewComponent);
+    const disabledComponent = disabledFixture.componentInstance;
+    disabledFixture.detectChanges();
+
+    expect(disabledComponent.rowContextMenuEnabled).toBeFalse();
+    expect(disabledComponent.rowContextMenuItems).toEqual([]);
+  });
+
+  it("should require both add-as-column configuration flags", () => {
+    appConfigService.getConfig.and.returnValue({
+      scientificMetadataContextMenu: {
+        enabled: true,
+        addAsColumn: false,
+      },
+    } as any);
+
+    const configuredFixture = TestBed.createComponent(MetadataViewComponent);
+    const configuredComponent = configuredFixture.componentInstance;
+    configuredFixture.detectChanges();
+
+    expect(
+      configuredComponent.rowContextMenuItems.some(
+        (action) => action.name === "addAsColumn",
+      ),
+    ).toBeFalse();
   });
 
   describe("#createMetadataArray()", () => {
@@ -151,6 +288,8 @@ describe("MetadataViewComponent", () => {
         JSON.stringify({ v: "test", u: "" }),
       );
       expect(metadataArray[0]["unit"]).toEqual("");
+      expect(metadataArray[0]["rawValue"]).toEqual({ v: "test", u: "" });
+      expect(metadataArray[0]["originalEntry"]).toEqual({ v: "test", u: "" });
     });
 
     it("should handle null metadata entries without throwing", () => {
@@ -168,15 +307,79 @@ describe("MetadataViewComponent", () => {
     });
   });
 
+  describe("#copy actions", () => {
+    it("should copy the requested metadata representation", async () => {
+      const writeText = spyOn(navigator.clipboard, "writeText").and.resolveTo();
+      const row = {
+        name: "beam_size",
+        human_name: "Beam Size",
+        rawValue: 2.4,
+        unit: "mm",
+        originalEntry: { value: 2.4, unit: "mm", type: "quantity" },
+      } as any;
+
+      await component.onRowEvent({
+        event: RowEventType.RowActionMenu,
+        sender: { row, action: { name: "copyName" } },
+      } as any);
+      await component.onRowEvent({
+        event: RowEventType.RowActionMenu,
+        sender: { row, action: { name: "copyMachineName" } },
+      } as any);
+      await component.onRowEvent({
+        event: RowEventType.RowActionMenu,
+        sender: { row, action: { name: "copyValue" } },
+      } as any);
+      await component.onRowEvent({
+        event: RowEventType.RowActionMenu,
+        sender: { row, action: { name: "copyFullValue" } },
+      } as any);
+      await component.onRowEvent({
+        event: RowEventType.RowActionMenu,
+        sender: { row, action: { name: "copyFullEntry" } },
+      } as any);
+
+      expect(writeText.calls.allArgs()).toEqual([
+        ["Beam Size"],
+        ["beam_size"],
+        ["2.4"],
+        [JSON.stringify({ value: 2.4, unit: "mm" })],
+        [JSON.stringify(row.originalEntry)],
+      ]);
+    });
+
+    it("should serialize object values as JSON and omit absent units", async () => {
+      const writeText = spyOn(navigator.clipboard, "writeText").and.resolveTo();
+      const row = {
+        name: "sample",
+        rawValue: { nested: true },
+        unit: "",
+        originalEntry: { nested: true },
+      } as any;
+
+      await component.onRowEvent({
+        event: RowEventType.RowActionMenu,
+        sender: { row, action: { name: "copyValue" } },
+      } as any);
+      await component.onRowEvent({
+        event: RowEventType.RowActionMenu,
+        sender: { row, action: { name: "copyFullValue" } },
+      } as any);
+
+      expect(writeText.calls.allArgs()).toEqual([
+        [JSON.stringify(row.rawValue)],
+        [JSON.stringify(row.rawValue)],
+      ]);
+    });
+  });
+
   describe("#onRowEvent()", () => {
     it("should delegate the selected scientific metadata entry to the shared service", async () => {
       appConfigService.getConfig.and.returnValue({
-        addScientificMetadataKeysAsColumn: true,
         metadataFloatFormatEnabled: true,
-        metadataFloatFormat: {
-          significantDigits: 3,
-          minCutoff: 0.001,
-          maxCutoff: 1000,
+        scientificMetadataContextMenu: {
+          enabled: true,
+          addAsColumn: true,
         },
       } as any);
 
@@ -211,15 +414,26 @@ describe("MetadataViewComponent", () => {
 
     it("should not delegate when add-as-column is disabled in config", async () => {
       appConfigService.getConfig.and.returnValue({
-        addScientificMetadataKeysAsColumn: false,
         metadataFloatFormatEnabled: true,
+        scientificMetadataContextMenu: {
+          enabled: true,
+          addAsColumn: false,
+          copyName: true,
+          copyMachineName: true,
+          copyValue: true,
+          copyFullValue: true,
+          copyFullEntry: true,
+        },
       } as any);
 
       const disabledFixture = TestBed.createComponent(MetadataViewComponent);
       const disabledComponent = disabledFixture.componentInstance;
       disabledFixture.detectChanges();
 
-      expect(disabledComponent.rowContextMenuItems).toEqual([]);
+      expect(disabledComponent.rowContextMenuItems.length).toBe(5);
+      expect(
+        disabledComponent.rowContextMenuItems.every((action) => !action.icon),
+      ).toBeTrue();
 
       await disabledComponent.onRowEvent({
         event: RowEventType.RowActionMenu,

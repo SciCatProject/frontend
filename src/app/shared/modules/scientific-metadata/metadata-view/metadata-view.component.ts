@@ -29,7 +29,13 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ContextMenuItem } from "shared/modules/dynamic-material-table/models/context-menu.model";
 import { ScientificMetadataColumnsService } from "shared/services/scientific-metadata-columns.service";
-import { AppConfigService } from "app-config.service";
+import {
+  AppConfigService,
+  ScientificMetadataContextMenuConfig,
+} from "app-config.service";
+import { Store } from "@ngrx/store";
+import { showMessageAction } from "state-management/actions/user.actions";
+import { Message, MessageType } from "state-management/models";
 
 @Component({
   selector: "metadata-view",
@@ -80,7 +86,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   showGlobalTextSearch = false;
 
   rowContextMenuItems: ContextMenuItem[];
-  canAddScientificMetadataKeysAsColumn: boolean;
+  rowContextMenuEnabled = true;
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -194,15 +200,84 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     private datePipe: DatePipe,
     private formatNumberPipe: FormatNumberPipe,
     private scientificMetadataColumnsService: ScientificMetadataColumnsService,
+    private store: Store,
     public linkyPipe: LinkyPipe,
     public prettyUnit: PrettyUnitPipe,
   ) {
-    this.canAddScientificMetadataKeysAsColumn =
-      this.appConfigService.getConfig().addScientificMetadataKeysAsColumn ===
-      true;
-    this.rowContextMenuItems = this.canAddScientificMetadataKeysAsColumn
-      ? [this.scientificMetadataColumnsService.addAsColumnAction]
+    const contextMenuConfig: ScientificMetadataContextMenuConfig =
+      this.appConfigService.getConfig().scientificMetadataContextMenu ?? {};
+
+    this.rowContextMenuEnabled = contextMenuConfig.enabled == true;
+    console.log(this.rowContextMenuEnabled);
+
+    const configuredContextMenuActions =
+      this.scientificMetadataColumnsService.contextMenuActions.filter(
+        (action) => {
+          const configKey =
+            action.name as keyof ScientificMetadataContextMenuConfig;
+
+          return contextMenuConfig[configKey] == true;
+        },
+      );
+
+    this.rowContextMenuItems = this.rowContextMenuEnabled
+      ? configuredContextMenuActions
       : [];
+    console.log(this.rowContextMenuItems);
+  }
+
+  private getCopyValue(
+    row: ScientificMetadataTableData,
+    actionName: string,
+  ): string | undefined {
+    switch (actionName) {
+      case "copyName":
+        return String(row.human_name || row.name);
+      case "copyMachineName":
+        return String(row.name);
+      case "copyValue":
+        return this.serializeForClipboard(row.rawValue);
+      case "copyFullValue":
+        return this.serializeForClipboard(
+          row.unit ? { value: row.rawValue, unit: row.unit } : row.rawValue,
+        );
+      case "copyFullEntry":
+        return this.serializeForClipboard(row.originalEntry);
+      default:
+        return undefined;
+    }
+  }
+
+  private serializeForClipboard(value: unknown): string {
+    return value !== null && typeof value === "object"
+      ? JSON.stringify(value)
+      : String(value);
+  }
+
+  private async copyToClipboard(value: string): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(value);
+      this.store.dispatch(
+        showMessageAction({
+          message: new Message(
+            "Selected metadata has been copied to your clipboard",
+            MessageType.Success,
+            5000,
+          ),
+        }),
+      );
+    } catch (error) {
+      this.store.dispatch(
+        showMessageAction({
+          message: new Message(
+            "Failed to copy selected metadata to clipboard",
+            MessageType.Error,
+            5000,
+          ),
+        }),
+      );
+      console.error("Could not copy metadata: ", error);
+    }
   }
 
   createMetadataArray(
@@ -239,6 +314,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           human_name: humanReadableName,
           type: entry["type"],
           ontology_reference: entry["ontology_reference"],
+          rawValue: entry["value"],
+          originalEntry: entry,
         };
 
         const validUnit = this.unitsService.unitValidation(entry["unit"]);
@@ -267,6 +344,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             entry !== null && typeof entry === "object"
               ? entry["ontology_reference"]
               : undefined,
+          rawValue: entry,
+          originalEntry: entry,
         };
       }
       metadataArray.push(metadataObject);
@@ -286,17 +365,24 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   }
 
   async onRowEvent({ event, sender }: IRowEvent<ScientificMetadataTableData>) {
-    if (
-      !this.canAddScientificMetadataKeysAsColumn ||
-      event !== RowEventType.RowActionMenu ||
-      sender.action?.name !==
-        this.scientificMetadataColumnsService.addAsColumnAction.name ||
-      !sender.row
-    ) {
+    if (event !== RowEventType.RowActionMenu || !sender.row) {
       return;
     }
 
-    await this.scientificMetadataColumnsService.addMetadataColumn(sender.row);
+    if (
+      this.rowContextMenuEnabled &&
+      this.rowContextMenuItems.some((item) => item.name === "addAsColumn") &&
+      sender.action?.name ===
+        this.scientificMetadataColumnsService.addAsColumnAction.name
+    ) {
+      await this.scientificMetadataColumnsService.addMetadataColumn(sender.row);
+      return;
+    }
+
+    const copyValue = this.getCopyValue(sender.row, sender.action?.name);
+    if (copyValue !== undefined) {
+      await this.copyToClipboard(copyValue);
+    }
   }
 
   initTable(settingConfig: ITableSetting): void {

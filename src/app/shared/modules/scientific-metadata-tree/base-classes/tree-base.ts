@@ -21,6 +21,7 @@ export class TreeNode {
   path: string;
   columnName: string;
   human_name?: string;
+  originalEntry?: unknown;
 }
 export class FlatNode {
   key: string;
@@ -32,6 +33,7 @@ export class FlatNode {
   path: string;
   columnName: string;
   human_name?: string;
+  originalEntry?: unknown;
 }
 @Component({
   template: "",
@@ -74,6 +76,7 @@ export class TreeBaseComponent {
         value !== null && typeof value === "object"
           ? value["human_name"]
           : undefined;
+      node.originalEntry = value;
       // suport both {value: any, unit: string} and {v: any , u: string}
       if (value?.unit || value?.unit === "" || value?.u || value?.u === "") {
         node.unit = value.unit || value.u || undefined;
