@@ -1,7 +1,15 @@
 <mat-card class="anyof-group">
   <mat-card-title
     >{{ anyOfTitle }}
-    <span class="spacer"></span>
+    <span class="spacer">&nbsp;<mat-icon
+      *ngIf="description"
+      matSuffix
+      class="field-description-icon"
+      [matTooltip]="description"
+      matTooltipPosition="above"
+    >
+      info_outline
+    </mat-icon></span>
     @if (options.includes("null")) {
       <mat-checkbox
         [(ngModel)]="notNullOptionSelected"

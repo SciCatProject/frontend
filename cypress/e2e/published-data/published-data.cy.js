@@ -1,9 +1,10 @@
 import { testData } from "../../fixtures/testData";
 
 describe("Datasets general", () => {
-  const title = "publishedDataTitle";
+  const runId = Date.now();
+  const title = `publishedDataTitle-${runId}`;
   const abstract = "publishedDataAbstract";
-  const userPublishedDataTitle = "userSpecificPublishedDataTitle";
+  const userPublishedDataTitle = `userSpecificPublishedDataTitle-${runId}`;
   const userPublishedDataAbstract = "userSpecificPublishedDataAbstract";
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
