@@ -4,7 +4,7 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
 import * as fromActions from "../actions/datasets.actions";
 import { DatasetEffects } from "./datasets.effects";
-import { FacetCounts } from "state-management/models";
+import { ArchViewMode, FacetCounts } from "state-management/models";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
@@ -197,6 +197,26 @@ describe("DatasetEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
     });
+
+    it("should only emit the response of the latest query", () => {
+      const older = [{ ...dataset, pid: "older" }];
+      const latest = [{ ...dataset, pid: "latest" }];
+
+      actions = hot("-ab", {
+        a: fromActions.fetchDatasetsAction(),
+        b: fromActions.fetchDatasetsAction(),
+      });
+      // the older request is slower and would finish last
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValues(
+        cold("---a|", { a: older }),
+        cold("-a|", { a: latest }),
+      );
+
+      const expected = cold("---b", {
+        b: fromActions.fetchDatasetsCompleteAction({ datasets: latest }),
+      });
+      expect(effects.fetchDatasets$).toBeObservable(expected);
+    });
   });
 
   describe("fetchFacetCounts$", () => {
@@ -246,6 +266,45 @@ describe("DatasetEffects", () => {
       );
 
       const expected = cold("--b", { b: outcome });
+      expect(effects.fetchFacetCounts$).toBeObservable(expected);
+    });
+
+    it("should refetch the counts when the archive view changes", () => {
+      actions = hot("-a", {
+        a: fromActions.setArchiveViewModeAction({
+          modeToggle: ArchViewMode.archivable,
+        }),
+      });
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
+        cold("-a|", { a: [{ all: [{ totalSets: 2 }] }] }),
+      );
+
+      const expected = cold("--b", {
+        b: fromActions.fetchFacetCountsCompleteAction({
+          facetCounts: {},
+          allCounts: 2,
+        }),
+      });
+      expect(effects.fetchFacetCounts$).toBeObservable(expected);
+    });
+
+    it("should only emit the counts of the latest query", () => {
+      actions = hot("-ab", {
+        a: fromActions.fetchFacetCountsAction(),
+        b: fromActions.fetchFacetCountsAction(),
+      });
+      // the older request is slower and would finish last
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValues(
+        cold("---a|", { a: [{ all: [{ totalSets: 1 }] }] }),
+        cold("-a|", { a: [{ all: [{ totalSets: 2 }] }] }),
+      );
+
+      const expected = cold("---b", {
+        b: fromActions.fetchFacetCountsCompleteAction({
+          facetCounts: {},
+          allCounts: 2,
+        }),
+      });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
     });
   });
