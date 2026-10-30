@@ -450,6 +450,8 @@ Cypress.Commands.add("resetColumnSetting", () => {
 // dispatchEvent (instead of cy.trigger) avoids Cypress actionability checks
 // (e.g. "element is hidden from view") which fail on the CDK drag handles.
 const dispatchMouse = (target, type, x, y) => {
+  const scrollX = window.scrollX || 0;
+  const scrollY = window.scrollY || 0;
   const event = new MouseEvent(type, {
     bubbles: true,
     cancelable: true,
@@ -458,6 +460,8 @@ const dispatchMouse = (target, type, x, y) => {
     buttons: type === "mouseup" ? 0 : 1,
     clientX: x,
     clientY: y,
+    pageX: x + scrollX,
+    pageY: y + scrollY,
   });
   target.dispatchEvent(event);
 };
