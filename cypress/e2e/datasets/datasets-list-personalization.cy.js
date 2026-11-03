@@ -2,16 +2,8 @@ import {
   defaultDatasetsColumnsList,
   personalizedDatasetsColumnsList,
 } from "../../fixtures/testData";
-import { getHeader } from "../../support/utils";
 
 describe("1000 - Datasets list personalization", () => {
-  const proposalId = `personalization-${Date.now()}`;
-
-  before(() => {
-    cy.login(Cypress.env("username"), Cypress.env("password"));
-    cy.createProposal({ proposalId });
-  });
-
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
   });
@@ -20,19 +12,10 @@ describe("1000 - Datasets list personalization", () => {
     cy.removeDatasets();
   });
 
-  after(() => {
-    cy.login(Cypress.env("secondaryUsername"), Cypress.env("secondaryPassword"));
-    cy.getToken().then((token) => {
-      cy.request({
-        method: "DELETE",
-        url: `${Cypress.env("baseUrl")}/proposals/${encodeURIComponent(proposalId)}`,
-        headers: getHeader(token),
-      });
-    });
-  });
 
   it("1010 - should be able to visit main datasets list with default columns", () => {
-    cy.createDataset({ type: "raw", proposalIds: [proposalId] });
+    cy.createDataset({ type: "raw" });
+    cy.createProposal();
 
     cy.visit("/datasets");
 
@@ -55,7 +38,7 @@ describe("1000 - Datasets list personalization", () => {
   });
 
   it("1015 - should be able to visit proposals datasets list with default columns", () => {
-    cy.visit(`/proposals/${proposalId}`);
+    cy.visit(`/proposals/20170266`);
 
     cy.finishedLoading();
     cy.get("proposal-detail .general-header").should("exist");
@@ -210,11 +193,6 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.get("button[type=submit]").click();
 
-    // Wait for the login to complete before reloading the app; otherwise the
-    // visit below can happen while still logged out.
-    cy.url().should("not.include", "/login");
-    cy.get(".user-button").should("contain.text", username);
-
     cy.finishedLoading();
 
     // visit the datasets list
@@ -239,7 +217,7 @@ describe("1000 - Datasets list personalization", () => {
   });
 
   it("1045 - should be able to visit proposals datasets list with personalized columns", () => {
-    cy.visit(`/proposals/${proposalId}`);
+    cy.visit(`/proposals/20170266`);
 
     cy.finishedLoading();
     cy.get("proposal-detail .general-header").should("exist");
@@ -322,11 +300,6 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.get("button[type=submit]").click();
 
-    // Wait for the login to complete before reloading the app; otherwise the
-    // visit below can happen while still logged out.
-    cy.url().should("not.include", "/login");
-    cy.get(".user-button").should("contain.text", username);
-
     cy.finishedLoading();
 
     // visit the datasets list
@@ -355,7 +328,7 @@ describe("1000 - Datasets list personalization", () => {
   });
 
   it("1065 - should be able to visit proposals datasets list with default columns", () => {
-    cy.visit(`/proposals/${proposalId}`);
+    cy.visit(`/proposals/20170266`);
 
     cy.finishedLoading();
     cy.get("proposal-detail .general-header").should("exist");

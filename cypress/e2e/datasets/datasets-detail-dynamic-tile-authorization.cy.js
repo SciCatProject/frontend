@@ -80,13 +80,6 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
   const guestUsername = Cypress.env("guestUsername");
   const guestPassword = Cypress.env("guestPassword");
 
-  const openDataset = () => {
-    cy.get("@tileDatasetPid").then((pid) => {
-      cy.visit(`/datasets/${encodeURIComponent(pid)}`);
-    });
-    cy.url().should("include", "/datasets/");
-  };
-
 
   describe("1010:0010: No restricted access indicator", () => {
 
@@ -100,9 +93,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       });
 
       cy.login(adminUsername, adminPassword);
-      cy.createDataset({ type: "raw", isPublished: true }).then((dataset) => {
-        cy.wrap(dataset.pid).as("tileDatasetPid");
-      });
+      cy.createDataset({ type: "raw" });
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigNoIndicator");
     });
@@ -119,7 +110,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.isLoading();
 
-      openDataset();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.isLoading();
 
@@ -162,7 +153,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.isLoading();
 
-      openDataset();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.isLoading();
 
@@ -205,7 +196,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.isLoading();
 
-      openDataset();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.isLoading();
 
@@ -233,6 +224,8 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
     it("1010:0010:0040: should only show public tile to non authenticated user", () => {
 
+      cy.createDataset({ type: "raw", "isPublished": true });
+
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigNoIndicator");
 
@@ -249,7 +242,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.isLoading();
 
-      openDataset();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.isLoading();
 
@@ -286,9 +279,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       });
 
       cy.login(adminUsername, adminPassword);
-      cy.createDataset({ type: "raw", isPublished: true }).then((dataset) => {
-        cy.wrap(dataset.pid).as("tileDatasetPid");
-      });
+      cy.createDataset({ type: "raw" });
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigWithIndicator");
     });
@@ -305,7 +296,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.isLoading();
 
-      openDataset();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.isLoading();
 
@@ -372,7 +363,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.isLoading();
 
-      openDataset();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.isLoading();
 
@@ -414,7 +405,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.isLoading();
 
-      openDataset();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.isLoading();
 
@@ -441,6 +432,8 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
     });
 
     it("1010:0020:0040: should only show public tile to non authenticated user", () => {
+      cy.createDataset({ type: "raw", "isPublished": true });
+      
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigWithIndicator");
 
@@ -458,7 +451,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.isLoading();
 
-      openDataset();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.isLoading();
 
