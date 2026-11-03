@@ -16,6 +16,66 @@ Configurable actions can:
 - Submit data to remote services (e.g., prepare and download a Jupyter notebook)
 - Change the publication status of datasets
 - Redirect users to custom links
+- Provide administrator-defined actions on the datasets list
+- Run built-in local operations, such as adding selected datasets to the selection/cart
+
+## Datasets-list actions
+
+Datasets-list actions are rendered in the action row above the datasets table. They are configured with two top-level frontend configuration properties:
+
+```json
+{
+  "datasetActionsEnabled": true,
+  "datasetActions": []
+}
+```
+
+`datasetActionsEnabled` controls whether the configurable-action row is rendered. When it is `false`, no datasets-list configurable actions are displayed. An explicitly empty `datasetActions` array is supported and intentionally displays no actions; it is different from omitting the configuration when an application default is applied.
+
+Actions are sorted by ascending `order`. They use the same visibility, enabled/disabled, authorization, variable, and context-resolution rules as actions on the datafiles page.
+
+### Datasets-list action context
+
+The action context contains:
+
+- `datasets`: the datasets currently selected in the table
+- `user`: the current user profile
+- `currentArchViewMode`: the current archive view mode
+- `shoppingCartEnabled`: whether the selection/cart feature is enabled
+
+For example, `#DatasetsPid` resolves to the PIDs of all selected datasets and `#Dataset0Pid` resolves to the first selected dataset PID.
+
+### Local Add to Selection action
+
+The former hard-coded Add to Selection button is represented by the local action type `local-add-to-selection`:
+
+```json
+{
+  "id": "add-to-selection",
+  "description": "Add the selected datasets to the selection",
+  "order": 1,
+  "label": "Add to Selection",
+  "mat_icon": "library_add",
+  "type": "local-add-to-selection",
+  "hidden": "#!shoppingCartEnabled",
+  "authorization": []
+}
+```
+
+This action does not require a `url`. It is disabled while no datasets are selected. When activated, it dispatches the normal `addToBatchAction` and then clears the table selection. Existing datasets in the selection/cart are preserved. Network-oriented action types (`form`, `xhr`, `link`, `json-download`, and `dialog`) are unchanged.
+
+### Dataset-detail migration
+
+`datasetActions` is reserved for the datasets list. Dynamic dataset-detail actions use `datasetDetailsActions` and `datasetDetailsActionsEnabled`:
+
+```json
+{
+  "datasetDetailsActionsEnabled": true,
+  "datasetDetailsActions": []
+}
+```
+
+Deployments that previously used `datasetActions` for dataset-detail actions must rename those properties to the dataset-details pair. This avoids showing detail-page actions on the datasets list after upgrading.
 
 ## Concepts
 
