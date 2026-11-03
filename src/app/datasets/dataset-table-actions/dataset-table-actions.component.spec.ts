@@ -24,7 +24,23 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 
 class MockAppConfigService {
-  getConfig = () => ({ archiveWorkflowEnabled: true });
+  getConfig = () => ({
+    archiveWorkflowEnabled: true,
+    shoppingCartEnabled: true,
+    datasetActionsEnabled: true,
+    datasetActions: [
+      {
+        id: "add-to-selection",
+        order: 1,
+        label: "Add to Selection",
+        mat_icon: "library_add",
+        type: "local-add-to-selection",
+        authorization: [],
+      },
+    ],
+    batchActionsEnabled: false,
+    batchActions: [],
+  });
 }
 
 describe("DatasetTableActionsComponent", () => {
@@ -89,6 +105,31 @@ describe("DatasetTableActionsComponent", () => {
     );
     expect(compiled.querySelector(".all")).toBeTruthy();
     expect(compiled.querySelector(".all").textContent).toContain("All");
+  });
+
+  it("exposes configured datasets-list actions and context", () => {
+    expect(component.datasetActionsConfig).toHaveSize(1);
+    expect(component.datasetActionsConfig[0].type).toBe(
+      "local-add-to-selection",
+    );
+    expect(component.actionItems.datasets).toEqual([]);
+    expect(component.actionItems.shoppingCartEnabled).toBeTrue();
+    expect(
+      fixture.nativeElement.querySelector('[data-cy="dataset-list-actions"]'),
+    ).toBeTruthy();
+  });
+
+  it("does not render the legacy hard-coded Add to Selection button", () => {
+    expect(fixture.nativeElement.querySelector("#addToBatchButton")).toBeNull();
+  });
+
+  it("does not render the configurable action row when disabled", () => {
+    component.appConfig.datasetActionsEnabled = false;
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('[data-cy="dataset-list-actions"]'),
+    ).toBeNull();
   });
 
   describe("#onModeChange()", () => {

@@ -63,6 +63,10 @@ import {
   actionFailureAction,
   actionSuccessAction,
 } from "state-management/actions/actions.actions";
+import {
+  addToBatchAction,
+  clearSelectionAction,
+} from "state-management/actions/datasets.actions";
 import { buildDefaultBatchActions } from "./configurable-actions.defaults";
 
 describe("1000: ConfigurableActionComponent", () => {
@@ -1234,6 +1238,66 @@ describe("1000: ConfigurableActionComponent", () => {
     );
     expect(typeXhrSpy).not.toHaveBeenCalled();
     expect(typeFormSpy).not.toHaveBeenCalled();
+  });
+
+  describe("local-add-to-selection action", () => {
+    const localAction: ActionConfig = {
+      id: "add-to-selection",
+      order: 1,
+      label: "Add to Selection",
+      type: "local-add-to-selection",
+      authorization: [],
+    };
+
+    it("dispatches add-to-batch before clearing table selection", () => {
+      component.actionConfig = localAction;
+      component.actionItems = {
+        ...mockActionItemsDatafilesNofiles,
+        datasets: [mockActionItemsDatafilesNofiles.datasets[0]],
+      };
+      const dispatchSpy = spyOn(store, "dispatch");
+      const finishedSpy = spyOn(component.actionFinished, "emit");
+
+      component.performAction();
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy.calls.argsFor(0)[0]).toEqual(addToBatchAction());
+      expect(dispatchSpy.calls.argsFor(1)[0]).toEqual(clearSelectionAction());
+      expect(finishedSpy).toHaveBeenCalledWith(
+        jasmine.objectContaining({ success: true }),
+      );
+    });
+
+    it("is disabled and does not dispatch when no datasets are selected", () => {
+      component.actionConfig = localAction;
+      component.actionItems = {
+        ...mockActionItemsDatafilesNofiles,
+        datasets: [],
+      };
+      const dispatchSpy = spyOn(store, "dispatch");
+
+      expect(component.disabled).toBeTrue();
+      expect(component.performAction()).toBeFalse();
+      expect(dispatchSpy).not.toHaveBeenCalled();
+    });
+
+    it("supports shopping-cart visibility context", () => {
+      component.actionConfig = {
+        ...localAction,
+        hidden: "#!shoppingCartEnabled",
+      };
+      component.actionItems = {
+        ...mockActionItemsDatafilesNofiles,
+        shoppingCartEnabled: true,
+      };
+      expect(component.visible).toBeTrue();
+
+      component.actionItems = {
+        ...component.actionItems,
+        shoppingCartEnabled: false,
+      };
+      expect(component.visible).toBeFalse();
+    });
   });
 
   it("1151: xhr action should dispatch actionFailureAction when request fails", fakeAsync(() => {

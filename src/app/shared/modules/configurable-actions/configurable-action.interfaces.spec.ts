@@ -43,6 +43,21 @@ describe("configurable-action.interfaces", () => {
       expect(warnSpy).not.toHaveBeenCalled();
     });
 
+    it("accepts a URL-less local add-to-selection action", () => {
+      validateAllActionConfigsIn({
+        datasetActions: [
+          {
+            id: "add-to-selection",
+            order: 1,
+            label: "Add to Selection",
+            type: "local-add-to-selection",
+            authorization: [],
+          },
+        ],
+      });
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
     it("warns when type is not a known ActionType", () => {
       validateActionConfigs(
         [{ ...baseAction, type: "unsupported" as ActionConfig["type"] }],

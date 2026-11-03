@@ -27,6 +27,7 @@
 
   @if (appConfig.datasetActionsEnabled) {
     <configurable-actions
+      data-cy="dataset-list-actions"
       [actionsConfig]="datasetActionsConfig"
       [actionItems]="actionItems"
       [buttonsStyle]="actionButtonsStyle"
