@@ -541,6 +541,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.standardDataSource.sort = this.sort;
     this.dataSource.subscribe((x) => {
       x = x || [];
+      // a removed row sends no mouseleave and its index is reused
+      this.hoverKey = null;
       this.rowSelectionModel.clear();
       this.initSystemField(x);
       this.standardDataSource.data = x;

@@ -1,4 +1,7 @@
 import { ChangeDetectorRef, Renderer2 } from "@angular/core";
+import { BehaviorSubject, of, Subject } from "rxjs";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
 import { DatePipe } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -123,6 +126,30 @@ describe("DynamicMatTableComponent", () => {
 
     expect(component.isHoverCardOpen(row, imageColumn)).toBeFalse();
     expect(component.isHoverCardOpen(otherRow, imageColumn)).toBeTrue();
+  });
+
+  it("clears the hover state when the data changes", () => {
+    const row = { id: 1, pid: "pid-1" };
+    const imageColumn: TableField<any> = { name: "image", renderImage: true };
+    component.tableSetting = {};
+    component.paginator = {
+      page: new Subject(),
+      initialized: of(undefined),
+    } as unknown as MatPaginator;
+    component.sort = {
+      sortChange: new Subject(),
+      initialized: of(undefined),
+    } as unknown as MatSort;
+    component.dataSource = new BehaviorSubject<any[]>([]);
+    spyOn(component, "refreshUI");
+    component.ngAfterViewInit();
+
+    component.onHoverCardTriggerEnter(row, imageColumn);
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeTrue();
+
+    component.dataSource.next([{ pid: "pid-2" }]);
+
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeFalse();
   });
 
   it("closes a pinned hover card on document click", () => {
