@@ -1,11 +1,12 @@
 import { HttpClient } from "@angular/common/http";
-import { TestBed } from "@angular/core/testing";
+import { TestBed, fakeAsync, tick } from "@angular/core/testing";
 import {
   AppConfigInterface,
   AppConfigService,
   HelpMessages,
 } from "app-config.service";
-import { Observable, of } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
+import { delay } from "rxjs/operators";
 import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfigInterface = {
@@ -521,6 +522,318 @@ describe("AppConfigService", () => {
             "/assets/config.override.json",
           );
       });
+    });
+  });
+
+  describe("#mergeConfig() with additionalConfigs", () => {
+    const CONFIG = "/assets/config.json";
+    const OVERRIDE = "/assets/config.override.json";
+    let consoleError: jasmine.Spy;
+    let consoleWarn: jasmine.Spy;
+
+    // Serves each URL from `responses`; `Error` values are thrown as failures.
+    const mockHttpGet = (responses: Record<string, object | Error>) =>
+      spyOn(service["http"], "get").and.callFake(
+        (url: string): Observable<any> => {
+          const response = responses[url];
+          return response instanceof Error
+            ? throwError(() => response)
+            : of(response ?? {});
+        },
+      );
+
+    beforeEach(() => {
+      consoleError = spyOn(console, "error");
+      consoleWarn = spyOn(console, "warn");
+    });
+
+    it("should merge config.json and config.override.json when no list is set", async () => {
+      mockHttpGet({
+        [CONFIG]: { allowConfigOverrides: true, facility: "root" },
+        [OVERRIDE]: { facility: "override" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({
+        allowConfigOverrides: true,
+        facility: "override",
+      });
+    });
+
+    it("should treat an empty list as no list", async () => {
+      mockHttpGet({ [CONFIG]: { facility: "root", additionalConfigs: [] } });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({ facility: "root", additionalConfigs: [] });
+    });
+
+    it("should only use the listed sources, in list order", async () => {
+      const httpGet = mockHttpGet({
+        [CONFIG]: {
+          facility: "root",
+          siteTitle: "root",
+          additionalConfigs: ["/ext.json", CONFIG],
+        },
+        "/ext.json": { facility: "ext", siteHeaderLogo: "ext.png" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({
+        facility: "root",
+        siteTitle: "root",
+        siteHeaderLogo: "ext.png",
+        additionalConfigs: ["/ext.json", CONFIG],
+      });
+      expect(httpGet).toHaveBeenCalledTimes(2);
+    });
+
+    it("should discard config.json when it is not listed", async () => {
+      mockHttpGet({
+        [CONFIG]: { facility: "root", additionalConfigs: ["/ext.json"] },
+        "/ext.json": { siteTitle: "ext" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({
+        siteTitle: "ext",
+        additionalConfigs: ["/ext.json"],
+      });
+    });
+
+    it("should fetch the sources in parallel", fakeAsync(() => {
+      const list = ["/a.json", "/b.json"];
+      spyOn(service["http"], "get").and.callFake(
+        (url: string): Observable<any> =>
+          url === CONFIG
+            ? of({ additionalConfigs: list })
+            : of({ siteTitle: url }).pipe(delay(1000)),
+      );
+
+      let result: Partial<AppConfigInterface> | undefined;
+      service["mergeConfig"]().then((r) => (result = r));
+      tick(1000);
+
+      expect(result).toEqual({ siteTitle: "/b.json", additionalConfigs: list });
+    }));
+
+    it("should treat a single URL string as a one-element list", async () => {
+      mockHttpGet({
+        [CONFIG]: { facility: "root", additionalConfigs: "/ext.json" as any },
+        "/ext.json": { siteTitle: "ext" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({
+        siteTitle: "ext",
+        additionalConfigs: ["/ext.json"],
+      });
+    });
+
+    it("should ignore additionalConfigs that is not a URL or list of URLs", async () => {
+      const bootstrap = {
+        facility: "root",
+        additionalConfigs: { a: 1 } as any,
+      };
+      mockHttpGet({ [CONFIG]: bootstrap });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual(bootstrap);
+    });
+
+    it("should use the list from config.override.json when overrides are allowed", async () => {
+      const list = [CONFIG, OVERRIDE, "/ext.json"];
+      mockHttpGet({
+        [CONFIG]: { allowConfigOverrides: true, facility: "root" },
+        [OVERRIDE]: { siteTitle: "override", additionalConfigs: list },
+        "/ext.json": { facility: "ext" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({
+        allowConfigOverrides: true,
+        facility: "ext",
+        siteTitle: "override",
+        additionalConfigs: list,
+      });
+    });
+
+    it("should let the list in config.override.json replace the one in config.json", async () => {
+      const httpGet = mockHttpGet({
+        [CONFIG]: {
+          allowConfigOverrides: true,
+          additionalConfigs: ["/from-config.json"],
+        },
+        [OVERRIDE]: { additionalConfigs: [OVERRIDE, "/from-override.json"] },
+      });
+
+      await service["mergeConfig"]();
+
+      expect(httpGet).toHaveBeenCalledWith("/from-override.json");
+      expect(httpGet).not.toHaveBeenCalledWith("/from-config.json");
+    });
+
+    it("should use the list from config.json when config.override.json has none", async () => {
+      const list = [CONFIG, OVERRIDE];
+      mockHttpGet({
+        [CONFIG]: {
+          allowConfigOverrides: true,
+          facility: "root",
+          additionalConfigs: list,
+        },
+        [OVERRIDE]: { facility: "override" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({
+        allowConfigOverrides: true,
+        facility: "override",
+        additionalConfigs: list,
+      });
+    });
+
+    it("should drop config.override.json when overrides are allowed but it is not listed", async () => {
+      mockHttpGet({
+        [CONFIG]: {
+          allowConfigOverrides: true,
+          facility: "root",
+          additionalConfigs: [CONFIG],
+        },
+        [OVERRIDE]: { facility: "override" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result.facility).toBe("root");
+    });
+
+    it("should load a listed config.override.json without resolving its list when overrides are not allowed", async () => {
+      const httpGet = mockHttpGet({
+        [CONFIG]: { additionalConfigs: [CONFIG, OVERRIDE] },
+        [OVERRIDE]: {
+          facility: "override",
+          additionalConfigs: ["/ignored.json"],
+        },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result).toEqual({
+        facility: "override",
+        additionalConfigs: [CONFIG, OVERRIDE],
+      });
+      expect(httpGet).not.toHaveBeenCalledWith("/ignored.json");
+    });
+
+    it("should ignore additionalConfigs inside remote sources", async () => {
+      const httpGet = mockHttpGet({
+        [CONFIG]: { additionalConfigs: ["/ext.json"] },
+        "/ext.json": { facility: "ext", additionalConfigs: ["/nested.json"] },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result.additionalConfigs).toEqual(["/ext.json"]);
+      expect(httpGet).not.toHaveBeenCalledWith("/nested.json");
+    });
+
+    it("should not fetch already loaded local files again", async () => {
+      const httpGet = mockHttpGet({
+        [CONFIG]: {
+          allowConfigOverrides: true,
+          additionalConfigs: ["assets/config.json", OVERRIDE],
+        },
+      });
+
+      await service["mergeConfig"]();
+
+      expect(httpGet).toHaveBeenCalledTimes(2);
+    });
+
+    it("should only load the first 3 entries, counting local files", async () => {
+      const list = [CONFIG, OVERRIDE, "/a", "/b"];
+      const httpGet = mockHttpGet({
+        [CONFIG]: {
+          allowConfigOverrides: true,
+          facility: "root",
+          additionalConfigs: list,
+        },
+        [OVERRIDE]: { siteTitle: "override" },
+        "/a": { facility: "a" },
+        "/b": { facility: "b" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result.facility).toBe("a");
+      expect(result.siteTitle).toBe("override");
+      expect(httpGet).not.toHaveBeenCalledWith("/b");
+      expect(consoleWarn).toHaveBeenCalledTimes(1);
+      expect(consoleError).not.toHaveBeenCalled();
+    });
+
+    it("should continue with the remaining entries after a failed fetch", async () => {
+      mockHttpGet({
+        [CONFIG]: { additionalConfigs: ["/a", "/b"] },
+        "/a": new Error("Network error"),
+        "/b": { facility: "b" },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result.facility).toBe("b");
+      expect(consoleError).toHaveBeenCalledWith("Error loading config from /a");
+    });
+
+    it("should replace arrays instead of merging them", async () => {
+      mockHttpGet({
+        [CONFIG]: {
+          datasetPageSizeOptions: [5, 10, 25, 100],
+          additionalConfigs: [CONFIG, "/ext.json"],
+        },
+        "/ext.json": { datasetPageSizeOptions: [10, 20, 30] },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result.datasetPageSizeOptions).toEqual([10, 20, 30]);
+    });
+
+    it("should deep merge nested objects", async () => {
+      mockHttpGet({
+        [CONFIG]: {
+          defaultMainPage: {
+            nonAuthenticatedUser: "DATASETS",
+            authenticatedUser: "DATASETS",
+          },
+          additionalConfigs: [CONFIG, "/ext.json"],
+        },
+        "/ext.json": { defaultMainPage: { authenticatedUser: "PROPOSALS" } },
+      });
+
+      const result = await service["mergeConfig"]();
+
+      expect(result.defaultMainPage).toEqual({
+        nonAuthenticatedUser: "DATASETS",
+        authenticatedUser: "PROPOSALS",
+      });
+    });
+
+    it("should ignore additionalConfigs from the backend config", async () => {
+      const httpGet = mockHttpGet({
+        "/api/v3/admin/config": { additionalConfigs: ["/ext.json"] },
+      });
+
+      await service.loadAppConfig();
+
+      expect(httpGet).not.toHaveBeenCalledWith("/ext.json");
     });
   });
 });
