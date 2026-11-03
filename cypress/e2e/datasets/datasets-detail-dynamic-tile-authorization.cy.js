@@ -224,7 +224,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
     it("1010:0010:0040: should only show public tile to non authenticated user", () => {
 
-      cy.createDataset({ type: "raw", "isPublished": true });
+      cy.createDataset({type: "raw", "isPublished": true});
 
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigNoIndicator");
@@ -432,8 +432,8 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
     });
 
     it("1010:0020:0040: should only show public tile to non authenticated user", () => {
-      cy.createDataset({ type: "raw", "isPublished": true });
-      
+      cy.createDataset({type: "raw", "isPublished": true});
+
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigWithIndicator");
 
