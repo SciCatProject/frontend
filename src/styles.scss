@@ -499,3 +499,8 @@ jsonforms {
   display: flex;
   align-items: center;
 }
+
+// the preview can end up over its thumbnail, it must not take the mouse
+.cdk-overlay-pane.thumbnail-preview-pane {
+  pointer-events: none;
+}

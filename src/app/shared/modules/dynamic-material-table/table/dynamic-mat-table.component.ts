@@ -261,6 +261,23 @@ export class DynamicMatTableComponent<T extends TableRow>
       offsetX: 4,
     },
   ];
+  /** Overlay positions for the thumbnail preview, to the right of the thumbnail first */
+  thumbnailPreviewPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "start",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "center",
+      offsetX: -8,
+    },
+  ];
   /** Overlay positions for metadata hover */
   metadataOverlayPositions: ConnectedPosition[] = [
     {
@@ -524,6 +541,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.standardDataSource.sort = this.sort;
     this.dataSource.subscribe((x) => {
       x = x || [];
+      // a removed row sends no mouseleave and its index is reused
+      this.hoverKey = null;
       this.rowSelectionModel.clear();
       this.initSystemField(x);
       this.standardDataSource.data = x;
