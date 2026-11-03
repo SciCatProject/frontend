@@ -94,7 +94,6 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       cy.login(adminUsername, adminPassword);
       cy.createDataset({ type: "raw" });
-      cy.createDataset({ type: "raw" });
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigNoIndicator");
     });
