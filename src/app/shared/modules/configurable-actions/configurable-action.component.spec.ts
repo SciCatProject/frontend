@@ -16,7 +16,7 @@ import { DatePipe } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
-import { Store, StoreModule } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   MockAuthService,
   MockHtmlElement,
@@ -49,7 +49,9 @@ import {
 import { of } from "rxjs";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import {
+  selectCurrentUser,
   selectIsAdmin,
+  selectIsLoading,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import {
@@ -116,10 +118,19 @@ describe("1000: ConfigurableActionComponent", () => {
         MatSnackBarModule,
         RouterModule,
         RouterModule.forRoot([]),
-        StoreModule.forRoot({}),
       ],
       declarations: [ConfigurableActionComponent],
-      providers: [provideMockStore(), DatePipe],
+      providers: [
+        provideMockStore({
+          selectors: [
+            { selector: selectCurrentUser, value: undefined },
+            { selector: selectProfile, value: {} },
+            { selector: selectIsAdmin, value: false },
+            { selector: selectIsLoading, value: false },
+          ],
+        }),
+        DatePipe,
+      ],
     });
     TestBed.overrideComponent(ConfigurableActionComponent, {
       set: {

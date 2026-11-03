@@ -167,6 +167,10 @@
         }
       },
       "datafilesActionsEnabled": { "type": "boolean" },
+      "datasetActionsEnabled": { "type": "boolean" },
+      "datasetActions": {
+        "$ref": "#/properties/datafilesActions"
+      },
       "statusBannerMessage": { "type": "string" },
       "statusBannerCode": {
         "type": "string",
@@ -220,7 +224,7 @@
             },
             "type": {
               "type": "string",
-              "enum": ["form", "xhr", "link", "json-download"]
+              "enum": ["form", "xhr", "link", "json-download", "dialog", "local-add-to-selection"]
             },
             "icon": { "type": "string" },
             "payload": { "type": "string" },
@@ -691,6 +695,35 @@
             "scope": "#/properties/maxDirectDownloadSize"
           },
           { "type": "Control", "scope": "#/properties/maxFileSizeWarning" }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Datasets List Actions",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/datasetActionsEnabled" },
+          {
+            "type": "ListWithDetail",
+            "scope": "#/properties/datasetActions",
+            "options": {
+              "detail": {
+                "type": "VerticalLayout",
+                "elements": [
+                  { "type": "Control", "scope": "#/properties/label" },
+                  { "type": "Control", "scope": "#/properties/id" },
+                  { "type": "Control", "scope": "#/properties/description" },
+                  { "type": "Control", "scope": "#/properties/order" },
+                  { "type": "Control", "scope": "#/properties/mat_icon" },
+                  { "type": "Control", "scope": "#/properties/url" },
+                  { "type": "Control", "scope": "#/properties/enabled" },
+                  { "type": "Control", "scope": "#/properties/type" }
+                ]
+              }
+            }
+          }
         ]
       },
       {

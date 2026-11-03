@@ -1,4 +1,28 @@
-# Datafiles Actions documentation
+# Configurable actions documentation
+
+## Datasets list actions
+
+Actions configured under `datasetActions` are rendered above the datasets table, alongside the batch actions. Set `datasetActionsEnabled` to `true` to enable the row; an explicitly empty `datasetActions` array renders no list actions. Actions receive the selected `datasets`, the current `user` profile, and `currentArchViewMode` in their action context, just like datafiles actions receive dataset context.
+
+The built-in local operation `local-add-to-selection` preserves the former Add to Selection behavior. It is disabled when no datasets are selected, dispatches `addToBatchAction`, and then clears the table selection. It does not clear the existing selection/cart. It does not require a URL; other action types retain their existing URL-based behavior.
+
+Example:
+
+```json
+"datasetActionsEnabled": true,
+"datasetActions": [{
+  "id": "add-to-selection",
+  "order": 1,
+  "label": "Add to Selection",
+  "mat_icon": "library_add",
+  "type": "local-add-to-selection",
+  "authorization": []
+}]
+```
+
+Dataset-detail dynamic templates use `datasetDetailsActions` and `datasetDetailsActionsEnabled`. Deployments that previously used `datasetActions` for dataset-detail actions should rename those keys to the dataset-details pair; `datasetActions` now belongs to the datasets list.
+
+## Datafiles actions
 
 Datafiles actions are configurable actions specific to all or selected datafiles. They are shown as button in the "Datafiles" tab under the individual dataset page.
 The button can be configured with text or icon or both.

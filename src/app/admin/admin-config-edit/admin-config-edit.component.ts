@@ -131,8 +131,13 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
         d.labelsLocalization.proposal,
       );
     }
-    if (d.datafilesActions) {
-      d.datafilesActions = d.datafilesActions.map((a: any) => ({
+    for (const actionsKey of [
+      "datafilesActions",
+      "datasetActions",
+      "datasetDetailsActions",
+    ]) {
+      if (!d[actionsKey]) continue;
+      d[actionsKey] = d[actionsKey].map((a: any) => ({
         ...a,
         variables:
           a.variables && !Array.isArray(a.variables)
@@ -166,8 +171,13 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
         d.labelsLocalization.proposal,
       );
     }
-    if (Array.isArray(d.datafilesActions)) {
-      d.datafilesActions = d.datafilesActions.map((a: any) => ({
+    for (const actionsKey of [
+      "datafilesActions",
+      "datasetActions",
+      "datasetDetailsActions",
+    ]) {
+      if (!Array.isArray(d[actionsKey])) continue;
+      d[actionsKey] = d[actionsKey].map((a: any) => ({
         ...a,
         variables: Array.isArray(a.variables)
           ? this.toObject(a.variables)

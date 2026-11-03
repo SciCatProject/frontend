@@ -8,13 +8,12 @@ import {
 } from "@angular/core/testing";
 
 import { DatasetTableActionsComponent } from "./dataset-table-actions.component";
-import { MockStore, mockDataset } from "shared/MockStubs";
+import { MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Store, StoreModule } from "@ngrx/store";
 import { ArchViewMode } from "state-management/models";
 import {
   setArchiveViewModeAction,
-  addToBatchAction,
   clearBatchAction,
   clearSelectionAction,
 } from "state-management/actions/datasets.actions";
@@ -107,40 +106,12 @@ describe("DatasetTableActionsComponent", () => {
     });
   });
 
-  describe("#isEmptySelection()", () => {
-    it("should return true if the length of selectedSets equals 0", () => {
-      const isEmpty = component.isEmptySelection();
-
-      expect(isEmpty).toEqual(true);
-    });
-
-    it("should return false if the length of selectedSets is larger than 0", () => {
-      component.selectedSets = [mockDataset];
-
-      const isEmpty = component.isEmptySelection();
-
-      expect(isEmpty).toEqual(false);
-    });
-  });
-
   describe("#archiveClickHandle()", () => {
     xit("should...", () => {});
   });
 
   describe("#retrieveClickHandle()", () => {
     xit("should...", () => {});
-  });
-
-  describe("#onAddToBatch()", () => {
-    it("should dispatch an addToBatchAction and a clearSelectionAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      component.onAddToBatch();
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(addToBatchAction());
-      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
-    });
   });
 
   describe("#onActionFinished()", () => {
