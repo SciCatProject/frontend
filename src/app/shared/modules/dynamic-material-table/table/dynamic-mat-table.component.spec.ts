@@ -128,9 +128,7 @@ describe("DynamicMatTableComponent", () => {
     expect(component.isHoverCardOpen(otherRow, imageColumn)).toBeTrue();
   });
 
-  it("clears the hover state when the data changes", () => {
-    const row = { id: 1, pid: "pid-1" };
-    const imageColumn: TableField<any> = { name: "image", renderImage: true };
+  const initDataSource = () => {
     component.tableSetting = {};
     component.paginator = {
       page: new Subject(),
@@ -143,6 +141,12 @@ describe("DynamicMatTableComponent", () => {
     component.dataSource = new BehaviorSubject<any[]>([]);
     spyOn(component, "refreshUI");
     component.ngAfterViewInit();
+  };
+
+  it("clears the hover state when the data changes", () => {
+    const row = { id: 1, pid: "pid-1" };
+    const imageColumn: TableField<any> = { name: "image", renderImage: true };
+    initDataSource();
 
     component.onHoverCardTriggerEnter(row, imageColumn);
     expect(component.isHoverCardOpen(row, imageColumn)).toBeTrue();
@@ -150,6 +154,21 @@ describe("DynamicMatTableComponent", () => {
     component.dataSource.next([{ pid: "pid-2" }]);
 
     expect(component.isHoverCardOpen(row, imageColumn)).toBeFalse();
+  });
+
+  it("keeps a pinned hover card open when the data changes", () => {
+    const row = { id: 1 };
+    const event = jasmine.createSpyObj<MouseEvent>("event", [
+      "stopPropagation",
+      "preventDefault",
+    ]);
+    initDataSource();
+
+    component.togglePinnedHoverCard(event, row, hoverColumn);
+    component.dataSource.next([{ pid: "pid-2" }]);
+
+    expect(component.isHoverCardPinned(row, hoverColumn)).toBeTrue();
+    expect(component.isHoverCardOpen(row, hoverColumn)).toBeTrue();
   });
 
   it("closes a pinned hover card on document click", () => {
