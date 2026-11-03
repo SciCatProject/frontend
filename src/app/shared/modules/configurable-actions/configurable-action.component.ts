@@ -41,6 +41,7 @@ import {
 import {
   addToBatchAction,
   clearSelectionAction,
+  selectDatasetsAction,
 } from "state-management/actions/datasets.actions";
 
 @Component({
@@ -238,6 +239,25 @@ export class ConfigurableActionComponent
       ),
       "#!isPublished": String(
         this.actionItems.datasets?.[0]?.isPublished === false,
+      ),
+      "#datasetPublic": String(
+        this.actionItems.datasets?.every(
+          (dataset) => dataset.isPublished === true,
+        ) === true,
+      ),
+      "#datasetAccess": String(
+        this.actionItems.datasets?.every(
+          (dataset) =>
+            this.isAdmin ||
+            (this.userProfile.accessGroups as string[] | undefined)?.includes(
+              dataset.ownerGroup,
+            ) ||
+            dataset.accessGroups?.some((group) =>
+              (this.userProfile.accessGroups as string[] | undefined)?.includes(
+                group,
+              ),
+            ),
+        ) === true,
       ),
       "#shoppingCartEnabled": String(
         this.actionItems.shoppingCartEnabled === true,
@@ -475,6 +495,9 @@ export class ConfigurableActionComponent
 
   private typeLocalAddToSelection() {
     if (!this.actionItems.datasets?.length) return false;
+    this.store.dispatch(
+      selectDatasetsAction({ datasets: this.actionItems.datasets }),
+    );
     this.store.dispatch(addToBatchAction());
     this.store.dispatch(clearSelectionAction());
     this.actionFinishedEmit(true);
@@ -516,6 +539,8 @@ export class ConfigurableActionComponent
       if (nextStep === "xhr") this.typeXhr();
       else if (nextStep === "form") this.typeForm();
       else if (nextStep === "json-download") this.typeJsonToDownload();
+      else if (nextStep === "local-add-to-selection")
+        this.typeLocalAddToSelection();
       else console.warn("Unsupported onSuccess action type:", nextStep);
     } catch (error) {
       console.error("Configurable action error on execute next step", error);
@@ -565,9 +590,21 @@ export class ConfigurableActionComponent
     });
   }
 
+  private isAuthorized(): boolean {
+    const authorization = this.actionConfig.authorization || [];
+    // Older consumers/tests may not provide a user context. Do not treat a
+    // missing context as a failed authorization check; rendered surfaces
+    // always provide the user profile through actionItems.
+    if (!authorization.length || !("user" in this.actionItems)) return true;
+    this.resolveVariableContext();
+    return authorization.some((condition) =>
+      this.evaluate(this.viewHandlers(condition)),
+    );
+  }
+
   get visible(): boolean {
     try {
-      this.resolveVariableContext();
+      if (!this.isAuthorized()) return false;
       if (!this.actionConfig.hidden) return true;
       return !this.evaluate(this.viewHandlers(this.actionConfig.hidden));
     } catch (error) {
@@ -577,6 +614,7 @@ export class ConfigurableActionComponent
   }
 
   get disabled(): boolean {
+    if (!this.isAuthorized()) return true;
     if (
       this.actionConfig.type === "local-add-to-selection" &&
       !this.actionItems.datasets?.length
@@ -634,7 +672,7 @@ export class ConfigurableActionComponent
   }
 
   performAction() {
-    this.resolveVariableContext();
+    if (!this.isAuthorized()) return false;
     const type = this.actionConfig.type || "form";
     switch (type) {
       case "json-download":

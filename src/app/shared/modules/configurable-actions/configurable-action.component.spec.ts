@@ -66,6 +66,7 @@ import {
 import {
   addToBatchAction,
   clearSelectionAction,
+  selectDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import { buildDefaultBatchActions } from "./configurable-actions.defaults";
 
@@ -1260,9 +1261,12 @@ describe("1000: ConfigurableActionComponent", () => {
 
       component.performAction();
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy.calls.argsFor(0)[0]).toEqual(addToBatchAction());
-      expect(dispatchSpy.calls.argsFor(1)[0]).toEqual(clearSelectionAction());
+      expect(dispatchSpy).toHaveBeenCalledTimes(3);
+      expect(dispatchSpy.calls.argsFor(0)[0]).toEqual(
+        selectDatasetsAction({ datasets: component.actionItems.datasets }),
+      );
+      expect(dispatchSpy.calls.argsFor(1)[0]).toEqual(addToBatchAction());
+      expect(dispatchSpy.calls.argsFor(2)[0]).toEqual(clearSelectionAction());
       expect(finishedSpy).toHaveBeenCalledWith(
         jasmine.objectContaining({ success: true }),
       );
@@ -1276,6 +1280,23 @@ describe("1000: ConfigurableActionComponent", () => {
       };
       const dispatchSpy = spyOn(store, "dispatch");
 
+      expect(component.disabled).toBeTrue();
+      expect(component.performAction()).toBeFalse();
+      expect(dispatchSpy).not.toHaveBeenCalled();
+    });
+
+    it("does not render or execute unauthorized actions", () => {
+      component.actionConfig = {
+        ...localAction,
+        authorization: ["#userIsAdmin"],
+      };
+      component.actionItems = {
+        ...mockActionItemsDatafilesNofiles,
+        user: {},
+      };
+      const dispatchSpy = spyOn(store, "dispatch");
+
+      expect(component.visible).toBeFalse();
       expect(component.disabled).toBeTrue();
       expect(component.performAction()).toBeFalse();
       expect(dispatchSpy).not.toHaveBeenCalled();
