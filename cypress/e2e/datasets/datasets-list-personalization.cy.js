@@ -12,7 +12,6 @@ describe("1000 - Datasets list personalization", () => {
     cy.removeDatasets();
   });
 
-
   it("1010 - should be able to visit main datasets list with default columns", () => {
     cy.createDataset({ type: "raw" });
     cy.createProposal();
@@ -38,7 +37,7 @@ describe("1000 - Datasets list personalization", () => {
   });
 
   it("1015 - should be able to visit proposals datasets list with default columns", () => {
-    cy.visit(`/proposals/20170266`);
+    cy.visit("/proposals/20170266");
 
     cy.finishedLoading();
     cy.get("proposal-detail .general-header").should("exist");
@@ -217,7 +216,7 @@ describe("1000 - Datasets list personalization", () => {
   });
 
   it("1045 - should be able to visit proposals datasets list with personalized columns", () => {
-    cy.visit(`/proposals/20170266`);
+    cy.visit("/proposals/20170266");
 
     cy.finishedLoading();
     cy.get("proposal-detail .general-header").should("exist");
@@ -328,7 +327,7 @@ describe("1000 - Datasets list personalization", () => {
   });
 
   it("1065 - should be able to visit proposals datasets list with default columns", () => {
-    cy.visit(`/proposals/20170266`);
+    cy.visit("/proposals/20170266");
 
     cy.finishedLoading();
     cy.get("proposal-detail .general-header").should("exist");
