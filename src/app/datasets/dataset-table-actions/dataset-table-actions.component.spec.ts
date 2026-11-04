@@ -27,8 +27,8 @@ class MockAppConfigService {
   getConfig = () => ({
     archiveWorkflowEnabled: true,
     shoppingCartEnabled: true,
-    datasetActionsEnabled: true,
-    datasetActions: [
+    datasetsListActionsEnabled: true,
+    datasetsListActions: [
       {
         id: "add-to-selection",
         order: 1,
@@ -107,9 +107,16 @@ describe("DatasetTableActionsComponent", () => {
     expect(compiled.querySelector(".all").textContent).toContain("All");
   });
 
+  it("uses the same raised accent button style as datafiles actions", () => {
+    expect(component.actionButtonsStyle).toEqual({
+      raised: true,
+      color: "accent",
+    });
+  });
+
   it("exposes configured datasets-list actions and context", () => {
-    expect(component.datasetActionsConfig).toHaveSize(1);
-    expect(component.datasetActionsConfig[0].type).toBe(
+    expect(component.datasetsListActionsConfig).toHaveSize(1);
+    expect(component.datasetsListActionsConfig[0].type).toBe(
       "local-add-to-selection",
     );
     expect(component.actionItems.datasets).toEqual([]);
@@ -124,7 +131,7 @@ describe("DatasetTableActionsComponent", () => {
   });
 
   it("does not render the configurable action row when disabled", () => {
-    component.appConfig.datasetActionsEnabled = false;
+    component.appConfig.datasetsListActionsEnabled = false;
     fixture.detectChanges();
 
     expect(

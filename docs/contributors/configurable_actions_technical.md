@@ -25,12 +25,12 @@ Datasets-list actions are rendered in the action row above the datasets table. T
 
 ```json
 {
-  "datasetActionsEnabled": true,
-  "datasetActions": []
+  "datasetsListActionsEnabled": true,
+  "datasetsListActions": []
 }
 ```
 
-`datasetActionsEnabled` controls whether the configurable-action row is rendered. When it is `false`, no datasets-list configurable actions are displayed. An explicitly empty `datasetActions` array is supported and intentionally displays no actions; it is different from omitting the configuration when an application default is applied.
+`datasetsListActionsEnabled` controls whether the configurable-action row is rendered. When it is `false`, no datasets-list configurable actions are displayed. An explicitly empty `datasetsListActions` array is supported and intentionally displays no actions; it is different from omitting the configuration when an application default is applied.
 
 Actions are sorted by ascending `order`. They use the same visibility, enabled/disabled, authorization, variable, and context-resolution rules as actions on the datafiles page.
 
@@ -66,7 +66,7 @@ This action does not require a `url`. It is disabled while no datasets are selec
 
 ### Dataset-detail migration
 
-`datasetActions` is reserved for the datasets list. Dynamic dataset-detail actions use `datasetDetailsActions` and `datasetDetailsActionsEnabled`:
+`datasetsListActions` is reserved for the datasets list. Dynamic dataset-detail actions use `datasetDetailsActions` and `datasetDetailsActionsEnabled`:
 
 ```json
 {

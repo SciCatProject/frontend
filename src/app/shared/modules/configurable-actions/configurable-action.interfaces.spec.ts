@@ -38,14 +38,14 @@ describe("configurable-action.interfaces", () => {
     it("does not warn for valid type/onSuccess values", () => {
       validateActionConfigs(
         [{ ...baseAction, type: "form", onSuccess: "xhr" }],
-        "datasetActions",
+        "datasetsListActions",
       );
       expect(warnSpy).not.toHaveBeenCalled();
     });
 
     it("accepts a URL-less local add-to-selection action", () => {
       validateAllActionConfigsIn({
-        datasetActions: [
+        datasetsListActions: [
           {
             id: "add-to-selection",
             order: 1,
@@ -61,7 +61,7 @@ describe("configurable-action.interfaces", () => {
     it("warns when type is not a known ActionType", () => {
       validateActionConfigs(
         [{ ...baseAction, type: "unsupported" as ActionConfig["type"] }],
-        "datasetActions",
+        "datasetsListActions",
       );
       expect(warnSpy).toHaveBeenCalledWith(
         jasmine.stringMatching(/unknown type "unsupported"/),
@@ -76,7 +76,7 @@ describe("configurable-action.interfaces", () => {
             onSuccess: "unsupported" as ActionConfig["onSuccess"],
           },
         ],
-        "datasetActions",
+        "datasetsListActions",
       );
       expect(warnSpy).toHaveBeenCalledWith(
         jasmine.stringMatching(/unknown onSuccess type "unsupported"/),
@@ -84,7 +84,7 @@ describe("configurable-action.interfaces", () => {
     });
 
     it("does nothing when actions is undefined", () => {
-      validateActionConfigs(undefined, "datasetActions");
+      validateActionConfigs(undefined, "datasetsListActions");
       expect(warnSpy).not.toHaveBeenCalled();
     });
   });
@@ -129,7 +129,7 @@ describe("configurable-action.interfaces", () => {
     it("ignores non-array and primitive config values", () => {
       validateAllActionConfigsIn({
         siteTitle: "SciCat",
-        datasetActionsEnabled: true,
+        datasetsListActionsEnabled: true,
         helpSettings: { enabled: true },
       });
       expect(warnSpy).not.toHaveBeenCalled();

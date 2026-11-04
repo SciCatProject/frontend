@@ -25,14 +25,12 @@
     </configurable-actions>
   }
 
-  @if (appConfig.datasetActionsEnabled) {
+  @if (appConfig.datasetsListActionsEnabled) {
     <configurable-actions
       data-cy="dataset-list-actions"
-      [actionsConfig]="datasetActionsConfig"
+      [actionsConfig]="datasetsListActionsConfig"
       [actionItems]="actionItems"
       [buttonsStyle]="actionButtonsStyle"
     ></configurable-actions>
   }
 </div>
-
-<div style="clear: both"></div>

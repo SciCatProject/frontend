@@ -167,8 +167,8 @@
         }
       },
       "datafilesActionsEnabled": { "type": "boolean" },
-      "datasetActionsEnabled": { "type": "boolean" },
-      "datasetActions": {
+      "datasetsListActionsEnabled": { "type": "boolean" },
+      "datasetsListActions": {
         "$ref": "#/properties/datafilesActions"
       },
       "datasetDetailsActionsEnabled": { "type": "boolean" },
@@ -726,10 +726,10 @@
           "expandable": true
         },
         "elements": [
-          { "type": "Control", "scope": "#/properties/datasetActionsEnabled" },
+          { "type": "Control", "scope": "#/properties/datasetsListActionsEnabled" },
           {
             "type": "ListWithDetail",
-            "scope": "#/properties/datasetActions",
+            "scope": "#/properties/datasetsListActions",
             "options": {
               "detail": {
                 "type": "VerticalLayout",

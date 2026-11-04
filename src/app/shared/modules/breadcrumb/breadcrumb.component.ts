@@ -61,13 +61,22 @@ export class BreadcrumbComponent implements OnInit {
    */
   setBreadcrumbs(): void {
     this.breadcrumbs = [];
-    const children = this.route.children.reduce<ActivatedRoute[]>(
-      (accumulator, child) => {
-        accumulator.push(child, ...child.children);
-        return accumulator;
-      },
-      [],
-    );
+    // The breadcrumb can be rendered from a routed page component as well as
+    // from the application shell. Start at the root activated route so both
+    // placements see the same route segments.
+    let rootRoute = this.route;
+    while (rootRoute.parent) {
+      rootRoute = rootRoute.parent;
+    }
+
+    const children: ActivatedRoute[] = [];
+    const collectRoutes = (route: ActivatedRoute): void => {
+      route.children.forEach((child) => {
+        children.push(child);
+        collectRoutes(child);
+      });
+    };
+    collectRoutes(rootRoute);
     children.forEach((root) => {
       let param: string;
       Object.keys(root.snapshot.params).forEach((key) => {
@@ -84,6 +93,24 @@ export class BreadcrumbComponent implements OnInit {
         this.breadcrumbs.push(crumb);
       });
     });
+
+    // When this component is rendered inside a lazy-loaded page, the
+    // ActivatedRoute tree may not expose the URL segments immediately. Fall
+    // back to the current router URL so the datasets list still shows its
+    // breadcrumb on the initial render.
+    if (this.breadcrumbs.length === 0) {
+      const paths = this.router.url.split(/[?#]/)[0].split("/").filter(Boolean);
+      paths.forEach((path) => {
+        const encodedPath = encodeURIComponent(path);
+        this.breadcrumbs.push({
+          label: this.sanitise(path, path),
+          path,
+          params: {},
+          url: "/" + encodedPath,
+          fallback: "/" + encodedPath,
+        });
+      });
+    }
   }
 
   /**

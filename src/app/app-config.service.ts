@@ -139,8 +139,8 @@ export interface AppConfigInterface {
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetDetailsTabsInclude?: DatasetDetailsTabsInclude;
-  datasetActionsEnabled: boolean;
-  datasetActions: ActionConfig[];
+  datasetsListActionsEnabled: boolean;
+  datasetsListActions: ActionConfig[];
   datafilesActionsEnabled: boolean;
   datafilesActions: ActionConfig[];
   datasetDetailsActionsEnabled: boolean;
@@ -398,21 +398,43 @@ export class AppConfigService {
           .pipe(timeout(2000)),
       );
       const migratedBackendConfig = { ...backendConfig };
+      const legacyBackendConfig =
+        migratedBackendConfig as Partial<AppConfigInterface> & {
+          datasetActionsEnabled?: boolean;
+          datasetActions?: ActionConfig[];
+        };
+
+      // Before the datasets-list action settings were renamed, they were
+      // stored under datasetActionsEnabled/datasetActions. Preserve those
+      // configurations under the new names.
+      if (
+        !("datasetsListActionsEnabled" in migratedBackendConfig) &&
+        "datasetActionsEnabled" in legacyBackendConfig
+      ) {
+        migratedBackendConfig.datasetsListActionsEnabled =
+          legacyBackendConfig.datasetActionsEnabled as boolean;
+        if (legacyBackendConfig.datasetActions !== undefined) {
+          migratedBackendConfig.datasetsListActions =
+            legacyBackendConfig.datasetActions;
+        }
+        delete legacyBackendConfig.datasetActionsEnabled;
+        delete legacyBackendConfig.datasetActions;
+      }
 
       // Before dataset detail actions were renamed, they were stored under
-      // datasetActions. Only configurations that predate the datasets-list
-      // action flag should be migrated; new configurations must retain their
-      // datasetActions as list actions.
+      // datasetActions. Only configurations without either datasets-list
+      // action setting should be migrated as legacy detail actions; the
+      // renamed datasets-list settings must not be interpreted as detail actions.
       if (
         !("datasetDetailsActions" in migratedBackendConfig) &&
-        !("datasetActionsEnabled" in migratedBackendConfig) &&
-        migratedBackendConfig.datasetActions
+        !("datasetsListActionsEnabled" in migratedBackendConfig) &&
+        legacyBackendConfig.datasetActions
       ) {
         migratedBackendConfig.datasetDetailsActions =
-          migratedBackendConfig.datasetActions;
+          legacyBackendConfig.datasetActions;
         migratedBackendConfig.datasetDetailsActionsEnabled =
           migratedBackendConfig.datafilesActionsEnabled;
-        delete migratedBackendConfig.datasetActions;
+        delete legacyBackendConfig.datasetActions;
       }
 
       // Asset configuration supplies defaults for older backend configs, while

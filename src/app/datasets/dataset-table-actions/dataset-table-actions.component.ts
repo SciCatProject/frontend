@@ -36,16 +36,18 @@ import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
-  actionButtonsStyle: ActionButtonStyle = { raised: false, color: "primary" };
+  actionButtonsStyle: ActionButtonStyle = { raised: true, color: "accent" };
   actionItems: ActionItems = {
     datasets: [],
     shoppingCartEnabled: this.appConfig.shoppingCartEnabled,
+    jupyterHubUrl: this.appConfig.jupyterHubUrl,
   };
   userProfile$ = this.store.select(selectProfile);
   selectSelectedDatasets$ = this.store.select(selectSelectedDatasets);
   selectIsBatchNonEmpty$ = this.store.select(selectIsBatchNonEmpty);
   batchActionsConfig: ActionConfig[] = this.appConfig.batchActions || [];
-  datasetActionsConfig: ActionConfig[] = this.appConfig.datasetActions || [];
+  datasetsListActionsConfig: ActionConfig[] =
+    this.appConfig.datasetsListActions || [];
 
   @Input() selectedSets: PartialOutputDatasetDto[] | null = [];
 
@@ -124,6 +126,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
           user: profile,
           currentArchViewMode: mode,
           shoppingCartEnabled: this.appConfig.shoppingCartEnabled,
+          jupyterHubUrl: this.appConfig.jupyterHubUrl,
         };
       }),
     );

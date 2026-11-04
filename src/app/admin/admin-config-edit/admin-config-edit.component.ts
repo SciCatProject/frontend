@@ -133,7 +133,7 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
     }
     for (const actionsKey of [
       "datafilesActions",
-      "datasetActions",
+      "datasetsListActions",
       "datasetDetailsActions",
     ]) {
       if (!d[actionsKey]) continue;
@@ -173,7 +173,7 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
     }
     for (const actionsKey of [
       "datafilesActions",
-      "datasetActions",
+      "datasetsListActions",
       "datasetDetailsActions",
     ]) {
       if (!Array.isArray(d[actionsKey])) continue;
