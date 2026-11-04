@@ -37,6 +37,7 @@ import {
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
@@ -133,6 +134,10 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   constructor(
     private appConfigService: AppConfigService,
     private datePipe: DatePipe,
@@ -147,12 +152,21 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
+    this.subscriptions.push(
       this.vm$.subscribe(({ samples, tableSettings, count, isLoading }) => {
         this.tablesSettings = tableSettings;
         this.dataSource.next(samples);
         this.pending = false;
 
-        const savedTableConfigColumns = tableSettings?.columns;
+        const savedTableConfigColumns =
+          this.tableConfigService.preferSavedColumns(
+            this.tableName,
+            tableSettings?.columns,
+            this.currentUserId,
+          );
         const tableSort = this.getTableSort();
         const paginationConfig = this.getTablePaginationConfig(
           count,
@@ -324,11 +338,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width } = column;
-
-      return { name, display, order: index, width };
-    });
+    const columnsSetting = this.tableConfigService.saveColumns(
+      this.tableName,
+      setting.columnSetting,
+      this.currentUserId,
+    );
 
     this.store.dispatch(
       updateUserSettingsAction({
@@ -343,10 +357,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
-    if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
-    ) {
+    if (event.type === TableSettingEventType.apply) {
       this.saveTableSettings(event.setting);
     }
   }

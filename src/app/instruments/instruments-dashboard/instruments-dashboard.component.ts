@@ -23,6 +23,7 @@ import { fetchInstrumentsAction } from "state-management/actions/instruments.act
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { selectInstrumentsWithCountAndTableSettings } from "state-management/selectors/instruments.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 
@@ -89,6 +90,10 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   constructor(
     private store: Store,
     private router: Router,
@@ -98,13 +103,22 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
+    this.subscriptions.push(
       this.instrumentsWithCountAndTableSettings$.subscribe(
         ({ instruments, count, isLoading, tablesSettings }) => {
           this.tablesSettings = tablesSettings;
           this.dataSource.next(instruments);
           this.pending = false;
 
-          const savedTableConfigColumns = tablesSettings?.columns;
+          const savedTableConfigColumns =
+            this.tableConfigService.preferSavedColumns(
+              this.tableName,
+              tablesSettings?.columns,
+              this.currentUserId,
+            );
           const tableSort = this.getTableSort();
           const paginationConfig = this.getTablePaginationConfig(
             count,
@@ -196,11 +210,11 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width } = column;
-
-      return { name, display, order: index, width };
-    });
+    const columnsSetting = this.tableConfigService.saveColumns(
+      this.tableName,
+      setting.columnSetting,
+      this.currentUserId,
+    );
 
     this.store.dispatch(
       updateUserSettingsAction({
@@ -215,10 +229,7 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
-    if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
-    ) {
+    if (event.type === TableSettingEventType.apply) {
       this.saveTableSettings(event.setting);
     }
   }

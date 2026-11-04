@@ -72,10 +72,8 @@ describe("Jobs general", () => {
         .find("input[type=checkbox]")
         .uncheck();
 
-      cy.contains(".column-config-apply button.done-setting", "done").click();
-
-      cy.get("dynamic-mat-table table-menu button").click();
-      cy.get('[role="menu"] button').contains("Save table setting").click();
+      // Changes auto-save after a debounce and the popup closes automatically.
+      cy.waitForColumnAutoSave();
 
       cy.reload();
 

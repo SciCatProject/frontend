@@ -1,16 +1,20 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Output,
   Input,
   EventEmitter,
+  OnDestroy,
   ViewChild,
-  ElementRef,
 } from "@angular/core";
 import { moveItemInArray, CdkDragDrop } from "@angular/cdk/drag-drop";
+import { Subject, Subscription } from "rxjs";
+import { debounceTime } from "rxjs/operators";
+import { MatMenuTrigger } from "@angular/material/menu";
 import { TableService } from "../../dynamic-mat-table.service";
 import { ITableSetting } from "../../../models/table-setting.model";
-import { deepClone, isNullorUndefined } from "../../../cores/type";
+import { isNullorUndefined } from "../../../cores/type";
 import { AbstractField } from "../../../models/table-field.model";
 import { Direction } from "@angular/cdk/bidi";
 import {
@@ -25,7 +29,10 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class TableMenuComponent {
+export class TableMenuComponent implements OnDestroy {
+  private columnChange$ = new Subject<void>();
+  private columnChangeSub: Subscription;
+
   @Output() menuActionChange: EventEmitter<TableMenuActionChange> =
     new EventEmitter<TableMenuActionChange>();
 
@@ -38,7 +45,6 @@ export class TableMenuComponent {
   set tableSetting(value: ITableSetting) {
     value.settingList =
       value.settingList === undefined ? [] : value.settingList;
-    this.originalTableSetting = value;
     this.reverseDirection = value.direction === "rtl" ? "ltr" : "rtl";
     this.currentTableSetting = value;
   }
@@ -56,17 +62,38 @@ export class TableMenuComponent {
   }
 
   @Output() tableSettingChange = new EventEmitter<ITableSetting>();
-  @ViewChild("newSetting", { static: false }) newSettingElement: ElementRef;
 
-  newSettingName = "";
-  showNewSetting = false;
+  @ViewChild("columnMenuTrigger") columnMenuTrigger: MatMenuTrigger;
 
   currentColumn: number = null;
   reverseDirection: "auto" | Direction = "auto";
-  originalTableSetting: ITableSetting;
   currentTableSetting: ITableSetting;
 
-  constructor(public tableService: TableService) {}
+  constructor(
+    public tableService: TableService,
+    private cdr: ChangeDetectorRef,
+  ) {
+    this.columnChangeSub = this.columnChange$
+      .pipe(debounceTime(6000))
+      .subscribe(() => this.saveColumnSettings());
+  }
+
+  private scheduleColumnSave() {
+    this.columnChange$.next();
+  }
+
+  private saveColumnSettings() {
+    this.menuActionChange.emit({
+      type: TableMenuAction.TableSetting,
+      data: this.currentTableSetting,
+    });
+    this.columnMenuTrigger?.closeMenu();
+  }
+
+  ngOnDestroy(): void {
+    this.columnChangeSub?.unsubscribe();
+    this.columnChange$.complete();
+  }
 
   screenMode_onClick() {
     this.menuActionChange.emit({
@@ -76,33 +103,30 @@ export class TableMenuComponent {
   }
 
   /***** Column Setting ******/
+  onColumnMenuOpened() {
+    this.cdr.markForCheck();
+  }
+
   columnMenuDropped(event: CdkDragDrop<any>): void {
     moveItemInArray(
       this.currentTableSetting.columnSetting,
       event.item.data.columnIndex,
       event.currentIndex,
     );
+    this.scheduleColumnSave();
   }
 
   toggleSelectedColumn(column: AbstractField) {
     column.display = column.display === "visible" ? "hidden" : "visible";
+    this.scheduleColumnSave();
   }
 
-  apply_onClick(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    this.menuActionChange.emit({
-      type: TableMenuAction.TableSetting,
-      data: this.currentTableSetting,
-    });
+  onColumnSettingChange() {
+    this.scheduleColumnSave();
   }
 
   setting_onClick(i) {
     this.currentColumn = i;
-  }
-
-  cancel_onClick() {
-    this.currentTableSetting = deepClone(this.originalTableSetting);
   }
 
   isVisible(visible: boolean) {
@@ -110,88 +134,12 @@ export class TableMenuComponent {
   }
 
   /*****  Save ********/
-  saveSetting_onClick(e, setting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SaveSetting,
-      data: setting?.settingName,
-    });
-  }
-
-  saveSimpleSetting_onClick(e, setting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SaveSimpleSetting,
-      data: setting?.settingName,
-    });
-    this.showNewSetting = true;
-  }
-
-  newSetting_onClick(e) {
-    this.showNewSetting = true;
-    this.newSettingName = "";
-    window.requestAnimationFrame(() => {
-      this.newSettingElement.nativeElement.focus();
-    });
-    e.stopPropagation();
-  }
-
-  selectSetting_onClick(e, setting: ITableSetting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SelectSetting,
-      data: setting.settingName,
-    });
-  }
-
-  resetDefault_onClick(e) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SelectSetting,
-      data: null,
-    });
-  }
-
   resetDefaultSimple_onClick(e) {
     e.stopPropagation();
     this.menuActionChange.emit({
       type: TableMenuAction.DefaultSimpleSetting,
       data: null,
     });
-    this.showNewSetting = true;
-  }
-
-  default_onClick(e, setting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.DefaultSetting,
-      data: setting.settingName,
-    });
-  }
-
-  applySaveSetting_onClick(e) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.SaveSetting,
-      data: this.newSettingName,
-    });
-    this.showNewSetting = true;
-  }
-
-  cancelSaveSetting_onClick(e) {
-    e.stopPropagation();
-    this.newSettingName = "";
-    this.showNewSetting = false;
-  }
-
-  deleteSetting_onClick(e, setting) {
-    e.stopPropagation();
-    this.menuActionChange.emit({
-      type: TableMenuAction.DeleteSetting,
-      data: setting,
-    });
-    this.newSettingName = "";
-    this.showNewSetting = false;
   }
 
   /******* Save File (JSON, CSV, Print)***********/

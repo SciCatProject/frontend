@@ -429,6 +429,136 @@ Cypress.Commands.add("removeJobs", () => {
   });
 });
 
+Cypress.Commands.add("openColumnSetting", () => {
+  cy.get("dynamic-mat-table mat-header-row.header").should("exist");
+  cy.contains("mat-icon", "more_vert").closest("button").click();
+  cy.contains("button.mat-mdc-menu-item", "Column setting").click();
+  cy.get('[role="menu"] mat-checkbox.column-config').should("exist");
+});
+
+// Reset the table columns back to the configured default via the table menu,
+// so a following set of column changes is guaranteed to produce change events
+// (and therefore trigger the debounced auto-save).
+Cypress.Commands.add("resetColumnSetting", () => {
+  cy.get("dynamic-mat-table mat-header-row.header").should("exist");
+  cy.contains("mat-icon", "more_vert").closest("button").click();
+  cy.contains("button.mat-mdc-menu-item", "Default setting").click();
+  cy.get("body").type("{esc}");
+});
+
+const cdkDispatch = (type, x, y, detail, handleSelector, handleIndex = 0) => {
+  cy.window().then((win) => {
+    const doc = win.document;
+    let target = doc;
+    if (type === "mousedown" && handleSelector) {
+      const handles = doc.querySelectorAll(handleSelector);
+      target = handles[handleIndex] || handles[0];
+    }
+    const event = new win.MouseEvent(type, {
+      bubbles: true,
+      cancelable: true,
+      view: win,
+      button: 0,
+      buttons: type === "mouseup" ? 0 : 1,
+      detail,
+      clientX: x,
+      clientY: y,
+    });
+    Object.defineProperty(event, "pageX", { get: () => x + win.scrollX });
+    Object.defineProperty(event, "pageY", { get: () => y + win.scrollY });
+    target.dispatchEvent(event);
+  });
+};
+
+// Perform a real CDK drag. Runs each step as its own Cypress command with a real
+// wait in between, dispatching native mouse events inside the AUT window so the
+// timing matches a real user drag.
+//
+// CDK requirements (verified against @angular/cdk drag-drop):
+//  - starts on `mousedown` (must have detail !== 0, else treated as fake)
+//  - reads the pointer position from `pageX`/`pageY` (not settable via
+//    MouseEventInit, so they are defined explicitly)
+//  - listens to `mousemove`/`mouseup` on the document
+//  - needs to move past the drag-start threshold before the drag begins
+const cdkDrag = (handleSelector, handleIndex, startX, startY, endX, endY) => {
+  cdkDispatch("mousedown", startX, startY, 1, handleSelector, handleIndex);
+  cy.wait(60);
+  cdkDispatch("mousemove", startX + 25, startY + 5, 0);
+  cy.wait(60);
+  cdkDispatch("mousemove", endX, endY, 0);
+  cy.wait(60);
+  cdkDispatch("mousemove", endX, endY, 0);
+  cy.wait(60);
+  cdkDispatch("mouseup", endX, endY, 0);
+  cy.wait(60);
+};
+
+// Reorder a table column by dragging its header to a target index using the CDK
+// drag handle. `from` and `to` are zero-based indexes into the draggable header
+// cells (excluding the row-checkbox and table-menu columns).
+Cypress.Commands.add("dragColumnHeader", (from, to) => {
+  cy.window().then((win) => {
+    const cells = win.document.querySelectorAll(
+      "mat-header-row.header mat-header-cell",
+    );
+    const draggable = Array.from(cells).filter((c) =>
+      c.querySelector(".drag-indicator"),
+    );
+    const s = draggable[from].getBoundingClientRect();
+    const t = draggable[to].getBoundingClientRect();
+
+    cy.log(`dragColumnHeader ${from}->${to} (${s.left},${s.top})`);
+
+    cdkDrag(
+      "mat-header-row.header .drag-indicator",
+      from,
+      s.left + s.width / 2,
+      s.top + s.height / 2,
+      t.left + t.width / 2,
+      t.top + t.height / 2,
+    );
+  });
+});
+
+// Drag a row within the column-settings popup from `from` to `to` (zero-based
+// indexes among the draggable rows).
+Cypress.Commands.add("dragPopupColumn", (from, to) => {
+  cy.window().then((win) => {
+    const rows = win.document.querySelectorAll('[role="menu"] .dragable-row');
+    const s = rows[from].getBoundingClientRect();
+    const t = rows[to].getBoundingClientRect();
+
+    cdkDrag(
+      '[role="menu"] .dragable-row mat-icon',
+      from,
+      s.left + s.width / 2,
+      s.top + s.height / 2,
+      t.left + t.width / 2,
+      t.top + t.height / 2,
+    );
+  });
+});
+
+Cypress.Commands.add("toggleColumnInPopup", (label, checked = true) => {
+  cy.get('[role="menu"]')
+    .contains("mat-checkbox.column-config", label)
+    .find("input[type=checkbox]")
+    .then(($input) => {
+      const isChecked = $input.is(":checked");
+      if (isChecked !== checked) {
+        cy.wrap($input).click({ force: true });
+      }
+    });
+});
+
+// The column-settings popup auto-saves 6000 ms after the last change and then
+// closes itself. Waiting for the popup to disappear confirms the save happened.
+Cypress.Commands.add("waitForColumnAutoSave", () => {
+  cy.get('[role="menu"] mat-checkbox.column-config', { timeout: 15000 }).should(
+    "not.exist",
+  );
+});
+
 Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
   cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
