@@ -308,11 +308,11 @@
       "type": "xhr",
       "mat_icon": "public_off",
       "method": "PATCH",
-      "url": "http://localhost:3000/api/v4/publisheddata/{{ @doi }}",
+      "url": "http://localhost:3000/api/v4/publisheddata/{{ @encodedDoi }}",
       "payload": "{\"status\": \"private\"}",
       "enabled": "(#publishedDataOwner || #userIsAdmin) && @status === 'public'",
       "variables": {
-        "doi": "#PublishedData0Doi",
+        "encodedDoi": "#encodedDoi",
         "status": "#PublishedData[0]Field[status]"
       },
       "headers": {
@@ -344,10 +344,15 @@
       "description": "Register published data",
       "order": 3,
       "label": "Register",
-      "type": "xhr",
+      "type": "dialog",
       "mat_icon": "registration",
       "method": "POST",
       "url": "http://localhost:3000/api/v4/publisheddata/{{ @encodedDoi }}/register",
+      "dialog": {
+        "title": "Register published data",
+        "description": "Registering is irreversible. Continue?",
+        "fields": []
+      },
       "variables": {
         "encodedDoi": "#encodedDoi",
         "status": "#publisheddata[0].status"

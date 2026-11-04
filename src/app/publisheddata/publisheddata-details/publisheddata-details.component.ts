@@ -32,7 +32,7 @@ import {
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);
   isAdmin$ = this.store.select(selectIsAdmin);
-  publishedData: PublishedData & { metadata?: any };
+  publishedData: (PublishedData & { metadata?: any }) | undefined;
   subscriptions: Subscription[] = [];
   appConfig = this.appConfigService.getConfig();
   show = false;
@@ -80,6 +80,10 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
             this.landingPageUrl =
               this.appConfig.landingPage + encodeURIComponent(data.doi);
           }
+        } else {
+          this.publishedData = undefined;
+          this.actionItems = { datasets: [], publisheddata: [], user };
+          this.landingPageUrl = "";
         }
       }),
     );

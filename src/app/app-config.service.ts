@@ -139,7 +139,7 @@ export interface AppConfigInterface {
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetDetailsTabsInclude?: DatasetDetailsTabsInclude;
-  datasetActionsEnabled: boolean;
+  datasetActionsEnabled?: boolean;
   datasetActions: ActionConfig[];
   datafilesActionsEnabled: boolean;
   datafilesActions: ActionConfig[];
@@ -255,6 +255,18 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
  * of silently losing it. Only an explicitly truthy batchActionsEnabled (a
  * deployment that has set up its own batchActions) is left untouched.
  */
+function normalizeDatasetActions(config: AppConfigInterface): void {
+  // Configurations from before datasetActionsEnabled existed displayed any
+  // configured dataset actions. Preserve that behavior when the flag is
+  // absent, while respecting an explicit false.
+  if (
+    config.datasetActionsEnabled === undefined ||
+    config.datasetActionsEnabled === null
+  ) {
+    config.datasetActionsEnabled = Array.isArray(config.datasetActions);
+  }
+}
+
 function applyDefaultBatchActions(config: AppConfigInterface): void {
   if (!config.archiveWorkflowEnabled || config.batchActionsEnabled) return;
   config.batchActionsEnabled = true;
@@ -471,6 +483,7 @@ export class AppConfigService {
         .datasetDetailComponent.tileRestrictedIconGroups ?? ["admin"];
     }
 
+    normalizeDatasetActions(config);
     applyDefaultBatchActions(config);
     validateAllActionConfigsIn(config);
 

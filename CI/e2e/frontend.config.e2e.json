@@ -326,10 +326,15 @@
       "description": "Register published data",
       "order": 2,
       "label": "Register",
-      "type": "xhr",
+      "type": "dialog",
       "mat_icon": "registration",
       "method": "POST",
       "url": "http://localhost:3000/api/v4/publisheddata/{{ @encodedDoi }}/register",
+      "dialog": {
+        "title": "Register published data",
+        "description": "Registering is irreversible. Continue?",
+        "fields": []
+      },
       "variables": {
         "encodedDoi": "#encodedDoi",
         "status": "#publisheddata[0].status"

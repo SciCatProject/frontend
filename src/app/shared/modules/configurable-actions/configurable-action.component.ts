@@ -40,6 +40,7 @@ import {
   actionFailureAction,
   actionSuccessAction,
 } from "state-management/actions/actions.actions";
+import { sessionTimeoutAction } from "state-management/actions/user.actions";
 
 @Component({
   selector: "configurable-action",
@@ -387,34 +388,68 @@ export class ConfigurableActionComponent
     this.variables = { ...this.variables, ...resolvedConfig };
   }
 
-  private typeXhr() {
-    const url = this.interpolate(this.actionConfig.url);
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
+  private buildRequestHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {};
+    const names = new Map<string, string>();
+    const set = (name: string, value: string) => {
+      const lower = name.toLowerCase();
+      const previous = names.get(lower);
+      if (previous) delete headers[previous];
+      names.set(lower, name);
+      headers[name] = value;
     };
 
-    Object.entries(this.actionConfig.headers || {}).forEach(([k, v]) => {
-      headers[k] = String(this.resolve(v));
-    });
+    set("Content-Type", "application/json");
+    Object.entries(this.actionConfig.headers || {}).forEach(([k, v]) =>
+      set(k, String(this.resolve(v))),
+    );
+    return headers;
+  }
 
+  private async responseError(response: Response): Promise<Error> {
+    let message = `HTTP ${response.status}`;
+    const text = await response.text().catch(() => "");
+    if (text) {
+      try {
+        const body = JSON.parse(text);
+        message = body?.message || body?.error || body?.detail || text;
+      } catch {
+        message = text;
+      }
+    }
+    if (response.status === 401 && message === "SESSION_EXPIRED") {
+      sessionStorage.setItem(
+        "postLoginRedirect",
+        window.location.pathname + window.location.search,
+      );
+      this.store.dispatch(sessionTimeoutAction());
+    }
+    return new Error(String(message));
+  }
+
+  private typeXhr() {
+    const url = this.interpolate(this.actionConfig.url);
     fetch(url, {
       method: this.actionConfig.method || "POST",
-      headers,
+      headers: this.buildRequestHeaders(),
       body: this.preparePayload(),
     })
       .then(async (r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        // Only an empty body is treated as "no data"; a non-empty body that
-        // fails to parse as JSON is a real error and should not be silently
-        // swallowed into a false success.
+        if (!r.ok) throw await this.responseError(r);
         const text = await r.text();
-        const data = text ? JSON.parse(text) : {};
-
+        let data: unknown = {};
+        if (text) {
+          try {
+            data = JSON.parse(text);
+          } catch {
+            data = text;
+          }
+        }
         this.store.dispatch(actionSuccessAction());
         this.actionFinishedEmit(true, data);
       })
       .catch((err: Error) => {
-        this.store.dispatch(actionFailureAction());
+        this.store.dispatch(actionFailureAction(err.message));
         this.actionFinishedEmit(false, err);
       });
     return true;
@@ -459,13 +494,7 @@ export class ConfigurableActionComponent
     const filename = this.interpolate(
       this.actionConfig.filename || "download.json",
     );
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
-
-    Object.entries(this.actionConfig.headers || {}).forEach(([k, v]) => {
-      headers[k] = String(this.resolve(v));
-    });
+    const headers = this.buildRequestHeaders();
 
     fetch(this.actionConfig.url, {
       method: this.actionConfig.method || "POST",

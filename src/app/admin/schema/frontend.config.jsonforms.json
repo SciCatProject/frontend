@@ -210,7 +210,7 @@
             "headers": {
               "type": "object",
               "properties": {
-                "content-type": { "type": "string" },
+                "Content-Type": { "type": "string" },
                 "Authorization": { "type": "string" }
               }
             },
@@ -266,7 +266,7 @@
             "headers": {
               "type": "object",
               "properties": {
-                "content-type": { "type": "string" },
+                "Content-Type": { "type": "string" },
                 "Authorization": { "type": "string" }
               }
             },
@@ -276,7 +276,7 @@
             },
             "type": {
               "type": "string",
-              "enum": ["form", "xhr", "link", "json-download"]
+              "enum": ["form", "xhr", "link", "json-download", "dialog"]
             },
             "icon": { "type": "string" },
             "payload": { "type": "string" },
@@ -819,7 +819,7 @@
                     "elements": [
                       {
                         "type": "Control",
-                        "scope": "#/properties/headers/properties/content-type"
+                        "scope": "#/properties/headers/properties/Content-Type"
                       },
                       {
                         "type": "Control",
@@ -910,7 +910,7 @@
                     "elements": [
                       {
                         "type": "Control",
-                        "scope": "#/properties/headers/properties/content-type"
+                        "scope": "#/properties/headers/properties/Content-Type"
                       },
                       {
                         "type": "Control",
