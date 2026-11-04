@@ -177,9 +177,7 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
           variables: Array.isArray(a.variables)
             ? this.toObject(a.variables)
             : a.variables,
-          inputs: Array.isArray(a.inputs)
-            ? this.toObject(a.inputs)
-            : a.inputs,
+          inputs: Array.isArray(a.inputs) ? this.toObject(a.inputs) : a.inputs,
         }));
       }
     });
