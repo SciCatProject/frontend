@@ -214,7 +214,7 @@ describe("DatasetTableActionsComponent", () => {
   describe("#onAddToBatch()", () => {
     it("should dispatch an addToBatchAction with the current view and a clearSelectionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      component.currentArchViewMode = ArchViewMode.archivable;
+      component.currentArchViewMode = "archivable";
 
       component.onAddToBatch();
 
