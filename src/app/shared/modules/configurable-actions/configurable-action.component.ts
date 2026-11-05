@@ -21,6 +21,7 @@ import {
   ActionItems,
   ActionType,
   DialogField,
+  normalizeEnabled,
 } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 as uuidv4 } from "uuid";
@@ -559,19 +560,27 @@ export class ConfigurableActionComponent
   }
 
   get disabled(): boolean {
-    if (typeof this.actionConfig.disabled === "boolean")
-      return this.actionConfig.disabled;
-    if (typeof this.actionConfig.enabled === "boolean")
-      return !this.actionConfig.enabled;
+    return this.enabledState().disabled;
+  }
+
+  get tooltip(): string {
+    return this.enabledState().tooltip;
+  }
+
+  // only the first failing condition is explained
+  private enabledState(): { disabled: boolean; tooltip: string } {
+    const { conditions, enabledTooltip } = normalizeEnabled(this.actionConfig);
     try {
-      this.resolveVariableContext();
-      const raw = this.actionConfig.enabled
-        ? `!(${this.actionConfig.enabled})`
-        : this.actionConfig.disabled || "false";
-      return this.evaluate(this.viewHandlers(raw));
+      if (conditions.length) this.resolveVariableContext();
+      const failed = conditions.find(
+        (c) => !this.evaluate(this.viewHandlers(c.condition)),
+      );
+      if (failed)
+        return { disabled: true, tooltip: failed.disabledTooltip ?? "" };
+      return { disabled: false, tooltip: enabledTooltip ?? "" };
     } catch (error) {
       console.error("Configurable action error on get disabled", error);
-      return true;
+      return { disabled: true, tooltip: "" };
     }
   }
 
