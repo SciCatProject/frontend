@@ -8,14 +8,18 @@
     <mat-label>Description</mat-label>
     <textarea matInput formControlName="description" rows="5"></textarea>
   </mat-form-field>
-  <mat-form-field *ngIf="data.userGroups">
-    <mat-label>Owner Group</mat-label>
-    <mat-select formControlName="ownerGroup" required>
-      <mat-option *ngFor="let group of data.userGroups" [value]="group">
-        {{ group }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  @if (data.userGroups) {
+    <mat-form-field>
+      <mat-label>Owner Group</mat-label>
+      <mat-select formControlName="ownerGroup" required>
+        @for (group of data.userGroups; track group) {
+          <mat-option [value]="group">
+            {{ group }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
   <mat-form-field>
     <mat-label>Source Folder</mat-label>
     <input matInput formControlName="sourceFolder" type="text" required />

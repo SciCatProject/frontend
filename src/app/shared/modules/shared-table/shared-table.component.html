@@ -1,13 +1,17 @@
 <div class="center">
-  <div class="spinner-container" *ngIf="dataSource.loading$ | async">
-    <mat-spinner></mat-spinner>
-  </div>
+  @if (dataSource.loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
 </div>
 
 <!-- title -->
-<div *ngIf="title" class="shared-table-title">
-  <div>{{ title }}</div>
-</div>
+@if (title) {
+  <div class="shared-table-title">
+    <div>{{ title }}</div>
+  </div>
+}
 
 <!-- Top ToolBar Start-->
 <div class="table-toolbar" fxLayout="row" fxLayoutAlign="space-between center">
@@ -89,7 +93,7 @@
   </ng-container>
   <!-- Toggle Button Button For Hidden Columns End -->
 
-  <ng-template [ngIf]="select">
+  @if (select) {
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -108,45 +112,46 @@
         </mat-checkbox>
       </mat-cell>
     </ng-container>
-  </ng-template>
+  }
 
   <!-- Cell Definition For Visible Columns Start -->
-  <ng-container
-    [matColumnDef]="column.id"
-    *ngFor="let column of withoutSelectColumns"
-  >
-    <mat-header-cell
-      *matHeaderCellDef
-      class="col-name shared-table-{{ column.matchMode }} first-header-cell"
-    >
-      <div fxLayout="row" fxLayoutAlign="space-between center">
-        <mat-icon>{{ column.icon }}</mat-icon>
-        <span mat-sort-header [disabled]="!column.canSort">{{
-          column.label | titleCase
-        }}</span>
-      </div>
-    </mat-header-cell>
-
-    <mat-cell *matCellDef="let row" [fxFlex]="column.width + 'px'">
-      <ng-container [ngSwitch]="column.type">
-        <ng-container *ngSwitchCase="'image'"
-          ><img [src]="row[column.id]"
-        /></ng-container>
-        <ng-container *ngSwitchCase="'dataseturl'"
-          ><a
-            [ngClass]="{ disabled: !row.datasetExist }"
-            [routerLink]="['/datasets/', getPropertyByPath(row, column.id)]"
-            >{{ getPropertyByPath(row, column.id) }}</a
-          >
-        </ng-container>
-        <ng-container *ngSwitchDefault class="ellipsis">
-          {{
-            getPropertyByPath(row, column.id) | newDynamicPipe: column.format
-          }}
-        </ng-container>
-      </ng-container>
-    </mat-cell>
-  </ng-container>
+  @for (column of withoutSelectColumns; track column) {
+    <ng-container [matColumnDef]="column.id">
+      <mat-header-cell
+        *matHeaderCellDef
+        class="col-name shared-table-{{ column.matchMode }} first-header-cell"
+      >
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-icon>{{ column.icon }}</mat-icon>
+          <span mat-sort-header [disabled]="!column.canSort">{{
+            column.label | titleCase
+          }}</span>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [fxFlex]="column.width + 'px'">
+        @switch (column.type) {
+          @case ("image") {
+            <img [src]="row[column.id]" />
+          }
+          @case ("dataseturl") {
+            <a
+              [ngClass]="{ disabled: !row.datasetExist }"
+              [routerLink]="['/datasets/', getPropertyByPath(row, column.id)]"
+              >{{ getPropertyByPath(row, column.id) }}</a
+            >
+          }
+          @default {
+            <ng-container class="ellipsis">
+              {{
+                getPropertyByPath(row, column.id)
+                  | newDynamicPipe: column.format
+              }}
+            </ng-container>
+          }
+        }
+      </mat-cell>
+    </ng-container>
+  }
   <!-- Cell Definition For Visible Columns End -->
 
   <!-- Cell Definition For Hidden Columns Start -->
@@ -157,83 +162,82 @@
       fxLayout="column"
       fxLayoutAlign="center start"
     >
-      <div *ngFor="let hiddenColumn of hiddenColumns" fxLayout="row" class="m8">
-        <strong> {{ hiddenColumn.label }}: </strong>
-        <span>
-          <ng-container [ngSwitch]="hiddenColumn.type">
-            <ng-container *ngSwitchCase="'image'"
-              ><img [src]="row[hiddenColumn.id]"
-            /></ng-container>
-            <ng-container *ngSwitchCase="'dataseturl'"
-              ><a
-                [routerLink]="[
-                  '/datasets/',
-                  getPropertyByPath(row, hiddenColumn.id),
-                ]"
-                >{{ getPropertyByPath(row, hiddenColumn.id) }}</a
-              >
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              {{
-                getPropertyByPath(row, hiddenColumn.id)
-                  | newDynamicPipe: hiddenColumn.format
-              }}</ng-container
-            >
-          </ng-container>
-        </span>
-      </div>
+      @for (hiddenColumn of hiddenColumns; track hiddenColumn) {
+        <div fxLayout="row" class="m8">
+          <strong> {{ hiddenColumn.label }}: </strong>
+          <span>
+            @switch (hiddenColumn.type) {
+              @case ("image") {
+                <img [src]="row[hiddenColumn.id]" />
+              }
+              @case ("dataseturl") {
+                <a
+                  [routerLink]="[
+                    '/datasets/',
+                    getPropertyByPath(row, hiddenColumn.id),
+                  ]"
+                  >{{ getPropertyByPath(row, hiddenColumn.id) }}</a
+                >
+              }
+              @default {
+                {{
+                  getPropertyByPath(row, hiddenColumn.id)
+                    | newDynamicPipe: hiddenColumn.format
+                }}
+              }
+            }
+          </span>
+        </div>
+      }
     </mat-cell>
   </ng-container>
   <!-- Cell Definition For Visible Columns End -->
 
   <!-- Cell Definition For Visible Filter Start -->
-  <ng-container
-    matColumnDef="{{ column.id }}-filter"
-    *ngFor="let column of visibleColumns"
-  >
-    <mat-header-cell *matHeaderCellDef="let row">
-      <mat-form-field
-        [formGroup]="filterForm"
-        appearance="outline"
-        *ngIf="column.matchMode === 'between'"
-        class="max-width"
-      >
-        <mat-date-range-input [rangePicker]="rangePicker">
-          <input
-            name="{{ column.id + '.start' }}"
-            matStartDate
-            placeholder="Start date"
-            [formControlName]="column.id + '.start'"
-          />
-          <input
-            name="{{ column.id + '.end' }}"
-            matEndDate
-            placeholder="End date"
-            [formControlName]="column.id + '.end'"
-          />
-        </mat-date-range-input>
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="rangePicker"
-        ></mat-datepicker-toggle>
-        <mat-date-range-picker #rangePicker> </mat-date-range-picker>
-      </mat-form-field>
-
-      <mat-form-field
-        [formGroup]="filterForm"
-        appearance="outline"
-        *ngIf="column.matchMode !== 'between' && !column.hideFilter"
-      >
-        <input
-          [formControlName]="column.id"
-          matInput
-          autocomplete="off"
-          name="{{ column.id }}"
-          placeholder="{{ column.matchMode }}"
-        />
-      </mat-form-field>
-    </mat-header-cell>
-  </ng-container>
+  @for (column of visibleColumns; track column) {
+    <ng-container matColumnDef="{{ column.id }}-filter">
+      <mat-header-cell *matHeaderCellDef="let row">
+        @if (column.matchMode === "between") {
+          <mat-form-field
+            [formGroup]="filterForm"
+            appearance="outline"
+            class="max-width"
+          >
+            <mat-date-range-input [rangePicker]="rangePicker">
+              <input
+                name="{{ column.id + '.start' }}"
+                matStartDate
+                placeholder="Start date"
+                [formControlName]="column.id + '.start'"
+              />
+              <input
+                name="{{ column.id + '.end' }}"
+                matEndDate
+                placeholder="End date"
+                [formControlName]="column.id + '.end'"
+              />
+            </mat-date-range-input>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="rangePicker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker> </mat-date-range-picker>
+          </mat-form-field>
+        }
+        @if (column.matchMode !== "between" && !column.hideFilter) {
+          <mat-form-field [formGroup]="filterForm" appearance="outline">
+            <input
+              [formControlName]="column.id"
+              matInput
+              autocomplete="off"
+              name="{{ column.id }}"
+              placeholder="{{ column.matchMode }}"
+            />
+          </mat-form-field>
+        }
+      </mat-header-cell>
+    </ng-container>
+  }
   <!-- Cell Definition For Visible Filter End -->
 
   <!-- Cell Definition For Hidden Filter Start -->
@@ -244,54 +248,51 @@
       fxLayoutAlign="start"
       class="over-flow-scroll"
     >
-      <div
-        *ngFor="let hiddenColumn of hiddenColumns"
-        fxLayout="column"
-        class="padding-right-1em"
-      >
-        <div>
-          <strong>{{ hiddenColumn.label }}</strong>
-          <span>
-            <mat-form-field
-              [formGroup]="filterForm"
-              appearance="outline"
-              *ngIf="hiddenColumn.matchMode === 'between'"
-              class="max-width"
-            >
-              <mat-date-range-input [rangePicker]="rangePicker">
-                <input
-                  matStartDate
-                  placeholder="Start date"
-                  [formControlName]="hiddenColumn.id + '.start'"
-                />
-                <input
-                  matEndDate
-                  placeholder="End date"
-                  [formControlName]="hiddenColumn.id + '.end'"
-                />
-              </mat-date-range-input>
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="rangePicker"
-              ></mat-datepicker-toggle>
-              <mat-date-range-picker #rangePicker></mat-date-range-picker>
-            </mat-form-field>
-            <mat-form-field
-              [formGroup]="filterForm"
-              appearance="outline"
-              *ngIf="hiddenColumn.matchMode !== 'between'"
-            >
-              <input
-                [formControlName]="hiddenColumn.id"
-                matInput
-                autocomplete="off"
-                name="{{ hiddenColumn.id }}"
-                placeholder="{{ hiddenColumn.matchMode }}"
-              />
-            </mat-form-field>
-          </span>
+      @for (hiddenColumn of hiddenColumns; track hiddenColumn) {
+        <div fxLayout="column" class="padding-right-1em">
+          <div>
+            <strong>{{ hiddenColumn.label }}</strong>
+            <span>
+              @if (hiddenColumn.matchMode === "between") {
+                <mat-form-field
+                  [formGroup]="filterForm"
+                  appearance="outline"
+                  class="max-width"
+                >
+                  <mat-date-range-input [rangePicker]="rangePicker">
+                    <input
+                      matStartDate
+                      placeholder="Start date"
+                      [formControlName]="hiddenColumn.id + '.start'"
+                    />
+                    <input
+                      matEndDate
+                      placeholder="End date"
+                      [formControlName]="hiddenColumn.id + '.end'"
+                    />
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="rangePicker"
+                  ></mat-datepicker-toggle>
+                  <mat-date-range-picker #rangePicker></mat-date-range-picker>
+                </mat-form-field>
+              }
+              @if (hiddenColumn.matchMode !== "between") {
+                <mat-form-field [formGroup]="filterForm" appearance="outline">
+                  <input
+                    [formControlName]="hiddenColumn.id"
+                    matInput
+                    autocomplete="off"
+                    name="{{ hiddenColumn.id }}"
+                    placeholder="{{ hiddenColumn.matchMode }}"
+                  />
+                </mat-form-field>
+              }
+            </span>
+          </div>
         </div>
-      </div>
+      }
     </mat-header-cell>
   </ng-container>
   <!-- Cell Definition For Hidden Filters End -->

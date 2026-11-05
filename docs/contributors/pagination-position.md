@@ -12,11 +12,11 @@ The shared `dynamic-mat-table` component displays a Material paginator above and
 
 Supported values are:
 
-| Value | Behavior |
-|---|---|
-| `top` | Shows only the paginator above the table. |
+| Value    | Behavior                                  |
+| -------- | ----------------------------------------- |
+| `top`    | Shows only the paginator above the table. |
 | `bottom` | Shows only the paginator below the table. |
-| `both` | Shows both paginator controls. |
+| `both`   | Shows both paginator controls.            |
 
 ## Configuration loading and defaults
 
@@ -41,13 +41,19 @@ It remains optional in the raw interface for backward compatibility, but the loa
 The setting is consumed directly by `DynamicMatTableComponent` through its global configuration:
 
 ```html
-*ngIf="pagination && appConfig.paginationPosition !== 'bottom'"
+@if ( pagination && (appConfig.paginationPosition === "top" ||
+appConfig.paginationPosition === "both") ) {
+<!-- top paginator -->
+}
 ```
 
 for the top paginator, and:
 
 ```html
-*ngIf="pagination && appConfig.paginationPosition !== 'top'"
+@if ( pagination && (appConfig.paginationPosition === "bottom" ||
+appConfig.paginationPosition === "both") ) {
+<!-- bottom paginator -->
+}
 ```
 
 for the bottom paginator.

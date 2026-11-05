@@ -12,13 +12,13 @@
         <mat-form-field class="selectField">
           <mat-label>Type</mat-label>
           <mat-select formControlName="type" (selectionChange)="detectType()">
-            <mat-option *ngFor="let type of typeValues" [value]="type">
-              {{ type }}</mat-option
-            >
+            @for (type of typeValues; track type) {
+              <mat-option [value]="type"> {{ type }}</mat-option>
+            }
           </mat-select>
-          <mat-error *ngIf="fieldHasError('type')">
-            Type is required
-          </mat-error>
+          @if (fieldHasError("type")) {
+            <mat-error> Type is required </mat-error>
+          }
         </mat-form-field>
       </div>
       <!-- Name Column -->
@@ -35,28 +35,33 @@
             placeholder="Name"
             (blur)="getUnits('key')"
           />
-          <mat-error *ngIf="fieldHasError('key')"> Name is required </mat-error>
+          @if (fieldHasError("key")) {
+            <mat-error> Name is required </mat-error>
+          }
         </mat-form-field>
       </div>
       <!-- Value Column -->
-      <div class="formColumn" *ngIf="getType() !== 'date'; else dateInput">
-        <mat-form-field class="inputField">
-          <input
-            matInput
-            data-cy="metadata-value"
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"
-            formControlName="value"
-            placeholder="Value"
-          />
-          <mat-error *ngIf="fieldHasError('value')">
-            {{ getErrorMessage("value") }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <ng-template #dateInput>
+      @if (getType() !== "date") {
+        <div class="formColumn">
+          <mat-form-field class="inputField">
+            <input
+              matInput
+              data-cy="metadata-value"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              formControlName="value"
+              placeholder="Value"
+            />
+            @if (fieldHasError("value")) {
+              <mat-error>
+                {{ getErrorMessage("value") }}
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      } @else {
         <mat-form-field class="inputField">
           <input
             matInput
@@ -72,11 +77,13 @@
             #picker
             [showSeconds]="true"
           ></ngx-mat-datetime-picker>
-          <mat-error *ngIf="fieldHasError('date')">
-            {{ getErrorMessage("date") }}
-          </mat-error>
+          @if (fieldHasError("date")) {
+            <mat-error>
+              {{ getErrorMessage("date") }}
+            </mat-error>
+          }
         </mat-form-field>
-      </ng-template>
+      }
       <!-- Unit Column -->
       <div class="formColumn">
         <mat-form-field class="inputField">
@@ -92,16 +99,17 @@
             (focus)="getUnits('key')"
           />
           <mat-autocomplete #metadataUnits="matAutocomplete">
-            <mat-option
-              *ngFor="let unit of filteredUnits$ | async"
-              [value]="unit"
-            >
-              {{ unit }}
-            </mat-option>
+            @for (unit of filteredUnits$ | async; track unit) {
+              <mat-option [value]="unit">
+                {{ unit }}
+              </mat-option>
+            }
           </mat-autocomplete>
-          <mat-error *ngIf="fieldHasError('unit')">
-            {{ getErrorMessage("unit") }}
-          </mat-error>
+          @if (fieldHasError("unit")) {
+            <mat-error>
+              {{ getErrorMessage("unit") }}
+            </mat-error>
+          }
         </mat-form-field>
       </div>
       <!-- Buttons Column -->

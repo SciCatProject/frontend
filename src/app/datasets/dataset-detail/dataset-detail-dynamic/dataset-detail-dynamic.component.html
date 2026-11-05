@@ -1,26 +1,27 @@
-<ng-template [ngIf]="dataset$ | async">
+@if (dataset$ | async) {
   <!-- Jupyter Hub Button -->
   <div fxLayout="row">
     <div fxFlex="auto">
-      <a
-        mat-raised-button
-        *ngIf="appConfig.jupyterHubUrl"
-        class="jupyter-button"
-        [href]="appConfig.jupyterHubUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Jupyter Hub
-      </a>
+      @if (appConfig.jupyterHubUrl) {
+        <a
+          mat-raised-button
+          class="jupyter-button"
+          [href]="appConfig.jupyterHubUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Jupyter Hub
+        </a>
+      }
     </div>
-    <configurable-actions
-      *ngIf="appConfig.datafilesActionsEnabled"
-      [actionsConfig]="appConfig.datasetActions"
-      [actionItems]="actionItems"
-    ></configurable-actions>
+    @if (appConfig.datafilesActionsEnabled) {
+      <configurable-actions
+        [actionsConfig]="appConfig.datasetActions"
+        [actionItems]="actionItems"
+      ></configurable-actions>
+    }
   </div>
   <div style="clear: both"></div>
-
   <!-- Main Grid List -->
   <div
     class="custom-grid"
@@ -28,58 +29,58 @@
     [style.gap.px]="gutterSize"
   >
     <!-- Iterate over each section in datasetView -->
-    <ng-container *ngFor="let section of datasetView$ | async">
-      <ng-container [ngSwitch]="section.type">
+    @for (section of datasetView$ | async; track section) {
+      @switch (section.type) {
         <!-- Status Banner Section -->
-        <div
-          *ngSwitchCase="'statusBanner'"
-          class="card-container"
-          [style.gridColumn]="'span ' + (section.col || 10)"
-          [style.gridRow]="'span ' + (section.row || 1)"
-        >
-          <dataset-status-banner
-            [datasetItem]="dataset"
-          ></dataset-status-banner>
-        </div>
-
+        @case ("statusBanner") {
+          <div
+            class="card-container"
+            [style.gridColumn]="'span ' + (section.col || 10)"
+            [style.gridRow]="'span ' + (section.row || 1)"
+          >
+            <dataset-status-banner
+              [datasetItem]="dataset"
+            ></dataset-status-banner>
+          </div>
+        }
         <!-- Regular Section -->
-        <div
-          *ngSwitchCase="'regular'"
-          class="card-container"
-          [style.gridColumn]="'span ' + (section.col || 10)"
-          [style.gridRow]="'span ' + (section.row || 1)"
-        >
-          <mat-card>
-            <!-- Section Header -->
-            <mat-card-header
-              class="dynamic-template-tile-header sticky-header"
-              data-cy="section-label"
-            >
-              <div mat-card-avatar class="section-icon">
-                <mat-icon>description</mat-icon>
-              </div>
-              <span>{{ section.label | translate: localization }}</span>
-              <span
-                *ngIf="section.restrictedIconVisible"
-                class="restricted-indicator"
+        @case ("regular") {
+          <div
+            class="card-container"
+            [style.gridColumn]="'span ' + (section.col || 10)"
+            [style.gridRow]="'span ' + (section.row || 1)"
+          >
+            <mat-card>
+              <!-- Section Header -->
+              <mat-card-header
+                class="dynamic-template-tile-header sticky-header"
+                data-cy="section-label"
               >
-                <mat-icon
-                  [matTooltip]="formatAuthorizedGroups(section.authorization)"
-                  >lock_outline</mat-icon
-                >
-              </span>
-            </mat-card-header>
-            <!-- Section Content -->
-            <mat-card-content>
-              <table>
-                <ng-container *ngFor="let field of section.fields">
-                  <tr>
-                    <th data-cy="field-label">
-                      {{ field.source | translate: localization }}
-                    </th>
-                    <td>
-                      <!-- Render based on field type using a dynamic template -->
-                      <ng-container [ngSwitch]="field.element">
+                <div mat-card-avatar class="section-icon">
+                  <mat-icon>description</mat-icon>
+                </div>
+                <span>{{ section.label | translate: localization }}</span>
+                @if (section.restrictedIconVisible) {
+                  <span class="restricted-indicator">
+                    <mat-icon
+                      [matTooltip]="
+                        formatAuthorizedGroups(section.authorization)
+                      "
+                      >lock_outline</mat-icon
+                    >
+                  </span>
+                }
+              </mat-card-header>
+              <!-- Section Content -->
+              <mat-card-content>
+                <table>
+                  @for (field of section.fields; track field) {
+                    <tr>
+                      <th data-cy="field-label">
+                        {{ field.source | translate: localization }}
+                      </th>
+                      <td>
+                        <!-- Render based on field type using a dynamic template -->
                         <ng-container
                           [ngTemplateOutlet]="dynamicTemplate"
                           [ngTemplateOutletContext]="{
@@ -88,292 +89,298 @@
                             isEmpty: field.isEmpty,
                           }"
                         ></ng-container>
-                      </ng-container>
-
-                      <!-- Dynamic Template Definition -->
-                      <ng-template
-                        #dynamicTemplate
-                        let-fieldType="fieldType"
-                        let-fieldValue="fieldValue"
-                        let-isEmpty="isEmpty"
-                      >
-                        <!-- Fallback if field is empty -->
-                        <ng-container *ngIf="isEmpty; else content"
-                          >-</ng-container
+                        <!-- Dynamic Template Definition -->
+                        <ng-template
+                          #dynamicTemplate
+                          let-fieldType="fieldType"
+                          let-fieldValue="fieldValue"
+                          let-isEmpty="isEmpty"
                         >
-                        <ng-template #content>
-                          <!-- InternalLink Field-->
-                          <ng-container *ngIf="fieldType === 'internalLink'">
-                            <ng-container
-                              *ngFor="let item of fieldValue; let isLast = last"
-                            >
-                              <a
-                                (click)="
-                                  onClickInternalLink(field.source, item.id)
-                                "
-                                [title]="item.label"
-                                [ngClass]="{ disabled: !item.id }"
-                                >{{ item.label }} </a
-                              ><span *ngIf="!isLast">&nbsp;,&nbsp;</span>
-                            </ng-container>
-                          </ng-container>
-                          <!-- Text Field -->
-                          <span
-                            *ngIf="fieldType === 'text'"
-                            [title]="fieldValue"
-                          >
-                            {{ fieldValue }}
-                          </span>
-                          <!-- Linky Field -->
-                          <span
-                            *ngIf="fieldType === 'linky'"
-                            [innerHTML]="fieldValue | linky"
-                            [title]="fieldValue"
-                          ></span>
-                          <!-- Date Field -->
-                          <span
-                            *ngIf="fieldType === 'date'"
-                            [title]="fieldValue"
-                            [innerHTML]="fieldValue"
-                          ></span>
-                          <!-- Copy Field -->
-                          <ng-container *ngIf="fieldType === 'copy'">
-                            <span class="truncated-text" [title]="fieldValue">
-                              {{ fieldValue }}
-                            </span>
-                            <button
-                              mat-icon-button
-                              class="copy-button"
-                              aria-label="copy"
-                              (click)="onCopy(fieldValue)"
-                              *ngIf="fieldValue"
-                            >
-                              <mat-icon>content_copy</mat-icon>
-                            </button>
-                          </ng-container>
-                          <!-- Tag Field -->
-                          <mat-chip-set *ngIf="fieldType === 'tag'" role="list">
-                            <mat-chip
-                              role="listitem"
-                              *ngFor="let tag of fieldValue"
-                              [title]="tag"
-                            >
-                              {{ tag }}
-                            </mat-chip>
-                          </mat-chip-set>
-                          <!-- Fallback for unsupported types -->
-                          <span
-                            *ngIf="isUnsupportedFieldType(fieldType)"
-                            [title]="fieldValue"
-                            class="general-warning"
-                          >
-                            {{ fieldValue }}
-                          </span>
+                          <!-- Fallback if field is empty -->
+                          @if (isEmpty) {
+                            -
+                          } @else {
+                            <!-- InternalLink Field-->
+                            @if (fieldType === "internalLink") {
+                              @for (
+                                item of fieldValue;
+                                track item;
+                                let isLast = $last
+                              ) {
+                                <a
+                                  (click)="
+                                    onClickInternalLink(field.source, item.id)
+                                  "
+                                  [title]="item.label"
+                                  [ngClass]="{ disabled: !item.id }"
+                                  >{{ item.label }}
+                                </a>
+                                @if (!isLast) {
+                                  <span>&nbsp;,&nbsp;</span>
+                                }
+                              }
+                            }
+                            <!-- Text Field -->
+                            @if (fieldType === "text") {
+                              <span [title]="fieldValue">
+                                {{ fieldValue }}
+                              </span>
+                            }
+                            <!-- Linky Field -->
+                            @if (fieldType === "linky") {
+                              <span
+                                [innerHTML]="fieldValue | linky"
+                                [title]="fieldValue"
+                              ></span>
+                            }
+                            <!-- Date Field -->
+                            @if (fieldType === "date") {
+                              <span
+                                [title]="fieldValue"
+                                [innerHTML]="fieldValue"
+                              ></span>
+                            }
+                            <!-- Copy Field -->
+                            @if (fieldType === "copy") {
+                              <span class="truncated-text" [title]="fieldValue">
+                                {{ fieldValue }}
+                              </span>
+                              @if (fieldValue) {
+                                <button
+                                  mat-icon-button
+                                  class="copy-button"
+                                  aria-label="copy"
+                                  (click)="onCopy(fieldValue)"
+                                >
+                                  <mat-icon>content_copy</mat-icon>
+                                </button>
+                              }
+                            }
+                            <!-- Tag Field -->
+                            @if (fieldType === "tag") {
+                              <mat-chip-set role="list">
+                                @for (tag of fieldValue; track tag) {
+                                  <mat-chip role="listitem" [title]="tag">
+                                    {{ tag }}
+                                  </mat-chip>
+                                }
+                              </mat-chip-set>
+                            }
+                            <!-- Fallback for unsupported types -->
+                            @if (isUnsupportedFieldType(fieldType)) {
+                              <span
+                                [title]="fieldValue"
+                                class="general-warning"
+                              >
+                                {{ fieldValue }}
+                              </span>
+                            }
+                          }
                         </ng-template>
-                      </ng-template>
-                    </td>
-                  </tr>
-                </ng-container>
-              </table>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
+                      </td>
+                    </tr>
+                  }
+                </table>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        }
         <!-- Scientific Metadata Section -->
-        <div
-          *ngSwitchCase="'scientificMetadata'"
-          class="card-container"
-          [style.gridColumn]="'span ' + (section.col || 10)"
-          [style.gridRow]="'span ' + (section.row || 1)"
-        >
-          <ng-container *ngIf="emptyMetadataTable()">
+        @case ("scientificMetadata") {
+          <div
+            class="card-container"
+            [style.gridColumn]="'span ' + (section.col || 10)"
+            [style.gridRow]="'span ' + (section.row || 1)"
+          >
+            @if (emptyMetadataTable()) {
+              <mat-card>
+                <mat-card-header
+                  class="dynamic-template-tile-header sticky-header"
+                  data-cy="section-label"
+                >
+                  <div mat-card-avatar class="section-icon">
+                    <mat-icon>science</mat-icon>
+                  </div>
+                  <span>{{ section.label | translate: localization }}</span>
+                  @if (section.restrictedIconVisible) {
+                    <span class="restricted-indicator">
+                      <mat-icon
+                        [matTooltip]="
+                          formatAuthorizedGroups(section.authorization)
+                        "
+                        >lock_outline</mat-icon
+                      >
+                    </span>
+                  }
+                </mat-card-header>
+                <mat-card-content class="scientific-metadata-content">
+                  @if (appConfig.tableSciDataEnabled) {
+                    @if (
+                      getScientificMetadata(dataset, section.source);
+                      as metadata
+                    ) {
+                      <div>
+                        @switch (section.viewMode) {
+                          @case ("tree") {
+                            <tree-view
+                              [metadata]="metadata"
+                              [allowAddAsColumn]="true"
+                              [metadataPath]="
+                                section.source || 'scientificMetadata'
+                              "
+                            ></tree-view>
+                          }
+                          @default {
+                            <metadata-view
+                              [metadata]="metadata"
+                            ></metadata-view>
+                          }
+                          @case ("json") {
+                            <div class="json-view">
+                              <ngx-json-viewer
+                                [json]="metadata"
+                                [expanded]="false"
+                              ></ngx-json-viewer>
+                            </div>
+                          }
+                        }
+                      </div>
+                    } @else {
+                      <p class="no-metadata-message">
+                        No scientific metadata found for this section
+                      </p>
+                    }
+                  }
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        }
+        <!-- Attachments Section -->
+        @case ("attachments") {
+          <div
+            class="card-container attachments-container"
+            [style.gridColumn]="'span ' + (section.col || 10)"
+            [style.gridRow]="'span ' + (section.row || 1)"
+          >
             <mat-card>
               <mat-card-header
                 class="dynamic-template-tile-header sticky-header"
                 data-cy="section-label"
               >
                 <div mat-card-avatar class="section-icon">
-                  <mat-icon>science</mat-icon>
+                  <mat-icon>photo_library</mat-icon>
                 </div>
                 <span>{{ section.label | translate: localization }}</span>
-                <span
-                  *ngIf="section.restrictedIconVisible"
-                  class="restricted-indicator"
-                >
-                  <mat-icon
-                    [matTooltip]="formatAuthorizedGroups(section.authorization)"
-                    >lock_outline</mat-icon
-                  >
-                </span>
+                @if (section.restrictedIconVisible) {
+                  <span class="restricted-indicator">
+                    <mat-icon
+                      [matTooltip]="
+                        formatAuthorizedGroups(section.authorization)
+                      "
+                      >lock_outline</mat-icon
+                    >
+                  </span>
+                }
               </mat-card-header>
-              <mat-card-content class="scientific-metadata-content">
-                <ng-container *ngIf="appConfig.tableSciDataEnabled">
-                  <ng-container
-                    *ngIf="
-                      getScientificMetadata(
-                        dataset,
-                        section.source
-                      ) as metadata;
-                      else noMetadata
-                    "
-                  >
-                    <div [ngSwitch]="section.viewMode">
-                      <tree-view
-                        *ngSwitchCase="'tree'"
-                        [metadata]="metadata"
-                        [allowAddAsColumn]="true"
-                        [metadataPath]="section.source || 'scientificMetadata'"
-                      ></tree-view>
-                      <metadata-view
-                        *ngSwitchDefault
-                        [metadata]="metadata"
-                      ></metadata-view>
-                      <div class="json-view" *ngSwitchCase="'json'">
-                        <ngx-json-viewer
-                          [json]="metadata"
-                          [expanded]="false"
-                        ></ngx-json-viewer>
-                      </div>
-                    </div>
-                  </ng-container>
-                  <ng-template #noMetadata>
-                    <p class="no-metadata-message">
-                      No scientific metadata found for this section
-                    </p>
-                  </ng-template>
-                </ng-container>
+              <mat-card-content>
+                @if (attachments$ | async; as attachments) {
+                  <!-- TOP: thumbnails -->
+                  <div class="attachments-wrapper">
+                    @if (attachments.length > 0) {
+                      @for (
+                        item of attachments | slice: 0 : section.options.limit;
+                        track item
+                      ) {
+                        <img
+                          mat-card-image
+                          [class]="
+                            [
+                              'thumbnail-image',
+                              getThumbnailSize(section.options.size),
+                            ].join(' ')
+                          "
+                          data-cy="attachment-thumbnail"
+                          [src]="getImageUrl(item.thumbnail)"
+                          (click)="openAttachment(item.thumbnail)"
+                          [title]="item.caption"
+                        />
+                      }
+                    } @else {
+                      <p class="no-attachments-message">No attachments found</p>
+                    }
+                  </div>
+                  <!-- BOTTOM: footer -->
+                  <div class="attachments-footer">
+                    <button
+                      mat-icon-button
+                      (click)="navigateToAttachmentsTab()"
+                      matTooltip="Upload or manage attachments"
+                      matTooltipPosition="above"
+                    >
+                      <mat-icon>add_photo_alternate</mat-icon>
+                    </button>
+                  </div>
+                }
               </mat-card-content>
             </mat-card>
-          </ng-container>
-        </div>
-
-        <!-- Attachments Section -->
-        <div
-          *ngSwitchCase="'attachments'"
-          class="card-container attachments-container"
-          [style.gridColumn]="'span ' + (section.col || 10)"
-          [style.gridRow]="'span ' + (section.row || 1)"
-        >
-          <mat-card>
-            <mat-card-header
-              class="dynamic-template-tile-header sticky-header"
-              data-cy="section-label"
-            >
-              <div mat-card-avatar class="section-icon">
-                <mat-icon>photo_library</mat-icon>
-              </div>
-              <span>{{ section.label | translate: localization }}</span>
-              <span
-                *ngIf="section.restrictedIconVisible"
-                class="restricted-indicator"
-              >
-                <mat-icon
-                  [matTooltip]="formatAuthorizedGroups(section.authorization)"
-                  >lock_outline</mat-icon
-                >
-              </span>
-            </mat-card-header>
-            <mat-card-content>
-              <ng-container *ngIf="attachments$ | async as attachments">
-                <!-- TOP: thumbnails -->
-                <div class="attachments-wrapper">
-                  <ng-container
-                    *ngIf="attachments.length > 0; else noAttachments"
-                  >
-                    <ng-container
-                      *ngFor="
-                        let item of attachments
-                          | slice: 0 : section.options.limit
-                      "
-                    >
-                      <img
-                        mat-card-image
-                        [class]="
-                          [
-                            'thumbnail-image',
-                            getThumbnailSize(section.options.size),
-                          ].join(' ')
-                        "
-                        data-cy="attachment-thumbnail"
-                        [src]="getImageUrl(item.thumbnail)"
-                        (click)="openAttachment(item.thumbnail)"
-                        [title]="item.caption"
-                      />
-                    </ng-container>
-                  </ng-container>
-                </div>
-
-                <!-- BOTTOM: footer -->
-                <div class="attachments-footer">
-                  <button
-                    mat-icon-button
-                    (click)="navigateToAttachmentsTab()"
-                    matTooltip="Upload or manage attachments"
-                    matTooltipPosition="above"
-                  >
-                    <mat-icon>add_photo_alternate</mat-icon>
-                  </button>
-                </div>
-              </ng-container>
-
-              <ng-template #noAttachments>
-                <p class="no-attachments-message">No attachments found</p>
-              </ng-template>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
+          </div>
+        }
         <!-- Dataset JSON View Section -->
-        <div
-          *ngSwitchCase="'datasetJsonView'"
-          class="card-container"
-          [style.gridColumn]="'span ' + (section.col || 10)"
-          [style.gridRow]="'span ' + (section.row || 1)"
-        >
-          <mat-card>
-            <mat-card-header
-              class="dynamic-template-tile-header sticky-header"
-              data-cy="section-label"
-            >
-              <div mat-card-avatar class="section-icon">
-                <mat-icon>data_object</mat-icon>
-              </div>
-              <span>{{ section.label | translate: localization }}</span>
-              <span
-                *ngIf="section.restrictedIconVisible"
-                class="restricted-indicator"
+        @case ("datasetJsonView") {
+          <div
+            class="card-container"
+            [style.gridColumn]="'span ' + (section.col || 10)"
+            [style.gridRow]="'span ' + (section.row || 1)"
+          >
+            <mat-card>
+              <mat-card-header
+                class="dynamic-template-tile-header sticky-header"
+                data-cy="section-label"
               >
-                <mat-icon
-                  [matTooltip]="formatAuthorizedGroups(section.authorization)"
-                  >lock_outline</mat-icon
-                >
-              </span>
-            </mat-card-header>
-            <mat-card-content>
-              <ng-container *ngIf="appConfig.jsonMetadataEnabled">
-                <button
-                  class="show-json-metadata-btn"
-                  mat-flat-button
-                  color="primary"
-                  (click)="showJsonMetadata = !showJsonMetadata"
-                >
-                  {{
-                    (showJsonMetadata ? "Hide JSON View" : "Show JSON View")
-                      | translate: localization
-                  }}
-                </button>
-                <br />
-                <div *ngIf="showJsonMetadata" class="json-view-overflow">
-                  <ngx-json-viewer
-                    [json]="datasetWithout$ | async"
-                    [expanded]="false"
-                  ></ngx-json-viewer>
+                <div mat-card-avatar class="section-icon">
+                  <mat-icon>data_object</mat-icon>
                 </div>
-              </ng-container>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </ng-container>
-    </ng-container>
+                <span>{{ section.label | translate: localization }}</span>
+                @if (section.restrictedIconVisible) {
+                  <span class="restricted-indicator">
+                    <mat-icon
+                      [matTooltip]="
+                        formatAuthorizedGroups(section.authorization)
+                      "
+                      >lock_outline</mat-icon
+                    >
+                  </span>
+                }
+              </mat-card-header>
+              <mat-card-content>
+                @if (appConfig.jsonMetadataEnabled) {
+                  <button
+                    class="show-json-metadata-btn"
+                    mat-flat-button
+                    color="primary"
+                    (click)="showJsonMetadata = !showJsonMetadata"
+                  >
+                    {{
+                      (showJsonMetadata ? "Hide JSON View" : "Show JSON View")
+                        | translate: localization
+                    }}
+                  </button>
+                  <br />
+                  @if (showJsonMetadata) {
+                    <div class="json-view-overflow">
+                      <ngx-json-viewer
+                        [json]="datasetWithout$ | async"
+                        [expanded]="false"
+                      ></ngx-json-viewer>
+                    </div>
+                  }
+                }
+              </mat-card-content>
+            </mat-card>
+          </div>
+        }
+      }
+    }
   </div>
-</ng-template>
+}

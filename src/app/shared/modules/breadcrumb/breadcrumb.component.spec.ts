@@ -9,12 +9,8 @@ import { BreadcrumbComponent } from "./breadcrumb.component";
 import { Store } from "@ngrx/store";
 import { provideRouter, Router } from "@angular/router";
 import { Location } from "@angular/common";
-import {
-  selectArchiveViewMode,
-  selectFilters,
-} from "state-management/selectors/datasets.selectors";
+import { selectFilters } from "state-management/selectors/datasets.selectors";
 import { of } from "rxjs/internal/observable/of";
-import { ArchViewMode } from "state-management/models";
 
 describe("BreadcrumbComponent", () => {
   let component: BreadcrumbComponent;
@@ -62,8 +58,7 @@ describe("BreadcrumbComponent", () => {
 
   it("should navigateByUrl to fallback when mode is empty", () => {
     spyOn(store, "select").and.callFake((selector) => {
-      if (selector === selectFilters) return of({});
-      if (selector === selectArchiveViewMode) return of(ArchViewMode.all);
+      if (selector === selectFilters) return of({ mode: {} });
       return of(null);
     });
     spyOn(router, "navigateByUrl").and.returnValue(Promise.resolve(true));
@@ -73,11 +68,22 @@ describe("BreadcrumbComponent", () => {
     expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
   });
 
-  it("should call location.back() when mode is not empty", () => {
+  it("should navigateByUrl to fallback when there is no mode", () => {
     spyOn(store, "select").and.callFake((selector) => {
       if (selector === selectFilters) return of({});
-      if (selector === selectArchiveViewMode)
-        return of(ArchViewMode.archivable);
+      return of(null);
+    });
+    spyOn(router, "navigateByUrl").and.returnValue(Promise.resolve(true));
+
+    component.crumbClick(0, datasetsCrumb);
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
+  });
+
+  it("should call location.back() when a view mode query is set", () => {
+    spyOn(store, "select").and.callFake((selector) => {
+      if (selector === selectFilters)
+        return of({ mode: { "datasetlifecycle.archivable": true } });
       return of(null);
     });
     spyOn(location, "back");
