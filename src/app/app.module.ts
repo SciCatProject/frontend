@@ -37,6 +37,7 @@ import { CustomTranslateLoader } from "shared/loaders/custom-translate.loader";
 import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 import { RouteTrackerService } from "shared/services/route-tracker.service";
 import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
+import { ActionEffects } from "state-management/effects/actions.effect";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -83,7 +84,7 @@ const apiConfigurationFn = (
       },
     ),
     extModules,
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([ActionEffects]),
   ],
   providers: [
     AppConfigService,

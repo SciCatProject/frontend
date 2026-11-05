@@ -12,6 +12,7 @@ import { DatePipe } from "@angular/common";
 import {
   Configuration as ApiConfiguration,
   DatasetClass,
+  PublishedData,
   UsersService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -28,6 +29,7 @@ import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import {
   selectIsAdmin,
+  selectIsLoggedIn,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
@@ -38,6 +40,7 @@ import {
   actionFailureAction,
   actionSuccessAction,
 } from "state-management/actions/actions.actions";
+import { sessionTimeoutAction } from "state-management/actions/user.actions";
 
 @Component({
   selector: "configurable-action",
@@ -70,6 +73,7 @@ export class ConfigurableActionComponent
 
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
 
   jwt = "";
   useMatIcon = false;
@@ -78,6 +82,7 @@ export class ConfigurableActionComponent
   variables: Record<string, unknown> = {};
   userProfile: Record<string, unknown> = {};
   isAdmin = false;
+  isLoggedIn = false;
   subscriptions: Subscription[] = [];
   form: HTMLFormElement | null = null;
 
@@ -173,6 +178,15 @@ export class ConfigurableActionComponent
       return _.get(this.actionItems, `instruments[${index}].${field}`);
     }
 
+    const publishedDataFieldMatch = selector.match(
+      /^#PublishedData\[(\d+)\]Field\[(\w+)\]$/,
+    );
+    if (publishedDataFieldMatch) {
+      const index = Number(publishedDataFieldMatch[1]);
+      const field = publishedDataFieldMatch[2];
+      return _.get(this.actionItems, `publisheddata[${index}].${field}`);
+    }
+
     return undefined;
   }
 
@@ -220,6 +234,10 @@ export class ConfigurableActionComponent
       "#DatasetsTotalSize": () => _(datasets).sumBy((d) => d.size || 0),
       "#DatasetsTotalPackedSize": () =>
         _(datasets).sumBy((d) => d.packedSize || 0),
+      "#PublishedData0Doi": () =>
+        _.get(this.actionItems, "publisheddata[0].doi"),
+      "#PublishedData0Status": () =>
+        _.get(this.actionItems, "publisheddata[0].status"),
     };
     return staticMap;
   }
@@ -227,8 +245,10 @@ export class ConfigurableActionComponent
   private viewHandlers(condition: string): string {
     let expr = condition;
     const symbols: Record<string, string> = {
-      "#datasetOwner": "context.isOwner",
+      "#datasetOwner": "context.isDatasetOwner",
+      "#publishedDataOwner": "context.isPublishedDataOwner",
       "#userIsAdmin": "context.isAdmin",
+      "#userIsLoggedIn": "context.isLoggedIn",
       "#isPublished": String(
         this.actionItems.datasets?.[0]?.isPublished === true,
       ),
@@ -282,7 +302,9 @@ export class ConfigurableActionComponent
         variables: this.variables,
         context: {
           isAdmin: this.isAdmin,
-          isOwner: this.isDatasetOwner,
+          isLoggedIn: this.isLoggedIn,
+          isDatasetOwner: this.isDatasetOwner,
+          isPublishedDataOwner: this.isPublishedDataOwner,
           maxSize: this.configService.getConfig().maxDirectDownloadSize,
         },
       };
@@ -298,6 +320,16 @@ export class ConfigurableActionComponent
     const datasets = _.get(this.actionItems, "datasets", []) as DatasetClass[];
     const userGroups = _.get(this.userProfile, "accessGroups", []) as string[];
     return _.some(datasets, (d) => userGroups.includes(d.ownerGroup));
+  }
+
+  private get isPublishedDataOwner(): boolean {
+    const publishedData = _.get(
+      this.actionItems,
+      "publisheddata",
+      [],
+    ) as PublishedData[];
+    const username = _.get(this.actionItems, "user.username") as string;
+    return _.some(publishedData, (pd) => pd.createdBy === username);
   }
 
   private buildDependenciesGraph(
@@ -356,34 +388,68 @@ export class ConfigurableActionComponent
     this.variables = { ...this.variables, ...resolvedConfig };
   }
 
-  private typeXhr() {
-    const url = this.interpolate(this.actionConfig.url);
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
+  private buildRequestHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {};
+    const names = new Map<string, string>();
+    const set = (name: string, value: string) => {
+      const lower = name.toLowerCase();
+      const previous = names.get(lower);
+      if (previous) delete headers[previous];
+      names.set(lower, name);
+      headers[name] = value;
     };
 
-    Object.entries(this.actionConfig.headers || {}).forEach(([k, v]) => {
-      headers[k] = String(this.resolve(v));
-    });
+    set("Content-Type", "application/json");
+    Object.entries(this.actionConfig.headers || {}).forEach(([k, v]) =>
+      set(k, String(this.resolve(v))),
+    );
+    return headers;
+  }
 
+  private async responseError(response: Response): Promise<Error> {
+    let message = `HTTP ${response.status}`;
+    const text = await response.text().catch(() => "");
+    if (text) {
+      try {
+        const body = JSON.parse(text);
+        message = body?.message || body?.error || body?.detail || text;
+      } catch {
+        message = text;
+      }
+    }
+    if (response.status === 401 && message === "SESSION_EXPIRED") {
+      sessionStorage.setItem(
+        "postLoginRedirect",
+        window.location.pathname + window.location.search,
+      );
+      this.store.dispatch(sessionTimeoutAction());
+    }
+    return new Error(String(message));
+  }
+
+  private typeXhr() {
+    const url = this.interpolate(this.actionConfig.url);
     fetch(url, {
       method: this.actionConfig.method || "POST",
-      headers,
+      headers: this.buildRequestHeaders(),
       body: this.preparePayload(),
     })
       .then(async (r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        // Only an empty body is treated as "no data"; a non-empty body that
-        // fails to parse as JSON is a real error and should not be silently
-        // swallowed into a false success.
+        if (!r.ok) throw await this.responseError(r);
         const text = await r.text();
-        const data = text ? JSON.parse(text) : {};
-
+        let data: unknown = {};
+        if (text) {
+          try {
+            data = JSON.parse(text);
+          } catch {
+            data = text;
+          }
+        }
         this.store.dispatch(actionSuccessAction());
         this.actionFinishedEmit(true, data);
       })
       .catch((err: Error) => {
-        this.store.dispatch(actionFailureAction());
+        this.store.dispatch(actionFailureAction(err.message));
         this.actionFinishedEmit(false, err);
       });
     return true;
@@ -428,13 +494,7 @@ export class ConfigurableActionComponent
     const filename = this.interpolate(
       this.actionConfig.filename || "download.json",
     );
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
-
-    Object.entries(this.actionConfig.headers || {}).forEach(([k, v]) => {
-      headers[k] = String(this.resolve(v));
-    });
+    const headers = this.buildRequestHeaders();
 
     fetch(this.actionConfig.url, {
       method: this.actionConfig.method || "POST",
@@ -586,6 +646,9 @@ export class ConfigurableActionComponent
     );
     this.subscriptions.push(
       this.isAdmin$.subscribe((ia) => (this.isAdmin = ia)),
+    );
+    this.subscriptions.push(
+      this.isLoggedIn$.subscribe((il) => (this.isLoggedIn = il)),
     );
     this.useMatIcon = !!this.actionConfig.mat_icon;
     this.useIcon = this.actionConfig.icon !== undefined;

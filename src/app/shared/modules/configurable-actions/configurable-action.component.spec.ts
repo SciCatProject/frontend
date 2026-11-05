@@ -50,6 +50,7 @@ import { of } from "rxjs";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import {
   selectIsAdmin,
+  selectIsLoggedIn,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import {
@@ -62,6 +63,7 @@ import {
   actionSuccessAction,
 } from "state-management/actions/actions.actions";
 import { buildDefaultBatchActions } from "./configurable-actions.defaults";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
@@ -1289,7 +1291,120 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1240: #isPublished token should follow dataset publish status", () => {
+  it("1235: !#userIsLoggedIn token should hide action when user is not logged in", () => {
+    store.overrideSelector(selectProfile, undefined);
+    store.overrideSelector(selectIsAdmin, false);
+    store.overrideSelector(selectIsLoggedIn, false);
+    store.refreshState();
+
+    const loginConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "login-hidden-test",
+      hidden: "!#userIsLoggedIn",
+      variables: {},
+    };
+
+    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
+    expect(component.visible).toBeFalse();
+  });
+
+  it("1236: !#userIsLoggedIn token should show action when user is logged in", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[0]);
+    store.overrideSelector(selectIsAdmin, false);
+    store.overrideSelector(selectIsLoggedIn, true);
+    store.refreshState();
+
+    const loginConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "login-visible-test",
+      hidden: "!#userIsLoggedIn",
+      variables: {},
+    };
+
+    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
+    expect(component.visible).toBeTrue();
+  });
+
+  it("1237: #userIsLoggedIn token should hide action when user is logged in", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[0]);
+    store.overrideSelector(selectIsAdmin, false);
+    store.overrideSelector(selectIsLoggedIn, true);
+    store.refreshState();
+
+    const loginConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "login-not-visible-test",
+      hidden: "#userIsLoggedIn",
+      variables: {},
+    };
+
+    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
+    expect(component.visible).toBeFalse();
+  });
+
+  it("1240: #publishedDataOwner token should enable action for creator", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[0]);
+    store.overrideSelector(selectIsAdmin, false);
+    store.refreshState();
+
+    const publishedDataConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "published-data-owner-enabled-test",
+      enabled: "#publishedDataOwner",
+      variables: {},
+    };
+
+    const publishedDataItems: ActionItems = {
+      datasets: [],
+      publisheddata: [
+        {
+          createdBy: "testuser",
+          doi: "10.1234/test",
+          title: "Test",
+          abstract: "Abstract",
+          datasetPids: [],
+          status: "public",
+        } as PublishedData,
+      ],
+      user: { username: "testuser" },
+    };
+
+    createComponent(publishedDataConfig, publishedDataItems);
+    expect(component.disabled).toBeFalse();
+  });
+
+  it("1250: #publishedDataOwner token should NOT enable action for non-creator", () => {
+    store.overrideSelector(selectProfile, mockUserProfiles[0]);
+    store.overrideSelector(selectIsAdmin, false);
+    store.refreshState();
+
+    const publishedDataConfig: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "published-data-owner-disabled-test",
+      enabled: "#publishedDataOwner",
+      variables: {},
+    };
+
+    const publishedDataItems: ActionItems = {
+      datasets: [],
+      publisheddata: [
+        {
+          createdBy: "otheruser",
+          doi: "10.1234/test",
+          title: "Test",
+          abstract: "Abstract",
+          datasetPids: [],
+          status: "public",
+        } as PublishedData,
+      ],
+      user: { username: "testuser" },
+    };
+
+    createComponent(publishedDataConfig, publishedDataItems);
+    expect(component.disabled).toBeTrue();
+  });
+
+  it("1260: #isPublished token should follow dataset publish status", () => {
     const publishedItems: ActionItems = {
       datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
     };
@@ -1306,7 +1421,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1250: #!isPublished token should follow dataset publish status", () => {
+  it("1270: #!isPublished token should follow dataset publish status", () => {
     const unpublishedItems: ActionItems = {
       datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
     };
@@ -1323,7 +1438,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1260: #Length should evaluate selected file list length", () => {
+  it("1280: #Length should evaluate selected file list length", () => {
     const lengthConfig: ActionConfig = {
       ...mockActionsConfig[0],
       id: "length-enabled-test",
@@ -1340,7 +1455,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1270: #MaxDownloadableSize should compare against configured max size", () => {
+  it("1290: #MaxDownloadableSize should compare against configured max size", () => {
     mockAppConfigService.appConfig.maxDirectDownloadSize =
       lowerMaxFileSizeLimit;
 
@@ -1362,7 +1477,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1280: hidden expression should hide action when condition is true", () => {
+  it("1300: hidden expression should hide action when condition is true", () => {
     const hiddenConfig: ActionConfig = {
       ...mockActionsConfig[0],
       id: "hidden-test",
@@ -1564,7 +1679,7 @@ describe("1000: ConfigurableActionComponent", () => {
   ];
 
   allKeywordMapSelectors.forEach((testCase) => {
-    it(`1290: ${testCase.name} selector should resolve`, () => {
+    it(`1310: ${testCase.name} selector should resolve`, () => {
       const selectorConfig: ActionConfig = {
         ...mockActionsConfig[0],
         id: `selector-${testCase.name}`,

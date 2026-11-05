@@ -131,19 +131,22 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
         d.labelsLocalization.proposal,
       );
     }
-    if (d.datafilesActions) {
-      d.datafilesActions = d.datafilesActions.map((a: any) => ({
-        ...a,
-        variables:
-          a.variables && !Array.isArray(a.variables)
-            ? this.toArray(a.variables)
-            : a.variables,
-        inputs:
-          a.inputs && !Array.isArray(a.inputs)
-            ? this.toArray(a.inputs)
-            : a.inputs,
-      }));
-    }
+    const actionCollections = ["datafilesActions", "publishedDataActions"];
+    actionCollections.forEach((collection) => {
+      if (Array.isArray(d[collection])) {
+        d[collection] = d[collection].map((a: any) => ({
+          ...a,
+          variables:
+            a.variables && !Array.isArray(a.variables)
+              ? this.toArray(a.variables)
+              : a.variables,
+          inputs:
+            a.inputs && !Array.isArray(a.inputs)
+              ? this.toArray(a.inputs)
+              : a.inputs,
+        }));
+      }
+    });
 
     return d;
   }
@@ -166,15 +169,18 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
         d.labelsLocalization.proposal,
       );
     }
-    if (Array.isArray(d.datafilesActions)) {
-      d.datafilesActions = d.datafilesActions.map((a: any) => ({
-        ...a,
-        variables: Array.isArray(a.variables)
-          ? this.toObject(a.variables)
-          : a.variables,
-        inputs: Array.isArray(a.inputs) ? this.toObject(a.inputs) : a.inputs,
-      }));
-    }
+    const actionCollections = ["datafilesActions", "publishedDataActions"];
+    actionCollections.forEach((collection) => {
+      if (Array.isArray(d[collection])) {
+        d[collection] = d[collection].map((a: any) => ({
+          ...a,
+          variables: Array.isArray(a.variables)
+            ? this.toObject(a.variables)
+            : a.variables,
+          inputs: Array.isArray(a.inputs) ? this.toObject(a.inputs) : a.inputs,
+        }));
+      }
+    });
 
     return d;
   }
