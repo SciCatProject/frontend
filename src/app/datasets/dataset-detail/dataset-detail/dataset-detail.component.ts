@@ -306,6 +306,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   openAttachment(encoded: string) {
     this.attachmentService.openAttachment(encoded);
   }
+
+  onAttachmentImageError(event: Event): void {
+    const image = event.target as HTMLImageElement;
+    image.onerror = null;
+    image.src = this.attachmentService.getUnknownFileIcon();
+  }
+
   emptyMetadataTable(): boolean {
     if (this.appConfig.hideEmptyMetadataTable) {
       return (

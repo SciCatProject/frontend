@@ -302,6 +302,7 @@
                           "
                           data-cy="attachment-thumbnail"
                           [src]="getImageUrl(item.thumbnail)"
+                          (error)="onAttachmentImageError($event)"
                           (click)="openAttachment(item.thumbnail)"
                           [title]="item.caption"
                         />
