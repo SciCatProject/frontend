@@ -11,7 +11,7 @@ import { DatasetTableActionsComponent } from "./dataset-table-actions.component"
 import { MockStore, mockDataset } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Store, StoreModule } from "@ngrx/store";
-import { ArchViewMode } from "state-management/models";
+import { DatasetViewMode } from "state-management/models";
 import {
   setArchiveViewModeAction,
   addToBatchAction,
@@ -23,9 +23,12 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
+import { DEFAULT_DATASET_VIEW_MODES } from "datasets/dataset-view-modes.defaults";
 
 class MockAppConfigService {
-  getConfig = () => ({ archiveWorkflowEnabled: true });
+  getConfig = () => ({
+    datasetViews: { modes: DEFAULT_DATASET_VIEW_MODES },
+  });
 }
 
 describe("DatasetTableActionsComponent", () => {
@@ -92,16 +95,46 @@ describe("DatasetTableActionsComponent", () => {
     expect(compiled.querySelector(".all").textContent).toContain("All");
   });
 
+  it("should render configured view mode labels", () => {
+    component.modes = [
+      { id: "to-tape", label: "Ready for tape", query: {} },
+      { id: "on-tape", label: "On tape", query: {} },
+    ];
+    fixture.detectChanges();
+
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelectorAll("mat-button-toggle").length).toEqual(2);
+    expect(compiled.querySelector(".to-tape").textContent).toContain(
+      "Ready for tape",
+    );
+    expect(compiled.querySelector(".archivable")).toBeFalsy();
+  });
+
+  it("should not render the mode toggles when no view modes are configured", () => {
+    component.modes = [];
+    fixture.detectChanges();
+
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector("mat-button-toggle-group")).toBeFalsy();
+  });
+
   describe("#onModeChange()", () => {
     it("should dispatch a SetViewModeAction and a clearSelectionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      const modeToggle = ArchViewMode.all;
+      const viewMode: DatasetViewMode = {
+        id: "on-tape",
+        label: "On tape",
+        query: { "datasetlifecycle.retrievable": true },
+      };
 
-      component.onModeChange(modeToggle);
+      component.onModeChange(viewMode);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({ modeToggle }),
+        setArchiveViewModeAction({
+          modeToggle: "on-tape",
+          mode: { "datasetlifecycle.retrievable": true },
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
     });

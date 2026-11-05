@@ -169,6 +169,24 @@ export enum ArchViewMode {
   system_error = "system error",
   user_error = "user error",
 }
+
+/**
+ * A named query preset for the dataset list, configured via
+ * `datasetViews.modes`. `id` is stored in the filters (`modeToggle`) and is
+ * what batch action `hidden` expressions match `#currentArchViewMode`
+ * against, so it should stay stable; `label` is only for display.
+ */
+export interface DatasetViewMode {
+  id: string;
+  label: string;
+  query: Record<string, unknown>;
+  tooltip?: string;
+}
+
+// the dataset list view modes
+export interface DatasetViewsConfig {
+  modes?: DatasetViewMode[];
+}
 export enum JobViewMode {
   myJobs = "my jobs",
   allJobs = "all jobs",
@@ -200,7 +218,7 @@ export interface GenericFilters {
 }
 
 export interface DatasetFilters extends GenericFilters {
-  modeToggle: ArchViewMode;
+  modeToggle: string;
   text: string;
   ownerGroup: string[];
   type: string[];
