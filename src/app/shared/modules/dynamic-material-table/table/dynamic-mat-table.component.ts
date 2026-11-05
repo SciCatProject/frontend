@@ -75,6 +75,8 @@ import {
 } from "../models/table-menu.model";
 import { TableDataSource } from "../cores/table-data-source";
 import { DatePipe } from "@angular/common";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { TimeDurationPipe } from "shared/pipes/time-duration.pipe";
 import { AppConfigService } from "app-config.service";
 import { EventsService } from "shared/events.service";
 import { get as lodashGet } from "lodash-es";
@@ -361,6 +363,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     private overlayPositionBuilder: OverlayPositionBuilder,
     public readonly config: TableSetting,
     private datePipe: DatePipe,
+    private fileSizePipe: FileSizePipe,
+    private timeDurationPipe: TimeDurationPipe,
     public appConfigService: AppConfigService,
     public eventsService: EventsService,
   ) {
@@ -1201,7 +1205,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (fieldName.includes(",")) {
       const fields = fieldName.split(",").map((f) => f.trim());
       const values = fields.map((field) =>
-        this.getColumnValue(data, { name: field }),
+        this.getColumnValue(data, { ...column, name: field, emptyValue: "" }),
       );
       return values.filter((value) => value !== "").join(", ");
     }
@@ -1212,7 +1216,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       : data[fieldName];
 
     if (value === null || value === undefined) {
-      return "";
+      return column.emptyValue || "";
     }
 
     // If column format for date is provided, format the value
@@ -1233,7 +1237,28 @@ export class DynamicMatTableComponent<T extends TableRow>
       }
     }
 
+    if (column.pipe) {
+      const pipedValue = this.applyColumnPipe(value, column);
+      return pipedValue ?? column.emptyValue ?? "";
+    }
+
     return value;
+  }
+
+  private applyColumnPipe(value: unknown, column: TableField<any>) {
+    const pipeArgs = column.pipeArgs ?? [];
+
+    switch (column.pipe) {
+      case "date":
+        return this.datePipe.transform(value as string, pipeArgs[0] as string);
+      case "filesize":
+        return this.fileSizePipe.transform(Number(value));
+      case "timeduration":
+        return this.timeDurationPipe.transform(Number(value));
+      default:
+        console.log("No such pipe exists:", value, column.pipe);
+        return value;
+    }
   }
 
   metadataNameHoverContent(row: any) {

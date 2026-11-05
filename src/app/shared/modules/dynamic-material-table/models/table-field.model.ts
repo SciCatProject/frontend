@@ -83,7 +83,10 @@ export interface AbstractField {
   headerTooltipEnable?: boolean;
   option?: any; // for store share data show in cell of column
   categoryData?: any[];
+  emptyValue?: string /* Displayed when the cell value is empty */;
   pipes?: IPipe[];
+  pipe?: "date" | "filesize" | "timeduration";
+  pipeArgs?: any[];
   toString?: (column: TableField<any>, row: TableRow) => string;
   customSort?: (column: TableField<any>, row: any) => string;
   customRender?: (column: TableField<any>, row: any) => string;
