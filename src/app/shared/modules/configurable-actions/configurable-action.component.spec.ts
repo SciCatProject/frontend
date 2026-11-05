@@ -1918,6 +1918,52 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(storeDispatchSpy).toHaveBeenCalledWith(actionSuccessAction());
   });
 
+  describe("1420: addedFrom in the cart", () => {
+    const [archiveAction] = buildDefaultBatchActions([]);
+
+    // no currentArchViewMode key: the cart (batch-view) context
+    const cartWith = (...origins: (string | undefined)[]): ActionItems => ({
+      datasets: origins.map(
+        (addedFrom, i) =>
+          ({
+            pid: `pid-${i}`,
+            size: 100,
+            packedSize: 100,
+            addedFrom,
+          }) as ActionItemDataset,
+      ),
+    });
+
+    it("1420: the default Archive action should ignore addedFrom", () => {
+      createComponent(archiveAction, cartWith("all", "details", undefined));
+      expect(component.disabled).toBeFalse();
+    });
+
+    it("1421: a custom action can require every dataset to come from a view", () => {
+      const strictArchive: ActionConfig = {
+        ...archiveAction,
+        variables: {
+          ...archiveAction.variables,
+          addedFrom: "#DatasetsField[addedFrom]",
+        },
+        enabled:
+          "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))",
+      };
+
+      createComponent(strictArchive, cartWith("archivable", "archivable"));
+      expect(component.disabled).toBeFalse();
+
+      createComponent(strictArchive, cartWith("archivable", "details"));
+      expect(component.disabled).toBeTrue();
+
+      createComponent(strictArchive, {
+        ...cartWith(undefined),
+        currentArchViewMode: "archivable",
+      });
+      expect(component.disabled).toBeFalse();
+    });
+  });
+
   describe("1400: default batch actions (Archive/Retrieve) visibility", () => {
     const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
 

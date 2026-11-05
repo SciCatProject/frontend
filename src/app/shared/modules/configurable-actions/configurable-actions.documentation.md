@@ -420,6 +420,29 @@ A few things worth noting if you adapt these:
   - *Cart*: `#currentArchViewMode` has no matching key in `batch-view`'s `actionItems`, so it resolves to the *literal selector text* (`"#currentArchViewMode"`), not `undefined`. The `'#currentArchViewMode'` entry is what actually detects "not on the mode-toggle page" and makes the action always visible there (the `undefined` entry is only a defensive fallback and never actually matches in practice — the selector resolution never produces real `undefined`). If you copy this pattern for a selector that isn't always provided, remember the fallback is the selector string itself, not `undefined`.
   - *Dataset list page*: here `#currentArchViewMode` resolves to a real mode string (`'all'`, `'archivable'`, `'retrievable'`, etc.), so neither of the above two entries matches — without the trailing `'archivable'` (or `'retrievable'` for Retrieve) entry, the action would be hidden in *every* mode on this page, not just the wrong ones. That entry is what restores the old per-mode behavior (Archive only in `'archivable'` mode, Retrieve only in `'retrievable'` mode) and it's easy to drop by mistake when simplifying this expression — don't remove it.
 
+## Batch actions: where cart datasets came from (`addedFrom`)
+
+Every dataset in the cart records where it was added from, as `addedFrom`:
+- the archive view mode it was selected in on the dataset list (e.g. `'archivable'`), when added from the list
+- `'details'` when added from the dataset details page
+- `'publishedData'` when loaded from a publication's dataset list (when editing published data)
+- unset for datasets added before this was recorded.
+
+`details` and `publishedData` are reserved, so don't use them as view `id`s.
+
+Actions read it with `#DatasetsField[addedFrom]`, one value per dataset. The built-in Archive/Retrieve actions don't use it, so the cart behaves as before. A deployment that wants the cart to give the same guarantee as the dataset list, where Archive is only shown in the `archivable` view, can add the check to its own `batchActions`:
+
+```json
+"variables": {
+  "archiveViewMode": "#currentArchViewMode",
+  "addedFrom": "#DatasetsField[addedFrom]",
+  "totalSize": "#DatasetsTotalSize"
+},
+"enabled": "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))"
+```
+
+`@archiveViewMode !== '#currentArchViewMode'` limits the check to the cart: on the dataset list the selector resolves to the real view, while in the cart it resolves to the literal selector text. With this rule, datasets added from the details page or before `addedFrom` existed keep Archive disabled in the cart; accept `'details'` too if that's wanted.
+
 ## Best practices
 
 - **Use stable, unique `id`s (UUIDs).** IDs aren't just for humans: code can match on them (e.g. `AppConfigService` looks up the built-in Retrieve action by its `id` to populate its dialog). Don't reuse an `id` across unrelated actions, and don't change an existing action's `id` once deployed, in case other config or code starts depending on it.
