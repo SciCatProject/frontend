@@ -4,7 +4,6 @@ import { Store } from "@ngrx/store";
 import {
   setArchiveViewModeAction,
   clearSelectionAction,
-  addToBatchAction,
   clearBatchAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, Subscription } from "rxjs";
@@ -37,12 +36,18 @@ import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
-  actionButtonsStyle: ActionButtonStyle = { raised: false, color: "primary" };
-  actionItems: ActionItems = { datasets: [] };
+  actionButtonsStyle: ActionButtonStyle = { raised: true, color: "accent" };
+  actionItems: ActionItems = {
+    datasets: [],
+    shoppingCartEnabled: this.appConfig.shoppingCartEnabled,
+    jupyterHubUrl: this.appConfig.jupyterHubUrl,
+  };
   userProfile$ = this.store.select(selectProfile);
   selectSelectedDatasets$ = this.store.select(selectSelectedDatasets);
   selectIsBatchNonEmpty$ = this.store.select(selectIsBatchNonEmpty);
   batchActionsConfig: ActionConfig[] = this.appConfig.batchActions || [];
+  datasetsListActionsConfig: ActionConfig[] =
+    this.appConfig.datasetsListActions || [];
 
   @Input() selectedSets: PartialOutputDatasetDto[] | null = [];
 
@@ -88,15 +93,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearSelectionAction());
   }
 
-  isEmptySelection(): boolean {
-    return this.selectedSets?.length === 0;
-  }
-
-  onAddToBatch(): void {
-    this.store.dispatch(addToBatchAction());
-    this.store.dispatch(clearSelectionAction());
-  }
-
   ngOnInit() {
     this.subscriptions.push(
       this.selectIsBatchNonEmpty$
@@ -129,6 +125,8 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
           datasets: datasets,
           user: profile,
           currentArchViewMode: mode,
+          shoppingCartEnabled: this.appConfig.shoppingCartEnabled,
+          jupyterHubUrl: this.appConfig.jupyterHubUrl,
         };
       }),
     );

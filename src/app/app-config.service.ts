@@ -139,8 +139,8 @@ export interface AppConfigInterface {
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetDetailsTabsInclude?: DatasetDetailsTabsInclude;
-  datasetActionsEnabled: boolean;
-  datasetActions: ActionConfig[];
+  datasetsListActionsEnabled: boolean;
+  datasetsListActions: ActionConfig[];
   datafilesActionsEnabled: boolean;
   datafilesActions: ActionConfig[];
   datasetDetailsActionsEnabled: boolean;
@@ -392,11 +392,55 @@ export class AppConfigService {
 
   async loadAppConfig(): Promise<void> {
     try {
-      const config = await firstValueFrom(
-        this.http.get("/api/v3/admin/config").pipe(timeout(2000)),
+      const backendConfig = await firstValueFrom(
+        this.http
+          .get<Partial<AppConfigInterface>>("/api/v3/admin/config")
+          .pipe(timeout(2000)),
       );
+      const migratedBackendConfig = { ...backendConfig };
+      const legacyBackendConfig =
+        migratedBackendConfig as Partial<AppConfigInterface> & {
+          datasetActionsEnabled?: boolean;
+          datasetActions?: ActionConfig[];
+        };
 
-      this.appConfig = Object.assign({}, this.appConfig, config);
+      // Before the datasets-list action settings were renamed, they were
+      // stored under datasetActionsEnabled/datasetActions. Preserve those
+      // configurations under the new names.
+      if (
+        !("datasetsListActionsEnabled" in migratedBackendConfig) &&
+        "datasetActionsEnabled" in legacyBackendConfig
+      ) {
+        migratedBackendConfig.datasetsListActionsEnabled =
+          legacyBackendConfig.datasetActionsEnabled as boolean;
+        if (legacyBackendConfig.datasetActions !== undefined) {
+          migratedBackendConfig.datasetsListActions =
+            legacyBackendConfig.datasetActions;
+        }
+        delete legacyBackendConfig.datasetActionsEnabled;
+        delete legacyBackendConfig.datasetActions;
+      }
+
+      // Before dataset detail actions were renamed, they were stored under
+      // datasetActions. Only configurations without either datasets-list
+      // action setting should be migrated as legacy detail actions; the
+      // renamed datasets-list settings must not be interpreted as detail actions.
+      if (
+        !("datasetDetailsActions" in migratedBackendConfig) &&
+        !("datasetsListActionsEnabled" in migratedBackendConfig) &&
+        legacyBackendConfig.datasetActions
+      ) {
+        migratedBackendConfig.datasetDetailsActions =
+          legacyBackendConfig.datasetActions;
+        migratedBackendConfig.datasetDetailsActionsEnabled =
+          migratedBackendConfig.datafilesActionsEnabled;
+        delete legacyBackendConfig.datasetActions;
+      }
+
+      // Asset configuration supplies defaults for older backend configs, while
+      // explicit backend values (including false and []) remain authoritative.
+      const assetConfig = await this.mergeConfig();
+      this.appConfig = mergeConfigs(assetConfig, migratedBackendConfig);
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
       const config = await this.mergeConfig();

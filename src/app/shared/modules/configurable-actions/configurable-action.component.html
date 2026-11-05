@@ -2,6 +2,7 @@
   @if (buttonStyle.raised) {
     <button
       mat-raised-button
+      [attr.data-action-id]="actionConfig.id"
       (click)="performAction()"
       [color]="buttonStyle.color"
       [disabled]="disabled"
@@ -18,6 +19,7 @@
   @if (!buttonStyle.raised) {
     <button
       mat-button
+      [attr.data-action-id]="actionConfig.id"
       [color]="buttonStyle.color"
       (click)="performAction()"
       [disabled]="disabled"

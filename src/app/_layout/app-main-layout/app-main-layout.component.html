@@ -1,4 +1,6 @@
 <div class="main-app">
-  <breadcrumb></breadcrumb>
+  @if (!isDatasetsListRoute) {
+    <breadcrumb></breadcrumb>
+  }
   <router-outlet></router-outlet>
 </div>

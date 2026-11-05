@@ -20,6 +20,7 @@ export const ACTION_TYPES = [
   "json-download",
   "xhr",
   "dialog",
+  "local-add-to-selection",
 ] as const;
 
 export type ActionType = (typeof ACTION_TYPES)[number];
@@ -37,7 +38,7 @@ export interface ActionConfig {
   mat_icon?: string;
   icon?: string;
   type?: ActionType;
-  url: string;
+  url?: string;
   target?: "_blank" | "_self" | "_parent" | "_top";
   authorization: string[];
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
@@ -60,7 +61,8 @@ function isActionConfig(value: unknown): value is ActionConfig {
     typeof (value as ActionConfig).id === "string" &&
     typeof (value as ActionConfig).order === "number" &&
     typeof (value as ActionConfig).label === "string" &&
-    typeof (value as ActionConfig).url === "string" &&
+    (typeof (value as ActionConfig).url === "string" ||
+      (value as ActionConfig).type === "local-add-to-selection") &&
     Array.isArray((value as ActionConfig).authorization)
   );
 }

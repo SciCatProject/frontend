@@ -38,6 +38,11 @@ import {
   actionFailureAction,
   actionSuccessAction,
 } from "state-management/actions/actions.actions";
+import {
+  addToBatchAction,
+  clearSelectionAction,
+  selectDatasetsAction,
+} from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "configurable-action",
@@ -235,6 +240,31 @@ export class ConfigurableActionComponent
       "#!isPublished": String(
         this.actionItems.datasets?.[0]?.isPublished === false,
       ),
+      "#datasetPublic": String(
+        this.actionItems.datasets?.every(
+          (dataset) => dataset.isPublished === true,
+        ) === true,
+      ),
+      "#datasetAccess": String(
+        this.actionItems.datasets?.every(
+          (dataset) =>
+            this.isAdmin ||
+            (this.userProfile.accessGroups as string[] | undefined)?.includes(
+              dataset.ownerGroup,
+            ) ||
+            dataset.accessGroups?.some((group) =>
+              (this.userProfile.accessGroups as string[] | undefined)?.includes(
+                group,
+              ),
+            ),
+        ) === true,
+      ),
+      "#shoppingCartEnabled": String(
+        this.actionItems.shoppingCartEnabled === true,
+      ),
+      "#!shoppingCartEnabled": String(
+        this.actionItems.shoppingCartEnabled !== true,
+      ),
     };
 
     Object.entries(symbols).forEach(([k, v]) => (expr = expr.replaceAll(k, v)));
@@ -357,7 +387,7 @@ export class ConfigurableActionComponent
   }
 
   private typeXhr() {
-    const url = this.interpolate(this.actionConfig.url);
+    const url = this.interpolate(this.actionConfig.url || "");
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
@@ -394,7 +424,7 @@ export class ConfigurableActionComponent
     this.form = document.createElement("form");
     this.form.target = this.actionConfig.target || "_self";
     this.form.method = this.actionConfig.method || "POST";
-    this.form.action = this.actionConfig.url;
+    this.form.action = this.actionConfig.url || "";
     this.form.style.display = "none";
 
     Object.entries(this.actionConfig.inputs || {}).forEach(([input, def]) => {
@@ -436,7 +466,7 @@ export class ConfigurableActionComponent
       headers[k] = String(this.resolve(v));
     });
 
-    fetch(this.actionConfig.url, {
+    fetch(this.actionConfig.url || "", {
       method: this.actionConfig.method || "POST",
       headers,
       body: this.preparePayload(),
@@ -458,9 +488,20 @@ export class ConfigurableActionComponent
 
   private typeLink() {
     window.open(
-      this.interpolate(this.actionConfig.url),
+      this.interpolate(this.actionConfig.url || ""),
       this.actionConfig.target || "_self",
     );
+  }
+
+  private typeLocalAddToSelection() {
+    if (!this.actionItems.datasets?.length) return false;
+    this.store.dispatch(
+      selectDatasetsAction({ datasets: this.actionItems.datasets }),
+    );
+    this.store.dispatch(addToBatchAction());
+    this.store.dispatch(clearSelectionAction());
+    this.actionFinishedEmit(true);
+    return true;
   }
 
   private typeDialog() {
@@ -498,6 +539,8 @@ export class ConfigurableActionComponent
       if (nextStep === "xhr") this.typeXhr();
       else if (nextStep === "form") this.typeForm();
       else if (nextStep === "json-download") this.typeJsonToDownload();
+      else if (nextStep === "local-add-to-selection")
+        this.typeLocalAddToSelection();
       else console.warn("Unsupported onSuccess action type:", nextStep);
     } catch (error) {
       console.error("Configurable action error on execute next step", error);
@@ -547,9 +590,21 @@ export class ConfigurableActionComponent
     });
   }
 
+  private isAuthorized(): boolean {
+    const authorization = this.actionConfig.authorization || [];
+    // Older consumers/tests may not provide a user context. Do not treat a
+    // missing context as a failed authorization check; rendered surfaces
+    // always provide the user profile through actionItems.
+    if (!authorization.length || !("user" in this.actionItems)) return true;
+    this.resolveVariableContext();
+    return authorization.some((condition) =>
+      this.evaluate(this.viewHandlers(condition)),
+    );
+  }
+
   get visible(): boolean {
     try {
-      this.resolveVariableContext();
+      if (!this.isAuthorized()) return false;
       if (!this.actionConfig.hidden) return true;
       return !this.evaluate(this.viewHandlers(this.actionConfig.hidden));
     } catch (error) {
@@ -559,6 +614,12 @@ export class ConfigurableActionComponent
   }
 
   get disabled(): boolean {
+    if (!this.isAuthorized()) return true;
+    if (
+      this.actionConfig.type === "local-add-to-selection" &&
+      !this.actionItems.datasets?.length
+    )
+      return true;
     if (typeof this.actionConfig.disabled === "boolean")
       return this.actionConfig.disabled;
     if (typeof this.actionConfig.enabled === "boolean")
@@ -611,7 +672,7 @@ export class ConfigurableActionComponent
   }
 
   performAction() {
-    this.resolveVariableContext();
+    if (!this.isAuthorized()) return false;
     const type = this.actionConfig.type || "form";
     switch (type) {
       case "json-download":
@@ -622,6 +683,8 @@ export class ConfigurableActionComponent
         return this.typeLink();
       case "dialog":
         return this.typeDialog();
+      case "local-add-to-selection":
+        return this.typeLocalAddToSelection();
       case "form":
       default:
         return this.typeForm();

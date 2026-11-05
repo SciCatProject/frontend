@@ -11,6 +11,7 @@ import { NgModule } from "@angular/core";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { RouterModule } from "@angular/router";
 import { SharedScicatFrontendModule } from "shared/shared.module";
+import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -134,6 +135,7 @@ import { filesReducer } from "state-management/reducers/files.reducer";
     ReactiveFormsModule,
     RouterModule,
     SharedScicatFrontendModule,
+    BreadcrumbModule,
     BatchCardModule,
     EffectsModule.forFeature([
       UserEffects,

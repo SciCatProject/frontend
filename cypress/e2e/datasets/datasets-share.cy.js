@@ -24,7 +24,7 @@ describe("Datasets", () => {
 
       cy.get(".dataset-table input[type='checkbox']").first().click();
 
-      cy.get("#addToBatchButton").click();
+      cy.get('[data-action-id="add-to-selection"]').click();
 
       cy.get("#cartOnHeaderButton").click();
 

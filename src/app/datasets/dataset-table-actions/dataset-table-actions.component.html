@@ -25,19 +25,12 @@
     </configurable-actions>
   }
 
-  @if (appConfig.shoppingCartEnabled) {
-    <button
-      id="addToBatchButton"
-      mat-button
-      [disabled]="isEmptySelection()"
-      class="add-batch"
-      (click)="onAddToBatch()"
-      color="primary"
-    >
-      <mat-icon>library_add</mat-icon>
-      Add to Selection
-    </button>
+  @if (appConfig.datasetsListActionsEnabled) {
+    <configurable-actions
+      data-cy="dataset-list-actions"
+      [actionsConfig]="datasetsListActionsConfig"
+      [actionItems]="actionItems"
+      [buttonsStyle]="actionButtonsStyle"
+    ></configurable-actions>
   }
 </div>
-
-<div style="clear: both"></div>

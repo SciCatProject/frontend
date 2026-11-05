@@ -125,6 +125,14 @@ describe("DashboardComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("renders the breadcrumb in the datasets page header", () => {
+    const header = fixture.nativeElement.querySelector(".datasets-page-header");
+
+    expect(header).toBeTruthy();
+    expect(header.querySelector("breadcrumb")).toBeTruthy();
+    expect(header.querySelector("dataset-table-actions")).toBeNull();
+  });
+
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
       component.onRowClick(dataset);

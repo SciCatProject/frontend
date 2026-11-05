@@ -76,6 +76,56 @@
   "maxDirectDownloadSize": 5000000000,
   "maxFileSizeWarning": "Some files are above <maxDirectDownloadSize> and cannot be downloaded directly. These file can be downloaded via sftp host: <sftpHost> in directory: <sourceFolder>",
   "shoppingCartEnabled": true,
+  "datasetsListActionsEnabled": true,
+  "datasetsListActions": [
+    {
+      "id": "add-to-selection",
+      "description": "Add the selected datasets to the selection",
+      "order": 1,
+      "label": "Add to Selection",
+      "mat_icon": "library_add",
+      "type": "local-add-to-selection",
+      "authorization": []
+    },
+    {
+      "id": "jupyter-notebook",
+      "description": "Open a Jupyter notebook for the selected datasets",
+      "order": 2,
+      "label": "Jupyter Notebook",
+      "mat_icon": "launch",
+      "type": "link",
+      "url": "{{ @hub }}",
+      "target": "_blank",
+      "variables": {
+        "hub": "#jupyterHubUrl",
+        "pids": "#DatasetsPid"
+      },
+      "enabled": "#Length(@pids) > 0",
+      "authorization": []
+    },
+    {
+      "id": "make-public",
+      "description": "Make the selected datasets public",
+      "order": 3,
+      "label": "Make Public",
+      "mat_icon": "lock_open",
+      "type": "xhr",
+      "method": "PATCH",
+      "url": "{{ @apiBaseUrl }}/dataset/{{ @pid }}/",
+      "target": "_blank",
+      "variables": {
+        "pid": "#Dataset0Pid",
+        "pids": "#DatasetsPid"
+      },
+      "enabled": "#Length(@pids) === 1",
+      "payload": "{\"isPublished\":\"true\"}",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "#tokenBearer"
+      },
+      "authorization": []
+    }
+  ],
   "shoppingCartOnHeader": true,
   "tableSciDataEnabled": true,
   "datasetDetailsShowMissingProposalId": false,

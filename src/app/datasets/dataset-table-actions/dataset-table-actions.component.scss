@@ -1,5 +1,12 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
 .mode-container {
-  float: left;
+  flex: 0 0 auto;
 
   .public-toggle {
     margin-right: 1em;
@@ -7,7 +14,10 @@
 }
 
 .action-container {
-  float: right;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
 }
 
 .action-container.hidden {

@@ -2,13 +2,19 @@
   width: 100%;
   max-width: 100%;
 }
-.dashboard-header {
+.datasets-page-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
-  box-sizing: border-box;
-  padding: 0;
-  gap: 0;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .datasets-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 mat-sidenav-container {

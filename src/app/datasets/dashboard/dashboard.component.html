@@ -1,13 +1,11 @@
 <div class="dashboard-main">
   <mat-sidenav-container [hasBackdrop]="false">
     <mat-sidenav-content>
-      <div fxLayout="row" fxLayout.xs="column" class="dashboard-header">
-        <div class="action-column" fxFlex="14" fxFlex.lt-xl="20"></div>
-        <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
-          @if (this.loggedIn$ | async) {
-            <dataset-table-actions></dataset-table-actions>
-          }
-        </div>
+      <div class="datasets-page-header">
+        <breadcrumb></breadcrumb>
+        @if (this.loggedIn$ | async) {
+          <dataset-table-actions></dataset-table-actions>
+        }
       </div>
 
       <div fxLayout="row" fxLayout.xs="column">

@@ -30,7 +30,7 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
-      cy.get("#addToBatchButton").click();
+      cy.get('[data-action-id="add-to-selection"]').click();
 
       cy.get("#cartOnHeaderButton").click();
 
@@ -65,7 +65,7 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
-      cy.get("#addToBatchButton").click();
+      cy.get('[data-action-id="add-to-selection"]').click();
 
       cy.get("#cartOnHeaderButton").click();
 
@@ -114,7 +114,7 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
-      cy.get("#addToBatchButton").click();
+      cy.get('[data-action-id="add-to-selection"]').click();
 
       cy.get("#cartOnHeaderButton").click();
 
@@ -145,7 +145,7 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
-      cy.get("#addToBatchButton").click();
+      cy.get('[data-action-id="add-to-selection"]').click();
 
       cy.get("#cartOnHeaderButton").click();
 
@@ -333,7 +333,7 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
-      cy.get("#addToBatchButton").click();
+      cy.get('[data-action-id="add-to-selection"]').click();
 
       cy.get("#cartOnHeaderButton").click();
 
@@ -462,7 +462,7 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
-      cy.get("#addToBatchButton").click();
+      cy.get('[data-action-id="add-to-selection"]').click();
 
       cy.get("#cartOnHeaderButton").click();
 

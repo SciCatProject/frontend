@@ -8,13 +8,12 @@ import {
 } from "@angular/core/testing";
 
 import { DatasetTableActionsComponent } from "./dataset-table-actions.component";
-import { MockStore, mockDataset } from "shared/MockStubs";
+import { MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Store, StoreModule } from "@ngrx/store";
 import { ArchViewMode } from "state-management/models";
 import {
   setArchiveViewModeAction,
-  addToBatchAction,
   clearBatchAction,
   clearSelectionAction,
 } from "state-management/actions/datasets.actions";
@@ -25,7 +24,23 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 
 class MockAppConfigService {
-  getConfig = () => ({ archiveWorkflowEnabled: true });
+  getConfig = () => ({
+    archiveWorkflowEnabled: true,
+    shoppingCartEnabled: true,
+    datasetsListActionsEnabled: true,
+    datasetsListActions: [
+      {
+        id: "add-to-selection",
+        order: 1,
+        label: "Add to Selection",
+        mat_icon: "library_add",
+        type: "local-add-to-selection",
+        authorization: [],
+      },
+    ],
+    batchActionsEnabled: false,
+    batchActions: [],
+  });
 }
 
 describe("DatasetTableActionsComponent", () => {
@@ -92,6 +107,38 @@ describe("DatasetTableActionsComponent", () => {
     expect(compiled.querySelector(".all").textContent).toContain("All");
   });
 
+  it("uses the same raised accent button style as datafiles actions", () => {
+    expect(component.actionButtonsStyle).toEqual({
+      raised: true,
+      color: "accent",
+    });
+  });
+
+  it("exposes configured datasets-list actions and context", () => {
+    expect(component.datasetsListActionsConfig).toHaveSize(1);
+    expect(component.datasetsListActionsConfig[0].type).toBe(
+      "local-add-to-selection",
+    );
+    expect(component.actionItems.datasets).toEqual([]);
+    expect(component.actionItems.shoppingCartEnabled).toBeTrue();
+    expect(
+      fixture.nativeElement.querySelector('[data-cy="dataset-list-actions"]'),
+    ).toBeTruthy();
+  });
+
+  it("does not render the legacy hard-coded Add to Selection button", () => {
+    expect(fixture.nativeElement.querySelector("#addToBatchButton")).toBeNull();
+  });
+
+  it("does not render the configurable action row when disabled", () => {
+    component.appConfig.datasetsListActionsEnabled = false;
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('[data-cy="dataset-list-actions"]'),
+    ).toBeNull();
+  });
+
   describe("#onModeChange()", () => {
     it("should dispatch a SetViewModeAction and a clearSelectionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
@@ -107,40 +154,12 @@ describe("DatasetTableActionsComponent", () => {
     });
   });
 
-  describe("#isEmptySelection()", () => {
-    it("should return true if the length of selectedSets equals 0", () => {
-      const isEmpty = component.isEmptySelection();
-
-      expect(isEmpty).toEqual(true);
-    });
-
-    it("should return false if the length of selectedSets is larger than 0", () => {
-      component.selectedSets = [mockDataset];
-
-      const isEmpty = component.isEmptySelection();
-
-      expect(isEmpty).toEqual(false);
-    });
-  });
-
   describe("#archiveClickHandle()", () => {
     xit("should...", () => {});
   });
 
   describe("#retrieveClickHandle()", () => {
     xit("should...", () => {});
-  });
-
-  describe("#onAddToBatch()", () => {
-    it("should dispatch an addToBatchAction and a clearSelectionAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      component.onAddToBatch();
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(addToBatchAction());
-      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
-    });
   });
 
   describe("#onActionFinished()", () => {

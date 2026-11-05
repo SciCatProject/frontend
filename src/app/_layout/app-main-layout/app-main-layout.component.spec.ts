@@ -47,4 +47,9 @@ describe("AppMainLayoutComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("identifies the datasets list route while ignoring query parameters", () => {
+    expect(component["isDatasetsListUrl"]("/datasets?limit=25")).toBeTrue();
+    expect(component["isDatasetsListUrl"]("/datasets/123")).toBeFalse();
+  });
 });

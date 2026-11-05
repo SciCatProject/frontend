@@ -167,6 +167,14 @@
         }
       },
       "datafilesActionsEnabled": { "type": "boolean" },
+      "datasetsListActionsEnabled": { "type": "boolean" },
+      "datasetsListActions": {
+        "$ref": "#/properties/datafilesActions"
+      },
+      "datasetDetailsActionsEnabled": { "type": "boolean" },
+      "datasetDetailsActions": {
+        "$ref": "#/properties/datafilesActions"
+      },
       "statusBannerMessage": { "type": "string" },
       "statusBannerCode": {
         "type": "string",
@@ -220,11 +228,26 @@
             },
             "type": {
               "type": "string",
-              "enum": ["form", "xhr", "link", "json-download"]
+              "enum": [
+                "form",
+                "xhr",
+                "link",
+                "json-download",
+                "dialog",
+                "local-add-to-selection"
+              ]
             },
             "icon": { "type": "string" },
             "payload": { "type": "string" },
-            "filename": { "type": "string" }
+            "filename": { "type": "string" },
+            "onSuccess": {
+              "type": "string",
+              "enum": ["form", "xhr", "json-download", "local-add-to-selection"]
+            },
+            "authorization": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
           }
         }
       },
@@ -544,7 +567,10 @@
           { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
-          { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetRelationshipsEnabled"
+          },
           {
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"
@@ -691,6 +717,81 @@
             "scope": "#/properties/maxDirectDownloadSize"
           },
           { "type": "Control", "scope": "#/properties/maxFileSizeWarning" }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Datasets List Actions",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/datasetsListActionsEnabled" },
+          {
+            "type": "ListWithDetail",
+            "scope": "#/properties/datasetsListActions",
+            "options": {
+              "detail": {
+                "type": "VerticalLayout",
+                "elements": [
+                  { "type": "Control", "scope": "#/properties/label" },
+                  { "type": "Control", "scope": "#/properties/id" },
+                  { "type": "Control", "scope": "#/properties/description" },
+                  { "type": "Control", "scope": "#/properties/order" },
+                  { "type": "Control", "scope": "#/properties/mat_icon" },
+                  { "type": "Control", "scope": "#/properties/url" },
+                  { "type": "Control", "scope": "#/properties/target" },
+                  { "type": "Control", "scope": "#/properties/enabled" },
+                  { "type": "Control", "scope": "#/properties/variables" },
+                  { "type": "Control", "scope": "#/properties/inputs" },
+                  { "type": "Control", "scope": "#/properties/headers" },
+                  { "type": "Control", "scope": "#/properties/method" },
+                  { "type": "Control", "scope": "#/properties/type" },
+                  { "type": "Control", "scope": "#/properties/authorization" },
+                  { "type": "Control", "scope": "#/properties/payload" },
+                  { "type": "Control", "scope": "#/properties/onSuccess" }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Dataset Detail Actions",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetDetailsActionsEnabled"
+          },
+          {
+            "type": "ListWithDetail",
+            "scope": "#/properties/datasetDetailsActions",
+            "options": {
+              "detail": {
+                "type": "VerticalLayout",
+                "elements": [
+                  { "type": "Control", "scope": "#/properties/label" },
+                  { "type": "Control", "scope": "#/properties/id" },
+                  { "type": "Control", "scope": "#/properties/description" },
+                  { "type": "Control", "scope": "#/properties/order" },
+                  { "type": "Control", "scope": "#/properties/mat_icon" },
+                  { "type": "Control", "scope": "#/properties/url" },
+                  { "type": "Control", "scope": "#/properties/target" },
+                  { "type": "Control", "scope": "#/properties/enabled" },
+                  { "type": "Control", "scope": "#/properties/variables" },
+                  { "type": "Control", "scope": "#/properties/inputs" },
+                  { "type": "Control", "scope": "#/properties/headers" },
+                  { "type": "Control", "scope": "#/properties/method" },
+                  { "type": "Control", "scope": "#/properties/type" },
+                  { "type": "Control", "scope": "#/properties/authorization" }
+                ]
+              }
+            }
+          }
         ]
       },
       {
@@ -893,7 +994,8 @@
                     "elements": [
                       { "type": "Control", "scope": "#/properties/label" },
                       { "type": "Control", "scope": "#/properties/type" },
-                      { "type": "Control", "scope": "#/properties/order" }]
+                      { "type": "Control", "scope": "#/properties/order" }
+                    ]
                   },
                   {
                     "type": "HorizontalLayout",
