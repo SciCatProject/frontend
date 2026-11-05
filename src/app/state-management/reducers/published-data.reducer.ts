@@ -49,6 +49,15 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchPublishedDataFailedAction,
+    fromActions.clearCurrentPublishedDataAction,
+    (state): PublishedDataState => ({
+      ...state,
+      currentPublishedData: undefined,
+    }),
+  ),
+
+  on(
     fromActions.publishPublishedDataCompleteAction,
     (state, { publishedData }): PublishedDataState => ({
       ...state,

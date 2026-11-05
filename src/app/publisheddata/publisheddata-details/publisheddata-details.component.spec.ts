@@ -19,8 +19,10 @@ import {
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
+import { clearCurrentPublishedDataAction } from "state-management/actions/published-data.actions";
 import {
   selectIsAdmin,
+  selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 
@@ -70,6 +72,7 @@ describe("PublisheddataDetailsComponent", () => {
     );
     store.overrideSelector(selectIsAdmin, false);
     store.overrideSelector(selectIsLoggedIn, false);
+    store.overrideSelector(selectIsLoading, false);
   }));
 
   beforeEach(() => {
@@ -80,6 +83,18 @@ describe("PublisheddataDetailsComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#ngOnDestroy()", () => {
+    it("should dispatch a clearCurrentPublishedDataAction", () => {
+      const dispatchSpy = spyOn(store, "dispatch");
+
+      component.ngOnDestroy();
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(
+        clearCurrentPublishedDataAction(),
+      );
+    });
   });
 
   describe("login state", () => {
@@ -97,6 +112,54 @@ describe("PublisheddataDetailsComponent", () => {
       expect(
         compiled.querySelector('[data-cy="registerButton"]'),
       ).not.toBeNull();
+    });
+  });
+
+  describe("published data not found", () => {
+    it("should not show the error page when the published data is loaded", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(
+        compiled.querySelector('[data-cy="published-data-not-found"]'),
+      ).toBeNull();
+    });
+
+    it("should show the error page when the published data is cleared", () => {
+      store.overrideSelector(selectCurrentPublishedData, undefined);
+      store.refreshState();
+      fixture.detectChanges();
+
+      const compiled = fixture.debugElement.nativeElement;
+      expect(
+        compiled.querySelector('[data-cy="published-data-not-found"]'),
+      ).not.toBeNull();
+    });
+
+    describe("without published data", () => {
+      beforeEach(() => {
+        store.overrideSelector(selectCurrentPublishedData, undefined);
+        store.refreshState();
+        fixture = TestBed.createComponent(PublisheddataDetailsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      });
+
+      it("should show the error page once loading has finished", () => {
+        const compiled = fixture.debugElement.nativeElement;
+        expect(
+          compiled.querySelector('[data-cy="published-data-not-found"]'),
+        ).not.toBeNull();
+      });
+
+      it("should not show the error page while loading", () => {
+        store.overrideSelector(selectIsLoading, true);
+        store.refreshState();
+        fixture.detectChanges();
+
+        const compiled = fixture.debugElement.nativeElement;
+        expect(
+          compiled.querySelector('[data-cy="published-data-not-found"]'),
+        ).toBeNull();
+      });
     });
   });
 

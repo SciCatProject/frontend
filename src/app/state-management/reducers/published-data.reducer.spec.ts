@@ -60,6 +60,30 @@ describe("PublishedData Reducer", () => {
     });
   });
 
+  describe("on fetchPublishedDataFailedAction", () => {
+    it("should clear currentPublishedData", () => {
+      const action = fromActions.fetchPublishedDataFailedAction();
+      const state = publishedDataReducer(
+        { ...initialPublishedDataState, currentPublishedData: publishedData },
+        action,
+      );
+
+      expect(state.currentPublishedData).toBeUndefined();
+    });
+  });
+
+  describe("on clearCurrentPublishedDataAction", () => {
+    it("should clear currentPublishedData", () => {
+      const action = fromActions.clearCurrentPublishedDataAction();
+      const state = publishedDataReducer(
+        { ...initialPublishedDataState, currentPublishedData: publishedData },
+        action,
+      );
+
+      expect(state.currentPublishedData).toBeUndefined();
+    });
+  });
+
   describe("on changePageAction", () => {
     it("should set skip and limit filters", () => {
       const page = 1;
