@@ -943,6 +943,11 @@
         },
         "elements": [
           {
+            "type": "Control",
+            "label": "Pagination position",
+            "scope": "#/properties/paginationPosition"
+          },
+          {
             "type": "ListWithDetail",
             "label": "View modes",
             "scope": "#/properties/datasetViews/properties/modes",
