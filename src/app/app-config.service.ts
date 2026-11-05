@@ -137,6 +137,7 @@ export interface AppConfigInterface {
   archiveWorkflowEnabled: boolean;
   datasetJsonScientificMetadata: boolean;
   datasetPageSizeOptions?: number[];
+  paginationPosition?: "top" | "bottom" | "both";
   datasetReduceEnabled: boolean;
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
@@ -421,6 +422,15 @@ export class AppConfigService {
     }
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
+
+    if (
+      config.paginationPosition !== "top" &&
+      config.paginationPosition !== "bottom" &&
+      config.paginationPosition !== "both"
+    ) {
+      config.paginationPosition = "both";
+    }
+
     if (
       "defaultMainPage" in config &&
       isMainPageConfiguration(config.defaultMainPage)

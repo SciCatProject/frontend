@@ -85,7 +85,11 @@
       </mat-form-field>
     </div>
   }
-  @if (pagination) {
+  @if (
+    pagination &&
+    (appConfig.paginationPosition === "top" ||
+      appConfig.paginationPosition === "both")
+  ) {
     <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
       <mat-paginator
         class="datasets-paginator datasets-header-paginator"
@@ -154,7 +158,11 @@
     </ng-container>
 
     <!-- Table Columns -->
-    @for (column of columns; track trackColumn($index, column); let i = $index) {
+    @for (
+      column of columns;
+      track trackColumn($index, column);
+      let i = $index
+    ) {
       <ng-container
         [matColumnDef]="column.name"
         [sticky]="column.sticky === 'start' ? true : false"
@@ -604,7 +612,11 @@
     }
   }
 </div>
-@if (pagination) {
+@if (
+  pagination &&
+  (appConfig.paginationPosition === "bottom" ||
+    appConfig.paginationPosition === "both")
+) {
   <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
     <mat-paginator
       class="datasets-paginator datasets-footer-paginator"
