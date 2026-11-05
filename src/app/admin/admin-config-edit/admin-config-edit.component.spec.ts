@@ -4,6 +4,7 @@ import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { selectConfig } from "state-management/selectors/runtime-config.selectors";
 import { updateConfiguration } from "state-management/actions/runtime-config.action";
+import { ControlElement, GroupLayout, Layout } from "@jsonforms/core";
 import { AdminConfigEditComponent } from "./admin-config-edit.component";
 
 describe("AdminConfigEditComponent internal link labels", () => {
@@ -93,5 +94,75 @@ describe("AdminConfigEditComponent internal link labels", () => {
     expect(action.config.datasetDetailsTabsInclude.details).toEqual([
       "proposals",
     ]);
+  });
+});
+
+describe("AdminConfigEditComponent datafiles action conditions", () => {
+  let fixture: ComponentFixture<AdminConfigEditComponent>;
+  let store: MockStore;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [AdminConfigEditComponent],
+      imports: [SharedScicatFrontendModule, NoopAnimationsModule],
+      providers: [
+        provideMockStore({
+          selectors: [
+            {
+              selector: selectConfig,
+              value: {
+                data: {
+                  labelsLocalization: { dataset: {}, proposal: {} },
+                  datafilesActions: [
+                    {
+                      id: "download",
+                      label: "Download",
+                      enabled: "#Length(@files) > 0",
+                      disabled: "true",
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        }),
+      ],
+    }).compileComponents();
+    store = TestBed.inject(MockStore);
+    fixture = TestBed.createComponent(AdminConfigEditComponent);
+    const group = (fixture.componentInstance.uiSchema as Layout).elements.find(
+      (element) => (element as GroupLayout).label === "Datafiles Actions",
+    ) as GroupLayout;
+    const control: ControlElement = {
+      type: "Control",
+      scope: "#/properties/datafilesActions",
+      // the action's detail form for every action, without the master list
+      options: { detail: group.elements[0].options?.detail },
+    };
+    const uiSchema: Layout = { type: "VerticalLayout", elements: [control] };
+    fixture.componentInstance.uiSchema = uiSchema;
+  });
+
+  afterEach(() => fixture.destroy());
+
+  it("should edit a string enabled as conditions and save that form", async () => {
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const inputs = Array.from(
+      fixture.nativeElement.querySelectorAll("input"),
+    ) as HTMLInputElement[];
+    expect(inputs.some((i) => i.value === "#Length(@files) > 0")).toBeTrue();
+
+    const dispatch = spyOn(store, "dispatch");
+    fixture.componentInstance.save();
+    const action = dispatch.calls.mostRecent().args[0] as unknown as ReturnType<
+      typeof updateConfiguration
+    >;
+    expect(action.config.datafilesActions[0].enabled).toEqual({
+      conditions: [{ condition: "#Length(@files) > 0" }],
+    });
+    expect(action.config.datafilesActions[0].disabled).toBeUndefined();
   });
 });

@@ -70,7 +70,8 @@ Please review the offical documentation for this attribute https://www.w3schools
   - _Example_: ": "_blank",
 - __enabled__: condition when the action can be triggered and the related button should be active.  
   The string may contains the keywords listed below and any logical expression of them.  
-  - _Type_: string
+  It can also be an object with a list of `conditions` that must all hold, to show tooltips: while disabled, the `disabledTooltip` of the first condition that fails is shown; while enabled, `enabledTooltip` is shown, e.g. to warn about what the action may do. An empty list means always enabled.  
+  - _Type_: string | boolean | `{ "conditions": { "condition": string, "disabledTooltip"?: string }[], "enabledTooltip"?: string }`
   - _Examples_: "#SizeLimit"  or  "#Selected && #SizeLimit",
   - _Keywords_: The string can contain any of the following keywords in a logical expression.   
     The expression will be calculated everytime one of the keywords changes value.
@@ -78,6 +79,8 @@ Please review the offical documentation for this attribute https://www.w3schools
       True if the total size of the files is below the limit indicated in configuration under the key `maxDirectDownloadSize`.
     - #Selected :
       True if one or more files are selected in the list.  
+  - _Object example_: `{ "conditions": [{ "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets." }, { "condition": "@totalSize > 0", "disabledTooltip": "There is nothing to archive." }], "enabledTooltip": "The job fails for datasets you don't own." }`
+  - _Notes_: order the conditions from the most basic one (e.g. something selected) to the most specific one, as only the first failing one is explained.
 - __authorization__: indicate which user has access to the action and can see the related button.  
   - _Type_: string[]
   - _Examples_: ["#datasetAccess", "#datasetPublic"]
@@ -323,7 +326,7 @@ Before configurable actions existed, the "Archive" and "Retrieve" buttons on the
 
 **You do not need to configure anything to keep the old behavior.** `AppConfigService.loadAppConfig()` calls `applyDefaultBatchActions(config)` (see `app-config.service.ts`), which defaults `batchActionsEnabled: true` and `batchActions` to the built-in Archive/Retrieve actions (defined in `configurable-actions.defaults.ts`, see below) whenever:
 
-- `archiveWorkflowEnabled` is `true` — the same flag that gated the old hardcoded Archive/Retrieve buttons (`*ngIf="appConfig.archiveWorkflowEnabled"` in `batch-view.component.html` and `dataset-table-actions.component.html`), **and**
+- `archiveWorkflowEnabled` is `true` — the same flag that gated the old hardcoded Archive/Retrieve buttons (`@if (appConfig.archiveWorkflowEnabled)` in `batch-view.component.html` and `dataset-table-actions.component.html`), **and**
 - `batchActionsEnabled` is falsy — either absent from your config (the common case for any config written before this feature existed) or explicitly set to `false`.
 
 If your config already sets `batchActionsEnabled: true` with its own `batchActions`, it is left untouched — the defaults only fill the gap for configs that haven't opted in yet. Note that `batchActionsEnabled: false` alone does **not** disable batch actions when `archiveWorkflowEnabled` is `true` — it's treated the same as "not configured yet", and the defaults still apply. To render no batch actions while keeping `archiveWorkflowEnabled` true for other purposes, opt in explicitly with an empty array: `"batchActionsEnabled": true, "batchActions": []` — that satisfies the truthy check, so the defaulting logic is skipped and the `<configurable-actions>` row simply has nothing to render.
@@ -356,6 +359,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "baseUrl": "#apiBaseUrl",
     "username": "#user.username",
     "userEmail": "#user.email",
+    "pids": "#DatasetsPid",
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "archiveViewMode": "#currentArchViewMode",
     "totalSize": "#DatasetsTotalSize"
@@ -366,7 +370,12 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"archive\"}",
   "hidden": "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
-  "enabled": "@totalSize > 0"
+  "enabled": {
+    "conditions": [
+      { "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets to archive." },
+      { "condition": "@totalSize > 0", "disabledTooltip": "The selected datasets have a total size of 0 bytes, so there is nothing to archive." }
+    ]
+  }
 }
 ```
 
@@ -389,6 +398,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "baseUrl": "#apiBaseUrl",
     "username": "#user.username",
     "userEmail": "#user.email",
+    "pids": "#DatasetsPid",
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "archiveViewMode": "#currentArchViewMode",
     "totalPackedSize": "#DatasetsTotalPackedSize"
@@ -407,7 +417,12 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\", \"option\": \"{{ @dialog.option }}\", \"destinationPath\": \"/archive/retrieve\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"retrieve\"}",
   "hidden": "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
-  "enabled": "@totalPackedSize > 0"
+  "enabled": {
+    "conditions": [
+      { "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets to retrieve." },
+      { "condition": "@totalPackedSize > 0", "disabledTooltip": "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve." }
+    ]
+  }
 }
 ```
 
