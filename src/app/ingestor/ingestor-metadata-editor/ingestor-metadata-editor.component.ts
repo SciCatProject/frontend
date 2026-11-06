@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Output, Input, OnInit } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Output,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
   configuredRenderer,
@@ -36,7 +44,7 @@ it will produce errors when changing the schema. */
   }`,
   standalone: false,
 })
-export class IngestorMetadataEditorComponent implements OnInit {
+export class IngestorMetadataEditorComponent implements OnInit, OnChanges {
   @Input() data: object;
   @Input() schema: JsonSchema;
   @Input() renderView: renderView;
@@ -46,6 +54,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
   visualData: object = {};
   reducedSchema: JsonSchema = {};
   editorInitialized = false;
+  lastEmittedData: any = null;
 
   ngOnInit() {
     this.updateVisualData();
@@ -91,6 +100,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
   }
 
   onDataChange(event: any) {
+    this.lastEmittedData = event;
     this.dataChange.emit(event);
   }
 
@@ -100,5 +110,16 @@ export class IngestorMetadataEditorComponent implements OnInit {
 
   hasErrors(): boolean {
     return this.errors.length > 0;
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.editorInitialized) {
+      return;
+    }
+    if (
+      changes["data"] &&
+      changes["data"].currentValue !== this.lastEmittedData
+    ) {
+      this.updateVisualData();
+    }
   }
 }
