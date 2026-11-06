@@ -210,7 +210,5 @@ export class IngestorExtractorMetadataDialogPageComponent
       this.isInstrumentMetadataOk &&
       this.isAcquisitionMetadataOk &&
       this.extractorMetaDataReady;
-
-    //this.uiNextButtonReady = this.extractorMetaDataReady;
   }
 }
