@@ -124,12 +124,12 @@ export class IngestorHelper {
       selectedResolvedDecodedSchema: {},
       scicatHeader: {},
       userMetaData: {
-        organizational: {},
-        sample: {},
+        organizational: null,
+        sample: null,
       },
       extractorMetaData: {
-        instrument: {},
-        acquisition: {},
+        instrument: null,
+        acquisition: null,
       },
       customMetaData: {},
       mergedMetaDataString: "",
