@@ -22,6 +22,7 @@ const appConfig: AppConfigInterface = {
   datasetRelationshipsEnabled: true,
   datasetJsonScientificMetadata: true,
   datasetPageSizeOptions: [5, 10, 25, 100],
+  paginationPosition: "both",
   editDatasetEnabled: true,
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
@@ -97,6 +98,7 @@ const appConfig: AppConfigInterface = {
   datasetSelectionActions: [],
   batchActionsEnabled: true,
   batchActions: [],
+  datasetViews: { modes: [] },
   defaultDatasetsListSettings: {
     columns: [
       {
@@ -269,6 +271,42 @@ describe("AppConfigService", () => {
       expect(service["appConfig"]).toEqual(appConfig);
     });
 
+    it("should default paginationPosition to both when missing", async () => {
+      const configWithoutPaginationPosition = {
+        ...appConfig,
+        paginationPosition: undefined,
+      };
+      spyOn(service["http"], "get").and.returnValue(
+        of(configWithoutPaginationPosition),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().paginationPosition).toBe("both");
+    });
+
+    ["top", "bottom", "both"].forEach((paginationPosition) => {
+      it(`should preserve a valid paginationPosition of ${paginationPosition}`, async () => {
+        spyOn(service["http"], "get").and.returnValue(
+          of({ ...appConfig, paginationPosition }),
+        );
+
+        await service.loadAppConfig();
+
+        expect(service.getConfig().paginationPosition).toBe(paginationPosition);
+      });
+    });
+
+    it("should default an invalid paginationPosition to both", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({ ...appConfig, paginationPosition: "invalid" }),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().paginationPosition).toBe("both");
+    });
+
     it("should default datasetPageSizeOptions when missing", async () => {
       const configWithoutDatasetPageSizeOptions = {
         ...appConfig,
@@ -333,6 +371,59 @@ describe("AppConfigService", () => {
       const config = service.getConfig();
       expect(config.batchActionsEnabled).toBeUndefined();
       expect(config.batchActions).toBeUndefined();
+    });
+
+    it("should default datasetViews.modes to the archive workflow views when archiveWorkflowEnabled is true", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({
+          ...appConfig,
+          archiveWorkflowEnabled: true,
+          datasetViews: undefined,
+        }),
+      );
+
+      await service.loadAppConfig();
+
+      expect(
+        service.getConfig().datasetViews?.modes?.map((mode) => mode.id),
+      ).toEqual([
+        "all",
+        "archivable",
+        "retrievable",
+        "work in progress",
+        "system error",
+        "user error",
+      ]);
+    });
+
+    it("should not default datasetViews.modes when archiveWorkflowEnabled is false", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({
+          ...appConfig,
+          archiveWorkflowEnabled: false,
+          datasetViews: undefined,
+        }),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().datasetViews?.modes).toBeUndefined();
+    });
+
+    [[], [{ id: "on-tape", label: "On tape", where: {} }]].forEach((modes) => {
+      it(`should not override a deployment's own datasetViews.modes (${modes.length} entries)`, async () => {
+        spyOn(service["http"], "get").and.returnValue(
+          of({
+            ...appConfig,
+            archiveWorkflowEnabled: true,
+            datasetViews: { modes },
+          }),
+        );
+
+        await service.loadAppConfig();
+
+        expect(service.getConfig().datasetViews?.modes).toEqual(modes);
+      });
     });
 
     it("should populate the defaulted Retrieve action's dialog options from retrieveDestinations", async () => {
@@ -509,6 +600,7 @@ describe("AppConfigService", () => {
             ? mergedConfig
             : mockConfigResponses["/assets/config.json"]),
           allowConfigOverrides: configOverrideEnabled,
+          paginationPosition: "both",
         });
         expect(service["http"].get).toHaveBeenCalledTimes(
           configOverrideEnabled ? 3 : 2,

@@ -1,13 +1,14 @@
 <div class="mode-container">
-  @if (appConfig.archiveWorkflowEnabled) {
+  @if (modes.length > 0) {
     <mat-button-toggle-group [value]="currentArchViewMode">
-      @for (mode of modes; track mode) {
+      @for (mode of modes; track mode.id) {
         <mat-button-toggle
           (click)="onModeChange(mode)"
-          [value]="mode"
-          [ngClass]="mode"
+          [value]="mode.id"
+          [ngClass]="mode.id"
+          [matTooltip]="mode.tooltip ?? ''"
         >
-          {{ mode | titlecase }}
+          {{ mode.label }}
         </mat-button-toggle>
       }
     </mat-button-toggle-group>
