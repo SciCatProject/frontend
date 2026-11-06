@@ -41,10 +41,7 @@ describe("0040: Dataset datafiles", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable("Cypress");
 
       cy.get("mat-row").contains("Cypress Dataset").first().click();
 
@@ -110,10 +107,7 @@ describe("0040: Dataset datafiles", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable("Cypress");
 
       cy.get("mat-row").contains("Cypress Dataset").first().click();
 
@@ -169,10 +163,7 @@ describe("0040: Dataset datafiles", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable("Cypress");
 
       cy.get("mat-row").contains("Cypress Dataset").first().click();
 
@@ -206,10 +197,7 @@ describe("0040: Dataset datafiles", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable("Cypress");
 
       cy.get("mat-row").contains("Cypress Dataset").first().click();
 
