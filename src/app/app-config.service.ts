@@ -8,8 +8,10 @@ import {
   validateAllActionConfigsIn,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { buildDefaultBatchActions } from "shared/modules/configurable-actions/configurable-actions.defaults";
+import { DEFAULT_DATASET_VIEW_MODES } from "datasets/dataset-view-modes.defaults";
 import {
   DatasetDetailComponentConfig,
+  DatasetViewsConfig,
   IngestorComponentConfig,
   LabelsLocalization,
   ListSettings,
@@ -135,6 +137,7 @@ export interface AppConfigInterface {
   archiveWorkflowEnabled: boolean;
   datasetJsonScientificMetadata: boolean;
   datasetPageSizeOptions?: number[];
+  paginationPosition?: "top" | "bottom" | "both";
   datasetReduceEnabled: boolean;
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
@@ -229,6 +232,7 @@ export interface AppConfigInterface {
   aboutSettings?: AboutSettings;
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
+  datasetViews?: DatasetViewsConfig;
   realTimeUpdatesEnabled?: boolean;
   additionalConfigs?: string[];
 }
@@ -294,6 +298,20 @@ function normalizeAdditionalConfigs(value: unknown): string[] {
     return [];
   }
   return urls;
+}
+
+/**
+ * The dataset list view toggles (Archivable, Retrievable, ...) used to be
+ * hardcoded and shown whenever archiveWorkflowEnabled was true. Keep that
+ * behavior for configs that don't set datasetViews.modes; an explicit array,
+ * including an empty one, is left untouched.
+ */
+function applyDefaultDatasetViewModes(config: AppConfigInterface): void {
+  if (!config.archiveWorkflowEnabled || config.datasetViews?.modes) return;
+  config.datasetViews = {
+    ...config.datasetViews,
+    modes: DEFAULT_DATASET_VIEW_MODES,
+  };
 }
 
 @Injectable({
@@ -404,6 +422,15 @@ export class AppConfigService {
     }
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
+
+    if (
+      config.paginationPosition !== "top" &&
+      config.paginationPosition !== "bottom" &&
+      config.paginationPosition !== "both"
+    ) {
+      config.paginationPosition = "both";
+    }
+
     if (
       "defaultMainPage" in config &&
       isMainPageConfiguration(config.defaultMainPage)
@@ -470,6 +497,7 @@ export class AppConfigService {
     }
 
     applyDefaultBatchActions(config);
+    applyDefaultDatasetViewModes(config);
     validateAllActionConfigsIn(config);
 
     this.appConfig = config;
