@@ -64,7 +64,13 @@ const reducer = createReducer(
     fromActions.connectIngestorSuccess,
     (
       state,
-      { versionResponse, userInfoResponse, authIsDisabled, healthResponse },
+      {
+        versionResponse,
+        userInfoResponse,
+        authIsDisabled,
+        healthResponse,
+        configurations,
+      },
     ): IngestorState => ({
       ...state,
       connectingBackend: false,
@@ -72,6 +78,7 @@ const reducer = createReducer(
         versionResponse,
         healthResponse,
         validEndpoint: true,
+        configurations,
       },
       ingestorAuth: {
         userInfoResponse,
