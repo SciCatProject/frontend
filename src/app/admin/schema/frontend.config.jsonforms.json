@@ -1115,6 +1115,11 @@
         },
         "elements": [
           {
+            "type": "Control",
+            "label": "Pagination position",
+            "scope": "#/properties/paginationPosition"
+          },
+          {
             "type": "Group",
             "label": "Default Datasets List Settings",
             "options": { "expandable": true },
