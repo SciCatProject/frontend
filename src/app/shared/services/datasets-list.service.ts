@@ -15,6 +15,17 @@ import { selectInstruments } from "state-management/selectors/instruments.select
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 
+export function isMetadataGroup(
+  value: unknown,
+): value is Record<string, unknown> {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    !("value" in value)
+  );
+}
+
 @Injectable()
 export class DatasetsListService implements OnDestroy {
   private subscriptions: Subscription[] = [];
@@ -110,6 +121,50 @@ export class DatasetsListService implements OnDestroy {
       return true;
     }
     return false;
+  }
+
+  prepareCsvExportColumns(
+    columns: TableField<any>[],
+    rows: object[],
+  ): TableField<any>[] {
+    return columns
+      .filter(
+        (column) =>
+          column.display !== "hidden" &&
+          column.exportable !== false &&
+          column.name !== "scientificMetadata" &&
+          column.name !== "metadata",
+      )
+      .flatMap((column) => {
+        if (!column.name.startsWith("scientificMetadata.")) {
+          return [column];
+        }
+
+        const groups = rows
+          .map((row) => lodashGet(row, column.name))
+          .filter(isMetadataGroup);
+        if (!groups.length) {
+          return [column];
+        }
+
+        const members = new Set(
+          groups.flatMap((group) =>
+            Object.keys(group).filter((key) => !isMetadataGroup(group[key])),
+          ),
+        );
+        return Array.from(members, (member) => ({
+          ...column,
+          name: `${column.name}.${member}`,
+          header: `${column.name.slice("scientificMetadata.".length)}.${member}`,
+          toExport: (row) => {
+            const group = lodashGet(row, column.name);
+            const value = isMetadataGroup(group) ? group[member] : undefined;
+            return value == null || isMetadataGroup(value)
+              ? ""
+              : this.formatNumberPipe.transform(value as any);
+          },
+        }));
+      });
   }
 
   convertSavedDatasetColumns(columns: TableColumn[]): TableField<any>[] {
