@@ -20,6 +20,7 @@ export class RowMenuComponent<T> {
   @Output() rowActionChange: EventEmitter<ContextMenuItem> =
     new EventEmitter<ContextMenuItem>();
   @Input() actionMenus: ContextMenuItem[] = [];
+  @Input() menuClass: string;
   @Input() tableSetting: TableSetting;
   @Input() rowActionMenu?: { [key: string]: ContextMenuItem };
   visibleActionMenus: ContextMenuItem[] = [];

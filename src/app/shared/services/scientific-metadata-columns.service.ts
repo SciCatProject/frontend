@@ -31,6 +31,45 @@ export class ScientificMetadataColumnsService {
     color: undefined,
   };
 
+  readonly copyNameAction: ContextMenuItem = {
+    name: "copyName",
+    text: "Copy name",
+    color: undefined,
+  };
+
+  readonly copyMachineNameAction: ContextMenuItem = {
+    name: "copyMachineName",
+    text: "Copy machine name",
+    color: undefined,
+  };
+
+  readonly copyValueAction: ContextMenuItem = {
+    name: "copyValue",
+    text: "Copy value",
+    color: undefined,
+  };
+
+  readonly copyFullValueAction: ContextMenuItem = {
+    name: "copyFullValue",
+    text: "Copy full value",
+    color: undefined,
+  };
+
+  readonly copyFullEntryAction: ContextMenuItem = {
+    name: "copyFullEntry",
+    text: "Copy full entry",
+    color: undefined,
+  };
+
+  readonly contextMenuActions: ContextMenuItem[] = [
+    this.addAsColumnAction,
+    this.copyNameAction,
+    this.copyMachineNameAction,
+    this.copyValueAction,
+    this.copyFullValueAction,
+    this.copyFullEntryAction,
+  ];
+
   constructor(private store: Store) {}
 
   private showMessage(content: string, type: MessageType) {

@@ -30,7 +30,7 @@
 <mat-tree
   class="treeView"
   [class.treeView-add-column-enabled]="
-    allowAddAsColumn && rowContextMenuItems.length > 0
+    rowContextMenuItems.length > 0
   "
   [dataSource]="dataSource"
   [treeControl]="treeControl"
@@ -43,17 +43,16 @@
   >
     <section>
       <div class="menu-cell">
-        @if (canShowAddAsColumn(node)) {
+        @if (getActionsForNode(node).length > 0) {
           <row-menu
-            [actionMenus]="rowContextMenuItems"
+            [actionMenus]="getActionsForNode(node)"
             [tableSetting]="tableSetting"
             (rowActionChange)="onRowActionChange(node, $event)"
           ></row-menu>
         }
         @if (
-          allowAddAsColumn &&
           rowContextMenuItems.length > 0 &&
-          !canShowAddAsColumn(node)
+          getActionsForNode(node).length === 0
         ) {
           <span class="menu-spacer"></span>
         }
@@ -73,7 +72,7 @@
   >
     <section>
       <div class="menu-cell">
-        @if (allowAddAsColumn && rowContextMenuItems.length > 0) {
+        @if (rowContextMenuItems.length > 0) {
           <span class="menu-spacer"></span>
         }
       </div>

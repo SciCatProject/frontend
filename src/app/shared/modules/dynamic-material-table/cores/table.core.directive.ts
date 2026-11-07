@@ -57,6 +57,8 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() public dataSource: BehaviorSubject<any[]>;
   @Input() backgroundColor: string = null;
   @Input() public rowContextMenuItems: ContextMenuItem[];
+  @Input() public rowContextMenuClass: string;
+  @Input() public rowContextMenuEnabled = true;
   @Input() defaultWidth: number = null;
   @Input() minWidth = 120;
   @Input() printConfig: PrintConfig = {};
