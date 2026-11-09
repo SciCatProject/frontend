@@ -80,9 +80,13 @@ hidden and its `where` is not applied: they see the whole view.
 List the same groups your backend treats as admins (`ADMIN_GROUPS`), so the
 list matches what they are allowed to do.
 
+## Writing `where`
+
+These apply to both the view's `where` and the checkbox `where`.
+
 ### Placeholders
 
-Both the view's `where` and the checkbox `where` can refer to the logged-in user.
+A `where` can refer to the logged-in user.
 A string value that is exactly one of these placeholders is replaced; keys and
 parts of strings are never replaced:
 
@@ -97,15 +101,38 @@ configurable action selectors (e.g. `#user.email`). A missing field becomes
 `null` and logs a console warning, which usually points to a typo in the
 config.
 
+### Related documents
+
+`where` can also filter on fields of related documents with a dotted path, e.g.
+to the datasets of the user's proposals:
+
+```json
+"checkbox": {
+  "label": "Only datasets of my proposals (PI)",
+  "where": { "proposals.pi_email": "#user.email" }
+}
+```
+
+Keep in mind:
+
+- A condition on a related field matches datasets with _at least one_ matching
+  related document. A condition on _all_ of them, e.g. all of a dataset's
+  proposals, can't be expressed.
+- Don't use a relation and one of its fields in the same query (e.g.
+  `proposals` and `proposals.type`): the backend rejects it with a path
+  collision error.
+- This needs a backend that supports related fields in the dataset `where`,
+  both for the list and for the facet counts (`fullfacet`), which also provide
+  the total used by the paginator.
+
 ### Limits
 
 - The queries go to the v4 dataset list, which only accepts these operators:
   `$in`, `$nin`, `$or`, `$and`, `$nor`, `$not`, `$eq`, `$ne`, `$gt`, `$gte`,
   `$lt`, `$lte`, `$exists`, `$regex`, `$text`. In particular `$expr` and
   `$elemMatch` are rejected.
-- Only dataset fields can be filtered by `where`. Conditions on related
-  documents, such as the PI email of a dataset's proposals, need backend
-  support for filtering on related documents.
+- Conditions on related documents use dotted paths, see
+  [Related documents](#related-documents).
 - The checkbox only narrows what is shown. The backend still decides what the
   user may do with the selected datasets.
 
