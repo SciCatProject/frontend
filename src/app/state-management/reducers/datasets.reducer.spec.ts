@@ -466,7 +466,8 @@ describe("DatasetsReducer", () => {
 
     it("should go back to the first page, keeping the page size", () => {
       const action = fromActions.setArchiveViewModeAction({
-        modeToggle: ArchViewMode.archivable,
+        modeToggle: "on-tape",
+        mode: { "datasetlifecycle.retrievable": true },
       });
       const state = fromDatasets.datasetsReducer(onThirdPage, action);
 

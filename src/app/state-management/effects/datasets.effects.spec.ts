@@ -4,7 +4,7 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
 import * as fromActions from "../actions/datasets.actions";
 import { DatasetEffects } from "./datasets.effects";
-import { ArchViewMode, FacetCounts } from "state-management/models";
+import { FacetCounts } from "state-management/models";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
@@ -321,7 +321,8 @@ describe("DatasetEffects", () => {
     it("should refetch the counts when the archive view changes", () => {
       actions = hot("-a", {
         a: fromActions.setArchiveViewModeAction({
-          modeToggle: ArchViewMode.archivable,
+          modeToggle: "on-tape",
+          mode: { "datasetlifecycle.retrievable": true },
         }),
       });
       datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
