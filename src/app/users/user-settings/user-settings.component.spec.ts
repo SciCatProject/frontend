@@ -82,7 +82,7 @@ describe("UserSettingsComponent", () => {
   });
 
   describe("#onCopy()", () => {
-    it("should copy the token to the users clipboard and dispatch a showMessageAction", () => {
+    it("should delegate copying the token to ClipboardService", () => {
       component.onCopy("test");
 
       expect(clipboardService.copyToClipboard).toHaveBeenCalledTimes(1);
