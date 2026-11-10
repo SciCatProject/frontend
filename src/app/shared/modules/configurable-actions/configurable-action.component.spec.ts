@@ -1948,6 +1948,7 @@ describe("1000: ConfigurableActionComponent", () => {
         ...archiveAction,
         variables: {
           ...archiveAction.variables,
+          archiveViewMode: "#currentArchViewMode",
           addedFrom: "#DatasetsField[addedFrom]",
         },
         enabled:
@@ -2031,36 +2032,24 @@ describe("1000: ConfigurableActionComponent", () => {
       expect(component.disabled).toBeTrue();
     });
 
-    it("1405: on the dataset list, Archive should be enabled only in the archivable view", () => {
-      createComponent(
-        archiveAction,
-        itemsWith([archivable], { currentArchViewMode: "archivable" }),
+    it("1405: on the dataset list, Archive and Retrieve should not depend on the view", () => {
+      ["all", "archivable", "retrievable", "work in progress"].forEach(
+        (mode) => {
+          createComponent(
+            archiveAction,
+            itemsWith([archivable], { currentArchViewMode: mode }),
+          );
+          expect(component.disabled).withContext(`archive ${mode}`).toBeFalse();
+
+          createComponent(
+            retrieveAction,
+            itemsWith([retrievable], { currentArchViewMode: mode }),
+          );
+          expect(component.disabled)
+            .withContext(`retrieve ${mode}`)
+            .toBeFalse();
+        },
       );
-      expect(component.disabled).toBeFalse();
-
-      ["all", "retrievable", "work in progress"].forEach((mode) => {
-        createComponent(
-          archiveAction,
-          itemsWith([archivable], { currentArchViewMode: mode }),
-        );
-        expect(component.disabled).withContext(mode).toBeTrue();
-      });
-    });
-
-    it("1406: on the dataset list, Retrieve should be enabled only in the retrievable view", () => {
-      createComponent(
-        retrieveAction,
-        itemsWith([retrievable], { currentArchViewMode: "retrievable" }),
-      );
-      expect(component.disabled).toBeFalse();
-
-      ["all", "archivable", "system error"].forEach((mode) => {
-        createComponent(
-          retrieveAction,
-          itemsWith([retrievable], { currentArchViewMode: mode }),
-        );
-        expect(component.disabled).withContext(mode).toBeTrue();
-      });
     });
 
     it("1407: in the cart (no view mode), Archive and Retrieve should depend on the lifecycle only", () => {
@@ -2118,9 +2107,7 @@ describe("1000: ConfigurableActionComponent", () => {
       size: number,
       packedSize: number,
       datasetlifecycle: Record<string, boolean> = archivable,
-      extra: Partial<ActionItems> = {},
     ): ActionItems => ({
-      ...extra,
       datasets: [
         {
           pid: "pid-0",
@@ -2161,24 +2148,6 @@ describe("1000: ConfigurableActionComponent", () => {
 
       createComponent(retrieveAction, itemsWithSizes(100, 100, retrievable));
       expect(component.tooltip).toEqual("");
-    });
-
-    it("1413: should ask to switch view on the dataset list", () => {
-      createComponent(
-        archiveAction,
-        itemsWithSizes(100, 100, archivable, { currentArchViewMode: "all" }),
-      );
-      expect(component.tooltip).toEqual(
-        "Switch to the Archivable view to archive datasets.",
-      );
-
-      createComponent(
-        retrieveAction,
-        itemsWithSizes(100, 100, retrievable, { currentArchViewMode: "all" }),
-      );
-      expect(component.tooltip).toEqual(
-        "Switch to the Retrievable view to retrieve datasets.",
-      );
     });
 
     it("1414: should explain a selection in the wrong lifecycle state", () => {
