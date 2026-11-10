@@ -43,7 +43,6 @@ import {
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { CurrentDataset } from "state-management/state/datasets.store";
-import { DEFAULT_DATASET_DETAIL_CUSTOMIZATION } from "../default-dataset-detail.configuration";
 
 const RELATION_CONFIG: Record<
   string,
@@ -135,24 +134,20 @@ export class DatasetDetailsComponent implements OnInit, OnDestroy {
       }),
     );
 
-    const configuredCustomization =
-      this.appConfig.datasetDetailComponent?.customization;
-    const customization =
-      configuredCustomization && configuredCustomization.length > 0
-        ? configuredCustomization
-        : DEFAULT_DATASET_DETAIL_CUSTOMIZATION;
-
-    const sortedDatasetView = customization
-      .map((section) => ({
-        ...section,
-        authorization: section.authorization ? [...section.authorization] : [],
-        visible: section.visible ?? true,
-        fields:
-          section.fields && Array.isArray(section.fields)
-            ? [...section.fields].sort((a, b) => a.order - b.order)
-            : section.fields,
-      }))
-      .sort((a, b) => a.order - b.order);
+    const sortedDatasetView =
+      this.appConfig.datasetDetailComponent.customization
+        .map((section) => ({
+          ...section,
+          authorization: section.authorization
+            ? [...section.authorization]
+            : [],
+          visible: section.visible ?? true,
+          fields:
+            section.fields && Array.isArray(section.fields)
+              ? [...section.fields].sort((a, b) => a.order - b.order)
+              : section.fields,
+        }))
+        .sort((a, b) => a.order - b.order);
 
     this.datasetView$ = combineLatest([this.dataset$, this.userGroups$]).pipe(
       map(([dataset, userGroups]) =>

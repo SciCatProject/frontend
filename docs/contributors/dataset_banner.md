@@ -78,7 +78,6 @@ The banner is rendered as a section of the dataset detail page's customizable la
 
 ```json
 "datasetDetailComponent": {
-  "enableCustomizedComponent": true,
   "customization": [
     {
       "type": "statusBanner",

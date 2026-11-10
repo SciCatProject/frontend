@@ -76,7 +76,6 @@ The `restrictedIconVisible` property is **not** a configuration option; it is co
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "tileRestrictedIconVisible": true,
     "tileRestrictedIconGroups": ["admin", "scientists"],
     "customization": [...]
@@ -112,7 +111,6 @@ Added to `datasetDetailComponent` object itself:
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "authorization": ["admin", "scientists"],
     "customization": [...]
   }
@@ -128,7 +126,6 @@ Configured on each customization item within the `customization` array:
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "customization": [
       {
         "type": "regular",
@@ -157,7 +154,6 @@ Configured on each customization item within the `customization` array:
 
 | Key | Type | Required | Default | Description |
 |-----|------|----------|---------|-------------|
-| `datasetDetailComponent.enableCustomizedComponent` | boolean | No | — | **Deprecated.** Retained for backward compatibility only; omit it in new configurations. |
 | `datasetDetailComponent.authorization` | string[] | No | `null` | Global authorization for all tiles in the component |
 | `datasetDetailComponent.customization[].authorization` | string[] | No | `[]` | Tile-specific authorization (empty array means no restriction) |
 | `datasetDetailComponent.customization[].visible` | boolean | No | `true` | Controls whether the tile is visible (use `false` to hide) |
@@ -179,7 +175,6 @@ The backend provides the frontend configuration. This is the primary configurati
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "authorization": ["admin"],
     "customization": [...]
   }
@@ -196,8 +191,6 @@ Used for environment-specific overrides without modifying the main configuration
 
 ```typescript
 export interface DatasetDetailComponentConfig {
-  /** @deprecated The dataset-details component is now the standard implementation. */
-  enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
   authorization?: string[];  // Global authorization for all tiles
   tileRestrictedIconVisible?: boolean;  // Show lock icon on restricted tiles
@@ -205,7 +198,7 @@ export interface DatasetDetailComponentConfig {
 }
 
 export interface AppConfig {
-  datasetDetailComponent?: DatasetDetailComponentConfig;
+  datasetDetailComponent: DatasetDetailComponentConfig;
 }
 
 export interface CustomizationItem {
@@ -229,7 +222,6 @@ export interface CustomizationItem {
 **Path**: Admin Dashboard > Frontend Config > Dataset Detail Component section
 
 The admin UI provides form controls through JSONForms:
-- **Enable Customized Component**: Toggle switch for `enableCustomizedComponent` (**deprecated**; retained only for backward compatibility)
 - **Show Restricted Tiles Indicator**: Toggle switch for `datasetDetailComponent.tileRestrictedIconVisible`
 - **Restricted Icon Groups**: Array of strings input for `datasetDetailComponent.tileRestrictedIconGroups`
 - **Authorization**: Array of strings input for global tile authorization
@@ -313,7 +305,6 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
 "datasetDetailComponent": {
   "type": "object",
   "properties": {
-    "enableCustomizedComponent": { "type": "boolean" },
     "authorization": {
       "type": "array",
       "items": { "type": "string" }
@@ -395,7 +386,6 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
   "elements": [
     {
       "type": "Control",
-      "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
     },
     {
       "type": "Control",
@@ -488,7 +478,6 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "authorization": ["admin", "data-managers"],
     "customization": [...]
   }
@@ -514,7 +503,6 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "customization": [
       {
         "type": "regular",
@@ -554,7 +542,6 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "authorization": ["admin", "scientists"],
     "customization": [
       {
@@ -799,7 +786,7 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ### Q: Can I use authorization without enabling customized components?
 
-**A**: No. The `authorization` field is only applicable when `enableCustomizedComponent` is set to `true`. The configurable dataset details component is always used. Tile-level authorization applies to configured sections; the built-in default layout has no section restrictions.
+**A**: No. The `authorization` field is only applicable when the configurable dataset details component is used. The configurable dataset details component is always used. Tile-level authorization applies to configured sections; the built-in default layout has no section restrictions.
 
 ### Q: Can I use both global and tile-level authorization?
 
@@ -834,7 +821,6 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "tileRestrictedIconVisible": true,
     "tileRestrictedIconGroups": ["admin", "scientists"],
     "customization": [...]
@@ -862,7 +848,7 @@ When enabled, tiles with restricted access (non-empty authorization array define
 
 ### Q: Can I use this feature with the default (non-customized) dataset detail view?
 
-**A**: No. Authorization only works when `enableCustomizedComponent` is `true` and you have defined custom tiles in the `customization` array. The built-in default layout does not define tile-level authorization; add `authorization` to a configured section to restrict it.
+**A**: No. Authorization only works when you have defined custom tiles in the `customization` array. The built-in default layout does not define tile-level authorization; add `authorization` to a configured section to restrict it.
 
 ### Q: How do I migrate from an old configuration?
 

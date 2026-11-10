@@ -9,7 +9,6 @@ The frontend configuration contains a `datasetDetailComponent` default layout in
 ```json
 {
   "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
     "customization": [
       {
         "type": "regular",
@@ -28,15 +27,15 @@ The frontend configuration contains a `datasetDetailComponent` default layout in
 }
 ```
 
-The complete default is intentionally kept in the frontend configuration. The component also uses the same built-in layout when `customization` is missing or empty, which keeps deployments with a minimal backend configuration compatible.
+The complete default is intentionally kept in the frontend configuration. This configuration is mandatory: if `datasetDetailComponent` or its non-empty `customization` array is missing or invalid, application startup fails with a configuration error.
 
-> **Deprecated:** `datasetDetailComponent.enableCustomizedComponent` is retained only for backward compatibility. The `dataset-details` component is now the standard implementation. New configurations should omit this option; existing `false` values continue to select the legacy implementation temporarily.
+> `datasetDetailComponent` is mandatory. The `dataset-details` component is always used, and its configured layout must be supplied through `customization`.
 
 ## Migration
 
-1. Remove any `enableCustomizedComponent: false` setting used solely to select the old page.
+1. Remove the obsolete `enableCustomizedComponent` setting from existing configurations.
 2. Start from the `datasetDetailComponent` block in `src/assets/config.json` (or `CI/e2e/frontend.config.e2e.json` for the end-to-end configuration).
-3. Omit the deprecated `enableCustomizedComponent` option and customize the `customization` sections as required.
+3. Customize the `customization` sections as required.
 4. Do not add a separate static dataset details component; all new layout changes belong in the configuration.
 
-The `datasetDetailComponent` name remains the configuration API for backward compatibility. The `enableCustomizedComponent` option is **deprecated** and retained only as a compatibility field. It should not be used in new configurations.
+The `datasetDetailComponent` configuration is mandatory. Missing or invalid configuration causes the application to fail during startup.
