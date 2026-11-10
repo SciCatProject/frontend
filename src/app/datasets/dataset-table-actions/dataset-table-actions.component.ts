@@ -35,6 +35,7 @@ import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   buildViewModeQuery,
   checkboxAppliesTo,
+  viewModeNeedsProfile,
   ViewModeUser,
 } from "datasets/dataset-view-modes.utils";
 
@@ -104,8 +105,14 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearSelectionAction());
   }
 
-  get profileLoaded(): boolean {
-    return !!this.user;
+  isModeDisabled(mode: DatasetViewMode): boolean {
+    return !this.user && viewModeNeedsProfile(mode);
+  }
+
+  modeTooltip(mode: DatasetViewMode): string {
+    return this.isModeDisabled(mode)
+      ? "Available once your user profile has loaded"
+      : (mode.tooltip ?? "");
   }
 
   get selectedMode(): DatasetViewMode | undefined {
@@ -126,6 +133,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
    * @param mode
    */
   onModeChange(mode: DatasetViewMode): void {
+    if (this.isModeDisabled(mode)) return;
     const checked =
       checkboxAppliesTo(mode, this.user) && mode.checkbox?.default !== false;
     this.setViewMode(mode, checked);

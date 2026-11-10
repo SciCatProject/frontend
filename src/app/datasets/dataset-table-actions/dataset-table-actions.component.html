@@ -1,15 +1,13 @@
 <div class="mode-container">
   @if (modes.length > 0) {
-    <mat-button-toggle-group
-      [value]="currentArchViewMode"
-      [disabled]="!profileLoaded"
-    >
+    <mat-button-toggle-group [value]="currentArchViewMode">
       @for (mode of modes; track mode.id) {
         <mat-button-toggle
           (click)="onModeChange(mode)"
           [value]="mode.id"
           [ngClass]="mode.id"
-          [matTooltip]="mode.tooltip ?? ''"
+          [disabled]="isModeDisabled(mode)"
+          [matTooltip]="modeTooltip(mode)"
         >
           {{ mode.label }}
         </mat-button-toggle>

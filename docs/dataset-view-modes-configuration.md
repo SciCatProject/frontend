@@ -97,6 +97,10 @@ configurable action selectors (e.g. `#user.email`). A missing field becomes
 `null` and logs a console warning, which usually points to a typo in the
 config.
 
+Views that use placeholders or have a checkbox are disabled until the user's
+profile has loaded. Other views can be picked right away, and stay usable even
+if the profile never loads.
+
 ### Limits
 
 - The queries go to the v4 dataset list, which only accepts these operators:

@@ -283,12 +283,32 @@ describe("DatasetTableActionsComponent", () => {
       ]);
     });
 
-    it("should disable the view buttons until the profile has loaded", () => {
+    it("should disable only the views that need the profile until it has loaded", () => {
+      const all = component.modes[0];
       component["user"] = null;
-      expect(component.profileLoaded).toBeFalse();
+      expect(component.isModeDisabled(all)).toBeFalse();
+      expect(component.isModeDisabled(owned)).toBeTrue();
+      expect(component.modeTooltip(owned)).toContain("profile");
 
       component["user"] = { accessGroups: ["p1234"] };
-      expect(component.profileLoaded).toBeTrue();
+      expect(component.isModeDisabled(owned)).toBeFalse();
+    });
+
+    it("should ignore a disabled view, but apply the others, without a profile", () => {
+      component["user"] = null;
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onModeChange(owned);
+      expect(dispatchSpy).not.toHaveBeenCalled();
+
+      component.onModeChange(component.modes[0]);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({
+          modeToggle: "all",
+          mode: {},
+          checked: false,
+        }),
+      );
     });
 
     it("should show the checkbox only for views that configure one, keeping its space otherwise", () => {

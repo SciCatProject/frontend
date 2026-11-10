@@ -12,7 +12,6 @@ const USER = "#user.";
 const PLACEHOLDER = /^#user\.[\w-]+(?:\.[\w-]+|\[\d+\])*$/;
 
 function resolvePlaceholder(value: string, user?: ViewModeUser | null) {
-  // the profile hasn't loaded yet, the query is rebuilt once it has
   if (!user) return null;
   const resolved = get(user, value.slice(USER.length));
   if (resolved !== undefined) return resolved;
@@ -29,6 +28,17 @@ export function resolveUserPlaceholders(
       ? resolvePlaceholder(value, user)
       : undefined,
   );
+}
+
+function hasUserPlaceholder(value: unknown): boolean {
+  if (typeof value === "string") return PLACEHOLDER.test(value);
+  if (value && typeof value === "object")
+    return Object.values(value).some(hasUserPlaceholder);
+  return false;
+}
+
+export function viewModeNeedsProfile(viewMode: DatasetViewMode): boolean {
+  return !!viewMode.checkbox || hasUserPlaceholder(viewMode.where);
 }
 
 export function checkboxAppliesTo(

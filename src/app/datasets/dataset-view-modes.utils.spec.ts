@@ -2,6 +2,7 @@ import {
   buildViewModeQuery,
   checkboxAppliesTo,
   resolveUserPlaceholders,
+  viewModeNeedsProfile,
 } from "./dataset-view-modes.utils";
 import { DatasetViewMode } from "state-management/models";
 
@@ -180,6 +181,39 @@ describe("dataset view modes utils", () => {
       expect(
         checkboxAppliesTo({ id: "a", label: "A", where: {} }, normalUser),
       ).toBeFalse();
+    });
+  });
+
+  describe("viewModeNeedsProfile", () => {
+    it("should be false for views without placeholders or a checkbox", () => {
+      expect(
+        viewModeNeedsProfile({
+          id: "a",
+          label: "A",
+          where: { "datasetlifecycle.archivable": true, tags: ["#user"] },
+        }),
+      ).toBeFalse();
+    });
+
+    it("should be true for views with a placeholder, however deeply nested", () => {
+      expect(
+        viewModeNeedsProfile({
+          id: "mine",
+          label: "Mine",
+          where: { $or: [{ ownerGroup: { $in: "#user.accessGroups" } }] },
+        }),
+      ).toBeTrue();
+    });
+
+    it("should be true for views with a checkbox", () => {
+      expect(
+        viewModeNeedsProfile({
+          id: "a",
+          label: "A",
+          where: {},
+          checkbox: { label: "Archivable", where: { archivable: true } },
+        }),
+      ).toBeTrue();
     });
   });
 });
