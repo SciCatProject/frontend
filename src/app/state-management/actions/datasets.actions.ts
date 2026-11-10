@@ -6,7 +6,6 @@ import {
   OutputDatasetDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
-  ArchViewMode,
   DatasetFilters,
   DateRangeFilter,
   FacetCounts,
@@ -103,7 +102,12 @@ export const prefillBatchCompleteAction = createAction(
   "[Dataset] Prefill Batch Complete",
   props<{ batch: PartialOutputDatasetDto[] }>(),
 );
-export const addToBatchAction = createAction("[Dataset] Add To Batch");
+// addedFrom: where the selection comes from, e.g. the dataset list's view
+// mode or "publishedData" (see BatchDataset in datasets.store.ts)
+export const addToBatchAction = createAction(
+  "[Dataset] Add To Batch",
+  props<{ addedFrom?: string }>(),
+);
 export const addCurrentToBatchAction = createAction(
   "[Dataset] Add Current To Batch",
 );
@@ -259,7 +263,7 @@ export const setPidTermsAction = createAction(
 );
 export const setArchiveViewModeAction = createAction(
   "[Dataset] Set Archive View Mode",
-  props<{ modeToggle: ArchViewMode }>(),
+  props<{ modeToggle: string; mode: Record<string, unknown> }>(),
 );
 export const setPublicViewModeAction = createAction(
   "[Dataset] Set Public View Mode",

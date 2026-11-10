@@ -2,10 +2,10 @@ import { Action, createReducer, on } from "@ngrx/store";
 import {
   initialDatasetState,
   DatasetState,
+  BATCH_ADDED_FROM_DETAILS,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
 import { fetchUserSettingsCompleteAction } from "state-management/actions/user.actions";
-import { ArchViewMode, FilterCondition } from "state-management/models";
 import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
 import deepEqual from "deep-equal";
 
@@ -136,11 +136,11 @@ const reducer = createReducer(
     ...state,
     batch,
   })),
-  on(fromActions.addToBatchAction, (state) => {
+  on(fromActions.addToBatchAction, (state, { addedFrom }) => {
     const batchedPids = state.batch.map((dataset) => dataset.pid);
-    const addition = state.selectedSets.filter(
-      (dataset) => batchedPids.indexOf(dataset.pid) === -1,
-    );
+    const addition = state.selectedSets
+      .filter((dataset) => batchedPids.indexOf(dataset.pid) === -1)
+      .map((dataset) => (addedFrom ? { ...dataset, addedFrom } : dataset));
     const batch = [...state.batch, ...addition];
     return { ...state, batch };
   }),
@@ -151,7 +151,10 @@ const reducer = createReducer(
     if (state.batch.some((d) => d.pid === state.currentSet.pid)) {
       return state;
     }
-    const batch = [...state.batch, state.currentSet];
+    const batch = [
+      ...state.batch,
+      { ...state.currentSet, addedFrom: BATCH_ADDED_FROM_DETAILS },
+    ];
     return { ...state, batch };
   }),
   on(fromActions.storeBatchAction, (state, { batch }) => ({ ...state, batch })),
@@ -293,72 +296,7 @@ const reducer = createReducer(
 
   on(
     fromActions.setArchiveViewModeAction,
-    (state, { modeToggle }): DatasetState => {
-      let mode = {};
-
-      switch (modeToggle) {
-        case ArchViewMode.all:
-          mode = {};
-          break;
-        case ArchViewMode.archivable:
-          mode = {
-            "datasetlifecycle.archivable": true,
-            "datasetlifecycle.retrievable": false,
-          };
-          break;
-        case ArchViewMode.retrievable:
-          mode = {
-            "datasetlifecycle.retrievable": true,
-            "datasetlifecycle.archivable": false,
-          };
-          break;
-        case ArchViewMode.work_in_progress:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.retrievable": false,
-                "datasetlifecycle.archivable": false,
-                "datasetlifecycle.archiveStatusMessage": {
-                  $ne: "scheduleArchiveJobFailed",
-                },
-                "datasetlifecycle.retrieveStatusMessage": {
-                  $ne: "scheduleRetrieveJobFailed",
-                },
-              },
-            ],
-          };
-          break;
-        case ArchViewMode.system_error:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.retrievable": true,
-                "datasetlifecycle.archivable": true,
-              },
-              {
-                "datasetlifecycle.archiveStatusMessage":
-                  "scheduleArchiveJobFailed",
-              },
-              {
-                "datasetlifecycle.retrieveStatusMessage":
-                  "scheduleRetrieveJobFailed",
-              },
-            ],
-          };
-          break;
-        case ArchViewMode.user_error:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.archiveStatusMessage": "missingFilesError",
-              },
-            ],
-          };
-          break;
-        default: {
-          break;
-        }
-      }
+    (state, { modeToggle, mode }): DatasetState => {
       const filters = { ...state.filters, skip: 0, mode, modeToggle };
       return { ...state, filters };
     },

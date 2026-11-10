@@ -21,6 +21,16 @@
         >
           cloud_off
         </mat-icon>
+      } @else if (realTimeEnabled && eventsService.evicted$ | async) {
+        <mat-icon
+          class="connection-error-icon"
+          matTooltip="Live updates paused: on in too many tabs. Toggling will pause your oldest tab."
+          matTooltipPosition="above"
+          aria-label="Live updates paused: on in too many tabs. Toggling will pause your oldest tab."
+          data-cy="live-updates-evicted"
+        >
+          sync_disabled
+        </mat-icon>
       }
     </div>
   }
@@ -72,7 +82,11 @@
       </mat-form-field>
     </div>
   }
-  @if (pagination) {
+  @if (
+    pagination &&
+    (appConfig.paginationPosition === "top" ||
+      appConfig.paginationPosition === "both")
+  ) {
     <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
       <mat-paginator
         class="datasets-paginator datasets-header-paginator"
@@ -145,7 +159,11 @@
     </ng-container>
 
     <!-- Table Columns -->
-    @for (column of columns; track trackColumn($index, column); let i = $index) {
+    @for (
+      column of columns;
+      track trackColumn($index, column);
+      let i = $index
+    ) {
       <ng-container
         [matColumnDef]="column.name"
         [sticky]="column.sticky === 'start' ? true : false"
@@ -222,11 +240,34 @@
         >
           <!-- The render image is specific for the dataset table as the "thumbnail" pipe is designed to work only with datasets. Maybe this should be reviewed later and have a more general solution where we render images in columns -->
           @if (column.renderImage) {
+            @let thumbnail = row.pid | thumbnail | async;
             <img
-              src="{{ row.pid | thumbnail | async }}"
+              src="{{ thumbnail }}"
               height="42px"
               loading="lazy"
+              cdkOverlayOrigin
+              #thumbnailOrigin="cdkOverlayOrigin"
+              (mouseenter)="onHoverCardTriggerEnter(row, column)"
+              (mouseleave)="onHoverCardTriggerLeave(row, column)"
             />
+            <ng-template
+              cdkConnectedOverlay
+              [cdkConnectedOverlayOrigin]="thumbnailOrigin"
+              [cdkConnectedOverlayOpen]="
+                !!thumbnail && isHoverCardOpen(row, column)
+              "
+              [cdkConnectedOverlayPositions]="thumbnailPreviewPositions"
+              [cdkConnectedOverlayPush]="true"
+              [cdkConnectedOverlayViewportMargin]="8"
+              cdkConnectedOverlayPanelClass="thumbnail-preview-pane"
+            >
+              <img
+                class="thumbnail-preview"
+                data-cy="thumbnail-preview"
+                [src]="thumbnail"
+                alt=""
+              />
+            </ng-template>
           } @else {
             @if (column.customRender) {
               @if (
@@ -572,7 +613,11 @@
     }
   }
 </div>
-@if (pagination) {
+@if (
+  pagination &&
+  (appConfig.paginationPosition === "bottom" ||
+    appConfig.paginationPosition === "both")
+) {
   <div class="paginator-container" [class.is-loading]="pagination?.isLoading">
     <mat-paginator
       class="datasets-paginator datasets-footer-paginator"
