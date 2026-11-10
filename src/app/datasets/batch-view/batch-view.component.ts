@@ -6,6 +6,7 @@ import {
   appendToDatasetArrayFieldAction,
   clearBatchAction,
   prefillBatchAction,
+  refreshBatchAction,
   removeFromBatchAction,
   storeBatchAction,
 } from "state-management/actions/datasets.actions";
@@ -296,6 +297,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
 
     this.store.dispatch(prefillBatchAction());
+    this.store.dispatch(refreshBatchAction());
     this.subscriptions.push(
       this.batch$.subscribe((result) => {
         if (result) {

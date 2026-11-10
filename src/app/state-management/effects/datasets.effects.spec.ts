@@ -10,6 +10,7 @@ import {
   selectFullfacetParams,
   selectCurrentDataset,
   selectRelatedDatasetsFilters,
+  selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
 import {
   loadingAction,
@@ -96,6 +97,10 @@ describe("DatasetEffects", () => {
               },
             },
             { selector: selectFullfacetParams, value: {} },
+            {
+              selector: selectDatasetsInBatch,
+              value: [{ pid: "pid-1" }, { pid: "pid-2" }],
+            },
             { selector: selectCurrentUser, value: { id: "testUser" } },
           ],
         }),
@@ -211,6 +216,37 @@ describe("DatasetEffects", () => {
 
       const expected = cold("-----b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
+    });
+  });
+
+  describe("refreshBatch$", () => {
+    it("should fetch the lifecycle of the datasets in the batch", () => {
+      const datasets = [
+        { pid: "pid-1", datasetlifecycle: { archivable: false } },
+      ] as any[];
+      const action = fromActions.refreshBatchAction();
+      const outcome = fromActions.refreshBatchCompleteAction({ datasets });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: datasets });
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.refreshBatch$).toBeObservable(expected);
+      expect(
+        JSON.parse(
+          datasetsV4Service.datasetsV4ControllerFindAllV4.calls.mostRecent()
+            .args[0] as string,
+        ).where,
+      ).toEqual({ pid: { $in: ["pid-1", "pid-2"] } });
+    });
+
+    it("should dispatch nothing if the request fails", () => {
+      actions = hot("-a", { a: fromActions.refreshBatchAction() });
+      const response = cold("-#", {});
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
+
+      expect(effects.refreshBatch$).toBeObservable(cold("---"));
     });
   });
 

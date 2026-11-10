@@ -31,7 +31,7 @@ import {
   tap,
   filter,
 } from "rxjs/operators";
-import { of } from "rxjs";
+import { EMPTY, of } from "rxjs";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
@@ -578,6 +578,31 @@ export class DatasetEffects {
     );
   });
 
+  refreshBatch$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.refreshBatchAction),
+      concatLatestFrom(() => [this.datasetsInBatch$, this.currentUser$]),
+      filter(([, batch, user]) => user != null && batch.length > 0),
+      switchMap(([, batch]) => {
+        const pids = batch.map((dataset) => dataset.pid);
+        const filter = {
+          where: { pid: { $in: pids } },
+          fields: ["pid", "datasetlifecycle"],
+          limits: { limit: pids.length },
+        };
+        return this.datasetsV4Service
+          .datasetsV4ControllerFindAllV4(JSON.stringify(filter))
+          .pipe(
+            map((datasets) =>
+              fromActions.refreshBatchCompleteAction({ datasets }),
+            ),
+            // keep the stored lifecycle if the refresh fails
+            catchError(() => EMPTY),
+          );
+      }),
+    );
+  });
+
   storeBatch$ = createEffect(
     () => {
       return this.actions$.pipe(
@@ -585,6 +610,7 @@ export class DatasetEffects {
           fromActions.addToBatchAction,
           fromActions.addCurrentToBatchAction,
           fromActions.storeBatchAction,
+          fromActions.refreshBatchCompleteAction,
           fromActions.removeFromBatchAction,
           fromActions.clearBatchAction,
         ),

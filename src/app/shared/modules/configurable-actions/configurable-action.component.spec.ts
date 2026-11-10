@@ -2111,8 +2111,24 @@ describe("1000: ConfigurableActionComponent", () => {
   describe("1410: default batch actions (Archive/Retrieve) disabled tooltips", () => {
     const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
 
-    const itemsWithSizes = (size: number, packedSize: number): ActionItems => ({
-      datasets: [{ pid: "pid-0", size, packedSize } as ActionItemDataset],
+    const archivable = { archivable: true, retrievable: false };
+    const retrievable = { archivable: false, retrievable: true };
+
+    const itemsWithSizes = (
+      size: number,
+      packedSize: number,
+      datasetlifecycle: Record<string, boolean> = archivable,
+      extra: Partial<ActionItems> = {},
+    ): ActionItems => ({
+      ...extra,
+      datasets: [
+        {
+          pid: "pid-0",
+          size,
+          packedSize,
+          datasetlifecycle,
+        } as ActionItemDataset,
+      ],
     });
 
     it("1410: should ask to select datasets when nothing is selected", () => {
@@ -2133,7 +2149,7 @@ describe("1000: ConfigurableActionComponent", () => {
         "The selected datasets have a total size of 0 bytes, so there is nothing to archive.",
       );
 
-      createComponent(retrieveAction, itemsWithSizes(0, 0));
+      createComponent(retrieveAction, itemsWithSizes(0, 0, retrievable));
       expect(component.tooltip).toEqual(
         "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve.",
       );
@@ -2143,8 +2159,38 @@ describe("1000: ConfigurableActionComponent", () => {
       createComponent(archiveAction, itemsWithSizes(100, 100));
       expect(component.tooltip).toEqual("");
 
-      createComponent(retrieveAction, itemsWithSizes(100, 100));
+      createComponent(retrieveAction, itemsWithSizes(100, 100, retrievable));
       expect(component.tooltip).toEqual("");
+    });
+
+    it("1413: should ask to switch view on the dataset list", () => {
+      createComponent(
+        archiveAction,
+        itemsWithSizes(100, 100, archivable, { currentArchViewMode: "all" }),
+      );
+      expect(component.tooltip).toEqual(
+        "Switch to the Archivable view to archive datasets.",
+      );
+
+      createComponent(
+        retrieveAction,
+        itemsWithSizes(100, 100, retrievable, { currentArchViewMode: "all" }),
+      );
+      expect(component.tooltip).toEqual(
+        "Switch to the Retrievable view to retrieve datasets.",
+      );
+    });
+
+    it("1414: should explain a selection in the wrong lifecycle state", () => {
+      createComponent(archiveAction, itemsWithSizes(100, 100, retrievable));
+      expect(component.tooltip).toEqual(
+        "Some of the selected datasets are not archivable.",
+      );
+
+      createComponent(retrieveAction, itemsWithSizes(100, 100, archivable));
+      expect(component.tooltip).toEqual(
+        "Some of the selected datasets are not retrievable.",
+      );
     });
   });
 

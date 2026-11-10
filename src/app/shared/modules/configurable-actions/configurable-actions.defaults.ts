@@ -18,10 +18,10 @@ import { ActionConfig } from "./configurable-action.interfaces";
  * Both actions are always visible and are enabled only when every selected
  * dataset is in the matching lifecycle state, using the same conditions as
  * the "archivable" and "retrievable" archive view modes (see
- * setArchiveViewModeAction in datasets.reducer.ts). On the dataset list they
- * are additionally enabled only in their matching view mode; they used to be
- * hidden outside it, so users had to know to switch view before the buttons
- * appeared.
+ * DEFAULT_DATASET_VIEW_MODES in dataset-view-modes.defaults.ts). On the
+ * dataset list they are additionally enabled only in their matching view
+ * mode; they used to be hidden outside it, so users had to know to switch
+ * view before the buttons appeared.
  *
  * `#currentArchViewMode` is only provided by dataset-table-actions; in the
  * cart (batch-view) it resolves to the selector text itself, so that entry
@@ -76,7 +76,7 @@ export function buildDefaultBatchActions(
           },
           {
             condition:
-              "@lifecycles.every((l) => l?.archivable === true && l?.retrievable !== true)",
+              "@lifecycles.every((l) => l?.archivable === true && l?.retrievable === false)",
             disabledTooltip:
               "Some of the selected datasets are not archivable.",
           },
@@ -140,7 +140,7 @@ export function buildDefaultBatchActions(
           },
           {
             condition:
-              "@lifecycles.every((l) => l?.retrievable === true && l?.archivable !== true)",
+              "@lifecycles.every((l) => l?.retrievable === true && l?.archivable === false)",
             disabledTooltip:
               "Some of the selected datasets are not retrievable.",
           },
