@@ -18,14 +18,10 @@ import { ActionConfig } from "./configurable-action.interfaces";
  * Both actions are always visible and are enabled only when every selected
  * dataset is in the matching lifecycle state, using the same conditions as
  * the "archivable" and "retrievable" archive view modes (see
- * DEFAULT_DATASET_VIEW_MODES in dataset-view-modes.defaults.ts). On the
- * dataset list they are additionally enabled only in their matching view
- * mode; they used to be hidden outside it, so users had to know to switch
- * view before the buttons appeared.
- *
- * `#currentArchViewMode` is only provided by dataset-table-actions; in the
- * cart (batch-view) it resolves to the selector text itself, so that entry
- * keeps the actions usable there on the lifecycle checks alone.
+ * DEFAULT_DATASET_VIEW_MODES in dataset-view-modes.defaults.ts). They don't
+ * depend on the dataset list's current view: they used to be hidden outside
+ * their matching view, so users had to know to switch view before the
+ * buttons appeared.
  */
 export function buildDefaultBatchActions(
   retrieveDestinationOptions: DialogOptionData[],
@@ -53,7 +49,6 @@ export function buildDefaultBatchActions(
         pids: "#DatasetsPid",
         datasetList: "#DatasetsPidEmptyFilesMap",
         lifecycles: "#DatasetsField[datasetlifecycle]",
-        archiveViewMode: "#currentArchViewMode",
         totalSize: "#DatasetsTotalSize",
       },
       dialog: {
@@ -67,12 +62,6 @@ export function buildDefaultBatchActions(
           {
             condition: "#Length(@pids) > 0",
             disabledTooltip: "Select one or more datasets to archive.",
-          },
-          {
-            condition:
-              "['archivable', '#currentArchViewMode'].includes(@archiveViewMode)",
-            disabledTooltip:
-              "Switch to the Archivable view to archive datasets.",
           },
           {
             condition:
@@ -109,7 +98,6 @@ export function buildDefaultBatchActions(
         pids: "#DatasetsPid",
         datasetList: "#DatasetsPidEmptyFilesMap",
         lifecycles: "#DatasetsField[datasetlifecycle]",
-        archiveViewMode: "#currentArchViewMode",
         totalPackedSize: "#DatasetsTotalPackedSize",
       },
       dialog: {
@@ -131,12 +119,6 @@ export function buildDefaultBatchActions(
           {
             condition: "#Length(@pids) > 0",
             disabledTooltip: "Select one or more datasets to retrieve.",
-          },
-          {
-            condition:
-              "['retrievable', '#currentArchViewMode'].includes(@archiveViewMode)",
-            disabledTooltip:
-              "Switch to the Retrievable view to retrieve datasets.",
           },
           {
             condition:
