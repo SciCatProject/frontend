@@ -2,6 +2,7 @@ import {
   ACTION_TYPES,
   ActionConfig,
   isActionType,
+  normalizeEnabled,
   validateActionConfigs,
   validateAllActionConfigsIn,
 } from "./configurable-action.interfaces";
@@ -17,6 +18,46 @@ describe("configurable-action.interfaces", () => {
     it("returns false for unknown values", () => {
       expect(isActionType("not-a-real-type")).toBeFalse();
       expect(isActionType(undefined)).toBeFalse();
+    });
+  });
+
+  describe("normalizeEnabled", () => {
+    const never = { conditions: [{ condition: "false" }] };
+
+    it("turns a string into a single condition", () => {
+      expect(normalizeEnabled({ enabled: "@a > 0" })).toEqual({
+        conditions: [{ condition: "@a > 0" }],
+      });
+    });
+
+    it("keeps the conditions form as is", () => {
+      const enabled = {
+        conditions: [{ condition: "@a", disabledTooltip: "No a" }],
+        enabledTooltip: "May fail",
+      };
+      expect(normalizeEnabled({ enabled })).toBe(enabled);
+    });
+
+    it("turns booleans and missing values into no or a false condition", () => {
+      expect(normalizeEnabled({})).toEqual({ conditions: [] });
+      expect(normalizeEnabled({ enabled: "" })).toEqual({ conditions: [] });
+      expect(normalizeEnabled({ enabled: true })).toEqual({ conditions: [] });
+      expect(normalizeEnabled({ enabled: false })).toEqual(never);
+    });
+
+    it("covers disabled with the previous precedence", () => {
+      expect(normalizeEnabled({ enabled: "@a", disabled: true })).toEqual(
+        never,
+      );
+      expect(normalizeEnabled({ enabled: false, disabled: false })).toEqual({
+        conditions: [],
+      });
+      expect(normalizeEnabled({ enabled: "@a", disabled: "@b" })).toEqual({
+        conditions: [{ condition: "@a" }],
+      });
+      expect(normalizeEnabled({ disabled: "@b" })).toEqual({
+        conditions: [{ condition: "!(@b)" }],
+      });
     });
   });
 
@@ -65,6 +106,49 @@ describe("configurable-action.interfaces", () => {
       );
       expect(warnSpy).toHaveBeenCalledWith(
         jasmine.stringMatching(/unknown onSuccess type "unsupported"/),
+      );
+    });
+
+    it("does not warn for valid enabled conditions", () => {
+      validateActionConfigs(
+        [
+          {
+            ...baseAction,
+            enabled: {
+              conditions: [
+                { condition: "true", disabledTooltip: "Not now" },
+                { condition: "true" },
+              ],
+              enabledTooltip: "May fail",
+            },
+          },
+        ],
+        "batchActions",
+      );
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it("warns when enabled conditions are malformed", () => {
+      validateActionConfigs(
+        [
+          {
+            ...baseAction,
+            enabled: [{ condition: "true" }],
+          } as unknown as ActionConfig,
+          {
+            ...baseAction,
+            enabled: { conditions: [{ when: "true" }] },
+          } as unknown as ActionConfig,
+          {
+            ...baseAction,
+            enabled: { conditions: [], enabledTooltip: 1 },
+          } as unknown as ActionConfig,
+        ],
+        "batchActions",
+      );
+      expect(warnSpy).toHaveBeenCalledTimes(3);
+      expect(warnSpy).toHaveBeenCalledWith(
+        jasmine.stringContaining("invalid enabled conditions"),
       );
     });
 

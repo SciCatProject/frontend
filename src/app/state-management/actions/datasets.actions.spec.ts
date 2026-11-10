@@ -241,8 +241,11 @@ describe("Dataset Actions", () => {
 
   describe("addToBatchAction", () => {
     it("should create an action", () => {
-      const action = fromActions.addToBatchAction();
-      expect({ ...action }).toEqual({ type: "[Dataset] Add To Batch" });
+      const action = fromActions.addToBatchAction({ addedFrom: "archivable" });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Add To Batch",
+        addedFrom: "archivable",
+      });
     });
   });
 
@@ -609,10 +612,12 @@ describe("Dataset Actions", () => {
   describe("setArchViewModeAction", () => {
     it("should create an action", () => {
       const modeToggle = ArchViewMode.all;
-      const action = fromActions.setArchiveViewModeAction({ modeToggle });
+      const mode = {};
+      const action = fromActions.setArchiveViewModeAction({ modeToggle, mode });
       expect({ ...action }).toEqual({
         type: "[Dataset] Set Archive View Mode",
         modeToggle,
+        mode,
       });
     });
   });
