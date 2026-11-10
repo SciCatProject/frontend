@@ -157,6 +157,41 @@ describe("DatasetsReducer", () => {
     });
   });
 
+  describe("on refreshBatchCompleteAction", () => {
+    it("should update the lifecycle and keep the other fields", () => {
+      const state = fromDatasets.datasetsReducer(
+        {
+          ...initialDatasetState,
+          batch: [
+            {
+              pid: "a",
+              addedFrom: "archivable",
+              datasetlifecycle: { archivable: true, retrievable: false },
+            },
+            { pid: "b", datasetlifecycle: { archivable: true } },
+          ],
+        } as typeof initialDatasetState,
+        fromActions.refreshBatchCompleteAction({
+          datasets: [
+            {
+              pid: "a",
+              datasetlifecycle: { archivable: false, retrievable: true },
+            },
+          ] as any[],
+        }),
+      );
+
+      expect(state.batch).toEqual([
+        {
+          pid: "a",
+          addedFrom: "archivable",
+          datasetlifecycle: { archivable: false, retrievable: true },
+        },
+        { pid: "b", datasetlifecycle: { archivable: true } },
+      ] as any[]);
+    });
+  });
+
   describe("on addToBatchAction", () => {
     const stateWith = (
       batch: { pid: string; addedFrom?: string }[],

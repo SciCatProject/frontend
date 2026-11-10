@@ -374,7 +374,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "conditions": [
       { "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets to archive." },
       { "condition": "['archivable', '#currentArchViewMode'].includes(@archiveViewMode)", "disabledTooltip": "Switch to the Archivable view to archive datasets." },
-      { "condition": "@lifecycles.every((l) => l?.archivable === true && l?.retrievable !== true)", "disabledTooltip": "Some of the selected datasets are not archivable." },
+      { "condition": "@lifecycles.every((l) => l?.archivable === true && l?.retrievable === false)", "disabledTooltip": "Some of the selected datasets are not archivable." },
       { "condition": "@totalSize > 0", "disabledTooltip": "The selected datasets have a total size of 0 bytes, so there is nothing to archive." }
     ]
   }
@@ -423,7 +423,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "conditions": [
       { "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets to retrieve." },
       { "condition": "['retrievable', '#currentArchViewMode'].includes(@archiveViewMode)", "disabledTooltip": "Switch to the Retrievable view to retrieve datasets." },
-      { "condition": "@lifecycles.every((l) => l?.retrievable === true && l?.archivable !== true)", "disabledTooltip": "Some of the selected datasets are not retrievable." },
+      { "condition": "@lifecycles.every((l) => l?.retrievable === true && l?.archivable === false)", "disabledTooltip": "Some of the selected datasets are not retrievable." },
       { "condition": "@totalPackedSize > 0", "disabledTooltip": "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve." }
     ]
   }
@@ -435,7 +435,7 @@ A few things worth noting if you adapt these:
 - The `option` field's `options` is left empty (`[]`) in a custom config on purpose if you rely on `retrieveDestinations`; only the *built-in default* Retrieve action gets it auto-populated by `applyDefaultBatchActions`. A custom `batchActions` entry must supply its own `options` (statically, or by referencing `retrieveDestinations` yourself if you re-add that wiring).
 - `#DatasetsPidEmptyFilesMap` already returns a JSON-stringified array, so it's interpolated as `{{ @datasetList }}` (no trailing `[]`) — using `{{ @datasetList[] }}` here would double-encode it.
 - **Archive is a plain confirmation dialog, not a data-collecting one.** `type: "dialog"` + `onSuccess: "xhr"` with `dialog.fields: []` (no fields at all) renders just the title/description and Cancel/Ok buttons — clicking Ok closes the dialog with a truthy (but empty) result, which is enough to trigger the `onSuccess` step; clicking Cancel closes with no result and nothing further happens. This is the pattern to reach for whenever you want a "are you sure?" prompt without asking the user for any input — compare to Retrieve, which uses the same `type`/`onSuccess` pair but adds a real `option` field to actually collect a value.
-- **Both actions are always visible, and are enabled based on the selection and, on the dataset list, on the current view.** Archive is enabled only when every selected dataset has `datasetlifecycle.archivable === true` and is not retrievable; Retrieve is the mirror image. These are the same conditions as the "Archivable" and "Retrievable" archive view modes (see `setArchiveViewModeAction` in `datasets.reducer.ts`). `#DatasetsField[datasetlifecycle]` returns one lifecycle object per selected dataset, so `.every(...)` is false for a mixed selection and true for an empty one, which is why the `#Length(@pids) > 0` and size conditions are kept.
+- **Both actions are always visible, and are enabled based on the selection and, on the dataset list, on the current view.** Archive is enabled only when every selected dataset has `datasetlifecycle.archivable === true` and `datasetlifecycle.retrievable === false`; Retrieve is the mirror image. These are the same conditions as the "Archivable" and "Retrievable" archive view modes (see `DEFAULT_DATASET_VIEW_MODES` in `dataset-view-modes.defaults.ts`). `#DatasetsField[datasetlifecycle]` returns one lifecycle object per selected dataset, so `.every(...)` is false for a mixed selection and true for an empty one, which is why the `#Length(@pids) > 0` and size conditions are kept.
   - On the dataset list, `#currentArchViewMode` resolves to the selected view (`'all'`, `'archivable'`, …), and each action is additionally enabled only in its own view (`'archivable'` for Archive, `'retrievable'` for Retrieve). Earlier versions hid the actions outside that view instead, which made them hard to find.
   - In the cart (`batch-view`), `#currentArchViewMode` has no matching key, so it resolves to the *literal selector text* (`"#currentArchViewMode"`), not `undefined`. The `'#currentArchViewMode'` entry in the `.includes([...])` array is what keeps the actions usable there on the lifecycle checks alone. If you copy this pattern for a selector that isn't always provided, remember the fallback is the selector string itself.
 
