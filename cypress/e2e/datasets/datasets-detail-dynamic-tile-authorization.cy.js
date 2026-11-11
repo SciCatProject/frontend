@@ -57,7 +57,6 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
   const authTestConfigNoIndicator = {
     datasetDetailComponent: {
-      enableCustomizedComponent: true,
       tileRestrictedIconVisible: false,
       tileRestrictedIconGroups: [],
       customization: baseCustomization,
@@ -66,7 +65,6 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
   const authTestConfigWithIndicator = {
     datasetDetailComponent: {
-      enableCustomizedComponent: true,
       tileRestrictedIconVisible: true,
       tileRestrictedIconGroups: ["admin"],
       customization: baseCustomization,
@@ -80,9 +78,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
   const guestUsername = Cypress.env("guestUsername");
   const guestPassword = Cypress.env("guestPassword");
 
-
   describe("1010:0010: No restricted access indicator", () => {
-
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         baseConfig.datasetDetailComponent.customization = [];
@@ -115,12 +111,15 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       cy.isLoading();
 
       // Admin user should see all sections
-      cy.get('[data-cy="section-label"]').should("contain", "Admin Only Section");
+      cy.get('[data-cy="section-label"]').should(
+        "contain",
+        "Admin Only Section",
+      );
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
       // But NOT archive manager only section
-      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
-        "not.exist",
-      );
+      cy.get(
+        '[data-cy="section-label"]:contains("Archive Manager Section")',
+      ).should("not.exist");
       // Invisible Section should not be visible to admin
       cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
         "not.exist",
@@ -138,7 +137,6 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
         .within(() => {
           cy.get(".restricted-indicator").should("not.exist");
         });
-
     });
 
     it("1010:0010:0020: should hide admin-only tile from archiveManager user", () => {
@@ -159,7 +157,10 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       // Archive Manager should see public and archiveManager sections
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
-      cy.get('[data-cy="section-label"]').should("contain", "Archive Manager Section");
+      cy.get('[data-cy="section-label"]').should(
+        "contain",
+        "Archive Manager Section",
+      );
       // But NOT admin-only section
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
         "not.exist",
@@ -181,7 +182,6 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
         .within(() => {
           cy.get(".restricted-indicator").should("not.exist");
         });
-
     });
 
     it("1010:0010:0030: should only show public tile to guest user", () => {
@@ -206,9 +206,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
         "not.exist",
       );
-      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
-        "not.exist",
-      );
+      cy.get(
+        '[data-cy="section-label"]:contains("Archive Manager Section")',
+      ).should("not.exist");
       // Invisible Section should not be visible to guest
       cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
         "not.exist",
@@ -223,8 +223,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
     });
 
     it("1010:0010:0040: should only show public tile to non authenticated user", () => {
-
-      cy.createDataset({type: "raw", "isPublished": true});
+      cy.createDataset({ type: "raw", isPublished: true });
 
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigNoIndicator");
@@ -252,9 +251,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
         "not.exist",
       );
-      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
-        "not.exist",
-      );
+      cy.get(
+        '[data-cy="section-label"]:contains("Archive Manager Section")',
+      ).should("not.exist");
       // Invisible Section should not be visible to non authenticated user
       cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
         "not.exist",
@@ -266,13 +265,15 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
           cy.get(".restricted-indicator").should("not.exist");
         });
     });
-  })
+  });
 
   describe("1010:0020: Show restricted access indicator", () => {
-
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-        const mergedConfig = mergeConfig(baseConfig, authTestConfigWithIndicator);
+        const mergedConfig = mergeConfig(
+          baseConfig,
+          authTestConfigWithIndicator,
+        );
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
           "getFrontendConfigWithIndicator",
         );
@@ -301,12 +302,15 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       cy.isLoading();
 
       // Admin user should see all sections
-      cy.get('[data-cy="section-label"]').should("contain", "Admin Only Section");
+      cy.get('[data-cy="section-label"]').should(
+        "contain",
+        "Admin Only Section",
+      );
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
       // But NOT archive manager only section
-      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
-        "not.exist",
-      );
+      cy.get(
+        '[data-cy="section-label"]:contains("Archive Manager Section")',
+      ).should("not.exist");
       // Invisible Section should not be visible to non authenticated user
       cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
         "not.exist",
@@ -316,7 +320,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")')
         .parent()
         .within(() => {
-          cy.get(".restricted-indicator mat-icon").should("exist").and("contain", "lock_outline");
+          cy.get(".restricted-indicator mat-icon")
+            .should("exist")
+            .and("contain", "lock_outline");
         });
       // Public section with ["#all"] should NOT have lock icon
       cy.get('[data-cy="section-label"]:contains("Public Section")')
@@ -347,8 +353,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       // The tooltip renders in the CDK overlay at the end of body, so it can't be
       // found inside the trigger's parent.
-      cy.get(".mat-mdc-tooltip").should("be.visible").and("contain.text", "admin");
-
+      cy.get(".mat-mdc-tooltip")
+        .should("be.visible")
+        .and("contain.text", "admin");
     });
 
     it("1010:0020:0020: should hide admin-only tile from archiveManager user", () => {
@@ -369,7 +376,10 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
       // Archive Manager should see public and archiveManager sections
       cy.get('[data-cy="section-label"]').should("contain", "Public Section");
-      cy.get('[data-cy="section-label"]').should("contain", "Archive Manager Section");
+      cy.get('[data-cy="section-label"]').should(
+        "contain",
+        "Archive Manager Section",
+      );
       // But NOT admin-only section
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
         "not.exist",
@@ -415,9 +425,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
         "not.exist",
       );
-      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
-        "not.exist",
-      );
+      cy.get(
+        '[data-cy="section-label"]:contains("Archive Manager Section")',
+      ).should("not.exist");
       // Invisible Section should not be visible to non authenticated user
       cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
         "not.exist",
@@ -432,7 +442,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
     });
 
     it("1010:0020:0040: should only show public tile to non authenticated user", () => {
-      cy.createDataset({type: "raw", "isPublished": true});
+      cy.createDataset({ type: "raw", isPublished: true });
 
       cy.visit("/datasets");
       cy.wait("@getFrontendConfigWithIndicator");
@@ -461,9 +471,9 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
       cy.get('[data-cy="section-label"]:contains("Admin Only Section")').should(
         "not.exist",
       );
-      cy.get('[data-cy="section-label"]:contains("Archive Manager Section")').should(
-        "not.exist",
-      );
+      cy.get(
+        '[data-cy="section-label"]:contains("Archive Manager Section")',
+      ).should("not.exist");
       // Invisible Section should not be visible to non authenticated user
       cy.get('[data-cy="section-label"]:contains("Invisible Section")').should(
         "not.exist",
@@ -475,6 +485,5 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
           cy.get(".restricted-indicator").should("not.exist");
         });
     });
-
-  })
+  });
 });

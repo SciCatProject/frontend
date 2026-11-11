@@ -9,14 +9,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 
-import { DatasetDetailDynamicComponent } from "./dataset-detail-dynamic.component";
+import { DatasetDetailsComponent } from "./dataset-details.component";
 import { InternalLinkType } from "state-management/models";
 import { TranslateService } from "@ngx-translate/core";
 import { of } from "rxjs";
 
-describe("DatasetDetailDynamicComponent", () => {
-  let component: DatasetDetailDynamicComponent;
-  let fixture: ComponentFixture<DatasetDetailDynamicComponent>;
+describe("DatasetDetailsComponent", () => {
+  let component: DatasetDetailsComponent;
+  let fixture: ComponentFixture<DatasetDetailsComponent>;
 
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
@@ -35,9 +35,9 @@ describe("DatasetDetailDynamicComponent", () => {
       providers: [
         { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
-      declarations: [DatasetDetailDynamicComponent, LinkyPipe],
+      declarations: [DatasetDetailsComponent, LinkyPipe],
     });
-    TestBed.overrideComponent(DatasetDetailDynamicComponent, {
+    TestBed.overrideComponent(DatasetDetailsComponent, {
       set: {
         providers: [
           { provide: Router, useValue: router },
@@ -48,7 +48,7 @@ describe("DatasetDetailDynamicComponent", () => {
     });
 
     TestBed.compileComponents();
-    fixture = TestBed.createComponent(DatasetDetailDynamicComponent);
+    fixture = TestBed.createComponent(DatasetDetailsComponent);
     component = fixture.componentInstance;
   }));
 
@@ -79,7 +79,6 @@ describe("DatasetDetailDynamicComponent", () => {
     ].forEach(({ description, related, labels }) => {
       it(description, () => {
         component.appConfig.datasetDetailComponent = {
-          enableCustomizedComponent: true,
           customization: [
             {
               type: "regular",
@@ -290,7 +289,6 @@ describe("DatasetDetailDynamicComponent", () => {
 
   it("should apply the label choice independently to each configured field", () => {
     component.appConfig.datasetDetailComponent = {
-      enableCustomizedComponent: true,
       customization: [
         {
           type: "regular",

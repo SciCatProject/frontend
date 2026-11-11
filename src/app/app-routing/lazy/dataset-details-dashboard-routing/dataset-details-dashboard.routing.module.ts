@@ -11,13 +11,13 @@ import { DatasetLifecycleComponent } from "datasets/dataset-lifecycle/dataset-li
 import { ReduceComponent } from "datasets/reduce/reduce.component";
 import { RelatedDatasetsComponent } from "datasets/related-datasets/related-datasets.component";
 import { LogbooksDashboardComponent } from "logbooks/logbooks-dashboard/logbooks-dashboard.component";
-import { DatasetDetailWrapperComponent } from "datasets/dataset-detail/dataset-detail-wrapper.component";
+import { DatasetDetailsComponent } from "datasets/dataset-details/dataset-details/dataset-details.component";
 import { RelationshipsComponent } from "datasets/relationships/relationships.component";
 
 const routes: Routes = [
   {
     path: "",
-    component: DatasetDetailWrapperComponent,
+    component: DatasetDetailsComponent,
   },
   {
     path: "jsonScientificMetadata",

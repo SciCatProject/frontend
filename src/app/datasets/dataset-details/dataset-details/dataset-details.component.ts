@@ -66,16 +66,16 @@ const RELATION_CONFIG: Record<
  * Component to show customizable details for a dataset, using the
  * form component
  * @export
- * @class DatasetDetailDynamicComponent
+ * @class DatasetDetailsComponent
  */
 @Component({
-  selector: "dataset-detail-dynamic",
-  templateUrl: "./dataset-detail-dynamic.component.html",
-  styleUrls: ["./dataset-detail-dynamic.component.scss"],
+  selector: "dataset-details",
+  templateUrl: "./dataset-details.component.html",
+  styleUrls: ["./dataset-details.component.scss"],
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
+export class DatasetDetailsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   datasetView$: Observable<CustomizationItem[]>;
@@ -134,19 +134,20 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       }),
     );
 
-    const sortedDatasetView = (
-      this.appConfig.datasetDetailComponent?.customization || []
-    )
-      .sort((a, b) => a.order - b.order)
-      .map((section) => ({
-        ...section,
-        authorization: section.authorization ? [...section.authorization] : [],
-        visible: section.visible ?? true,
-        fields:
-          section.fields && Array.isArray(section.fields)
-            ? [...section.fields].sort((a, b) => a.order - b.order)
-            : section.fields,
-      }));
+    const sortedDatasetView =
+      this.appConfig.datasetDetailComponent.customization
+        .map((section) => ({
+          ...section,
+          authorization: section.authorization
+            ? [...section.authorization]
+            : [],
+          visible: section.visible ?? true,
+          fields:
+            section.fields && Array.isArray(section.fields)
+              ? [...section.fields].sort((a, b) => a.order - b.order)
+              : section.fields,
+        }))
+        .sort((a, b) => a.order - b.order);
 
     this.datasetView$ = combineLatest([this.dataset$, this.userGroups$]).pipe(
       map(([dataset, userGroups]) =>
