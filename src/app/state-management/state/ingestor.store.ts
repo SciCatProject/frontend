@@ -9,6 +9,7 @@ import {
   GetBrowseDatasetResponse,
   GetExtractorResponse,
   GetTransferResponse,
+  OtherConfigurationsResponse,
   OtherHealthResponse,
   OtherVersionResponse,
   UserInfo,
@@ -23,6 +24,7 @@ interface IngestorStatus {
   versionResponse: OtherVersionResponse | null;
   healthResponse: OtherHealthResponse | null;
   validEndpoint: boolean | null;
+  configurations: OtherConfigurationsResponse | null;
 }
 
 export interface IngestorState {
@@ -52,6 +54,7 @@ export const initialIngestorState: IngestorState = {
     versionResponse: null,
     healthResponse: null,
     validEndpoint: null,
+    configurations: null,
   },
   ingestorAuth: null,
   ingestorEndpoint: {
