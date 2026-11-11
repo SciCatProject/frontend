@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, DOCUMENT } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
@@ -34,8 +34,6 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { Message, MessageType } from "state-management/models";
-
 import {
   Instrument,
   ProposalClass,
@@ -43,6 +41,7 @@ import {
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
+import { ClipboardService } from "shared/services/clipboard.service";
 import { CurrentDataset } from "state-management/state/datasets.store";
 import { selectCurrentDatasetInstruments } from "state-management/selectors/instruments.selectors";
 import { selectCurrentDatasetProposals } from "state-management/selectors/proposals.selectors";

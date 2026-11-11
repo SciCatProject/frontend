@@ -15,7 +15,6 @@ import { UsersModule } from "../users/users.module";
 import { MatChipsModule } from "@angular/material/chips";
 import { StatusBannerComponent } from "./app-header/status-banner/status-banner.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { AppFooterComponent } from './app-footer/app-footer.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +22,6 @@ import { AppFooterComponent } from './app-footer/app-footer.component';
     AppLayoutComponent,
     AppHeaderComponent,
     AppMainLayoutComponent,
-    AppFooterComponent,
   ],
   imports: [
     CommonModule,
@@ -41,4 +39,4 @@ import { AppFooterComponent } from './app-footer/app-footer.component';
   ],
   exports: [],
 })
-export class LayoutModule { }
+export class LayoutModule {}

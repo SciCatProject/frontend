@@ -32,6 +32,11 @@
         "type": "array",
         "items": { "type": "number" }
       },
+      "paginationPosition": {
+        "type": "string",
+        "enum": ["top", "bottom", "both"],
+        "default": "both"
+      },
       "editDatasetEnabled": { "type": "boolean" },
       "editDatasetSampleEnabled": { "type": "boolean" },
       "editMetadataEnabled": { "type": "boolean" },
@@ -126,6 +131,28 @@
         },
         "additionalProperties": false
       },
+      "datasetViews": {
+        "type": "object",
+        "properties": {
+          "modes": {
+            "type": "array",
+            "description": "Named query presets shown as view toggles on the dataset list. The id is stored in the filters and used by batch actions (#currentArchViewMode), so keep it stable. The where (a Mongo query) can't be edited here: set it in the JSON config. If not set and archiveWorkflowEnabled is true, the built-in archive workflow views are used; an empty list hides the toggles.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "label": { "type": "string" },
+                "tooltip": { "type": "string" },
+                "where": {
+                  "type": "object",
+                  "description": "Mongo query for the view, as the where of the v4 dataset filter; edit it in the JSON config."
+                }
+              },
+              "required": ["id", "label"]
+            }
+          }
+        }
+      },
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
@@ -186,63 +213,23 @@
             "mat_icon": { "type": "string" },
             "url": { "type": "string" },
             "target": { "type": "string" },
-            "enabled": { "type": "string" },
-            "inputs": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "key": { "type": "string" },
-                  "value": { "type": "string" }
-                }
-              }
-            },
-            "variables": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "key": { "type": "string" },
-                  "value": { "type": "string" }
-                }
-              }
-            },
-            "headers": {
+            "enabled": {
               "type": "object",
               "properties": {
-                "content-type": { "type": "string" },
-                "Authorization": { "type": "string" }
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "condition": { "type": "string" },
+                      "disabledTooltip": { "type": "string" }
+                    },
+                    "required": ["condition"]
+                  }
+                },
+                "enabledTooltip": { "type": "string" }
               }
             },
-            "method": {
-              "type": "string",
-              "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"]
-            },
-            "type": {
-              "type": "string",
-              "enum": ["form", "xhr", "link", "json-download"]
-            },
-            "icon": { "type": "string" },
-            "payload": { "type": "string" },
-            "filename": { "type": "string" }
-          }
-        }
-      },
-      "publishedDataActionsEnabled": { "type": "boolean" },
-      "publishedDataActions": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "label": { "type": "string" },
-            "id": { "type": "string" },
-            "description": { "type": "string" },
-            "order": { "type": "number" },
-            "mat_icon": { "type": "string" },
-            "url": { "type": "string" },
-            "target": { "type": "string" },
-            "enabled": { "type": "string" },
-            "authorization": { "type": "array", "items": { "type": "string" } },
             "inputs": {
               "type": "array",
               "items": {
@@ -600,7 +587,10 @@
           { "type": "Control", "scope": "#/properties/allowConfigOverrides" },
           { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
           { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
-          { "type": "Control", "scope": "#/properties/datasetRelationshipsEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetRelationshipsEnabled"
+          },
           {
             "type": "Control",
             "scope": "#/properties/datasetJsonScientificMetadata"
@@ -774,94 +764,35 @@
                   { "type": "Control", "scope": "#/properties/mat_icon" },
                   { "type": "Control", "scope": "#/properties/url" },
                   { "type": "Control", "scope": "#/properties/target" },
-                  { "type": "Control", "scope": "#/properties/enabled" },
-                  {
-                    "type": "Control",
-                    "scope": "#/properties/method"
-                  },
-                  { "type": "Control", "scope": "#/properties/type" },
-                  { "type": "Control", "scope": "#/properties/icon" },
-                  {
-                    "type": "Control",
-                    "scope": "#/properties/payload",
-                    "options": { "multi": true }
-                  },
-                  { "type": "Control", "scope": "#/properties/filename" },
-                  {
-                    "type": "Control",
-                    "scope": "#/properties/variables",
-                    "options": {
-                      "detail": {
-                        "type": "HorizontalLayout",
-                        "elements": [
-                          { "type": "Control", "scope": "#/properties/key" },
-                          { "type": "Control", "scope": "#/properties/value" }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "type": "Control",
-                    "scope": "#/properties/inputs",
-                    "options": {
-                      "detail": {
-                        "type": "HorizontalLayout",
-                        "elements": [
-                          { "type": "Control", "scope": "#/properties/key" },
-                          { "type": "Control", "scope": "#/properties/value" }
-                        ]
-                      }
-                    }
-                  },
                   {
                     "type": "Group",
-                    "label": "Headers",
+                    "label": "Enabled when all conditions hold",
                     "elements": [
                       {
                         "type": "Control",
-                        "scope": "#/properties/headers/properties/content-type"
+                        "scope": "#/properties/enabled/properties/conditions",
+                        "options": {
+                          "detail": {
+                            "type": "HorizontalLayout",
+                            "elements": [
+                              {
+                                "type": "Control",
+                                "scope": "#/properties/condition"
+                              },
+                              {
+                                "type": "Control",
+                                "scope": "#/properties/disabledTooltip"
+                              }
+                            ]
+                          }
+                        }
                       },
                       {
                         "type": "Control",
-                        "scope": "#/properties/headers/properties/Authorization"
+                        "scope": "#/properties/enabled/properties/enabledTooltip"
                       }
                     ]
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      },
-      {
-        "type": "Group",
-        "label": "Published Data Actions",
-        "options": {
-          "expandable": true
-        },
-        "elements": [
-          {
-            "type": "Control",
-            "scope": "#/properties/publishedDataActionsEnabled"
-          },
-          {
-            "type": "ListWithDetail",
-            "scope": "#/properties/publishedDataActions",
-            "options": {
-              "detail": {
-                "type": "VerticalLayout",
-                "elements": [
-                  { "type": "Control", "scope": "#/properties/label" },
-                  { "type": "Control", "scope": "#/properties/id" },
-                  {
-                    "type": "Control",
-                    "scope": "#/properties/description"
                   },
-                  { "type": "Control", "scope": "#/properties/order" },
-                  { "type": "Control", "scope": "#/properties/mat_icon" },
-                  { "type": "Control", "scope": "#/properties/url" },
-                  { "type": "Control", "scope": "#/properties/target" },
-                  { "type": "Control", "scope": "#/properties/enabled" },
                   {
                     "type": "Control",
                     "scope": "#/properties/method"
@@ -874,10 +805,6 @@
                     "options": { "multi": true }
                   },
                   { "type": "Control", "scope": "#/properties/filename" },
-                  {
-                    "type": "Control",
-                    "scope": "#/properties/authorization"
-                  },
                   {
                     "type": "Control",
                     "scope": "#/properties/variables",
@@ -1010,6 +937,36 @@
       },
       {
         "type": "Group",
+        "label": "Dataset List Views",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "label": "Pagination position",
+            "scope": "#/properties/paginationPosition"
+          },
+          {
+            "type": "ListWithDetail",
+            "label": "View modes",
+            "scope": "#/properties/datasetViews/properties/modes",
+            "options": {
+              "labelRef": "#/items/properties/label",
+              "detail": {
+                "type": "HorizontalLayout",
+                "elements": [
+                  { "type": "Control", "scope": "#/properties/id" },
+                  { "type": "Control", "scope": "#/properties/label" },
+                  { "type": "Control", "scope": "#/properties/tooltip" }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "Group",
         "label": "Dataset Detail Component",
         "options": {
           "expandable": true
@@ -1040,7 +997,8 @@
                     "elements": [
                       { "type": "Control", "scope": "#/properties/label" },
                       { "type": "Control", "scope": "#/properties/type" },
-                      { "type": "Control", "scope": "#/properties/order" }]
+                      { "type": "Control", "scope": "#/properties/order" }
+                    ]
                   },
                   {
                     "type": "HorizontalLayout",
@@ -1156,6 +1114,11 @@
           "expandable": true
         },
         "elements": [
+          {
+            "type": "Control",
+            "label": "Pagination position",
+            "scope": "#/properties/paginationPosition"
+          },
           {
             "type": "Group",
             "label": "Default Datasets List Settings",

@@ -10,6 +10,7 @@ import { Store } from "@ngrx/store";
 import { Subscription, Observable, combineLatest } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
+import { showMessageAction } from "state-management/actions/user.actions";
 import {
   selectCurrentAttachments,
   selectCurrentDataset,
@@ -28,6 +29,8 @@ import {
   CustomizationItem,
   DatasetViewFieldType,
   InternalLinkType,
+  Message,
+  MessageType,
 } from "state-management/models";
 
 import { AttachmentService } from "shared/services/attachment.service";
@@ -113,7 +116,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private clipboardService: ClipboardService,
   ) {
     this.tileRestrictedIconVisible =
       this.appConfig.datasetDetailComponent?.tileRestrictedIconVisible ?? false;
@@ -241,9 +243,24 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   }
 
   onCopy(value: string) {
-    this.clipboardService.copyToClipboard(
-      value,
-      "Selected field has been copied to your clipboard",
+    navigator.clipboard.writeText(value).then(
+      () => {
+        const message = new Message(
+          "Selected field has been copied to your clipboard",
+          MessageType.Success,
+          5000,
+        );
+        this.store.dispatch(showMessageAction({ message }));
+      },
+      (err) => {
+        const errorMessage = new Message(
+          "Failed to copy selected field to clipboard",
+          MessageType.Error,
+          5000,
+        );
+        this.store.dispatch(showMessageAction({ message: errorMessage }));
+        console.error("Could not copy text: ", err);
+      },
     );
   }
 
