@@ -15,15 +15,13 @@ import { ActionConfig } from "./configurable-action.interfaces";
  * retrieve dialog was built.
  */
 /**
- * `#currentArchViewMode` is only provided by dataset-table-actions (the
- * dataset list page, with its archive-view-mode toggle); batch-view (the
- * cart) has no such concept and doesn't set it. When a selector has no
- * matching context key, ConfigurableActionComponent's fallback returns the
- * selector text itself rather than undefined — hence the `#currentArchViewMode`
- * string check below is what actually detects "not in a mode-toggle page",
- * not the `typeof ... === 'undefined'` check (kept only as a defensive
- * fallback). Both actions should render unconditionally in the cart, and
- * only for their matching mode on the dataset list page.
+ * Both actions are always visible and are enabled only when every selected
+ * dataset is in the matching lifecycle state, using the same conditions as
+ * the "archivable" and "retrievable" archive view modes (see
+ * DEFAULT_DATASET_VIEW_MODES in dataset-view-modes.defaults.ts). They don't
+ * depend on the dataset list's current view: they used to be hidden outside
+ * their matching view, so users had to know to switch view before the
+ * buttons appeared.
  */
 export function buildDefaultBatchActions(
   retrieveDestinationOptions: DialogOptionData[],
@@ -50,7 +48,7 @@ export function buildDefaultBatchActions(
         userEmail: "#user.email",
         pids: "#DatasetsPid",
         datasetList: "#DatasetsPidEmptyFilesMap",
-        archiveViewMode: "#currentArchViewMode",
+        lifecycles: "#DatasetsField[datasetlifecycle]",
         totalSize: "#DatasetsTotalSize",
       },
       dialog: {
@@ -59,13 +57,17 @@ export function buildDefaultBatchActions(
       },
       payload:
         '{"jobParams": {"username": "{{ @username }}"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "archive"}',
-      hidden:
-        "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
       enabled: {
         conditions: [
           {
             condition: "#Length(@pids) > 0",
             disabledTooltip: "Select one or more datasets to archive.",
+          },
+          {
+            condition:
+              "@lifecycles.every((l) => l?.archivable === true && l?.retrievable === false)",
+            disabledTooltip:
+              "Some of the selected datasets are not archivable.",
           },
           {
             condition: "@totalSize > 0",
@@ -95,7 +97,7 @@ export function buildDefaultBatchActions(
         userEmail: "#user.email",
         pids: "#DatasetsPid",
         datasetList: "#DatasetsPidEmptyFilesMap",
-        archiveViewMode: "#currentArchViewMode",
+        lifecycles: "#DatasetsField[datasetlifecycle]",
         totalPackedSize: "#DatasetsTotalPackedSize",
       },
       dialog: {
@@ -112,13 +114,17 @@ export function buildDefaultBatchActions(
       },
       payload:
         '{"jobParams": {"username": "{{ @username }}", "option": "{{ @dialog.option }}", "destinationPath": "/archive/retrieve"}, "emailJobInitiator": "{{ @userEmail }}", "datasetList": {{ @datasetList }}, "type": "retrieve"}',
-      hidden:
-        "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
       enabled: {
         conditions: [
           {
             condition: "#Length(@pids) > 0",
             disabledTooltip: "Select one or more datasets to retrieve.",
+          },
+          {
+            condition:
+              "@lifecycles.every((l) => l?.retrievable === true && l?.archivable === false)",
+            disabledTooltip:
+              "Some of the selected datasets are not retrievable.",
           },
           {
             condition: "@totalPackedSize > 0",

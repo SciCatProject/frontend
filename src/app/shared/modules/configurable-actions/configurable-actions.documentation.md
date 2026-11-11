@@ -361,7 +361,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "userEmail": "#user.email",
     "pids": "#DatasetsPid",
     "datasetList": "#DatasetsPidEmptyFilesMap",
-    "archiveViewMode": "#currentArchViewMode",
+    "lifecycles": "#DatasetsField[datasetlifecycle]",
     "totalSize": "#DatasetsTotalSize"
   },
   "dialog": {
@@ -369,10 +369,10 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "fields": []
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"archive\"}",
-  "hidden": "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
   "enabled": {
     "conditions": [
       { "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets to archive." },
+      { "condition": "@lifecycles.every((l) => l?.archivable === true && l?.retrievable === false)", "disabledTooltip": "Some of the selected datasets are not archivable." },
       { "condition": "@totalSize > 0", "disabledTooltip": "The selected datasets have a total size of 0 bytes, so there is nothing to archive." }
     ]
   }
@@ -400,7 +400,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "userEmail": "#user.email",
     "pids": "#DatasetsPid",
     "datasetList": "#DatasetsPidEmptyFilesMap",
-    "archiveViewMode": "#currentArchViewMode",
+    "lifecycles": "#DatasetsField[datasetlifecycle]",
     "totalPackedSize": "#DatasetsTotalPackedSize"
   },
   "dialog": {
@@ -416,10 +416,10 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     ]
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\", \"option\": \"{{ @dialog.option }}\", \"destinationPath\": \"/archive/retrieve\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"retrieve\"}",
-  "hidden": "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
   "enabled": {
     "conditions": [
       { "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets to retrieve." },
+      { "condition": "@lifecycles.every((l) => l?.retrievable === true && l?.archivable === false)", "disabledTooltip": "Some of the selected datasets are not retrievable." },
       { "condition": "@totalPackedSize > 0", "disabledTooltip": "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve." }
     ]
   }
@@ -431,9 +431,7 @@ A few things worth noting if you adapt these:
 - The `option` field's `options` is left empty (`[]`) in a custom config on purpose if you rely on `retrieveDestinations`; only the *built-in default* Retrieve action gets it auto-populated by `applyDefaultBatchActions`. A custom `batchActions` entry must supply its own `options` (statically, or by referencing `retrieveDestinations` yourself if you re-add that wiring).
 - `#DatasetsPidEmptyFilesMap` already returns a JSON-stringified array, so it's interpolated as `{{ @datasetList }}` (no trailing `[]`) — using `{{ @datasetList[] }}` here would double-encode it.
 - **Archive is a plain confirmation dialog, not a data-collecting one.** `type: "dialog"` + `onSuccess: "xhr"` with `dialog.fields: []` (no fields at all) renders just the title/description and Cancel/Ok buttons — clicking Ok closes the dialog with a truthy (but empty) result, which is enough to trigger the `onSuccess` step; clicking Cancel closes with no result and nothing further happens. This is the pattern to reach for whenever you want a "are you sure?" prompt without asking the user for any input — compare to Retrieve, which uses the same `type`/`onSuccess` pair but adds a real `option` field to actually collect a value.
-- **These same two actions render on both the dataset list page (`dataset-table-actions`, which sets `currentArchViewMode`) and the cart (`batch-view`, which does not) — the `hidden` expression has two jobs, one per context, and every entry in the `.includes([...])` array is load-bearing:**
-  - *Cart*: `#currentArchViewMode` has no matching key in `batch-view`'s `actionItems`, so it resolves to the *literal selector text* (`"#currentArchViewMode"`), not `undefined`. The `'#currentArchViewMode'` entry is what actually detects "not on the mode-toggle page" and makes the action always visible there (the `undefined` entry is only a defensive fallback and never actually matches in practice — the selector resolution never produces real `undefined`). If you copy this pattern for a selector that isn't always provided, remember the fallback is the selector string itself, not `undefined`.
-  - *Dataset list page*: here `#currentArchViewMode` resolves to a real mode string (`'all'`, `'archivable'`, `'retrievable'`, etc.), so neither of the above two entries matches — without the trailing `'archivable'` (or `'retrievable'` for Retrieve) entry, the action would be hidden in *every* mode on this page, not just the wrong ones. That entry is what restores the old per-mode behavior (Archive only in `'archivable'` mode, Retrieve only in `'retrievable'` mode) and it's easy to drop by mistake when simplifying this expression — don't remove it.
+- **Both actions are always visible, and are enabled based on the selected datasets only, not on the dataset list's current view.** Archive is enabled only when every selected dataset has `datasetlifecycle.archivable === true` and `datasetlifecycle.retrievable === false`; Retrieve is the mirror image. These are the same conditions as the "Archivable" and "Retrievable" archive view modes (see `DEFAULT_DATASET_VIEW_MODES` in `dataset-view-modes.defaults.ts`). `#DatasetsField[datasetlifecycle]` returns one lifecycle object per selected dataset, so `.every(...)` is false for a mixed selection and true for an empty one, which is why the `#Length(@pids) > 0` and size conditions are kept. Earlier versions hid the actions outside their matching view, which made them hard to find.
 
 ## Batch actions: where cart datasets came from (`addedFrom`)
 
@@ -445,7 +443,7 @@ Every dataset in the cart records where it was added from, as `addedFrom`:
 
 `details` and `publishedData` are reserved, so don't use them as view `id`s.
 
-Actions read it with `#DatasetsField[addedFrom]`, one value per dataset. The built-in Archive/Retrieve actions don't use it, so the cart behaves as before. A deployment that wants the cart to give the same guarantee as the dataset list, where Archive is only shown in the `archivable` view, can add the check to its own `batchActions`:
+Actions read it with `#DatasetsField[addedFrom]`, one value per dataset. The built-in Archive/Retrieve actions don't use it, so the cart behaves as before. A deployment that wants the cart to give the same guarantee as the dataset list, where Archive is only enabled in the `archivable` view, can add the check to its own `batchActions`:
 
 ```json
 "variables": {

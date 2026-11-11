@@ -132,6 +132,11 @@ export const removeFromBatchAction = createAction(
   props<{ dataset: PartialOutputDatasetDto }>(),
 );
 export const clearBatchAction = createAction("[Dataset] Clear Batch");
+export const refreshBatchAction = createAction("[Dataset] Refresh Batch");
+export const refreshBatchCompleteAction = createAction(
+  "[Dataset] Refresh Batch Complete",
+  props<{ datasets: PartialOutputDatasetDto[] }>(),
+);
 
 export const addDatasetAction = createAction(
   "[Dataset] Add Dataset",
