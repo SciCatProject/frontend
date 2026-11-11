@@ -18,8 +18,8 @@ export class ClipboardService {
    */
   copyToClipboard(
     text: string,
-    successMessage: string = "Copied to clipboard",
-    duration: number = 5000,
+    successMessage = "Copied to clipboard",
+    duration = 5000,
   ): void {
     if (!navigator.clipboard?.writeText) {
       const errorMessage = new Message(

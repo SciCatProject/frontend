@@ -1,28 +1,24 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import {
-  PublishedData,
-  ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
+  amendPublishedDataAction,
   deletePublishedDataAction,
   fetchPublishedDataAction,
   fetchRelatedDatasetsAndAddToBatchAction,
+  publishPublishedDataAction,
+  registerPublishedDataAction,
 } from "state-management/actions/published-data.actions";
+import { Subscription } from "rxjs";
 import { ClipboardService } from "shared/services/clipboard.service";
-import { Subscription, combineLatest } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
 import {
-  selectCurrentUser,
   selectIsAdmin,
+  selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import {
-  ActionItems,
-  ActionButtonStyle,
-} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 @Component({
   selector: "publisheddata-details",
@@ -35,17 +31,11 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   isAdmin$ = this.store.select(selectIsAdmin);
   publishedData: PublishedData & { metadata?: any };
   subscriptions: Subscription[] = [];
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
   appConfig = this.appConfigService.getConfig();
   show = false;
-  user: ReturnedUserDto | undefined;
   landingPageUrl = "";
   doi = "";
-
-  actionItems: ActionItems = {
-    datasets: [],
-    publisheddata: [],
-  };
-  actionButtonsStyle: ActionButtonStyle = { raised: true, color: "accent" };
 
   constructor(
     private appConfigService: AppConfigService,
@@ -64,19 +54,9 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      combineLatest([
-        this.store.select(selectCurrentUser),
-        this.currentData$,
-      ]).subscribe(([user, data]) => {
-        this.user = user;
+      this.currentData$.subscribe((data) => {
         if (data) {
           this.publishedData = data;
-          this.actionItems = {
-            datasets: [],
-            publisheddata: [data],
-            encodedDoi: encodeURIComponent(data.doi),
-            user,
-          };
 
           if (this.appConfig.landingPage) {
             this.landingPageUrl =
@@ -91,16 +71,28 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  onActionFinished(event: { success: boolean }) {
-    if (event.success) {
-      this.store.dispatch(fetchPublishedDataAction({ id: this.doi }));
+  onRegisterClick(doi: string) {
+    if (
+      confirm(
+        "Are you sure you want to register this published data? Keep in mind that no further changes can be made after this action.",
+      )
+    ) {
+      this.store.dispatch(registerPublishedDataAction({ doi }));
     }
+  }
+
+  onAmendClick(doi: string) {
+    this.store.dispatch(amendPublishedDataAction({ doi }));
   }
 
   onDeleteClick(doi: string) {
     if (confirm("Are you sure you want to delete this published data?")) {
       this.store.dispatch(deletePublishedDataAction({ doi }));
     }
+  }
+
+  onPublishClick(doi: string) {
+    this.store.dispatch(publishPublishedDataAction({ doi }));
   }
 
   onEditClick() {
@@ -118,10 +110,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   }
 
   onCopyClick(doi: string): void {
-    this.clipboardService.copyToClipboard(
-      doi,
-      "copied to your clipboard.",
-    );
+    this.clipboardService.copyToClipboard(doi, "copied to your clipboard.");
   }
 
   isUrl(dataDescription: string): boolean {

@@ -266,24 +266,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       }),
     );
 
-      return {
-        name,
-        header,
-        enabled: !!(display === "visible"),
-        order: index,
-        width,
-        path,
-        userAdded: column.userAdded || undefined,
-        type,
-        format,
-        tooltip,
-      };
-    });
-
     // Persist immediately to persistent local store as a fast fallback so UI changes
     // survive short navigations / reloads even if the server/store hasn't updated yet.
     try {
-      this.tableSettingsStorage.set(this.tableName, columnsSetting, this.currentUserId);
+      this.tableSettingsStorage.set(
+        this.tableName,
+        columnsSetting,
+        this.currentUserId,
+      );
     } catch (e) {
       // Ignore storage failures (private mode or quota), server update still happens below.
     }
@@ -314,7 +304,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
       // Dispatch server update to reset user settings (server remains canonical).
       this.store.dispatch(
-        updateUserSettingsAction({ property: { fe_dataset_table_columns: [] } }),
+        updateUserSettingsAction({
+          property: { fe_dataset_table_columns: [] },
+        }),
       );
 
       return;

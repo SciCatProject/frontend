@@ -106,8 +106,8 @@ describe("DynamicMatTableComponent popup drag + apply (direct)", () => {
       component.setting.columnSetting.find((c: any) => c.name === "type")
         .display,
     ).toBe("hidden");
-    expect(
-      component.columns.find((c: any) => c.name === "type").display,
-    ).toBe("hidden");
+    expect(component.columns.find((c: any) => c.name === "type").display).toBe(
+      "hidden",
+    );
   });
 });

@@ -61,7 +61,3 @@ karma-junit.xml
 # config files overrides
 config.override.json
 config.override.*.json
-
-# devcontainer / session artifacts
-.devcontainer/
-session-*.md

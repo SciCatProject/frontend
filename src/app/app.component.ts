@@ -8,7 +8,6 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
 } from "@angular/core";
-import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import {
   clearMessageAction,
@@ -55,7 +54,6 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     public translateService: TranslateService,
     private titleService: Title,
     private store: Store,
-    private router: Router,
   ) {
     this.config = this.appConfigService.getConfig();
     this.facility = this.config.facility ?? "";
@@ -104,19 +102,10 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
               break;
             }
           }
-          const ref = this.snackBar.open(
-            current.content,
-            current.action,
-            {
-              duration: current.duration,
-              panelClass,
-            },
-          );
-          if (current.action && current.route) {
-            ref.onAction().subscribe(() =>
-              this.router.navigate([current.route!]),
-            );
-          }
+          this.snackBar.open(current.content, undefined, {
+            duration: current.duration,
+            panelClass,
+          });
           this.store.dispatch(clearMessageAction());
         }
       });

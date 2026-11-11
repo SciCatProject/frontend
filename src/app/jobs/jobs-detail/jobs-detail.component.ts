@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Inject, DOCUMENT } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 
 import { fetchJobAction } from "state-management/actions/jobs.actions";
 import { Store } from "@ngrx/store";

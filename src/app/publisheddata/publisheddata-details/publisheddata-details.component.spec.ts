@@ -2,10 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { PublisheddataDetailsComponent } from "./publisheddata-details.component";
 import {
   MockActivatedRoute,
-  MockAuthService,
   MockPublishedDataApi,
   MockRouter,
-  MockUserApi,
 } from "shared/MockStubs";
 import { provideMockStore, MockStore } from "@ngrx/store/testing";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
@@ -16,32 +14,21 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
+import { ClipboardService } from "shared/services/clipboard.service";
 import {
   PublishedData,
   PublishedDataService,
-  UsersService,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { AuthService } from "shared/services/auth/auth.service";
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
-import { selectIsAdmin } from "state-management/selectors/user.selectors";
+import {
+  selectIsAdmin,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
   editPublishedData: true,
   jsonMetadataEnabled: true,
-  publishedDataActionsEnabled: true,
-  publishedDataActions: [
-    {
-      id: "test-action",
-      label: "Test Action",
-      type: "link",
-      url: "https://example.com",
-    },
-  ],
 });
 
 const createPublishedData = (status: string) =>
@@ -56,6 +43,7 @@ describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
   let fixture: ComponentFixture<PublisheddataDetailsComponent>;
   let store: MockStore;
+  let clipboardService: jasmine.SpyObj<ClipboardService>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -69,23 +57,30 @@ describe("PublisheddataDetailsComponent", () => {
         SharedScicatFrontendModule,
       ],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
         provideMockStore(),
         { provide: Router, useClass: MockRouter },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: PublishedDataService, useClass: MockPublishedDataApi },
-        { provide: UsersService, useClass: MockUserApi },
-        { provide: AuthService, useClass: MockAuthService },
         { provide: AppConfigService, useValue: { getConfig } },
+        {
+          provide: ClipboardService,
+          useValue: jasmine.createSpyObj("ClipboardService", [
+            "copyToClipboard",
+          ]),
+        },
       ],
     }).compileComponents();
 
     store = TestBed.inject(MockStore);
+    clipboardService = TestBed.inject(
+      ClipboardService,
+    ) as jasmine.SpyObj<ClipboardService>;
     store.overrideSelector(
       selectCurrentPublishedData,
       createPublishedData("public"),
     );
     store.overrideSelector(selectIsAdmin, false);
+    store.overrideSelector(selectIsLoggedIn, false);
   }));
 
   beforeEach(() => {
@@ -98,10 +93,32 @@ describe("PublisheddataDetailsComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("configurable actions", () => {
-    it("should render configurable-actions element when publishedDataActions are configured", () => {
+  describe("copy DOI", () => {
+    it("should delegate copying the DOI to ClipboardService", () => {
+      component.onCopyClick("10.1234/test-doi");
+
+      expect(clipboardService.copyToClipboard).toHaveBeenCalledWith(
+        "10.1234/test-doi",
+        "copied to your clipboard.",
+      );
+    });
+  });
+
+  describe("login state", () => {
+    it("should hide status actions when the user is not logged in", () => {
       const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector("configurable-actions")).not.toBeNull();
+      expect(compiled.querySelector('[data-cy="registerButton"]')).toBeNull();
+    });
+
+    it("should show status actions when the user is logged in", () => {
+      store.overrideSelector(selectIsLoggedIn, true);
+      store.refreshState();
+      fixture.detectChanges();
+
+      const compiled = fixture.debugElement.nativeElement;
+      expect(
+        compiled.querySelector('[data-cy="registerButton"]'),
+      ).not.toBeNull();
     });
   });
 

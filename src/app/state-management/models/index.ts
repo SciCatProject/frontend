@@ -27,25 +27,6 @@ export interface FacetCounts {
   [field: string]: FacetCount[];
 }
 
-export interface DateRange {
-  begin?: string;
-  end?: string;
-}
-
-export interface DateRangeFilter {
-  $gte?: { $date: string };
-  $lte?: { $date: string };
-}
-
-export interface FacetCount {
-  _id: string;
-  label?: string;
-  count: number;
-}
-export interface FacetCounts {
-  [field: string]: FacetCount[];
-}
-
 export interface Settings {
   tapeCopies: string;
   datasetCount: number;
@@ -175,23 +156,13 @@ export interface Message {
   content: string;
   type: MessageType;
   duration: number;
-  action?: string;
-  route?: string;
 }
 
 export class Message implements Message {
-  constructor(
-    content: string,
-    type: MessageType,
-    duration: number,
-    action?: string,
-    route?: string,
-  ) {
+  constructor(content: string, type: MessageType, duration: number) {
     this.content = content;
     this.type = type;
     this.duration = duration;
-    this.action = action;
-    this.route = route;
   }
 }
 
@@ -202,6 +173,25 @@ export enum ArchViewMode {
   work_in_progress = "work in progress",
   system_error = "system error",
   user_error = "user error",
+}
+
+/**
+ * A named query preset for the dataset list, configured via
+ * `datasetViews.modes`. `id` is stored in the filters (`modeToggle`) and is
+ * what batch action `hidden` expressions match `#currentArchViewMode`
+ * against, so it should stay stable; `label` is only for display.
+ */
+export interface DatasetViewMode {
+  id: string;
+  label: string;
+  // Mongo query, as the where of the v4 dataset filter
+  where: Record<string, unknown>;
+  tooltip?: string;
+}
+
+// the dataset list view modes
+export interface DatasetViewsConfig {
+  modes?: DatasetViewMode[];
 }
 export enum JobViewMode {
   myJobs = "my jobs",
@@ -234,7 +224,7 @@ export interface GenericFilters {
 }
 
 export interface DatasetFilters extends GenericFilters {
-  modeToggle: ArchViewMode;
+  modeToggle: string;
   text: string;
   ownerGroup: string[];
   type: string[];

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, DOCUMENT } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import {
   fetchCurrentUserAction,
@@ -9,6 +9,7 @@ import {
   selectUserSettingsPageViewModel,
 } from "state-management/selectors/user.selectors";
 
+import { ClipboardService } from "shared/services/clipboard.service";
 import packageJson from "../../../../package.json";
 import { AppConfigService } from "app-config.service";
 

@@ -51,6 +51,9 @@ import { addProposalFilterAction } from "state-management/actions/proposals.acti
 export class ProposalTableComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
+  currentUser$ = this.store.select(selectCurrentUser);
+  currentUserId?: string;
+
   proposalsWithCountAndTableSettings$ = this.store.select(
     selectProposalsWithCountAndTableSettings,
   );

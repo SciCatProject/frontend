@@ -23,7 +23,6 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
-import { ClipboardService } from "shared/services/clipboard.service";
 
 @Component({
   selector: "ingestor-confirm-transfer-dialog-page",
@@ -61,7 +60,6 @@ export class IngestorConfirmTransferDialogPageComponent
     private store: Store,
     @Optional()
     private dialogRef: MatDialogRef<IngestorConfirmTransferDialogPageComponent>,
-    private clipboardService: ClipboardService,
   ) {}
 
   ngOnInit() {
@@ -150,7 +148,13 @@ export class IngestorConfirmTransferDialogPageComponent
   }
 
   onCopyMetadata(): void {
-    this.clipboardService.copyToClipboard(this.provideMergeMetaData);
-    this.copiedToClipboard = true;
+    navigator.clipboard.writeText(this.provideMergeMetaData).then(
+      () => {
+        this.copiedToClipboard = true;
+      },
+      (err) => {
+        console.error("Failed to copy metadata to clipboard: ", err);
+      },
+    );
   }
 }

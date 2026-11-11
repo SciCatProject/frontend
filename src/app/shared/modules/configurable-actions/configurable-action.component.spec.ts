@@ -11,6 +11,8 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
+import { MatTooltip, MatTooltipModule } from "@angular/material/tooltip";
+import { By } from "@angular/platform-browser";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { DatePipe } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -50,7 +52,6 @@ import { of } from "rxjs";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import {
   selectIsAdmin,
-  selectIsLoggedIn,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import {
@@ -63,7 +64,6 @@ import {
   actionSuccessAction,
 } from "state-management/actions/actions.actions";
 import { buildDefaultBatchActions } from "./configurable-actions.defaults";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
@@ -112,6 +112,7 @@ describe("1000: ConfigurableActionComponent", () => {
         MatButtonModule,
         MatIconModule,
         MatTableModule,
+        MatTooltipModule,
         PipesModule,
         ReactiveFormsModule,
         MatDialogModule,
@@ -1291,120 +1292,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1235: !#userIsLoggedIn token should hide action when user is not logged in", () => {
-    store.overrideSelector(selectProfile, undefined);
-    store.overrideSelector(selectIsAdmin, false);
-    store.overrideSelector(selectIsLoggedIn, false);
-    store.refreshState();
-
-    const loginConfig: ActionConfig = {
-      ...mockActionsConfig[0],
-      id: "login-hidden-test",
-      hidden: "!#userIsLoggedIn",
-      variables: {},
-    };
-
-    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
-    expect(component.visible).toBeFalse();
-  });
-
-  it("1236: !#userIsLoggedIn token should show action when user is logged in", () => {
-    store.overrideSelector(selectProfile, mockUserProfiles[0]);
-    store.overrideSelector(selectIsAdmin, false);
-    store.overrideSelector(selectIsLoggedIn, true);
-    store.refreshState();
-
-    const loginConfig: ActionConfig = {
-      ...mockActionsConfig[0],
-      id: "login-visible-test",
-      hidden: "!#userIsLoggedIn",
-      variables: {},
-    };
-
-    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
-    expect(component.visible).toBeTrue();
-  });
-
-  it("1237: #userIsLoggedIn token should hide action when user is logged in", () => {
-    store.overrideSelector(selectProfile, mockUserProfiles[0]);
-    store.overrideSelector(selectIsAdmin, false);
-    store.overrideSelector(selectIsLoggedIn, true);
-    store.refreshState();
-
-    const loginConfig: ActionConfig = {
-      ...mockActionsConfig[0],
-      id: "login-not-visible-test",
-      hidden: "#userIsLoggedIn",
-      variables: {},
-    };
-
-    createComponent(loginConfig, mockActionItemsDatafilesNofiles);
-    expect(component.visible).toBeFalse();
-  });
-
-  it("1240: #publishedDataOwner token should enable action for creator", () => {
-    store.overrideSelector(selectProfile, mockUserProfiles[0]);
-    store.overrideSelector(selectIsAdmin, false);
-    store.refreshState();
-
-    const publishedDataConfig: ActionConfig = {
-      ...mockActionsConfig[0],
-      id: "published-data-owner-enabled-test",
-      enabled: "#publishedDataOwner",
-      variables: {},
-    };
-
-    const publishedDataItems: ActionItems = {
-      datasets: [],
-      publisheddata: [
-        {
-          createdBy: "testuser",
-          doi: "10.1234/test",
-          title: "Test",
-          abstract: "Abstract",
-          datasetPids: [],
-          status: "public",
-        } as PublishedData,
-      ],
-      user: { username: "testuser" },
-    };
-
-    createComponent(publishedDataConfig, publishedDataItems);
-    expect(component.disabled).toBeFalse();
-  });
-
-  it("1250: #publishedDataOwner token should NOT enable action for non-creator", () => {
-    store.overrideSelector(selectProfile, mockUserProfiles[0]);
-    store.overrideSelector(selectIsAdmin, false);
-    store.refreshState();
-
-    const publishedDataConfig: ActionConfig = {
-      ...mockActionsConfig[0],
-      id: "published-data-owner-disabled-test",
-      enabled: "#publishedDataOwner",
-      variables: {},
-    };
-
-    const publishedDataItems: ActionItems = {
-      datasets: [],
-      publisheddata: [
-        {
-          createdBy: "otheruser",
-          doi: "10.1234/test",
-          title: "Test",
-          abstract: "Abstract",
-          datasetPids: [],
-          status: "public",
-        } as PublishedData,
-      ],
-      user: { username: "testuser" },
-    };
-
-    createComponent(publishedDataConfig, publishedDataItems);
-    expect(component.disabled).toBeTrue();
-  });
-
-  it("1260: #isPublished token should follow dataset publish status", () => {
+  it("1240: #isPublished token should follow dataset publish status", () => {
     const publishedItems: ActionItems = {
       datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
     };
@@ -1421,7 +1309,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1270: #!isPublished token should follow dataset publish status", () => {
+  it("1250: #!isPublished token should follow dataset publish status", () => {
     const unpublishedItems: ActionItems = {
       datasets: structuredClone(mockActionItemsDatafilesNofiles.datasets),
     };
@@ -1438,7 +1326,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1280: #Length should evaluate selected file list length", () => {
+  it("1260: #Length should evaluate selected file list length", () => {
     const lengthConfig: ActionConfig = {
       ...mockActionsConfig[0],
       id: "length-enabled-test",
@@ -1455,7 +1343,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1290: #MaxDownloadableSize should compare against configured max size", () => {
+  it("1270: #MaxDownloadableSize should compare against configured max size", () => {
     mockAppConfigService.appConfig.maxDirectDownloadSize =
       lowerMaxFileSizeLimit;
 
@@ -1477,7 +1365,7 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(component.disabled).toBeFalse();
   });
 
-  it("1300: hidden expression should hide action when condition is true", () => {
+  it("1280: hidden expression should hide action when condition is true", () => {
     const hiddenConfig: ActionConfig = {
       ...mockActionsConfig[0],
       id: "hidden-test",
@@ -1679,7 +1567,7 @@ describe("1000: ConfigurableActionComponent", () => {
   ];
 
   allKeywordMapSelectors.forEach((testCase) => {
-    it(`1310: ${testCase.name} selector should resolve`, () => {
+    it(`1290: ${testCase.name} selector should resolve`, () => {
       const selectorConfig: ActionConfig = {
         ...mockActionsConfig[0],
         id: `selector-${testCase.name}`,
@@ -2033,6 +1921,52 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(storeDispatchSpy).toHaveBeenCalledWith(actionSuccessAction());
   });
 
+  describe("1420: addedFrom in the cart", () => {
+    const [archiveAction] = buildDefaultBatchActions([]);
+
+    // no currentArchViewMode key: the cart (batch-view) context
+    const cartWith = (...origins: (string | undefined)[]): ActionItems => ({
+      datasets: origins.map(
+        (addedFrom, i) =>
+          ({
+            pid: `pid-${i}`,
+            size: 100,
+            packedSize: 100,
+            addedFrom,
+          }) as ActionItemDataset,
+      ),
+    });
+
+    it("1420: the default Archive action should ignore addedFrom", () => {
+      createComponent(archiveAction, cartWith("all", "details", undefined));
+      expect(component.disabled).toBeFalse();
+    });
+
+    it("1421: a custom action can require every dataset to come from a view", () => {
+      const strictArchive: ActionConfig = {
+        ...archiveAction,
+        variables: {
+          ...archiveAction.variables,
+          addedFrom: "#DatasetsField[addedFrom]",
+        },
+        enabled:
+          "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))",
+      };
+
+      createComponent(strictArchive, cartWith("archivable", "archivable"));
+      expect(component.disabled).toBeFalse();
+
+      createComponent(strictArchive, cartWith("archivable", "details"));
+      expect(component.disabled).toBeTrue();
+
+      createComponent(strictArchive, {
+        ...cartWith(undefined),
+        currentArchViewMode: "archivable",
+      });
+      expect(component.disabled).toBeFalse();
+    });
+  });
+
   describe("1400: default batch actions (Archive/Retrieve) visibility", () => {
     const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
 
@@ -2098,6 +2032,179 @@ describe("1000: ConfigurableActionComponent", () => {
       expect(body.jobParams.option).toBe("second");
       expect(body.jobParams.retrieveDestination).toBeUndefined();
       expect(body.type).toBe("retrieve");
+    });
+  });
+
+  describe("1410: default batch actions (Archive/Retrieve) disabled tooltips", () => {
+    const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
+
+    const itemsWithSizes = (size: number, packedSize: number): ActionItems => ({
+      datasets: [{ pid: "pid-0", size, packedSize } as ActionItemDataset],
+    });
+
+    it("1410: should ask to select datasets when nothing is selected", () => {
+      createComponent(archiveAction, { datasets: [] });
+      expect(component.tooltip).toEqual(
+        "Select one or more datasets to archive.",
+      );
+
+      createComponent(retrieveAction, { datasets: [] });
+      expect(component.tooltip).toEqual(
+        "Select one or more datasets to retrieve.",
+      );
+    });
+
+    it("1411: should explain an empty selection total", () => {
+      createComponent(archiveAction, itemsWithSizes(0, 0));
+      expect(component.tooltip).toEqual(
+        "The selected datasets have a total size of 0 bytes, so there is nothing to archive.",
+      );
+
+      createComponent(retrieveAction, itemsWithSizes(0, 0));
+      expect(component.tooltip).toEqual(
+        "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve.",
+      );
+    });
+
+    it("1412: should show no tooltip while enabled", () => {
+      createComponent(archiveAction, itemsWithSizes(100, 100));
+      expect(component.tooltip).toEqual("");
+
+      createComponent(retrieveAction, itemsWithSizes(100, 100));
+      expect(component.tooltip).toEqual("");
+    });
+  });
+
+  describe("1500: enabled conditions", () => {
+    const baseAction: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "enabled-conditions-test",
+      variables: { pids: "#DatasetsPid" },
+    };
+
+    it("1500: should be disabled by the first failing condition, with its tooltip", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [
+              { condition: "#Length(@pids) > 0", disabledTooltip: "never" },
+              { condition: "false", disabledTooltip: "first failing" },
+              { condition: "false", disabledTooltip: "second failing" },
+            ],
+            enabledTooltip: "unused",
+          },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeTrue();
+      expect(component.tooltip).toEqual("first failing");
+    });
+
+    it("1501: should be enabled with the enabledTooltip when all conditions hold", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [
+              { condition: "#Length(@pids) > 0", disabledTooltip: "unused" },
+              { condition: "true" },
+            ],
+            enabledTooltip: "May fail",
+          },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("May fail");
+
+      createComponent(
+        {
+          ...baseAction,
+          enabled: { conditions: [], enabledTooltip: "Always" },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("Always");
+    });
+
+    it("1502: should have no tooltip when none is configured", () => {
+      createComponent(
+        { ...baseAction, enabled: { conditions: [{ condition: "false" }] } },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeTrue();
+      expect(component.tooltip).toEqual("");
+
+      createComponent(
+        { ...baseAction, enabled: { conditions: [{ condition: "true" }] } },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("");
+
+      createComponent({ ...baseAction, enabled: "false" }, mockActionItems);
+      expect(component.tooltip).toEqual("");
+    });
+
+    it("1503: should put the tooltip of a disabled action on a focusable wrapper", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [{ condition: "false", disabledTooltip: "Because" }],
+          },
+        },
+        mockActionItems,
+      );
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const wrapperTooltip = wrapper.injector.get(MatTooltip);
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(wrapperTooltip.message).toEqual("Because");
+      expect(wrapperTooltip.disabled).toBeFalse();
+      expect(buttonTooltip.disabled).toBeTrue();
+      // focusable, so keyboard users can reach the tooltip
+      expect(wrapper.nativeElement.getAttribute("tabindex")).toEqual("0");
+      expect(wrapper.nativeElement.getAttribute("aria-label")).toEqual(
+        baseAction.label,
+      );
+    });
+
+    it("1504: should put the tooltip of an enabled action on the button", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: { conditions: [], enabledTooltip: "May fail" },
+        },
+        mockActionItems,
+      );
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(buttonTooltip.message).toEqual("May fail");
+      expect(buttonTooltip.disabled).toBeFalse();
+      expect(wrapper.injector.get(MatTooltip).disabled).toBeTrue();
+      expect(wrapper.nativeElement.hasAttribute("tabindex")).toBeFalse();
+    });
+
+    it("1505: should not show a tooltip or take focus without one", () => {
+      createComponent({ ...baseAction, enabled: "true" }, mockActionItems);
+
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(wrapper.injector.get(MatTooltip).disabled).toBeTrue();
+      expect(buttonTooltip.disabled).toBeTrue();
+      expect(wrapper.nativeElement.hasAttribute("tabindex")).toBeFalse();
+      expect(wrapper.nativeElement.hasAttribute("aria-label")).toBeFalse();
     });
   });
 });
