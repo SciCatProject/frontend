@@ -570,6 +570,7 @@
                 data-cy="attachment-thumbnail"
                 mat-card-image
                 [src]="getImageUrl(da.thumbnail)"
+                (error)="onAttachmentImageError($event)"
                 (click)="openAttachment(da.thumbnail)"
                 class="thumbnail-image"
               />
