@@ -306,34 +306,29 @@ describe("ProposalEffects", () => {
       expect(effects.fetchProposalDatasets$).toBeObservable(expected);
     });
 
-    it("should only complete the latest fetch when a slow one is still running", () => {
-      const slow = fromActions.fetchProposalDatasetsAction({
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const datasets = [dataset];
+      const skip = 0;
+      const limit = 50;
+      const action = fromActions.fetchProposalDatasetsAction({
         proposalId,
-        skip: 0,
-        limit: 10,
-      });
-      const fast = fromActions.fetchProposalDatasetsAction({
-        proposalId,
-        skip: 10,
-        limit: 10,
+        skip,
+        limit,
       });
       const outcome1 = fromActions.fetchProposalDatasetsCompleteAction({
-        datasets: [dataset],
-        skip: 10,
-        limit: 10,
+        datasets,
+        skip,
+        limit,
       });
       const outcome2 = fromActions.fetchProposalDatasetsCountAction({
         proposalId,
       });
 
-      actions = hot("-ab", { a: slow, b: fast });
-      datasetApi.datasetsControllerFindAllV3.and.returnValues(
-        cold("-----a|", { a: [] }),
-        cold("-a|", { a: [dataset] }),
-      );
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", { a: datasets });
+      datasetApi.datasetsControllerFindAllV3.and.returnValue(response);
 
-      // the slow answer would arrive at frame 6 and is dropped
-      const expected = cold("---(bc)", { b: outcome1, c: outcome2 });
+      const expected = cold("-----(bc)", { b: outcome1, c: outcome2 });
       expect(effects.fetchProposalDatasets$).toBeObservable(expected);
     });
   });

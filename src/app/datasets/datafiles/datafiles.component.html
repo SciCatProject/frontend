@@ -1,44 +1,42 @@
-<ng-template [ngIf]="dataset$ | async">
-  <ng-template [ngIf]="maxFileSize && tooLargeFile">
+@if (dataset$ | async) {
+  @if (maxFileSize && tooLargeFile) {
     <span>
       <mat-icon class="warning-icon"> warning </mat-icon>
       <span [innerHTML]="hasFileAboveMaxSizeWarning()"></span>
     </span>
-  </ng-template>
-
-  <ng-template [ngIf]="maxFileSize">
+  }
+  @if (maxFileSize) {
     <div>
       <mat-icon> info </mat-icon>
       Maximum allowed download size: {{ maxFileSize | filesize }}
     </div>
-  </ng-template>
-
-  <ng-template [ngIf]="files.length > 0 && maxFileSize">
+  }
+  @if (files.length > 0 && maxFileSize) {
     <div class="selected" fxLayout="row" fxLayoutAlign="space-evenly end">
       <div fxFlex="auto" style="margin-bottom: 0.5em">
         Selected: {{ selectedFileSize | filesize
         }}{{ maxFileSize ? " / " + (maxFileSize | filesize) : "" }}
       </div>
     </div>
-  </ng-template>
-
+  }
   <div class="datafiles-header">
     <span [ngPlural]="count" class="nbr-of-files">
       <ng-template ngPluralCase="=0">No datafiles.</ng-template>
       <ng-template ngPluralCase="=1">1 datafile.</ng-template>
       <ng-template ngPluralCase="other">{{ count }} datafiles.</ng-template>
     </span>
-    <div *ngIf="(datablocks$ | async) && (datablocks$ | async)?.length === 0">
-      <h3>No files associated to this dataset</h3>
-    </div>
-
-    <configurable-actions
-      *ngIf="appConfig.datafilesActionsEnabled"
-      [actionsConfig]="appConfig.datafilesActions"
-      [actionItems]="actionItems"
-    ></configurable-actions>
+    @if ((datablocks$ | async) && (datablocks$ | async)?.length === 0) {
+      <div>
+        <h3>No files associated to this dataset</h3>
+      </div>
+    }
+    @if (appConfig.datafilesActionsEnabled) {
+      <configurable-actions
+        [actionsConfig]="appConfig.datafilesActions"
+        [actionItems]="actionItems"
+      ></configurable-actions>
+    }
   </div>
-
   <dynamic-mat-table
     [columns]="tableColumns"
     [dataSource]="dataSource"
@@ -52,4 +50,4 @@
     (paginationChange)="onPaginationChange($event)"
   >
   </dynamic-mat-table>
-</ng-template>
+}

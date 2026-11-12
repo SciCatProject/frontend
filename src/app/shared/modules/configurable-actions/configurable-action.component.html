@@ -1,19 +1,50 @@
-<ng-template [ngIf]="visible">
-  <button
-    *ngIf="buttonStyle.raised" 
-    mat-raised-button
-    (click)="performAction()"
-    [color]="buttonStyle.color" 
-    [disabled]="disabled">
-    <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
-    <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
-    {{ actionConfig.label }}
-  </button>
-  <button *ngIf="!buttonStyle.raised" mat-button
-    [color]="buttonStyle.color" (click)="performAction()"
-    [disabled]="disabled">
-    <mat-icon *ngIf="useMatIcon">{{ actionConfig.mat_icon }}</mat-icon>
-    <img *ngIf="useIcon" src="{{ actionConfig.icon }}" />
-    {{ actionConfig.label }}
-  </button>
-</ng-template>
+@if (visible) {
+  <!-- disabled buttons can't take focus or pointer events, so the wrapper
+       carries their tooltip; it is then focusable, and the tooltip shows on
+       keyboard focus and is linked as its accessible description. Enabled
+       buttons carry their tooltip themselves -->
+  <span
+    class="action-wrapper"
+    [matTooltip]="tooltip"
+    [matTooltipDisabled]="!tooltip || !disabled"
+    [attr.tabindex]="tooltip && disabled ? 0 : null"
+    [attr.aria-label]="tooltip && disabled ? actionConfig.label : null"
+  >
+    @if (buttonStyle.raised) {
+      <button
+        mat-raised-button
+        (click)="performAction()"
+        [color]="buttonStyle.color"
+        [disabled]="disabled"
+        [matTooltip]="tooltip"
+        [matTooltipDisabled]="!tooltip || disabled"
+      >
+        @if (useMatIcon) {
+          <mat-icon>{{ actionConfig.mat_icon }}</mat-icon>
+        }
+        @if (useIcon) {
+          <img src="{{ actionConfig.icon }}" />
+        }
+        {{ actionConfig.label }}
+      </button>
+    }
+    @if (!buttonStyle.raised) {
+      <button
+        mat-button
+        [color]="buttonStyle.color"
+        (click)="performAction()"
+        [disabled]="disabled"
+        [matTooltip]="tooltip"
+        [matTooltipDisabled]="!tooltip || disabled"
+      >
+        @if (useMatIcon) {
+          <mat-icon>{{ actionConfig.mat_icon }}</mat-icon>
+        }
+        @if (useIcon) {
+          <img src="{{ actionConfig.icon }}" />
+        }
+        {{ actionConfig.label }}
+      </button>
+    }
+  </span>
+}

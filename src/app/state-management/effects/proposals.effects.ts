@@ -141,7 +141,6 @@ export class ProposalEffects {
   fetchProposalDatasets$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalDatasetsAction),
-      // a newer fetch cancels the one still running
       switchMap(({ skip, limit, sortColumn, sortDirection, proposalId }) => {
         return this.datasetsService
           .datasetsControllerFindAllV3(

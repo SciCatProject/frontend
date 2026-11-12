@@ -48,7 +48,7 @@ import {
   distinctUntilChanged,
   filter,
 } from "rxjs/operators";
-import { Subject, Subscription, timer } from "rxjs";
+import { combineLatest, Subject, Subscription, timer } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
 import {
@@ -259,6 +259,23 @@ export class DynamicMatTableComponent<T extends TableRow>
       overlayX: "start",
       overlayY: "center",
       offsetX: 4,
+    },
+  ];
+  /** Overlay positions for the thumbnail preview, to the right of the thumbnail first */
+  thumbnailPreviewPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "start",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "center",
+      offsetX: -8,
     },
   ];
   /** Overlay positions for metadata hover */
@@ -517,6 +534,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.standardDataSource.sort = this.sort;
     this.dataSource.subscribe((x) => {
       x = x || [];
+      // a removed row sends no mouseleave and its index is reused
+      this.hoverKey = null;
       this.rowSelectionModel.clear();
       this.initSystemField(x);
       this.standardDataSource.data = x;
@@ -657,11 +676,12 @@ export class DynamicMatTableComponent<T extends TableRow>
       });
     }
 
-    this.liveConnectionErrSub = this.eventsService.connectionError$.subscribe(
-      (hasError) => {
-        this.liveBorder = !hasError;
-      },
-    );
+    this.liveConnectionErrSub = combineLatest([
+      this.eventsService.connectionError$,
+      this.eventsService.evicted$,
+    ]).subscribe(([hasError, evicted]) => {
+      this.liveBorder = !hasError && !evicted;
+    });
   }
 
   public get inverseOfTranslation(): number {

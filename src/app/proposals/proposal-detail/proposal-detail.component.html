@@ -1,197 +1,215 @@
-<div *ngIf="proposal" class="tab-content">
-  <mat-card>
-    <mat-card-header class="general-header">
-      <div mat-card-avatar class="section-icon">
-        <mat-icon> description </mat-icon>
-      </div>
-      {{ "General Information" | translate: localization }}
-    </mat-card-header>
-
-    <mat-card-content>
-      <table>
-        <tr>
-          <th>{{ "Title" | translate: localization }}</th>
-          <td>{{ proposal.title }}</td>
-        </tr>
-        <tr>
-          <th>{{ "Abstract" | translate: localization }}</th>
-          <td>{{ proposal.abstract }}</td>
-        </tr>
-        <tr>
-          <th>{{ "Proposal Id" | translate: localization }}</th>
-          <td>{{ proposal.proposalId }}</td>
-        </tr>
-        <tr data-cy="proposal-type">
-          <th>{{ "Proposal Type" | translate: localization }}</th>
-          <!-- TODO: Change this to just proposal.type when new sdk is merged -->
-          <td>{{ proposal["type"] }}</td>
-        </tr>
-        <tr
-          *ngIf="
-            proposal['parentProposalId'] && parentProposal$
-              | async as parentProposal
-          "
-        >
-          <th>{{ "Parent proposal" | translate: localization }}</th>
-          <td>
-            <a (click)="onClickProposal(parentProposal.proposalId)">{{
-              parentProposal.title
-            }}</a>
-          </td>
-        </tr>
-        <ng-template
-          [ngIf]="
-            proposal.MeasurementPeriodList &&
-            proposal.MeasurementPeriodList.length > 0
-          "
-        >
-          <ng-template
-            ngFor
-            let-period
-            [ngForOf]="proposal.MeasurementPeriodList"
-            let-i="index"
-            let-first="first"
-          >
-            <tr *ngIf="first">
-              <th>{{ "Start Time" | translate: localization }}</th>
-              <td>
-                {{ period.start | date }}
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template
-            ngFor
-            let-period
-            [ngForOf]="proposal.MeasurementPeriodList"
-            let-i="index"
-            let-last="last"
-          >
-            <tr *ngIf="last">
-              <th>{{ "End Time" | translate: localization }}</th>
-              <td>{{ period.end | date }}</td>
-            </tr>
-          </ng-template>
-        </ng-template>
-        <tr>
-          <th>{{ "Number of Datasets" | translate: localization }}</th>
-          <td>{{ proposal.numberOfDatasets }}</td>
-        </tr>
-      </table>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card>
-    <mat-card-header class="creator-header">
-      <div mat-card-avatar class="section-icon">
-        <mat-icon> person </mat-icon>
-      </div>
-      {{ "Creator Information" | translate: localization }}
-    </mat-card-header>
-
-    <mat-card-content>
-      <table>
-        <tr>
-          <th>{{ "Main proposer" | translate: localization }}</th>
-          <td *ngIf="proposal.firstname && proposal.lastname; else noName">
-            <a href="mailto:{{ proposal.email }}"
-              >{{ proposal.firstname }} {{ proposal.lastname }}</a
-            >
-          </td>
-          <ng-template #noName>
-            <td>
-              <a href="mailto:{{ proposal.email }}">{{ proposal.email }}</a>
-            </td>
-          </ng-template>
-        </tr>
-        <tr *ngIf="proposal.pi_firstname && proposal.pi_lastname">
-          <th>{{ "Principal Investigator" | translate: localization }}</th>
-          <td *ngIf="proposal.pi_email; else withoutEmail">
-            <a href="mailto:{{ proposal.pi_email }}"
-              >{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</a
-            >
-          </td>
-          <ng-template #withoutEmail>
-            <td>{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</td>
-          </ng-template>
-        </tr>
-      </table>
-    </mat-card-content>
-  </mat-card>
-
-  <ng-container *ngIf="emptyMetadataTable()">
-    <mat-card
-      *ngIf="appConfig.tableSciDataEnabled"
-      data-cy="proposal-metadata-card"
-    >
-      <mat-card-header class="scientific-header">
+@if (proposal) {
+  <div class="tab-content">
+    <mat-card>
+      <mat-card-header class="general-header">
         <div mat-card-avatar class="section-icon">
-          <mat-icon> science </mat-icon>
+          <mat-icon> description </mat-icon>
         </div>
-        {{ "Metadata" | translate: localization }}
+        {{ "General Information" | translate: localization }}
       </mat-card-header>
       <mat-card-content>
-        <ng-template
-          [ngIf]="!appConfig.jsonMetadataEnabled"
-          [ngIfElse]="jsonView"
-        >
-          <ng-template #metadataView>
-            <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-view
-                *ngSwitchCase="'tree'"
-                [metadata]="proposal['metadata']"
-              ></tree-view>
-              <metadata-view *ngSwitchDefault [metadata]="proposal['metadata']">
-              </metadata-view>
-            </div>
-          </ng-template>
-          <mat-tab-group
-            class="metadataGroup"
-            *ngIf="editingAllowed; else metadataView"
-          >
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon> list </mat-icon> View
-              </ng-template>
-              <ng-template matTabContent>
-                <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
-              </ng-template>
-            </mat-tab>
-            <mat-tab
-              class="editTab"
-              *ngIf="editingAllowed"
-              [hidden]="!appConfig.editMetadataEnabled"
-            >
-              <ng-template mat-tab-label>
-                <mat-icon> edit </mat-icon> Edit
-              </ng-template>
-              <ng-template matTabContent>
-                <div [ngSwitch]="appConfig.metadataStructure">
-                  <tree-edit
-                    *ngSwitchCase="'tree'"
-                    [metadata]="proposal['metadata']"
-                    (save)="onSaveMetadata($event)"
-                    (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-                  >
-                  </tree-edit>
-                  <metadata-edit
-                    *ngSwitchDefault
-                    [metadata]="proposal['metadata']"
-                    (save)="onSaveMetadata($event)"
-                  >
-                  </metadata-edit>
-                </div>
-              </ng-template>
-            </mat-tab>
-          </mat-tab-group>
-        </ng-template>
-
-        <ng-template #jsonView>
-          <ngx-json-viewer
-            [json]="proposal['metadata']"
-            [expanded]="false"
-          ></ngx-json-viewer>
-        </ng-template>
+        <table>
+          <tr>
+            <th>{{ "Title" | translate: localization }}</th>
+            <td>{{ proposal.title }}</td>
+          </tr>
+          <tr>
+            <th>{{ "Abstract" | translate: localization }}</th>
+            <td>{{ proposal.abstract }}</td>
+          </tr>
+          <tr>
+            <th>{{ "Proposal Id" | translate: localization }}</th>
+            <td>{{ proposal.proposalId }}</td>
+          </tr>
+          <tr data-cy="proposal-type">
+            <th>{{ "Proposal Type" | translate: localization }}</th>
+            <!-- TODO: Change this to just proposal.type when new sdk is merged -->
+            <td>{{ proposal["type"] }}</td>
+          </tr>
+          @if (
+            proposal["parentProposalId"] && parentProposal$ | async;
+            as parentProposal
+          ) {
+            <tr>
+              <th>{{ "Parent proposal" | translate: localization }}</th>
+              <td>
+                <a (click)="onClickProposal(parentProposal.proposalId)">{{
+                  parentProposal.title
+                }}</a>
+              </td>
+            </tr>
+          }
+          @if (
+            proposal.MeasurementPeriodList &&
+            proposal.MeasurementPeriodList.length > 0
+          ) {
+            @for (
+              period of proposal.MeasurementPeriodList;
+              track period;
+              let i = $index;
+              let first = $first
+            ) {
+              @if (first) {
+                <tr>
+                  <th>{{ "Start Time" | translate: localization }}</th>
+                  <td>
+                    {{ period.start | date }}
+                  </td>
+                </tr>
+              }
+            }
+            @for (
+              period of proposal.MeasurementPeriodList;
+              track period;
+              let i = $index;
+              let last = $last
+            ) {
+              @if (last) {
+                <tr>
+                  <th>{{ "End Time" | translate: localization }}</th>
+                  <td>{{ period.end | date }}</td>
+                </tr>
+              }
+            }
+          }
+          <tr>
+            <th>{{ "Number of Datasets" | translate: localization }}</th>
+            <td>{{ proposal.numberOfDatasets }}</td>
+          </tr>
+        </table>
       </mat-card-content>
     </mat-card>
-  </ng-container>
-</div>
+    <mat-card>
+      <mat-card-header class="creator-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> person </mat-icon>
+        </div>
+        {{ "Creator Information" | translate: localization }}
+      </mat-card-header>
+      <mat-card-content>
+        <table>
+          <tr>
+            <th>{{ "Main proposer" | translate: localization }}</th>
+            @if (proposal.firstname && proposal.lastname) {
+              <td>
+                <a href="mailto:{{ proposal.email }}"
+                  >{{ proposal.firstname }} {{ proposal.lastname }}</a
+                >
+              </td>
+            } @else {
+              <td>
+                <a href="mailto:{{ proposal.email }}">{{ proposal.email }}</a>
+              </td>
+            }
+          </tr>
+          @if (proposal.pi_firstname && proposal.pi_lastname) {
+            <tr>
+              <th>{{ "Principal Investigator" | translate: localization }}</th>
+              @if (proposal.pi_email) {
+                <td>
+                  <a href="mailto:{{ proposal.pi_email }}"
+                    >{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</a
+                  >
+                </td>
+              } @else {
+                <td>{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</td>
+              }
+            </tr>
+          }
+        </table>
+      </mat-card-content>
+    </mat-card>
+    @if (emptyMetadataTable()) {
+      @if (appConfig.tableSciDataEnabled) {
+        <mat-card data-cy="proposal-metadata-card">
+          <mat-card-header class="scientific-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> science </mat-icon>
+            </div>
+            {{ "Metadata" | translate: localization }}
+          </mat-card-header>
+          <mat-card-content>
+            @if (!appConfig.jsonMetadataEnabled) {
+              <ng-template #metadataView>
+                <div>
+                  @switch (appConfig.metadataStructure) {
+                    @case ("tree") {
+                      <tree-view [metadata]="proposal['metadata']"></tree-view>
+                    }
+                    @default {
+                      <metadata-view [metadata]="proposal['metadata']">
+                      </metadata-view>
+                    }
+                  }
+                </div>
+              </ng-template>
+              @if (editingAllowed) {
+                <mat-tab-group class="metadataGroup">
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      <mat-icon> list </mat-icon> View
+                    </ng-template>
+                    <ng-template matTabContent>
+                      <ng-container *ngTemplateOutlet="metadataView">
+                      </ng-container>
+                    </ng-template>
+                  </mat-tab>
+                  @if (editingAllowed) {
+                    <mat-tab
+                      class="editTab"
+                      [hidden]="!appConfig.editMetadataEnabled"
+                    >
+                      <ng-template mat-tab-label>
+                        <mat-icon> edit </mat-icon> Edit
+                      </ng-template>
+                      <ng-template matTabContent>
+                        <div>
+                          @switch (appConfig.metadataStructure) {
+                            @case ("tree") {
+                              <tree-edit
+                                [metadata]="proposal['metadata']"
+                                (save)="onSaveMetadata($event)"
+                                (hasUnsavedChanges)="
+                                  onHasUnsavedChanges($event)
+                                "
+                              >
+                              </tree-edit>
+                            }
+                            @default {
+                              <metadata-edit
+                                [metadata]="proposal['metadata']"
+                                (save)="onSaveMetadata($event)"
+                              >
+                              </metadata-edit>
+                            }
+                          }
+                        </div>
+                      </ng-template>
+                    </mat-tab>
+                  }
+                </mat-tab-group>
+              } @else {
+                <div>
+                  @switch (appConfig.metadataStructure) {
+                    @case ("tree") {
+                      <tree-view [metadata]="proposal['metadata']"></tree-view>
+                    }
+                    @default {
+                      <metadata-view [metadata]="proposal['metadata']">
+                      </metadata-view>
+                    }
+                  }
+                </div>
+              }
+            } @else {
+              <ngx-json-viewer
+                [json]="proposal['metadata']"
+                [expanded]="false"
+              ></ngx-json-viewer>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    }
+  </div>
+}

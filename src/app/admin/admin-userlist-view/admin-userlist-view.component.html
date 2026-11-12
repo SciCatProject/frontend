@@ -1,12 +1,12 @@
 <div class="userlist-container">
-  <ng-container *ngIf="error">
+  @if (error) {
     <div class="error-container">
       <mat-icon color="warn">error</mat-icon>
-      <p>Error loading users: {{ error?.message || 'Unknown error' }}</p>
+      <p>Error loading users: {{ error?.message || "Unknown error" }}</p>
     </div>
-  </ng-container>
+  }
 
-  <ng-container *ngIf="!error">
+  @if (!error) {
     <dynamic-mat-table
       [tableName]="tableName"
       [columns]="columns"
@@ -22,5 +22,5 @@
       [emptyIcon]="'info'"
     >
     </dynamic-mat-table>
-  </ng-container>
+  }
 </div>

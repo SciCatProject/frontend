@@ -1,163 +1,167 @@
-<div fxLayout="row" fxLayout.xs="column" *ngIf="vm$ | async as vm">
-  <div fxFlex="80">
-    <mat-card>
-      <mat-card-header class="general-header">
-        <div mat-card-avatar class="section-icon">
-          <mat-icon> person </mat-icon>
-        </div>
-        User Information
-      </mat-card-header>
-
-      <mat-card-content>
-        <ng-container
-          *ngIf="
+@if (vm$ | async; as vm) {
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="80">
+      <mat-card>
+        <mat-card-header class="general-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> person </mat-icon>
+          </div>
+          User Information
+        </mat-card-header>
+        <mat-card-content>
+          @if (
             vm.profile &&
-              vm.profile.thumbnailPhoto &&
-              vm.profile.thumbnailPhoto.startsWith('data:image/');
-            else noPhoto
-          "
-        >
-          <img
-            class="profile-image"
-            src="{{ vm.profile.thumbnailPhoto }}"
-            height="65px"
-            alt="profile photo"
-          />
-        </ng-container>
-        <ng-template #noPhoto>
-          <img
-            class="profile-image"
-            src="assets/images/user.png"
-            height="65px"
-            alt="profile photo"
-          />
-        </ng-template>
-
-        <table>
-          <tr *ngIf="vm.profile && vm.profile.displayName" data-cy="user-name">
-            <th>Name</th>
-            <td>{{ vm.profile.displayName }}</td>
-          </tr>
-          <tr *ngIf="vm.user && vm.user.email" data-cy="user-email">
-            <th>Email</th>
-            <td>{{ vm.user.email }}</td>
-          </tr>
-          <tr *ngIf="vm.user && vm.user.id" data-cy="user-id">
-            <th>Id</th>
-            <td>{{ vm.user.id }}</td>
-          </tr>
-          <tr
-            *ngIf="vm.profile && vm.profile.accessGroups"
-            data-cy="user-accessGroup"
-          >
-            <th>Groups</th>
-            <td>
-              <ng-container
-                *ngIf="
-                  vm.profile.accessGroups.length > 0;
-                  else noGroupsTemplate
-                "
+            vm.profile.thumbnailPhoto &&
+            vm.profile.thumbnailPhoto.startsWith("data:image/")
+          ) {
+            <img
+              class="profile-image"
+              src="{{ vm.profile.thumbnailPhoto }}"
+              height="65px"
+              alt="profile photo"
+            />
+          } @else {
+            <img
+              class="profile-image"
+              src="assets/images/user.png"
+              height="65px"
+              alt="profile photo"
+            />
+          }
+          <table>
+            @if (vm.profile && vm.profile.displayName) {
+              <tr data-cy="user-name">
+                <th>Name</th>
+                <td>{{ vm.profile.displayName }}</td>
+              </tr>
+            }
+            @if (vm.user && vm.user.email) {
+              <tr data-cy="user-email">
+                <th>Email</th>
+                <td>{{ vm.user.email }}</td>
+              </tr>
+            }
+            @if (vm.user && vm.user.id) {
+              <tr data-cy="user-id">
+                <th>Id</th>
+                <td>{{ vm.user.id }}</td>
+              </tr>
+            }
+            @if (vm.profile && vm.profile.accessGroups) {
+              <tr data-cy="user-accessGroup">
+                <th>Groups</th>
+                <td>
+                  @if (vm.profile.accessGroups.length > 0) {
+                    <span [class.showMore]="showMore">
+                      {{
+                        showMore
+                          ? vm.profile.accessGroups
+                          : (vm.profile.accessGroups | slice: 0 : 10) + "..."
+                      }}
+                    </span>
+                    @if (vm.profile.accessGroups.length > 10) {
+                      <span
+                        class="toggleButton"
+                        (click)="toggleShowMore($event)"
+                        (keydown)="toggleShowMore($event)"
+                      >
+                        @if (showMore) {
+                          <mat-icon matTooltip="Show Less Groups"
+                            >unfold_less</mat-icon
+                          >
+                        } @else {
+                          <mat-icon matTooltip="Show All Groups"
+                            >unfold_more</mat-icon
+                          >
+                        }
+                      </span>
+                    }
+                  } @else {
+                    <span class="empty-state">No groups available</span>
+                  }
+                </td>
+              </tr>
+            }
+            @if (tokenValue) {
+              <tr data-cy="user-token">
+                <th>SciCat Token</th>
+                <td>
+                  <span class="token-truncate">{{ tokenValue }}</span>
+                  <span class="copy-button" (click)="onCopy(tokenValue)">
+                    <mat-icon matTooltip="Copy token to clipboard"
+                      >post_add</mat-icon
+                    >
+                  </span>
+                </td>
+              </tr>
+            }
+            @if (vm.user && vm.user.authStrategy) {
+              <tr data-cy="auth-strategy">
+                <th>Auth strategy</th>
+                <td>{{ vm.user.authStrategy }}</td>
+              </tr>
+            }
+          </table>
+        </mat-card-content>
+      </mat-card>
+      @if (vm.settings; as settings) {
+        <mat-card>
+          <mat-card-header class="settings-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> settings </mat-icon>
+            </div>
+            Settings
+          </mat-card-header>
+          <mat-card-content>
+            <table>
+              @if (appVersion) {
+                <tr>
+                  <th>Frontend Release Version</th>
+                  <td>{{ appVersion }}</td>
+                </tr>
+              }
+              @if (appConfig.facility) {
+                <tr>
+                  <th>Site</th>
+                  <td>{{ appConfig.facility }}</td>
+                </tr>
+              }
+            </table>
+          </mat-card-content>
+        </mat-card>
+      }
+      @if (isAdmin$ | async) {
+        <mat-card>
+          <mat-card-header class="configs-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> settings_applications </mat-icon>
+            </div>
+            Frontend Configs
+          </mat-card-header>
+          <mat-card-content>
+            <button
+              mat-stroked-button
+              class="config-button"
+              (click)="toggleShowConfig($event, 'frontend')"
+              (keydown)="toggleShowConfig($event, 'frontend')"
+            >
+              {{
+                showConfig.frontend
+                  ? "Hide Frontend Config"
+                  : "Show Frontend Config"
+              }}
+            </button>
+            @if (showConfig.frontend) {
+              <ngx-json-viewer
+                data-cy="config-json-view"
+                [json]="appConfig"
+                [expanded]="false"
               >
-                <span [class.showMore]="showMore">
-                  {{
-                    showMore
-                      ? vm.profile.accessGroups
-                      : (vm.profile.accessGroups | slice: 0 : 10) + "..."
-                  }}
-                </span>
-                <span
-                  *ngIf="vm.profile.accessGroups.length > 10"
-                  class="toggleButton"
-                  (click)="toggleShowMore($event)"
-                  (keydown)="toggleShowMore($event)"
-                >
-                  <ng-container *ngIf="showMore; else showAllTemplate">
-                    <mat-icon matTooltip="Show Less Groups"
-                      >unfold_less</mat-icon
-                    >
-                  </ng-container>
-                  <ng-template #showAllTemplate>
-                    <mat-icon matTooltip="Show All Groups"
-                      >unfold_more</mat-icon
-                    >
-                  </ng-template>
-                </span>
-              </ng-container>
-              <ng-template #noGroupsTemplate>
-                <span class="empty-state">No groups available</span>
-              </ng-template>
-            </td>
-          </tr>
-          <tr *ngIf="tokenValue" data-cy="user-token">
-            <th>SciCat Token</th>
-            <td>
-              <span class="token-truncate">{{ tokenValue }}</span>
-              <span class="copy-button" (click)="onCopy(tokenValue)">
-                <mat-icon matTooltip="Copy token to clipboard"
-                  >post_add</mat-icon
-                >
-              </span>
-            </td>
-          </tr>
-          <tr *ngIf="vm.user && vm.user.authStrategy" data-cy="auth-strategy">
-            <th>Auth strategy</th>
-            <td>{{ vm.user.authStrategy }}</td>
-          </tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card *ngIf="vm.settings as settings">
-      <mat-card-header class="settings-header">
-        <div mat-card-avatar class="section-icon">
-          <mat-icon> settings </mat-icon>
-        </div>
-        Settings
-      </mat-card-header>
-
-      <mat-card-content>
-        <table>
-          <tr *ngIf="appVersion">
-            <th>Frontend Release Version</th>
-            <td>{{ appVersion }}</td>
-          </tr>
-          <tr *ngIf="appConfig.facility">
-            <th>Site</th>
-            <td>{{ appConfig.facility }}</td>
-          </tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card *ngIf="isAdmin$ | async">
-      <mat-card-header class="configs-header">
-        <div mat-card-avatar class="section-icon">
-          <mat-icon> settings_applications </mat-icon>
-        </div>
-        Frontend Configs
-      </mat-card-header>
-
-      <mat-card-content>
-        <button
-          mat-stroked-button
-          class="config-button"
-          (click)="toggleShowConfig($event, 'frontend')"
-          (keydown)="toggleShowConfig($event, 'frontend')"
-        >
-          {{
-            showConfig.frontend
-              ? "Hide Frontend Config"
-              : "Show Frontend Config"
-          }}
-        </button>
-        <ngx-json-viewer
-          *ngIf="showConfig.frontend"
-          data-cy="config-json-view"
-          [json]="appConfig"
-          [expanded]="false"
-        >
-        </ngx-json-viewer>
-      </mat-card-content>
-    </mat-card>
+              </ngx-json-viewer>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
   </div>
-</div>
+}

@@ -4,10 +4,11 @@ import { By } from "@angular/platform-browser";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { DatePipe } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { StoreModule } from "@ngrx/store";
 import { TranslateService } from "@ngx-translate/core";
-import { BehaviorSubject, EMPTY, of } from "rxjs";
+import { BehaviorSubject, EMPTY, of, Subject } from "rxjs";
 import {
   Overlay,
   OverlayContainer,
@@ -111,6 +112,72 @@ describe("DynamicMatTableComponent", () => {
     component.closePinnedHoverCard();
 
     expect(component.isHoverCardOpen(row, hoverColumn)).toBeFalse();
+  });
+
+  it("opens the thumbnail preview on mouseenter and closes it on mouseleave", () => {
+    const row = { id: 1, pid: "pid-1" };
+    const imageColumn: TableField<any> = { name: "image", renderImage: true };
+
+    component.onHoverCardTriggerEnter(row, imageColumn);
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeTrue();
+
+    component.onHoverCardTriggerLeave(row, imageColumn);
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeFalse();
+  });
+
+  it("shows the preview of one row at a time", () => {
+    const row = { id: 1, pid: "pid-1" };
+    const otherRow = { id: 2, pid: "pid-2" };
+    const imageColumn: TableField<any> = { name: "image", renderImage: true };
+
+    component.onHoverCardTriggerEnter(row, imageColumn);
+    component.onHoverCardTriggerEnter(otherRow, imageColumn);
+
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeFalse();
+    expect(component.isHoverCardOpen(otherRow, imageColumn)).toBeTrue();
+  });
+
+  const initDataSource = () => {
+    component.tableSetting = {};
+    component.paginator = {
+      page: new Subject(),
+      initialized: of(undefined),
+    } as unknown as MatPaginator;
+    component.sort = {
+      sortChange: new Subject(),
+      initialized: of(undefined),
+    } as unknown as MatSort;
+    component.dataSource = new BehaviorSubject<any[]>([]);
+    spyOn(component, "refreshUI");
+    component.ngAfterViewInit();
+  };
+
+  it("clears the hover state when the data changes", () => {
+    const row = { id: 1, pid: "pid-1" };
+    const imageColumn: TableField<any> = { name: "image", renderImage: true };
+    initDataSource();
+
+    component.onHoverCardTriggerEnter(row, imageColumn);
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeTrue();
+
+    component.dataSource.next([{ pid: "pid-2" }]);
+
+    expect(component.isHoverCardOpen(row, imageColumn)).toBeFalse();
+  });
+
+  it("keeps a pinned hover card open when the data changes", () => {
+    const row = { id: 1 };
+    const event = jasmine.createSpyObj<MouseEvent>("event", [
+      "stopPropagation",
+      "preventDefault",
+    ]);
+    initDataSource();
+
+    component.togglePinnedHoverCard(event, row, hoverColumn);
+    component.dataSource.next([{ pid: "pid-2" }]);
+
+    expect(component.isHoverCardPinned(row, hoverColumn)).toBeTrue();
+    expect(component.isHoverCardOpen(row, hoverColumn)).toBeTrue();
   });
 
   it("closes a pinned hover card on document click", () => {
@@ -249,7 +316,11 @@ describe("DynamicMatTableComponent sort header", () => {
         { provide: AppConfigService, useValue: { getConfig: () => ({}) } },
         {
           provide: EventsService,
-          useValue: { connectionError$: of(false), message$: EMPTY },
+          useValue: {
+            connectionError$: of(false),
+            evicted$: of(false),
+            message$: EMPTY,
+          },
         },
       ],
     });
