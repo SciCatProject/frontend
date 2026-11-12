@@ -96,8 +96,9 @@ describe("1000 - Datasets list personalization", () => {
       .find("input")
       .uncheck({ force: true });
 
-    // Apply
-    cy.contains("mat-icon", "done").closest("button").click();
+    // Auto-save: the change is persisted after a debounce, no explicit apply
+    // button. Close the menu so the table is fully visible again.
+    cy.get("body").type("{esc}");
 
     cy.get("mat-table")
       .find("mat-header-row.header")
@@ -142,16 +143,17 @@ describe("1000 - Datasets list personalization", () => {
       .find("input")
       .uncheck({ force: true });
 
-    // Apply
-    cy.contains("mat-icon", "done").closest("button").click();
+    // Auto-save persists the change after a debounce (no apply/save buttons).
+    cy.get("body").type("{esc}");
 
     cy.finishedLoading();
 
-    cy.contains("mat-icon", "more_vert").closest("button").click();
-
-    cy.contains("button.mat-mdc-menu-item", "Save table setting").click();
-
+    // Reload/revisit and verify the personalized columns were persisted
     cy.visit("/datasets");
+
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+    cy.finishedLoading();
 
     cy.get("mat-table")
       .find("mat-header-row.header")
@@ -313,10 +315,6 @@ describe("1000 - Datasets list personalization", () => {
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
-
-    cy.contains("mat-icon", "more_vert").closest("button").click();
-
-    cy.contains("button.mat-mdc-menu-item", "Save table setting").click();
 
     cy.get("mat-table")
       .find("mat-header-row.header")
