@@ -186,6 +186,24 @@ describe("TableConfigService (fallback)", () => {
       ]);
     });
 
+    it("treats an undefined display as enabled (visible)", () => {
+      const result = service.buildColumnsSetting([
+        { name: "name" },
+        { name: "pid", display: undefined },
+      ] as any);
+
+      expect(result.map((c) => c.enabled)).toEqual([true, true]);
+    });
+
+    it("round-trips an undefined display as visible after reload", () => {
+      const persisted = service.buildColumnsSetting([{ name: "name" }] as any);
+
+      const defaults = [{ name: "name", display: undefined }] as any;
+      const merged = service.mergeColumnSettings(defaults, persisted as any);
+
+      expect((merged[0] as any).display).toBe("visible");
+    });
+
     it("maps printable and sticky through", () => {
       const result = service.buildColumnsSetting([
         { name: "name", display: "visible", printable: false, sticky: "start" },

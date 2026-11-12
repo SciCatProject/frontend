@@ -128,7 +128,7 @@ export class TableConfigService {
       return {
         name,
         header,
-        enabled: display === "visible" || display === "prevent-hidden",
+        enabled: display !== "hidden",
         order: index,
         width,
         path,
