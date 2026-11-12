@@ -32,9 +32,8 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-//import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AppConfigService } from "app-config.service";
-//import { boolean } from "mathjs";
 import {
   higherMaxFileSizeLimit,
   lowerMaxFileSizeLimit,
@@ -68,8 +67,8 @@ import { buildDefaultBatchActions } from "./configurable-actions.defaults";
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
   let fixture: ComponentFixture<ConfigurableActionComponent>;
-  let htmlForm: HTMLFormElement;
   let htmlInput: HTMLInputElement;
+  let createNativeElement: (tagName: string) => HTMLElement;
 
   let store: MockStore;
 
@@ -98,8 +97,7 @@ describe("1000: ConfigurableActionComponent", () => {
   // });
 
   beforeAll(() => {
-    htmlForm = document.createElement("form");
-    (htmlForm as HTMLFormElement).submit = () => {};
+    createNativeElement = document.createElement.bind(document);
     htmlInput = document.createElement("input");
   });
 
@@ -117,6 +115,7 @@ describe("1000: ConfigurableActionComponent", () => {
         ReactiveFormsModule,
         MatDialogModule,
         MatSnackBarModule,
+        MatProgressSpinnerModule,
         RouterModule,
         RouterModule.forRoot([]),
         StoreModule.forRoot({}),
@@ -149,6 +148,8 @@ describe("1000: ConfigurableActionComponent", () => {
     TestBed.compileComponents();
 
     store = TestBed.inject(MockStore);
+    store.overrideSelector(selectProfile, {});
+    store.overrideSelector(selectIsAdmin, false);
   }));
 
   // Narrow, structural views onto private members, used only to spy on/stub
@@ -649,13 +650,14 @@ describe("1000: ConfigurableActionComponent", () => {
 
     switch (elementType) {
       case "form":
-        element = htmlForm.cloneNode(true) as HTMLElement;
+        element = createNativeElement("form");
+        (element as HTMLFormElement).submit = () => {};
         break;
       case "input":
         element = htmlInput.cloneNode(true) as HTMLElement;
         break;
       default:
-        element = null;
+        element = createNativeElement(elementType);
     }
     return element;
   }
@@ -820,6 +822,215 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(selectedFiles.length).toEqual(1);
     const selectedFilePath = selectedFiles[0].path;
     expect(formFilePath).toEqual(selectedFilePath);
+  });
+
+  it("1063: iframe should be visible by default when hidden is omitted", () => {
+    const baseConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      type: "form",
+      target: "iframe",
+    };
+
+    createComponent(
+      {
+        ...baseConfig,
+        id: "default-visible-form",
+        iframeConfig: { name: "default-visible-frame" },
+      } as ActionConfig,
+      mockActionItemsDatafilesNofiles,
+    );
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    component.performAction();
+
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.iframeLoading).toBeTrue();
+    expect(component.form.target).toBe("default-visible-frame");
+
+    createComponent(
+      { ...baseConfig, id: "no-iframe-config" } as ActionConfig,
+      mockActionItemsDatafilesNofiles,
+    );
+    component.performAction();
+
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.form.target).toBe("configurable-action-no-iframe-config");
+  });
+
+  it("1065: Form submission should target a configured iframe", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "download-frame",
+        hidden: false,
+        width: "50%",
+        height: "300px",
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.target).toBe("download-frame");
+    expect(component.form.parentNode).toBe(document.body);
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.iframeName).toBe("download-frame");
+    expect(component.iframeTitle).toBe("download-frame");
+    expect(component.iframeWidth).toBe("50%");
+    expect(component.iframeHeight).toBe("300px");
+    expect(component.iframeLoading).toBeTrue();
+    const iframe = fixture.nativeElement.querySelector(
+      'iframe[name="download-frame"]',
+    ) as HTMLIFrameElement;
+    expect(iframe).not.toBeNull();
+    expect(iframe.name).toBe("download-frame");
+    expect(iframe.contentWindow?.name).toBe("download-frame");
+
+    component.onIframeLoad();
+
+    expect(component.iframeLoading).toBeFalse();
+
+    const submitSpy = spyOn(component.form, "submit").and.callFake(function (
+      this: HTMLFormElement,
+    ) {
+      expect(this.target).toBe("_blank");
+    });
+
+    component.openIframeInNewTab();
+
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+    expect(component.form.target).toBe("download-frame");
+  });
+
+  it("1066: Hidden iframe form submission should still create a targetable iframe", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "hidden-iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "hidden-download-frame",
+        hidden: true,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.target).toBe("hidden-download-frame");
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeFalse();
+    expect(component.iframeLoading).toBeFalse();
+    expect(
+      fixture.nativeElement.querySelector(
+        'iframe[name="hidden-download-frame"]',
+      ),
+    ).not.toBeNull();
+  });
+
+  it("1069: Reused cross-origin iframe should not block form submission", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "cross-origin-iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "cross-origin-frame",
+        hidden: true,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    const submitSpy = jasmine.createSpy("submit");
+    spyOn(document, "createElement").and.callFake((type: string) => {
+      const element = createFakeElement(type);
+      if (type === "form") (element as HTMLFormElement).submit = submitSpy;
+      return element;
+    });
+    // Once the iframe has navigated to another origin, reading or writing
+    // `contentWindow.name` throws a SecurityError.
+    const crossOriginWindow = {};
+    Object.defineProperty(crossOriginWindow, "name", {
+      get: () => {
+        throw new DOMException("Blocked", "SecurityError");
+      },
+      set: () => {
+        throw new DOMException("Blocked", "SecurityError");
+      },
+    });
+    spyOnProperty(
+      HTMLIFrameElement.prototype,
+      "contentWindow",
+      "get",
+    ).and.returnValue(crossOriginWindow as Window);
+
+    expect(() => component.performAction()).not.toThrow();
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+    expect(component.form.target).toBe("cross-origin-frame");
+  });
+
+  it("1067: Repeated iframe form submissions should clean up the previous form", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "repeat-iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "repeat-download-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+    const firstForm = component.form;
+
+    expect(() => component.performAction()).not.toThrow();
+    expect(firstForm.parentNode).toBeNull();
+    expect(component.form.parentNode).toBe(document.body);
+    expect(component.form.target).toBe("repeat-download-frame");
+  });
+
+  it("1068: Form submission should interpolate configured URL", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "iframe-form-url",
+      type: "form",
+      url: "https://example.com/notebook/{{ @pid }}",
+      variables: {
+        pid: "#Dataset0Pid",
+      },
+      target: "iframe",
+      iframeConfig: {
+        name: "download-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItems);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.action).toBe(
+      "https://example.com/notebook/40f3beec-bee2-11f0-8c47-4b68a24470e0",
+    );
   });
 
   it("1070: Download All action button should contain the correct label", () => {
@@ -1025,6 +1236,71 @@ describe("1000: ConfigurableActionComponent", () => {
       current_action.url,
       current_action.target,
     );
+  });
+
+  it("1131: link action targeting an iframe should open the configured iframe instead of a new tab", () => {
+    const iframeLinkConfig: ActionConfig = {
+      ...mockActionsConfig.find((a) => a.id === actionSelectorType.link),
+      id: "iframe-link",
+      type: "link",
+      target: "iframe",
+      iframeConfig: {
+        name: "link-preview-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeLinkConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    spyOn(window, "open");
+
+    component.performAction();
+
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.iframeName).toBe("link-preview-frame");
+    expect(component.iframeLoading).toBeTrue();
+    expect(window.open).toHaveBeenCalledWith(
+      iframeLinkConfig.url,
+      "link-preview-frame",
+    );
+    const iframe = fixture.nativeElement.querySelector(
+      'iframe[name="link-preview-frame"]',
+    ) as HTMLIFrameElement;
+    expect(iframe).not.toBeNull();
+    expect(iframe.contentWindow?.name).toBe("link-preview-frame");
+
+    component.onIframeLoad();
+
+    expect(component.iframeLoading).toBeFalse();
+  });
+
+  it("1132: open in new tab should reuse the link URL opened in the iframe", () => {
+    const iframeLinkConfig: ActionConfig = {
+      ...mockActionsConfig.find((a) => a.id === actionSelectorType.link),
+      id: "iframe-link-uuid",
+      type: "link",
+      target: "iframe",
+      url: "https://example.com/session/{{ #uuid }}",
+      iframeConfig: {
+        name: "link-uuid-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeLinkConfig, mockActionItemsDatafilesNofiles);
+    const openSpy = spyOn(window, "open");
+
+    component.performAction();
+    component.openIframeInNewTab();
+
+    expect(openSpy).toHaveBeenCalledTimes(2);
+    const [iframeUrl, iframeTarget] = openSpy.calls.argsFor(0);
+    const [newTabUrl, newTabTarget] = openSpy.calls.argsFor(1);
+    expect(iframeTarget).toBe("link-uuid-frame");
+    expect(newTabTarget).toBe("_blank");
+    expect(iframeUrl).toMatch(
+      /^https:\/\/example\.com\/session\/[0-9a-f-]{36}$/,
+    );
+    expect(newTabUrl).toBe(iframeUrl);
   });
 
   it("1140: should build dependency graph", () => {

@@ -6,9 +6,16 @@ import { ConfigurableActionsComponent } from "./configurable-actions.component";
 import { ConfigurableActionComponent } from "./configurable-action.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+  ],
   declarations: [ConfigurableActionsComponent, ConfigurableActionComponent],
   exports: [ConfigurableActionsComponent, ConfigurableActionComponent],
 })

@@ -7,6 +7,9 @@ import {
   Output,
   SimpleChanges,
   OnDestroy,
+  ChangeDetectorRef,
+  ElementRef,
+  ViewChild,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import {
@@ -22,6 +25,7 @@ import {
   ActionType,
   DialogField,
   normalizeEnabled,
+  IframeConfig,
 } from "./configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 as uuidv4 } from "uuid";
@@ -49,6 +53,10 @@ import {
 export class ConfigurableActionComponent
   implements OnInit, OnChanges, OnDestroy
 {
+  private iframeLoadArmed = false;
+  @ViewChild("actionIframe")
+  private iframeRef?: ElementRef<HTMLIFrameElement>;
+  private cachedLinkUrl: string | null = null;
   private authorizationTokens = {
     "#jwt": () => this.jwt,
     "#token": () => this.authService.getToken()?.id,
@@ -82,12 +90,21 @@ export class ConfigurableActionComponent
   subscriptions: Subscription[] = [];
   form: HTMLFormElement | null = null;
 
+  iframeEnabled = false;
+  iframeVisible = false;
+  iframeName = "";
+  iframeTitle = "";
+  iframeWidth = "100%";
+  iframeHeight = "400px";
+  iframeLoading = false;
+
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
     private configService: AppConfigService,
     private store: Store,
     private datePipe: DatePipe,
+    private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
     private apiConfiguration: ApiConfiguration,
   ) {}
@@ -391,11 +408,18 @@ export class ConfigurableActionComponent
   }
 
   private typeForm() {
-    if (this.form) document.body.removeChild(this.form);
+    const isIframeTarget = this.actionConfig.target === "iframe";
+    if (isIframeTarget) {
+      this.prepareIframe();
+      this.cdRef.detectChanges();
+    }
+    if (this.form?.parentNode) this.form.parentNode.removeChild(this.form);
     this.form = document.createElement("form");
-    this.form.target = this.actionConfig.target || "_self";
+    this.form.id = this.actionConfig.id;
+    this.form.name = this.actionConfig.id;
+    this.form.target = this.getTarget();
     this.form.method = this.actionConfig.method || "POST";
-    this.form.action = this.actionConfig.url;
+    this.form.action = this.interpolate(this.actionConfig.url);
     this.form.style.display = "none";
 
     Object.entries(this.actionConfig.inputs || {}).forEach(([input, def]) => {
@@ -412,10 +436,50 @@ export class ConfigurableActionComponent
         this.form!.appendChild(this.addInputElement(input, String(value)));
       }
     });
-
     document.body.appendChild(this.form);
+    if (isIframeTarget) {
+      this.iframeLoadArmed = this.iframeVisible;
+      this.syncIframeTargetWindowName(this.form.target);
+    }
     this.form.submit();
     return true;
+  }
+
+  private getTarget(): string {
+    // pre-defined target (default: new tab)
+    if (this.actionConfig.target !== "iframe")
+      return this.actionConfig.target || "_self";
+
+    // Iframe target
+    return this.iframeName;
+  }
+
+  private prepareIframe() {
+    const config = this.actionConfig.iframeConfig || {
+      name: `configurable-action-${this.actionConfig.id}`,
+    };
+    this.iframeEnabled = true;
+    this.iframeVisible = !(config.hidden ?? false);
+    this.iframeName = config.name;
+    this.iframeTitle = config.title || config.name;
+    this.iframeWidth = config.width || "90vw";
+    this.iframeHeight = config.height || "70vh";
+    this.iframeLoading = this.iframeVisible;
+    this.iframeLoadArmed = false;
+
+    return config.name;
+  }
+
+  private syncIframeTargetWindowName(targetName: string) {
+    // Make sure iframe target is correctly set (Chromium)
+    if (this.actionConfig.target !== "iframe") return;
+    const contentWindow = this.iframeRef?.nativeElement.contentWindow;
+    if (!contentWindow) return;
+    try {
+      if (contentWindow.name !== targetName) contentWindow.name = targetName;
+    } catch {
+      // Propagate the CORS case browsing-context previousely set.
+    }
   }
 
   private preparePayload(): string {
@@ -458,10 +522,18 @@ export class ConfigurableActionComponent
   }
 
   private typeLink() {
-    window.open(
-      this.interpolate(this.actionConfig.url),
-      this.actionConfig.target || "_self",
-    );
+    const isIframeTarget = this.actionConfig.target === "iframe";
+    if (isIframeTarget) {
+      this.prepareIframe();
+      this.cdRef.detectChanges();
+    }
+    const target = this.getTarget();
+    if (isIframeTarget) {
+      this.syncIframeTargetWindowName(target);
+      this.iframeLoadArmed = this.iframeVisible;
+    }
+    this.cachedLinkUrl = this.interpolate(this.actionConfig.url);
+    window.open(this.cachedLinkUrl, target);
   }
 
   private typeDialog() {
@@ -548,6 +620,69 @@ export class ConfigurableActionComponent
     });
   }
 
+  // only the first failing condition is explained
+  private enabledState(): { disabled: boolean; tooltip: string } {
+    const { conditions, enabledTooltip } = normalizeEnabled(this.actionConfig);
+    try {
+      if (conditions.length) this.resolveVariableContext();
+      const failed = conditions.find(
+        (c) => !this.evaluate(this.viewHandlers(c.condition)),
+      );
+      if (failed)
+        return { disabled: true, tooltip: failed.disabledTooltip ?? "" };
+      return { disabled: false, tooltip: enabledTooltip ?? "" };
+    } catch (error) {
+      console.error("Configurable action error on get disabled", error);
+      return { disabled: true, tooltip: "" };
+    }
+  }
+
+  closeIframe() {
+    this.iframeVisible = false;
+    this.iframeLoading = false;
+    this.iframeLoadArmed = false;
+  }
+
+  openIframeInNewTab() {
+    // A cross-origin iframe's current URL cannot be read, so a form is
+    // re-submitted to the new tab (accepted even for non-idempotent POSTs).
+    if (this.form) {
+      const currentTarget = this.form.target;
+      this.form.target = "_blank";
+      try {
+        this.form.submit();
+      } finally {
+        this.form.target = currentTarget;
+      }
+    } else if (this.cachedLinkUrl) {
+      window.open(this.cachedLinkUrl, "_blank");
+    }
+  }
+
+  onIframeLoad() {
+    if (!this.iframeLoadArmed) return;
+    this.iframeLoading = false;
+    this.iframeLoadArmed = false;
+  }
+
+  performAction() {
+    this.resolveVariableContext();
+    const type = this.actionConfig.type || "form";
+    switch (type) {
+      case "json-download":
+        return this.typeJsonToDownload();
+      case "xhr":
+        return this.typeXhr();
+      case "link":
+        return this.typeLink();
+      case "dialog":
+        return this.typeDialog();
+      case "form":
+      default:
+        return this.typeForm();
+    }
+  }
+
   get visible(): boolean {
     try {
       this.resolveVariableContext();
@@ -565,23 +700,6 @@ export class ConfigurableActionComponent
 
   get tooltip(): string {
     return this.enabledState().tooltip;
-  }
-
-  // only the first failing condition is explained
-  private enabledState(): { disabled: boolean; tooltip: string } {
-    const { conditions, enabledTooltip } = normalizeEnabled(this.actionConfig);
-    try {
-      if (conditions.length) this.resolveVariableContext();
-      const failed = conditions.find(
-        (c) => !this.evaluate(this.viewHandlers(c.condition)),
-      );
-      if (failed)
-        return { disabled: true, tooltip: failed.disabledTooltip ?? "" };
-      return { disabled: false, tooltip: enabledTooltip ?? "" };
-    } catch (error) {
-      console.error("Configurable action error on get disabled", error);
-      return { disabled: true, tooltip: "" };
-    }
   }
 
   ngOnInit() {
@@ -617,23 +735,6 @@ export class ConfigurableActionComponent
 
   ngOnDestroy() {
     this.subscriptions.forEach((s) => s.unsubscribe());
-  }
-
-  performAction() {
-    this.resolveVariableContext();
-    const type = this.actionConfig.type || "form";
-    switch (type) {
-      case "json-download":
-        return this.typeJsonToDownload();
-      case "xhr":
-        return this.typeXhr();
-      case "link":
-        return this.typeLink();
-      case "dialog":
-        return this.typeDialog();
-      case "form":
-      default:
-        return this.typeForm();
-    }
+    if (this.form?.parentNode) this.form.parentNode.removeChild(this.form);
   }
 }
