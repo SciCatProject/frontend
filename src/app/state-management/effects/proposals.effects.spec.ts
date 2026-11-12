@@ -305,6 +305,37 @@ describe("ProposalEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchProposalDatasets$).toBeObservable(expected);
     });
+
+    it("should only complete the latest fetch when a slow one is still running", () => {
+      const slow = fromActions.fetchProposalDatasetsAction({
+        proposalId,
+        skip: 0,
+        limit: 10,
+      });
+      const fast = fromActions.fetchProposalDatasetsAction({
+        proposalId,
+        skip: 10,
+        limit: 10,
+      });
+      const outcome1 = fromActions.fetchProposalDatasetsCompleteAction({
+        datasets: [dataset],
+        skip: 10,
+        limit: 10,
+      });
+      const outcome2 = fromActions.fetchProposalDatasetsCountAction({
+        proposalId,
+      });
+
+      actions = hot("-ab", { a: slow, b: fast });
+      datasetApi.datasetsControllerFindAllV3.and.returnValues(
+        cold("-----a|", { a: [] }),
+        cold("-a|", { a: [dataset] }),
+      );
+
+      // the slow answer would arrive at frame 6 and is dropped
+      const expected = cold("---(bc)", { b: outcome1, c: outcome2 });
+      expect(effects.fetchProposalDatasets$).toBeObservable(expected);
+    });
   });
 
   describe("fetchProposalDatasetsCount$", () => {

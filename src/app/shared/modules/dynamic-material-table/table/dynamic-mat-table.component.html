@@ -95,6 +95,8 @@
 >
   <mat-table
     matSort
+    [matSortActive]="tableSetting.tableSort?.sortColumn"
+    [matSortDirection]="tableSetting.tableSort?.sortDirection ?? ''"
     class="dynamic-table"
     multiTemplateDataRows
     [cdkDropListDisabled]="false"

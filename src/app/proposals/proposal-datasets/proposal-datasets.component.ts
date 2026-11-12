@@ -2,14 +2,16 @@ import { Direction } from "@angular/cdk/bidi";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Sort } from "@angular/material/sort";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { AppConfigService } from "app-config.service";
 import {
   BehaviorSubject,
+  distinctUntilChanged,
   filter,
   lastValueFrom,
+  map,
   Subscription,
   take,
 } from "rxjs";
@@ -40,6 +42,14 @@ import {
 } from "state-management/selectors/user.selectors";
 import { EventsService } from "shared/events.service";
 
+// what the table shows: the page, the page size and the sort, as the url says
+interface TableQuery {
+  pageIndex: number;
+  pageSize: number;
+  sortColumn: string;
+  sortDirection: "asc" | "desc";
+}
+
 export interface TableData {
   pid: string;
   name: string;
@@ -57,6 +67,9 @@ export interface TableData {
   standalone: false,
 })
 export class ProposalDatasetsComponent implements OnInit, OnDestroy {
+  // what the table shows now, as the url says
+  private tableQuery: TableQuery;
+
   isLoggedIn$ = this.store.select(selectIsLoggedIn);
   proposalDatasets$ = this.store.select(selectViewProposalPageViewModel);
   latestUpdatedId$ = this.eventsService.latestUpdatedId$;
@@ -85,6 +98,9 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   setting: ITableSetting = {};
 
+  // the sort of the url, shown by the table header
+  tableSort: ITableSetting["tableSort"];
+
   paginationMode: TablePaginationMode = "server-side";
 
   showNoData = true;
@@ -104,11 +120,6 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   rowSelectionMode: TableSelectionMode = "none";
 
   defaultPageSize = 10;
-
-  // kept here and not only in the url, the proposal page clears the query
-  // params when switching tabs
-  sortColumn: string | undefined = "creationTime";
-  sortDirection: string | undefined = "desc";
 
   tablesSettings: object;
 
@@ -144,7 +155,47 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
     private eventsService: EventsService,
-  ) {}
+  ) {
+    this.tableQuery = this.toTableQuery({});
+  }
+
+  // no (or an invalid) value in the url means the default one
+  private toTableQuery(params: Params): TableQuery {
+    const pageIndex = Number(params.pageIndex);
+    const pageSize = Number(params.pageSize);
+    const hasSort =
+      !!params.sortColumn &&
+      (params.sortDirection === "asc" || params.sortDirection === "desc");
+
+    const sortDirection: "asc" | "desc" = hasSort
+      ? params.sortDirection
+      : "desc";
+
+    return {
+      pageIndex: Number.isInteger(pageIndex) && pageIndex >= 0 ? pageIndex : 0,
+      pageSize:
+        Number.isInteger(pageSize) && pageSize > 0
+          ? pageSize
+          : this.defaultPageSize,
+      sortColumn: hasSort ? params.sortColumn : "creationTime",
+      sortDirection,
+    };
+  }
+
+  // fetches what the table shows, in the order it is sorted in
+  private fetchDatasets() {
+    const { pageIndex, pageSize, sortColumn, sortDirection } = this.tableQuery;
+    this.pending = true;
+    this.store.dispatch(
+      fetchProposalDatasetsAction({
+        proposalId: this.proposalId,
+        skip: pageIndex * pageSize,
+        limit: pageSize,
+        sortColumn,
+        sortDirection,
+      }),
+    );
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -156,32 +207,33 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
         )
         .subscribe((payload: Record<string, any>) => {
           if (!payload.data.proposalIds.includes(this.proposalId)) return;
-          this.store.dispatch(
-            fetchProposalDatasetsAction({
-              proposalId: this.proposalId,
-              skip: 0,
-              limit: this.defaultPageSize,
-              sortColumn: "creationTime",
-              sortDirection: "desc",
-            }),
-          );
+          this.fetchDatasets();
         }),
     );
 
-    const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
-    if (sortColumn && sortDirection) {
-      this.sortColumn = sortColumn;
-      this.sortDirection = sortDirection;
-    }
-
-    this.store.dispatch(
-      fetchProposalDatasetsAction({
-        proposalId: this.proposalId,
-        skip: 0,
-        limit: this.defaultPageSize,
-        sortColumn: this.sortColumn,
-        sortDirection: this.sortDirection,
-      }),
+    // the url is the only state of the table, sorting and paging only change it
+    this.subscriptions.push(
+      this.route.queryParams
+        .pipe(
+          map((params) => this.toTableQuery(params)),
+          distinctUntilChanged(
+            (a, b) =>
+              a.pageIndex === b.pageIndex &&
+              a.pageSize === b.pageSize &&
+              a.sortColumn === b.sortColumn &&
+              a.sortDirection === b.sortDirection,
+          ),
+        )
+        .subscribe((query) => {
+          this.tableQuery = query;
+          this.tableSort = {
+            sortColumn: query.sortColumn,
+            sortDirection: query.sortDirection,
+          };
+          // the table reads it when it is created, before the settings are there
+          this.setting = { ...this.setting, tableSort: this.tableSort };
+          this.fetchDatasets();
+        }),
     );
 
     this.subscriptions.push(
@@ -211,6 +263,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
             this.tableName,
             this.tableDefaultSettingsConfig,
             userTableConfigColumns,
+            this.tableSort,
           );
         const paginationConfig = {
           pageSizeOptions: [5, 10, 25, 100],
@@ -243,15 +296,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     this.realTimeEnabled = enabled;
     if (enabled) {
       this.eventsService.connect();
-      this.store.dispatch(
-        fetchProposalDatasetsAction({
-          proposalId: this.proposalId,
-          skip: 0,
-          limit: this.defaultPageSize,
-          sortColumn: "creationTime",
-          sortDirection: "desc",
-        }),
-      );
+      this.fetchDatasets();
     } else {
       this.eventsService.disconnect();
     }
@@ -275,55 +320,26 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChange(pagination: TablePagination) {
-    this.pending = true;
-    const queryParams: Record<string, string | number> = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
     this.router.navigate([], {
-      queryParams,
+      queryParams: {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+      },
       queryParamsHandling: "merge",
     });
-
-    this.store.dispatch(
-      fetchProposalDatasetsAction({
-        proposalId: this.proposalId,
-        limit: pagination.pageSize,
-        skip: pagination.pageIndex * pagination.pageSize,
-        sortColumn: this.sortColumn,
-        sortDirection: this.sortDirection,
-      }),
-    );
   }
 
   onTableEvent({ event, sender }: ITableEvent) {
     if (event === TableEventType.SortChanged) {
       const { active: sortColumn, direction: sortDirection } = sender as Sort;
-      this.sortColumn = sortDirection ? sortColumn : undefined;
-      this.sortDirection = sortDirection || undefined;
-      this.pending = true;
       this.router.navigate([], {
         queryParams: {
           pageIndex: 0,
-          sortDirection: sortDirection || undefined,
           sortColumn: sortDirection ? sortColumn : undefined,
+          sortDirection: sortDirection || undefined,
         },
         queryParamsHandling: "merge",
       });
-
-      const queryParams = this.route.snapshot.queryParams;
-
-      this.store.dispatch(
-        fetchProposalDatasetsAction({
-          proposalId: this.proposalId,
-          limit: queryParams.pageSize || this.defaultPageSize,
-          skip:
-            queryParams.pageIndex *
-            (queryParams.pageSize || this.defaultPageSize),
-          sortColumn: sortColumn,
-          sortDirection: sortDirection,
-        }),
-      );
     }
   }
 
