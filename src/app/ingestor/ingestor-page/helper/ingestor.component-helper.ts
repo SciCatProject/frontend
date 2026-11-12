@@ -387,7 +387,9 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
           schema.properties[key].pattern = regExFQDN.source;
         }
         if (value.includes("--optional")) {
-          schema.properties[key].type = "string";
+          schema.properties[key].type = value.includes("--dateTime")
+            ? ["string", "null"]
+            : "string";
         }
         if (value.includes("--type")) {
           schema.properties[key].type = "string";
