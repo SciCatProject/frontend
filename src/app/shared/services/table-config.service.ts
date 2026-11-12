@@ -13,6 +13,25 @@ import { TableSettingsStorageService } from "./table-settings-storage.service";
 export class TableConfigService {
   constructor(private tableSettingsStorage: TableSettingsStorageService) {}
 
+  /**
+   * Resolve the `display` value for a merged column. Persisted settings store
+   * visibility as the boolean `enabled`; the table renders from `display`.
+   * Prefer an explicit `display` on the saved column, then translate `enabled`,
+   * and finally fall back to the default/saved column's own `display`.
+   */
+  private resolveDisplay(
+    saved: TableField<any>,
+    fallback: AbstractField,
+  ): AbstractField["display"] {
+    if (saved.display) {
+      return saved.display;
+    }
+    if (typeof saved.enabled === "boolean") {
+      return saved.enabled ? "visible" : "hidden";
+    }
+    return fallback?.display;
+  }
+
   getTableSort(route: ActivatedRoute): ITableSetting["tableSort"] {
     const { queryParams } = route.snapshot;
     return queryParams.sortDirection && queryParams.sortColumn
@@ -74,25 +93,6 @@ export class TableConfigService {
     );
 
     return [...mergedColumns, ...extraColumns];
-  }
-
-  /**
-   * Resolve the `display` value for a merged column. Persisted settings store
-   * visibility as the boolean `enabled`; the table renders from `display`.
-   * Prefer an explicit `display` on the saved column, then translate `enabled`,
-   * and finally fall back to the default/saved column's own `display`.
-   */
-  private resolveDisplay(
-    saved: TableField<any>,
-    fallback: AbstractField,
-  ): AbstractField["display"] {
-    if (saved.display) {
-      return saved.display;
-    }
-    if (typeof saved.enabled === "boolean") {
-      return saved.enabled ? "visible" : "hidden";
-    }
-    return fallback?.display;
   }
 
   persistColumns(tableName: string, columns: unknown[], userId?: string) {

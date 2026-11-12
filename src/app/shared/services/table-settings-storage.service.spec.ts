@@ -13,7 +13,9 @@ describe("TableSettingsStorageService", () => {
     try {
       localStorage.clear();
       sessionStorage.clear();
-    } catch {}
+    } catch (e) {
+      // ignore storage access errors in test environment
+    }
   });
 
   it("should set and get columns correctly", () => {

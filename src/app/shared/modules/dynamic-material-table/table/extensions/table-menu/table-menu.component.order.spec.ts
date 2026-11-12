@@ -67,13 +67,13 @@ describe("TableMenuComponent popup auto-save", () => {
     ]);
   });
 
-  it("auto-saves the reordered setting after 500ms debounce", fakeAsync(() => {
+  it("auto-saves the reordered setting after 6000ms debounce", fakeAsync(() => {
     component.columnMenuDropped({
       item: { data: { columnIndex: 1 } },
       currentIndex: 0,
     } as any);
 
-    tick(499);
+    tick(5999);
     expect(emitted.length).toBe(0);
 
     tick(1);
@@ -87,10 +87,10 @@ describe("TableMenuComponent popup auto-save", () => {
     expect(emitted[0].data).toBe(setting);
   }));
 
-  it("auto-saves a checkbox toggle after 500ms debounce", fakeAsync(() => {
+  it("auto-saves a checkbox toggle after 6000ms debounce", fakeAsync(() => {
     component.toggleSelectedColumn(setting.columnSetting[2]);
 
-    tick(499);
+    tick(5999);
     expect(emitted.length).toBe(0);
 
     tick(1);
@@ -106,17 +106,17 @@ describe("TableMenuComponent popup auto-save", () => {
     tick(200);
     component.toggleSelectedColumn(setting.columnSetting[0]);
 
-    tick(499);
+    tick(5999);
     expect(emitted.length).toBe(0);
 
     tick(1);
     expect(emitted.length).toBe(1);
   }));
 
-  it("auto-saves a gear sub-menu change after 500ms debounce", fakeAsync(() => {
+  it("auto-saves a gear sub-menu change after 6000ms debounce", fakeAsync(() => {
     component.onColumnSettingChange();
 
-    tick(499);
+    tick(5999);
     expect(emitted.length).toBe(0);
 
     tick(1);
