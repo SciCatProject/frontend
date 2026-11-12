@@ -264,5 +264,25 @@ describe("TableConfigService (fallback)", () => {
 
       expect((merged[0] as any).display).toBe("visible");
     });
+
+    it("preserves a default prevent-hidden column when persisted enabled=true", () => {
+      const defaults = [{ name: "jobId", display: "prevent-hidden" }] as any;
+      const saved = [{ name: "jobId", enabled: true, order: 0 }] as any;
+
+      const merged = service.mergeColumnSettings(defaults, saved);
+
+      expect((merged[0] as any).display).toBe("prevent-hidden");
+    });
+
+    it("round-trips a prevent-hidden column as prevent-hidden after reload", () => {
+      const persisted = service.buildColumnsSetting([
+        { name: "jobId", display: "prevent-hidden" },
+      ] as any);
+
+      const defaults = [{ name: "jobId", display: "prevent-hidden" }] as any;
+      const merged = service.mergeColumnSettings(defaults, persisted as any);
+
+      expect((merged[0] as any).display).toBe("prevent-hidden");
+    });
   });
 });

@@ -18,6 +18,10 @@ export class TableConfigService {
    * visibility as the boolean `enabled`; the table renders from `display`.
    * Prefer an explicit `display` on the saved column, then translate `enabled`,
    * and finally fall back to the default/saved column's own `display`.
+   *
+   * When translating `enabled: true`, preserve the default column's
+   * `prevent-hidden` state instead of collapsing it to plain `visible`, so a
+   * protected column cannot become hideable after a save/reload round-trip.
    */
   private resolveDisplay(
     saved: TableField<any>,
@@ -27,7 +31,12 @@ export class TableConfigService {
       return saved.display;
     }
     if (typeof saved.enabled === "boolean") {
-      return saved.enabled ? "visible" : "hidden";
+      if (!saved.enabled) {
+        return "hidden";
+      }
+      return fallback?.display === "prevent-hidden"
+        ? "prevent-hidden"
+        : "visible";
     }
     return fallback?.display;
   }
