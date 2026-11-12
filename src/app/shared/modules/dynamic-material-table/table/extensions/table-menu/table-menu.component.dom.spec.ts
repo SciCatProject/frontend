@@ -81,7 +81,7 @@ describe("TableMenuComponent DOM popup drag + apply", () => {
 
     expect(emitted).toBeUndefined();
 
-    tick(6000);
+    tick(500);
 
     expect(emitted?.type).toBe(TableMenuAction.TableSetting);
     expect(emitted?.data.columnSetting.map((c: any) => c.name)).toEqual([
