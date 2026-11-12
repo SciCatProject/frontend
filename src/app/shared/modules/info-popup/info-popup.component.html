@@ -1,0 +1,51 @@
+<button
+  #trigger
+  type="button"
+  class="trigger"
+  cdkOverlayOrigin
+  #origin="cdkOverlayOrigin"
+  [class.open]="isOpen()"
+  [attr.aria-label]="label"
+  [attr.aria-expanded]="isOpen()"
+  aria-haspopup="dialog"
+  (click)="toggle()"
+  data-cy="info-popup-trigger"
+>
+  <mat-icon>{{ icon }}</mat-icon>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="origin"
+  [cdkConnectedOverlayOpen]="isOpen()"
+  [cdkConnectedOverlayPositions]="positions"
+  (overlayOutsideClick)="onOutsideClick($event)"
+  (overlayKeydown)="onKeydown($event)"
+  (positionChange)="fit()"
+  (detach)="close()"
+>
+  <div
+    class="popup"
+    role="dialog"
+    [style.max-height.px]="maxHeight()"
+    [style.max-width.px]="maxWidth()"
+    [attr.aria-label]="title || label"
+    data-cy="info-popup"
+  >
+    <div class="popup-header">
+      <mat-icon class="popup-icon">{{ icon }}</mat-icon>
+      <span class="popup-title">{{ title || label }}</span>
+      <button
+        type="button"
+        class="popup-close"
+        aria-label="Close"
+        (click)="close()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="popup-body">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-template>

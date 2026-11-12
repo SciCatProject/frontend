@@ -5,7 +5,7 @@ import {
   PartialOutputDatasetDto,
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { SampleFilters, ScientificCondition } from "state-management/models";
+import { SampleFilters, FilterCondition } from "state-management/models";
 
 export const fetchSamplesAction = createAction("[Sample] Fetch Samples");
 export const fetchSamplesCompleteAction = createAction(
@@ -171,14 +171,9 @@ export const setTextFilterAction = createAction(
   props<{ text: string }>(),
 );
 
-export const addCharacteristicsFilterAction = createAction(
-  "[Sample] Add Characteristics Filter",
-  props<{ characteristic: ScientificCondition }>(),
-);
-
-export const removeCharacteristicsFilterAction = createAction(
-  "[Sample] Remove Characteristics Filter",
-  props<{ lhs: string }>(),
+export const setCharacteristicsFilterAction = createAction(
+  "[Sample] Set Characteristics Filter",
+  props<{ characteristics: FilterCondition[] }>(),
 );
 
 export const clearSamplesStateAction = createAction("[Sample] Clear State");

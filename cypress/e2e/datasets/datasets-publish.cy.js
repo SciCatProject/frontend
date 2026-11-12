@@ -28,7 +28,7 @@ describe("Datasets", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
+      cy.get("a.button").click({ animationDistanceThreshold: 0.01 });
 
       cy.get("#publishButton").click();
 

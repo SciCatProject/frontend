@@ -14,16 +14,6 @@
           matTooltipPosition="after"
           formControlName="textField"
         />
-        @if (appConfig.autoApplyFilters) {
-          <span
-            matSuffix
-            class="enter-hint"
-            matTooltip="Press Enter to apply"
-            matTooltipPosition="after"
-            matTooltipShowDelay="500"
-            >↵</span
-          >
-        }
       </mat-form-field>
     }
     @case ("dateRange") {
@@ -53,16 +43,6 @@
             (keydown.enter)="onApplyEnter($event)"
           />
         </mat-date-range-input>
-        @if (appConfig.autoApplyFilters) {
-          <span
-            matSuffix
-            class="enter-hint"
-            matTooltip="Press Enter to apply"
-            matTooltipPosition="after"
-            matTooltipShowDelay="500"
-            >↵</span
-          >
-        }
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>

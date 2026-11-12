@@ -194,6 +194,9 @@ describe("1000 - Datasets list personalization", () => {
 
     cy.finishedLoading();
 
+    // wait for the login to finish before the page is loaded again
+    cy.get(".user-button").should("contain.text", username);
+
     // visit the datasets list
     cy.visit("/datasets");
 

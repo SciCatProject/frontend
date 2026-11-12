@@ -1,7 +1,7 @@
 import { samplesReducer } from "./samples.reducer";
 import { initialSampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
-import { SampleFilters, ScientificCondition } from "../models";
+import { SampleFilters, FilterCondition } from "../models";
 import {
   createMock,
   mockDataset as dataset,
@@ -208,45 +208,36 @@ describe("SamplesReducer", () => {
     });
   });
 
-  describe("on addCharacteristicsFilterAction", () => {
-    it("should add characteristic to characteristics filter", () => {
-      const characteristic: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "EQUAL_TO_STRING",
-        rhs: "rhsTest",
-        unit: "",
-      };
+  describe("on setCharacteristicsFilterAction", () => {
+    const characteristic: FilterCondition = {
+      lhs: "lhsTest",
+      relation: "EQUAL_TO_STRING",
+      rhs: "rhsTest",
+      unit: "",
+    };
 
-      const action = fromActions.addCharacteristicsFilterAction({
-        characteristic,
+    it("should set the characteristics filter", () => {
+      const action = fromActions.setCharacteristicsFilterAction({
+        characteristics: [characteristic],
       });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.sampleFilters.characteristics).toContain(characteristic);
+      expect(state.sampleFilters.characteristics).toEqual([characteristic]);
     });
-  });
 
-  describe("on removeCharacteristicsFilterAction", () => {
-    it("should remove characteristic from characteristics filter", () => {
-      const characteristic: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "EQUAL_TO_STRING",
-        rhs: "rhsTest",
-        unit: "",
-      };
-
-      initialSampleState.sampleFilters.characteristics.push(characteristic);
-
-      expect(initialSampleState.sampleFilters.characteristics).toContain(
-        characteristic,
+    it("should replace the characteristics that were set before", () => {
+      const first = samplesReducer(
+        initialSampleState,
+        fromActions.setCharacteristicsFilterAction({
+          characteristics: [characteristic],
+        }),
+      );
+      const state = samplesReducer(
+        first,
+        fromActions.setCharacteristicsFilterAction({ characteristics: [] }),
       );
 
-      const lhs = "lhsTest";
-
-      const action = fromActions.removeCharacteristicsFilterAction({ lhs });
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.sampleFilters.characteristics).not.toContain(characteristic);
+      expect(state.sampleFilters.characteristics).toEqual([]);
     });
   });
 

@@ -34,7 +34,7 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
+      cy.get("a.button").click({ animationDistanceThreshold: 0.01 });
 
       cy.get("#publishButton").click();
 
@@ -69,7 +69,7 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
+      cy.get("a.button").click({ animationDistanceThreshold: 0.01 });
 
       cy.get("#publishButton").click();
 
@@ -118,7 +118,7 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
+      cy.get("a.button").click({ animationDistanceThreshold: 0.01 });
 
       cy.get("#publishButton").click();
 
@@ -149,7 +149,7 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
+      cy.get("a.button").click({ animationDistanceThreshold: 0.01 });
 
       cy.finishedLoading();
 
@@ -337,7 +337,7 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("batch-card a.button").click();
+      cy.get("batch-card a.button").click({ animationDistanceThreshold: 0.01 });
 
       cy.get('[data-cy="batch-table"] mat-row').its("length").should("eq", 2);
 
@@ -466,7 +466,7 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
+      cy.get("a.button").click({ animationDistanceThreshold: 0.01 });
 
       cy.get("#publishButton").click();
 

@@ -11,7 +11,6 @@ import { SearchBarModule } from "./modules/search-bar/search-bar.module";
 import { ScientificMetadataModule } from "./modules/scientific-metadata/scientific-metadata.module";
 import { UnitsService } from "./services/units.service";
 import { FilePathTruncate } from "./pipes/file-path-truncate.pipe";
-import { SearchParametersDialogModule } from "./modules/search-parameters-dialog/search-parameters-dialog.module";
 import { CommonModule } from "@angular/common";
 import { SharedTableModule } from "./modules/shared-table/shared-table.module";
 import { ScicatDataService } from "./services/scicat-data-service";
@@ -43,7 +42,6 @@ import { AjvService } from "./services/ajv.service";
     SearchBarModule,
     FullTextSearchBarModule,
     TableModule,
-    SearchParametersDialogModule,
     CommonModule,
     FormsModule,
     SharedTableModule,

@@ -19,16 +19,6 @@
     matTooltip="{{ tooltip }}"
     matTooltipPosition="after"
   />
-  @if (appConfig.autoApplyFilters) {
-    <span
-      matSuffix
-      class="enter-hint"
-      matTooltip="Press Enter to apply"
-      matTooltipPosition="after"
-      matTooltipShowDelay="500"
-      >↵</span
-    >
-  }
 
   <mat-autocomplete #mutiselection="matAutocomplete">
     @for (fc of suggestions$ | async; track fc) {

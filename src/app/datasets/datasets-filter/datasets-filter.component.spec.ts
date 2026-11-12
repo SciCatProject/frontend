@@ -24,7 +24,6 @@ import { MatDialogModule, MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatChipsModule } from "@angular/material/chips";
@@ -140,7 +139,7 @@ describe("DatasetsFilterComponent", () => {
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
-      declarations: [DatasetsFilterComponent, SearchParametersDialogComponent],
+      declarations: [DatasetsFilterComponent],
       providers: [
         AsyncPipe,
         AppConfigService,

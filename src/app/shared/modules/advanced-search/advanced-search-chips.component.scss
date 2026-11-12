@@ -1,0 +1,148 @@
+:host {
+  display: block;
+}
+
+// a strip of its own, so that it is clear these filters are applied
+.applied-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 4px 10px;
+  background: color-mix(in srgb, var(--theme-primary-default) 7%, white);
+  border: 1px solid color-mix(in srgb, var(--theme-primary-default) 30%, white);
+  border-left: 4px solid var(--theme-primary-default);
+  border-radius: 8px;
+}
+
+.applied-label {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--theme-primary-default);
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+.chips {
+  flex: 1;
+  min-width: 0;
+}
+
+// one gap between the chips, the chips bring margins of their own
+.chips ::ng-deep .mdc-evolution-chip-set__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.chips ::ng-deep .mat-mdc-chip,
+.chips ::ng-deep .mdc-evolution-chip {
+  margin: 0;
+}
+
+mat-chip-row {
+  cursor: pointer;
+  --mat-chip-container-height: 26px;
+  --mat-chip-label-text-size: 12px;
+  --mat-chip-label-text-color: inherit;
+  --mat-chip-elevated-container-color: #fff;
+  --mat-chip-outline-width: 1px;
+  --mat-chip-outline-color: #c3c8cf;
+
+  &:hover {
+    --mat-chip-elevated-container-color: color-mix(
+      in srgb,
+      var(--theme-primary-default) 10%,
+      white
+    );
+  }
+
+  // a filter with NOT has a red tint and an icon, so it does not look like part of the text
+  &.excluded {
+    --mat-chip-elevated-container-color: color-mix(
+      in srgb,
+      var(--theme-warn-default, #b00020) 7%,
+      white
+    );
+    --mat-chip-outline-color: color-mix(
+      in srgb,
+      var(--theme-warn-default, #b00020) 45%,
+      white
+    );
+  }
+}
+
+.not-icon {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  font-size: 14px;
+  vertical-align: middle;
+  color: var(--theme-warn-default, #b00020);
+}
+
+// short chips, the tooltip shows the whole filter
+.chip-text {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clear-all {
+  flex-shrink: 0;
+  min-width: 0;
+  padding: 0 8px;
+  font-size: 0.75rem;
+  --mdc-text-button-container-height: 28px;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    margin: 0 2px 0 0;
+    font-size: 16px;
+  }
+}
+
+// narrow screens: label and Clear on one line, the filters below it
+@media (max-width: 640px) {
+  .applied-filters {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .applied-label {
+    order: 1;
+  }
+
+  .clear-all {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .chips {
+    order: 3;
+    flex: 1 1 100%;
+  }
+
+  mat-chip-row {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .chip-text {
+    max-width: min(180px, 55vw);
+  }
+}

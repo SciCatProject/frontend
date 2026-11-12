@@ -1,0 +1,64 @@
+<mat-form-field appearance="outline" subscriptSizing="dynamic">
+  <input
+    matInput
+    autocomplete="off"
+    spellcheck="false"
+    placeholder="Search key"
+    title="Search or type a key, e.g. parent.child"
+    aria-label="Key"
+    [value]="key"
+    [matAutocomplete]="keys"
+    (input)="onInput($any($event.target).value)"
+    data-cy="condition-key"
+  />
+  @if (error) {
+    <mat-icon
+      matSuffix
+      class="error-icon"
+      [matTooltip]="error"
+      [attr.aria-label]="error"
+      data-cy="condition-error"
+      >error_outline</mat-icon
+    >
+  }
+  <mat-icon matSuffix class="dropdown-icon">arrow_drop_down</mat-icon>
+  <mat-autocomplete
+    #keys="matAutocomplete"
+    class="key-panel condition-panel"
+    [panelWidth]="panelWidth"
+    (opened)="onOpened()"
+    (optionSelected)="onSelected($event.option.value)"
+  >
+    @for (option of options(); track option.key) {
+      <mat-option [value]="option.key" data-cy="condition-key-option">
+        <span class="option-name">{{
+          option.humanReadableName || option.key
+        }}</span>
+        @if (option.humanReadableName) {
+          <span class="option-key">{{ option.key }}</span>
+        }
+      </mat-option>
+    }
+    @if (hasMore() && options().length && !loading()) {
+      <mat-option class="load-more-option" data-cy="condition-key-load-more">
+        <button
+          type="button"
+          class="load-more"
+          (mousedown)="$event.preventDefault()"
+          (click)="$event.stopPropagation(); loadMore()"
+        >
+          <span class="more">Show {{ pageSize }} more</span>
+        </button>
+      </mat-option>
+    }
+    @if (loading()) {
+      <mat-option disabled class="status" data-cy="condition-key-loading"
+        >Loading…</mat-option
+      >
+    } @else if (!options().length) {
+      <mat-option disabled class="status"
+        >No keys found, the typed key is used</mat-option
+      >
+    }
+  </mat-autocomplete>
+</mat-form-field>
