@@ -123,4 +123,16 @@ describe("TableMenuComponent popup auto-save", () => {
     expect(emitted.length).toBe(1);
     expect(emitted[0].type).toBe(TableMenuAction.TableSetting);
   }));
+
+  it("flushes a pending debounced change on destroy", fakeAsync(() => {
+    component.toggleSelectedColumn(setting.columnSetting[2]);
+
+    tick(100);
+    expect(emitted.length).toBe(0);
+
+    component.ngOnDestroy();
+
+    expect(emitted.length).toBe(1);
+    expect(emitted[0].type).toBe(TableMenuAction.TableSetting);
+  }));
 });

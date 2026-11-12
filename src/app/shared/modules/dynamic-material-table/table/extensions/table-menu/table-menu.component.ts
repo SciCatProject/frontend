@@ -33,6 +33,7 @@ import {
 export class TableMenuComponent implements OnDestroy {
   private columnChange$ = new Subject<void>();
   private columnChangeSub: Subscription;
+  private columnSavePending = false;
 
   @Output() menuActionChange: EventEmitter<TableMenuActionChange> =
     new EventEmitter<TableMenuActionChange>();
@@ -80,10 +81,12 @@ export class TableMenuComponent implements OnDestroy {
   }
 
   private scheduleColumnSave() {
+    this.columnSavePending = true;
     this.columnChange$.next();
   }
 
   private saveColumnSettings() {
+    this.columnSavePending = false;
     this.menuActionChange.emit({
       type: TableMenuAction.TableSetting,
       data: this.currentTableSetting,
@@ -92,6 +95,9 @@ export class TableMenuComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.columnSavePending) {
+      this.saveColumnSettings();
+    }
     this.columnChangeSub?.unsubscribe();
     this.columnChange$.complete();
   }
