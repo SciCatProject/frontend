@@ -1,45 +1,48 @@
-import { testData } from "../../fixtures/testData";
-
-describe('Datasets columns persistence', () => {
+describe("Datasets columns persistence", () => {
   before(() => {
-    cy.login(Cypress.env('username'), Cypress.env('password'));
-    cy.createDataset({ type: 'raw', dataFileSize: 'small', datasetName: 'Columns Persistence Dataset' });
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+    cy.createDataset({
+      type: "raw",
+      dataFileSize: "small",
+      datasetName: "Columns Persistence Dataset",
+    });
   });
 
   after(() => {
     cy.removeDatasets();
   });
 
-  it('should persist deselected column across navigation and reload', () => {
-    cy.visit('/datasets');
+  it("should auto-save a deselected column and keep it hidden after reload", () => {
+    cy.visit("/datasets");
 
-    // ensure table menu exists
-    cy.get('dynamic-mat-table table-menu button').click();
-    cy.get('[role="menu"] button').contains('Column setting').click();
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+    cy.finishedLoading();
 
-    // uncheck the first visible column (if any) by checking a checkbox in the dialog
-    cy.get('[role="menu"]').within(() => {
-      cy.get('input[type=checkbox]').first().uncheck({ force: true });
-    });
+    const removedHeader = "Image";
+    const headerCell = 'mat-header-row.header mat-header-cell';
 
-    cy.contains('.column-config-apply button.done-setting', 'done').click();
+    cy.get(headerCell).should("contain.text", removedHeader);
 
-    // Save table setting so it persists
-    cy.get('dynamic-mat-table table-menu button').click();
-    cy.get('[role="menu"] button').contains('Save table setting').click();
+    // Open the table menu -> Column setting
+    cy.get("dynamic-mat-table table-menu button").first().click();
+    cy.contains("button.mat-mdc-menu-item", "Column setting").click();
 
-    // Navigate into a dataset and back
-    cy.get('dynamic-mat-table mat-row').first().click();
-    cy.url().should('include', '/datasets/');
+    // Auto-save: unchecking triggers a debounced save, no explicit apply button
+    cy.contains("label", removedHeader)
+      .closest("mat-checkbox")
+      .find("input")
+      .uncheck({ force: true });
 
-    cy.go('back');
+    // The header disappears immediately after the toggle
+    cy.get(headerCell).should("not.contain.text", removedHeader);
 
-    // reload and assert column not present
+    // Reload and verify the change persisted (auto-save), without any
+    // "done" / "Save table setting" controls being used.
     cy.reload();
 
-    // After reload, assert that table header does not contain the previously removed column header
-    // We use a generic assertion: the first column header should not be the removed one
-    // (Exact header text depends on the environment; this asserts the table still renders)
-    cy.get('dynamic-mat-table mat-header-row').should('exist');
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+    cy.finishedLoading();
+
+    cy.get(headerCell).should("not.contain.text", removedHeader);
   });
 });
