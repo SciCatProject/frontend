@@ -182,6 +182,9 @@ export class DatasetsListService implements OnDestroy {
           type: column.type,
           format: column.format,
           tooltip: column.tooltip,
+          sort: column.sort,
+          printable: column.printable,
+          sticky: column.sticky,
         };
 
         // NOTE: This is how we render the custom columns if new config is used.
