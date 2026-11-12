@@ -18,6 +18,7 @@ For the full documentation please go to the [SciCat home page](https://scicatpro
 ## Configuration
 
 - [Site logo related images](SITE-LOGO-CONFIGURATION.md)
+- [Scientific metadata context menu](docs/scientific-metadata-context-menu-configuration.md)
 
 ## Get started
 

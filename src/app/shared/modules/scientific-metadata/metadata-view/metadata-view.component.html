@@ -1,8 +1,9 @@
 @if (metadata) {
   <div
-    class="metadataTable"
-    [class.metadataTable-add-column-enabled]="
-      canAddScientificMetadataKeysAsColumn
+    id="scientific-metadata-table"
+    class="metadataTable scientific-metadata-table"
+    [class.metadataTable-raw-context-menu-enabled]="
+      rowContextMenuEnabled
     "
   >
     <dynamic-mat-table
@@ -23,6 +24,8 @@
       [showProgress]="showProgress"
       [showGlobalTextSearch]="showGlobalTextSearch"
       [rowContextMenuItems]="rowContextMenuItems"
+      [rowContextMenuEnabled]="rowContextMenuEnabled"
+      rowContextMenuClass="metadata-entry-context-menu"
       style="height: 100%"
       [emptyMessage]="'No metadata available'"
       [emptyIcon]="'folder'"
