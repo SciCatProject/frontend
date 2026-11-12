@@ -406,6 +406,36 @@ describe("DatasetDetailDynamicComponent", () => {
     });
   });
 
+  describe("getHeaderColor", () => {
+    it("should return header-5 when no color is configured", () => {
+      expect(component.getHeaderColor({ type: "regular" } as any)).toBe(
+        "var(--theme-header-5-lighter)",
+      );
+    });
+
+    it("should resolve a theme palette name to the palette css variable", () => {
+      const section = { type: "regular", headerColor: "header-2" } as any;
+      expect(component.getHeaderColor(section)).toBe(
+        "var(--theme-header-2-lighter)",
+      );
+    });
+  });
+
+  describe("getHeaderContrastColor", () => {
+    it("should return header-5 contrast when no color is configured", () => {
+      expect(component.getHeaderContrastColor({ type: "regular" } as any)).toBe(
+        "var(--theme-header-5-lighter-contrast)",
+      );
+    });
+
+    it("should resolve a theme palette name to its contrast css variable", () => {
+      const section = { type: "regular", headerColor: "header-2" } as any;
+      expect(component.getHeaderContrastColor(section)).toBe(
+        "var(--theme-header-2-lighter-contrast)",
+      );
+    });
+  });
+
   describe("getScientificMetadata", () => {
     type TestCase = {
       desc: string;
