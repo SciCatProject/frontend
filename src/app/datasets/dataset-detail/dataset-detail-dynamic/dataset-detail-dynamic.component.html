@@ -14,9 +14,9 @@
         </a>
       }
     </div>
-    @if (appConfig.datafilesActionsEnabled) {
+    @if (appConfig.datasetDetailsActionsEnabled) {
       <configurable-actions
-        [actionsConfig]="appConfig.datasetActions"
+        [actionsConfig]="appConfig.datasetDetailsActions"
         [actionItems]="actionItems"
       ></configurable-actions>
     }

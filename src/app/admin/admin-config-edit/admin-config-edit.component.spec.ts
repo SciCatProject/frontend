@@ -131,13 +131,17 @@ describe("AdminConfigEditComponent datafiles action conditions", () => {
     store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(AdminConfigEditComponent);
     const group = (fixture.componentInstance.uiSchema as Layout).elements.find(
-      (element) => (element as GroupLayout).label === "Datafiles Actions",
+      (element) => (element as GroupLayout).label === "Configurable Actions",
     ) as GroupLayout;
+    const datafilesActionsControl = group.elements.find(
+      (element) =>
+        (element as ControlElement).scope === "#/properties/datafilesActions",
+    ) as ControlElement;
     const control: ControlElement = {
       type: "Control",
       scope: "#/properties/datafilesActions",
       // the action's detail form for every action, without the master list
-      options: { detail: group.elements[0].options?.detail },
+      options: { detail: datafilesActionsControl.options?.detail },
     };
     const uiSchema: Layout = { type: "VerticalLayout", elements: [control] };
     fixture.componentInstance.uiSchema = uiSchema;
