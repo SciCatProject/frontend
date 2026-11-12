@@ -531,13 +531,6 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   ngAfterViewInit(): void {
     this.standardDataSource.paginator = this.paginator;
-    if (this.tableSetting.tableSort) {
-      this.sort.sort({
-        id: this.tableSetting.tableSort.sortColumn,
-        start: this.tableSetting.tableSort.sortDirection,
-        disableClear: false,
-      });
-    }
     this.standardDataSource.sort = this.sort;
     this.dataSource.subscribe((x) => {
       x = x || [];

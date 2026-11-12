@@ -1,9 +1,14 @@
-import { ChangeDetectorRef, Renderer2 } from "@angular/core";
-import { BehaviorSubject, of, Subject } from "rxjs";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
+import { ChangeDetectorRef, Component, Renderer2 } from "@angular/core";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { DatePipe } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { StoreModule } from "@ngrx/store";
+import { TranslateService } from "@ngx-translate/core";
+import { BehaviorSubject, EMPTY, of, Subject } from "rxjs";
 import {
   Overlay,
   OverlayContainer,
@@ -11,6 +16,10 @@ import {
 } from "@angular/cdk/overlay";
 
 import { DynamicMatTableComponent } from "./dynamic-mat-table.component";
+import { DynamicMatTableModule } from "./dynamic-mat-table.module";
+import { ITableSetting } from "../models/table-setting.model";
+import { ITableEvent, TableEventType } from "../models/table-row.model";
+import { EventsService } from "shared/events.service";
 import { TableService } from "./dynamic-mat-table.service";
 import { TableField } from "../models/table-field.model";
 import { AppConfigService } from "app-config.service";
@@ -245,5 +254,118 @@ describe("DynamicMatTableComponent", () => {
     expect(
       component.getScientificMetadata(row, nestedHoverColumn),
     ).toBeUndefined();
+  });
+});
+
+@Component({
+  template: `<dynamic-mat-table
+    tableName="sortTestTable"
+    pagingMode="server-side"
+    [columns]="columns"
+    [setting]="setting"
+    [dataSource]="dataSource"
+    [pagination]="pagination"
+    (onTableEvent)="events.push($event)"
+  ></dynamic-mat-table>`,
+  standalone: false,
+})
+class SortHostComponent {
+  columns: TableField<any>[] = [
+    { name: "datasetName", header: "Dataset Name" },
+    { name: "creationTime", header: "Creation Time" },
+  ];
+  setting: ITableSetting = {
+    tableSort: { sortColumn: "creationTime", sortDirection: "desc" },
+  };
+  dataSource = new BehaviorSubject<any[]>([
+    { datasetName: "a", creationTime: "2026-01-01" },
+  ]);
+  pagination = { pageIndex: 0, pageSize: 10, length: 1 };
+  events: ITableEvent[] = [];
+}
+
+describe("DynamicMatTableComponent sort header", () => {
+  let fixture: ComponentFixture<SortHostComponent>;
+  let host: SortHostComponent;
+
+  const matSort = () =>
+    fixture.debugElement.query(By.directive(MatSort)).injector.get(MatSort);
+  const sortEvents = () =>
+    host.events.filter((e) => e.event === TableEventType.SortChanged);
+  const sortedHeaders = () =>
+    fixture.debugElement
+      .queryAll(By.css("[mat-sort-header]"))
+      .map((header) => header.nativeElement as HTMLElement)
+      .filter((header) => header.getAttribute("aria-sort") !== "none")
+      .map((header) => ({
+        header: header.textContent.trim(),
+        sort: header.getAttribute("aria-sort"),
+      }));
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [SortHostComponent],
+      imports: [
+        DynamicMatTableModule.forRoot({}),
+        NoopAnimationsModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [
+        DatePipe,
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
+        { provide: AppConfigService, useValue: { getConfig: () => ({}) } },
+        {
+          provide: EventsService,
+          useValue: {
+            connectionError$: of(false),
+            evicted$: of(false),
+            message$: EMPTY,
+          },
+        },
+      ],
+    });
+    fixture = TestBed.createComponent(SortHostComponent);
+    host = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it("shows the sort of the setting when the table is created", () => {
+    expect(matSort().active).toBe("creationTime");
+    expect(matSort().direction).toBe("desc");
+    expect(sortedHeaders()).toEqual([
+      { header: "Creation Time", sort: "descending" },
+    ]);
+    expect(sortEvents()).toEqual([]);
+  });
+
+  it("follows the sort of the setting when it changes later", () => {
+    host.setting = {
+      ...host.setting,
+      tableSort: { sortColumn: "datasetName", sortDirection: "asc" },
+    };
+    fixture.detectChanges();
+
+    expect(matSort().active).toBe("datasetName");
+    expect(matSort().direction).toBe("asc");
+    expect(sortedHeaders()).toEqual([
+      { header: "Dataset Name", sort: "ascending" },
+    ]);
+    // only a click of the user is a sort event
+    expect(sortEvents()).toEqual([]);
+  });
+
+  it("emits a sort event when a header is clicked", () => {
+    const header = fixture.debugElement
+      .queryAll(By.css("[mat-sort-header]"))
+      .find((h) => h.nativeElement.textContent.trim() === "Dataset Name");
+
+    header.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(sortEvents().length).toBe(1);
+    expect(sortEvents()[0].sender).toEqual({
+      active: "datasetName",
+      direction: "asc",
+    });
   });
 });
