@@ -28,7 +28,9 @@ import {
 import { ConditionKeySource } from "./advanced-search.keys";
 import {
   RELATION_OPTIONS,
+  getBounds,
   getRelationOption,
+  getText,
   isConditionComplete,
   isDatasetCondition,
   normalizeCondition,
@@ -46,11 +48,6 @@ export interface AdvancedSearchDialogData {
   draftChange?: (configs: ConditionConfig[]) => void;
 }
 
-export { METADATA_FIELD };
-
-/** What a row filters on: a dataset field or scientific metadata. */
-export type RowKind = "dataset" | "metadata";
-
 /** A condition being edited, `id` keeps the row stable while its field changes. */
 interface Row extends ConditionConfig {
   id: number;
@@ -63,32 +60,18 @@ interface RowError {
 
 /** Rows are edited as a draft with plain strings, `normalizeCondition` converts them on apply. */
 const toDraft = ({ condition }: ConditionConfig): ConditionConfig => {
-  if (isDatasetCondition(condition)) {
-    if (condition.relation === "RANGE") {
-      const [from, to] = Array.isArray(condition.rhs) ? condition.rhs : [];
-      return {
-        condition: {
-          ...condition,
-          rhs: [String(from ?? ""), String(to ?? "")],
-        },
-      };
-    }
-
-    const rhs = Array.isArray(condition.rhs)
-      ? condition.rhs.join(", ")
-      : String(condition.rhs ?? "");
-    return { condition: { ...condition, rhs } };
-  }
-
-  const rhs = Array.isArray(condition.rhs)
-    ? condition.rhs.map((bound) => String(bound ?? ""))
-    : String(condition.rhs ?? "");
+  const [min, max] = getBounds(condition.rhs);
   return {
     condition: {
       ...condition,
-      relation: getRelationOption(condition.relation).value,
+      // the equality variants are one operator in the UI
+      relation: isDatasetCondition(condition)
+        ? condition.relation
+        : getRelationOption(condition.relation).value,
       rhs:
-        condition.relation === "RANGE" && !Array.isArray(rhs) ? ["", ""] : rhs,
+        condition.relation === "RANGE"
+          ? [String(min ?? ""), String(max ?? "")]
+          : getText(condition.rhs),
     },
   };
 };
@@ -310,12 +293,10 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     id: number,
     change: (condition: FilterCondition) => FilterCondition,
   ): void {
-    this.patch(id, (row) => ({ ...row, condition: change(row.condition) }));
-  }
-
-  private patch(id: number, change: (row: Row) => Row): void {
     this.rows.update((rows) =>
-      rows.map((row) => (row.id === id ? change(row) : row)),
+      rows.map((row) =>
+        row.id === id ? { ...row, condition: change(row.condition) } : row,
+      ),
     );
   }
 
@@ -325,7 +306,8 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
       ?.scrollIntoView({ block: "nearest" });
   }
 
-  getKind(condition: FilterCondition): RowKind {
+  /** What a row filters on: a dataset field or scientific metadata. */
+  getKind(condition: FilterCondition): "dataset" | "metadata" {
     return isDatasetCondition(condition) ? "dataset" : "metadata";
   }
 
@@ -356,6 +338,7 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
 
   /** A dataset field has no operator, the placeholder tells how it matches. */
   getValuePlaceholder(condition: FilterCondition): string {
+    if (!isDatasetCondition(condition)) return "Value";
     return condition.relation === "IN"
       ? "beam, test (separated by commas)"
       : "Contains this text, e.g. beam";
@@ -392,17 +375,14 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     this.touched.update((touched) => new Set(touched).add(id));
   }
 
-  setExclude(id: number, exclude: boolean): void {
-    this.patchCondition(id, (condition) => ({ ...condition, exclude }));
+  /** Changes the key, the value, the unit or Exclude of a row. */
+  set(id: number, change: Partial<FilterCondition>): void {
+    this.patchCondition(id, (condition) => ({ ...condition, ...change }));
   }
 
   /** The user chose a dataset field, or scientific metadata to pick a key for. */
   setField(id: number, field: string): void {
     this.patchCondition(id, (condition) => this.withField(condition, field));
-  }
-
-  setKey(id: number, lhs: string): void {
-    this.patchCondition(id, (condition) => ({ ...condition, lhs }));
   }
 
   setRelation(id: number, relation: FilterCondition["relation"]): void {
@@ -415,10 +395,6 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
         rhs: isRange ? ["", ""] : wasRange ? "" : condition.rhs,
       };
     });
-  }
-
-  setValue(id: number, rhs: string): void {
-    this.patchCondition(id, (condition) => ({ ...condition, rhs }));
   }
 
   /** The date the date picker shows for a saved `2026-01-31`. */
@@ -440,10 +416,6 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
       bounds[index] = value;
       return { ...condition, rhs: bounds };
     });
-  }
-
-  setUnit(id: number, unit: string): void {
-    this.patchCondition(id, (condition) => ({ ...condition, unit }));
   }
 
   apply(): void {

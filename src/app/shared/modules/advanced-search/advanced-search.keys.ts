@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
+import { escapeRegExp } from "lodash-es";
 import { MetadataKeysV4Service } from "@scicatproject/scicat-sdk-ts-angular";
 import { Observable, map, take } from "rxjs";
 import { MetadataKey } from "state-management/models";
-import { escapeRegex } from "./advanced-search.utils";
 
 /** How many keys are listed at first, and how many more when scrolling. */
 export const KEY_PAGE_SIZE = 20;
@@ -20,7 +20,7 @@ export class MetadataKeySearchService {
   constructor(private metadataKeysService: MetadataKeysV4Service) {}
 
   search(term: string, skip: number, limit: number): Observable<MetadataKey[]> {
-    const search = escapeRegex(term.trim());
+    const search = escapeRegExp(term.trim());
     const match = { $regex: search, $options: "i" };
     const filter = {
       where: search

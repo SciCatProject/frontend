@@ -1,11 +1,5 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  Output,
-  signal,
-} from "@angular/core";
+import { Component, EventEmitter, Input, Output, signal } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
   Subject,
   catchError,
@@ -14,7 +8,6 @@ import {
   map,
   of,
   switchMap,
-  takeUntil,
   tap,
 } from "rxjs";
 import { MetadataKey } from "state-management/models";
@@ -34,8 +27,7 @@ export const SEARCH_DEBOUNCE_MS = 250;
   styleUrls: ["./advanced-search-key-picker.component.scss"],
   standalone: false,
 })
-export class AdvancedSearchKeyPickerComponent implements OnDestroy {
-  private readonly destroy$ = new Subject<void>();
+export class AdvancedSearchKeyPickerComponent {
   private readonly requests$ = new Subject<{ term: string; skip: number }>();
   private readonly typed$ = new Subject<string>();
   // the search term the listed keys belong to
@@ -62,7 +54,7 @@ export class AdvancedSearchKeyPickerComponent implements OnDestroy {
             catchError(() => of({ keys: [] as MetadataKey[], skip })),
           ),
         ),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(),
       )
       .subscribe(({ keys, skip }) => {
         this.options.update((loaded) =>
@@ -76,7 +68,7 @@ export class AdvancedSearchKeyPickerComponent implements OnDestroy {
       .pipe(
         debounceTime(SEARCH_DEBOUNCE_MS),
         filter((term) => term !== this.loadedTerm),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(),
       )
       .subscribe((term) => this.load(term));
   }
@@ -118,10 +110,5 @@ export class AdvancedSearchKeyPickerComponent implements OnDestroy {
 
   onSelected(key: string): void {
     this.keyChange.emit(key);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

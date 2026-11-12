@@ -1,3 +1,4 @@
+import { escapeRegExp } from "lodash-es";
 import * as Math from "mathjs";
 import {
   FilterCondition,
@@ -42,17 +43,21 @@ const isBlank = (value: unknown): boolean =>
 const isNumeric = (value: unknown): boolean =>
   !isBlank(value) && !isNaN(Number(value));
 
+/** The two bounds of a range, none when the value is not a range. */
+export const getBounds = (rhs: FilterCondition["rhs"]): (string | number)[] =>
+  Array.isArray(rhs) ? rhs : [];
+
 /** Dataset fields hold lists and text, scientific metadata holds measurements. */
 export const isDatasetCondition = (condition: FilterCondition): boolean =>
   condition.source === "dataset";
 
-/** What was typed for a dataset field, a list is shown as `a, b`. */
-const datasetText = (rhs: FilterCondition["rhs"]): string =>
+/** The value as text, a list is shown as `a, b`. */
+export const getText = (rhs: FilterCondition["rhs"]): string =>
   Array.isArray(rhs) ? rhs.join(", ") : String(rhs ?? "");
 
 /** The values of a list field, typed as `a, b, c`. */
 export function splitValues(rhs: FilterCondition["rhs"]): string[] {
-  return datasetText(rhs)
+  return getText(rhs)
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean);
@@ -103,7 +108,7 @@ export function isConditionComplete(condition: FilterCondition): boolean {
   if (isDatasetCondition(condition)) {
     return condition.relation === "IN"
       ? splitValues(condition.rhs).length > 0
-      : datasetText(condition.rhs).trim() !== "";
+      : getText(condition.rhs).trim() !== "";
   }
   return !isBlank(condition.rhs);
 }
@@ -129,38 +134,30 @@ export function normalizeCondition(
 }
 
 function normalizeValue(condition: FilterCondition): FilterCondition {
-  const unit = condition.unit || "";
+  const isDataset = isDatasetCondition(condition);
+  const unit = isDataset ? "" : condition.unit || "";
 
-  if (isDatasetCondition(condition)) {
-    if (condition.relation === "RANGE") {
-      const [from, to] = Array.isArray(condition.rhs) ? condition.rhs : [];
-      return {
-        ...condition,
-        rhs: [
-          isBlank(from) ? undefined : String(from),
-          isBlank(to) ? undefined : String(to),
-        ],
-        unit: "",
-      };
-    }
+  if (condition.relation === "RANGE") {
+    // dates stay text, measurements are numbers
+    const convert = isDataset ? String : Number;
+    const [min, max] = getBounds(condition.rhs);
+    return {
+      ...condition,
+      rhs: [
+        isBlank(min) ? undefined : convert(min),
+        isBlank(max) ? undefined : convert(max),
+      ],
+      unit,
+    };
+  }
+
+  if (isDataset) {
     return {
       ...condition,
       rhs:
         condition.relation === "IN"
           ? splitValues(condition.rhs)
-          : datasetText(condition.rhs).trim(),
-      unit: "",
-    };
-  }
-
-  if (condition.relation === "RANGE") {
-    const [min, max] = Array.isArray(condition.rhs) ? condition.rhs : [];
-    return {
-      ...condition,
-      rhs: [
-        isBlank(min) ? undefined : Number(min),
-        isBlank(max) ? undefined : Number(max),
-      ],
+          : getText(condition.rhs).trim(),
       unit,
     };
   }
@@ -184,9 +181,9 @@ function normalizeValue(condition: FilterCondition): FilterCondition {
 export function toActiveConditions(
   configs: ConditionConfig[] = [],
 ): FilterCondition[] {
-  return configs
-    .filter(isActive)
-    .map(({ condition }) => normalizeCondition(condition));
+  return getActiveConfigs(configs).map(({ condition }) =>
+    normalizeCondition(condition),
+  );
 }
 
 /** Short readable form, used for the chips: `temperature ≥ 20 celsius`. */
@@ -196,23 +193,21 @@ export function describeCondition(condition: FilterCondition): string {
 }
 
 function describeValue(condition: FilterCondition): string {
-  if (isDatasetCondition(condition)) {
-    const label = getDatasetField(condition.lhs)?.label ?? condition.lhs;
-    if (condition.relation === "RANGE") {
-      const [from, to] = Array.isArray(condition.rhs) ? condition.rhs : [];
-      return `${label}: ${isBlank(from) ? "…" : from} – ${isBlank(to) ? "…" : to}`;
-    }
-    return condition.relation === "IN"
-      ? `${label}: ${splitValues(condition.rhs).join(", ")}`
-      : `${label} contains "${datasetText(condition.rhs).trim()}"`;
-  }
-
-  const unit = condition.unit ? ` ${condition.unit}` : "";
+  const isDataset = isDatasetCondition(condition);
+  const label = isDataset
+    ? (getDatasetField(condition.lhs)?.label ?? condition.lhs)
+    : condition.lhs;
+  const unit = !isDataset && condition.unit ? ` ${condition.unit}` : "";
 
   if (condition.relation === "RANGE") {
-    const [min, max] = Array.isArray(condition.rhs) ? condition.rhs : [];
-    const range = `${isBlank(min) ? "…" : min} – ${isBlank(max) ? "…" : max}`;
-    return `${condition.lhs}: ${range}${unit}`;
+    const [min, max] = getBounds(condition.rhs);
+    return `${label}: ${isBlank(min) ? "…" : min} – ${isBlank(max) ? "…" : max}${unit}`;
+  }
+
+  if (isDataset) {
+    return condition.relation === "IN"
+      ? `${label}: ${splitValues(condition.rhs).join(", ")}`
+      : `${label} contains "${getText(condition.rhs).trim()}"`;
   }
 
   const { symbol } = getRelationOption(condition.relation);
@@ -251,6 +246,16 @@ export function convertToSIUnit(
   }
 }
 
+const MONGO_OPERATORS: Partial<Record<FilterConditionRelation, string>> = {
+  EQUAL_TO: "$eq",
+  EQUAL_TO_NUMERIC: "$eq",
+  EQUAL_TO_STRING: "$eq",
+  GREATER_THAN: "$gt",
+  LESS_THAN: "$lt",
+  GREATER_THAN_OR_EQUAL: "$gte",
+  LESS_THAN_OR_EQUAL: "$lte",
+};
+
 export function conditionToMongoQuery(
   condition: FilterCondition,
 ): Record<string, any> {
@@ -274,57 +279,34 @@ export function conditionToMongoQuery(
     queryUnit = converted.siUnit;
   }
 
-  switch (relation) {
-    case "EQUAL_TO":
-    case "EQUAL_TO_NUMERIC":
-    case "EQUAL_TO_STRING":
-      query[valuePath] = { $eq: queryValue };
-      break;
+  const operator = MONGO_OPERATORS[relation];
 
-    case "GREATER_THAN":
-      query[valuePath] = { $gt: queryValue };
-      break;
+  if (operator) {
+    query[valuePath] = { [operator]: queryValue };
+  } else if (relation !== "RANGE") {
+    console.warn(`Unknown relation type: ${relation}`);
+  } else if (Array.isArray(rhs) && rhs.length === 2) {
+    const [min, max] = rhs;
+    let convertedMin = min;
+    let convertedMax = max;
 
-    case "LESS_THAN":
-      query[valuePath] = { $lt: queryValue };
-      break;
+    if (unit) {
+      const toSI = (bound: string | number | undefined) =>
+        isBlank(bound)
+          ? bound
+          : convertToSIUnit(lhs, bound as number, unit).value;
+      convertedMin = toSI(min);
+      convertedMax = toSI(max);
+      // a range can have only one bound, use the one that is set
+      queryUnit = convertToSIUnit(lhs, (min ?? max) as number, unit).siUnit;
+    }
 
-    case "GREATER_THAN_OR_EQUAL":
-      query[valuePath] = { $gte: queryValue };
-      break;
-
-    case "LESS_THAN_OR_EQUAL":
-      query[valuePath] = { $lte: queryValue };
-      break;
-
-    case "RANGE":
-      if (Array.isArray(rhs) && rhs.length === 2) {
-        const [min, max] = rhs;
-        let convertedMin = min;
-        let convertedMax = max;
-
-        if (unit) {
-          const toSI = (bound: string | number | undefined) =>
-            isBlank(bound)
-              ? bound
-              : convertToSIUnit(lhs, bound as number, unit).value;
-          convertedMin = toSI(min);
-          convertedMax = toSI(max);
-          // a range can have only one bound, use the one that is set
-          queryUnit = convertToSIUnit(lhs, (min ?? max) as number, unit).siUnit;
-        }
-
-        if (convertedMin !== null && convertedMin !== undefined) {
-          query[valuePath] = { ...query[valuePath], $gte: convertedMin };
-        }
-        if (convertedMax !== null && convertedMax !== undefined) {
-          query[valuePath] = { ...query[valuePath], $lte: convertedMax };
-        }
-      }
-      break;
-
-    default:
-      console.warn(`Unknown relation type: ${relation}`);
+    if (convertedMin !== null && convertedMin !== undefined) {
+      query[valuePath] = { ...query[valuePath], $gte: convertedMin };
+    }
+    if (convertedMax !== null && convertedMax !== undefined) {
+      query[valuePath] = { ...query[valuePath], $lte: convertedMax };
+    }
   }
 
   if (queryUnit) {
@@ -333,16 +315,13 @@ export function conditionToMongoQuery(
   return query;
 }
 
-export const escapeRegex = (text: string): string =>
-  text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
 function datasetConditionToQuery({
   lhs,
   relation,
   rhs,
 }: FilterCondition): Record<string, unknown> {
   if (relation === "RANGE") {
-    const [from, to] = Array.isArray(rhs) ? rhs : [];
+    const [from, to] = getBounds(rhs);
     // a bound that is not a date (e.g. typed in the config) is left out
     const start = isBlank(from) ? undefined : startOfDay(String(from));
     // the end day is included, up to the start of the next day
@@ -358,7 +337,7 @@ function datasetConditionToQuery({
     ? { [lhs]: { $in: splitValues(rhs) } }
     : {
         [lhs]: {
-          $regex: escapeRegex(datasetText(rhs).trim()),
+          $regex: escapeRegExp(getText(rhs).trim()),
           $options: "i",
         },
       };

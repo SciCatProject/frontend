@@ -438,22 +438,13 @@ export class UserEffects {
   setConditions$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsCompleteAction),
+      // the datasets reducer already filters by them, see fetchUserSettingsCompleteAction
       mergeMap(({ userSettings }) =>
-        SETTINGS_CONFIG.filter((s) => s.configKey === "conditions").flatMap(
-          (s) => {
-            const scope = s.scope as ConditionSettingScope;
-            const incoming = userSettings.externalSettings?.[s.key];
-
-            const conditions = incoming.length > 0 ? incoming : [];
-
-            // the datasets reducer already filters by them, see fetchUserSettingsCompleteAction
-            return [
-              fromActions.updateConditionsConfigs({
-                conditionConfigs: conditions,
-                scope,
-              }),
-            ];
-          },
+        SETTINGS_CONFIG.filter((s) => s.configKey === "conditions").map((s) =>
+          fromActions.updateConditionsConfigs({
+            conditionConfigs: userSettings.externalSettings[s.key],
+            scope: s.scope as ConditionSettingScope,
+          }),
         ),
       ),
     );

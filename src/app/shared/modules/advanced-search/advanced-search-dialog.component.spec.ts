@@ -14,8 +14,8 @@ import { AdvancedSearchModule } from "./advanced-search.module";
 import {
   AdvancedSearchDialogComponent,
   AdvancedSearchDialogData,
-  METADATA_FIELD,
 } from "./advanced-search-dialog.component";
+import { METADATA_FIELD } from "./advanced-search.fields";
 
 describe("AdvancedSearchDialogComponent", () => {
   let component: AdvancedSearchDialogComponent;
@@ -74,7 +74,7 @@ describe("AdvancedSearchDialogComponent", () => {
   /** Picks scientific metadata and a key, like the user does. */
   const setMetadata = (index: number, key: string) => {
     component.setField(id(index), METADATA_FIELD);
-    component.setKey(id(index), key);
+    component.set(id(index), { lhs: key });
   };
 
   beforeEach(() => {
@@ -241,7 +241,7 @@ describe("AdvancedSearchDialogComponent", () => {
       component.setField(id(), METADATA_FIELD);
       expect(row().condition.lhs).toBe("");
 
-      component.setKey(id(), "pressure");
+      component.set(id(), { lhs: "pressure" });
       expect(row().condition.lhs).toBe("pressure");
       expect(row().condition.source).toBe("scientificMetadata");
     });
@@ -254,15 +254,15 @@ describe("AdvancedSearchDialogComponent", () => {
 
     it("should start over when the kind of field changes", () => {
       setMetadata(0, "temperature");
-      component.setValue(id(), "5");
-      component.setUnit(id(), "celsius");
+      component.set(id(), { rhs: "5" });
+      component.set(id(), { unit: "celsius" });
 
       component.setField(id(), "keywords");
       expect(row().condition.lhs).toBe("keywords");
       expect(row().condition.rhs).toBe("");
       expect(row().condition.unit).toBe("");
 
-      component.setValue(id(), "beam");
+      component.set(id(), { rhs: "beam" });
       component.setField(id(), METADATA_FIELD);
       expect(row().condition.lhs).toBe("");
       expect(row().condition.rhs).toBe("");
@@ -271,7 +271,7 @@ describe("AdvancedSearchDialogComponent", () => {
 
     it("should keep the key and value when metadata is chosen again", () => {
       setMetadata(0, "temperature");
-      component.setValue(id(), "5");
+      component.set(id(), { rhs: "5" });
       component.setField(id(), METADATA_FIELD);
 
       expect(row().condition.lhs).toBe("temperature");
@@ -280,7 +280,7 @@ describe("AdvancedSearchDialogComponent", () => {
 
     it("should keep the value when another dataset field of the same kind is picked", () => {
       component.setField(id(), "keywords");
-      component.setValue(id(), "beam");
+      component.set(id(), { rhs: "beam" });
       component.setField(id(), "proposalIds");
 
       expect(row().condition.lhs).toBe("proposalIds");
@@ -422,7 +422,7 @@ describe("AdvancedSearchDialogComponent", () => {
 
     it("should apply a value without a unit", () => {
       createComponent([saved()]);
-      component.setUnit(id(), "");
+      component.set(id(), { unit: "" });
 
       component.apply();
 
@@ -471,11 +471,11 @@ describe("AdvancedSearchDialogComponent", () => {
     });
 
     it("should not allow the same key twice, the conditions would be merged", () => {
-      component.setKey(id(), "temperature");
-      component.setValue(id(), "5");
+      component.set(id(), { lhs: "temperature" });
+      component.set(id(), { rhs: "5" });
       component.addRow();
-      component.setKey(id(1), "temperature");
-      component.setValue(id(1), "6");
+      component.set(id(1), { lhs: "temperature" });
+      component.set(id(1), { rhs: "6" });
 
       expect(component.errors().get(id(1))?.key).toBeDefined();
       expect(component.canApply()).toBeFalse();
@@ -532,7 +532,7 @@ describe("AdvancedSearchDialogComponent", () => {
       expect(component.canApply()).toBeFalse();
       expect(component.errors().get(id())?.value).toBeDefined();
 
-      component.setValue(id(), "5");
+      component.set(id(), { rhs: "5" });
       expect(component.canApply()).toBeTrue();
     });
 
@@ -549,7 +549,7 @@ describe("AdvancedSearchDialogComponent", () => {
       expect(cells("[data-cy=condition-apply-hint]").length).toBe(1);
       expect(cells("[data-cy=condition-error]").length).toBe(1);
 
-      component.setValue(id(), "beam");
+      component.set(id(), { rhs: "beam" });
       fixture.detectChanges();
       expect(cells("[data-cy=condition-apply-hint]").length).toBe(0);
     });
@@ -558,16 +558,16 @@ describe("AdvancedSearchDialogComponent", () => {
       component.setField(id(), "keywords");
       expect(component.canApply()).toBeFalse();
 
-      component.setValue(id(), " , ");
+      component.set(id(), { rhs: " , " });
       expect(component.canApply()).toBeFalse();
 
-      component.setValue(id(), "beam");
+      component.set(id(), { rhs: "beam" });
       expect(component.canApply()).toBeTrue();
     });
 
     it("should not apply a value without a key", () => {
       component.setField(id(), METADATA_FIELD);
-      component.setValue(id(), "5");
+      component.set(id(), { rhs: "5" });
 
       expect(component.errors().get(id())?.key).toBeDefined();
       expect(component.canApply()).toBeFalse();
@@ -583,11 +583,11 @@ describe("AdvancedSearchDialogComponent", () => {
 
     it("should allow the same key twice, both conditions are kept", () => {
       setMetadata(0, "temperature");
-      component.setValue(id(), "5");
+      component.set(id(), { rhs: "5" });
       component.setRelation(id(), "GREATER_THAN");
       component.addRow();
       setMetadata(1, "temperature");
-      component.setValue(id(1), "9");
+      component.set(id(1), { rhs: "9" });
       component.setRelation(id(1), "LESS_THAN");
 
       expect(component.canApply()).toBeTrue();
@@ -608,7 +608,7 @@ describe("AdvancedSearchDialogComponent", () => {
 
     it("should reset the value when switching to and from a range", () => {
       setMetadata(0, "temperature");
-      component.setValue(id(), "5");
+      component.set(id(), { rhs: "5" });
       component.setRelation(id(), "RANGE");
       expect(row().condition.rhs).toEqual(["", ""]);
 
@@ -664,8 +664,8 @@ describe("AdvancedSearchDialogComponent", () => {
     it("should close with the normalized conditions and without empty rows", () => {
       createComponent();
       setMetadata(0, "temperature");
-      component.setValue(id(), "5");
-      component.setUnit(id(), "celsius");
+      component.set(id(), { rhs: "5" });
+      component.set(id(), { unit: "celsius" });
       component.addRow();
 
       component.apply();
@@ -704,7 +704,7 @@ describe("AdvancedSearchDialogComponent", () => {
     it("should close with the values of a dataset field as a list", () => {
       createComponent();
       component.setField(id(), "keywords");
-      component.setValue(id(), "beam, test");
+      component.set(id(), { rhs: "beam, test" });
 
       component.apply();
 
@@ -720,11 +720,11 @@ describe("AdvancedSearchDialogComponent", () => {
     it("should close with exclude only on the filters that have it", () => {
       createComponent();
       setMetadata(0, "temperature");
-      component.setValue(id(), "5");
+      component.set(id(), { rhs: "5" });
       component.addRow();
       setMetadata(1, "pressure");
-      component.setValue(id(1), "2");
-      component.setExclude(id(1), true);
+      component.set(id(1), { rhs: "2" });
+      component.set(id(1), { exclude: true });
 
       component.apply();
 
