@@ -279,7 +279,10 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     type: TableSettingEventType;
     setting: ITableSetting;
   }) {
-    if (event.type === TableSettingEventType.apply) {
+    if (
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
+    ) {
       this.saveTableSettings(event.setting);
     }
   }
