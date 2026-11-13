@@ -158,6 +158,11 @@ export const updatePublishedDataFailedAction = createAction(
   "[PublishedData] Update Published Data Failed",
 );
 
+export const setTextFilterAction = createAction(
+  "[PublishedData] Set Text Filter",
+  props<{ text: string }>(),
+);
+
 export const changePageAction = createAction(
   "[PublishedData] Change Page",
   props<{ page: number; limit: number }>(),

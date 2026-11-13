@@ -46,9 +46,12 @@ export class PublishedDataEffects {
       ),
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
-      mergeMap((params) =>
+      switchMap(({ filter, limits }) =>
         this.publishedDataService
-          .publishedDataV4ControllerFindAllV4(JSON.stringify(params))
+          .publishedDataV4ControllerFindAllV4(
+            JSON.stringify(limits),
+            JSON.stringify(filter),
+          )
           .pipe(
             mergeMap((publishedData) => [
               fromActions.fetchAllPublishedDataCompleteAction({
@@ -67,11 +70,14 @@ export class PublishedDataEffects {
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      switchMap(() =>
-        this.publishedDataService.publishedDataV4ControllerCountV4().pipe(
-          map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
-          catchError(() => of(fromActions.fetchCountFailedAction())),
-        ),
+      concatLatestFrom(() => this.queryParams$),
+      switchMap(([, { filter }]) =>
+        this.publishedDataService
+          .publishedDataV4ControllerCountV4(JSON.stringify(filter))
+          .pipe(
+            map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
+            catchError(() => of(fromActions.fetchCountFailedAction())),
+          ),
       ),
     );
   });
@@ -426,6 +432,7 @@ export class PublishedDataEffects {
         fromActions.fetchAllPublishedDataAction,
         fromActions.fetchCountAction,
         fromActions.sortByColumnAction,
+        fromActions.changePageAction,
         fromActions.fetchPublishedDataAction,
         fromActions.createPublishedDataAction,
         fromActions.savePublishedDataAction,

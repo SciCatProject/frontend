@@ -291,6 +291,30 @@ Cypress.Commands.add("removeDatasets", () => {
   });
 });
 
+Cypress.Commands.add("removePublishedData", () => {
+  cy.log("Removing published data");
+  cy.login(Cypress.env("username"), Cypress.env("password"));
+  cy.getToken().then((token) => {
+    cy.request({
+      method: "GET",
+      url: lbBaseUrlV4 + "/publisheddata",
+      headers: getHeader(token),
+    })
+      .its("body")
+      .then((publishedData) => {
+        publishedData.forEach(({ doi }) => {
+          // Registered/amended published data cannot be removed
+          cy.request({
+            method: "DELETE",
+            url: lbBaseUrlV4 + "/publisheddata/" + encodeURIComponent(doi),
+            headers: getHeader(token),
+            failOnStatusCode: false,
+          });
+        });
+      });
+  });
+});
+
 Cypress.Commands.add("removeProposals", () => {
   cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getToken().then((token) => {

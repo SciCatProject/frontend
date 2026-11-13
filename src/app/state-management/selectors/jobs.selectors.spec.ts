@@ -17,6 +17,7 @@ const job = createMock<OutputJobV3Dto>({
 
 const jobFilters = {
   mode: null,
+  text: "",
   sortField: "creationTime:desc",
   skip: 0,
   limit: 50,
@@ -100,17 +101,27 @@ describe("Job Selectors", () => {
   });
 
   describe("selectQueryParams", () => {
-    it("should query params from filters", () => {
-      const { mode, sortField, skip, limit } = jobFilters;
-      let params;
-      if (mode) {
-        params = { where: mode, order: sortField, skip, limit };
-      } else {
-        params = { order: sortField, skip, limit };
-      }
+    it("should build fullquery fields and limits from filters", () => {
       expect(
         fromSelectors.selectQueryParams.projector(initialJobsState.filters),
-      ).toEqual(params);
+      ).toEqual({
+        fields: {},
+        limits: { order: "creationTime:desc", skip: 0, limit: 50 },
+      });
+    });
+
+    it("should include mode and text in fields when set", () => {
+      const mode = { emailJobInitiator: "test@email.com" };
+      expect(
+        fromSelectors.selectQueryParams.projector({
+          ...jobFilters,
+          mode,
+          text: "archive",
+        }),
+      ).toEqual({
+        fields: { mode, text: "archive" },
+        limits: { order: "creationTime:desc", skip: 0, limit: 50 },
+      });
     });
   });
 });
