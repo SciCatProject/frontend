@@ -471,10 +471,11 @@ describe("Proposals general", () => {
         .find("input[type=checkbox]")
         .uncheck();
 
-      cy.contains(".column-config-apply button.done-setting", "done").click();
-
-      cy.get("dynamic-mat-table table-menu button").click();
-      cy.get('[role="menu"] button').contains("Save table setting").click();
+      // Auto-save persists the change after a debounce; no explicit apply or
+      // "Save table setting" step. Close the menu, then let the debounce save
+      // complete before reloading.
+      cy.get("body").type("{esc}");
+      cy.wait(700);
 
       cy.reload();
 
@@ -489,10 +490,6 @@ describe("Proposals general", () => {
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
-
-      cy.get("body").type("{esc}");
-      cy.get("dynamic-mat-table table-menu button").click();
-      cy.get('[role="menu"] button').contains("Save table setting").click();
 
       cy.get("body").type("{esc}");
 
