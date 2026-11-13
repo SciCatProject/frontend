@@ -19,6 +19,7 @@ describe("Datasets columns persistence", () => {
     cy.finishedLoading();
 
     const removedHeader = "Image";
+    const retainedHeader = "PID";
     const headerCell = 'mat-header-row.header mat-header-cell';
 
     cy.get(headerCell).should("contain.text", removedHeader);
@@ -43,6 +44,9 @@ describe("Datasets columns persistence", () => {
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
     cy.finishedLoading();
 
+    // The deselected column stays absent, while the table still renders the
+    // retained columns (proving it is not just a failed/empty table render).
     cy.get(headerCell).should("not.contain.text", removedHeader);
+    cy.get(headerCell).should("contain.text", retainedHeader);
   });
 });
