@@ -6,7 +6,13 @@ import {
   OnInit,
   EventEmitter,
 } from "@angular/core";
-import { BehaviorSubject, combineLatestWith, filter, Subscription } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatestWith,
+  filter,
+  Subscription,
+  take,
+} from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
@@ -49,6 +55,12 @@ import { addProposalFilterAction } from "state-management/actions/proposals.acti
   standalone: false,
 })
 export class ProposalTableComponent implements OnInit, OnDestroy {
+  private lastData?: {
+    tablesSettings: any;
+    count: number;
+    isFacetCountsLoading: boolean;
+  };
+
   subscriptions: Subscription[] = [];
 
   proposalsWithCountAndTableSettings$ = this.store.select(
@@ -122,6 +134,44 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
   ) {}
 
+  private initTableFromSettings(
+    tablesSettings: any,
+    count: number,
+    isFacetCountsLoading: boolean,
+  ): void {
+    const defaultConfigColumns =
+      this.appConfig?.defaultProposalsListSettings?.columns;
+
+    const userConfigColumns = this.tableConfigService.preferSavedColumns(
+      this.tableName,
+      tablesSettings?.columns as TableColumn[],
+      this.currentUserId,
+    );
+
+    const userTableConfigColumns = this.convertSavedColumns(
+      userConfigColumns as TableColumn[],
+    );
+
+    this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+      this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
+
+    const tableSort = this.getTableSort();
+    const paginationConfig = this.getTablePaginationConfig(
+      count,
+      isFacetCountsLoading,
+    );
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      userTableConfigColumns,
+      tableSort,
+    );
+
+    if (tableSettingsConfig?.settingList.length) {
+      this.initTable(tableSettingsConfig, paginationConfig);
+    }
+  }
+
   ngOnInit() {
     this.subscriptions.push(
       this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
@@ -132,49 +182,40 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         .pipe(
           filter(({ hasFetchedSettings }) => hasFetchedSettings),
           combineLatestWith(this.isFacetCountsLoading$),
+          combineLatestWith(this.currentUser$),
+          take(1),
         )
         .subscribe(
           async ([
-            { proposals, count, tablesSettings },
-            isFacetCountsLoading,
+            [{ proposals, count, tablesSettings }, isFacetCountsLoading],
+            user,
           ]) => {
+            this.currentUserId = user?.id;
+            this.lastData = { tablesSettings, count, isFacetCountsLoading };
             this.dataSource.next(proposals);
             this.pending = false;
 
-            const defaultConfigColumns =
-              this.appConfig?.defaultProposalsListSettings?.columns;
-
-            const userConfigColumns =
-              this.tableConfigService.preferSavedColumns(
-                this.tableName,
-                tablesSettings?.columns,
-                this.currentUserId,
-              );
-
-            const userTableConfigColumns =
-              this.convertSavedColumns(userConfigColumns);
-
-            this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-              this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
-
-            const tableSort = this.getTableSort();
-            const paginationConfig = this.getTablePaginationConfig(
+            this.initTableFromSettings(
+              tablesSettings,
               count,
               isFacetCountsLoading,
             );
-            const tableSettingsConfig =
-              this.tableConfigService.getTableSettingsConfig(
-                this.tableName,
-                this.tableDefaultSettingsConfig,
-                userTableConfigColumns,
-                tableSort,
-              );
-
-            if (tableSettingsConfig?.settingList.length) {
-              this.initTable(tableSettingsConfig, paginationConfig);
-            }
           },
         ),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe(() => {
+          if (this.lastData) {
+            this.initTableFromSettings(
+              this.lastData.tablesSettings,
+              this.lastData.count,
+              this.lastData.isFacetCountsLoading,
+            );
+          }
+        }),
     );
 
     this.subscriptions.push(

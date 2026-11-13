@@ -2,7 +2,13 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { OutputJobV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
-import { BehaviorSubject, Subscription, take, filter } from "rxjs";
+import {
+  BehaviorSubject,
+  Subscription,
+  take,
+  filter,
+  combineLatestWith,
+} from "rxjs";
 import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { ExportExcelService } from "shared/services/export-excel.service";
@@ -33,6 +39,8 @@ import { selectCurrentUser } from "state-management/selectors/user.selectors";
   standalone: false,
 })
 export class JobsDashboardNewComponent implements OnInit, OnDestroy {
+  private lastVm: any;
+
   public vm$ = this.store.select(selectJobsDashboardPageViewModel);
 
   columns: TableField<any>[] = [];
@@ -138,6 +146,25 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
     );
   }
 
+  private initTableFromSettings(vm: any): void {
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      this.tableConfigService.preferSavedColumns(
+        this.tableName,
+        vm.tableSettings?.columns,
+        this.currentUserId,
+      ),
+    );
+
+    const currentColumnSetting =
+      tableSettingsConfig.settingList.find((s) => s.isCurrentSetting)
+        ?.columnSetting ?? [];
+
+    this.columns = currentColumnSetting;
+    this.setting = tableSettingsConfig;
+  }
+
   ngOnInit() {
     this.subscriptions.push(
       this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
@@ -147,32 +174,19 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
       this.vm$
         .pipe(
           filter((vm) => vm.hasFetchedSettings),
+          combineLatestWith(this.currentUser$),
           take(1),
         )
-        .subscribe((vm) => {
+        .subscribe(([vm, user]) => {
+          this.currentUserId = user?.id;
           this.currentFilters = vm.filters;
+          this.lastVm = vm;
           const { skip, limit } = vm.filters;
           const pageIndex = skip / limit;
 
           this.loadData(vm.filters, pageIndex, limit);
 
-          const tableSettingsConfig =
-            this.tableConfigService.getTableSettingsConfig(
-              this.tableName,
-              this.tableDefaultSettingsConfig,
-              this.tableConfigService.preferSavedColumns(
-                this.tableName,
-                vm.tableSettings?.columns,
-                this.currentUserId,
-              ),
-            );
-
-          const currentColumnSetting =
-            tableSettingsConfig.settingList.find((s) => s.isCurrentSetting)
-              ?.columnSetting ?? [];
-
-          this.columns = currentColumnSetting;
-          this.setting = tableSettingsConfig;
+          this.initTableFromSettings(vm);
 
           this.subscriptions.push(
             this.scicatDataSource.loading$.subscribe((loading) => {
@@ -186,6 +200,16 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
             pageIndex,
             pageSize: limit,
           };
+        }),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe(() => {
+          if (this.lastVm) {
+            this.initTableFromSettings(this.lastVm);
+          }
         }),
     );
 

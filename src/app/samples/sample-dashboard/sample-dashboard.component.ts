@@ -55,6 +55,10 @@ import { ScientificCondition } from "state-management/models";
   standalone: false,
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
+  private lastCount?: number;
+
+  private lastIsLoading = false;
+
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
 
   @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
@@ -148,6 +152,31 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
   ) {}
 
+  private initTableFromSettings(
+    tableSettings: any,
+    count: number | undefined,
+    isLoading: boolean,
+  ): void {
+    const savedTableConfigColumns = this.tableConfigService.preferSavedColumns(
+      this.tableName,
+      tableSettings?.columns as TableField<any>[],
+      this.currentUserId,
+    );
+    const tableSort = this.getTableSort();
+    const paginationConfig = this.getTablePaginationConfig(count, isLoading);
+
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      savedTableConfigColumns,
+      tableSort,
+    );
+
+    if (tableSettingsConfig?.settingList.length) {
+      this.initTable(tableSettingsConfig, paginationConfig);
+    }
+  }
+
   ngOnInit() {
     this.store.dispatch(fetchMetadataKeysAction());
 
@@ -156,35 +185,30 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.vm$.subscribe(({ samples, tableSettings, count, isLoading }) => {
-        this.tablesSettings = tableSettings;
-        this.dataSource.next(samples);
-        this.pending = false;
+      combineLatest([this.vm$, this.currentUser$]).subscribe(
+        ([{ samples, tableSettings, count, isLoading }, user]) => {
+          this.currentUserId = user?.id;
+          this.tablesSettings = tableSettings;
+          this.lastCount = count;
+          this.lastIsLoading = isLoading;
+          this.dataSource.next(samples);
+          this.pending = false;
 
-        const savedTableConfigColumns =
-          this.tableConfigService.preferSavedColumns(
-            this.tableName,
-            tableSettings?.columns,
-            this.currentUserId,
+          this.initTableFromSettings(tableSettings, count, isLoading);
+        },
+      ),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe(() => {
+          this.initTableFromSettings(
+            this.tablesSettings,
+            this.lastCount,
+            this.lastIsLoading,
           );
-        const tableSort = this.getTableSort();
-        const paginationConfig = this.getTablePaginationConfig(
-          count,
-          isLoading,
-        );
-
-        const tableSettingsConfig =
-          this.tableConfigService.getTableSettingsConfig(
-            this.tableName,
-            this.tableDefaultSettingsConfig,
-            savedTableConfigColumns,
-            tableSort,
-          );
-
-        if (tableSettingsConfig?.settingList.length) {
-          this.initTable(tableSettingsConfig, paginationConfig);
-        }
-      }),
+        }),
     );
 
     this.subscriptions.push(

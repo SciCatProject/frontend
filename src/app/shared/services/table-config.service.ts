@@ -8,21 +8,13 @@ import { ActivatedRoute } from "@angular/router";
 import { TablePagination } from "../modules/dynamic-material-table/models/table-pagination.model";
 import { TableColumn } from "state-management/models";
 import { TableSettingsStorageService } from "./table-settings-storage.service";
+import { Observable } from "rxjs";
+import { filter, map } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export class TableConfigService {
   constructor(private tableSettingsStorage: TableSettingsStorageService) {}
 
-  /**
-   * Resolve the `display` value for a merged column. Persisted settings store
-   * visibility as the boolean `enabled`; the table renders from `display`.
-   * Prefer an explicit `display` on the saved column, then translate `enabled`,
-   * and finally fall back to the default/saved column's own `display`.
-   *
-   * When translating `enabled: true`, preserve the default column's
-   * `prevent-hidden` state instead of collapsing it to plain `visible`, so a
-   * protected column cannot become hideable after a save/reload round-trip.
-   */
   private resolveDisplay(
     saved: TableField<any>,
     fallback: AbstractField,
@@ -41,6 +33,36 @@ export class TableConfigService {
     return fallback?.display;
   }
 
+  /**
+   * Emit the freshly stored columns for `tableName` whenever another tab (or
+   * this tab) changes them, but only for the namespace of the given user. This
+   * lets an open table refresh its columns so a stale snapshot cannot later
+   * overwrite a newer cross-tab save.
+   */
+  watchColumnChanges(
+    tableName: string,
+    userId?: string,
+  ): Observable<TableField<any>[]> {
+    return this.tableSettingsStorage.changes$.pipe(
+      filter((change) => change.tableName === tableName),
+      map(
+        () =>
+          (this.tableSettingsStorage.get(tableName, userId) ||
+            []) as TableField<any>[],
+      ),
+    );
+  }
+
+  /**
+   * Resolve the `display` value for a merged column. Persisted settings store
+   * visibility as the boolean `enabled`; the table renders from `display`.
+   * Prefer an explicit `display` on the saved column, then translate `enabled`,
+   * and finally fall back to the default/saved column's own `display`.
+   *
+   * When translating `enabled: true`, preserve the default column's
+   * `prevent-hidden` state instead of collapsing it to plain `visible`, so a
+   * protected column cannot become hideable after a save/reload round-trip.
+   */
   getTableSort(route: ActivatedRoute): ITableSetting["tableSort"] {
     const { queryParams } = route.snapshot;
     return queryParams.sortDirection && queryParams.sortColumn

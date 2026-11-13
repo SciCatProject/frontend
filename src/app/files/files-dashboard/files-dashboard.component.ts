@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, combineLatest } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
@@ -34,6 +34,10 @@ import { TableConfigService } from "shared/services/table-config.service";
   standalone: false,
 })
 export class FilesDashboardComponent implements OnInit, OnDestroy {
+  private lastCount?: number;
+
+  private lastIsLoading = false;
+
   filesWithCountAndTableSettings$ = this.store.select(
     selectFilesWithCountAndTableSettings,
   );
@@ -137,43 +141,64 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
   ) {}
 
+  private initTableFromSettings(
+    tablesSettings: any,
+    count: number | undefined,
+    isLoading: boolean,
+  ): void {
+    const savedTableConfigColumns = this.tableConfigService.preferSavedColumns(
+      this.tableName,
+      tablesSettings?.columns as TableField<any>[],
+      this.currentUserId,
+    );
+    const tableSort = this.getTableSort();
+    const paginationConfig = this.getTablePaginationConfig(count, isLoading);
+
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      savedTableConfigColumns,
+      tableSort,
+    );
+
+    if (tableSettingsConfig?.settingList.length) {
+      this.initTable(tableSettingsConfig, paginationConfig);
+    }
+  }
+
   ngOnInit(): void {
     this.subscriptions.push(
       this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
     );
 
     this.subscriptions.push(
-      this.filesWithCountAndTableSettings$.subscribe(
-        ({ origDatablocks, count, isLoading, tablesSettings }) => {
+      combineLatest([
+        this.filesWithCountAndTableSettings$,
+        this.currentUser$,
+      ]).subscribe(
+        ([{ origDatablocks, count, isLoading, tablesSettings }, user]) => {
+          this.currentUserId = user?.id;
           this.tablesSettings = tablesSettings;
+          this.lastCount = count;
+          this.lastIsLoading = isLoading;
           this.dataSource.next(origDatablocks);
           this.pending = false;
 
-          const savedTableConfigColumns =
-            this.tableConfigService.preferSavedColumns(
-              this.tableName,
-              tablesSettings?.columns,
-              this.currentUserId,
-            );
-          const tableSort = this.getTableSort();
-          const paginationConfig = this.getTablePaginationConfig(
-            count,
-            isLoading,
-          );
-
-          const tableSettingsConfig =
-            this.tableConfigService.getTableSettingsConfig(
-              this.tableName,
-              this.tableDefaultSettingsConfig,
-              savedTableConfigColumns,
-              tableSort,
-            );
-
-          if (tableSettingsConfig?.settingList.length) {
-            this.initTable(tableSettingsConfig, paginationConfig);
-          }
+          this.initTableFromSettings(tablesSettings, count, isLoading);
         },
       ),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe(() => {
+          this.initTableFromSettings(
+            this.tablesSettings,
+            this.lastCount,
+            this.lastIsLoading,
+          );
+        }),
     );
 
     this.subscriptions.push(

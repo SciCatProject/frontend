@@ -6,7 +6,7 @@ import {
   ITableSetting,
   TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, combineLatest } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   TablePagination,
@@ -58,6 +58,10 @@ const tableDefaultSettingsConfig: ITableSetting = {
   standalone: false,
 })
 export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
+  private lastCount?: number;
+
+  private lastIsLoading = false;
+
   instrumentsWithCountAndTableSettings$ = this.store.select(
     selectInstrumentsWithCountAndTableSettings,
   );
@@ -101,43 +105,64 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
   ) {}
 
+  private initTableFromSettings(
+    tablesSettings: any,
+    count: number | undefined,
+    isLoading: boolean,
+  ): void {
+    const savedTableConfigColumns = this.tableConfigService.preferSavedColumns(
+      this.tableName,
+      tablesSettings?.columns as TableField<any>[],
+      this.currentUserId,
+    );
+    const tableSort = this.getTableSort();
+    const paginationConfig = this.getTablePaginationConfig(count, isLoading);
+
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      tableDefaultSettingsConfig,
+      savedTableConfigColumns,
+      tableSort,
+    );
+
+    if (tableSettingsConfig?.settingList.length) {
+      this.initTable(tableSettingsConfig, paginationConfig);
+    }
+  }
+
   ngOnInit(): void {
     this.subscriptions.push(
       this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
     );
 
     this.subscriptions.push(
-      this.instrumentsWithCountAndTableSettings$.subscribe(
-        ({ instruments, count, isLoading, tablesSettings }) => {
+      combineLatest([
+        this.instrumentsWithCountAndTableSettings$,
+        this.currentUser$,
+      ]).subscribe(
+        ([{ instruments, count, isLoading, tablesSettings }, user]) => {
+          this.currentUserId = user?.id;
           this.tablesSettings = tablesSettings;
+          this.lastCount = count;
+          this.lastIsLoading = isLoading;
           this.dataSource.next(instruments);
           this.pending = false;
 
-          const savedTableConfigColumns =
-            this.tableConfigService.preferSavedColumns(
-              this.tableName,
-              tablesSettings?.columns,
-              this.currentUserId,
-            );
-          const tableSort = this.getTableSort();
-          const paginationConfig = this.getTablePaginationConfig(
-            count,
-            isLoading,
-          );
-
-          const tableSettingsConfig =
-            this.tableConfigService.getTableSettingsConfig(
-              this.tableName,
-              tableDefaultSettingsConfig,
-              savedTableConfigColumns,
-              tableSort,
-            );
-
-          if (tableSettingsConfig?.settingList.length) {
-            this.initTable(tableSettingsConfig, paginationConfig);
-          }
+          this.initTableFromSettings(tablesSettings, count, isLoading);
         },
       ),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe(() => {
+          this.initTableFromSettings(
+            this.tablesSettings,
+            this.lastCount,
+            this.lastIsLoading,
+          );
+        }),
     );
 
     this.subscriptions.push(

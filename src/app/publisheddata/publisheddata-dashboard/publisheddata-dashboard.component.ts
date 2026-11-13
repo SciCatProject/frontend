@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
-import { BehaviorSubject, Subscription, take } from "rxjs";
+import { BehaviorSubject, Subscription, take, combineLatestWith } from "rxjs";
 import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { ExportExcelService } from "shared/services/export-excel.service";
@@ -33,6 +33,8 @@ import { selectCurrentUser } from "state-management/selectors/user.selectors";
   standalone: false,
 })
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
+  private lastVm: any;
+
   public vm$ = this.store.select(selectPublishedDataDashboardPageViewModel);
 
   columns: TableField<any>[] = [];
@@ -108,38 +110,55 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  private initTableFromSettings(vm: any): void {
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      this.tableConfigService.preferSavedColumns(
+        this.tableName,
+        vm.tablesSettings?.columns,
+        this.currentUserId,
+      ),
+    );
+
+    const currentColumnSetting = tableSettingsConfig.settingList.find(
+      (s) => s.isCurrentSetting,
+    )?.columnSetting;
+
+    this.columns = currentColumnSetting;
+    this.setting = tableSettingsConfig;
+
+    this.pagination = {
+      ...this.pagination,
+      length: vm.count,
+    };
+  }
+
   ngOnInit() {
     this.subscriptions.push(
       this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
     );
 
     this.subscriptions.push(
-      this.vm$.pipe(take(1)).subscribe((vm) => {
-        this.currentFilters = vm.filters;
+      this.vm$
+        .pipe(take(1), combineLatestWith(this.currentUser$))
+        .subscribe(([vm, user]) => {
+          this.currentUserId = user?.id;
+          this.currentFilters = vm.filters;
+          this.lastVm = vm;
 
-        const tableSettingsConfig =
-          this.tableConfigService.getTableSettingsConfig(
-            this.tableName,
-            this.tableDefaultSettingsConfig,
-            this.tableConfigService.preferSavedColumns(
-              this.tableName,
-              vm.tablesSettings?.columns,
-              this.currentUserId,
-            ),
-          );
+          this.initTableFromSettings(vm);
+        }),
+    );
 
-        const currentColumnSetting = tableSettingsConfig.settingList.find(
-          (s) => s.isCurrentSetting,
-        )?.columnSetting;
-
-        this.columns = currentColumnSetting;
-        this.setting = tableSettingsConfig;
-
-        this.pagination = {
-          ...this.pagination,
-          length: vm.count,
-        };
-      }),
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe(() => {
+          if (this.lastVm) {
+            this.initTableFromSettings(this.lastVm);
+          }
+        }),
     );
 
     this.subscriptions.push(
