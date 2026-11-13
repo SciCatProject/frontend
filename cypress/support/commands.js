@@ -153,7 +153,7 @@ Cypress.Commands.add("createDataset", (overwrites = {}) => {
     });
   });
 });
-Cypress.Commands.add("createProposal", (overwrites = {}) => {
+Cypress.Commands.add("createProposal", (overwrites = {}, options = {}) => {
   return cy.getCookie("user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
 
@@ -170,6 +170,7 @@ Cypress.Commands.add("createProposal", (overwrites = {}) => {
         url: lbBaseUrl + "/Proposals",
         headers: getHeader(token),
         body: proposal,
+        ...options,
       });
     });
   });

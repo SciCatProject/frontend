@@ -3,11 +3,25 @@ import {
   personalizedDatasetsColumnsList,
 } from "../../fixtures/testData";
 
+// Column settings are persisted per user on the server and shared between the
+// datasets list and the proposal-datasets table. Restore the official defaults
+// so assertions are not affected by personalization from a previous test/run.
+const resetDatasetColumns = () => {
+  cy.visit("/datasets");
+  cy.get("mat-table mat-header-row").should("exist");
+  cy.finishedLoading();
+  cy.contains("mat-icon", "more_vert").closest("button").click();
+  cy.contains("button.mat-mdc-menu-item", "Default setting").click();
+  cy.finishedLoading();
+};
+
 describe("1000 - Datasets list personalization", () => {
   before(() => {
-    // The proposal uses a fixed proposalId and is reused across tests, so clean
-    // up any leftover from a previous run to avoid a 409 on createProposal.
+    // The proposal uses a fixed proposalId and is reused across tests (and may
+    // be created by a parallel spec), so clean up any leftover.
     cy.removeProposals();
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+    resetDatasetColumns();
   });
 
   beforeEach(() => {
@@ -20,7 +34,7 @@ describe("1000 - Datasets list personalization", () => {
 
   it("1010 - should be able to visit main datasets list with default columns", () => {
     cy.createDataset({ type: "raw" });
-    cy.createProposal();
+    cy.createProposal({}, { failOnStatusCode: false });
 
     cy.visit("/datasets");
 
@@ -43,6 +57,10 @@ describe("1000 - Datasets list personalization", () => {
   });
 
   it("1015 - should be able to visit proposals datasets list with default columns", () => {
+    // Ensure the shared dataset column setting is at defaults before asserting
+    // the proposal-datasets table (which mirrors it).
+    resetDatasetColumns();
+
     cy.visit("/proposals/20170266");
 
     cy.finishedLoading();
