@@ -26,9 +26,13 @@ import {
   TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  ITableSetting,
+  TableSettingEventType,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableColumn } from "state-management/models";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { DatasetsListService } from "shared/services/datasets-list.service";
 import { TableConfigService } from "shared/services/table-config.service";
@@ -109,6 +113,10 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   showGlobalTextSearch = false;
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
     settingList: [
@@ -140,6 +148,10 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
     this.subscriptions.push(
       this.eventsService.message$
         .pipe(
@@ -201,7 +213,11 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
           this.tableConfigService.getTableSettingsConfig(
             this.tableName,
             this.tableDefaultSettingsConfig,
-            userTableConfigColumns,
+            this.tableConfigService.preferSavedColumns(
+              this.tableName,
+              userTableConfigColumns,
+              this.currentUserId,
+            ),
           );
         const paginationConfig = {
           pageSizeOptions: [5, 10, 25, 100],
@@ -228,6 +244,22 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     this.columns = currentColumnSetting;
     this.setting = settingConfig;
     this.pagination = paginationConfig;
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
+    ) {
+      this.tableConfigService.saveColumns(
+        this.tableName,
+        event.setting.columnSetting,
+        this.currentUserId,
+      );
+    }
   }
 
   onRealTimeToggle(enabled: boolean) {

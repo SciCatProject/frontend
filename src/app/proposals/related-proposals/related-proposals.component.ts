@@ -20,11 +20,13 @@ import {
 import {
   Direction,
   ITableSetting,
+  TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { fetchRelatedProposalsAction } from "state-management/actions/proposals.actions";
 import { selectRelatedProposalsPageViewModel } from "state-management/selectors/proposals.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 
 const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
@@ -74,6 +76,8 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
 
+  subscriptions: Subscription[] = [];
+
   tableName = "relatedProposalsTable";
 
   columns: TableField<any>[];
@@ -112,6 +116,10 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
 
   showGlobalTextSearch = false;
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -120,6 +128,10 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
     const initialQueryParams = this.route.snapshot.queryParams;
     this.store.dispatch(
       fetchRelatedProposalsAction({
@@ -149,7 +161,11 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
           this.tableConfigService.getTableSettingsConfig(
             this.tableName,
             tableDefaultSettingsConfig,
-            null,
+            this.tableConfigService.preferSavedColumns(
+              this.tableName,
+              null,
+              this.currentUserId,
+            ),
             tableSort,
           );
 
@@ -179,6 +195,22 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
     this.columns = currentColumnSetting;
     this.setting = settingConfig;
     this.pagination = paginationConfig;
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
+    ) {
+      this.tableConfigService.saveColumns(
+        this.tableName,
+        event.setting.columnSetting,
+        this.currentUserId,
+      );
+    }
   }
 
   onPaginationChange(pagination: TablePagination) {
@@ -241,5 +273,6 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

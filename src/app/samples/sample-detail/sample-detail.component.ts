@@ -9,6 +9,7 @@ import {
 } from "rxjs";
 import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";
 import { Store } from "@ngrx/store";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   fetchSampleAction,
   fetchSampleDatasetsAction,
@@ -33,7 +34,10 @@ import {
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
-import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  ITableSetting,
+  TableSettingEventType,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
   TablePagination,
   TablePaginationMode,
@@ -68,6 +72,10 @@ export class SampleDetailComponent
   tableName = "sampleDatasetsTable";
 
   columns: TableField<any>[];
+
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
 
   setting: ITableSetting = {};
 
@@ -169,6 +177,22 @@ export class SampleDetailComponent
     );
   }
 
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
+    ) {
+      this.tableConfigService.saveColumns(
+        this.tableName,
+        event.setting.columnSetting,
+        this.currentUserId,
+      );
+    }
+  }
+
   onPaginationChange({ pageIndex, pageSize }: TablePagination) {
     this.store.dispatch(
       changeDatasetsPageAction({
@@ -189,6 +213,10 @@ export class SampleDetailComponent
   }
 
   ngOnInit() {
+    this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
     this.subscriptions.push(
       combineLatest([
         this.vm$,
@@ -225,7 +253,11 @@ export class SampleDetailComponent
           this.tableConfigService.getTableSettingsConfig(
             this.tableName,
             this.tableDefaultSettingsConfig,
-            userTableConfigColumns,
+            this.tableConfigService.preferSavedColumns(
+              this.tableName,
+              userTableConfigColumns,
+              this.currentUserId,
+            ),
           );
 
         const paginationConfig = {
