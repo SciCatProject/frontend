@@ -234,7 +234,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.tableConfigService
-        .watchColumnChanges(this.tableName, this.currentUserId)
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
         .subscribe(() => {
           const savedColumns = this.tableConfigService.preferSavedColumns(
             this.tableName,

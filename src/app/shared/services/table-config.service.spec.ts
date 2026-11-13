@@ -47,6 +47,23 @@ describe("TableConfigService (fallback)", () => {
       expect(emitted.length).toBe(1);
       expect(emitted[0]).toEqual([{ name: "pid" }] as any);
     });
+
+    it("resolves the userId lazily at emission time", () => {
+      storage.get.and.returnValue([{ name: "pid" }] as any);
+      let currentUserId: string | undefined = undefined;
+      const sub = service
+        .watchColumnChanges("datasetsTable", () => currentUserId)
+        .subscribe();
+
+      change$.next({ tableName: "datasetsTable", origin: "remote" });
+      expect(storage.get).toHaveBeenCalledWith("datasetsTable", undefined);
+
+      currentUserId = "user-1";
+      change$.next({ tableName: "datasetsTable", origin: "remote" });
+      expect(storage.get).toHaveBeenCalledWith("datasetsTable", "user-1");
+
+      sub.unsubscribe();
+    });
   });
 
   it("should use recovered savedTableConfig from storage when none provided", () => {

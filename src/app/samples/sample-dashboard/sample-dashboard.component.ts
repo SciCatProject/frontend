@@ -181,27 +181,35 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.tablesSettings) {
+            this.initTableFromSettings(
+              this.tablesSettings,
+              this.lastCount,
+              this.lastIsLoading,
+            );
+          }
+        }),
     );
 
     this.subscriptions.push(
-      combineLatest([this.vm$, this.currentUser$]).subscribe(
-        ([{ samples, tableSettings, count, isLoading }, user]) => {
-          this.currentUserId = user?.id;
-          this.tablesSettings = tableSettings;
-          this.lastCount = count;
-          this.lastIsLoading = isLoading;
-          this.dataSource.next(samples);
-          this.pending = false;
+      this.vm$.subscribe(({ samples, tableSettings, count, isLoading }) => {
+        this.tablesSettings = tableSettings;
+        this.lastCount = count;
+        this.lastIsLoading = isLoading;
+        this.dataSource.next(samples);
+        this.pending = false;
 
-          this.initTableFromSettings(tableSettings, count, isLoading);
-        },
-      ),
+        this.initTableFromSettings(tableSettings, count, isLoading);
+      }),
     );
 
     this.subscriptions.push(
       this.tableConfigService
-        .watchColumnChanges(this.tableName, this.currentUserId)
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
         .subscribe(() => {
           this.initTableFromSettings(
             this.tablesSettings,

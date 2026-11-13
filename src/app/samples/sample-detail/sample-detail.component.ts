@@ -282,7 +282,7 @@ export class SampleDetailComponent
 
     this.subscriptions.push(
       this.tableConfigService
-        .watchColumnChanges(this.tableName, this.currentUserId)
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
         .subscribe(() => {
           const savedColumns = this.tableConfigService.preferSavedColumns(
             this.tableName,

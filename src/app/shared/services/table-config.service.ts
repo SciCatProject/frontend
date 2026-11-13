@@ -38,11 +38,18 @@ export class TableConfigService {
    * them. Only remote ("storage"-event) changes are surfaced so an open table
    * reflects a newer cross-tab save before it can overwrite it, while ignoring
    * this tab's own writes (which are already reflected in its live state).
+   *
+   * `userId` is resolved lazily at emission time (via a getter, when provided)
+   * so a subscription created before the authenticated user is known still
+   * reads the correct per-user namespace once the user has loaded.
    */
   watchColumnChanges(
     tableName: string,
-    userId?: string,
+    userId?: string | (() => string | undefined),
   ): Observable<TableField<any>[]> {
+    const resolveUserId = () =>
+      typeof userId === "function" ? userId() : userId;
+
     return this.tableSettingsStorage.changes$.pipe(
       filter(
         (change) =>
@@ -50,7 +57,7 @@ export class TableConfigService {
       ),
       map(
         () =>
-          (this.tableSettingsStorage.get(tableName, userId) ||
+          (this.tableSettingsStorage.get(tableName, resolveUserId()) ||
             []) as TableField<any>[],
       ),
     );

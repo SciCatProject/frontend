@@ -216,7 +216,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.tableConfigService
-        .watchColumnChanges(this.tableName, this.currentUserId)
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
         .subscribe(() => {
           if (this.lastData) {
             this.initTableFromSettings(

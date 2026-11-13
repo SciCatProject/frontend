@@ -6,7 +6,7 @@ import {
   ITableSetting,
   TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
-import { BehaviorSubject, Subscription, combineLatest } from "rxjs";
+import { BehaviorSubject, Subscription, distinctUntilChanged } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   TablePagination,
@@ -132,16 +132,23 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.tablesSettings) {
+            this.initTableFromSettings(
+              this.tablesSettings,
+              this.lastCount,
+              this.lastIsLoading,
+            );
+          }
+        }),
     );
 
     this.subscriptions.push(
-      combineLatest([
-        this.instrumentsWithCountAndTableSettings$,
-        this.currentUser$,
-      ]).subscribe(
-        ([{ instruments, count, isLoading, tablesSettings }, user]) => {
-          this.currentUserId = user?.id;
+      this.instrumentsWithCountAndTableSettings$.subscribe(
+        ({ instruments, count, isLoading, tablesSettings }) => {
           this.tablesSettings = tablesSettings;
           this.lastCount = count;
           this.lastIsLoading = isLoading;
@@ -155,7 +162,7 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.tableConfigService
-        .watchColumnChanges(this.tableName, this.currentUserId)
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
         .subscribe(() => {
           this.initTableFromSettings(
             this.tablesSettings,

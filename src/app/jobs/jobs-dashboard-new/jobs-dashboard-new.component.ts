@@ -210,7 +210,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.tableConfigService
-        .watchColumnChanges(this.tableName, this.currentUserId)
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
         .subscribe(() => {
           if (this.lastVm) {
             this.initTableFromSettings(this.lastVm);
