@@ -7,7 +7,7 @@ import {
   Subscription,
   take,
   filter,
-  combineLatestWith,
+  distinctUntilChanged,
 } from "rxjs";
 import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
@@ -167,18 +167,23 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.lastVm) {
+            this.initTableFromSettings(this.lastVm);
+          }
+        }),
     );
 
     this.subscriptions.push(
       this.vm$
         .pipe(
           filter((vm) => vm.hasFetchedSettings),
-          combineLatestWith(this.currentUser$),
           take(1),
         )
-        .subscribe(([vm, user]) => {
-          this.currentUserId = user?.id;
+        .subscribe((vm) => {
           this.currentFilters = vm.filters;
           this.lastVm = vm;
           const { skip, limit } = vm.filters;

@@ -3,7 +3,12 @@ import { Store } from "@ngrx/store";
 import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
-import { BehaviorSubject, Subscription, take, combineLatestWith } from "rxjs";
+import {
+  BehaviorSubject,
+  Subscription,
+  take,
+  distinctUntilChanged,
+} from "rxjs";
 import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { ExportExcelService } from "shared/services/export-excel.service";
@@ -136,19 +141,23 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.lastVm) {
+            this.initTableFromSettings(this.lastVm);
+          }
+        }),
     );
 
     this.subscriptions.push(
-      this.vm$
-        .pipe(take(1), combineLatestWith(this.currentUser$))
-        .subscribe(([vm, user]) => {
-          this.currentUserId = user?.id;
-          this.currentFilters = vm.filters;
-          this.lastVm = vm;
+      this.vm$.pipe(take(1)).subscribe((vm) => {
+        this.currentFilters = vm.filters;
+        this.lastVm = vm;
 
-          this.initTableFromSettings(vm);
-        }),
+        this.initTableFromSettings(vm);
+      }),
     );
 
     this.subscriptions.push(

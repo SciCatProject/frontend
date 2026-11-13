@@ -12,6 +12,7 @@ import {
   filter,
   Subscription,
   take,
+  distinctUntilChanged,
 } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -174,7 +175,18 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.lastData) {
+            this.initTableFromSettings(
+              this.lastData.tablesSettings,
+              this.lastData.count,
+              this.lastData.isFacetCountsLoading,
+            );
+          }
+        }),
     );
 
     this.subscriptions.push(
@@ -182,15 +194,13 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         .pipe(
           filter(({ hasFetchedSettings }) => hasFetchedSettings),
           combineLatestWith(this.isFacetCountsLoading$),
-          combineLatestWith(this.currentUser$),
           take(1),
         )
         .subscribe(
           async ([
-            [{ proposals, count, tablesSettings }, isFacetCountsLoading],
-            user,
+            { proposals, count, tablesSettings },
+            isFacetCountsLoading,
           ]) => {
-            this.currentUserId = user?.id;
             this.lastData = { tablesSettings, count, isFacetCountsLoading };
             this.dataSource.next(proposals);
             this.pending = false;
