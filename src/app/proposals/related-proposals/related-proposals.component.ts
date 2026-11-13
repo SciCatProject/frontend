@@ -182,6 +182,23 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
         }
       },
     );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe((savedColumns) => {
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              tableDefaultSettingsConfig,
+              savedColumns,
+            );
+
+          if (tableSettingsConfig?.settingList.length) {
+            this.initTable(tableSettingsConfig, this.pagination);
+          }
+        }),
+    );
   }
 
   initTable(

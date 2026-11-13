@@ -8,18 +8,23 @@ export interface StoredTableColumns {
   userId?: string;
 }
 
+export interface TableColumnsChange {
+  tableName: string;
+  userId?: string;
+  // "local" when emitted by this tab's own set/remove, "remote" when the
+  // change arrived from another tab via the storage event.
+  origin: "local" | "remote";
+}
+
 @Injectable({ providedIn: "root" })
 export class TableSettingsStorageService {
   private readonly keyPrefix = "scicat.table";
   private readonly version = "v1";
-  private readonly change$ = new Subject<{
-    tableName: string;
-    userId?: string;
-  }>();
+  private readonly change$ = new Subject<TableColumnsChange>();
 
   // Public observable consumers can subscribe to be notified when other tabs or
   // the same tab make changes via this service
-  public readonly changes$: Observable<{ tableName: string; userId?: string }> =
+  public readonly changes$: Observable<TableColumnsChange> =
     this.change$.asObservable();
 
   constructor() {
@@ -56,6 +61,7 @@ export class TableSettingsStorageService {
         this.change$.next({
           tableName,
           userId: userId === "anon" ? undefined : userId,
+          origin: "remote",
         });
       } catch {
         // ignore malformed keys/events
@@ -70,7 +76,7 @@ export class TableSettingsStorageService {
         bc.onmessage = (msg: any) => {
           const { tableName, userId } = msg.data || {};
           if (tableName) {
-            this.change$.next({ tableName, userId });
+            this.change$.next({ tableName, userId, origin: "remote" });
           }
         };
       }
@@ -236,7 +242,7 @@ export class TableSettingsStorageService {
       );
 
       // notify same-tab subscribers
-      this.change$.next({ tableName, userId });
+      this.change$.next({ tableName, userId, origin: "local" });
       // other tabs will receive a 'storage' event automatically
     } catch (e) {
       // swallow storage errors (private mode, quota)
@@ -246,7 +252,7 @@ export class TableSettingsStorageService {
   remove(tableName: string, userId?: string) {
     try {
       localStorage.removeItem(this.keyFor(tableName, userId));
-      this.change$.next({ tableName, userId });
+      this.change$.next({ tableName, userId, origin: "local" });
     } catch (e) {
       // ignore
     }

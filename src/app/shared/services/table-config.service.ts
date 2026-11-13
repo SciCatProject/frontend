@@ -34,17 +34,20 @@ export class TableConfigService {
   }
 
   /**
-   * Emit the freshly stored columns for `tableName` whenever another tab (or
-   * this tab) changes them, but only for the namespace of the given user. This
-   * lets an open table refresh its columns so a stale snapshot cannot later
-   * overwrite a newer cross-tab save.
+   * Emit the freshly stored columns for `tableName` when *another tab* changes
+   * them. Only remote ("storage"-event) changes are surfaced so an open table
+   * reflects a newer cross-tab save before it can overwrite it, while ignoring
+   * this tab's own writes (which are already reflected in its live state).
    */
   watchColumnChanges(
     tableName: string,
     userId?: string,
   ): Observable<TableField<any>[]> {
     return this.tableSettingsStorage.changes$.pipe(
-      filter((change) => change.tableName === tableName),
+      filter(
+        (change) =>
+          change.tableName === tableName && change.origin === "remote",
+      ),
       map(
         () =>
           (this.tableSettingsStorage.get(tableName, userId) ||

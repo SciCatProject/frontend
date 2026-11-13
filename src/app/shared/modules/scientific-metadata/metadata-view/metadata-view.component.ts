@@ -3,6 +3,7 @@ import {
   OnInit,
   Input,
   OnChanges,
+  OnDestroy,
   SimpleChange,
 } from "@angular/core";
 import {
@@ -16,7 +17,7 @@ import {
   ITableSetting,
   TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableSelectionMode } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { DatePipe } from "@angular/common";
@@ -41,7 +42,8 @@ import { TableConfigService } from "shared/services/table-config.service";
   styleUrls: ["./metadata-view.component.scss"],
   standalone: false,
 })
-export class MetadataViewComponent implements OnInit, OnChanges {
+export class MetadataViewComponent implements OnInit, OnChanges, OnDestroy {
+  private columnChangeSub?: Subscription;
   @Input() metadata: object = {};
 
   @Input() tableId?: string;
@@ -221,6 +223,15 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     );
   }
 
+  private subscribeToColumnChanges(): void {
+    this.columnChangeSub?.unsubscribe();
+    this.columnChangeSub = this.tableConfigService
+      .watchColumnChanges(this.storageKey)
+      .subscribe(() => {
+        this.initTable(this.resolveTableSetting());
+      });
+  }
+
   createMetadataArray(
     metadata: Record<string, any>,
   ): ScientificMetadataTableData[] {
@@ -296,9 +307,14 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       this.dataSource.next(this.tableData);
 
       this.initTable(this.resolveTableSetting());
+      this.subscribeToColumnChanges();
 
       this.pending = false;
     }
+  }
+
+  ngOnDestroy() {
+    this.columnChangeSub?.unsubscribe();
   }
 
   async onRowEvent({ event, sender }: IRowEvent<ScientificMetadataTableData>) {
@@ -349,6 +365,11 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         this.metadata = changes[propName].currentValue;
         this.tableData = this.createMetadataArray(this.metadata);
         this.dataSource.next(this.tableData);
+      }
+      if (propName === "tableId") {
+        this.tableId = changes[propName].currentValue;
+        this.initTable(this.resolveTableSetting());
+        this.subscribeToColumnChanges();
       }
     }
   }

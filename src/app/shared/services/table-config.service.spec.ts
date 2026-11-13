@@ -2,17 +2,21 @@ import { TestBed } from "@angular/core/testing";
 import { TableConfigService } from "./table-config.service";
 import { TableSettingsStorageService } from "./table-settings-storage.service";
 import { ITableSetting } from "../modules/dynamic-material-table/models/table-setting.model";
+import { Subject } from "rxjs";
 
 describe("TableConfigService (fallback)", () => {
   let service: TableConfigService;
   let storage: jasmine.SpyObj<TableSettingsStorageService>;
+  let change$: Subject<any>;
 
   beforeEach(() => {
+    change$ = new Subject();
     const storageSpy = jasmine.createSpyObj("TableSettingsStorageService", [
       "get",
       "set",
       "migrateLegacyKeysForUser",
     ]);
+    (storageSpy as any).changes$ = change$.asObservable();
 
     TestBed.configureTestingModule({
       providers: [
@@ -25,6 +29,24 @@ describe("TableConfigService (fallback)", () => {
     storage = TestBed.inject(
       TableSettingsStorageService,
     ) as jasmine.SpyObj<TableSettingsStorageService>;
+  });
+
+  describe("watchColumnChanges", () => {
+    it("emits stored columns only for remote changes of the matching table", () => {
+      storage.get.and.returnValue([{ name: "pid" }] as any);
+      const emitted: any[] = [];
+      const sub = service
+        .watchColumnChanges("datasetsTable")
+        .subscribe((columns) => emitted.push(columns));
+
+      change$.next({ tableName: "datasetsTable", origin: "local" });
+      change$.next({ tableName: "otherTable", origin: "remote" });
+      change$.next({ tableName: "datasetsTable", origin: "remote" });
+
+      sub.unsubscribe();
+      expect(emitted.length).toBe(1);
+      expect(emitted[0]).toEqual([{ name: "pid" }] as any);
+    });
   });
 
   it("should use recovered savedTableConfig from storage when none provided", () => {

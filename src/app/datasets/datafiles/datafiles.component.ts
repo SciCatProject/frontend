@@ -260,6 +260,13 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
     this.setting = this.buildTableSetting();
     this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe(() => {
+          this.setting = this.buildTableSetting();
+        }),
+    );
+    this.subscriptions.push(
       this.vm$.subscribe(({ datablocks, totalCount, dataset, isLoading }) => {
         if (dataset) {
           this.datasetPid = dataset.pid;

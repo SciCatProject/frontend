@@ -279,6 +279,30 @@ export class SampleDetailComponent
         };
       }),
     );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, this.currentUserId)
+        .subscribe(() => {
+          const savedColumns = this.tableConfigService.preferSavedColumns(
+            this.tableName,
+            [] as TableColumn[],
+            this.currentUserId,
+          );
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              this.tableDefaultSettingsConfig,
+              this.datasetsListService.convertSavedDatasetColumns(
+                savedColumns as TableColumn[],
+              ),
+            );
+
+          if (tableSettingsConfig?.settingList.length) {
+            this.initTable(tableSettingsConfig, this.pagination);
+          }
+        }),
+    );
     // Prevent user from reloading page if there are unsave changes
     this.subscriptions.push(
       fromEvent(window, "beforeunload").subscribe((event) => {
