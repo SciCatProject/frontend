@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, combineLatest } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
@@ -18,6 +18,7 @@ import {
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { Sort } from "@angular/material/sort";
 import { selectFilesWithCountAndTableSettings } from "state-management/selectors/files.selectors";
 import { fetchAllOrigDatablocksAction } from "state-management/actions/files.actions";
@@ -33,6 +34,10 @@ import { TableConfigService } from "shared/services/table-config.service";
   standalone: false,
 })
 export class FilesDashboardComponent implements OnInit, OnDestroy {
+  private lastCount?: number;
+
+  private lastIsLoading = false;
+
   filesWithCountAndTableSettings$ = this.store.select(
     selectFilesWithCountAndTableSettings,
   );
@@ -62,6 +67,10 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
   defaultPageSizeOptions = [5, 10, 25, 100];
 
   tablesSettings: object;
+
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -132,34 +141,64 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
   ) {}
 
+  private initTableFromSettings(
+    tablesSettings: any,
+    count: number | undefined,
+    isLoading: boolean,
+  ): void {
+    const savedTableConfigColumns = this.tableConfigService.preferSavedColumns(
+      this.tableName,
+      tablesSettings?.columns as TableField<any>[],
+      this.currentUserId,
+    );
+    const tableSort = this.getTableSort();
+    const paginationConfig = this.getTablePaginationConfig(count, isLoading);
+
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      savedTableConfigColumns,
+      tableSort,
+    );
+
+    if (tableSettingsConfig?.settingList.length) {
+      this.initTable(tableSettingsConfig, paginationConfig);
+    }
+  }
+
   ngOnInit(): void {
     this.subscriptions.push(
-      this.filesWithCountAndTableSettings$.subscribe(
-        ({ origDatablocks, count, isLoading, tablesSettings }) => {
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
+    this.subscriptions.push(
+      combineLatest([
+        this.filesWithCountAndTableSettings$,
+        this.currentUser$,
+      ]).subscribe(
+        ([{ origDatablocks, count, isLoading, tablesSettings }, user]) => {
+          this.currentUserId = user?.id;
           this.tablesSettings = tablesSettings;
+          this.lastCount = count;
+          this.lastIsLoading = isLoading;
           this.dataSource.next(origDatablocks);
           this.pending = false;
 
-          const savedTableConfigColumns = tablesSettings?.columns;
-          const tableSort = this.getTableSort();
-          const paginationConfig = this.getTablePaginationConfig(
-            count,
-            isLoading,
-          );
-
-          const tableSettingsConfig =
-            this.tableConfigService.getTableSettingsConfig(
-              this.tableName,
-              this.tableDefaultSettingsConfig,
-              savedTableConfigColumns,
-              tableSort,
-            );
-
-          if (tableSettingsConfig?.settingList.length) {
-            this.initTable(tableSettingsConfig, paginationConfig);
-          }
+          this.initTableFromSettings(tablesSettings, count, isLoading);
         },
       ),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
+        .subscribe(() => {
+          this.initTableFromSettings(
+            this.tablesSettings,
+            this.lastCount,
+            this.lastIsLoading,
+          );
+        }),
     );
 
     this.subscriptions.push(
@@ -246,11 +285,11 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width } = column;
-
-      return { name, display, order: index, width };
-    });
+    const columnsSetting = this.tableConfigService.saveColumns(
+      this.tableName,
+      setting.columnSetting,
+      this.currentUserId,
+    );
 
     this.store.dispatch(
       updateUserSettingsAction({
@@ -266,8 +305,8 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     setting: ITableSetting;
   }) {
     if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);
     }

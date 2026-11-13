@@ -6,7 +6,7 @@ import {
   ITableSetting,
   TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, distinctUntilChanged } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   TablePagination,
@@ -23,6 +23,7 @@ import { fetchInstrumentsAction } from "state-management/actions/instruments.act
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { selectInstrumentsWithCountAndTableSettings } from "state-management/selectors/instruments.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 
@@ -57,6 +58,10 @@ const tableDefaultSettingsConfig: ITableSetting = {
   standalone: false,
 })
 export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
+  private lastCount?: number;
+
+  private lastIsLoading = false;
+
   instrumentsWithCountAndTableSettings$ = this.store.select(
     selectInstrumentsWithCountAndTableSettings,
   );
@@ -89,6 +94,10 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   constructor(
     private store: Store,
     private router: Router,
@@ -96,34 +105,71 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
   ) {}
 
+  private initTableFromSettings(
+    tablesSettings: any,
+    count: number | undefined,
+    isLoading: boolean,
+  ): void {
+    const savedTableConfigColumns = this.tableConfigService.preferSavedColumns(
+      this.tableName,
+      tablesSettings?.columns as TableField<any>[],
+      this.currentUserId,
+    );
+    const tableSort = this.getTableSort();
+    const paginationConfig = this.getTablePaginationConfig(count, isLoading);
+
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      tableDefaultSettingsConfig,
+      savedTableConfigColumns,
+      tableSort,
+    );
+
+    if (tableSettingsConfig?.settingList.length) {
+      this.initTable(tableSettingsConfig, paginationConfig);
+    }
+  }
+
   ngOnInit(): void {
+    this.subscriptions.push(
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.tablesSettings) {
+            this.initTableFromSettings(
+              this.tablesSettings,
+              this.lastCount,
+              this.lastIsLoading,
+            );
+          }
+        }),
+    );
+
     this.subscriptions.push(
       this.instrumentsWithCountAndTableSettings$.subscribe(
         ({ instruments, count, isLoading, tablesSettings }) => {
           this.tablesSettings = tablesSettings;
+          this.lastCount = count;
+          this.lastIsLoading = isLoading;
           this.dataSource.next(instruments);
           this.pending = false;
 
-          const savedTableConfigColumns = tablesSettings?.columns;
-          const tableSort = this.getTableSort();
-          const paginationConfig = this.getTablePaginationConfig(
-            count,
-            isLoading,
-          );
-
-          const tableSettingsConfig =
-            this.tableConfigService.getTableSettingsConfig(
-              this.tableName,
-              tableDefaultSettingsConfig,
-              savedTableConfigColumns,
-              tableSort,
-            );
-
-          if (tableSettingsConfig?.settingList.length) {
-            this.initTable(tableSettingsConfig, paginationConfig);
-          }
+          this.initTableFromSettings(tablesSettings, count, isLoading);
         },
       ),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
+        .subscribe(() => {
+          this.initTableFromSettings(
+            this.tablesSettings,
+            this.lastCount,
+            this.lastIsLoading,
+          );
+        }),
     );
 
     this.subscriptions.push(
@@ -196,11 +242,11 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width } = column;
-
-      return { name, display, order: index, width };
-    });
+    const columnsSetting = this.tableConfigService.saveColumns(
+      this.tableName,
+      setting.columnSetting,
+      this.currentUserId,
+    );
 
     this.store.dispatch(
       updateUserSettingsAction({
@@ -216,8 +262,8 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
     setting: ITableSetting;
   }) {
     if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);
     }

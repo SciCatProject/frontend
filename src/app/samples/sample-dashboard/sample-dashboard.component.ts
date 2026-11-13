@@ -37,6 +37,7 @@ import {
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
@@ -54,6 +55,10 @@ import { ScientificCondition } from "state-management/models";
   standalone: false,
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
+  private lastCount?: number;
+
+  private lastIsLoading = false;
+
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
 
   @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
@@ -133,6 +138,10 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   constructor(
     private appConfigService: AppConfigService,
     private datePipe: DatePipe,
@@ -143,34 +152,71 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
   ) {}
 
+  private initTableFromSettings(
+    tableSettings: any,
+    count: number | undefined,
+    isLoading: boolean,
+  ): void {
+    const savedTableConfigColumns = this.tableConfigService.preferSavedColumns(
+      this.tableName,
+      tableSettings?.columns as TableField<any>[],
+      this.currentUserId,
+    );
+    const tableSort = this.getTableSort();
+    const paginationConfig = this.getTablePaginationConfig(count, isLoading);
+
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      savedTableConfigColumns,
+      tableSort,
+    );
+
+    if (tableSettingsConfig?.settingList.length) {
+      this.initTable(tableSettingsConfig, paginationConfig);
+    }
+  }
+
   ngOnInit() {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.tablesSettings) {
+            this.initTableFromSettings(
+              this.tablesSettings,
+              this.lastCount,
+              this.lastIsLoading,
+            );
+          }
+        }),
+    );
+
+    this.subscriptions.push(
       this.vm$.subscribe(({ samples, tableSettings, count, isLoading }) => {
         this.tablesSettings = tableSettings;
+        this.lastCount = count;
+        this.lastIsLoading = isLoading;
         this.dataSource.next(samples);
         this.pending = false;
 
-        const savedTableConfigColumns = tableSettings?.columns;
-        const tableSort = this.getTableSort();
-        const paginationConfig = this.getTablePaginationConfig(
-          count,
-          isLoading,
-        );
-
-        const tableSettingsConfig =
-          this.tableConfigService.getTableSettingsConfig(
-            this.tableName,
-            this.tableDefaultSettingsConfig,
-            savedTableConfigColumns,
-            tableSort,
-          );
-
-        if (tableSettingsConfig?.settingList.length) {
-          this.initTable(tableSettingsConfig, paginationConfig);
-        }
+        this.initTableFromSettings(tableSettings, count, isLoading);
       }),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
+        .subscribe(() => {
+          this.initTableFromSettings(
+            this.tablesSettings,
+            this.lastCount,
+            this.lastIsLoading,
+          );
+        }),
     );
 
     this.subscriptions.push(
@@ -324,11 +370,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width } = column;
-
-      return { name, display, order: index, width };
-    });
+    const columnsSetting = this.tableConfigService.saveColumns(
+      this.tableName,
+      setting.columnSetting,
+      this.currentUserId,
+    );
 
     this.store.dispatch(
       updateUserSettingsAction({
@@ -344,8 +390,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     setting: ITableSetting;
   }) {
     if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);
     }

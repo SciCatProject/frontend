@@ -109,4 +109,23 @@ describe("DatasetsListService CSV columns", () => {
       ).toEqual([]);
     }
   });
+
+  it("preserves sort, printable and sticky when converting saved columns", () => {
+    const [column] = service.convertSavedDatasetColumns([
+      {
+        name: "pid",
+        header: "PID",
+        order: 0,
+        enabled: true,
+        type: "standard",
+        sort: "client-side",
+        printable: false,
+        sticky: "start",
+      },
+    ]);
+
+    expect(column.sort).toBe("client-side");
+    expect(column.printable).toBeFalse();
+    expect(column.sticky).toBe("start");
+  });
 });

@@ -66,4 +66,23 @@ describe("ProposalTableComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("preserves sort, printable and sticky when converting saved columns", () => {
+    const [column] = component.convertSavedColumns([
+      {
+        name: "proposalId",
+        header: "Proposal Id",
+        order: 0,
+        enabled: true,
+        type: "standard",
+        sort: "server-side",
+        printable: false,
+        sticky: "end",
+      },
+    ]);
+
+    expect(column.sort).toBe("server-side");
+    expect(column.printable).toBeFalse();
+    expect(column.sticky).toBe("end");
+  });
 });

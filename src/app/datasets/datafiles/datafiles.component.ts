@@ -40,9 +40,14 @@ import {
   RowEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  ITableSetting,
+  TableSettingEventType,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { TableConfigService } from "shared/services/table-config.service";
 
 @Component({
   selector: "datafiles",
@@ -112,13 +117,17 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   setting: ITableSetting = {};
 
+  tableName = "dataFilesTable";
+
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
-    saveSettingMode: "none",
     settingList: [
       {
         visibleActionMenu: actionMenu,
-        saveSettingMode: "none",
         isDefaultSetting: true,
         isCurrentSetting: true,
         columnSetting: [],
@@ -152,7 +161,30 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private fileSizePipe: FileSizePipe,
+    private tableConfigService: TableConfigService,
   ) {}
+
+  private buildTableSetting(): ITableSetting {
+    const defaultSetting: ITableSetting = {
+      ...this.tableDefaultSettingsConfig,
+      settingList: [
+        {
+          ...this.tableDefaultSettingsConfig.settingList[0],
+          columnSetting: this.tableColumns,
+        },
+      ],
+    };
+
+    return this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      defaultSetting,
+      this.tableConfigService.preferSavedColumns(
+        this.tableName,
+        this.tableColumns,
+        this.currentUserId,
+      ),
+    );
+  }
 
   getAllFiles() {
     return this.files.map((file) => file.path);
@@ -222,7 +254,18 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     return warning;
   }
   ngOnInit() {
-    this.setting = this.tableDefaultSettingsConfig;
+    this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
+    this.setting = this.buildTableSetting();
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
+        .subscribe(() => {
+          this.setting = this.buildTableSetting();
+        }),
+    );
     this.subscriptions.push(
       this.vm$.subscribe(({ datablocks, totalCount, dataset, isLoading }) => {
         if (dataset) {
@@ -260,6 +303,22 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
     this.cdRef.detectChanges();
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
+    ) {
+      this.tableConfigService.saveColumns(
+        this.tableName,
+        event.setting.columnSetting,
+        this.currentUserId,
+      );
+    }
   }
 
   onPaginationChange({ pageIndex, pageSize }: TablePagination) {

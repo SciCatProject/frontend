@@ -3,7 +3,12 @@ import { Store } from "@ngrx/store";
 import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
-import { BehaviorSubject, Subscription, take } from "rxjs";
+import {
+  BehaviorSubject,
+  Subscription,
+  take,
+  distinctUntilChanged,
+} from "rxjs";
 import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { ExportExcelService } from "shared/services/export-excel.service";
@@ -24,6 +29,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { TableConfigService } from "shared/services/table-config.service";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-publisheddata-dashboard",
@@ -32,6 +38,8 @@ import { updateUserSettingsAction } from "state-management/actions/user.actions"
   standalone: false,
 })
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
+  private lastVm: any;
+
   public vm$ = this.store.select(selectPublishedDataDashboardPageViewModel);
 
   columns: TableField<any>[] = [];
@@ -86,6 +94,10 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   currentFilters: any = {};
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   constructor(
     private router: Router,
     private store: Store,
@@ -103,30 +115,59 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  private initTableFromSettings(vm: any): void {
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      this.tableConfigService.preferSavedColumns(
+        this.tableName,
+        vm.tablesSettings?.columns,
+        this.currentUserId,
+      ),
+    );
+
+    const currentColumnSetting = tableSettingsConfig.settingList.find(
+      (s) => s.isCurrentSetting,
+    )?.columnSetting;
+
+    this.columns = currentColumnSetting;
+    this.setting = tableSettingsConfig;
+
+    this.pagination = {
+      ...this.pagination,
+      length: vm.count,
+    };
+  }
+
   ngOnInit() {
+    this.subscriptions.push(
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.lastVm) {
+            this.initTableFromSettings(this.lastVm);
+          }
+        }),
+    );
+
     this.subscriptions.push(
       this.vm$.pipe(take(1)).subscribe((vm) => {
         this.currentFilters = vm.filters;
+        this.lastVm = vm;
 
-        const tableSettingsConfig =
-          this.tableConfigService.getTableSettingsConfig(
-            this.tableName,
-            this.tableDefaultSettingsConfig,
-            vm.tablesSettings?.columns || [],
-          );
-
-        const currentColumnSetting = tableSettingsConfig.settingList.find(
-          (s) => s.isCurrentSetting,
-        )?.columnSetting;
-
-        this.columns = currentColumnSetting;
-        this.setting = tableSettingsConfig;
-
-        this.pagination = {
-          ...this.pagination,
-          length: vm.count,
-        };
+        this.initTableFromSettings(vm);
       }),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
+        .subscribe(() => {
+          if (this.lastVm) {
+            this.initTableFromSettings(this.lastVm);
+          }
+        }),
     );
 
     this.subscriptions.push(
@@ -186,11 +227,11 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   }
 
   saveTableSettings(setting: ITableSetting) {
-    const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width } = column;
-
-      return { name, display, order: index, width };
-    });
+    const columnsSetting = this.tableConfigService.saveColumns(
+      this.tableName,
+      setting.columnSetting,
+      this.currentUserId,
+    );
 
     this.store.dispatch(
       updateUserSettingsAction({
@@ -204,8 +245,8 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     setting: ITableSetting;
   }) {
     if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);
     }
