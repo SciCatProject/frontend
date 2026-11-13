@@ -27,6 +27,7 @@ export class JobEffects {
         fromActions.sortByColumnAction,
         fromActions.setJobViewModeAction,
         fromActions.setTextFilterAction,
+        fromActions.setJobsLimitFilterAction,
       ),
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),

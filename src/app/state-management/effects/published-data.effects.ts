@@ -46,7 +46,7 @@ export class PublishedDataEffects {
       ),
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
-      mergeMap(({ filter, limits }) =>
+      switchMap(({ filter, limits }) =>
         this.publishedDataService
           .publishedDataV4ControllerFindAllV4(
             JSON.stringify(limits),
