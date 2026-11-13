@@ -11,7 +11,6 @@ import {
   combineLatestWith,
   filter,
   Subscription,
-  take,
   distinctUntilChanged,
 } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
@@ -194,7 +193,6 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         .pipe(
           filter(({ hasFetchedSettings }) => hasFetchedSettings),
           combineLatestWith(this.isFacetCountsLoading$),
-          take(1),
         )
         .subscribe(
           async ([
