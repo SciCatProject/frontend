@@ -67,6 +67,8 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
 
   pending = true;
 
+  datasetPid: string;
+
   setting: ITableSetting = {};
 
   tableColumns: TableField<any>[] = [
@@ -148,6 +150,9 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
       ([vm, defaultTableColumns, currentPage, datasetsPerPage, isLoading]) => {
         this.dataSource.next(vm.relatedDatasets);
         this.pending = false;
+        if (vm.dataset) {
+          this.datasetPid = vm.dataset.pid;
+        }
 
         const defaultConfigColumns =
           this.appConfig?.defaultDatasetsListSettings?.columns || [];
@@ -234,7 +239,7 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
         limit: pageSize,
       }),
     );
-    this.store.dispatch(fetchRelatedDatasetsAction());
+    this.store.dispatch(fetchRelatedDatasetsAction({ pid: this.datasetPid }));
   }
 
   onRowEvent({ event, sender }: IRowEvent<PartialOutputDatasetDto>): void {

@@ -445,10 +445,12 @@ describe("test dataset selectors", () => {
       expect(
         fromDatasetSelectors.selectRelatedDatasetsPageViewModel.projector(
           initialDatasetState,
+          initialDatasetState.currentSet,
         ),
       ).toEqual({
         relatedDatasets: [],
         relatedDatasetsCount: 0,
+        dataset: initialDatasetState.currentSet,
       });
     });
   });
