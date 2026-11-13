@@ -79,7 +79,7 @@ export class TableSettingsStorageService {
     }
   }
 
-  private migrateLegacyKeys() {
+  private migrateLegacyKeys(targetUserId?: string) {
     // Some code paths in the codebase previously used simple keys like `${tableName}-columns` or sessionStorage.
     // For backward compatibility, attempt to find such entries and migrate them into the new per-user localStorage key.
     try {
@@ -95,14 +95,15 @@ export class TableSettingsStorageService {
           try {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed)) {
-              // write to new localStorage as anon user
+              // write to new localStorage under the target user (or anon)
               const payload: StoredTableColumns = {
                 version: this.version,
                 columns: parsed,
                 savedAt: new Date().toISOString(),
+                userId: targetUserId,
               };
               localStorage.setItem(
-                this.keyFor(tableName),
+                this.keyFor(tableName, targetUserId),
                 JSON.stringify(payload),
               );
               // remove legacy key to avoid double-migration
@@ -129,9 +130,10 @@ export class TableSettingsStorageService {
                 version: this.version,
                 columns: parsed,
                 savedAt: new Date().toISOString(),
+                userId: targetUserId,
               };
               localStorage.setItem(
-                this.keyFor(tableName),
+                this.keyFor(tableName, targetUserId),
                 JSON.stringify(payload),
               );
               localStorage.removeItem(key);
@@ -143,6 +145,64 @@ export class TableSettingsStorageService {
       }
     } catch {
       // ignore storage iteration errors
+    }
+  }
+
+  /**
+   * Attempt to migrate any remaining legacy column keys into the given
+   * authenticated user's namespace. Called once the user identity is known, so
+   * preferences that were migrated (or left) under the anonymous key before the
+   * user ID was available are still discoverable via preferSavedColumns.
+   */
+  migrateLegacyKeysForUser(userId?: string) {
+    if (!userId) {
+      return;
+    }
+    // Migrate any still-present legacy keys directly into the user namespace.
+    this.migrateLegacyKeys(userId);
+
+    // Promote anonymous entries (e.g. migrated before the user ID was known)
+    // into the user namespace, but never overwrite columns the user already
+    // has stored.
+    try {
+      const anonMarker = `.anon.`;
+      const suffix = `.columns.${this.version}`;
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (
+          !key ||
+          !key.startsWith(this.keyPrefix) ||
+          !key.includes(anonMarker) ||
+          !key.endsWith(suffix)
+        ) {
+          continue;
+        }
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const tableName = key.slice(
+          key.indexOf(anonMarker) + anonMarker.length,
+          key.length - suffix.length,
+        );
+        if (this.get(tableName, userId) !== undefined) {
+          continue;
+        }
+        const parsed = JSON.parse(raw) as StoredTableColumns;
+        if (!parsed || !Array.isArray(parsed.columns)) {
+          continue;
+        }
+        const payload: StoredTableColumns = {
+          version: this.version,
+          columns: parsed.columns,
+          savedAt: new Date().toISOString(),
+          userId,
+        };
+        localStorage.setItem(
+          this.keyFor(tableName, userId),
+          JSON.stringify(payload),
+        );
+      }
+    } catch {
+      // ignore storage iteration/parse errors
     }
   }
 

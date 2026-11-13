@@ -173,6 +173,10 @@ export class TableConfigService {
     columns: T[] | undefined,
     userId?: string,
   ): T[] {
+    // Once the authenticated user is known, promote any anon/legacy entries
+    // into the user namespace so their migrated preferences are restored.
+    this.tableSettingsStorage.migrateLegacyKeysForUser(userId);
+
     const persisted = this.tableSettingsStorage.get(
       tableName,
       userId,

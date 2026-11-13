@@ -11,6 +11,7 @@ describe("TableConfigService (fallback)", () => {
     const storageSpy = jasmine.createSpyObj("TableSettingsStorageService", [
       "get",
       "set",
+      "migrateLegacyKeysForUser",
     ]);
 
     TestBed.configureTestingModule({
