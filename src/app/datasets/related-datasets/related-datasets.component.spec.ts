@@ -8,6 +8,7 @@ import {
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import {
+  selectRelatedDatasetsCountIsLoading,
   selectRelatedDatasetsCurrentPage,
   selectRelatedDatasetsPageViewModel,
   selectRelatedDatasetsPerPage,
@@ -61,6 +62,7 @@ describe("RelatedDatasetsComponent", () => {
               value: {
                 relatedDatasets: [],
                 relatedDatasetsCount: 0,
+                dataset: { pid: "testPid" },
               },
             },
             {
@@ -74,6 +76,10 @@ describe("RelatedDatasetsComponent", () => {
             {
               selector: selectColumnsWithHasFetchedSettings,
               value: { columns: [], hasFetchedSettings: true },
+            },
+            {
+              selector: selectRelatedDatasetsCountIsLoading,
+              value: false,
             },
           ],
         }),
@@ -117,7 +123,9 @@ describe("RelatedDatasetsComponent", () => {
           limit: event.pageSize,
         }),
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchRelatedDatasetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchRelatedDatasetsAction({ pid: "testPid" }),
+      );
     });
   });
 

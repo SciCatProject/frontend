@@ -83,6 +83,7 @@ export const fetchOrigDatablocksCountFailedAction = createAction(
 
 export const fetchRelatedDatasetsAction = createAction(
   "[Dataset] Fetch Related Datasets",
+  props<{ pid: string }>(),
 );
 export const fetchRelatedDatasetsCompleteAction = createAction(
   "[Dataset] Fetch Related Datasets Complete",
@@ -94,6 +95,7 @@ export const fetchRelatedDatasetsFailedAction = createAction(
 
 export const fetchRelatedDatasetsCountAction = createAction(
   "[Dataset] Fetch Related Datasets Count",
+  props<{ pid: string }>(),
 );
 
 export const fetchRelatedDatasetsCountCompleteAction = createAction(

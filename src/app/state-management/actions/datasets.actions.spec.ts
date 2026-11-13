@@ -154,9 +154,12 @@ describe("Dataset Actions", () => {
 
   describe("fetchRelatedDatasetsAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchRelatedDatasetsAction();
+      const action = fromActions.fetchRelatedDatasetsAction({
+        pid: "testPid",
+      });
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Related Datasets",
+        pid: "testPid",
       });
     });
   });
