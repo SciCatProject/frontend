@@ -113,9 +113,9 @@
               type="checkbox"
               [checked]="!!condition.exclude"
               (change)="set(row.id, { exclude: $any($event.target).checked })"
+              aria-label="Exclude"
               data-cy="condition-exclude"
             />
-            Exclude
           </label>
 
           <mat-form-field

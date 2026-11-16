@@ -85,14 +85,14 @@
 .column-heads,
 .condition-row {
   display: grid;
-  grid-template-columns: minmax(150px, 1fr) 170px minmax(300px, 1.7fr) 40px;
+  grid-template-columns: minmax(150px, 1fr) 170px minmax(300px, 1.7fr) 32px;
   align-items: center;
   gap: 16px;
 
   &.advanced {
     grid-template-columns:
-      104px 220px minmax(150px, 1fr) 160px minmax(300px, 1.7fr)
-      40px;
+      56px 220px minmax(150px, 1fr) 160px minmax(300px, 2.4fr)
+      32px;
   }
 }
 
@@ -221,6 +221,11 @@
     flex: 0 0 34%;
   }
 
+  // a range has two numbers to fit, the unit gets less
+  &:has(input[type="number"]) .unit {
+    flex-basis: 24%;
+  }
+
   &:hover {
     border-color: var(--faint);
   }
@@ -260,6 +265,23 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+// the remove button shows when the row is hovered or has the focus, touch screens always show it
+.row-actions .action-button {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.condition-row:hover .action-button,
+.condition-row:focus-within .action-button {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .row-actions .action-button {
+    opacity: 1;
+  }
 }
 
 .action-button {

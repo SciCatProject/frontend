@@ -20,12 +20,12 @@ export const RELATION_OPTIONS: RelationOption[] = [
   { value: "LESS_THAN", label: "Less than", symbol: "<" },
   {
     value: "GREATER_THAN_OR_EQUAL",
-    label: "At least",
+    label: "Greater than or equal to",
     symbol: "≥",
   },
   {
     value: "LESS_THAN_OR_EQUAL",
-    label: "At most",
+    label: "Less than or equal to",
     symbol: "≤",
   },
   { value: "RANGE", label: "Between", symbol: "↔" },
