@@ -393,10 +393,16 @@ export function withPlainDates<T>(value: T): T {
   return value;
 }
 
-/** The facets only take conditions on scientific metadata, without NOT. */
+/**
+ * The facets only take conditions on scientific metadata, without NOT. A range is left out too:
+ * the facets of the backend need both bounds and leave them out of the match.
+ */
 export function isPlainConditionList(conditions: FilterCondition[]): boolean {
   return conditions.every(
-    (condition) => !isDatasetCondition(condition) && !condition.exclude,
+    (condition) =>
+      !isDatasetCondition(condition) &&
+      !condition.exclude &&
+      condition.relation !== "RANGE",
   );
 }
 

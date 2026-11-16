@@ -11,18 +11,15 @@ import { Store, StoreModule } from "@ngrx/store";
 import {
   MockActivatedRoute,
   MockStore,
-  createMock,
   mockDataset as dataset,
 } from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
+import { changePageAction } from "state-management/actions/datasets.actions";
 import {
-  addDatasetAction,
-  changePageAction,
-} from "state-management/actions/datasets.actions";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { provideMockStore } from "@ngrx/store/testing";
-import { resetIngestionObject } from "state-management/actions/ingestor.actions";
+  MockStore as NgrxMockStore,
+  provideMockStore,
+} from "@ngrx/store/testing";
 import { selectSelectedDatasets } from "state-management/selectors/datasets.selectors";
 import {
   selectColumns,
@@ -34,11 +31,6 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
-import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
-import {
-  DatasetsControllerCreateV3Request,
-  ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
 
 class MockMatDialog {
   open() {
@@ -64,18 +56,17 @@ describe("DashboardComponent", () => {
     events: of(new NavigationStart(1, "/datasets")),
   };
 
-  const getConfig = () => ({
-    shoppingCartOnHeader: true,
-  });
+  let config: Record<string, unknown>;
+  const getConfig = () => config;
 
   let store: MockStore;
   let dispatchSpy;
 
   beforeEach(waitForAsync(() => {
+    config = { shoppingCartOnHeader: true };
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
-        BrowserAnimationsModule,
         MatCardModule,
         MatDialogModule,
         MatIconModule,
@@ -123,6 +114,45 @@ describe("DashboardComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("side filter", () => {
+    const render = () => {
+      fixture = TestBed.createComponent(DashboardComponent);
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    };
+
+    it("should be shown when it is not configured", () => {
+      const page = render();
+
+      expect(page.querySelector("datasets-filter")).not.toBeNull();
+      expect(page.querySelectorAll(".action-column").length).toBe(2);
+    });
+
+    it("should be gone with its column when it is turned off", () => {
+      config.sideFilterEnabled = false;
+
+      const page = render();
+
+      expect(page.querySelector("datasets-filter")).toBeNull();
+      expect(page.querySelector(".action-column")).toBeNull();
+      expect(page.querySelector("dataset-table")).not.toBeNull();
+    });
+
+    it("should leave the column for the create dataset card when it is turned off", () => {
+      config.sideFilterEnabled = false;
+      config.addDatasetEnabled = true;
+      (TestBed.inject(Store) as unknown as NgrxMockStore).overrideSelector(
+        selectIsLoggedIn,
+        true,
+      );
+
+      const page = render();
+
+      expect(page.querySelector("datasets-filter")).toBeNull();
+      expect(page.querySelector(".add-card")).not.toBeNull();
+    });
   });
 
   describe("#onRowClick()", () => {

@@ -1,9 +1,24 @@
 <div class="dashboard-main">
   <mat-sidenav-container [hasBackdrop]="false">
     <mat-sidenav-content>
+      <!-- without the filter the side column only stays for the cards below it, else the table takes the whole width -->
+      @let filterShown = appConfig.sideFilterEnabled !== false;
+      @let loggedIn = loggedIn$ | async;
+      @let cartCardShown =
+        !appConfig.shoppingCartOnHeader && (nonEmpty$ | async);
+      @let sideColumn =
+        filterShown ||
+        (loggedIn && (appConfig.addDatasetEnabled || cartCardShown));
+
       <div fxLayout="row" fxLayout.xs="column" class="dashboard-header">
-        <div class="action-column" fxFlex="14" fxFlex.lt-xl="20"></div>
-        <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+        @if (sideColumn) {
+          <div class="action-column" fxFlex="14" fxFlex.lt-xl="20"></div>
+        }
+        <div
+          class="table-column"
+          [fxFlex]="sideColumn ? 85 : 100"
+          [fxFlex.lt-xl]="sideColumn ? 80 : 100"
+        >
           @if (this.loggedIn$ | async) {
             <dataset-table-actions></dataset-table-actions>
           }
@@ -11,29 +26,37 @@
       </div>
 
       <div fxLayout="row" fxLayout.xs="column">
-        <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
-          <datasets-filter></datasets-filter>
-          @if (this.loggedIn$ | async) {
-            <ingestor-creation
-              #ingestor
-              style="display: none"
-            ></ingestor-creation>
-            @if (appConfig.addDatasetEnabled) {
-              <mat-card class="add-card" (click)="openDialog()">
-                <mat-card-content>
-                  <mat-icon> add_circle </mat-icon>
-                  Create Dataset
-                </mat-card-content>
-              </mat-card>
+        @if (sideColumn) {
+          <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
+            @if (filterShown) {
+              <datasets-filter></datasets-filter>
             }
-            @if (!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)) {
-              <div>
-                <batch-card></batch-card>
-              </div>
+            @if (this.loggedIn$ | async) {
+              <ingestor-creation
+                #ingestor
+                style="display: none"
+              ></ingestor-creation>
+              @if (appConfig.addDatasetEnabled) {
+                <mat-card class="add-card" (click)="openDialog()">
+                  <mat-card-content>
+                    <mat-icon> add_circle </mat-icon>
+                    Create Dataset
+                  </mat-card-content>
+                </mat-card>
+              }
+              @if (!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)) {
+                <div>
+                  <batch-card></batch-card>
+                </div>
+              }
             }
-          }
-        </div>
-        <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+          </div>
+        }
+        <div
+          class="table-column"
+          [fxFlex]="sideColumn ? 85 : 100"
+          [fxFlex.lt-xl]="sideColumn ? 80 : 100"
+        >
           <dataset-table
             (rowClick)="onRowClick($event)"
             (pageChange)="onPageChange($event)"

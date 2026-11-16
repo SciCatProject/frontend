@@ -443,6 +443,11 @@ describe("condition filter utils", () => {
     it("should not accept what the facets can't take", () => {
       expect(isPlainConditionList([datasetCondition()])).toBeFalse();
       expect(isPlainConditionList([condition({ exclude: true })])).toBeFalse();
+      expect(
+        isPlainConditionList([
+          condition({ relation: "RANGE", rhs: [1, undefined] }),
+        ]),
+      ).toBeFalse();
     });
   });
 

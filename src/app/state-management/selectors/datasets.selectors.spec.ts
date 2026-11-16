@@ -417,6 +417,13 @@ describe("test dataset selectors", () => {
         facetFields([{ ...plain, source: "dataset" }]).scientific,
       ).toBeUndefined();
     });
+
+    it("should leave out a range, the facets of the backend take both bounds as exclusive", () => {
+      expect(
+        facetFields([{ ...plain, relation: "RANGE", rhs: [1, undefined] }])
+          .scientific,
+      ).toBeUndefined();
+    });
   });
 
   describe("selectConditionsCountQuery", () => {
@@ -460,6 +467,16 @@ describe("test dataset selectors", () => {
       expect(projector(params, [{ ...plain, source: "dataset" }])).toEqual(
         params.query,
       );
+    });
+
+    it("should be the query of the datasets for a range, even with one bound", () => {
+      const { projector } = fromDatasetSelectors.selectConditionsCountQuery;
+
+      expect(
+        projector(params, [
+          { ...plain, relation: "RANGE", rhs: [undefined, 10] },
+        ]),
+      ).toEqual(params.query);
     });
   });
 

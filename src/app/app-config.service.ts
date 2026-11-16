@@ -191,6 +191,7 @@ export interface AppConfigInterface {
   scienceSearchUnitsEnabled: boolean;
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;
+  sideFilterEnabled?: boolean;
   sftpHost: string | null;
   sourceFolder?: string;
   maxFileSizeWarning?: string;

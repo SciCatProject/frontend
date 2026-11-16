@@ -33,7 +33,7 @@ export const FIELD_GUIDE: {
   {
     type: "text",
     title: "Text",
-    text: "Description, Owner, Dataset name and Source folder contain the text you type, in upper or lower case.",
+    text: "Description, Owner and Dataset name contain the text you type, in upper or lower case.",
     typed: "ope",
     finds: "finds OpenBeam and open beam",
   },
@@ -47,7 +47,7 @@ export const FIELD_GUIDE: {
   {
     type: "date",
     title: "Date",
-    text: "Creation time takes a start and an end date, either one can be left empty.",
+    text: "Creation time, Start time and End time take a start and an end date, either one can be left empty.",
     typed: "2026-01-01 to 2026-02-01",
     finds: "finds datasets created in between",
   },
@@ -73,14 +73,13 @@ export const DATASET_FIELDS: DatasetField[] = [
   { key: "sampleIds", label: "Sample IDs", relation: "IN" },
   { key: "instrumentIds", label: "Instrument IDs", relation: "IN" },
   { key: "type", label: "Type", relation: "IN" },
-  { key: "ownerGroup", label: "Owner group", relation: "IN" },
-  { key: "creationLocation", label: "Creation location", relation: "IN" },
   // dates
   { key: "creationTime", label: "Creation time", relation: "RANGE" },
+  { key: "startTime", label: "Start time", relation: "RANGE" },
+  { key: "endTime", label: "End time", relation: "RANGE" },
   // text
   { key: "datasetName", label: "Dataset name", relation: "CONTAINS" },
   { key: "owner", label: "Owner", relation: "CONTAINS" },
-  { key: "sourceFolder", label: "Source folder", relation: "CONTAINS" },
   { key: "description", label: "Description", relation: "CONTAINS" },
 ];
 
