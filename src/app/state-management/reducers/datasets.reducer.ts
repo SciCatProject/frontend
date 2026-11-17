@@ -161,6 +161,18 @@ const reducer = createReducer(
     return { ...state, batch };
   }),
   on(fromActions.storeBatchAction, (state, { batch }) => ({ ...state, batch })),
+  on(fromActions.refreshBatchCompleteAction, (state, { datasets }) => {
+    const fresh = new Map(datasets.map((d) => [d.pid, d]));
+    const batch = state.batch.map((dataset) =>
+      fresh.has(dataset.pid)
+        ? {
+            ...dataset,
+            datasetlifecycle: fresh.get(dataset.pid).datasetlifecycle,
+          }
+        : dataset,
+    );
+    return { ...state, batch };
+  }),
   on(fromActions.removeFromBatchAction, (state, { dataset }): DatasetState => {
     const batch = state.batch.filter(
       (datasetInBatch) => datasetInBatch.pid !== dataset.pid,

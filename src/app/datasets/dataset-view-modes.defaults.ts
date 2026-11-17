@@ -5,8 +5,8 @@ import { ArchViewMode, DatasetViewMode } from "state-management/models";
  * Applied by AppConfigService whenever a deployment has
  * archiveWorkflowEnabled but hasn't configured its own datasetViews.modes, so
  * existing configs keep the same toggles. Ids are kept equal to the old
- * ArchViewMode values because the default Archive/Retrieve batch actions
- * match on them (see configurable-actions.defaults.ts).
+ * ArchViewMode values so that batch actions matching on
+ * `#currentArchViewMode` keep working.
  */
 export const DEFAULT_DATASET_VIEW_MODES: DatasetViewMode[] = [
   { id: ArchViewMode.all, label: "All", where: {} },

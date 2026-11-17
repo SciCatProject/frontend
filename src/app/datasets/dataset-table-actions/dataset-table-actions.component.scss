@@ -7,7 +7,14 @@
 }
 
 .action-container {
-  float: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .add-batch {
+    margin-left: 4px;
+  }
 }
 
 .action-container.hidden {
