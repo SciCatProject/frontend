@@ -23,10 +23,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable("Cypress");
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
@@ -58,10 +55,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable("Cypress");
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
@@ -107,10 +101,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(testDatasetName2);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(testDatasetName2);
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
@@ -138,10 +129,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(testDatasetName1);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(testDatasetName1);
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
@@ -173,10 +161,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(title);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(title);
 
       cy.get("app-publisheddata-dashboard mat-table").should(
         "not.contain",
@@ -193,10 +178,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(title);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(title);
 
       cy.get("app-publisheddata-dashboard mat-table mat-row")
         .contains(title)
@@ -223,10 +205,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(title);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(title);
 
       cy.get("app-publisheddata-dashboard mat-table mat-row")
         .contains(title)
@@ -301,10 +280,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(title);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(title);
 
       cy.get("app-publisheddata-dashboard mat-table mat-row")
         .contains(title)
@@ -326,10 +302,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(newDatasetName);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(newDatasetName);
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
@@ -353,10 +326,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(title);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(title);
 
       cy.get("app-publisheddata-dashboard mat-table mat-row")
         .contains(title)
@@ -379,10 +349,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(title);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(title);
 
       cy.get("app-publisheddata-dashboard mat-table mat-row")
         .contains(title)
@@ -404,10 +371,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(title);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(title);
 
       cy.get("app-publisheddata-dashboard mat-table mat-row").should(
         "contain",
@@ -424,10 +388,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type(title);
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(title);
 
       cy.get("app-publisheddata-dashboard mat-table mat-row")
         .contains(title)
@@ -455,10 +416,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]').clear().type("Cypress");
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable("Cypress");
 
       cy.get(".dataset-table mat-row input[type='checkbox']").first().click();
 
@@ -542,13 +500,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"]')
-        .clear()
-        .type(userPublishedDataTitle);
-
-      cy.get('[data-cy="search-button"]').click();
-
-      cy.isLoading();
+      cy.searchTable(userPublishedDataTitle);
 
       cy.get("app-publisheddata-dashboard mat-table mat-row")
         .contains(userPublishedDataTitle)

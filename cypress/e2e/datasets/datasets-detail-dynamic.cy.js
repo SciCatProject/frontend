@@ -31,14 +31,9 @@ describe("0050: Datasets Detail View Dynamic", () => {
 
     cy.finishedLoading();
 
-    cy.get('[data-cy="text-search"]').clear().type("Cypress");
-    cy.get('[data-cy="search-button"]').click();
+    cy.searchTable("Cypress");
 
-    cy.isLoading();
-
-    cy.get("mat-row").contains("Cypress Dataset").click();
-
-    cy.isLoading();
+    cy.openDataset("Cypress Dataset");
     cy.wrap(Object.values(customizedLabelSets)).each((value) => {
       cy.get("body")
         .find('[data-cy="section-label"], [data-cy="field-label"]')
@@ -51,14 +46,9 @@ describe("0050: Datasets Detail View Dynamic", () => {
 
     cy.finishedLoading();
 
-    cy.get('[data-cy="text-search"]').clear().type("Cypress");
-    cy.get('[data-cy="search-button"]').click();
+    cy.searchTable("Cypress");
 
-    cy.isLoading();
-
-    cy.get("mat-row").contains("Cypress Dataset").click();
-
-    cy.isLoading();
+    cy.openDataset("Cypress Dataset");
     const sortedLabels = customizedComponents
       .sort((a, b) => a.order - b.order)
       .map((section) => section.label);
@@ -75,14 +65,9 @@ describe("0050: Datasets Detail View Dynamic", () => {
 
     cy.finishedLoading();
 
-    cy.get('[data-cy="text-search"]').clear().type("Cypress");
-    cy.get('[data-cy="search-button"]').click();
+    cy.searchTable("Cypress");
 
-    cy.isLoading();
-
-    cy.get("mat-row").contains("Cypress Dataset").click();
-
-    cy.isLoading();
+    cy.openDataset("Cypress Dataset");
     const componentLabel = "Section Label Regular";
     const sectionToTest = customizedComponents.find(
       (section) => section.label === componentLabel,
@@ -103,14 +88,9 @@ describe("0050: Datasets Detail View Dynamic", () => {
 
     cy.finishedLoading();
 
-    cy.get('[data-cy="text-search"]').clear().type("Cypress");
-    cy.get('[data-cy="search-button"]').click();
+    cy.searchTable("Cypress");
 
-    cy.isLoading();
-
-    cy.get("mat-row").contains("Cypress Dataset").click();
-
-    cy.isLoading();
+    cy.openDataset("Cypress Dataset");
     const componentLabel = "Section Label Attachments";
     const sectionToTest = customizedComponents.find(
       (section) => section.label === componentLabel,
@@ -123,7 +103,7 @@ describe("0050: Datasets Detail View Dynamic", () => {
 
     cy.uploadDatasetAttachments(actualImageCount);
 
-    cy.isLoading();
+    cy.finishedLoading();
 
     cy.get(".mat-mdc-tab-link").contains("Details").click();
 
@@ -142,16 +122,13 @@ describe("0050: Datasets Detail View Dynamic", () => {
 
     cy.finishedLoading();
 
-    cy.get('[data-cy="text-search"]').clear().type("Cypress");
-    cy.get('[data-cy="search-button"]').click();
-
-    cy.isLoading();
+    cy.searchTable("Cypress");
 
     cy.get("mat-row").contains("Cypress Dataset").click();
 
     cy.reload();
 
-    cy.isLoading();
+    cy.finishedLoading();
 
     cy.get(".mat-mdc-tab-link").contains("Details").should("exist");
     cy.get(".mat-mdc-tab-link").contains("Attachments").should("exist");

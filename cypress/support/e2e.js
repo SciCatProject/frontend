@@ -30,3 +30,20 @@ Cypress.on("uncaught:exception", (err) => {
     return false;
   }
 });
+
+// Never let the browser cache the frontend config response.
+// When the frontend is served without the backend reverse proxy (as in CI),
+// nginx answers /api/v3/admin/config with index.html (Last-Modified, no
+// Cache-Control). Chrome may cache that heuristically, and Cypress keeps the
+// cache between tests, so a later cy.visit() can load the config from cache
+// without a network request. cy.intercept() stubs then never see it and tests
+// fail with "No request ever occurred" (e.g. cy.wait("@getConfig")).
+// Only this response is affected; the rest of the app stays cacheable.
+// Tests that stub admin/config themselves reply before this handler runs.
+beforeEach(() => {
+  cy.intercept("GET", "**/api/v3/admin/config", (req) => {
+    req.on("response", (res) => {
+      res.headers["cache-control"] = "no-store";
+    });
+  });
+});

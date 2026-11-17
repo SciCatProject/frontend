@@ -139,11 +139,24 @@ describe("1000 - Datasets list personalization", () => {
     // Apply
     cy.contains("mat-icon", "done").closest("button").click();
 
+    // Applying keeps the column menu open (apply_onClick stops propagation).
+    // Close it explicitly; otherwise its backdrop can still cover the table
+    // menu button on slow runners. Escape closes the submenu, then the menu.
+    cy.get("body").type("{esc}{esc}");
+    cy.get(".cdk-overlay-backdrop").should("not.exist");
+
     cy.finishedLoading();
+
+    cy.intercept("PATCH", /\/api\/v3\/users\/[^/]+\/settings(\/external)?$/).as(
+      "saveSettings",
+    );
 
     cy.contains("mat-icon", "more_vert").closest("button").click();
 
     cy.contains("button.mat-mdc-menu-item", "Save table setting").click();
+
+    // Make sure the settings are stored before reloading the app.
+    cy.wait("@saveSettings");
 
     cy.visit("/datasets");
 
@@ -190,12 +203,23 @@ describe("1000 - Datasets list personalization", () => {
     cy.get("#usernameInput").type(username).should("have.value", username);
     cy.get("#passwordInput").type(password).should("have.value", password);
 
+    cy.intercept("POST", "**/auth/login").as("loginRequest");
     cy.get("button[type=submit]").click();
+
+    // Wait until the login has actually completed before reloading the app;
+    // otherwise cy.visit() can abort the login request and the datasets list
+    // is rendered for an anonymous user (with the default columns).
+    cy.wait("@loginRequest")
+      .its("response.statusCode")
+      .should("be.oneOf", [200, 201]);
+    cy.get(".user-button").should("contain.text", username);
 
     cy.finishedLoading();
 
     // visit the datasets list
     cy.visit("/datasets");
+
+    cy.get(".user-button").should("contain.text", username);
 
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
@@ -297,12 +321,23 @@ describe("1000 - Datasets list personalization", () => {
     cy.get("#usernameInput").type(username).should("have.value", username);
     cy.get("#passwordInput").type(password).should("have.value", password);
 
+    cy.intercept("POST", "**/auth/login").as("loginRequest");
     cy.get("button[type=submit]").click();
+
+    // Wait until the login has actually completed before reloading the app;
+    // otherwise cy.visit() can abort the login request and the datasets list
+    // is rendered for an anonymous user (with the default columns).
+    cy.wait("@loginRequest")
+      .its("response.statusCode")
+      .should("be.oneOf", [200, 201]);
+    cy.get(".user-button").should("contain.text", username);
 
     cy.finishedLoading();
 
     // visit the datasets list
     cy.visit("/datasets");
+
+    cy.get(".user-button").should("contain.text", username);
 
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
