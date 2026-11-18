@@ -24,25 +24,27 @@ describe("AdminConfigEditComponent internal link labels", () => {
                 data: {
                   labelsLocalization: { dataset: {}, proposal: {} },
                   datasetDetailsTabsInclude: { details: ["proposals"] },
-                  datasetDetailComponent: {
-                    enableCustomizedComponent: true,
-                    customization: [
-                      {
-                        type: "regular",
-                        label: "Related Documents",
-                        order: 0,
-                        col: 1,
-                        row: 1,
-                        fields: [
-                          {
-                            element: "internalLink",
-                            source: "proposalIds",
-                            internalLinkLabel: "id",
-                            order: 0,
-                          },
-                        ],
-                      },
-                    ],
+                  componentCustomization: {
+                    dataset: {
+                      enabled: true,
+                      customization: [
+                        {
+                          type: "regular",
+                          label: "Related Documents",
+                          order: 0,
+                          col: 1,
+                          row: 1,
+                          fields: [
+                            {
+                              element: "internalLink",
+                              source: "proposalIds",
+                              internalLinkLabel: "id",
+                              order: 0,
+                            },
+                          ],
+                        },
+                      ],
+                    },
                   },
                 },
               },
@@ -88,7 +90,7 @@ describe("AdminConfigEditComponent internal link labels", () => {
     >;
     expect(action.type).toBe(updateConfiguration.type);
     expect(
-      action.config.datasetDetailComponent.customization[0].fields[0]
+      action.config.componentCustomization.dataset.customization[0].fields[0]
         .internalLinkLabel,
     ).toBe("title");
     expect(action.config.datasetDetailsTabsInclude.details).toEqual([
@@ -113,14 +115,19 @@ describe("AdminConfigEditComponent datafiles action conditions", () => {
               value: {
                 data: {
                   labelsLocalization: { dataset: {}, proposal: {} },
-                  datafilesActions: [
-                    {
-                      id: "download",
-                      label: "Download",
-                      enabled: "#Length(@files) > 0",
-                      disabled: "true",
+                  configurableActions: {
+                    datafiles: {
+                      enabled: true,
+                      actions: [
+                        {
+                          id: "download",
+                          label: "Download",
+                          enabled: "#Length(@files) > 0",
+                          disabled: "true",
+                        },
+                      ],
                     },
-                  ],
+                  },
                 },
               },
             },
@@ -135,7 +142,8 @@ describe("AdminConfigEditComponent datafiles action conditions", () => {
     ) as GroupLayout;
     const control: ControlElement = {
       type: "Control",
-      scope: "#/properties/datafilesActions",
+      scope:
+        "#/properties/configurableActions/properties/datafiles/properties/actions",
       // the action's detail form for every action, without the master list
       options: { detail: group.elements[0].options?.detail },
     };
@@ -168,9 +176,13 @@ describe("AdminConfigEditComponent datafiles action conditions", () => {
     const action = dispatch.calls.mostRecent().args[0] as unknown as ReturnType<
       typeof updateConfiguration
     >;
-    expect(action.config.datafilesActions[0].enabled).toEqual({
+    expect(
+      action.config.configurableActions.datafiles.actions[0].enabled,
+    ).toEqual({
       conditions: [{ condition: "#Length(@files) > 1" }],
     });
-    expect(action.config.datafilesActions[0].disabled).toBeUndefined();
+    expect(
+      action.config.configurableActions.datafiles.actions[0].disabled,
+    ).toBeUndefined();
   });
 });

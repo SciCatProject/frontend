@@ -64,8 +64,7 @@ export class DatasetEffects {
       concatLatestFrom(() => [this.fullqueryParams$, this.currentUser$]),
       switchMap(([, params, user]) => {
         const config = this.appConfigService.getConfig();
-        const defaultConfigColumns =
-          config?.defaultDatasetsListSettings?.columns;
+        const defaultConfigColumns = config?.defaultSettings?.datasets?.columns;
         let defaultColumn = "createdAt";
         let defaultDirection = "desc";
 

@@ -38,7 +38,7 @@ export class ProposalEffects {
         const config = this.appConfigService.getConfig();
 
         const defaultConfigColumns =
-          config?.defaultProposalsListSettings?.columns;
+          config?.defaultSettings?.proposals?.columns;
 
         let defaultColumn = "createdAt";
         let defaultDirection = "desc";
@@ -95,7 +95,7 @@ export class ProposalEffects {
       concatLatestFrom(() => this.fullfacetParams$),
       map(([, params]) => {
         const config = this.appConfigService.getConfig();
-        const filters = config.defaultProposalsListSettings?.filters ?? [];
+        const filters = config.defaultSettings?.proposals?.filters ?? [];
         const facets = filters.map((f) => f.key);
 
         return {

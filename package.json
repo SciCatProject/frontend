@@ -14,7 +14,8 @@
     "betterer": "betterer",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "generate:sdk:local": "node scripts/generate-nestjs-sdk"
+    "generate:sdk:local": "node scripts/generate-nestjs-sdk",
+    "migrate:latest": "node scripts/migrate-latest.js"
   },
   "private": true,
   "dependencies": {

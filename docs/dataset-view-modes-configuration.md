@@ -47,7 +47,7 @@ In Progress, System Error and User Error (see
 `src/app/datasets/dataset-view-modes.defaults.ts`). The default Archive and
 Retrieve batch actions only show up in the `archivable` and `retrievable`
 views. If you rename those ids, update the `hidden` expressions of your
-`batchActions` to match.
+`configurableActions.batch.actions` to match.
 
 To hide the toggles while keeping `archiveWorkflowEnabled`, set
 `"datasetViews": { "modes": [] }`.

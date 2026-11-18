@@ -75,11 +75,13 @@ The `restrictedIconVisible` property is **not** a configuration option; it is co
 **Configuration:**
 ```json
 {
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": true,
     "tileRestrictedIconVisible": true,
     "tileRestrictedIconGroups": ["admin", "scientists"],
     "customization": [...]
+    }
   }
 }
 ```
@@ -90,7 +92,7 @@ The `restrictedIconVisible` property is **not** a configuration option; it is co
 - To hide a tile, set `visible: false`
 
 **Files Involved:**
-- `src/app/state-management/models/index.ts` - Configuration interface (includes `DatasetDetailComponentConfig` with `tileRestrictedIconVisible` and `tileRestrictedIconGroups`)
+- `src/app/state-management/models/index.ts` - Configuration interface (includes `ComponentCustomization` with `tileRestrictedIconVisible` and `tileRestrictedIconGroups`)
 - `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.ts` - Logic (computes `restrictedIconVisible` at runtime)
 - `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.html` - Template
 - `src/app/datasets/dataset-detail-dynamic/dataset-detail-dynamic.component.scss` - Styling
@@ -107,14 +109,16 @@ The authorization can be configured at **two levels**:
 
 #### Level 1: Global Dataset Detail Component Authorization (NEW)
 
-Added to `datasetDetailComponent` object itself:
+Added to the `componentCustomization.dataset` object itself:
 
 ```json
 {
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": true,
     "authorization": ["admin", "scientists"],
     "customization": [...]
+    }
   }
 }
 ```
@@ -127,8 +131,9 @@ Configured on each customization item within the `customization` array:
 
 ```json
 {
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": true,
     "customization": [
       {
         "type": "regular",
@@ -151,17 +156,18 @@ Configured on each customization item within the `customization` array:
     ]
   }
 }
+}
 ```
 
 ### Configuration Keys
 
 | Key | Type | Required | Default | Description |
 |-----|------|----------|---------|-------------|
-| `datasetDetailComponent.authorization` | string[] | No | `null` | Global authorization for all tiles in the component |
-| `datasetDetailComponent.customization[].authorization` | string[] | No | `[]` | Tile-specific authorization (empty array means no restriction) |
-| `datasetDetailComponent.customization[].visible` | boolean | No | `true` | Controls whether the tile is visible (use `false` to hide) |
-| `datasetDetailComponent.tileRestrictedIconVisible` | boolean | No | `false` | Show lock icon on tiles with restricted access |
-| `datasetDetailComponent.tileRestrictedIconGroups` | string[] | No | `[]` | User groups that can see the restricted icon (empty array means all users) |
+| `componentCustomization.dataset.authorization` | string[] | No | `null` | Global authorization for all tiles in the component |
+| `componentCustomization.dataset.customization[].authorization` | string[] | No | `[]` | Tile-specific authorization (empty array means no restriction) |
+| `componentCustomization.dataset.customization[].visible` | boolean | No | `true` | Controls whether the tile is visible (use `false` to hide) |
+| `componentCustomization.dataset.tileRestrictedIconVisible` | boolean | No | `false` | Show lock icon on tiles with restricted access |
+| `componentCustomization.dataset.tileRestrictedIconGroups` | string[] | No | `[]` | User groups that can see the restricted icon (empty array means all users) |
 
 ### Configuration Locations
 
@@ -177,10 +183,12 @@ The backend provides the frontend configuration. This is the primary configurati
 
 ```json
 {
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": true,
     "authorization": ["admin"],
     "customization": [...]
+    }
   }
 }
 ```
@@ -194,16 +202,20 @@ Used for environment-specific overrides without modifying the main configuration
 **File**: `src/app/state-management/models/index.ts`
 
 ```typescript
-export interface DatasetDetailComponentConfig {
-  enableCustomizedComponent: boolean;
-  customization: CustomizationItem[];
+export interface ComponentCustomization<TItem> {
+  enabled: boolean;
+  customization: TItem[];
   authorization?: string[];  // Global authorization for all tiles
   tileRestrictedIconVisible?: boolean;  // Show lock icon on restricted tiles
   tileRestrictedIconGroups?: string[];  // User groups that can see the restricted icon
 }
 
+export interface ComponentCustomizationConfig {
+  datasetDetails?: ComponentCustomization<CustomizationItem>;
+}
+
 export interface AppConfig {
-  datasetDetailComponent?: DatasetDetailComponentConfig;
+  componentCustomization?: ComponentCustomizationConfig;
 }
 
 export interface CustomizationItem {
@@ -227,9 +239,9 @@ export interface CustomizationItem {
 **Path**: Admin Dashboard > Frontend Config > Dataset Detail Component section
 
 The admin UI provides form controls through JSONForms:
-- **Enable Customized Component**: Toggle switch for `enableCustomizedComponent`
-- **Show Restricted Tiles Indicator**: Toggle switch for `datasetDetailComponent.tileRestrictedIconVisible`
-- **Restricted Icon Groups**: Array of strings input for `datasetDetailComponent.tileRestrictedIconGroups`
+- **Enable Customized Component**: Toggle switch for `componentCustomization.dataset.enabled`
+- **Show Restricted Tiles Indicator**: Toggle switch for `componentCustomization.dataset.tileRestrictedIconVisible`
+- **Restricted Icon Groups**: Array of strings input for `componentCustomization.dataset.tileRestrictedIconGroups`
 - **Authorization**: Array of strings input for global tile authorization
 - **Customization**: List with detail view for configuring individual tiles
 
@@ -305,13 +317,16 @@ The Dataset Detail Component supports the following tile types:
 
 The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonforms.json`
 
-#### Schema Section (datasetDetailComponent)
+#### Schema Section (componentCustomization)
 
 ```json
-"datasetDetailComponent": {
+"componentCustomization": {
   "type": "object",
   "properties": {
-    "enableCustomizedComponent": { "type": "boolean" },
+    "dataset": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
     "authorization": {
       "type": "array",
       "items": { "type": "string" }
@@ -379,6 +394,8 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
     }
   }
 }
+  }
+}
 ```
 
 #### UI Schema Section (Dataset Detail Component)
@@ -393,24 +410,24 @@ The JSON Form Schema is defined in `src/app/admin/schema/frontend.config.jsonfor
   "elements": [
     {
       "type": "Control",
-      "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
+      "scope": "#/properties/componentCustomization/properties/dataset/properties/enabled"
     },
     {
       "type": "Control",
-      "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconVisible"
+      "scope": "#/properties/componentCustomization/properties/dataset/properties/tileRestrictedIconVisible"
     },
     {
       "type": "Control",
-      "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconGroups"
+      "scope": "#/properties/componentCustomization/properties/dataset/properties/tileRestrictedIconGroups"
     },
     {
       "type": "Control",
-      "scope": "#/properties/datasetDetailComponent/properties/authorization"
+      "scope": "#/properties/componentCustomization/properties/dataset/properties/authorization"
     },
     {
       "type": "ListWithDetail",
       "label": "Customization Configuration",
-      "scope": "#/properties/datasetDetailComponent/properties/customization",
+      "scope": "#/properties/componentCustomization/properties/dataset/properties/customization",
       "options": {
         "detail": {
           "type": "VerticalLayout",
@@ -485,10 +502,12 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 **Configuration (JSON)**:
 ```json
 {
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": true,
     "authorization": ["admin", "data-managers"],
     "customization": [...]
+    }
   }
 }
 ```
@@ -511,8 +530,9 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 **Configuration (JSON)**:
 ```json
 {
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": true,
     "customization": [
       {
         "type": "regular",
@@ -536,6 +556,7 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
     ]
   }
 }
+}
 ```
 
 **Result**: 
@@ -551,8 +572,9 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 **Configuration**:
 ```json
 {
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": true,
     "authorization": ["admin", "scientists"],
     "customization": [
       {
@@ -570,6 +592,7 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
         "source": "scientificMetadata"
       }
     ]
+    }
   }
 }
 ```
@@ -625,7 +648,7 @@ These are registered in `src/app/admin/admin-config-edit/admin-config-edit.compo
 The authorization system follows this evaluation order:
 
 1. **Tile-level authorization** (if present) takes precedence
-2. **Global datasetDetailComponent authorization** (if present)
+2. **Global componentCustomization.dataset authorization** (if present)
 3. **Default**: `[]` (visible to all authenticated users)
 
 ### Authorization Matching
@@ -674,12 +697,12 @@ There are no special groups. Empty array `[]` means no restriction (visible to a
    ```typescript
    // Inject AppConfigService
    const config = this.appConfigService.getConfig();
-   console.log('Dataset Detail Config:', config.datasetDetailComponent);
+   console.log('Dataset Detail Config:', config.componentCustomization.dataset);
    ```
 
 3. **Verify backend configuration**:
    - Use Swagger UI or API client to call `/api/v3/runtime-config/frontendConfig`
-   - Verify the `datasetDetailComponent` section is correct
+   - Verify the `componentCustomization.dataset` section is correct
 
 **Solutions**:
 
@@ -713,7 +736,7 @@ There are no special groups. Empty array `[]` means no restriction (visible to a
 ```json
 {
   "type": "ListWithDetail",
-  "scope": "#/properties/datasetDetailComponent/properties/authorization",
+  "scope": "#/properties/componentCustomization/properties/dataset/properties/authorization",
   "options": {
     "detail": {
       "type": "VerticalLayout",
@@ -797,7 +820,7 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ### Q: Can I use authorization without enabling customized components?
 
-**A**: No. The `authorization` field is only applicable when `enableCustomizedComponent` is set to `true`. If customized components are disabled, the default dataset detail view is used, and tile-level authorization does not apply.
+**A**: No. The `authorization` field is only applicable when `componentCustomization.dataset.enabled` is set to `true`. If customized components are disabled, the default dataset detail view is used, and tile-level authorization does not apply.
 
 ### Q: Can I use both global and tile-level authorization?
 
@@ -828,14 +851,16 @@ This change should be made in `src/app/admin/schema/frontend.config.jsonforms.js
 
 ### Q: How do I show a lock icon on restricted tiles?
 
-**A**: Enable the `tileRestrictedIconVisible` configuration flag under `datasetDetailComponent`:
+**A**: Enable the `tileRestrictedIconVisible` configuration flag under `componentCustomization.dataset`:
 ```json
 {
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": true,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": true,
     "tileRestrictedIconVisible": true,
     "tileRestrictedIconGroups": ["admin", "scientists"],
     "customization": [...]
+    }
   }
 }
 ```
@@ -860,12 +885,12 @@ When enabled, tiles with restricted access (non-empty authorization array define
 
 ### Q: Can I use this feature with the default (non-customized) dataset detail view?
 
-**A**: No. Authorization only works when `enableCustomizedComponent` is `true` and you have defined custom tiles in the `customization` array. The default dataset detail view does not support tile-level authorization.
+**A**: No. Authorization only works when `componentCustomization.dataset.enabled` is `true` and you have defined custom tiles in the `customization` array. The default dataset detail view does not support tile-level authorization.
 
 ### Q: How do I migrate from an old configuration?
 
 **A**: Existing configurations without authorization fields will continue to work unchanged. All tiles will be visible to all authenticated users. To add authorization:
-1. Add the `authorization` field to `datasetDetailComponent` or individual tiles
+1. Add the `authorization` field to `componentCustomization.dataset` or individual tiles
 2. Test with different user groups
 3. Gradually restrict access as needed
 

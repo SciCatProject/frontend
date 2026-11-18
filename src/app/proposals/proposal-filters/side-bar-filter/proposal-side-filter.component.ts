@@ -74,8 +74,7 @@ export class ProposalSideFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.filterConfigs$.subscribe((filterConfigs) => {
         if (filterConfigs) {
-          this.filterLists =
-            this.appConfig.defaultProposalsListSettings?.filters;
+          this.filterLists = this.appConfig.defaultSettings?.proposals?.filters;
 
           const { queryParams } = this.route.snapshot;
 
@@ -88,7 +87,7 @@ export class ProposalSideFilterComponent implements OnInit, OnDestroy {
             // whereas user settings still have the old filter type
             // It is commented out for now because we don't get proposals filter from user settings yet
 
-            // this.appConfig.defaultProposalsListSettings?.filters?.forEach(
+            // this.appConfig.defaultSettings?.proposals?.filters?.forEach(
             //   (defaultFilter) => {
             //     if (filter.key === defaultFilter.key) {
             //       filter.type = defaultFilter.type;

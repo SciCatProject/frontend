@@ -5,11 +5,11 @@ describe("0050: Datasets Detail View Dynamic", () => {
   const dynamicComponentConfig = testConfig.dynamicDetailViewComponent;
   const customizedLabelSets = dynamicComponentConfig.labelsLocalization.dataset;
   const customizedComponents =
-    dynamicComponentConfig.datasetDetailComponent.customization;
+    dynamicComponentConfig.componentCustomization.dataset.customization;
 
   beforeEach(() => {
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-      baseConfig.datasetDetailComponent.customization = [];
+      baseConfig.componentCustomization.dataset.customization = [];
       const mergedConfig = mergeConfig(baseConfig, dynamicComponentConfig);
       cy.intercept("GET", "**/admin/config", mergedConfig).as(
         "getFrontendConfig",

@@ -12,7 +12,7 @@ The dataset status banner is a small, colored notice rendered above the dataset 
 
 This feature is unrelated to the existing global **statusBannerMessage** setting, which renders a single, static banner in the application header regardless of which page or dataset is being viewed. The dataset status banner described here is per-dataset and conditional, driven by rules evaluated against the dataset actually loaded.
 
-Both `datasetStatusBanner` and the `statusBanner` entry in `datasetDetailComponent.customization` (see [Placement](#placement-on-the-dataset-detail-page) below) are also editable through the Admin config editor, backed by `src/app/admin/schema/frontend.config.jsonforms.json`.
+Both `datasetStatusBanner` and the `statusBanner` entry in `componentCustomization.dataset.customization` (see [Placement](#placement-on-the-dataset-detail-page) below) are also editable through the Admin config editor, backed by `src/app/admin/schema/frontend.config.jsonforms.json`.
 
 ## Configuration
 
@@ -74,11 +74,12 @@ With this configuration, a dataset whose `datasetlifecycle.archiveStatusMessage`
 
 ## Placement on the dataset detail page
 
-The banner is rendered as a section of the dataset detail page's customizable layout, alongside the other sections such as "General Information" or "Scientific Metadata". It is added by including an entry of type `statusBanner` in `datasetDetailComponent.customization`:
+The banner is rendered as a section of the dataset detail page's customizable layout, alongside the other sections such as "General Information" or "Scientific Metadata". It is added by including an entry of type `statusBanner` in `componentCustomization.dataset.customization`:
 
 ```json
-"datasetDetailComponent": {
-  "enableCustomizedComponent": false,
+"componentCustomization": {
+  "dataset": {
+    "enabled": true,
   "customization": [
     {
       "type": "statusBanner",
@@ -89,6 +90,7 @@ The banner is rendered as a section of the dataset detail page's customizable la
     },
     ...
   ]
+  }
 }
 ```
 

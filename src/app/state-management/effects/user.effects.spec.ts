@@ -49,15 +49,16 @@ import { mockUser } from "shared/MockStubs";
 class AppConfigServiceMock {
   getConfig() {
     return {
-      accessTokenPrefix: "",
-      defaultDatasetsListSettings: {
-        columns: [],
-        conditions: [],
-        filters: [],
-      },
-      defaultProposalsListSettings: {
-        columns: [],
-        filters: [],
+      defaultSettings: {
+        datasets: {
+          columns: [],
+          conditions: [],
+          filters: [],
+        },
+        proposals: {
+          columns: [],
+          filters: [],
+        },
       },
     };
   }

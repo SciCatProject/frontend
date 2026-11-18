@@ -1,10 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { TestBed, fakeAsync, tick } from "@angular/core/testing";
-import {
-  AppConfigInterface,
-  AppConfigService,
-  HelpMessages,
-} from "app-config.service";
+import { AppConfigInterface, AppConfigService } from "app-config.service";
 import { Observable, of, throwError } from "rxjs";
 import { delay } from "rxjs/operators";
 import { MockHttp } from "shared/MockStubs";
@@ -15,7 +11,6 @@ const appConfig: AppConfigInterface = {
     authenticatedUser: "DATASETS",
   },
   skipSciCatLoginPageEnabled: false,
-  accessTokenPrefix: "",
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
@@ -24,9 +19,7 @@ const appConfig: AppConfigInterface = {
   datasetPageSizeOptions: [5, 10, 25, 100],
   paginationPosition: "both",
   editDatasetEnabled: true,
-  editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
-  editPublishedData: true,
   addSampleEnabled: true,
   externalAuthEndpoint: "/auth/msad",
   facility: "ESS",
@@ -39,10 +32,7 @@ const appConfig: AppConfigInterface = {
   loginFacilityEnabled: true,
   loginLdapEnabled: true,
   loginLocalEnabled: true,
-  fileColorEnabled: true,
   fileDownloadEnabled: true,
-  gettingStarted: null,
-  ingestManual: null,
   jobsEnabled: true,
   dateFormat: "yyyy-MM-dd HH:mm",
   timezone: "UTC",
@@ -61,18 +51,13 @@ const appConfig: AppConfigInterface = {
     minCutoff: 0.001,
     maxCutoff: 1000,
   },
-  metadataPreviewEnabled: true,
   metadataStructure: "",
-  multipleDownloadAction: "http://localhost:3012/zip",
-  multipleDownloadEnabled: true,
-  multipleDownloadUseAuthToken: false,
   oAuth2Endpoints: [],
   policiesEnabled: true,
   retrieveDestinations: [],
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
   scienceSearchEnabled: true,
   scienceSearchUnitsEnabled: true,
-  searchPublicDataEnabled: true,
   searchSamples: true,
   sftpHost: "login.esss.dk",
   sourceFolder: "default",
@@ -84,147 +69,142 @@ const appConfig: AppConfigInterface = {
   siteSciCatLogo: "full",
   tableSciDataEnabled: true,
   fileserverBaseURL: "",
-  fileserverButtonLabel: "",
   datasetDetailsShowMissingProposalId: true,
-  helpMessages: new HelpMessages(),
   notificationInterceptorEnabled: true,
-  datasetActionsEnabled: false,
-  datasetActions: [],
-  datasetDetailsActionsEnabled: false,
-  datasetDetailsActions: [],
-  datafilesActionsEnabled: false,
-  datafilesActions: [],
-  datasetSelectionActionsEnabled: false,
-  datasetSelectionActions: [],
-  batchActionsEnabled: true,
-  batchActions: [],
+  configurableActions: {
+    datasetDetails: { enabled: false, actions: [] },
+    datafiles: { enabled: false, actions: [] },
+    batch: { enabled: true, actions: [] },
+  },
   datasetViews: { modes: [] },
-  defaultDatasetsListSettings: {
-    columns: [
-      {
-        name: "select",
-        order: 0,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "pid",
-        order: 1,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "datasetName",
-        order: 2,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "runNumber",
-        order: 3,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "sourceFolder",
-        order: 4,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "size",
-        order: 5,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "creationTime",
-        order: 6,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "type",
-        order: 7,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "image",
-        order: 8,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "metadata",
-        order: 9,
-        type: "standard",
-        enabled: false,
-      },
-      {
-        name: "proposalId",
-        order: 10,
-        type: "standard",
-        enabled: true,
-      },
-      {
-        name: "ownerGroup",
-        order: 11,
-        type: "standard",
-        enabled: false,
-      },
-      {
-        name: "dataStatus",
-        order: 12,
-        type: "standard",
-        enabled: false,
-      },
-    ],
-    filters: [
-      {
-        key: "creationLocation",
-        label: "Location",
-        type: "multiSelect",
-        description: "Filter by creation location on the dataset",
-        enabled: true,
-      },
-      {
-        key: "pid",
-        label: "Pid",
-        type: "text",
-        description: "Filter by dataset pid",
-        enabled: true,
-      },
-      {
-        key: "ownerGroup",
-        label: "Group",
-        type: "multiSelect",
-        description: "Filter by owner group of the dataset",
-        enabled: true,
-      },
-      {
-        key: "type",
-        label: "Type",
-        type: "multiSelect",
-        description: "Filter by dataset type",
-        enabled: true,
-      },
-      {
-        key: "keywords",
-        label: "Keyword",
-        type: "multiSelect",
-        description: "Filter by keywords in the dataset",
-        enabled: true,
-      },
-      {
-        key: "creationTime",
-        label: "Creation Time",
-        type: "dateRange",
-        description: "Filter by creation time of the dataset",
-        enabled: true,
-      },
-    ],
-    conditions: [],
+  defaultSettings: {
+    datasets: {
+      columns: [
+        {
+          name: "select",
+          order: 0,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "pid",
+          order: 1,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "datasetName",
+          order: 2,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "runNumber",
+          order: 3,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "sourceFolder",
+          order: 4,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "size",
+          order: 5,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "creationTime",
+          order: 6,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "type",
+          order: 7,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "image",
+          order: 8,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "metadata",
+          order: 9,
+          type: "standard",
+          enabled: false,
+        },
+        {
+          name: "proposalId",
+          order: 10,
+          type: "standard",
+          enabled: true,
+        },
+        {
+          name: "ownerGroup",
+          order: 11,
+          type: "standard",
+          enabled: false,
+        },
+        {
+          name: "dataStatus",
+          order: 12,
+          type: "standard",
+          enabled: false,
+        },
+      ],
+      filters: [
+        {
+          key: "creationLocation",
+          label: "Location",
+          type: "multiSelect",
+          description: "Filter by creation location on the dataset",
+          enabled: true,
+        },
+        {
+          key: "pid",
+          label: "Pid",
+          type: "text",
+          description: "Filter by dataset pid",
+          enabled: true,
+        },
+        {
+          key: "ownerGroup",
+          label: "Group",
+          type: "multiSelect",
+          description: "Filter by owner group of the dataset",
+          enabled: true,
+        },
+        {
+          key: "type",
+          label: "Type",
+          type: "multiSelect",
+          description: "Filter by dataset type",
+          enabled: true,
+        },
+        {
+          key: "keywords",
+          label: "Keyword",
+          type: "multiSelect",
+          description: "Filter by keywords in the dataset",
+          enabled: true,
+        },
+        {
+          key: "creationTime",
+          label: "Creation Time",
+          type: "dateRange",
+          description: "Filter by creation time of the dataset",
+          enabled: true,
+        },
+      ],
+      conditions: [],
+    },
   },
   ingestorComponent: {
     ingestorEnabled: true,
@@ -237,11 +217,13 @@ const appConfig: AppConfigInterface = {
     enabled: false,
     htmlContent: "This is not my about",
   },
-  datasetDetailComponent: {
-    enableCustomizedComponent: false,
-    customization: [],
-    tileRestrictedIconVisible: false,
-    tileRestrictedIconGroups: ["admin"],
+  componentCustomization: {
+    dataset: {
+      enabled: false,
+      customization: [],
+      tileRestrictedIconVisible: false,
+      tileRestrictedIconGroups: ["admin"],
+    },
   },
 };
 
@@ -323,22 +305,28 @@ describe("AppConfigService", () => {
       ]);
     });
 
-    it("should not override a deployment's own batchActions when batchActionsEnabled is already truthy", async () => {
+    it("should not override a deployment's own configurableActions.batch when configurableActions.batch.enabled is already truthy", async () => {
       spyOn(service["http"], "get").and.returnValue(of(appConfig));
 
       await service.loadAppConfig();
 
-      expect(service.getConfig().batchActionsEnabled).toBe(true);
-      expect(service.getConfig().batchActions).toEqual([]);
+      expect(service.getConfig().configurableActions?.batch?.enabled).toBe(
+        true,
+      );
+      expect(service.getConfig().configurableActions?.batch?.actions).toEqual(
+        [],
+      );
     });
 
-    [undefined, false].forEach((batchActionsEnabled) => {
-      it(`should default batchActionsEnabled/batchActions to the built-in Archive/Retrieve actions when archiveWorkflowEnabled is true and batchActionsEnabled is ${batchActionsEnabled}`, async () => {
+    [undefined, false].forEach((batchEnabled) => {
+      it(`should default configurableActions.batch to the built-in Archive/Retrieve actions when archiveWorkflowEnabled is true and configurableActions.batch.enabled is ${batchEnabled}`, async () => {
         const configWithoutBatchActions = {
           ...appConfig,
           archiveWorkflowEnabled: true,
-          batchActionsEnabled,
-          batchActions: undefined,
+          configurableActions: {
+            ...appConfig.configurableActions,
+            batch: { enabled: batchEnabled, actions: undefined },
+          },
         };
         spyOn(service["http"], "get").and.returnValue(
           of(configWithoutBatchActions),
@@ -347,20 +335,45 @@ describe("AppConfigService", () => {
         await service.loadAppConfig();
 
         const config = service.getConfig();
-        expect(config.batchActionsEnabled).toBe(true);
-        expect(config.batchActions?.map((action) => action.label)).toEqual([
-          "Archive",
-          "Retrieve",
-        ]);
+        expect(config.configurableActions?.batch?.enabled).toBe(true);
+        expect(
+          config.configurableActions?.batch?.actions?.map(
+            (action) => action.label,
+          ),
+        ).toEqual(["Archive", "Retrieve"]);
       });
     });
 
-    it("should not default batchActions when archiveWorkflowEnabled is false", async () => {
+    it("should still default configurableActions.batch when the migration added it empty", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({
+          ...appConfig,
+          archiveWorkflowEnabled: true,
+          configurableActions: {
+            ...appConfig.configurableActions,
+            batch: { enabled: false, actions: [] },
+          },
+        }),
+      );
+
+      await service.loadAppConfig();
+
+      const batch = service.getConfig().configurableActions?.batch;
+      expect(batch?.enabled).toBe(true);
+      expect(batch?.actions?.map((action) => action.label)).toEqual([
+        "Archive",
+        "Retrieve",
+      ]);
+    });
+
+    it("should not default configurableActions.batch when archiveWorkflowEnabled is false", async () => {
       const configWithoutArchiveWorkflow = {
         ...appConfig,
         archiveWorkflowEnabled: false,
-        batchActionsEnabled: undefined,
-        batchActions: undefined,
+        configurableActions: {
+          ...appConfig.configurableActions,
+          batch: undefined,
+        },
       };
       spyOn(service["http"], "get").and.returnValue(
         of(configWithoutArchiveWorkflow),
@@ -369,8 +382,7 @@ describe("AppConfigService", () => {
       await service.loadAppConfig();
 
       const config = service.getConfig();
-      expect(config.batchActionsEnabled).toBeUndefined();
-      expect(config.batchActions).toBeUndefined();
+      expect(config.configurableActions?.batch).toBeUndefined();
     });
 
     it("should default datasetViews.modes to the archive workflow views when archiveWorkflowEnabled is true", async () => {
@@ -430,8 +442,10 @@ describe("AppConfigService", () => {
       const configWithoutBatchActions = {
         ...appConfig,
         archiveWorkflowEnabled: true,
-        batchActionsEnabled: undefined,
-        batchActions: undefined,
+        configurableActions: {
+          ...appConfig.configurableActions,
+          batch: undefined,
+        },
         retrieveDestinations: [
           { option: "PSI", tooltip: "Copy to PSI" },
           { option: "URLs", tooltip: "Get download URLs" },
@@ -445,7 +459,9 @@ describe("AppConfigService", () => {
 
       const retrieveAction = service
         .getConfig()
-        .batchActions?.find((action) => action.label === "Retrieve");
+        .configurableActions?.batch?.actions?.find(
+          (action) => action.label === "Retrieve",
+        );
       expect(retrieveAction?.dialog?.fields[0].options).toEqual([
         { option: "PSI", tooltip: "Copy to PSI" },
         { option: "URLs", tooltip: "Get download URLs" },
@@ -456,9 +472,9 @@ describe("AppConfigService", () => {
   describe("#getConfig()", () => {
     const mockConfigResponses: Record<string, object> = {
       "/assets/config.json": {
-        accessTokenPrefix: "",
+        facility: "",
         lbBaseURL: "http://127.0.0.1:3000",
-        gettingStarted: null,
+        landingPage: null,
         datasetPageSizeOptions: [5, 10, 25, 100],
         defaultMainPage: {
           nonAuthenticatedUser: "DATASETS",
@@ -480,16 +496,18 @@ describe("AppConfigService", () => {
           enabled: false,
           htmlContent: "This is the mockConfigResponses config.json about",
         },
-        datasetDetailComponent: {
-          enableCustomizedComponent: false,
-          customization: [],
-          tileRestrictedIconVisible: false,
-          tileRestrictedIconGroups: ["admin"],
+        componentCustomization: {
+          dataset: {
+            enabled: false,
+            customization: [],
+            tileRestrictedIconVisible: false,
+            tileRestrictedIconGroups: ["admin"],
+          },
         },
       },
       "/assets/config.override.json": {
-        accessTokenPrefix: "Bearer ",
-        gettingStarted: "aGettingStarted",
+        facility: "Bearer ",
+        landingPage: "aLandingPage",
         addDatasetEnabled: true,
         mainMenu: { nonAuthenticatedUser: { files: true } },
         oAuth2Endpoints: [],
@@ -503,19 +521,21 @@ describe("AppConfigService", () => {
           htmlContent:
             "This is the mockConfigResponses config.override.json about",
         },
-        datasetDetailComponent: {
-          enableCustomizedComponent: false,
-          customization: [],
-          tileRestrictedIconVisible: false,
-          tileRestrictedIconGroups: ["admin"],
+        componentCustomization: {
+          dataset: {
+            enabled: false,
+            customization: [],
+            tileRestrictedIconVisible: false,
+            tileRestrictedIconGroups: ["admin"],
+          },
         },
       },
     };
 
     const mergedConfig = {
-      accessTokenPrefix: "Bearer ",
+      facility: "Bearer ",
       lbBaseURL: "http://127.0.0.1:3000",
-      gettingStarted: "aGettingStarted",
+      landingPage: "aLandingPage",
       datasetPageSizeOptions: [5, 10, 25, 100],
       addDatasetEnabled: true,
       defaultMainPage: {
@@ -536,11 +556,13 @@ describe("AppConfigService", () => {
         htmlContent:
           "This is the mockConfigResponses config.override.json about",
       },
-      datasetDetailComponent: {
-        enableCustomizedComponent: false,
-        customization: [],
-        tileRestrictedIconVisible: false,
-        tileRestrictedIconGroups: ["admin"],
+      componentCustomization: {
+        dataset: {
+          enabled: false,
+          customization: [],
+          tileRestrictedIconVisible: false,
+          tileRestrictedIconGroups: ["admin"],
+        },
       },
     };
 
@@ -849,8 +871,8 @@ describe("AppConfigService", () => {
       expect(httpGet).toHaveBeenCalledTimes(2);
     });
 
-    it("should only load the first 3 entries, counting local files", async () => {
-      const list = [CONFIG, OVERRIDE, "/a", "/b"];
+    it("should only load the first 6 entries, counting local files", async () => {
+      const list = [CONFIG, OVERRIDE, "/a", "/b", "/c", "/d", "/e"];
       const httpGet = mockHttpGet({
         [CONFIG]: {
           allowConfigOverrides: true,
@@ -860,13 +882,17 @@ describe("AppConfigService", () => {
         [OVERRIDE]: { siteTitle: "override" },
         "/a": { facility: "a" },
         "/b": { facility: "b" },
+        "/c": { facility: "c" },
+        "/d": { facility: "d" },
+        "/e": { facility: "e" },
       });
 
       const result = await service["mergeConfig"]();
 
-      expect(result.facility).toBe("a");
+      expect(result.facility).toBe("d");
       expect(result.siteTitle).toBe("override");
-      expect(httpGet).not.toHaveBeenCalledWith("/b");
+      expect(httpGet).toHaveBeenCalledWith("/d");
+      expect(httpGet).not.toHaveBeenCalledWith("/e");
       expect(consoleWarn).toHaveBeenCalledTimes(1);
       expect(consoleError).not.toHaveBeenCalled();
     });

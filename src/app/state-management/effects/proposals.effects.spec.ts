@@ -50,23 +50,25 @@ describe("ProposalEffects", () => {
   let datasetApi: jasmine.SpyObj<DatasetsService>;
 
   const getConfig = () => ({
-    defaultProposalsListSettings: {
-      filters: [
-        {
-          key: "instrumentIds",
-          label: "Instrument",
-          type: "checkbox",
-          description: "Filter by instrument name",
-          enabled: true,
-        },
-        {
-          key: "proposalId",
-          label: "Proposal Id",
-          type: "checkbox",
-          description: "Filter by proposal id",
-          enabled: true,
-        },
-      ],
+    defaultSettings: {
+      proposals: {
+        filters: [
+          {
+            key: "instrumentIds",
+            label: "Instrument",
+            type: "checkbox",
+            description: "Filter by instrument name",
+            enabled: true,
+          },
+          {
+            key: "proposalId",
+            label: "Proposal Id",
+            type: "checkbox",
+            description: "Filter by proposal id",
+            enabled: true,
+          },
+        ],
+      },
     },
   });
 

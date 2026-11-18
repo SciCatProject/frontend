@@ -89,9 +89,9 @@
             </button>
           }
         }
-        @if (appConfig.batchActionsEnabled) {
+        @if (appConfig.configurableActions?.batch?.enabled) {
           <configurable-actions
-            [actionsConfig]="appConfig.batchActions"
+            [actionsConfig]="appConfig.configurableActions.batch.actions"
             [actionItems]="actionItems"
             [buttonsStyle]="actionButtonsStyle"
             (actionFinished)="onActionFinished($event)"
