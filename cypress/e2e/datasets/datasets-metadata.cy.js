@@ -745,9 +745,9 @@ describe.skip("Datasets", () => {
         .click({ force: true });
       cy.get('[role="menu"]').contains("Type").click({ force: true });
 
-      cy.get('[role="menu"] .column-config-apply .done-setting')
-        .contains("done")
-        .click({ force: true });
+      // Auto-save persists the column change after a debounce; no explicit
+      // "done" apply button. Just close the menu.
+      cy.get("body").type("{esc}");
 
       cy.contains(
         "dynamic-mat-table mat-header-row.header",

@@ -1,0 +1,260 @@
+import { Injectable } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+
+export interface StoredTableColumns {
+  version: string; // e.g. "v1"
+  columns: unknown[]; // the columnsSetting payload
+  savedAt?: string;
+  userId?: string;
+}
+
+export interface TableColumnsChange {
+  tableName: string;
+  userId?: string;
+  // "local" when emitted by this tab's own set/remove, "remote" when the
+  // change arrived from another tab via the storage event.
+  origin: "local" | "remote";
+}
+
+@Injectable({ providedIn: "root" })
+export class TableSettingsStorageService {
+  private readonly keyPrefix = "scicat.table";
+  private readonly version = "v1";
+  private readonly change$ = new Subject<TableColumnsChange>();
+
+  // Public observable consumers can subscribe to be notified when other tabs or
+  // the same tab make changes via this service
+  public readonly changes$: Observable<TableColumnsChange> =
+    this.change$.asObservable();
+
+  constructor() {
+    this.initCrossTabSync();
+    // Attempt migration from legacy sessionStorage keys on startup (best-effort)
+    this.migrateLegacyKeys();
+  }
+
+  private keyFor(tableName: string, userId?: string) {
+    return `${this.keyPrefix}.${userId || "anon"}.${tableName}.columns.${this.version}`;
+  }
+
+  private initCrossTabSync() {
+    // Listen to storage events from other tabs/windows
+    window.addEventListener("storage", (ev: StorageEvent) => {
+      try {
+        if (!ev.key) return;
+        // Only react to keys that match our prefix and version
+        if (
+          !ev.key.startsWith(this.keyPrefix) ||
+          !ev.key.endsWith(this.version)
+        ) {
+          return;
+        }
+
+        // parse key format: scicat.table.{userId}.{tableName}.columns.v1
+        const parts = ev.key.split(".");
+        // expected: [scicat, table, userId, tableName, columns, v1]
+        if (parts.length < 6) {
+          return;
+        }
+        const userId = parts[2];
+        const tableName = parts[3];
+        this.change$.next({
+          tableName,
+          userId: userId === "anon" ? undefined : userId,
+          origin: "remote",
+        });
+      } catch {
+        // ignore malformed keys/events
+      }
+    });
+
+    // Optionally initialize a BroadcastChannel for lower-latency messaging in supported browsers
+    try {
+      const BC = (window as any).BroadcastChannel;
+      if (typeof BC === "function") {
+        const bc = new BC("scicat.table.settings.v1");
+        bc.onmessage = (msg: any) => {
+          const { tableName, userId } = msg.data || {};
+          if (tableName) {
+            this.change$.next({ tableName, userId, origin: "remote" });
+          }
+        };
+      }
+    } catch {
+      // BroadcastChannel not supported or blocked; storage event is sufficient
+    }
+  }
+
+  private migrateLegacyKeys(targetUserId?: string) {
+    // Some code paths in the codebase previously used simple keys like `${tableName}-columns` or sessionStorage.
+    // For backward compatibility, attempt to find such entries and migrate them into the new per-user localStorage key.
+    try {
+      // Iterate over possible legacy key patterns in sessionStorage/localStorage
+      // Legacy key: `${tableName}-columns` in local/session storage — we'll search sessionStorage first.
+      for (let i = sessionStorage.length - 1; i >= 0; i--) {
+        const key = sessionStorage.key(i);
+        if (!key) continue;
+        if (key.endsWith("-columns")) {
+          const tableName = key.replace(/-columns$/, "");
+          const raw = sessionStorage.getItem(key);
+          if (!raw) continue;
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              // write to new localStorage under the target user (or anon)
+              const payload: StoredTableColumns = {
+                version: this.version,
+                columns: parsed,
+                savedAt: new Date().toISOString(),
+                userId: targetUserId,
+              };
+              localStorage.setItem(
+                this.keyFor(tableName, targetUserId),
+                JSON.stringify(payload),
+              );
+              // remove legacy key to avoid double-migration
+              sessionStorage.removeItem(key);
+            }
+          } catch {
+            // ignore parse errors
+          }
+        }
+      }
+
+      // Also check localStorage legacy keys (less likely), but be conservative and only migrate simple arrays
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (!key) continue;
+        if (key.endsWith("-columns") && !key.startsWith(this.keyPrefix)) {
+          const tableName = key.replace(/-columns$/, "");
+          const raw = localStorage.getItem(key);
+          if (!raw) continue;
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              const payload: StoredTableColumns = {
+                version: this.version,
+                columns: parsed,
+                savedAt: new Date().toISOString(),
+                userId: targetUserId,
+              };
+              localStorage.setItem(
+                this.keyFor(tableName, targetUserId),
+                JSON.stringify(payload),
+              );
+              localStorage.removeItem(key);
+            }
+          } catch {
+            // ignore
+          }
+        }
+      }
+    } catch {
+      // ignore storage iteration errors
+    }
+  }
+
+  /**
+   * Attempt to migrate any remaining legacy column keys into the given
+   * authenticated user's namespace. Called once the user identity is known, so
+   * preferences that were migrated (or left) under the anonymous key before the
+   * user ID was available are still discoverable via preferSavedColumns.
+   */
+  migrateLegacyKeysForUser(userId?: string) {
+    if (!userId) {
+      return;
+    }
+    // Migrate any still-present legacy keys directly into the user namespace.
+    this.migrateLegacyKeys(userId);
+
+    // Promote anonymous entries (e.g. migrated before the user ID was known)
+    // into the user namespace, but never overwrite columns the user already
+    // has stored.
+    try {
+      const anonMarker = `.anon.`;
+      const suffix = `.columns.${this.version}`;
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (
+          !key ||
+          !key.startsWith(this.keyPrefix) ||
+          !key.includes(anonMarker) ||
+          !key.endsWith(suffix)
+        ) {
+          continue;
+        }
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const tableName = key.slice(
+          key.indexOf(anonMarker) + anonMarker.length,
+          key.length - suffix.length,
+        );
+        if (this.get(tableName, userId) !== undefined) {
+          continue;
+        }
+        const parsed = JSON.parse(raw) as StoredTableColumns;
+        if (!parsed || !Array.isArray(parsed.columns)) {
+          continue;
+        }
+        const payload: StoredTableColumns = {
+          version: this.version,
+          columns: parsed.columns,
+          savedAt: new Date().toISOString(),
+          userId,
+        };
+        localStorage.setItem(
+          this.keyFor(tableName, userId),
+          JSON.stringify(payload),
+        );
+      }
+    } catch {
+      // ignore storage iteration/parse errors
+    }
+  }
+
+  get(
+    tableName: string,
+    userId?: string,
+  ): StoredTableColumns["columns"] | undefined {
+    try {
+      const raw = localStorage.getItem(this.keyFor(tableName, userId));
+      if (!raw) return undefined;
+      const parsed = JSON.parse(raw) as StoredTableColumns;
+      if (!parsed || !parsed.columns) return undefined;
+      return parsed.columns;
+    } catch (e) {
+      // Parsing or access error — return undefined to let callers fall back
+      return undefined;
+    }
+  }
+
+  set(tableName: string, columns: unknown[], userId?: string) {
+    try {
+      const payload: StoredTableColumns = {
+        version: this.version,
+        columns,
+        savedAt: new Date().toISOString(),
+        userId,
+      };
+      localStorage.setItem(
+        this.keyFor(tableName, userId),
+        JSON.stringify(payload),
+      );
+
+      // notify same-tab subscribers
+      this.change$.next({ tableName, userId, origin: "local" });
+      // other tabs will receive a 'storage' event automatically
+    } catch (e) {
+      // swallow storage errors (private mode, quota)
+    }
+  }
+
+  remove(tableName: string, userId?: string) {
+    try {
+      localStorage.removeItem(this.keyFor(tableName, userId));
+      this.change$.next({ tableName, userId, origin: "local" });
+    } catch (e) {
+      // ignore
+    }
+  }
+}
