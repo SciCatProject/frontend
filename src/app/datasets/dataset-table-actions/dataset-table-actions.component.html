@@ -6,12 +6,25 @@
           (click)="onModeChange(mode)"
           [value]="mode.id"
           [ngClass]="mode.id"
-          [matTooltip]="mode.tooltip ?? ''"
+          [disabled]="isModeDisabled(mode)"
+          [matTooltip]="modeTooltip(mode)"
         >
           {{ mode.label }}
         </mat-button-toggle>
       }
     </mat-button-toggle-group>
+  }
+
+  @if (hasModeCheckbox) {
+    <mat-checkbox
+      class="mode-checkbox"
+      data-cy="dataset-view-mode-checkbox"
+      [class.hidden]="!selectedModeCheckbox"
+      [checked]="currentArchViewModeChecked"
+      (change)="onModeCheckboxChange($event.checked)"
+    >
+      {{ selectedModeCheckbox?.label }}
+    </mat-checkbox>
   }
 </div>
 

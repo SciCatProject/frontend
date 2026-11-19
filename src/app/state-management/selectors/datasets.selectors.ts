@@ -139,6 +139,11 @@ export const selectArchiveViewMode = createSelector(
   (filters) => filters.modeToggle,
 );
 
+export const selectArchiveViewModeChecked = createSelector(
+  selectFilters,
+  (filters) => filters.modeChecked,
+);
+
 export const selectPublicViewMode = createSelector(
   selectFilters,
   (filters) => filters.isPublished,
@@ -228,13 +233,15 @@ export const selectFullqueryParams = createSelector(
   (state) => {
     const filter = state.filters;
     const pagination = state.pagination;
-    // don't query with modeToggle, it's only in filters for persistent routing
+    // don't query with modeToggle and modeChecked, they're only in filters
+    // for persistent routing
     const {
       text,
       skip,
       limit,
       sortField,
       modeToggle,
+      modeChecked,
       mode,
       scientific,
       ...theRest
@@ -272,7 +279,7 @@ export const selectFullfacetParams = createSelector(
   (state, userFilters) => {
     const filter = state.filters;
     const pagination = state.pagination;
-    const { skip, limit, sortField, modeToggle, ...theRest } = {
+    const { skip, limit, sortField, modeToggle, modeChecked, ...theRest } = {
       ...filter,
       ...pagination,
     };
