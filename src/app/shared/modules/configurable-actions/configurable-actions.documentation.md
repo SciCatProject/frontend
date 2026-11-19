@@ -67,7 +67,17 @@ The action configuration is a json object wiuth the following keys:
 - __target__ : if type is set to `form`, it specified if the form should be submitted in the current browser windows/tab or in an another.  
 Please review the offical documentation for this attribute https://www.w3schools.com/TAgs/att_form_target.asp
   - _Type_: string  
+  - _Allowed values_: `_blank`, `_self`, `_parent`, `_top`, `iframe`
   - _Example_: ": "_blank",
+  - _Notes_: setting `target` to `iframe` routes the action into a managed `<iframe>` instead of navigating a browser window/tab — see [Iframe target](#iframe-target-showing-action-responses-in-page) below. Supported by `type: "form"` (the default, or a `dialog` whose `onSuccess` is `form`), which submits the form into the iframe, and by `type: "link"`, which navigates the iframe via `window.open(url, iframeName)` instead of opening a new tab.
+- __iframeConfig__: configuration for the iframe used when `target` is `iframe`. Ignored otherwise.  
+  - _Type_: object
+  - _Optional_: true — if omitted while `target: "iframe"` is set, a visible iframe panel named `configurable-action-<id>` is used.
+  - _Fields_:
+    - `name` (string): unique name for the iframe/target window. Becomes the `<iframe>`'s `name` and the form's `target`. Must be unique among the actions rendered together.
+    - `title` (string): text shown in the panel header when the iframe is visible. Defaults to `name`.
+    - `hidden` (boolean, default `false`): when `false` or omitted, a visible panel opens showing the response. Set to `true` to submit into a headless iframe that is never shown to the user.
+    - `width` / `height` (string): CSS size of the visible panel. Ignored when `hidden` is `true`. Default `"90vw"` / `"70vh"`.
 - __enabled__: condition when the action can be triggered and the related button should be active.  
   The string may contains the keywords listed below and any logical expression of them.  
   It can also be an object with a list of `conditions` that must all hold, to show tooltips: while disabled, the `disabledTooltip` of the first condition that fails is shown; while enabled, `enabledTooltip` is shown, e.g. to warn about what the action may do. An empty list means always enabled.  
@@ -316,6 +326,44 @@ Configuration
   ]
 }
 ```
+
+## Iframe target: showing action responses in-page
+
+Setting `target: "iframe"` on a `form`-type or `link`-type action routes it into a same-page `<iframe>` managed by the component instead of navigating a browser window/tab. This is useful for endpoints that render a response (a preview, a status page) that you want to show without leaving the current view, or for triggering a server-side effect (a redirect, a file generation) without any visible navigation at all.
+
+- For `type: "form"`, the form element is submitted with the iframe's name as its `target`.
+- For `type: "link"`, `window.open(url, iframeName)` is called — since a browsing context (the iframe) with that name already exists in the page, the browser navigates it in place instead of opening a new window, the same way `<a target="frameName">` would.
+
+By default (`iframeConfig.hidden` omitted or `false`) the iframe is shown: the component renders a floating panel over the page, sized by `iframeConfig.width`/`height` (default `90vw`/`70vh`), with a header showing `iframeConfig.title` (defaults to `name` if no title is set) and two buttons:
+- **Open in new tab**: for a `form` action, re-submits the same form with `target="_blank"` (restoring the original `target` afterwards) — the iframe's current URL cannot be read across origins, so the request is sent again, whatever its `method`; for a `link` action, opens the exact URL that was loaded in the iframe (tokens such as `#uuid` are not regenerated) with `window.open(url, "_blank")`. Either way, the user gets the response in a real browser tab.
+- **Close**: hides the panel. The underlying `<iframe>` element is kept in background so a later action reusing the same iframe action `iframeConfig.name` keeps a target to submit into.
+
+Set `iframeConfig.hidden: true` for a headless iframe instead: the form/link has somewhere to submit/navigate to, but nothing is shown to the user.
+
+While waiting for the iframe's first `load` event after a submission, a loading spinner is shown in place of the (blank) iframe content.
+
+Example:
+```json
+{
+  "id": "3cd1e6fa-1f1a-11f0-8f3f-8f6a2c9d7b21",
+  "label": "Preview Notebook",
+  "type": "form",
+  "target": "iframe",
+  "url": "https://www.scicat.info/notebook/preview",
+  "iframeConfig": {
+    "name": "notebook-preview-frame",
+    "title": "Notebook preview",
+    "hidden": false,
+    "width": "80vw",
+    "height": "80vh"
+  }
+}
+```
+
+A few things worth noting:
+- **`iframeConfig.name` must be unique** among the actions rendered together in the same view — it is used both as the `<iframe>` element's `name` and as the form's `target`/window name. Reusing a name across two different actions means they submit into (and overwrite) the same iframe.
+- **The target site must allow being framed.** CORS does not apply to iframe navigations, but a site sending `X-Frame-Options: DENY`/`SAMEORIGIN` or a CSP `frame-ancestors` that excludes the SciCat origin is refused by the browser: the panel shows the browser's own error page (e.g. "refused to connect"). The component cannot detect this (the iframe is cross-origin), so the user has to use **Open in new tab**. The same applies to an `http://` URL embedded in an `https://` SciCat (blocked as mixed content).
+- **Other action types ignore `target`.** `xhr`, `json-download`, and `dialog` (unless its `onSuccess` is `form`) don't go through `typeForm`/`typeLink`, so `target: "iframe"` has no effect on them.
 
 ## Batch actions: migrating from the hardcoded Archive/Retrieve buttons
 
