@@ -56,21 +56,21 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
   ];
 
   const authTestConfigNoIndicator = {
-    datasetDetailComponent: {
-      enableCustomizedComponent: true,
+    componentCustomization: { dataset: {
+      enabled: true,
       tileRestrictedIconVisible: false,
       tileRestrictedIconGroups: [],
       customization: baseCustomization,
-    },
+    } },
   };
 
   const authTestConfigWithIndicator = {
-    datasetDetailComponent: {
-      enableCustomizedComponent: true,
+    componentCustomization: { dataset: {
+      enabled: true,
       tileRestrictedIconVisible: true,
       tileRestrictedIconGroups: ["admin"],
       customization: baseCustomization,
-    },
+    } },
   };
 
   const adminUsername = Cypress.env("username");
@@ -85,7 +85,7 @@ describe("1010: Dataset Detail Dynamic Tile Authorization", () => {
 
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-        baseConfig.datasetDetailComponent.customization = [];
+        baseConfig.componentCustomization.dataset.customization = [];
         const mergedConfig = mergeConfig(baseConfig, authTestConfigNoIndicator);
         cy.intercept("GET", "**/admin/config", mergedConfig).as(
           "getFrontendConfigNoIndicator",

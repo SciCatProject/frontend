@@ -10,12 +10,12 @@ import {
 import { buildDefaultBatchActions } from "shared/modules/configurable-actions/configurable-actions.defaults";
 import { DEFAULT_DATASET_VIEW_MODES } from "datasets/dataset-view-modes.defaults";
 import {
-  DatasetDetailComponentConfig,
+  ComponentCustomizationConfig,
   DatasetViewsConfig,
   IngestorComponentConfig,
+  LabelMaps,
   LabelsLocalization,
   ListSettings,
-  TableColumn,
 } from "state-management/models";
 
 export interface OAuth2Endpoint {
@@ -28,20 +28,6 @@ export class RetrieveDestinations {
   location?: string | null;
   option = "";
   tooltip?: string | null;
-}
-
-export class HelpMessages {
-  ingestManual: string;
-  gettingStarted: string;
-
-  constructor(
-    gettingStarted = "gives a brief description on how to get started using the data catalog.",
-    ingestManual = `provides detailed information on how to make your data available to the
-    catalog as well as archiving and retrieval of datasets.`,
-  ) {
-    this.gettingStarted = gettingStarted;
-    this.ingestManual = ingestManual;
-  }
 }
 
 export enum MainPageOptions {
@@ -128,11 +114,28 @@ export interface DatasetDetailsTabsInclude {
   details?: DatasetIncludeField[];
 }
 
+export interface ActionGroupConfig {
+  enabled?: boolean;
+  actions?: ActionConfig[];
+}
+
+// Configurable actions, one group per component that renders them.
+export interface ConfigurableActionsConfig {
+  datasetDetails?: ActionGroupConfig;
+  datafiles?: ActionGroupConfig;
+  batch?: ActionGroupConfig;
+}
+
+// Default columns/filters/conditions of the list pages.
+export interface DefaultSettingsConfig {
+  datasets?: ListSettings;
+  proposals?: ListSettings;
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   addScientificMetadataKeysAsColumn?: boolean;
   skipSciCatLoginPageEnabled?: boolean;
-  accessTokenPrefix: string;
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
   datasetJsonScientificMetadata: boolean;
@@ -142,18 +145,10 @@ export interface AppConfigInterface {
   datasetRelationshipsEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
   datasetDetailsTabsInclude?: DatasetDetailsTabsInclude;
-  datasetActionsEnabled: boolean;
-  datasetActions: ActionConfig[];
-  datafilesActionsEnabled: boolean;
-  datafilesActions: ActionConfig[];
-  datasetDetailsActionsEnabled: boolean;
-  datasetDetailsActions: ActionConfig[];
-  datasetSelectionActionsEnabled: boolean;
-  datasetSelectionActions: ActionConfig[];
+  datasetStatusBanner?: DatasetStatusBannerConfig;
+  configurableActions?: ConfigurableActionsConfig;
   editDatasetEnabled: boolean;
-  editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
-  editPublishedData: boolean;
   addSampleEnabled: boolean;
   externalAuthEndpoint: string | null;
   facility: string | null;
@@ -163,33 +158,24 @@ export interface AppConfigInterface {
   loginFacilityEnabled: boolean;
   loginLdapEnabled: boolean;
   loginLocalEnabled: boolean;
-  fileColorEnabled: boolean;
   fileDownloadEnabled: boolean;
-  gettingStarted: string | null;
-  ingestManual: string | null;
   jobsEnabled: boolean;
   jsonMetadataEnabled: boolean;
   jupyterHubUrl: string | null;
   landingPage: string | null;
   lbBaseURL: string;
-  localColumns?: TableColumn[]; // localColumns is deprecated and should be removed in the future
   logbookEnabled: boolean;
   loginFormEnabled: boolean;
   maxDirectDownloadSize: number | null;
-  metadataPreviewEnabled: boolean;
   metadataStructure: string;
   metadataFloatFormat?: MetadataFloatFormat;
   metadataFloatFormatEnabled?: boolean;
-  multipleDownloadAction: string | null;
-  multipleDownloadEnabled: boolean;
-  multipleDownloadUseAuthToken: boolean;
   oAuth2Endpoints: OAuth2Endpoint[];
   policiesEnabled: boolean;
   retrieveDestinations?: RetrieveDestinations[];
   riotBaseUrl: string | null;
   scienceSearchEnabled: boolean;
   scienceSearchUnitsEnabled: boolean;
-  searchPublicDataEnabled: boolean;
   searchSamples: boolean;
   sftpHost: string | null;
   sourceFolder?: string;
@@ -204,25 +190,21 @@ export interface AppConfigInterface {
   siteLoginLogo: string | null;
   tableSciDataEnabled: boolean;
   fileserverBaseURL: string;
-  fileserverButtonLabel: string | undefined;
-  helpMessages?: HelpMessages;
   notificationInterceptorEnabled: boolean;
-  pidSearchMethod?: string;
   metadataEditingUnitListDisabled?: boolean;
-  defaultDatasetsListSettings?: ListSettings;
-  defaultProposalsListSettings?: ListSettings;
+  defaultSettings?: DefaultSettingsConfig;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
-  datasetDetailComponent?: DatasetDetailComponentConfig;
+  componentCustomization?: ComponentCustomizationConfig;
   labelsLocalization?: LabelsLocalization;
+  // Display names of the filter components, keyed by component name.
+  labelMaps?: LabelMaps;
   dateFormat?: string;
   timezone?: string;
   defaultMainPage?: MainPageConfiguration;
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
-  supportEmail?: string;
   hideEmptyMetadataTable?: boolean;
-  datasetStatusBanner?: DatasetStatusBannerConfig;
   ingestorComponent?: IngestorComponentConfig;
   defaultTab?: DefaultTab;
   statusBannerMessage?: string;
@@ -230,8 +212,6 @@ export interface AppConfigInterface {
   autoApplyFilters?: boolean;
   helpSettings?: HelpSettings;
   aboutSettings?: AboutSettings;
-  batchActionsEnabled?: boolean;
-  batchActions?: ActionConfig[];
   datasetViews?: DatasetViewsConfig;
   realTimeUpdatesEnabled?: boolean;
   additionalConfigs?: string[];
@@ -248,29 +228,38 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
 }
 
 /**
- * Deployments whose config predates batchActionsEnabled/batchActions never
- * had a reason to set that flag, so a falsy batchActionsEnabled (missing, or
- * explicitly false) is indistinguishable from "hasn't been configured yet".
+ * Deployments whose config predates configurableActions.batch never had a reason to set
+ * configurableActions.batch.enabled, so a falsy value (missing, or explicitly false) is
+ * indistinguishable from "hasn't been configured yet".
  * archiveWorkflowEnabled is the flag that gated the old hardcoded Archive/
  * Retrieve buttons, so as long as it's true, default to the built-in
  * Archive/Retrieve actions in that case, restoring the old behavior instead
- * of silently losing it. Only an explicitly truthy batchActionsEnabled (a
- * deployment that has set up its own batchActions) is left untouched.
+ * of silently losing it. Only an explicitly truthy configurableActions.batch.enabled (a
+ * deployment that has set up its own configurableActions.batch.actions) is left untouched.
  */
 function applyDefaultBatchActions(config: AppConfigInterface): void {
-  if (!config.archiveWorkflowEnabled || config.batchActionsEnabled) return;
-  config.batchActionsEnabled = true;
-  config.batchActions = buildDefaultBatchActions(
-    (config.retrieveDestinations ?? []).map((destination) => ({
-      option: destination.option,
-      tooltip: destination.tooltip ?? undefined,
-    })),
-  );
+  if (
+    !config.archiveWorkflowEnabled ||
+    config.configurableActions?.batch?.enabled
+  )
+    return;
+  config.configurableActions = {
+    ...config.configurableActions,
+    batch: {
+      enabled: true,
+      actions: buildDefaultBatchActions(
+        (config.retrieveDestinations ?? []).map((destination) => ({
+          option: destination.option,
+          tooltip: destination.tooltip ?? undefined,
+        })),
+      ),
+    },
+  };
 }
 
 const CONFIG_URL = "/assets/config.json";
 const CONFIG_OVERRIDE_URL = "/assets/config.override.json";
-const MAX_ADDITIONAL_CONFIGS = 3;
+const MAX_ADDITIONAL_CONFIGS = 6;
 
 // Custom merge to replace arrays instead of merging them
 function mergeConfigs(
@@ -488,12 +477,13 @@ export class AppConfigService {
       };
     }
 
-    if (config.datasetDetailComponent) {
-      config.datasetDetailComponent.tileRestrictedIconVisible =
-        config.datasetDetailComponent.tileRestrictedIconVisible ?? false;
+    const datasetCustomization = config.componentCustomization?.dataset;
+    if (datasetCustomization) {
+      datasetCustomization.tileRestrictedIconVisible =
+        datasetCustomization.tileRestrictedIconVisible ?? false;
 
-      config.datasetDetailComponent.tileRestrictedIconGroups = config
-        .datasetDetailComponent.tileRestrictedIconGroups ?? ["admin"];
+      datasetCustomization.tileRestrictedIconGroups =
+        datasetCustomization.tileRestrictedIconGroups ?? ["admin"];
     }
 
     applyDefaultBatchActions(config);

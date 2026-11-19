@@ -4,26 +4,24 @@
     "authenticatedUser": "PROPOSALS"
   },
   "autoApplyFilters": false,
-  "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": false,
   "allowConfigOverrides": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "datasetRelationshipsEnabled": true,
+  "datasetDetailsShowMissingProposalId": false,
   "datasetDetailsTabsInclude": {
     "details": ["proposals", "samples", "instruments", "attachments"]
   },
   "datasetJsonScientificMetadata": true,
   "editDatasetEnabled": true,
-  "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
-  "editPublishedData": true,
   "addSampleEnabled": false,
   "externalAuthEndpoint": "/api/v3/auth/msad",
   "facility": "SciCat Vanilla CI Test",
-  "siteIcon": "site-header-logo.png",
+  "siteHeaderLogo": "site-header-logo.png",
   "siteHeaderLogoUrl": "https://my.facility.site",
-  "sitetitle": "SciCat FE CI repo",
+  "siteTitle": "SciCat FE CI repo",
   "siteSciCatLogo": "full",
   "loginFacilityLabel": "SciCat Vanilla",
   "loginLdapLabel": "Ldap",
@@ -31,10 +29,7 @@
   "loginFacilityEnabled": true,
   "loginLdapEnabled": true,
   "loginLocalEnabled": true,
-  "fileColorEnabled": true,
   "fileDownloadEnabled": true,
-  "gettingStarted": null,
-  "ingestManual": null,
   "jobsEnabled": true,
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "",
@@ -53,10 +48,7 @@
   "logbookEnabled": true,
   "loginFormEnabled": true,
   "thumbnailFetchLimitPerPage": 100,
-  "metadataPreviewEnabled": true,
   "metadataStructure": "",
-  "multipleDownloadAction": "http:/localhost/zip",
-  "multipleDownloadEnabled": true,
   "oAuth2Endpoints": [
     {
       "authURL": "api/v3/auth/oidc",
@@ -68,7 +60,6 @@
   "riotBaseUrl": "",
   "scienceSearchEnabled": true,
   "scienceSearchUnitsEnabled": true,
-  "searchPublicDataEnabled": true,
   "searchSamples": true,
   "sftpHost": "",
   "shareEnabled": true,
@@ -78,12 +69,13 @@
   "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,
   "tableSciDataEnabled": true,
-  "datasetDetailsShowMissingProposalId": false,
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,
   "hideEmptyMetadataTable": false,
-  "datafilesActionsEnabled": true,
-  "datafilesActions": [
+  "configurableActions": {
+    "datafiles": {
+      "enabled": true,
+      "actions": [
     {
       "id": "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       "description": "This action let users download all files using the zip service",
@@ -106,10 +98,7 @@
         "directory[]": "@folder",
         "files[]": "@files"
       },
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ]
+          "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "3072fafc-4363-11ef-b9f9-ebf568222d26",
@@ -136,10 +125,7 @@
         "files[]": "@files"
       },
       "enabled": "#Length(@files) && #MaxDownloadableSize(@totalSize)",
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ]
+          "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "4f974f0e-4364-11ef-9c63-03d19f813f4e",
@@ -165,10 +151,7 @@
         "directory[]": "@folder",
         "files[]": "@files"
       },
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ]
+          "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
@@ -194,10 +177,7 @@
         "files[]": "@files"
       },
       "enabled": "#Length(@files) > 0",
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ]
+          "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "0cd5b592-0b1a-11f0-a42c-23e177127ee7",
@@ -209,10 +189,7 @@
       "icon": "/assets/icons/jupyter_logo.png",
       "url": "http://localhost:5000/notebook/all/json",
       "target": "_blank",
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ],
+          "authorization": ["#datasetAccess", "#datasetPublic"],
       "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0FilesPath",
@@ -231,10 +208,7 @@
       "url": "http://localhost:5000/notebook/selected/json",
       "target": "_blank",
       "enabled": "#Length(@files) > 0",
-      "authorization": [
-        "#datasetAccess",
-        "#datasetPublic"
-      ],
+          "authorization": ["#datasetAccess", "#datasetPublic"],
       "variables": {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0SelectedFilesPath",
@@ -298,11 +272,12 @@
       "url": "http://localhost:5000/external",
       "target": "_blank"
     }
-  ],
-  "datasetDetailsActionsEnabled": false,
-  "datasetDetailsActions": [],
-  "selectionActionsEnabled": true,
-  "selectionActions": [],
+      ]
+    },
+    "datasetDetails": {
+      "enabled": true
+    }
+  },
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",
@@ -314,7 +289,8 @@
       "TextFilter": "Text"
     }
   },
-  "defaultDatasetsListSettings": {
+  "defaultSettings": {
+    "datasets": {
     "columns": [
       {
         "name": "select",
@@ -576,7 +552,7 @@
     ],
     "conditions": []
   },
-  "defaultProposalsListSettings": {
+    "proposals": {
     "columns": [
       {
         "name": "proposalId",
@@ -682,6 +658,7 @@
         "enabled": true
       }
     ]
+    }
   },
   "labelsLocalization": {
     "dataset": {
@@ -734,12 +711,11 @@
   },
   "dateFormat": "yyyy-MM-dd HH:mm",
   "timezone": "UTC",
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": false,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": false,
     "tileRestrictedIconVisible": true,
-    "tileRestrictedIconGroups": [
-      "admin"
-    ],
+      "tileRestrictedIconGroups": ["admin"],
     "customization": [
       {
         "type": "regular",
@@ -748,9 +724,7 @@
         "row": 1,
         "col": 10,
         "visible": true,
-        "authorization": [
-          "admin"
-        ],
+          "authorization": ["admin"],
         "fields": [
           {
             "element": "text",
@@ -792,9 +766,7 @@
         "row": 1,
         "col": 10,
         "visible": true,
-        "authorization": [
-          "archivemanager"
-        ],
+          "authorization": ["archivemanager"],
         "fields": [
           {
             "element": "text",
@@ -1010,6 +982,7 @@
         "row": 2
       }
     ]
+    }
   },
   "mainMenu": {
     "nonAuthenticatedUser": {

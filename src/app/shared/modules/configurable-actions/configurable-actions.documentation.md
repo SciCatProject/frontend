@@ -5,8 +5,26 @@ The button can be configured with text or icon or both.
 At the moment there are only two kind of actions: form and json-download.
 
 ## Configuration
-The configuration of the datafiles actions is done by adding an array of action objects under the __datafilesActions__ key of the SciCat frontend configuration file.
-Each object in the array configure one action.
+
+Configurable actions are grouped per component under the **configurableActions** key of the SciCat frontend configuration file. Each group has an `enabled` flag and an `actions` array, and each object in the array configures one action:
+
+| Group                                | Rendered in                                          |
+| ------------------------------------ | ---------------------------------------------------- |
+| `configurableActions.datafiles`      | the "Datafiles" tab of the dataset details page      |
+| `configurableActions.datasetDetails` | the header of the customized dataset details page    |
+| `configurableActions.batch`          | the dataset list selection and the batch (cart) page |
+
+```json
+{
+  "configurableActions": {
+    "datafiles": { "enabled": true, "actions": [] },
+    "datasetDetails": { "enabled": true, "actions": [] },
+    "batch": { "enabled": true, "actions": [] }
+  }
+}
+```
+
+The former flat keys (`datafilesActionsEnabled`, `datafilesActions`, `datasetActions`, `batchActionsEnabled`, `batchActions`) are still read and migrated to this structure when the configuration is loaded, with a deprecation warning in the console. The `datasetDetails` actions used to be gated by `datafilesActionsEnabled`; the migration keeps that behavior. `datasetDetailsActions` and `datasetSelectionActions` were never used and are ignored.
 
 ## Individual action configuration
 The action configuration is a json object wiuth the following keys:
@@ -220,7 +238,10 @@ The configuration below will create the following 5 buttons under the "Datafiles
 Configuration
 ```
 {
-  "datafilesActions" : [
+  "configurableActions": {
+   "datafiles": {
+    "enabled": true,
+    "actions" : [
     {
       "id": "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       "order": 5,
@@ -315,29 +336,31 @@ Configuration
     }
   ]
 }
+  }
+}
 ```
 
 ## Batch actions: migrating from the hardcoded Archive/Retrieve buttons
 
-Before configurable actions existed, the "Archive" and "Retrieve" buttons on the dataset selection/batch view were hardcoded Angular components (`ArchivingService`, `onArchive()`/`onRetrieve()`) that dispatched `submitJobAction` to the store, which the Jobs effects then POSTed to the Jobs API. That code has been removed. Archive/Retrieve are now just another pair of configurable actions, driven by two new keys on the app config:
+Before configurable actions existed, the "Archive" and "Retrieve" buttons on the dataset selection/batch view were hardcoded Angular components (`ArchivingService`, `onArchive()`/`onRetrieve()`) that dispatched `submitJobAction` to the store, which the Jobs effects then POSTed to the Jobs API. That code has been removed. Archive/Retrieve are now just another pair of configurable actions, driven by two keys on the app config:
 
-- `batchActionsEnabled` (boolean): shows a `<configurable-actions>` row (gated the same way as `datafilesActionsEnabled`, `datasetDetailsActionsEnabled`, etc.) wherever batch/selection actions are rendered.
-- `batchActions` (`ActionConfig[]`): the actions rendered in that row.
+- `configurableActions.batch.enabled` (boolean): shows a `<configurable-actions>` row (gated the same way as the other `configurableActions` groups) wherever batch/selection actions are rendered.
+- `configurableActions.batch.actions` (`ActionConfig[]`): the actions rendered in that row.
 
-**You do not need to configure anything to keep the old behavior.** `AppConfigService.loadAppConfig()` calls `applyDefaultBatchActions(config)` (see `app-config.service.ts`), which defaults `batchActionsEnabled: true` and `batchActions` to the built-in Archive/Retrieve actions (defined in `configurable-actions.defaults.ts`, see below) whenever:
+**You do not need to configure anything to keep the old behavior.** `AppConfigService.loadAppConfig()` calls `applyDefaultBatchActions(config)` (see `app-config.service.ts`), which defaults `configurableActions.batch.enabled: true` and `configurableActions.batch.actions` to the built-in Archive/Retrieve actions (defined in `configurable-actions.defaults.ts`, see below) whenever:
 
 - `archiveWorkflowEnabled` is `true` — the same flag that gated the old hardcoded Archive/Retrieve buttons (`@if (appConfig.archiveWorkflowEnabled)` in `batch-view.component.html` and `dataset-table-actions.component.html`), **and**
-- `batchActionsEnabled` is falsy — either absent from your config (the common case for any config written before this feature existed) or explicitly set to `false`.
+- `configurableActions.batch.enabled` is falsy — either absent from your config (the common case for any config written before this feature existed) or explicitly set to `false`.
 
-If your config already sets `batchActionsEnabled: true` with its own `batchActions`, it is left untouched — the defaults only fill the gap for configs that haven't opted in yet. Note that `batchActionsEnabled: false` alone does **not** disable batch actions when `archiveWorkflowEnabled` is `true` — it's treated the same as "not configured yet", and the defaults still apply. To render no batch actions while keeping `archiveWorkflowEnabled` true for other purposes, opt in explicitly with an empty array: `"batchActionsEnabled": true, "batchActions": []` — that satisfies the truthy check, so the defaulting logic is skipped and the `<configurable-actions>` row simply has nothing to render.
+If your config already sets `configurableActions.batch.enabled: true` with its own `configurableActions.batch.actions`, it is left untouched — the defaults only fill the gap for configs that haven't opted in yet. Note that `configurableActions.batch.enabled: false` alone does **not** disable batch actions when `archiveWorkflowEnabled` is `true` — it's treated the same as "not configured yet", and the defaults still apply. To render no batch actions while keeping `archiveWorkflowEnabled` true for other purposes, opt in explicitly with an empty array: `"configurableActions": { "batch": { "enabled": true, "actions": [] } }` — that satisfies the truthy check, so the defaulting logic is skipped and the `<configurable-actions>` row simply has nothing to render.
 
 The built-in Retrieve action's dialog also pulls its destination options directly from your existing `retrieveDestinations` config (the same key the old retrieve dialog used) — see `applyDefaultBatchActions` in `app-config.service.ts`, which maps `retrieveDestinations` to `{option, tooltip}` pairs before building the defaults. You do not need to duplicate destinations anywhere.
 
-If you want to fully customize Archive/Retrieve (different URL, extra fields, different labels), set `batchActionsEnabled: true` and provide your own `batchActions` array using the same shape as any other action config — see the examples below.
+If you want to fully customize Archive/Retrieve (different URL, extra fields, different labels), set `configurableActions.batch.enabled: true` and provide your own `configurableActions.batch.actions` array using the same shape as any other action config — see the examples below.
 
 ## Example configurations: Archive and Retrieve
 
-These are the actual built-in defaults (from `configurable-actions.defaults.ts`), reproduced here as a starting point for a custom `batchActions` array. Both submit directly to the Jobs API (`POST {apiBaseUrl}/api/v3/jobs`) with the same request shape the old `ArchivingService` used to build (`jobParams`, `emailJobInitiator`, `datasetList`, `type`).
+These are the actual built-in defaults (from `configurable-actions.defaults.ts`), reproduced here as a starting point for a custom `configurableActions.batch.actions` array. Both submit directly to the Jobs API (`POST {apiBaseUrl}/api/v3/jobs`) with the same request shape the old `ArchivingService` used to build (`jobParams`, `emailJobInitiator`, `datasetList`, `type`).
 
 ```json
 {
@@ -428,7 +451,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
 
 A few things worth noting if you adapt these:
 - `#apiBaseUrl` resolves to the SDK's own `Configuration.basePath` (the base URL every SDK service, e.g. `JobsService`, actually sends requests to) rather than reading `lbBaseURL` off the app config directly — this stays correct even if the two ever diverge. There's no generic "read any app config field" selector; `#apiBaseUrl` is the one dedicated selector for the API's base URL.
-- The `option` field's `options` is left empty (`[]`) in a custom config on purpose if you rely on `retrieveDestinations`; only the *built-in default* Retrieve action gets it auto-populated by `applyDefaultBatchActions`. A custom `batchActions` entry must supply its own `options` (statically, or by referencing `retrieveDestinations` yourself if you re-add that wiring).
+- The `option` field's `options` is left empty (`[]`) in a custom config on purpose if you rely on `retrieveDestinations`; only the *built-in default* Retrieve action gets it auto-populated by `applyDefaultBatchActions`. A custom `configurableActions.batch.actions` entry must supply its own `options` (statically, or by referencing `retrieveDestinations` yourself if you re-add that wiring).
 - `#DatasetsPidEmptyFilesMap` already returns a JSON-stringified array, so it's interpolated as `{{ @datasetList }}` (no trailing `[]`) — using `{{ @datasetList[] }}` here would double-encode it.
 - **Archive is a plain confirmation dialog, not a data-collecting one.** `type: "dialog"` + `onSuccess: "xhr"` with `dialog.fields: []` (no fields at all) renders just the title/description and Cancel/Ok buttons — clicking Ok closes the dialog with a truthy (but empty) result, which is enough to trigger the `onSuccess` step; clicking Cancel closes with no result and nothing further happens. This is the pattern to reach for whenever you want a "are you sure?" prompt without asking the user for any input — compare to Retrieve, which uses the same `type`/`onSuccess` pair but adds a real `option` field to actually collect a value.
 - **These same two actions render on both the dataset list page (`dataset-table-actions`, which sets `currentArchViewMode`) and the cart (`batch-view`, which does not) — the `hidden` expression has two jobs, one per context, and every entry in the `.includes([...])` array is load-bearing:**
@@ -445,7 +468,7 @@ Every dataset in the cart records where it was added from, as `addedFrom`:
 
 `details` and `publishedData` are reserved, so don't use them as view `id`s.
 
-Actions read it with `#DatasetsField[addedFrom]`, one value per dataset. The built-in Archive/Retrieve actions don't use it, so the cart behaves as before. A deployment that wants the cart to give the same guarantee as the dataset list, where Archive is only shown in the `archivable` view, can add the check to its own `batchActions`:
+Actions read it with `#DatasetsField[addedFrom]`, one value per dataset. The built-in Archive/Retrieve actions don't use it, so the cart behaves as before. A deployment that wants the cart to give the same guarantee as the dataset list, where Archive is only shown in the `archivable` view, can add the check to its own `configurableActions.batch.actions`:
 
 ```json
 "variables": {

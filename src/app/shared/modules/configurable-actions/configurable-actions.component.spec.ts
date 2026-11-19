@@ -100,7 +100,6 @@ describe("1010: ConfigurableActionsComponent", () => {
   it("0055: max file size should fallback to zero when not configured", () => {
     const config = mockAppConfigService.appConfig as {
       maxDirectDownloadSize?: number;
-      datafilesActionsEnabled: boolean;
     };
     config.maxDirectDownloadSize = undefined;
 

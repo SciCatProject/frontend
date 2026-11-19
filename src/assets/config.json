@@ -1,5 +1,4 @@
 {
-  "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": false,
   "addScientificMetadataKeysAsColumn": false,
   "allowConfigOverrides": true,
@@ -10,14 +9,12 @@
   "datasetPageSizeOptions": [5, 10, 25, 100],
   "paginationPosition": "both",
   "editDatasetEnabled": true,
-  "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
-  "editPublishedData": true,
   "addSampleEnabled": true,
   "externalAuthEndpoint": "/auth/msad",
   "facility": "SciCat FE vanilla",
-  "siteIcon": "site-header-logo.png",
-  "sitetitle": "SciCat FE repo",
+  "siteHeaderLogo": "site-header-logo.png",
+  "siteTitle": "SciCat FE repo",
   "siteSciCatLogo": "full",
   "loginFacilityLabel": "SciCat Vanilla",
   "loginLdapLabel": "Ldap",
@@ -25,13 +22,10 @@
   "loginFacilityEnabled": true,
   "loginLdapEnabled": false,
   "loginLocalEnabled": true,
-  "fileColorEnabled": true,
   "fileDownloadEnabled": true,
-  "gettingStarted": null,
-  "ingestManual": null,
   "jobsEnabled": true,
   "jsonMetadataEnabled": true,
-  "JupyterHubUrl": "",
+  "jupyterHubUrl": "",
   "landingPage": "doi.ess.eu/detail/",
   "lbBaseURL": "http://127.0.0.1:3000",
   "ingestorComponent": {
@@ -47,10 +41,7 @@
   "logbookEnabled": true,
   "loginFormEnabled": true,
   "thumbnailFetchLimitPerPage": 100,
-  "metadataPreviewEnabled": true,
   "metadataStructure": "",
-  "multipleDownloadAction": "http://localhost:3012/zip",
-  "multipleDownloadEnabled": true,
   "oAuth2Endpoints": [
     {
       "authURL": "api/v3/auth/oidc",
@@ -62,7 +53,6 @@
   "riotBaseUrl": "http://scichat.swap.ess.eu",
   "scienceSearchEnabled": false,
   "scienceSearchUnitsEnabled": true,
-  "searchPublicDataEnabled": true,
   "searchSamples": true,
   "sftpHost": "your.sftp.server",
   "shareEnabled": true,
@@ -76,9 +66,6 @@
   "datasetDetailsTabsInclude": {
     "details": ["attachments"]
   },
-  "notificationInterceptorEnabled": true,
-  "metadataEditingUnitListDisabled": true,
-  "hideEmptyMetadataTable": false,
   "datasetStatusBanner": {
     "enabled": true,
     "rules": [
@@ -96,8 +83,13 @@
       }
     ]
   },
-  "datafilesActionsEnabled": true,
-  "datafilesActions": [
+  "notificationInterceptorEnabled": true,
+  "metadataEditingUnitListDisabled": true,
+  "hideEmptyMetadataTable": false,
+  "configurableActions": {
+    "datafiles": {
+      "enabled": true,
+      "actions": [
     {
       "id": "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       "description": "This action let users download all files using the zip service",
@@ -294,11 +286,13 @@
       "url": "https://ess.eu",
       "target": "_blank"
     }
-  ],
-  "datasetDetailsActionsEnabled": false,
-  "datasetDetailsActions": [],
-  "selectionActionsEnabled": true,
-  "selectionActions": [],
+      ]
+    },
+    "datasetDetails": {
+      "enabled": true,
+      "actions": []
+    }
+  },
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",
@@ -310,7 +304,8 @@
       "TextFilter": "Text"
     }
   },
-  "defaultDatasetsListSettings": {
+  "defaultSettings": {
+    "datasets": {
     "columns": [
       {
         "name": "select",
@@ -573,7 +568,7 @@
     ],
     "conditions": []
   },
-  "defaultProposalsListSettings": {
+    "proposals": {
     "columns": [
       {
         "name": "proposalId",
@@ -675,6 +670,7 @@
         "enabled": true
       }
     ]
+    }
   },
   "labelsLocalization": {
     "dataset": {
@@ -727,8 +723,9 @@
   },
   "dateFormat": "yyyy-MM-dd HH:mm",
   "timezone": "UTC",
-  "datasetDetailComponent": {
-    "enableCustomizedComponent": false,
+  "componentCustomization": {
+    "dataset": {
+      "enabled": false,
     "tileRestrictedIconVisible": false,
     "tileRestrictedIconGroups": ["admin"],
     "customization": [
@@ -922,6 +919,7 @@
         "row": 2
       }
     ]
+    }
   },
   "defaultMainPage": {
     "nonAuthenticatedUser": "DATASETS",

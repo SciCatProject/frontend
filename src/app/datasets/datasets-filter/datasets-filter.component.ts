@@ -113,7 +113,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             // Apply default filter type from app config if available
             // This is to handle the case when site admin changed the filter type
             // whereas user settings still have the old filter type
-            this.appConfig.defaultDatasetsListSettings?.filters?.forEach(
+            this.appConfig.defaultSettings?.datasets?.filters?.forEach(
               (defaultFilter) => {
                 if (filter.key === defaultFilter.key) {
                   filter.type = defaultFilter.type;

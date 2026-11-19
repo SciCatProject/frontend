@@ -155,7 +155,7 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
         }
 
         const defaultConfigColumns =
-          this.appConfig?.defaultDatasetsListSettings?.columns || [];
+          this.appConfig?.defaultSettings?.datasets?.columns || [];
 
         const userTableConfigColumns =
           this.datasetsListService.convertSavedDatasetColumns(

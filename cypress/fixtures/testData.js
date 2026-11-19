@@ -212,8 +212,8 @@ export const testConfig = {
         "Section Label Dataset JsonView": "Test Section Dataset JsonView",
       },
     },
-    datasetDetailComponent: {
-      enableCustomizedComponent: true,
+    componentCustomization: { dataset: {
+      enabled: true,
       customization: [
         {
           type: "attachments",
@@ -287,7 +287,7 @@ export const testConfig = {
           col: 10,
         },
       ],
-    },
+    } },
   },
   defaultDetailViewComponent: {
     labelsLocalization: {
@@ -301,10 +301,10 @@ export const testConfig = {
         "Creator Information": "Creator Information",
       },
     },
-    datasetDetailComponent: {
-      enableCustomizedComponent: false,
+    componentCustomization: { dataset: {
+      enabled: false,
       customization: [],
-    },
+    } },
   },
   proposalViewCustomLabels: {
     labelsLocalization: {
@@ -320,7 +320,7 @@ export const testConfig = {
         pi_lastname: "PI Last Name",
       },
     },
-    defaultProposalsListSettings: {
+    defaultSettings: { proposals: {
       columns: [
         {
           name: "proposalId",
@@ -375,7 +375,7 @@ export const testConfig = {
         },
       ],
       conditions: [],
-    },
+    } },
   },
   helpSettings: {
     disabled: {

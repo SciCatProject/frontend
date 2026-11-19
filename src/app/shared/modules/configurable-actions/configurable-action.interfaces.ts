@@ -149,19 +149,24 @@ export function validateActionConfigs(
 }
 
 /**
- * Scans every top-level property of the app config and validates any array
- * that looks like an ActionConfig[] (by shape, not by key name). This means
- * a new `somethingActions: ActionConfig[]` field on AppConfigInterface gets
- * validated automatically, without needing a matching call to be added here.
+ * Scans the app config, including nested objects such as `actions`, and
+ * validates any array that looks like an ActionConfig[] (by shape, not by key
+ * name). This means a new group of actions added to the config gets validated
+ * automatically, without needing a matching call to be added here. Warnings
+ * name the dotted path of the array, e.g. `configurableActions.datafiles.actions`.
  */
-export function validateAllActionConfigsIn(config: object): void {
+export function validateAllActionConfigsIn(
+  config: object,
+  path: string[] = [],
+): void {
   Object.entries(config as Record<string, unknown>).forEach(([key, value]) => {
-    if (
-      Array.isArray(value) &&
-      value.length > 0 &&
-      value.every(isActionConfig)
-    ) {
-      validateActionConfigs(value as ActionConfig[], key);
+    const keyPath = [...path, key];
+    if (Array.isArray(value)) {
+      if (value.length > 0 && value.every(isActionConfig)) {
+        validateActionConfigs(value as ActionConfig[], keyPath.join("."));
+      }
+    } else if (value && typeof value === "object") {
+      validateAllActionConfigsIn(value, keyPath);
     }
   });
 }

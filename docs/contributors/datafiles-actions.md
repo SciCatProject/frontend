@@ -12,12 +12,12 @@ This page describes how to configure the datafiles actions.
 Datafiles actions are actions available to users when viewing the list of files associated to a dataset which can be viewed under the the Datafiles tab of the dataset details page.  
 These actions are shown as button between the page header and the table listing the files.
 
-There are two properties in the frontend configuration structure that control the datafiles actions:
+The datafiles actions live under the **configurableActions.datafiles** property of the frontend configuration structure, together with the other properties below:
 
-- **datafilesActionsEnabled**  
+- **configurableActions.datafiles.enabled**  
   _Type: boolean_  
-  This property enables the action sfeature on the datafiles page.
-- **datafilesActions**  
+  This property enables the action feature on the datafiles page.
+- **configurableActions.datafiles.actions**  
   _Type: array of ActionConfig_  
   This property contains an array of action definition. Each element defines an individual action that is rendered as button. Each button can have a label or an icon or both.
 - **maxDirectDownloadSize**  
@@ -114,9 +114,9 @@ This example define the following 4 type of actions:
 Configuration properties are set to the following values:
 
 ```
-datafilesActionsEnabled = true
+configurableActions.datafiles.enabled = true
 
-datafilesActions = [
+configurableActions.datafiles.actions = [
     {
       id: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       order: 4,

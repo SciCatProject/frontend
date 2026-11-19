@@ -132,21 +132,25 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
         d.labelsLocalization.proposal,
       );
     }
-    if (d.datafilesActions) {
-      d.datafilesActions = d.datafilesActions.map((a: any) => ({
-        ...a,
-        // the form only edits the conditions form, which also covers disabled
-        enabled: normalizeEnabled(a),
-        disabled: undefined,
-        variables:
-          a.variables && !Array.isArray(a.variables)
-            ? this.toArray(a.variables)
-            : a.variables,
-        inputs:
-          a.inputs && !Array.isArray(a.inputs)
-            ? this.toArray(a.inputs)
-            : a.inputs,
-      }));
+    if (d.labelMaps?.filters && !Array.isArray(d.labelMaps.filters)) {
+      d.labelMaps.filters = this.toArray(d.labelMaps.filters);
+    }
+    if (d.configurableActions?.datafiles?.actions) {
+      d.configurableActions.datafiles.actions =
+        d.configurableActions.datafiles.actions.map((a: any) => ({
+          ...a,
+          // the form only edits the conditions form, which also covers disabled
+          enabled: normalizeEnabled(a),
+          disabled: undefined,
+          variables:
+            a.variables && !Array.isArray(a.variables)
+              ? this.toArray(a.variables)
+              : a.variables,
+          inputs:
+            a.inputs && !Array.isArray(a.inputs)
+              ? this.toArray(a.inputs)
+              : a.inputs,
+        }));
     }
 
     return d;
@@ -170,14 +174,18 @@ export class AdminConfigEditComponent implements OnInit, OnDestroy {
         d.labelsLocalization.proposal,
       );
     }
-    if (Array.isArray(d.datafilesActions)) {
-      d.datafilesActions = d.datafilesActions.map((a: any) => ({
-        ...a,
-        variables: Array.isArray(a.variables)
-          ? this.toObject(a.variables)
-          : a.variables,
-        inputs: Array.isArray(a.inputs) ? this.toObject(a.inputs) : a.inputs,
-      }));
+    if (Array.isArray(d.labelMaps?.filters)) {
+      d.labelMaps.filters = this.toObject(d.labelMaps.filters);
+    }
+    if (Array.isArray(d.configurableActions?.datafiles?.actions)) {
+      d.configurableActions.datafiles.actions =
+        d.configurableActions.datafiles.actions.map((a: any) => ({
+          ...a,
+          variables: Array.isArray(a.variables)
+            ? this.toObject(a.variables)
+            : a.variables,
+          inputs: Array.isArray(a.inputs) ? this.toObject(a.inputs) : a.inputs,
+        }));
     }
 
     return d;

@@ -618,8 +618,8 @@ describe("Proposals general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          defaultProposalsListSettings: {
-            ...baseConfig.defaultProposalsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, proposals: {
+            ...baseConfig.defaultSettings.proposals,
             filters: [
               {
                 key: "type",
@@ -636,7 +636,7 @@ describe("Proposals general", () => {
                 enabled: false,
               },
             ],
-          },
+          } },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
@@ -682,8 +682,8 @@ describe("Proposals general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          defaultProposalsListSettings: {
-            ...baseConfig.defaultProposalsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, proposals: {
+            ...baseConfig.defaultSettings.proposals,
             columns: [
               {
                 name: "proposalId",
@@ -709,7 +709,7 @@ describe("Proposals general", () => {
                 sort: "desc",
               },
             ],
-          },
+          } },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");

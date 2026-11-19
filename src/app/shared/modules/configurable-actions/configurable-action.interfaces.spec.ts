@@ -186,6 +186,24 @@ describe("configurable-action.interfaces", () => {
       );
     });
 
+    it("discovers ActionConfig[] nested in objects and names the dotted path", () => {
+      validateAllActionConfigsIn({
+        configurableActions: {
+          datafiles: {
+            enabled: true,
+            actions: [
+              { ...baseAction, type: "unsupported" as ActionConfig["type"] },
+            ],
+          },
+        },
+      });
+      expect(warnSpy).toHaveBeenCalledWith(
+        jasmine.stringMatching(
+          /configurableActions\.datafiles\.actions: action "test-action" has unknown type/,
+        ),
+      );
+    });
+
     it("ignores arrays that are not ActionConfig[]", () => {
       validateAllActionConfigsIn({
         datasetPageSizeOptions: [5, 10, 25],

@@ -37,7 +37,7 @@ export class DatasetsFilterSettingsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.defaultFilters = this.appConfig.defaultDatasetsListSettings.filters;
+    this.defaultFilters = this.appConfig.defaultSettings?.datasets?.filters;
     this.userSavedFilters = this.data.filterConfigs || [];
 
     const newFilters = this.defaultFilters.reduce((filtered, item) => {

@@ -447,8 +447,8 @@ describe("Datasets general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          defaultDatasetsListSettings: {
-            ...baseConfig.defaultDatasetsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, datasets: {
+            ...baseConfig.defaultSettings.datasets,
             conditions: [
               {
                 condition: {
@@ -465,7 +465,7 @@ describe("Datasets general", () => {
                 enabled: false,
               },
             ],
-          },
+          } },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
@@ -506,8 +506,8 @@ describe("Datasets general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          defaultDatasetsListSettings: {
-            ...baseConfig.defaultDatasetsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, datasets: {
+            ...baseConfig.defaultSettings.datasets,
             filters: [
               {
                 key: "type",
@@ -524,7 +524,7 @@ describe("Datasets general", () => {
                 enabled: false,
               },
             ],
-          },
+          } },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
@@ -565,8 +565,8 @@ describe("Datasets general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          defaultDatasetsListSettings: {
-            ...baseConfig.defaultDatasetsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, datasets: {
+            ...baseConfig.defaultSettings.datasets,
             conditions: [
               {
                 condition: {
@@ -578,7 +578,7 @@ describe("Datasets general", () => {
                 enabled: true,
               },
             ],
-          },
+          } },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
@@ -687,8 +687,8 @@ describe("Datasets general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          defaultDatasetsListSettings: {
-            ...baseConfig.defaultDatasetsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, datasets: {
+            ...baseConfig.defaultSettings.datasets,
             filters: [
               {
                 key: "type",
@@ -705,7 +705,7 @@ describe("Datasets general", () => {
                 enabled: false,
               },
             ],
-          },
+          } },
         };
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
       });
@@ -860,8 +860,8 @@ describe("Datasets general", () => {
         const testConfig = {
           ...baseConfig,
           autoApplyFilters: true,
-          defaultDatasetsListSettings: {
-            ...baseConfig.defaultDatasetsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, datasets: {
+            ...baseConfig.defaultSettings.datasets,
             filters: [
               {
                 key: "keywords",
@@ -871,7 +871,7 @@ describe("Datasets general", () => {
                 enabled: true,
               },
             ],
-          },
+          } },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
@@ -891,8 +891,8 @@ describe("Datasets general", () => {
         const testConfig = {
           ...baseConfig,
           autoApplyFilters: true,
-          defaultDatasetsListSettings: {
-            ...baseConfig.defaultDatasetsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, datasets: {
+            ...baseConfig.defaultSettings.datasets,
             filters: [
               {
                 key: "keywords",
@@ -902,7 +902,7 @@ describe("Datasets general", () => {
                 enabled: true,
               },
             ],
-          },
+          } },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
@@ -937,8 +937,8 @@ describe("Datasets general", () => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
-          defaultDatasetsListSettings: {
-            ...baseConfig.defaultDatasetsListSettings,
+          defaultSettings: { ...baseConfig.defaultSettings, datasets: {
+            ...baseConfig.defaultSettings.datasets,
             columns: [
               {
                 name: "select",
@@ -954,7 +954,7 @@ describe("Datasets general", () => {
                 sort: "asc",
               },
             ],
-          },
+          } },
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");

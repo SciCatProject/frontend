@@ -365,13 +365,13 @@ export class UserEffects {
                 switch (settingConfig?.scope) {
                   case "dataset":
                     items =
-                      config.defaultDatasetsListSettings?.[
+                      config.defaultSettings?.datasets?.[
                         settingConfig.configKey
                       ] || initialUserState.settings[setting];
                     break;
                   case "proposal":
                     items =
-                      config.defaultProposalsListSettings?.[
+                      config.defaultSettings?.proposals?.[
                         settingConfig.configKey
                       ] || initialUserState.settings[setting];
                     break;
@@ -564,12 +564,12 @@ export class UserEffects {
             switch (s.scope) {
               case "dataset":
                 filterConfigs =
-                  config.defaultDatasetsListSettings?.filters ||
+                  config.defaultSettings?.datasets?.filters ||
                   initialUserState.settings.fe_dataset_table_filters;
                 break;
               case "proposal":
                 filterConfigs =
-                  config.defaultProposalsListSettings?.filters ||
+                  config.defaultSettings?.proposals?.filters ||
                   initialUserState.settings.fe_proposal_table_filters;
                 break;
               default:
@@ -594,7 +594,7 @@ export class UserEffects {
             switch (scope) {
               case "dataset":
                 defaultConditions =
-                  config.defaultDatasetsListSettings?.conditions ||
+                  config.defaultSettings?.datasets?.conditions ||
                   initialUserState.settings.fe_dataset_table_conditions;
                 break;
               case "sample":
@@ -624,19 +624,15 @@ export class UserEffects {
           (s) => {
             let columnsConfig = [];
 
-            // NOTE: config.localColumns is for backward compatibility.
-            //       it should be removed once no longer needed
-
             switch (s.scope) {
               case "dataset":
                 columnsConfig =
-                  config.defaultDatasetsListSettings?.columns ||
-                  config.localColumns ||
+                  config.defaultSettings?.datasets?.columns ||
                   initialUserState.settings.fe_dataset_table_columns;
                 break;
               case "proposal":
                 columnsConfig =
-                  config.defaultProposalsListSettings?.columns ||
+                  config.defaultSettings?.proposals?.columns ||
                   initialUserState.settings.fe_proposal_table_columns;
                 break;
               default:

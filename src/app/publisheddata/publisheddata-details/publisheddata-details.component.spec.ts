@@ -27,7 +27,6 @@ import {
 
 const getConfig = () => ({
   editMetadataEnabled: true,
-  editPublishedData: true,
   jsonMetadataEnabled: true,
 });
 
