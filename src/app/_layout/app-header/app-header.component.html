@@ -148,10 +148,11 @@
     @if (isLoggedIn$ | async) {
       <span>
         @if (config.shoppingCartOnHeader) {
-          <span [matMenuTriggerFor]="cartMenu">
+          <span>
             <button
               mat-icon-button
               id="cartOnHeaderButton"
+              [routerLink]="getSelectionLink()"
               [matTooltip]="'Selection'"
               [matTooltipShowDelay]="500"
             >
@@ -165,9 +166,6 @@
             </button>
           </span>
         }
-        <mat-menu class="custom-menu" #cartMenu="matMenu">
-          <batch-card></batch-card>
-        </mat-menu>
         <span>
           <button
             [matTooltip]="'User menu'"

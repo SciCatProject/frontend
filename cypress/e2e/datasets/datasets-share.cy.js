@@ -28,8 +28,6 @@ describe("Datasets", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
-
       cy.get("#shareButton").click();
 
       cy.get("#userEmailField").type(Cypress.env("guestUserEmail"));

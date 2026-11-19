@@ -112,6 +112,19 @@ export class AppHeaderComponent implements OnInit {
     this.oAuth2Endpoints = this.config.oAuth2Endpoints;
   }
 
+  getSelectionLink(): string {
+    const currentUrl = (this.router.url ?? "").split("?")[0];
+
+    // while editing a published dataset list the selection page is the edit route
+    if (
+      localStorage.getItem("editingDatasetList") === "true" &&
+      currentUrl.endsWith("datasetList")
+    ) {
+      return currentUrl + "/edit";
+    }
+    return "/datasets/selection";
+  }
+
   isFullUrl(url: string): boolean {
     return url.startsWith("http://") || url.startsWith("https://");
   }

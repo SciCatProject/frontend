@@ -28,8 +28,6 @@ describe("Datasets", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
-
       cy.get("#publishButton").click();
 
       cy.get("#titleInput").type("some title text");
