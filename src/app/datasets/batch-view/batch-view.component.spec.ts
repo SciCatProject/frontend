@@ -120,10 +120,13 @@ describe("BatchViewComponent", () => {
     });
     datasetsListService = jasmine.createSpyObj<DatasetsListService>(
       "DatasetsListService",
-      ["convertSavedDatasetColumns"],
+      ["convertSavedDatasetColumns", "prepareCsvExportColumns"],
     );
     datasetsListService.convertSavedDatasetColumns.and.returnValue(
       convertedColumns,
+    );
+    datasetsListService.prepareCsvExportColumns.and.callFake((columns) =>
+      columns.filter((column) => column.display !== "hidden"),
     );
 
     TestBed.configureTestingModule({
@@ -235,6 +238,10 @@ describe("BatchViewComponent", () => {
         datasetsListService.convertSavedDatasetColumns,
       ).toHaveBeenCalledWith(configuredColumns);
       expect(tableService.exportToCsv).toHaveBeenCalled();
+      expect(datasetsListService.prepareCsvExportColumns).toHaveBeenCalledWith(
+        convertedColumns,
+        [dataset],
+      );
 
       const [columns, rows, selection, filename] =
         tableService.exportToCsv.calls.mostRecent().args;

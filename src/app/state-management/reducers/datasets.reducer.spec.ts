@@ -1,7 +1,7 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
 import { initialDatasetState } from "state-management/state/datasets.store";
-import { ArchViewMode, FacetCounts, ScientificCondition } from "../models";
+import { FacetCounts, ScientificCondition } from "../models";
 import { createMock, mockAttachmentV4 as attachment } from "shared/MockStubs";
 import {
   OrigDatablock,
@@ -158,19 +158,50 @@ describe("DatasetsReducer", () => {
   });
 
   describe("on addToBatchAction", () => {
-    it("should update batch property with selectedSets", () => {
-      const batchedPids = initialDatasetState.batch.map(
-        (batchSet) => batchSet.pid,
-      );
-      const addition = initialDatasetState.selectedSets.filter(
-        (selectedSet) => batchedPids.indexOf(selectedSet.pid) === -1,
-      );
-      const batch = [...initialDatasetState.batch, ...addition];
+    const stateWith = (
+      batch: { pid: string; addedFrom?: string }[],
+      selectedSets: { pid: string }[],
+    ) =>
+      ({
+        ...initialDatasetState,
+        batch,
+        selectedSets,
+        filters: { ...initialDatasetState.filters, modeToggle: "all" },
+      }) as typeof initialDatasetState;
 
-      const action = fromActions.addToBatchAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+    it("should add the selected datasets that are not yet in the batch", () => {
+      const state = fromDatasets.datasetsReducer(
+        stateWith([{ pid: "in-cart" }], [{ pid: "in-cart" }, { pid: "new" }]),
+        fromActions.addToBatchAction({}),
+      );
 
-      expect(state.batch).toEqual(batch);
+      expect(state.batch.map((d) => d.pid)).toEqual(["in-cart", "new"]);
+    });
+
+    it("should stamp only the newly added datasets with the given addedFrom", () => {
+      const state = fromDatasets.datasetsReducer(
+        stateWith(
+          [{ pid: "in-cart", addedFrom: "retrievable" }],
+          [{ pid: "in-cart" }, { pid: "new" }],
+        ),
+        fromActions.addToBatchAction({ addedFrom: "archivable" }),
+      );
+
+      expect(state.batch).toEqual([
+        { pid: "in-cart", addedFrom: "retrievable" },
+        { pid: "new", addedFrom: "archivable" },
+      ] as typeof state.batch);
+    });
+
+    it("should not use the current view when addedFrom is not given", () => {
+      const state = fromDatasets.datasetsReducer(
+        stateWith([], [{ pid: "unknown-origin" }]),
+        fromActions.addToBatchAction({}),
+      );
+
+      expect(state.batch).toEqual([
+        { pid: "unknown-origin" },
+      ] as typeof state.batch);
     });
   });
 
@@ -183,7 +214,7 @@ describe("DatasetsReducer", () => {
       const action = fromActions.addCurrentToBatchAction();
       const state = fromDatasets.datasetsReducer(stateIn, action);
 
-      expect(state.batch).toEqual([dataset]);
+      expect(state.batch).toEqual([{ ...dataset, addedFrom: "details" }]);
     });
 
     it("should not duplicate currentSet if already present in batch", () => {
@@ -364,13 +395,20 @@ describe("DatasetsReducer", () => {
   });
 
   describe("on setArchiveViewModeAction", () => {
-    it("should set mode to an empty object, set modetoggle and set skip to 0", () => {
-      const modeToggle = ArchViewMode.all;
+    it("should set mode and modeToggle from the action and set skip to 0", () => {
+      const modeToggle = "on-tape";
+      const mode = { "datasetlifecycle.retrievable": true };
 
-      const action = fromActions.setArchiveViewModeAction({ modeToggle });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+      const action = fromActions.setArchiveViewModeAction({ modeToggle, mode });
+      const state = fromDatasets.datasetsReducer(
+        {
+          ...initialDatasetState,
+          filters: { ...initialDatasetState.filters, skip: 50 },
+        },
+        action,
+      );
 
-      expect(state.filters.mode).toEqual({});
+      expect(state.filters.mode).toEqual(mode);
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
     });

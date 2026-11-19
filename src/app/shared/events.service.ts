@@ -23,8 +23,12 @@ export class EventsService {
   private connectionSub: Subscription | null = null;
   private messageSubject = new Subject<Record<string, unknown>>();
   private connectionErrorSubject = new BehaviorSubject<boolean>(false);
+  private evictedSubject = new BehaviorSubject<boolean>(false);
 
   connectionError$ = this.connectionErrorSubject.asObservable();
+
+  // True after the backend closed this tab's stream because the user has too many open
+  evicted$ = this.evictedSubject.asObservable();
 
   message$ = this.messageSubject.asObservable();
 
@@ -58,7 +62,10 @@ export class EventsService {
       const es = new EventSource(`/api/v3/events/stream?ticket=${ticket}`);
 
       es.onopen = () =>
-        this.ngZone.run(() => this.connectionErrorSubject.next(false));
+        this.ngZone.run(() => {
+          this.connectionErrorSubject.next(false);
+          this.evictedSubject.next(false);
+        });
 
       es.onmessage = (event) =>
         this.ngZone.run(() => observer.next(JSON.parse(event.data)));
@@ -67,6 +74,15 @@ export class EventsService {
         es.close();
         this.ngZone.run(() => observer.error(new Error("event stream closed")));
       };
+
+      es.addEventListener("evicted", () => {
+        es.close();
+        this.ngZone.run(() => {
+          this.evictedSubject.next(true);
+          this.connectionSub?.unsubscribe();
+          this.connectionSub = null;
+        });
+      });
 
       return () => es.close();
     });
@@ -106,5 +122,6 @@ export class EventsService {
     this.connectionSub?.unsubscribe();
     this.connectionSub = null;
     this.connectionErrorSubject.next(false);
+    this.evictedSubject.next(false);
   }
 }

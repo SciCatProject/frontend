@@ -1,195 +1,195 @@
-<div class="container" *ngIf="metadata">
-  <form [formGroup]="metadataForm" data-cy="metadata-edit-form">
-    <div
-      formArrayName="items"
-      *ngFor="let item of items.controls; let i = index"
-    >
-      <div [formGroupName]="i">
-        <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
-          <!-- Type Column -->
-          <div class="formColumn typeColumn">
-            <mat-form-field class="selectField" fxFlex="100">
-              <mat-label>Type</mat-label>
-              <mat-select
-                formControlName="fieldType"
-                (selectionChange)="detectType(i)"
-                data-cy="field-type-input"
-              >
-                <mat-option *ngFor="let type of typeValues" [value]="type">{{
-                  type
-                }}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="fieldHasError(i, 'fieldType')">
-                Type is required
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <!-- Displayed name Column -->
-          <div class="formColumn">
-            <mat-form-field class="inputField" fxFlex="100">
-              <mat-label>Displayed Name</mat-label>
-              <input
-                id="humanNameInput{{ i }}"
-                matInput
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false"
-                formControlName="fieldHumanName"
-                data-cy="metadata-human-name-input"
-              />
-            </mat-form-field>
-          </div>
-          <!-- Raw property name Column -->
-          <div class="formColumn">
-            <mat-form-field class="inputField" fxFlex="100">
-              <mat-label>Raw property name</mat-label>
-              <input
-                id="nameInput{{ i }}"
-                matInput
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false"
-                formControlName="fieldName"
-                data-cy="metadata-name-input"
-                (blur)="getUnits(i)"
-              />
-              <mat-error *ngIf="fieldHasError(i, 'fieldName')">
-                Name is required
-              </mat-error>
-              <mat-error *ngIf="fieldHasDuplicateError(i, 'fieldName')">
-                Name already exists
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <!-- Value Column -->
-          <div class="formColumn" *ngIf="getType(i) !== 'date'; else dateInput">
-            <mat-form-field class="inputField" fxFlex="100">
-              <mat-label>Value</mat-label>
-              <input
-                id="valueInput{{ i }}"
-                matInput
-                [type]="setValueInputType(i)"
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false"
-                formControlName="fieldValue"
-                data-cy="metadata-value-input"
-                step="1"
-              />
-              <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
-                Value is required
-              </mat-error>
-              <mat-error *ngIf="fieldHasLinkError(i, 'fieldValue')">
-                Invalid link
-              </mat-error>
-              <mat-error *ngIf="fieldHasRangeError(i, 'fieldValue')">
-                Invalid range
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <ng-template #dateInput>
-            <mat-form-field class="inputField">
-              <input
-                matInput
-                formControlName="fieldValue"
-                placeholder="Value"
-                [ngxMatDatetimePicker]="picker"
-                data-cy="metadata-value-input"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="$any(picker)"
-              ></mat-datepicker-toggle>
-              <ngx-mat-datetime-picker
-                #picker
-                [showSeconds]="true"
-              ></ngx-mat-datetime-picker>
-              <mat-error *ngIf="fieldHasDateError(i, 'fieldValue')">
-                Invalid date
-              </mat-error>
-            </mat-form-field>
-          </ng-template>
-          <!-- Unit Column -->
-          <div class="formColumn">
-            <mat-form-field class="inputField" fxFlex="100">
-              <mat-label>Unit</mat-label>
-              <input
-                id="unitsInput{{ i }}"
-                matInput
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false"
-                formControlName="fieldUnit"
-                [matAutocomplete]="metadataUnits"
-                (focus)="getUnits(i)"
-                data-cy="metadata-unit-input"
-              />
-              <div
-                class="unit-warning"
-                *ngIf="invalidUnitWarning[i]"
-                mat-icon-button
-                matSuffix
-                (click)="$event.stopPropagation()"
-                [attr.aria-label]="'warning invalid unit'"
-                [matTooltip]="invalidUnitWarning[i]"
-              >
-                <mat-icon>{{ "error_outline" }}</mat-icon>
+@if (metadata) {
+  <div class="container">
+    <form [formGroup]="metadataForm" data-cy="metadata-edit-form">
+      @for (item of items.controls; track item; let i = $index) {
+        <div formArrayName="items">
+          <div [formGroupName]="i">
+            <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
+              <!-- Type Column -->
+              <div class="formColumn typeColumn">
+                <mat-form-field class="selectField" fxFlex="100">
+                  <mat-label>Type</mat-label>
+                  <mat-select
+                    formControlName="fieldType"
+                    (selectionChange)="detectType(i)"
+                    data-cy="field-type-input"
+                  >
+                    @for (type of typeValues; track type) {
+                      <mat-option [value]="type">{{ type }}</mat-option>
+                    }
+                  </mat-select>
+                  @if (fieldHasError(i, "fieldType")) {
+                    <mat-error> Type is required </mat-error>
+                  }
+                </mat-form-field>
               </div>
-              <mat-autocomplete #metadataUnits="matAutocomplete">
-                <mat-option
-                  *ngFor="let unit of filteredUnits$ | async"
-                  [value]="unit"
+              <!-- Displayed name Column -->
+              <div class="formColumn">
+                <mat-form-field class="inputField" fxFlex="100">
+                  <mat-label>Displayed Name</mat-label>
+                  <input
+                    id="humanNameInput{{ i }}"
+                    matInput
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    formControlName="fieldHumanName"
+                    data-cy="metadata-human-name-input"
+                  />
+                </mat-form-field>
+              </div>
+              <!-- Raw property name Column -->
+              <div class="formColumn">
+                <mat-form-field class="inputField" fxFlex="100">
+                  <mat-label>Raw property name</mat-label>
+                  <input
+                    id="nameInput{{ i }}"
+                    matInput
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    formControlName="fieldName"
+                    data-cy="metadata-name-input"
+                    (blur)="getUnits(i)"
+                  />
+                  @if (fieldHasError(i, "fieldName")) {
+                    <mat-error> Name is required </mat-error>
+                  }
+                  @if (fieldHasDuplicateError(i, "fieldName")) {
+                    <mat-error> Name already exists </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <!-- Value Column -->
+              @if (getType(i) !== "date") {
+                <div class="formColumn">
+                  <mat-form-field class="inputField" fxFlex="100">
+                    <mat-label>Value</mat-label>
+                    <input
+                      id="valueInput{{ i }}"
+                      matInput
+                      [type]="setValueInputType(i)"
+                      autocomplete="off"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      spellcheck="false"
+                      formControlName="fieldValue"
+                      data-cy="metadata-value-input"
+                      step="1"
+                    />
+                    @if (fieldHasError(i, "fieldValue")) {
+                      <mat-error> Value is required </mat-error>
+                    }
+                    @if (fieldHasLinkError(i, "fieldValue")) {
+                      <mat-error> Invalid link </mat-error>
+                    }
+                    @if (fieldHasRangeError(i, "fieldValue")) {
+                      <mat-error> Invalid range </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              } @else {
+                <mat-form-field class="inputField">
+                  <input
+                    matInput
+                    formControlName="fieldValue"
+                    placeholder="Value"
+                    [ngxMatDatetimePicker]="picker"
+                    data-cy="metadata-value-input"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="$any(picker)"
+                  ></mat-datepicker-toggle>
+                  <ngx-mat-datetime-picker
+                    #picker
+                    [showSeconds]="true"
+                  ></ngx-mat-datetime-picker>
+                  @if (fieldHasDateError(i, "fieldValue")) {
+                    <mat-error> Invalid date </mat-error>
+                  }
+                </mat-form-field>
+              }
+              <!-- Unit Column -->
+              <div class="formColumn">
+                <mat-form-field class="inputField" fxFlex="100">
+                  <mat-label>Unit</mat-label>
+                  <input
+                    id="unitsInput{{ i }}"
+                    matInput
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    formControlName="fieldUnit"
+                    [matAutocomplete]="metadataUnits"
+                    (focus)="getUnits(i)"
+                    data-cy="metadata-unit-input"
+                  />
+                  @if (invalidUnitWarning[i]) {
+                    <div
+                      class="unit-warning"
+                      mat-icon-button
+                      matSuffix
+                      (click)="$event.stopPropagation()"
+                      [attr.aria-label]="'warning invalid unit'"
+                      [matTooltip]="invalidUnitWarning[i]"
+                    >
+                      <mat-icon>{{ "error_outline" }}</mat-icon>
+                    </div>
+                  }
+                  <mat-autocomplete #metadataUnits="matAutocomplete">
+                    @for (unit of filteredUnits$ | async; track unit) {
+                      <mat-option [value]="unit">
+                        {{ unit }}
+                      </mat-option>
+                    }
+                  </mat-autocomplete>
+                  @if (fieldHasError(i, "fieldUnit")) {
+                    <mat-error> A unit is required for quantities </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="formColumn deleteColumn" fxFlexAlign="center">
+                <button
+                  mat-icon-button
+                  class="deleteButton"
+                  type="button"
+                  color="warn"
+                  title="Delete row"
+                  (click)="onRemove(i)"
                 >
-                  {{ unit }}
-                </mat-option>
-              </mat-autocomplete>
-              <mat-error *ngIf="fieldHasError(i, 'fieldUnit')">
-                A unit is required for quantities
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="formColumn deleteColumn" fxFlexAlign="center">
-            <button
-              mat-icon-button
-              class="deleteButton"
-              type="button"
-              color="warn"
-              title="Delete row"
-              (click)="onRemove(i)"
-            >
-              <mat-icon> cancel </mat-icon>
-            </button>
+                  <mat-icon> cancel </mat-icon>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <button
-      mat-flat-button
-      type="button"
-      color="accent"
-      (click)="addMetadata()"
-      data-cy="add-new-row"
-    >
-      <mat-icon> add_circle </mat-icon>
-      Add row
-    </button>
-
-    <button
-      mat-flat-button
-      type="submit"
-      color="primary"
-      class="save-button"
-      [disabled]="isInvalid()"
-      (click)="doSave()"
-      data-cy="save-changes-button"
-    >
-      <mat-icon> save </mat-icon>
-      Save changes
-    </button>
-  </form>
-</div>
+      }
+      <button
+        mat-flat-button
+        type="button"
+        color="accent"
+        (click)="addMetadata()"
+        data-cy="add-new-row"
+      >
+        <mat-icon> add_circle </mat-icon>
+        Add row
+      </button>
+      <button
+        mat-flat-button
+        type="submit"
+        color="primary"
+        class="save-button"
+        [disabled]="isInvalid()"
+        (click)="doSave()"
+        data-cy="save-changes-button"
+      >
+        <mat-icon> save </mat-icon>
+        Save changes
+      </button>
+    </form>
+  </div>
+}
