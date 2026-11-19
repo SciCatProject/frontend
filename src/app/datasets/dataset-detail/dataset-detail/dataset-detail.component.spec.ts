@@ -36,6 +36,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute, mockDataset } from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
+import {
+  updateConditionsConfigs,
+  updateUserSettingsAction,
+} from "state-management/actions/user.actions";
 import { AttachmentService } from "shared/services/attachment.service";
 import { OutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { TranslateService } from "@ngx-translate/core";
@@ -116,8 +120,16 @@ describe("DatasetDetailComponent", () => {
       component.dataset = mockDataset;
       component.onClickKeyword(keyword);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
+      // the saved advanced filters are cleared too, as the clear button of the filters does
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateConditionsConfigs({ conditionConfigs: [], scope: "dataset" }),
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateUserSettingsAction({
+          property: { fe_dataset_table_conditions: [] },
+        }),
+      );
       expect(dispatchSpy).toHaveBeenCalledWith(
         addDatasetFilterAction({
           filterType: "multiSelect",

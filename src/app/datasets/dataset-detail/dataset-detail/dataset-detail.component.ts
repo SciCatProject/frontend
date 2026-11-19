@@ -42,6 +42,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 import { ClipboardService } from "shared/services/clipboard.service";
+import { AdvancedSearchService } from "shared/modules/advanced-search/advanced-search.service";
 import { CurrentDataset } from "state-management/state/datasets.store";
 import { selectCurrentDatasetInstruments } from "state-management/selectors/instruments.selectors";
 import { selectCurrentDatasetProposals } from "state-management/selectors/proposals.selectors";
@@ -93,6 +94,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private clipboardService: ClipboardService,
+    private advancedSearchService: AdvancedSearchService,
   ) {}
 
   ngOnInit() {
@@ -160,6 +162,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
+    // the advanced filters go with the side filters, so the chips match what is applied
+    this.advancedSearchService.clear("dataset");
     this.store.dispatch(
       addDatasetFilterAction({
         filterType: "multiSelect",

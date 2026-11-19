@@ -186,6 +186,42 @@ describe("AdvancedSearchKeyPickerComponent", () => {
     expect(component.loading()).toBeFalse();
   }));
 
+  it("should load more keys when the show more row is picked with the keyboard", fakeAsync(() => {
+    component.key = "key3";
+    component.onOpened();
+    tick();
+
+    component.onSelected(component.loadMoreValue);
+
+    expect(source).toHaveBeenCalledWith("", KEY_PAGE_SIZE, KEY_PAGE_SIZE);
+    expect(keysOf().length).toBe(KEY_PAGE_SIZE * 2);
+    // it is not a key, the key stays as it is and the input shows it
+    expect(changed).not.toHaveBeenCalled();
+    expect(component.displayKey(component.loadMoreValue)).toBe("key3");
+    expect(component.displayKey("other")).toBe("other");
+  }));
+
+  it("should open the list again after the show more row, with the keys it has", fakeAsync(() => {
+    const openPanel = spyOn(component["trigger"], "openPanel");
+    component.onOpened();
+    tick();
+
+    component.onSelected(component.loadMoreValue);
+    tick();
+    // the list opens again, it is not loaded from the start
+    component.onOpened();
+
+    expect(openPanel).toHaveBeenCalledTimes(1);
+    expect(source).toHaveBeenCalledTimes(2);
+    expect(keysOf().length).toBe(KEY_PAGE_SIZE * 2);
+  }));
+
+  it("should ignore a selection without a key", () => {
+    component.onSelected(undefined);
+
+    expect(changed).not.toHaveBeenCalled();
+  });
+
   it("should tell which key was selected", () => {
     component.onSelected("pressure");
 

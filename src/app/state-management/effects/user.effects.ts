@@ -35,6 +35,7 @@ import {
   selectColumns,
   selectCurrentUser,
   selectConditions,
+  selectHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
 import {
   clearDatasetsStateAction,
@@ -540,8 +541,9 @@ export class UserEffects {
       concatLatestFrom(() => [
         this.store.select(selectConditions("dataset")),
         this.store.select(selectConditions("sample")),
+        this.store.select(selectHasFetchedSettings),
       ]),
-      map(([{ config }, datasetConditions, sampleConditions]) => {
+      map(([{ config }, datasetConditions, sampleConditions, hasFetched]) => {
         const isAuthenticated = this.authService.isAuthenticated();
         const actions = [];
 
@@ -582,6 +584,10 @@ export class UserEffects {
 
         SETTINGS_CONFIG.filter((s) => s.configKey === "conditions").forEach(
           (s) => {
+            // the predefined conditions are for the first load only, later what the user has
+            // is kept, also when it is empty (cleared)
+            if (hasFetched) return;
+
             const scope = s.scope as ConditionSettingScope;
             let defaultConditions;
 

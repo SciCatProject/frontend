@@ -745,8 +745,14 @@ describe("UserEffects", () => {
     };
 
     // the conditions that are put in the store, by scope
-    const loaded = (config: object, settings: object = noSettings) => {
-      TestBed.inject(MockStore).setState({ users: { settings } });
+    const loaded = (
+      config: object,
+      settings: object = noSettings,
+      hasFetchedSettings = false,
+    ) => {
+      TestBed.inject(MockStore).setState({
+        users: { settings, hasFetchedSettings },
+      });
       actions = hot("(a|)", {
         a: fromActions.loadDefaultSettings({ config } as never),
       });
@@ -830,6 +836,19 @@ describe("UserEffects", () => {
 
       expect(dataset).toEqual(own);
       expect(sample).toEqual(own);
+    });
+
+    it("should not bring the predefined conditions back once the settings were loaded", () => {
+      const config = {
+        defaultDatasetsListSettings: { conditions: [predefined("a")] },
+        defaultSamplesListSettings: { conditions: [predefined("b")] },
+      };
+
+      // the user cleared them, paging loads the default settings again
+      const { dataset, sample } = loaded(config, noSettings, true);
+
+      expect(dataset).toBeUndefined();
+      expect(sample).toBeUndefined();
     });
 
     it("should filter the datasets by the predefined conditions that are not switched off", () => {

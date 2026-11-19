@@ -26,6 +26,7 @@
     #keys="matAutocomplete"
     class="key-panel condition-panel"
     [panelWidth]="panelWidth"
+    [displayWith]="displayKey"
     (opened)="onOpened()"
     (optionSelected)="onSelected($event.option.value)"
   >
@@ -40,7 +41,11 @@
       </mat-option>
     }
     @if (hasMore() && options().length && !loading()) {
-      <mat-option class="load-more-option" data-cy="condition-key-load-more">
+      <mat-option
+        class="load-more-option"
+        [value]="loadMoreValue"
+        data-cy="condition-key-load-more"
+      >
         <button
           type="button"
           class="load-more"
