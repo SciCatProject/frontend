@@ -1,3 +1,4 @@
+import { setDatasetFields } from "shared/modules/advanced-search/advanced-search.fields";
 import { UserEffects } from "./user.effects";
 import {
   UsersService,
@@ -693,6 +694,55 @@ describe("UserEffects", () => {
         ]);
       });
 
+      it("should be the fields of the config with a value for the datasets", () => {
+        setDatasetFields([
+          { key: "keywords", relation: "IN", value: ["neutron"] },
+        ]);
+        const settings = settingsAfterFetch(
+          {},
+          { advancedSearchEnabled: true },
+        );
+        setDatasetFields();
+
+        expect(settings.fe_dataset_table_conditions).toEqual([
+          jasmine.objectContaining({
+            condition: jasmine.objectContaining({
+              lhs: "keywords",
+              rhs: ["neutron"],
+              source: "dataset",
+            }),
+          }),
+        ]);
+        expect(settings.fe_sample_table_conditions).toEqual([]);
+      });
+
+      it("should keep the conditions a user cleared, also with fields of the config with a value", () => {
+        setDatasetFields([
+          { key: "keywords", relation: "IN", value: ["neutron"] },
+        ]);
+        const settings = settingsAfterFetch(
+          { fe_dataset_table_conditions: [] },
+          { advancedSearchEnabled: true },
+        );
+        setDatasetFields();
+
+        expect(settings.fe_dataset_table_conditions).toEqual([]);
+      });
+
+      it("should not replace the dataset conditions the user has with the fields of the config", () => {
+        setDatasetFields([
+          { key: "keywords", relation: "IN", value: ["neutron"] },
+        ]);
+        const own = [{ condition: { ...predefined.condition, lhs: "own" } }];
+        const settings = settingsAfterFetch(
+          { fe_dataset_table_conditions: own },
+          { advancedSearchEnabled: true },
+        );
+        setDatasetFields();
+
+        expect(settings.fe_dataset_table_conditions).toEqual(own);
+      });
+
       it("should not be used by the advanced search", () => {
         expect(
           settingsAfterFetch({}, { advancedSearchEnabled: true })
@@ -857,6 +907,115 @@ describe("UserEffects", () => {
 
         expect(dataset).toEqual([]);
         expect(sample).toEqual([]);
+      });
+    });
+
+    describe("fields of the config with a value", () => {
+      const configured = () =>
+        setDatasetFields([
+          { key: "keywords", relation: "IN", value: ["neutron"] },
+          { key: "pid", relation: "IN" },
+          {
+            key: "scientificMetadata.detector.distance",
+            relation: "GREATER_THAN",
+            value: 5,
+            unit: "mm",
+          },
+        ]);
+      afterEach(() => setDatasetFields());
+
+      it("should start the dataset list with all the fields, and apply the ones with a value", () => {
+        configured();
+
+        const { dataset } = loaded({ advancedSearchEnabled: true });
+
+        expect(
+          (dataset as { condition: { lhs: string } }[]).map(
+            (c) => c.condition.lhs,
+          ),
+        ).toEqual(["keywords", "pid", "detector.distance"]);
+      });
+
+      it("should filter the datasets by the ones with a value", () => {
+        configured();
+        TestBed.inject(MockStore).setState({ users: { settings: noSettings } });
+        actions = hot("(a|)", {
+          a: fromActions.loadDefaultSettings({
+            config: { advancedSearchEnabled: true },
+          } as never),
+        });
+
+        let filtered: { lhs: string }[];
+        effects.loadDefaultSettings$.pipe(toArray()).subscribe((all) => {
+          filtered = (
+            all.find(
+              (action) => action.type === setScientificConditionsAction.type,
+            ) as ReturnType<typeof setScientificConditionsAction>
+          ).conditions;
+        });
+        getTestScheduler().flush();
+
+        expect(filtered.map(({ lhs }) => lhs)).toEqual([
+          "keywords",
+          "detector.distance",
+        ]);
+      });
+
+      it("should not be used by the old condition filter", () => {
+        configured();
+
+        const { dataset } = loaded({ advancedSearchEnabled: false });
+
+        expect(dataset).toEqual([]);
+      });
+
+      it("should not come back once the settings were loaded", () => {
+        configured();
+
+        const { dataset } = loaded(
+          { advancedSearchEnabled: true },
+          noSettings,
+          true,
+        );
+
+        expect(dataset).toBeUndefined();
+      });
+
+      it("should start the list of a visitor without settings the same way", () => {
+        configured();
+        authService.isAuthenticated.and.returnValue(false);
+
+        const { dataset } = loaded({ advancedSearchEnabled: true });
+
+        expect(
+          (dataset as { condition: { lhs: string } }[]).map(
+            (c) => c.condition.lhs,
+          ),
+        ).toEqual(["keywords", "pid", "detector.distance"]);
+      });
+
+      it("should not replace the conditions the user has", () => {
+        configured();
+        const own = [predefined("own_key")];
+
+        const { dataset } = loaded(
+          { advancedSearchEnabled: true },
+          { fe_dataset_table_conditions: own, fe_sample_table_conditions: [] },
+        );
+
+        expect(dataset).toEqual(own);
+      });
+
+      it("should start with the fields of the config only for the datasets", () => {
+        configured();
+
+        expect(loaded({ advancedSearchEnabled: true }).sample).toEqual([]);
+      });
+
+      it("should start without conditions when no field has a value", () => {
+        setDatasetFields([{ key: "pid", relation: "IN" }]);
+
+        expect(loaded({ advancedSearchEnabled: true }).dataset).toEqual([]);
       });
     });
 

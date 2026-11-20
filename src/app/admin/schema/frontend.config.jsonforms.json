@@ -95,7 +95,6 @@
         }
       },
       "riotBaseUrl": { "type": "string" },
-      "scienceSearchEnabled": { "type": "boolean" },
       "scienceSearchUnitsEnabled": { "type": "boolean" },
       "searchPublicDataEnabled": { "type": "boolean" },
       "searchSamples": { "type": "boolean" },
@@ -107,6 +106,46 @@
       "shoppingCartEnabled": { "type": "boolean" },
       "shoppingCartOnHeader": { "type": "boolean" },
       "advancedSearchEnabled": { "type": "boolean", "default": false },
+      "advancedSearchFields": {
+        "type": "object",
+        "description": "Fields offered by the advanced search, per list. Only datasets use them for now, the built-in list is used when empty. The labels come from labelsLocalization. Without saved filters the advanced search opens with a row for each field.",
+        "properties": {
+          "datasets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "A dataset field, or scientific metadata as scientificMetadata.<key>, with dots for nested keys."
+                },
+                "relation": {
+                  "type": "string",
+                  "enum": [
+                    "CONTAINS",
+                    "IN",
+                    "RANGE",
+                    "EQUAL_TO",
+                    "GREATER_THAN",
+                    "LESS_THAN",
+                    "GREATER_THAN_OR_EQUAL",
+                    "LESS_THAN_OR_EQUAL"
+                  ],
+                  "description": "Dataset fields: CONTAINS, IN or RANGE. Scientific metadata: the operator the row starts with."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The value the row starts with. Separate several values with commas: any number for IN, two bounds for RANGE (from, to)."
+                },
+                "unit": {
+                  "type": "string",
+                  "description": "The unit of the value of scientific metadata."
+                }
+              }
+            }
+          }
+        }
+      },
       "tableSciDataEnabled": { "type": "boolean" },
       "datasetDetailsShowMissingProposalId": { "type": "boolean" },
       "datasetDetailsTabsInclude": {
@@ -581,6 +620,7 @@
           { "type": "Control", "scope": "#/properties/statusBannerCode" },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
           { "type": "Control", "scope": "#/properties/advancedSearchEnabled" },
+          { "type": "Control", "scope": "#/properties/advancedSearchFields" },
           { "type": "Control", "scope": "#/properties/tableSciDataEnabled" },
           {
             "type": "Control",
