@@ -16,7 +16,9 @@ import {
   fetchDatasetsAction,
   fetchFacetCountsAction,
   setPublicViewModeAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
+import { FilterCondition } from "state-management/models";
 import { of } from "rxjs";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -24,7 +26,6 @@ import { MatDialogModule, MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatChipsModule } from "@angular/material/chips";
@@ -140,7 +141,7 @@ describe("DatasetsFilterComponent", () => {
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
-      declarations: [DatasetsFilterComponent, SearchParametersDialogComponent],
+      declarations: [DatasetsFilterComponent],
       providers: [
         AsyncPipe,
         AppConfigService,
@@ -169,6 +170,11 @@ describe("DatasetsFilterComponent", () => {
     fixture = TestBed.createComponent(DatasetsFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    // the component of the schema-less template is not the condition filter
+    component.conditionFilter = jasmine.createSpyObj(
+      "SharedConditionComponent",
+      ["applyConditions"],
+    );
   });
 
   beforeEach(inject([Store], (mockStore: MockStoreWithFilters) => {
@@ -229,6 +235,49 @@ describe("DatasetsFilterComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(fetchFacetCountsAction());
+    });
+  });
+
+  describe("old condition filter", () => {
+    const temperature: FilterCondition = {
+      lhs: "temperature",
+      relation: "GREATER_THAN",
+      rhs: 5,
+      unit: "",
+    };
+    const pressure: FilterCondition = { ...temperature, lhs: "pressure" };
+
+    it("should add a condition to the applied ones", () => {
+      spyOn(store, "select").and.returnValue(of([pressure]));
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.addCondition(temperature);
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(
+        setScientificConditionsAction({ conditions: [pressure, temperature] }),
+      );
+    });
+
+    it("should not add a condition that is applied already", () => {
+      spyOn(store, "select").and.returnValue(of([temperature]));
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.addCondition({ ...temperature });
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(
+        setScientificConditionsAction({ conditions: [temperature] }),
+      );
+    });
+
+    it("should remove the condition of a key", () => {
+      spyOn(store, "select").and.returnValue(of([pressure, temperature]));
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.removeCondition({ ...temperature, rhs: "5" });
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(
+        setScientificConditionsAction({ conditions: [pressure] }),
+      );
     });
   });
 

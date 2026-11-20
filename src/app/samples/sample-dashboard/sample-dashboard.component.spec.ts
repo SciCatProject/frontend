@@ -13,7 +13,10 @@ import {
   setTextFilterAction,
   changePageAction,
   sortByColumnAction,
+  setCharacteristicsFilterAction,
 } from "state-management/actions/samples.actions";
+import { FilterCondition } from "state-management/models";
+import { of } from "rxjs";
 import {
   PageChangeEvent,
   SortChangeEvent,
@@ -133,6 +136,42 @@ describe("SampleDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setTextFilterAction({ text: query }),
+      );
+    });
+  });
+
+  describe("old condition filter", () => {
+    const temperature: FilterCondition = {
+      lhs: "temperature",
+      relation: "GREATER_THAN",
+      rhs: 5,
+      unit: "",
+    };
+    const pressure: FilterCondition = { ...temperature, lhs: "pressure" };
+    const withCharacteristics = (characteristicsFilter: FilterCondition[]) =>
+      (component.vm$ = of({ characteristicsFilter }) as never);
+
+    it("should add a condition to the characteristics", () => {
+      withCharacteristics([pressure]);
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.addCondition(temperature);
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(
+        setCharacteristicsFilterAction({
+          characteristics: [pressure, temperature],
+        }),
+      );
+    });
+
+    it("should remove the condition of a key", () => {
+      withCharacteristics([pressure, temperature]);
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.removeCondition(temperature);
+
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(
+        setCharacteristicsFilterAction({ characteristics: [pressure] }),
       );
     });
   });

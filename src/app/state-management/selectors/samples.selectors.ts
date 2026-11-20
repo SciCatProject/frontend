@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { MetadataKey } from "state-management/models";
 import { SampleState } from "state-management/state/samples.store";
 import { selectCurrentUser, selectSettings } from "./user.selectors";
 import { selectCurrentDataset } from "./datasets.selectors";
@@ -13,6 +14,12 @@ export const selectSamples = createSelector(
 export const selectMetadataKeys = createSelector(
   selectSampleState,
   (state) => state.metadataKeys,
+);
+
+/** The keys in the shape of the dataset keys, samples have no names for them. */
+export const selectMetadataKeyOptions = createSelector(
+  selectMetadataKeys,
+  (keys): MetadataKey[] => keys.map((key) => ({ key })),
 );
 
 export const selectCurrentSample = createSelector(

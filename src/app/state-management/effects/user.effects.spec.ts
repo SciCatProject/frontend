@@ -12,10 +12,11 @@ import { ADAuthService } from "users/adauth.service";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import * as fromActions from "state-management/actions/user.actions";
-import { hot, cold } from "jasmine-marbles";
+import { hot, cold, getTestScheduler } from "jasmine-marbles";
+import { toArray } from "rxjs/operators";
 import { MessageType } from "state-management/models";
 import { Router } from "@angular/router";
-import { provideMockStore } from "@ngrx/store/testing";
+import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import {
   selectColumns,
   selectCurrentUser,
@@ -23,6 +24,7 @@ import {
 import {
   clearDatasetsStateAction,
   setDatasetsLimitFilterAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
 import {
   clearJobsStateAction,
@@ -670,6 +672,93 @@ describe("UserEffects", () => {
 
       const expected = cold("-(bc)", { b: outcome1, c: outcome2 });
       expect(effects.setLimitFilters$).toBeObservable(expected);
+    });
+  });
+
+  describe("loadDefaultSettings$", () => {
+    it("should filter the datasets by the predefined conditions that are not switched off", () => {
+      const predefined = (lhs: string) => ({
+        condition: {
+          lhs,
+          relation: "EQUAL_TO_STRING" as const,
+          rhs: "steel",
+          unit: "",
+        },
+      });
+      const conditions = [
+        predefined("on"),
+        { ...predefined("off"), enabled: false },
+      ];
+      TestBed.inject(MockStore).setState({
+        users: {
+          settings: {
+            fe_dataset_table_conditions: [],
+            fe_sample_table_conditions: [],
+          },
+        },
+      });
+      actions = hot("(a|)", {
+        a: fromActions.loadDefaultSettings({
+          config: { defaultDatasetsListSettings: { conditions } },
+        } as never),
+      });
+
+      let filtered: unknown;
+      effects.loadDefaultSettings$.pipe(toArray()).subscribe((all) => {
+        filtered = (
+          all.find(
+            (action) => action.type === setScientificConditionsAction.type,
+          ) as ReturnType<typeof setScientificConditionsAction>
+        ).conditions;
+      });
+
+      getTestScheduler().flush();
+
+      expect(filtered).toEqual([predefined("on").condition]);
+    });
+  });
+
+  describe("setConditions$", () => {
+    const filled = {
+      condition: {
+        lhs: "temperature",
+        relation: "EQUAL_TO" as const,
+        rhs: "20",
+        unit: "",
+      },
+      enabled: true,
+    };
+    const switchedOff = { ...filled, enabled: false };
+    const withoutValue = {
+      ...filled,
+      condition: { ...filled.condition, lhs: "pressure", rhs: "" },
+    };
+
+    it("should only keep the saved conditions, the datasets reducer already filters by them", () => {
+      const configs = [filled, switchedOff, withoutValue];
+      const userSettings = {
+        externalSettings: {
+          fe_dataset_table_conditions: configs,
+          fe_sample_table_conditions: [],
+        },
+      } as unknown as UserSettings;
+
+      actions = hot("-a", {
+        a: fromActions.fetchUserSettingsCompleteAction({ userSettings }),
+      });
+
+      // setting them again would go back to the first page
+      const expected = cold("-(cd)", {
+        c: fromActions.updateConditionsConfigs({
+          conditionConfigs: configs,
+          scope: "dataset",
+        }),
+        d: fromActions.updateConditionsConfigs({
+          conditionConfigs: [],
+          scope: "sample",
+        }),
+      });
+      expect(effects.setConditions$).toBeObservable(expected);
     });
   });
 
