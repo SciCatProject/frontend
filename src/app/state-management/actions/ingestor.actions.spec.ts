@@ -39,12 +39,16 @@ describe("Ingestor Actions", () => {
       const versionResponse = { version: "1.0.0" };
       const userInfoResponse = { logged_in: true };
       const healthResponse = { status: "ok" };
+      const configurations: { creationLocations: Array<string> } = {
+        creationLocations: ["/foo/bar/"],
+      };
 
       const action = fromActions.connectIngestorSuccess({
         versionResponse,
         userInfoResponse,
         authIsDisabled: false,
         healthResponse,
+        configurations,
       });
 
       expect(action.type).toBe("[Ingestor] Completed Ingestor Connection");

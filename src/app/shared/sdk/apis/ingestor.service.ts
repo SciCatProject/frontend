@@ -9,6 +9,7 @@ import {
   GetBrowseDatasetResponse,
   GetExtractorResponse,
   GetTransferResponse,
+  OtherConfigurationsResponse,
   OtherHealthResponse,
   OtherVersionResponse,
   PostDatasetRequest,
@@ -30,6 +31,7 @@ export const INGESTOR_API_ENDPOINTS_V1 = {
   OTHER: {
     VERSION: "version",
     HEALTH: "health",
+    CONFIGURATIONS: "configurations",
   },
   EXTRACTOR: "extractor",
   METADATA: "metadata",
@@ -84,6 +86,18 @@ export class Ingestor {
       switchMap((ingestorEndpoint) =>
         this.http.get<OtherHealthResponse>(
           `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.OTHER.HEALTH}`,
+          this.getRequestOptions(),
+        ),
+      ),
+    );
+  }
+
+  getConfigurations(): Observable<OtherConfigurationsResponse> {
+    return this.store.select(selectIngestorEndpoint).pipe(
+      take(1),
+      switchMap((endpoint) =>
+        this.http.get<OtherConfigurationsResponse>(
+          `${endpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.OTHER.CONFIGURATIONS}`,
           this.getRequestOptions(),
         ),
       ),
