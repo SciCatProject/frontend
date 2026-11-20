@@ -232,17 +232,20 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
     // The saved conditions are the ones shown as chips, so they replace the ones of the URL,
     // also when there are none. The page can be there before the settings are.
-    this.subscriptions.push(
-      this.store
-        .select(selectFetchedConditions("sample"))
-        .pipe(
-          filter((configs) => configs !== null),
-          take(1),
-        )
-        .subscribe((configs) =>
-          this.onConditionsApplied(toActiveConditions(configs)),
-        ),
-    );
+    // The old condition filter applies its conditions itself and keeps the ones of the URL.
+    if (!this.oldFilter) {
+      this.subscriptions.push(
+        this.store
+          .select(selectFetchedConditions("sample"))
+          .pipe(
+            filter((configs) => configs !== null),
+            take(1),
+          )
+          .subscribe((configs) =>
+            this.onConditionsApplied(toActiveConditions(configs)),
+          ),
+      );
+    }
   }
 
   /** The filters changing fetches the samples, see ngOnInit. */
