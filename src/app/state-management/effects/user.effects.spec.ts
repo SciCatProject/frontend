@@ -638,6 +638,88 @@ describe("UserEffects", () => {
       expect(effects.fetchUserSettings$).toBeObservable(expected);
     });
 
+    describe("predefined conditions of the samples", () => {
+      const predefined = {
+        condition: {
+          lhs: "material",
+          relation: "EQUAL_TO_STRING" as const,
+          rhs: "steel",
+          unit: "",
+        },
+      };
+
+      const settingsAfterFetch = (
+        externalSettings: object,
+        // the predefined conditions are for the old condition filter
+        config: object = { advancedSearchEnabled: false },
+      ) => {
+        spyOn(TestBed.inject(AppConfigService), "getConfig").and.returnValue({
+          ...config,
+          defaultSamplesListSettings: { conditions: [predefined] },
+        } as never);
+        actions = hot("-a", { a: fromActions.fetchUserSettingsAction({ id }) });
+        userApi.usersControllerGetSettingsV3.and.returnValue(
+          cold("-a|", { a: { externalSettings } as unknown as UserSettings }),
+        );
+
+        let settings: Record<string, unknown>;
+        effects.fetchUserSettings$.subscribe((action) => {
+          settings = (action as { userSettings: UserSettings }).userSettings
+            .externalSettings;
+        });
+        getTestScheduler().flush();
+        return settings;
+      };
+
+      it("should give the predefined conditions back to a user who cleared them, for the old condition filter", () => {
+        expect(
+          settingsAfterFetch({ fe_sample_table_conditions: [] })
+            .fe_sample_table_conditions,
+        ).toEqual([predefined]);
+      });
+
+      it("should keep the sample conditions a user cleared, with the advanced search", () => {
+        expect(
+          settingsAfterFetch(
+            { fe_sample_table_conditions: [] },
+            { advancedSearchEnabled: true },
+          ).fe_sample_table_conditions,
+        ).toEqual([]);
+      });
+
+      it("should be the sample conditions of a user whose settings are new", () => {
+        expect(settingsAfterFetch({}).fe_sample_table_conditions).toEqual([
+          predefined,
+        ]);
+      });
+
+      it("should not be used by the advanced search", () => {
+        expect(
+          settingsAfterFetch({}, { advancedSearchEnabled: true })
+            .fe_sample_table_conditions,
+        ).toEqual([]);
+      });
+
+      it("should not be used when the advanced search is not configured", () => {
+        expect(settingsAfterFetch({}, {}).fe_sample_table_conditions).toEqual(
+          [],
+        );
+      });
+
+      it("should not replace the sample conditions the user has", () => {
+        const own = [{ condition: { ...predefined.condition, lhs: "own" } }];
+
+        expect(
+          settingsAfterFetch({ fe_sample_table_conditions: own })
+            .fe_sample_table_conditions,
+        ).toEqual(own);
+      });
+
+      it("should leave the dataset conditions alone", () => {
+        expect(settingsAfterFetch({}).fe_dataset_table_conditions).toEqual([]);
+      });
+    });
+
     it("should result in a fetchUserSettingsFailedAction", () => {
       const action = fromActions.fetchUserSettingsAction({ id });
       const outcome = fromActions.fetchUserSettingsFailedAction();
@@ -676,30 +758,177 @@ describe("UserEffects", () => {
   });
 
   describe("loadDefaultSettings$", () => {
-    it("should filter the datasets by the predefined conditions that are not switched off", () => {
-      const predefined = (lhs: string) => ({
-        condition: {
-          lhs,
-          relation: "EQUAL_TO_STRING" as const,
-          rhs: "steel",
-          unit: "",
-        },
+    const predefined = (lhs: string) => ({
+      condition: {
+        lhs,
+        relation: "EQUAL_TO_STRING" as const,
+        rhs: "steel",
+        unit: "",
+      },
+    });
+    const noSettings = {
+      fe_dataset_table_conditions: [],
+      fe_sample_table_conditions: [],
+    };
+
+    // the conditions that are put in the store, by scope
+    const loaded = (
+      config: object,
+      settings: object = noSettings,
+      hasFetchedSettings = false,
+    ) => {
+      TestBed.inject(MockStore).setState({
+        users: { settings, hasFetchedSettings },
       });
+      actions = hot("(a|)", {
+        a: fromActions.loadDefaultSettings({
+          // the predefined conditions are for the old condition filter
+          config: { advancedSearchEnabled: false, ...config },
+        } as never),
+      });
+
+      let emitted: {
+        type: string;
+        scope?: string;
+        conditionConfigs?: unknown;
+      }[];
+      effects.loadDefaultSettings$
+        .pipe(toArray())
+        .subscribe((all) => (emitted = all as typeof emitted));
+      getTestScheduler().flush();
+
+      const conditionsOf = (scope: string) =>
+        emitted.find(
+          (action) =>
+            action.type === fromActions.updateConditionsConfigs.type &&
+            action.scope === scope,
+        )?.conditionConfigs;
+      return {
+        dataset: conditionsOf("dataset"),
+        sample: conditionsOf("sample"),
+      };
+    };
+
+    it("should start the dataset list with the predefined conditions", () => {
+      const conditions = [predefined("material")];
+
+      const { dataset } = loaded({
+        defaultDatasetsListSettings: { conditions },
+      });
+
+      expect(dataset).toEqual(conditions);
+    });
+
+    it("should start the sample list with the predefined conditions", () => {
+      const conditions = [predefined("material")];
+
+      const { sample, dataset } = loaded({
+        defaultSamplesListSettings: { conditions },
+      });
+
+      expect(sample).toEqual(conditions);
+      expect(dataset).toEqual([]);
+    });
+
+    it("should keep the predefined conditions of the datasets and the samples apart", () => {
+      const datasets = [predefined("temperature")];
+      const samples = [predefined("material")];
+
+      const { dataset, sample } = loaded({
+        defaultDatasetsListSettings: { conditions: datasets },
+        defaultSamplesListSettings: { conditions: samples },
+      });
+
+      expect(dataset).toEqual(datasets);
+      expect(sample).toEqual(samples);
+    });
+
+    it("should not use the predefined conditions with the advanced search", () => {
+      const config = {
+        defaultDatasetsListSettings: { conditions: [predefined("a")] },
+        defaultSamplesListSettings: { conditions: [predefined("b")] },
+      };
+
+      [true, undefined].forEach((advancedSearchEnabled) => {
+        const { dataset, sample } = loaded({
+          ...config,
+          advancedSearchEnabled,
+        });
+
+        expect(dataset).toEqual([]);
+        expect(sample).toEqual([]);
+      });
+    });
+
+    it("should start without conditions when nothing is predefined", () => {
+      const { dataset, sample } = loaded({});
+
+      expect(dataset).toEqual([]);
+      expect(sample).toEqual([]);
+    });
+
+    it("should keep the conditions the user has instead of the predefined ones", () => {
+      const own = [predefined("own_key")];
+
+      const { dataset, sample } = loaded(
+        {
+          defaultDatasetsListSettings: { conditions: [predefined("a")] },
+          defaultSamplesListSettings: { conditions: [predefined("b")] },
+        },
+        {
+          fe_dataset_table_conditions: own,
+          fe_sample_table_conditions: own,
+        },
+      );
+
+      expect(dataset).toEqual(own);
+      expect(sample).toEqual(own);
+    });
+
+    it("should bring the predefined conditions back on every load for the old condition filter", () => {
+      const conditions = [predefined("a")];
+
+      const { dataset } = loaded(
+        {
+          advancedSearchEnabled: false,
+          defaultDatasetsListSettings: { conditions },
+        },
+        noSettings,
+        true,
+      );
+
+      expect(dataset).toEqual(conditions);
+    });
+
+    it("should not bring the predefined conditions back once the settings were loaded", () => {
+      const config = {
+        defaultDatasetsListSettings: { conditions: [predefined("a")] },
+        defaultSamplesListSettings: { conditions: [predefined("b")] },
+      };
+
+      // the user cleared them, paging loads the default settings again
+      const { dataset, sample } = loaded(
+        { ...config, advancedSearchEnabled: true },
+        noSettings,
+        true,
+      );
+
+      expect(dataset).toBeUndefined();
+      expect(sample).toBeUndefined();
+    });
+
+    it("should filter the datasets by the predefined conditions that are not switched off", () => {
       const conditions = [
         predefined("on"),
         { ...predefined("off"), enabled: false },
       ];
-      TestBed.inject(MockStore).setState({
-        users: {
-          settings: {
-            fe_dataset_table_conditions: [],
-            fe_sample_table_conditions: [],
-          },
-        },
-      });
+      TestBed.inject(MockStore).setState({ users: { settings: noSettings } });
       actions = hot("(a|)", {
         a: fromActions.loadDefaultSettings({
-          config: { defaultDatasetsListSettings: { conditions } },
+          config: {
+            advancedSearchEnabled: false,
+            defaultDatasetsListSettings: { conditions },
+          },
         } as never),
       });
 

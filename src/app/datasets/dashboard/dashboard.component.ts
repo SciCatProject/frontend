@@ -10,9 +10,9 @@ import {
   fetchDatasetsAction,
   fetchFacetCountsAction,
   prefillBatchAction,
+  fetchMetadataKeysAction,
   prefillFiltersAction,
   fetchDatasetCompleteAction,
-  fetchMetadataKeysAction,
   changePageAction,
   clearBatchAction,
   setSearchTermsAction,
@@ -111,7 +111,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
-    this.store.dispatch(fetchMetadataKeysAction({}));
+    // the old condition filter lists the keys of the store
+    if (this.appConfig.advancedSearchEnabled === false) {
+      this.store.dispatch(fetchMetadataKeysAction({}));
+    }
 
     this.subscriptions.push(
       combineLatest([
