@@ -238,8 +238,9 @@ const appConfig: AppConfigInterface = {
     htmlContent: "This is not my about",
   },
   datasetDetailComponent: {
-    enableCustomizedComponent: false,
-    customization: [],
+    customization: [
+      { type: "regular", label: "Test", order: 0, row: 1, col: 1 },
+    ],
     tileRestrictedIconVisible: false,
     tileRestrictedIconGroups: ["admin"],
   },
@@ -481,8 +482,9 @@ describe("AppConfigService", () => {
           htmlContent: "This is the mockConfigResponses config.json about",
         },
         datasetDetailComponent: {
-          enableCustomizedComponent: false,
-          customization: [],
+          customization: [
+            { type: "regular", label: "Test", order: 0, row: 1, col: 1 },
+          ],
           tileRestrictedIconVisible: false,
           tileRestrictedIconGroups: ["admin"],
         },
@@ -504,8 +506,9 @@ describe("AppConfigService", () => {
             "This is the mockConfigResponses config.override.json about",
         },
         datasetDetailComponent: {
-          enableCustomizedComponent: false,
-          customization: [],
+          customization: [
+            { type: "regular", label: "Test", order: 0, row: 1, col: 1 },
+          ],
           tileRestrictedIconVisible: false,
           tileRestrictedIconGroups: ["admin"],
         },
@@ -537,8 +540,9 @@ describe("AppConfigService", () => {
           "This is the mockConfigResponses config.override.json about",
       },
       datasetDetailComponent: {
-        enableCustomizedComponent: false,
-        customization: [],
+        customization: [
+          { type: "regular", label: "Test", order: 0, row: 1, col: 1 },
+        ],
         tileRestrictedIconVisible: false,
         tileRestrictedIconGroups: ["admin"],
       },
@@ -575,6 +579,24 @@ describe("AppConfigService", () => {
       const config = service.getConfig();
 
       expect(config).toEqual(appConfig);
+    });
+
+    it("should fail when datasetDetailComponent is missing", async () => {
+      spyOn(service["http"], "get").and.returnValue(of({}));
+
+      await expectAsync(service.loadAppConfig()).toBeRejectedWithError(
+        "Invalid frontend configuration: datasetDetailComponent is required.",
+      );
+    });
+
+    it("should fail when dataset customization is empty", async () => {
+      spyOn(service["http"], "get").and.returnValue(
+        of({ datasetDetailComponent: { customization: [] } }),
+      );
+
+      await expectAsync(service.loadAppConfig()).toBeRejectedWithError(
+        "Invalid frontend configuration: datasetDetailComponent.customization must be a non-empty array.",
+      );
     });
 
     [true, false].forEach((configOverrideEnabled) => {
@@ -920,7 +942,14 @@ describe("AppConfigService", () => {
 
     it("should ignore additionalConfigs from the backend config", async () => {
       const httpGet = mockHttpGet({
-        "/api/v3/admin/config": { additionalConfigs: ["/ext.json"] },
+        "/api/v3/admin/config": {
+          additionalConfigs: ["/ext.json"],
+          datasetDetailComponent: {
+            customization: [
+              { type: "regular", label: "Test", order: 0, row: 1, col: 1 },
+            ],
+          },
+        },
       });
 
       await service.loadAppConfig();

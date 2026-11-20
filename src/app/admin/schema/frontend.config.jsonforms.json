@@ -1,6 +1,7 @@
 {
   "schema": {
     "type": "object",
+    "required": ["datasetDetailComponent"],
     "properties": {
       "defaultMainPage": {
         "type": "object",
@@ -423,7 +424,6 @@
       "datasetDetailComponent": {
         "type": "object",
         "properties": {
-          "enableCustomizedComponent": { "type": "boolean" },
           "tileRestrictedIconVisible": {
             "type": "boolean",
             "title": "Restricted Tiles Indicator Enabled",
@@ -502,10 +502,12 @@
                     "required": ["element", "source", "order"]
                   }
                 }
-              }
+              },
+              "required": ["type", "label", "order", "row", "col"]
             }
           }
-        }
+        },
+        "required": ["customization"]
       },
       "mainMenu": {
         "type": "object",
@@ -972,10 +974,6 @@
           "expandable": true
         },
         "elements": [
-          {
-            "type": "Control",
-            "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
-          },
           {
             "type": "Control",
             "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconVisible"

@@ -213,7 +213,7 @@ export interface AppConfigInterface {
   defaultProposalsListSettings?: ListSettings;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
-  datasetDetailComponent?: DatasetDetailComponentConfig;
+  datasetDetailComponent: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
   timezone?: string;
@@ -312,6 +312,76 @@ function applyDefaultDatasetViewModes(config: AppConfigInterface): void {
     ...config.datasetViews,
     modes: DEFAULT_DATASET_VIEW_MODES,
   };
+}
+
+function validateDatasetDetailConfiguration(config: AppConfigInterface): void {
+  const datasetDetailComponent = config.datasetDetailComponent as unknown;
+  if (!datasetDetailComponent || typeof datasetDetailComponent !== "object") {
+    throw new Error(
+      "Invalid frontend configuration: datasetDetailComponent is required.",
+    );
+  }
+
+  const customization = (
+    datasetDetailComponent as {
+      customization?: unknown;
+    }
+  ).customization;
+  if (!Array.isArray(customization) || customization.length === 0) {
+    throw new Error(
+      "Invalid frontend configuration: datasetDetailComponent.customization must be a non-empty array.",
+    );
+  }
+
+  const validTypes = new Set([
+    "regular",
+    "scientificMetadata",
+    "datasetJsonView",
+    "attachments",
+    "statusBanner",
+  ]);
+  const validFieldTypes = new Set([
+    "text",
+    "copy",
+    "linky",
+    "tag",
+    "date",
+    "internalLink",
+  ]);
+  const invalidIndex = customization.findIndex((section) => {
+    if (!section || typeof section !== "object") return true;
+    const item = section as Record<string, unknown>;
+    if (
+      typeof item.type !== "string" ||
+      !validTypes.has(item.type) ||
+      typeof item.label !== "string" ||
+      typeof item.order !== "number" ||
+      typeof item.row !== "number" ||
+      typeof item.col !== "number"
+    ) {
+      return true;
+    }
+
+    if (item.fields === undefined) return false;
+    if (!Array.isArray(item.fields)) return true;
+
+    return item.fields.some((field) => {
+      if (!field || typeof field !== "object") return true;
+      const fieldConfig = field as Record<string, unknown>;
+      return (
+        typeof fieldConfig.element !== "string" ||
+        !validFieldTypes.has(fieldConfig.element) ||
+        typeof fieldConfig.source !== "string" ||
+        typeof fieldConfig.order !== "number"
+      );
+    });
+  });
+
+  if (invalidIndex !== -1) {
+    throw new Error(
+      `Invalid frontend configuration: datasetDetailComponent.customization[${invalidIndex}] is malformed.`,
+    );
+  }
 }
 
 @Injectable({
@@ -422,6 +492,7 @@ export class AppConfigService {
     }
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
+    validateDatasetDetailConfiguration(config);
 
     if (
       config.paginationPosition !== "top" &&

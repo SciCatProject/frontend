@@ -213,7 +213,6 @@ export const testConfig = {
       },
     },
     datasetDetailComponent: {
-      enableCustomizedComponent: true,
       customization: [
         {
           type: "attachments",
@@ -300,10 +299,6 @@ export const testConfig = {
         "General Information": "Test General Information",
         "Creator Information": "Creator Information",
       },
-    },
-    datasetDetailComponent: {
-      enableCustomizedComponent: false,
-      customization: [],
     },
   },
   proposalViewCustomLabels: {

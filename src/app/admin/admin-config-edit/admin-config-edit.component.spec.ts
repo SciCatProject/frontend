@@ -25,7 +25,6 @@ describe("AdminConfigEditComponent internal link labels", () => {
                   labelsLocalization: { dataset: {}, proposal: {} },
                   datasetDetailsTabsInclude: { details: ["proposals"] },
                   datasetDetailComponent: {
-                    enableCustomizedComponent: true,
                     customization: [
                       {
                         type: "regular",
