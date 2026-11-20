@@ -585,7 +585,11 @@ describe("Datasets advanced search", () => {
 
     it("should filter with the rows that are filled in and keep the empty ones", () => {
       cy.openAdvancedSearch();
+      // the dialog puts the cursor in the first row once it is open, what is typed before
+      // that would be lost
+      cy.get('[data-cy="condition-field"]').first().should("have.focus");
       row(2).find('[data-cy="condition-value"]').type("gamma");
+      row(2).find('[data-cy="condition-value"]').should("have.value", "gamma");
       apply();
 
       chips().should("have.length", 1).and("contain", "Keywords: gamma");
