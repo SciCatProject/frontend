@@ -43,8 +43,11 @@ const EQUALITY_RELATIONS: FilterConditionRelation[] = [
   "EQUAL_TO_STRING",
 ];
 
+// spaces only are no value, they would be read as the number 0
 const isBlank = (value: unknown): boolean =>
-  value === undefined || value === null || value === "";
+  value === undefined ||
+  value === null ||
+  (typeof value === "string" && value.trim() === "");
 
 const isNumeric = (value: unknown): boolean =>
   !isBlank(value) && !isNaN(Number(value));
@@ -332,18 +335,23 @@ export function conditionToMongoQuery(
       convertedMin = toSI(min);
       convertedMax = toSI(max);
       // a range can have only one bound, use the one that is set
-      queryUnit = convertToSIUnit(lhs, (min ?? max) as number, unit).siUnit;
+      queryUnit = convertToSIUnit(
+        lhs,
+        (isBlank(min) ? max : min) as number,
+        unit,
+      ).siUnit;
     }
 
-    if (convertedMin !== null && convertedMin !== undefined) {
+    if (!isBlank(convertedMin)) {
       query[valuePath] = { ...query[valuePath], $gte: convertedMin };
     }
-    if (convertedMax !== null && convertedMax !== undefined) {
+    if (!isBlank(convertedMax)) {
       query[valuePath] = { ...query[valuePath], $lte: convertedMax };
     }
   }
 
-  if (queryUnit) {
+  // a range without a bound is no filter, its unit alone must not be one either
+  if (queryUnit && query[valuePath]) {
     query[`${metadataPath(lhs)}.unitSI`] = { $eq: queryUnit };
   }
   return query;
@@ -380,8 +388,16 @@ function datasetConditionToQuery({
 /** The start of a day (`2026-01-31`) in the local time zone as an ISO string, undefined for no date. */
 function startOfDay(date: string, addDays = 0): string | undefined {
   const [year, month, day] = date.split("-").map(Number);
-  const start = new Date(year, month - 1, day + addDays);
-  return isNaN(start.getTime()) ? undefined : start.toISOString();
+  const given = new Date(year, month - 1, day);
+  // a day that does not exist, e.g. 2026-02-31, is not moved into the next month
+  if (
+    isNaN(given.getTime()) ||
+    given.getMonth() !== month - 1 ||
+    given.getDate() !== day
+  ) {
+    return undefined;
+  }
+  return new Date(year, month - 1, day + addDays).toISOString();
 }
 
 /** The query of one condition, NOT leaves out what matches. */
