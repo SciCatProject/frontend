@@ -741,6 +741,22 @@ describe("AdvancedSearchDialogComponent", () => {
   describe("validation", () => {
     beforeEach(() => createComponent());
 
+    it("should not apply a range of scientific metadata that is the wrong way round", () => {
+      setMetadata(0, "temperature");
+      component.setRelation(id(), "RANGE");
+      component.setBound(id(), 0, "30");
+      component.setBound(id(), 1, "4");
+
+      expect(component.canApply()).toBeFalse();
+      expect(component.errors().get(id())?.value).toContain("minimum");
+
+      // 4 to 30 as numbers, as text "30" would come first
+      component.setBound(id(), 0, "4");
+      component.setBound(id(), 1, "30");
+
+      expect(component.canApply()).toBeTrue();
+    });
+
     it("should not apply a condition without a value", () => {
       setMetadata(0, "temperature");
 
