@@ -5,6 +5,7 @@
     [id]="id"
     [formControl]="form"
     (input)="onChange($event)"
+    (blur)="onBlur()"
   />
   <mat-icon
     *ngIf="description"
