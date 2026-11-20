@@ -82,6 +82,28 @@ mat-chip-row {
   }
 }
 
+// the text search is a pill with a search icon, so it does not look like a metadata filter
+mat-chip-row.text-chip {
+  cursor: default;
+  font-style: italic;
+  --mat-chip-elevated-container-color: color-mix(
+    in srgb,
+    var(--theme-primary-default) 12%,
+    white
+  );
+  --mat-chip-outline-color: var(--theme-primary-default);
+  border-radius: 13px;
+}
+
+.text-icon {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  font-size: 14px;
+  vertical-align: middle;
+  color: var(--theme-primary-default);
+}
+
 .not-icon {
   width: 14px;
   height: 14px;

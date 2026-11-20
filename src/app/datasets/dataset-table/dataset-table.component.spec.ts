@@ -23,6 +23,8 @@ import {
   selectAllDatasetsAction,
   clearSelectionAction,
   sortByColumnAction,
+  setTextFilterAction,
+  fetchDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import {
@@ -283,6 +285,43 @@ describe("DatasetTableComponent", () => {
       ngrxStore.refreshState();
 
       expect(clearSelection).toHaveBeenCalled();
+    });
+  });
+
+  describe("text search chip", () => {
+    it("should show the text of the last search", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onTextSearchApply("beam");
+
+      expect(component.appliedText).toBe("beam");
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
+    });
+
+    it("should remove the text and search again", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      component.onTextSearchApply("beam");
+
+      component.onTextRemove();
+
+      expect(component.appliedText).toBe("");
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setTextFilterAction({ text: "" }),
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
+    });
+
+    it("should clear the text and the advanced filters", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      const clearFilters = jasmine.createSpy("clearFilters");
+      component.advancedSearchButton = { clearFilters } as never;
+
+      component.onClearAll();
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setTextFilterAction({ text: "" }),
+      );
+      expect(clearFilters).toHaveBeenCalledTimes(1);
     });
   });
 

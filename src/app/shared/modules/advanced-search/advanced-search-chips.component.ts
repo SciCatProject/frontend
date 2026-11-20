@@ -12,9 +12,12 @@ import { describeCondition, getActiveConfigs } from "./advanced-search.utils";
 })
 export class AdvancedSearchChipsComponent {
   @Input() configs: ConditionConfig[] | null = [];
+  /** The text of the last search, shown as a chip of its own. */
+  @Input() appliedText: string | null = "";
 
   @Output() filterSelect = new EventEmitter<ConditionConfig>();
   @Output() filterRemove = new EventEmitter<ConditionConfig>();
+  @Output() textRemove = new EventEmitter<void>();
   @Output() clearAll = new EventEmitter<void>();
 
   readonly describe = describeCondition;

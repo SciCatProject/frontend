@@ -11,6 +11,22 @@
     </span>
 
     <mat-chip-set class="chips" aria-label="Applied filters">
+      @if (appliedText) {
+        <mat-chip-row
+          class="text-chip"
+          [matTooltip]="'Text search: ' + appliedText"
+          matTooltipShowDelay="300"
+          (removed)="textRemove.emit()"
+          data-cy="text-chip"
+        >
+          <mat-icon class="text-icon" aria-hidden="true">search</mat-icon>
+          <span class="cdk-visually-hidden">Text search:</span>
+          <span class="chip-text">“{{ appliedText }}”</span>
+          <button matChipRemove type="button" aria-label="Remove text search">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      }
       @for (config of active; track config) {
         <mat-chip-row
           [class.excluded]="config.condition.exclude"

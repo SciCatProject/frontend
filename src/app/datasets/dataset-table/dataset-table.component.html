@@ -11,7 +11,7 @@
   [showGlobalTextSearch]="true"
   [globalTextSearch]="globalTextSearch"
   (globalTextSearchChange)="onTextSearchChange($event)"
-  (globalTextSearchApply)="onTextSearchAction()"
+  (globalTextSearchApply)="onTextSearchApply($event)"
   [globalTextSearchPlaceholder]="'Type anything to search...'"
   [localization]="localization"
   [selectionIds]="selectionIds"
@@ -37,9 +37,11 @@
     <advanced-search-chips
       table-toolbar
       [configs]="conditionConfigs$ | async"
+      [appliedText]="appliedText"
+      (textRemove)="onTextRemove()"
       (filterSelect)="advancedSearchButton.openFilter($event)"
       (filterRemove)="advancedSearchButton.removeFilter($event)"
-      (clearAll)="advancedSearchButton.clearFilters()"
+      (clearAll)="onClearAll()"
     ></advanced-search-chips>
   }
 </dynamic-mat-table>

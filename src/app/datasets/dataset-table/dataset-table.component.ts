@@ -177,6 +177,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   tablesSettings: object;
 
   globalTextSearch = "";
+  /** The text of the last search, null until the first one. */
+  appliedText: string | null = null;
 
   /** The metadata keys for the conditions, loaded page by page. */
   keySource: ConditionKeySource;
@@ -447,6 +449,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         .subscribe(([queryParams, storeSearchTerm]) => {
           const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
           this.globalTextSearch = searchQuery.text || storeSearchTerm || "";
+          // an empty box removes the chip, the first text is the one from the url
+          this.appliedText = this.globalTextSearch
+            ? (this.appliedText ?? this.globalTextSearch)
+            : "";
         }),
     );
   }
@@ -473,6 +479,22 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onTextSearchAction() {
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
+  }
+
+  // the text comes with the event, the box value is reset from the url while it changes
+  onTextSearchApply(term: string) {
+    this.appliedText = term;
+    this.onTextSearchAction();
+  }
+
+  onTextRemove() {
+    this.onTextSearchChange("");
+    this.onTextSearchApply("");
+  }
+
+  onClearAll() {
+    this.onTextSearchChange("");
+    this.advancedSearchButton.clearFilters();
   }
 
   onConditionsApplied(conditions: FilterCondition[]) {

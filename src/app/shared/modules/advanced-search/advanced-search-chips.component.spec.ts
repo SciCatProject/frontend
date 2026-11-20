@@ -82,6 +82,39 @@ describe("AdvancedSearchChipsComponent", () => {
     expect(find(".chip-text").textContent).toBe("Keywords: beam, test");
   });
 
+  it("should show the text search as a chip of its own", () => {
+    component.appliedText = "beam";
+    render([config("temperature")]);
+
+    expect(find("[data-cy=text-chip]").textContent).toContain("“beam”");
+    expect(chips().length).toBe(1);
+  });
+
+  it("should show no text chip for an empty text", () => {
+    component.appliedText = "";
+    render([config("temperature")]);
+
+    expect(find("[data-cy=text-chip]")).toBeNull();
+  });
+
+  it("should show no bar for the text alone", () => {
+    component.appliedText = "beam";
+    render([]);
+
+    expect(find("[data-cy=condition-applied]")).toBeNull();
+  });
+
+  it("should tell when the text chip is removed", () => {
+    const removed = jasmine.createSpy("textRemove");
+    component.textRemove.subscribe(removed);
+    component.appliedText = "beam";
+    render([config("temperature")]);
+
+    find("[data-cy=text-chip] [matChipRemove]").click();
+
+    expect(removed).toHaveBeenCalledTimes(1);
+  });
+
   it("should tell which filter was clicked or removed", () => {
     const [first, second] = [config("temperature"), config("pressure")];
     const selected = jasmine.createSpy("select");
@@ -91,7 +124,9 @@ describe("AdvancedSearchChipsComponent", () => {
     render([first, second]);
 
     find("[data-cy=condition-chip]").click();
-    fixture.nativeElement.querySelectorAll("[matChipRemove]")[1].click();
+    fixture.nativeElement
+      .querySelectorAll("[data-cy=condition-chip] [matChipRemove]")[1]
+      .click();
 
     expect(selected).toHaveBeenCalledOnceWith(first);
     expect(removed).toHaveBeenCalledOnceWith(second);
