@@ -167,7 +167,11 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
               : "Enter a value",
         });
       } else if (this.isReversed(condition)) {
-        errors.set(id, { value: "The start date is after the end date" });
+        errors.set(id, {
+          value: isDatasetCondition(condition)
+            ? "The start date is after the end date"
+            : "The minimum is greater than the maximum",
+        });
       }
     }
     return errors;
@@ -219,12 +223,14 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     });
   }
 
+  /** Dates are compared as text (yyyy-mm-dd), the bounds of scientific metadata as numbers. */
   private isReversed({ rhs, relation, source }: FilterCondition): boolean {
-    if (source !== "dataset" || relation !== "RANGE" || !Array.isArray(rhs)) {
+    if (relation !== "RANGE" || !Array.isArray(rhs)) {
       return false;
     }
-    const [from, to] = rhs;
-    return !!from && !!to && String(from) > String(to);
+    const [from, to] = rhs.map((bound) => String(bound ?? "").trim());
+    if (!from || !to) return false;
+    return source === "dataset" ? from > to : Number(from) > Number(to);
   }
 
   private hasValue({ rhs }: FilterCondition): boolean {
