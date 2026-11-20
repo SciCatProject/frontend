@@ -151,6 +151,15 @@ export const selectHasFetchedSettings = createSelector(
   (state) => state.hasFetchedSettings,
 );
 
+/** The saved conditions once the settings are fetched, before that it is not known: null. */
+export const selectFetchedConditions = (scope: "dataset" | "sample") =>
+  createSelector(
+    selectHasFetchedSettings,
+    selectConditions(scope),
+    (hasFetchedSettings, conditions) =>
+      hasFetchedSettings ? conditions : null,
+  );
+
 export const selectColumnsWithHasFetchedSettings = createSelector(
   selectColumns,
   selectHasFetchedSettings,

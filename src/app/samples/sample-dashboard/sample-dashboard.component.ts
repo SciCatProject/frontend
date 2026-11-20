@@ -41,11 +41,8 @@ import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
-import {
-  addCharacteristicsFilterAction,
-  removeCharacteristicsFilterAction,
-} from "state-management/actions/samples.actions";
-import { ScientificCondition } from "state-management/models";
+import { setCharacteristicsFilterAction } from "state-management/actions/samples.actions";
+import { FilterCondition } from "state-management/models";
 
 @Component({
   selector: "sample-dashboard",
@@ -143,6 +140,18 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
   ) {}
 
+  private setCharacteristics(
+    change: (characteristics: FilterCondition[]) => FilterCondition[],
+  ) {
+    this.vm$.pipe(take(1)).subscribe((vm) =>
+      this.store.dispatch(
+        setCharacteristicsFilterAction({
+          characteristics: change(vm.characteristicsFilter ?? []),
+        }),
+      ),
+    );
+  }
+
   ngOnInit() {
     this.store.dispatch(fetchMetadataKeysAction());
 
@@ -210,15 +219,16 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      addCharacteristicsFilterAction({ characteristic: condition }),
-    );
+  addCondition = (condition: FilterCondition) => {
+    this.setCharacteristics((characteristics) => [
+      ...characteristics,
+      condition,
+    ]);
   };
 
-  removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(
-      removeCharacteristicsFilterAction({ lhs: condition.lhs }),
+  removeCondition = (condition: FilterCondition) => {
+    this.setCharacteristics((characteristics) =>
+      characteristics.filter(({ lhs }) => lhs !== condition.lhs),
     );
   };
 
@@ -257,11 +267,9 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   reset() {
     this.store.dispatch(setTextFilterAction({ text: "" }));
 
-    this.vm$.pipe(take(1)).subscribe((vm) => {
-      vm.characteristicsFilter?.forEach((c) => {
-        this.store.dispatch(removeCharacteristicsFilterAction({ lhs: c.lhs }));
-      });
-    });
+    this.store.dispatch(
+      setCharacteristicsFilterAction({ characteristics: [] }),
+    );
     this.conditionFilter?.clearConditions();
 
     this.store.dispatch(fetchSamplesAction());

@@ -18,6 +18,7 @@ import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
+  selectConditionsCountQuery,
   selectDatasetsInBatch,
   selectCurrentDataset,
   selectRelatedDatasetsFilters,
@@ -33,7 +34,7 @@ import {
   take,
   takeUntil,
 } from "rxjs/operators";
-import { Observable, of } from "rxjs";
+import { forkJoin, Observable, of } from "rxjs";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
@@ -51,6 +52,7 @@ export class DatasetEffects {
   relatedDatasetsFilters$ = this.store.select(selectRelatedDatasetsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   fullfacetParams$ = this.store.select(selectFullfacetParams);
+  conditionsCountQuery$ = this.store.select(selectConditionsCountQuery);
   filesFilters$ = this.store.select(selectFilesFilters);
   datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
   currentUser$ = this.store.select(selectCurrentUser);
@@ -113,8 +115,12 @@ export class DatasetEffects {
         fromActions.setPublicViewModeAction,
         fromActions.sortByColumnAction,
       ),
-      concatLatestFrom(() => [this.fullfacetParams$, this.currentUser$]),
-      switchMap(([, params, user]) => {
+      concatLatestFrom(() => [
+        this.fullfacetParams$,
+        this.currentUser$,
+        this.conditionsCountQuery$,
+      ]),
+      switchMap(([, params, user, countQuery]) => {
         const { fields, facets } = params;
 
         const filter = {
@@ -128,11 +134,21 @@ export class DatasetEffects {
               filter,
             );
 
-        return apiCall$.pipe(
-          map((res) => {
+        // the facets can't take all kinds of conditions, then the datasets are
+        // counted with the query of the datasets, see selectConditionsCountQuery
+        const counts$ = countQuery
+          ? forkJoin({
+              facets: apiCall$,
+              total: this.countDatasets(user, countQuery),
+            })
+          : apiCall$.pipe(map((facets) => ({ facets, total: null })));
+
+        return counts$.pipe(
+          map(({ facets: res, total }) => {
             const { all, ...facetCounts } = res[0];
 
-            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+            const allCounts =
+              total ?? (all && all.length > 0 ? all[0].totalSets : 0);
             return fromActions.fetchFacetCountsCompleteAction({
               facetCounts,
               allCounts,
@@ -183,17 +199,6 @@ export class DatasetEffects {
       map(({ limit }) =>
         updateUserSettingsAction({ property: { datasetCount: limit } }),
       ),
-    );
-  });
-
-  updateMetadataKeys$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(
-        fromActions.addScientificConditionAction,
-        fromActions.removeScientificConditionAction,
-        fromActions.clearFacetsAction,
-      ),
-      map(() => fromActions.fetchMetadataKeysAction({})),
     );
   });
 
@@ -631,6 +636,19 @@ export class DatasetEffects {
     private datasetsPublicV4Service: DatasetsPublicV4Service,
     private attachmentsV4Service: AttachmentsV4Service,
   ) {}
+
+  private countDatasets(
+    user: unknown,
+    query: Record<string, unknown>,
+  ): Observable<number> {
+    const filter = JSON.stringify({ where: query });
+    const count$ = user
+      ? this.datasetsV4Service.datasetsV4ControllerCountV4(filter)
+      : this.datasetsPublicV4Service.datasetsPublicV4ControllerCountPublicV4(
+          filter,
+        );
+    return count$.pipe(map(({ count }) => count));
+  }
 
   private waitForDataset$(pid: string): Observable<CurrentDataset> {
     return this.currentDataset$.pipe(
