@@ -437,9 +437,6 @@ export class AppConfigService {
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
 
-    // the advanced search is off unless it is turned on, until it becomes the default
-    config.advancedSearchEnabled = config.advancedSearchEnabled === true;
-
     setDatasetFields(
       config.advancedSearchFields?.datasets,
       config.labelsLocalization?.dataset,
