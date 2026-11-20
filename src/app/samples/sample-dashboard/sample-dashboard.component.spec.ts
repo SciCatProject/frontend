@@ -36,9 +36,8 @@ import {
   TableEventType,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 
-const getConfig = () => ({
-  addSampleEnabled: true,
-});
+let config: Record<string, unknown> = { addSampleEnabled: true };
+const getConfig = () => config;
 
 describe("SampleDashboardComponent", () => {
   let component: SampleDashboardComponent;
@@ -173,6 +172,31 @@ describe("SampleDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledOnceWith(
         setCharacteristicsFilterAction({ characteristics: [pressure] }),
       );
+    });
+  });
+
+  describe("search box of the table", () => {
+    afterEach(() => (config = { addSampleEnabled: true }));
+
+    // the component reads the config when it is created
+    const withConfig = (testConfig: Record<string, unknown>) => {
+      config = testConfig;
+      return TestBed.createComponent(SampleDashboardComponent).componentInstance
+        .showGlobalTextSearch;
+    };
+
+    it("should be shown for the advanced search when the samples can be searched", () => {
+      expect(withConfig({ searchSamples: true })).toBeTrue();
+    });
+
+    it("should be gone when the samples can't be searched, with the advanced search in it", () => {
+      expect(withConfig({ searchSamples: false })).toBeFalsy();
+    });
+
+    it("should be gone with the old condition filter, that has its own search card", () => {
+      expect(
+        withConfig({ searchSamples: true, advancedSearchEnabled: false }),
+      ).toBeFalse();
     });
   });
 

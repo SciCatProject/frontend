@@ -96,7 +96,8 @@
         (onTableEvent)="onTableEvent($event)"
         class="mat-elevation-z2"
       >
-        @if (!oldFilter) {
+        <!-- the button sits in the search box of the table, without it there is no advanced search -->
+        @if (showGlobalTextSearch) {
           <advanced-search-button
             table-search-action
             [iconOnly]="true"
@@ -106,7 +107,7 @@
             (conditionsApplied)="onConditionsApplied($event)"
           ></advanced-search-button>
         }
-        @if (!oldFilter) {
+        @if (showGlobalTextSearch) {
           <advanced-search-chips
             table-toolbar
             [configs]="conditionConfigs$ | async"
