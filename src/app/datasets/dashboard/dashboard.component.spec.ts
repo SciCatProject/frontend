@@ -123,16 +123,16 @@ describe("DashboardComponent", () => {
       return fixture.nativeElement as HTMLElement;
     };
 
-    it("should be shown when it is not configured", () => {
+    it("should be shown without the advanced filter", () => {
+      config.advancedSearchEnabled = false;
+
       const page = render();
 
       expect(page.querySelector("datasets-filter")).not.toBeNull();
       expect(page.querySelectorAll(".action-column").length).toBe(2);
     });
 
-    it("should be gone with its column when it is turned off", () => {
-      config.sideFilterEnabled = false;
-
+    it("should be gone with its column when the advanced filter is not configured", () => {
       const page = render();
 
       expect(page.querySelector("datasets-filter")).toBeNull();
@@ -140,8 +140,14 @@ describe("DashboardComponent", () => {
       expect(page.querySelector("dataset-table")).not.toBeNull();
     });
 
-    it("should leave the column for the create dataset card when it is turned off", () => {
-      config.sideFilterEnabled = false;
+    it("should be gone with the advanced filter", () => {
+      config.advancedSearchEnabled = true;
+
+      expect(render().querySelector("datasets-filter")).toBeNull();
+    });
+
+    it("should leave the column for the create dataset card with the advanced filter", () => {
+      config.advancedSearchEnabled = true;
       config.addDatasetEnabled = true;
       (TestBed.inject(Store) as unknown as NgrxMockStore).overrideSelector(
         selectIsLoggedIn,

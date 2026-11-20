@@ -151,6 +151,33 @@ describe("DatasetTableComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  describe("advanced search", () => {
+    const render = (advancedSearchEnabled?: boolean) => {
+      appConfigService.getConfig.and.returnValue({
+        datasetPageSizeOptions: [5, 10, 25, 100],
+        scienceSearchEnabled: true,
+        advancedSearchEnabled,
+      } as AppConfigInterface);
+      fixture = TestBed.createComponent(DatasetTableComponent);
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    };
+
+    it("should be shown when it is on, also when it is not configured", () => {
+      expect(render().querySelector("advanced-search-button")).not.toBeNull();
+      expect(
+        render(true).querySelector("advanced-search-button"),
+      ).not.toBeNull();
+    });
+
+    it("should be gone when it is off", () => {
+      const table = render(false);
+
+      expect(table.querySelector("advanced-search-button")).toBeNull();
+      expect(table.querySelector("advanced-search-chips")).toBeNull();
+    });
+  });
+
   describe("#getTablePaginationConfig()", () => {
     it("should use datasetPageSizeOptions from app config", () => {
       appConfigService.getConfig.and.returnValue({

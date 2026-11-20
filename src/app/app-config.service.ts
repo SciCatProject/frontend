@@ -195,7 +195,8 @@ export interface AppConfigInterface {
   scienceSearchUnitsEnabled: boolean;
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;
-  sideFilterEnabled?: boolean;
+  /** The advanced search (the default) or, when false, the side panel with the old condition filter. */
+  advancedSearchEnabled?: boolean;
   /** The fields of the advanced search per list, only datasets use them for now. */
   advancedSearchFields?: Partial<
     Record<

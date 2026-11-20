@@ -2,7 +2,7 @@
   <mat-sidenav-container [hasBackdrop]="false">
     <mat-sidenav-content>
       <!-- without the filter the side column only stays for the cards below it, else the table takes the whole width -->
-      @let filterShown = appConfig.sideFilterEnabled !== false;
+      @let filterShown = appConfig.advancedSearchEnabled === false;
       @let loggedIn = loggedIn$ | async;
       @let cartCardShown =
         !appConfig.shoppingCartOnHeader && (nonEmpty$ | async);

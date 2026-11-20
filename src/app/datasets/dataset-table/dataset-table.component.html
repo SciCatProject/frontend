@@ -23,7 +23,9 @@
   [emptyMessage]="'No datasets available'"
   [emptyIcon]="'folder'"
 >
-  @if (appConfig.scienceSearchEnabled) {
+  @if (
+    appConfig.scienceSearchEnabled && appConfig.advancedSearchEnabled !== false
+  ) {
     <advanced-search-button
       table-search-action
       [iconOnly]="true"
@@ -33,7 +35,9 @@
       (conditionsApplied)="onConditionsApplied($event)"
     ></advanced-search-button>
   }
-  @if (appConfig.scienceSearchEnabled) {
+  @if (
+    appConfig.scienceSearchEnabled && appConfig.advancedSearchEnabled !== false
+  ) {
     <advanced-search-chips
       table-toolbar
       [configs]="conditionConfigs$ | async"
