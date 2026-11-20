@@ -40,6 +40,11 @@ const reducer = createReducer(
   })),
 
   on(
+    fromActions.fetchMetadataKeysCompleteAction,
+    (state, { metadataKeys }): DatasetState => ({ ...state, metadataKeys }),
+  ),
+
+  on(
     fromActions.fetchDatasetCompleteAction,
     (state, { dataset }): DatasetState => {
       // origdatablocks are paginated by the datafiles tab, keep the loaded

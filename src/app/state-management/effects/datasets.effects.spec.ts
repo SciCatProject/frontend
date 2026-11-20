@@ -24,6 +24,7 @@ import {
   OrigdatablocksV4Service,
   OrigdatablocksPublicV4Service,
   OutputDatasetDto,
+  MetadataKeysV4Service,
   DatasetsV4Service,
   DatasetsPublicV4Service,
   AttachmentsV4Service,
@@ -69,6 +70,7 @@ describe("DatasetEffects", () => {
   let datasetApi: jasmine.SpyObj<DatasetsService>;
   let origdatablocksApi: jasmine.SpyObj<OrigdatablocksV4Service>;
   let origdatablocksPublicApi: jasmine.SpyObj<OrigdatablocksPublicV4Service>;
+  let metadataKeysApi: jasmine.SpyObj<MetadataKeysV4Service>;
   let datasetsV4Service: jasmine.SpyObj<DatasetsV4Service>;
   let datasetsPublicV4Service: jasmine.SpyObj<DatasetsPublicV4Service>;
   let attachmentsV4Service: jasmine.SpyObj<AttachmentsV4Service>;
@@ -147,6 +149,12 @@ describe("DatasetEffects", () => {
             "origDatablocksPublicV4ControllerCountFilesPublicV4",
           ]),
         },
+        {
+          provide: MetadataKeysV4Service,
+          useValue: jasmine.createSpyObj("metadataKeysApi", [
+            "metadataKeysV4ControllerFindAllV4",
+          ]),
+        },
         { provide: AppConfigService, useValue: { getConfig } },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
@@ -157,6 +165,7 @@ describe("DatasetEffects", () => {
     datasetApi = injectedStub(DatasetsService);
     origdatablocksApi = injectedStub(OrigdatablocksV4Service);
     origdatablocksPublicApi = injectedStub(OrigdatablocksPublicV4Service);
+    metadataKeysApi = injectedStub(MetadataKeysV4Service);
     datasetsV4Service = injectedStub(DatasetsV4Service);
     datasetsPublicV4Service = injectedStub(DatasetsPublicV4Service);
     attachmentsV4Service = injectedStub(AttachmentsV4Service);
@@ -350,6 +359,59 @@ describe("DatasetEffects", () => {
       expect(effects.fetchFacetCounts$).toBeObservable(
         cold("--b", { b: fromActions.fetchFacetCountsFailedAction() }),
       );
+    });
+  });
+
+  describe("fetchMetadataKeys$", () => {
+    it("should result in a fetchMetadataKeysCompleteAction", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysAction({});
+      const outcome = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", {
+        a: [{ key: "test", humanReadable: "Test" }],
+      });
+      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
+        response,
+      );
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchMetadataKeysFailedAction", () => {
+      const action = fromActions.fetchMetadataKeysAction({});
+      const outcome = fromActions.fetchMetadataKeysFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
+        response,
+      );
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysAction({});
+      const outcome = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", {
+        a: [{ key: "test", humanReadable: "Test" }],
+      });
+      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
+        response,
+      );
+
+      const expected = cold("-----b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
     });
   });
 

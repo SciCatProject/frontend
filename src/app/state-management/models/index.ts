@@ -226,6 +226,9 @@ export interface FilterCondition {
   exclude?: boolean;
 }
 
+/** The name the old condition filter uses for a condition. */
+export type ScientificCondition = FilterCondition;
+
 export interface MetadataKey {
   key: string;
   humanReadableName?: string;

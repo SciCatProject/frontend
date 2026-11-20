@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { OutputSampleDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -48,6 +48,7 @@ import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/defau
 import { AdvancedSearchService } from "shared/modules/advanced-search/advanced-search.service";
 import { staticKeySource } from "shared/modules/advanced-search/advanced-search.keys";
 import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
+import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
 
 @Component({
   selector: "sample-dashboard",
@@ -59,6 +60,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
 
   keySource = staticKeySource(this.store.select(selectMetadataKeyOptions));
+
+  @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -100,6 +103,9 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   appConfig = this.appConfigService.getConfig();
+
+  /** The old condition filter instead of the advanced search. */
+  oldFilter = this.appConfig.advancedSearchEnabled === false;
 
   dialogConfig: MatDialogConfig = new MatDialogConfig();
 
@@ -143,6 +149,16 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private advancedSearchService: AdvancedSearchService,
   ) {}
+
+  private setCharacteristics(
+    change: (characteristics: FilterCondition[]) => FilterCondition[],
+  ) {
+    this.vm$
+      .pipe(take(1))
+      .subscribe((vm) =>
+        this.onConditionsApplied(change(vm.characteristicsFilter ?? [])),
+      );
+  }
 
   ngOnInit() {
     this.store.dispatch(fetchMetadataKeysAction());
@@ -224,6 +240,19 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(setCharacteristicsFilterAction({ characteristics }));
   }
 
+  addCondition = (condition: FilterCondition) => {
+    this.setCharacteristics((characteristics) => [
+      ...characteristics,
+      condition,
+    ]);
+  };
+
+  removeCondition = (condition: FilterCondition) => {
+    this.setCharacteristics((characteristics) =>
+      characteristics.filter(({ lhs }) => lhs !== condition.lhs),
+    );
+  };
+
   formatTableData(samples: OutputSampleDto[]): any {
     if (samples) {
       return samples.map((sample) => ({
@@ -250,6 +279,9 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
+    if (this.conditionFilter) {
+      this.conditionFilter.applyConditions();
+    }
     this.store.dispatch(fetchSamplesAction());
   }
 

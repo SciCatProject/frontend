@@ -20,7 +20,20 @@
               [prefilledValue]="vm.textFilter"
               (search)="onTextSearchChange($event)"
             ></app-search-bar>
-            @if (appConfig.scienceSearchEnabled) {
+            @if (appConfig.scienceSearchEnabled && oldFilter) {
+              <shared-condition
+                #conditionFilter
+                [showConditions]="true"
+                [metadataKeys]="vm.metadataKeys"
+                [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
+                [showConditionToggle]="false"
+                [conditionSettingScope]="'sample'"
+                [addConditionAction]="addCondition"
+                [removeConditionAction]="removeCondition"
+                [dialogTitle]="'Add Sample Metadata Key'"
+              ></shared-condition>
+            }
+            @if (appConfig.scienceSearchEnabled && !oldFilter) {
               <div class="advanced-search">
                 <advanced-search-button
                   #advancedSearch

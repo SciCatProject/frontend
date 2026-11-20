@@ -16,6 +16,7 @@ const initialDatasetState: DatasetState = {
   facetCountsIsLoading: false,
   origDatablocksCountIsLoading: false,
   relatedDatasetsCountIsLoading: false,
+  metadataKeys: ["test"],
   hasPrefilledFilters: false,
   searchTerms: "run",
   keywordsTerms: "",
@@ -70,6 +71,14 @@ describe("test dataset selectors", () => {
           initialDatasetState,
         ),
       ).toEqual([]);
+    });
+  });
+
+  describe("selectMetadataKeys", () => {
+    it("should select the array of metadata keys", () => {
+      expect(
+        fromDatasetSelectors.selectMetadataKeys.projector(initialDatasetState),
+      ).toEqual(["test"]);
     });
   });
 

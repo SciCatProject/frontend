@@ -21,6 +21,11 @@ export const selectSelectedDatasets = createSelector(
   (state) => state.selectedSets,
 );
 
+export const selectMetadataKeys = createSelector(
+  selectDatasetState,
+  (state) => state.metadataKeys,
+);
+
 export const selectDatasetsFacetCountsIsLoading = createSelector(
   selectDatasetState,
   (state) => state.facetCountsIsLoading,

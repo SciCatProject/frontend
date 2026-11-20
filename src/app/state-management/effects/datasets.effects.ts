@@ -10,6 +10,7 @@ import {
   OrigDatablock,
   OrigdatablocksV4Service,
   OrigdatablocksPublicV4Service,
+  MetadataKeysV4Service,
   DatasetsV4Service,
   DatasetsPublicV4Service,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -153,6 +154,39 @@ export class DatasetEffects {
           }),
           catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
         );
+      }),
+    );
+  });
+
+  fetchMetadataKeys$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchMetadataKeysAction),
+      switchMap(({ searchTerm }) => {
+        const filter = {
+          where: {},
+          fields: ["key", "humanReadableName"],
+        };
+
+        if (searchTerm && searchTerm.trim()) {
+          filter.where = {
+            $or: [
+              { key: { $regex: searchTerm, $options: "i" } },
+              { humanReadableName: { $regex: searchTerm, $options: "i" } },
+            ],
+          };
+        }
+
+        return this.metadataKeysV4Service
+          .metadataKeysV4ControllerFindAllV4(JSON.stringify(filter))
+          .pipe(
+            map((metadataKeys) => {
+              const keys = metadataKeys.map((dto) => dto.key);
+              return fromActions.fetchMetadataKeysCompleteAction({
+                metadataKeys: keys,
+              });
+            }),
+            catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
+          );
       }),
     );
   });
@@ -497,6 +531,7 @@ export class DatasetEffects {
       ofType(
         fromActions.fetchDatasetsAction,
         fromActions.fetchFacetCountsAction,
+        fromActions.fetchMetadataKeysAction,
         fromActions.fetchDatasetAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
@@ -519,6 +554,8 @@ export class DatasetEffects {
         fromActions.fetchRelatedDatasetsFailedAction,
         fromActions.fetchFacetCountsCompleteAction,
         fromActions.fetchFacetCountsFailedAction,
+        fromActions.fetchMetadataKeysCompleteAction,
+        fromActions.fetchMetadataKeysFailedAction,
         fromActions.fetchDatasetCompleteAction,
         fromActions.fetchDatasetFailedAction,
         fromActions.addDatasetCompleteAction,
@@ -580,6 +617,7 @@ export class DatasetEffects {
     private origdatablocksPublicService: OrigdatablocksPublicV4Service,
     private store: Store,
     private appConfigService: AppConfigService,
+    private metadataKeysV4Service: MetadataKeysV4Service,
     private datasetsV4Service: DatasetsV4Service,
     private datasetsPublicV4Service: DatasetsPublicV4Service,
     private attachmentsV4Service: AttachmentsV4Service,

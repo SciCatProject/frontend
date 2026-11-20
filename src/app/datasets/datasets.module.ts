@@ -91,6 +91,7 @@ import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { AdvancedSearchModule } from "shared/modules/advanced-search/advanced-search.module";
+import { SharedConditionModule } from "shared/modules/shared-condition/shared-condition.module";
 import { RelationshipsComponent } from "./relationships/relationships.component";
 import { RelatedIdentifierCellComponent } from "./relationships/related-identifier-cell/related-identifier-cell.component";
 import { ActionEffects } from "state-management/effects/actions.effect";
@@ -166,6 +167,7 @@ import { filesReducer } from "state-management/reducers/files.reducer";
     OverlayModule,
     IngestorModule,
     AdvancedSearchModule,
+    SharedConditionModule,
   ],
   declarations: [
     BatchViewComponent,
