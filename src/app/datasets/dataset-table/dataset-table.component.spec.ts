@@ -341,8 +341,11 @@ describe("DatasetTableComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
       const clearFilters = jasmine.createSpy("clearFilters");
       component.advancedSearchButton = { clearFilters } as never;
+      component.onTextSearchApply("beam");
 
       component.onClearAll();
+
+      expect(component.appliedText).toBe("");
 
       expect(dispatchSpy).toHaveBeenCalledWith(
         setTextFilterAction({ text: "" }),

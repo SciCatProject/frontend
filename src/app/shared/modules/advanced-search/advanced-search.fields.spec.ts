@@ -254,6 +254,15 @@ describe("condition filter fields", () => {
       ]);
     });
 
+    it("should not take a name every object has as a relation", () => {
+      setDatasetFields([
+        { key: "pid", relation: "toString" as never },
+        { key: "keywords", relation: "IN" },
+      ]);
+
+      expect(getDatasetFields().map(({ key }) => key)).toEqual(["keywords"]);
+    });
+
     it("should fall back to the defaults when no field is valid", () => {
       setDatasetFields([{ relation: "IN" }]);
 
