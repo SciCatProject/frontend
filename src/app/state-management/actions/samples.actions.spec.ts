@@ -1,5 +1,5 @@
 import * as fromActions from "./samples.actions";
-import { SampleFilters, ScientificCondition } from "state-management/models";
+import { SampleFilters, FilterCondition } from "state-management/models";
 import {
   mockAttachment as attachment,
   mockDataset as dataset,
@@ -415,31 +415,22 @@ describe("Sample Actions", () => {
     });
   });
 
-  describe("addCharacteristicsFilterAction", () => {
+  describe("setCharacteristicsFilterAction", () => {
     it("should create an action", () => {
-      const characteristic: ScientificCondition = {
-        lhs: "lhsTest",
-        relation: "LESS_THAN",
-        rhs: 5,
-        unit: "s",
-      };
-      const action = fromActions.addCharacteristicsFilterAction({
-        characteristic,
+      const characteristics: FilterCondition[] = [
+        {
+          lhs: "lhsTest",
+          relation: "LESS_THAN",
+          rhs: 5,
+          unit: "s",
+        },
+      ];
+      const action = fromActions.setCharacteristicsFilterAction({
+        characteristics,
       });
       expect({ ...action }).toEqual({
-        type: "[Sample] Add Characteristics Filter",
-        characteristic,
-      });
-    });
-  });
-
-  describe("removeCharacteristicsFilterAction", () => {
-    it("should create an action", () => {
-      const lhs = "lhsTest";
-      const action = fromActions.removeCharacteristicsFilterAction({ lhs });
-      expect({ ...action }).toEqual({
-        type: "[Sample] Remove Characteristics Filter",
-        lhs,
+        type: "[Sample] Set Characteristics Filter",
+        characteristics,
       });
     });
   });

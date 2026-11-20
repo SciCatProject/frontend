@@ -61,6 +61,14 @@ describe("Sample Selectors", () => {
     });
   });
 
+  describe("selectMetadataKeyOptions", () => {
+    it("should offer the keys like the dataset keys", () => {
+      expect(
+        fromSelectors.selectMetadataKeyOptions.projector(["a", "b"]),
+      ).toEqual([{ key: "a" }, { key: "b" }]);
+    });
+  });
+
   describe("selectCurrentSample", () => {
     it("should select the current sample", () => {
       expect(
