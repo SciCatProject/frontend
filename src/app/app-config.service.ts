@@ -10,6 +10,10 @@ import {
 import { buildDefaultBatchActions } from "shared/modules/configurable-actions/configurable-actions.defaults";
 import { DEFAULT_DATASET_VIEW_MODES } from "datasets/dataset-view-modes.defaults";
 import {
+  DatasetField,
+  setDatasetFields,
+} from "shared/modules/advanced-search/advanced-search.fields";
+import {
   DatasetDetailComponentConfig,
   DatasetViewsConfig,
   IngestorComponentConfig,
@@ -187,12 +191,18 @@ export interface AppConfigInterface {
   policiesEnabled: boolean;
   retrieveDestinations?: RetrieveDestinations[];
   riotBaseUrl: string | null;
-  scienceSearchEnabled: boolean;
   scienceSearchUnitsEnabled: boolean;
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;
-  /** The advanced search or, when false, the side panel with the old condition filter. */
+  /** The advanced search (the default) or, when false, the side panel with the old condition filter. */
   advancedSearchEnabled?: boolean;
+  /** The fields of the advanced search per list, only datasets use them for now. */
+  advancedSearchFields?: Partial<
+    Record<
+      "datasets" | "samples" | "proposals" | "instruments",
+      Omit<DatasetField, "label">[]
+    >
+  >;
   sftpHost: string | null;
   sourceFolder?: string;
   maxFileSizeWarning?: string;
@@ -213,7 +223,7 @@ export interface AppConfigInterface {
   metadataEditingUnitListDisabled?: boolean;
   defaultDatasetsListSettings?: ListSettings;
   defaultProposalsListSettings?: ListSettings;
-  /** Samples only have the conditions of the old condition filter to predefine. */
+  /** Samples only have the conditions of the advanced search to predefine. */
   defaultSamplesListSettings?: Pick<ListSettings, "conditions">;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
@@ -429,6 +439,11 @@ export class AppConfigService {
 
     // the advanced search is off unless it is turned on, until it becomes the default
     config.advancedSearchEnabled = config.advancedSearchEnabled === true;
+
+    setDatasetFields(
+      config.advancedSearchFields?.datasets,
+      config.labelsLocalization?.dataset,
+    );
 
     if (
       config.paginationPosition !== "top" &&

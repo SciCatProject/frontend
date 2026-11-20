@@ -108,9 +108,7 @@ export class MockMatDialog {
   }
 }
 
-const getConfig = () => ({
-  scienceSearchEnabled: false,
-});
+const getConfig = () => ({});
 
 describe("DatasetsFilterComponent", () => {
   let component: DatasetsFilterComponent;

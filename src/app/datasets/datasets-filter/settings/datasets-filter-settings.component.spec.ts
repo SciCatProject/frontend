@@ -42,7 +42,6 @@ export class MockMatDialog {
 }
 
 const getConfig = () => ({
-  scienceSearchEnabled: false,
   defaultDatasetsListSettings: {
     filters: [],
   },

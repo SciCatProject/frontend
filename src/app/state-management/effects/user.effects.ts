@@ -42,7 +42,10 @@ import {
   setDatasetsLimitFilterAction,
   setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
-import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
+import {
+  getConfiguredConditions,
+  toActiveConditions,
+} from "shared/modules/advanced-search/advanced-search.utils";
 import {
   clearJobsStateAction,
   setJobsLimitFilterAction,
@@ -369,7 +372,8 @@ export class UserEffects {
                 config.advancedSearchEnabled !== false &&
                 Array.isArray(items);
 
-              // the predefined conditions are for the old condition filter only
+              // the predefined conditions are for the old condition filter, the advanced search
+              // starts with the fields of its config that have a value
               const predefined =
                 settingConfig?.configKey !== "conditions" ||
                 config.advancedSearchEnabled === false;
@@ -382,7 +386,8 @@ export class UserEffects {
                         ? config.defaultDatasetsListSettings?.[
                             settingConfig.configKey
                           ]
-                        : undefined) || initialUserState.settings[setting];
+                        : getConfiguredConditions()) ||
+                      initialUserState.settings[setting];
                     break;
                   case "proposal":
                     items =
@@ -608,7 +613,7 @@ export class UserEffects {
                 defaultConditions =
                   (predefined
                     ? config.defaultDatasetsListSettings?.conditions
-                    : undefined) ||
+                    : getConfiguredConditions()) ||
                   initialUserState.settings.fe_dataset_table_conditions;
                 break;
               case "sample":
