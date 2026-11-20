@@ -56,6 +56,13 @@ describe("condition filter utils", () => {
       expect(isConditionComplete(condition({ lhs: "" }))).toBeFalse();
     });
 
+    it("should take spaces only as no value", () => {
+      expect(isConditionComplete(condition({ rhs: "   " }))).toBeFalse();
+      expect(
+        isConditionComplete(condition({ relation: "RANGE", rhs: [" ", ""] })),
+      ).toBeFalse();
+    });
+
     it("should accept a range with one bound", () => {
       const range = (rhs: (string | number)[]) =>
         condition({ relation: "RANGE", rhs });
@@ -369,6 +376,39 @@ describe("condition filter utils", () => {
       expect(describeCondition(condition({ exclude: true }))).toBe(
         "not temperature = 20",
       );
+    });
+  });
+
+  describe("review fixes for the query", () => {
+    it("should leave a range without a bound out, also when it has a unit", () => {
+      expect(
+        conditionsToQuery([
+          condition({ relation: "RANGE", rhs: ["", ""], unit: "mm" }),
+        ]),
+      ).toEqual({});
+    });
+
+    it("should use the unit of the bound that is set, the other one is an empty text", () => {
+      expect(
+        conditionsToQuery([
+          condition({ relation: "RANGE", rhs: ["", 5], unit: "mm" }),
+        ]),
+      ).toEqual({
+        "scientificMetadata.temperature.valueSI": { $lte: 0.005 },
+        "scientificMetadata.temperature.unitSI": { $eq: "m" },
+      });
+    });
+
+    it("should leave out a day that does not exist, not move it to the next month", () => {
+      const query = conditionsToQuery([
+        datasetCondition({
+          lhs: "creationTime",
+          relation: "RANGE",
+          rhs: ["2026-02-31", "2026-03-10"],
+        }),
+      ]) as { creationTime: Record<string, unknown> };
+
+      expect(Object.keys(query.creationTime)).toEqual(["$lt"]);
     });
   });
 
