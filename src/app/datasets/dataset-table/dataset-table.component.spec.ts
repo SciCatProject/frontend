@@ -155,7 +155,6 @@ describe("DatasetTableComponent", () => {
     const render = (advancedSearchEnabled?: boolean) => {
       appConfigService.getConfig.and.returnValue({
         datasetPageSizeOptions: [5, 10, 25, 100],
-        scienceSearchEnabled: true,
         advancedSearchEnabled,
       } as AppConfigInterface);
       fixture = TestBed.createComponent(DatasetTableComponent);

@@ -191,7 +191,6 @@ export interface AppConfigInterface {
   policiesEnabled: boolean;
   retrieveDestinations?: RetrieveDestinations[];
   riotBaseUrl: string | null;
-  scienceSearchEnabled: boolean;
   scienceSearchUnitsEnabled: boolean;
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;

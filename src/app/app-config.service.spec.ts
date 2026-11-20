@@ -74,7 +74,6 @@ const appConfig: AppConfigInterface = {
   policiesEnabled: true,
   retrieveDestinations: [],
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
-  scienceSearchEnabled: true,
   scienceSearchUnitsEnabled: true,
   searchPublicDataEnabled: true,
   searchSamples: true,

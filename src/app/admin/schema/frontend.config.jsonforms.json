@@ -95,7 +95,6 @@
         }
       },
       "riotBaseUrl": { "type": "string" },
-      "scienceSearchEnabled": { "type": "boolean" },
       "scienceSearchUnitsEnabled": { "type": "boolean" },
       "searchPublicDataEnabled": { "type": "boolean" },
       "searchSamples": { "type": "boolean" },

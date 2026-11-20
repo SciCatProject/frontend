@@ -108,9 +108,7 @@ export class MockMatDialog {
   }
 }
 
-const getConfig = () => ({
-  scienceSearchEnabled: false,
-});
+const getConfig = () => ({});
 
 describe("DatasetsFilterComponent", () => {
   let component: DatasetsFilterComponent;
@@ -170,6 +168,11 @@ describe("DatasetsFilterComponent", () => {
     fixture = TestBed.createComponent(DatasetsFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    // the component of the schema-less template is not the condition filter
+    component.conditionFilter = jasmine.createSpyObj(
+      "SharedConditionComponent",
+      ["applyConditions"],
+    );
   });
 
   beforeEach(inject([Store], (mockStore: MockStoreWithFilters) => {
