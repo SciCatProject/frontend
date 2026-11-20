@@ -21,7 +21,6 @@ const appConfig: AppConfigInterface = {
   skipSciCatLoginPageEnabled: false,
   accessTokenPrefix: "",
   addDatasetEnabled: true,
-  advancedSearchEnabled: false,
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
   datasetRelationshipsEnabled: true,
@@ -301,20 +300,6 @@ describe("AppConfigService", () => {
       );
       await service.loadAppConfig();
       expect(getDatasetFields()).toEqual(DATASET_FIELDS);
-    });
-
-    it("should keep the advanced search off unless it is turned on", async () => {
-      const get = spyOn(service["http"], "get");
-
-      get.and.returnValue(
-        of({ ...appConfig, advancedSearchEnabled: undefined }),
-      );
-      await service.loadAppConfig();
-      expect(service.getConfig().advancedSearchEnabled).toBeFalse();
-
-      get.and.returnValue(of({ ...appConfig, advancedSearchEnabled: true }));
-      await service.loadAppConfig();
-      expect(service.getConfig().advancedSearchEnabled).toBeTrue();
     });
 
     it("should default paginationPosition to both when missing", async () => {
@@ -647,7 +632,6 @@ describe("AppConfigService", () => {
             : mockConfigResponses["/assets/config.json"]),
           allowConfigOverrides: configOverrideEnabled,
           paginationPosition: "both",
-          advancedSearchEnabled: false,
         });
         expect(service["http"].get).toHaveBeenCalledTimes(
           configOverrideEnabled ? 3 : 2,
