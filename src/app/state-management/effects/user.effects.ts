@@ -429,7 +429,7 @@ export class UserEffects {
       mergeMap(({ userSettings }) =>
         SETTINGS_CONFIG.filter((s) => s.configKey === "conditions").map((s) =>
           fromActions.updateConditionsConfigs({
-            conditionConfigs: userSettings.externalSettings[s.key],
+            conditionConfigs: userSettings.externalSettings?.[s.key] ?? [],
             scope: s.scope as ConditionSettingScope,
           }),
         ),
