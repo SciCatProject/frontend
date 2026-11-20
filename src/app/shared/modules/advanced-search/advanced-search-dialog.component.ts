@@ -17,12 +17,12 @@ import {
 import { ConditionConfig } from "state-management/state/user.store";
 import { UnitsService } from "shared/services/units.service";
 import {
-  DATASET_FIELDS,
   FIELD_GUIDE,
   FIELD_TYPES,
   FieldOption,
   METADATA_FIELD,
   getDatasetField,
+  getDatasetFields,
   getFieldOptions,
 } from "./advanced-search.fields";
 import { ConditionKeySource } from "./advanced-search.keys";
@@ -126,7 +126,7 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
   readonly fieldTypes = FIELD_TYPES;
   readonly fieldGuide = FIELD_GUIDE;
   readonly unitsEnabled = this.data.unitsEnabled;
-  readonly datasetFields = this.advanced ? DATASET_FIELDS : [];
+  readonly datasetFields = this.advanced ? getDatasetFields() : [];
   /** Scientific metadata is one of the fields, it only asks for more once chosen. */
   readonly fieldOptions = getFieldOptions(this.datasetFields);
   /** One click starts a new row, the field dropdown has all other fields. */

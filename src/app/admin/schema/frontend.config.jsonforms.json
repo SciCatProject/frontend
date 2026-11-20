@@ -107,6 +107,25 @@
       "shoppingCartEnabled": { "type": "boolean" },
       "shoppingCartOnHeader": { "type": "boolean" },
       "sideFilterEnabled": { "type": "boolean" },
+      "advancedSearchFields": {
+        "type": "object",
+        "description": "Fields offered by the advanced search, per list. Only datasets use them for now, the built-in list is used when empty. The labels come from labelsLocalization.",
+        "properties": {
+          "datasets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string" },
+                "relation": {
+                  "type": "string",
+                  "enum": ["CONTAINS", "IN", "RANGE"]
+                }
+              }
+            }
+          }
+        }
+      },
       "tableSciDataEnabled": { "type": "boolean" },
       "datasetDetailsShowMissingProposalId": { "type": "boolean" },
       "datasetDetailsTabsInclude": {
@@ -581,6 +600,7 @@
           { "type": "Control", "scope": "#/properties/statusBannerCode" },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
           { "type": "Control", "scope": "#/properties/sideFilterEnabled" },
+          { "type": "Control", "scope": "#/properties/advancedSearchFields" },
           { "type": "Control", "scope": "#/properties/tableSciDataEnabled" },
           {
             "type": "Control",

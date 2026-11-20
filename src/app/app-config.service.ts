@@ -10,6 +10,10 @@ import {
 import { buildDefaultBatchActions } from "shared/modules/configurable-actions/configurable-actions.defaults";
 import { DEFAULT_DATASET_VIEW_MODES } from "datasets/dataset-view-modes.defaults";
 import {
+  DatasetField,
+  setDatasetFields,
+} from "shared/modules/advanced-search/advanced-search.fields";
+import {
   DatasetDetailComponentConfig,
   DatasetViewsConfig,
   IngestorComponentConfig,
@@ -192,6 +196,13 @@ export interface AppConfigInterface {
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;
   sideFilterEnabled?: boolean;
+  /** The fields of the advanced search per list, only datasets use them for now. */
+  advancedSearchFields?: Partial<
+    Record<
+      "datasets" | "samples" | "proposals" | "instruments",
+      Omit<DatasetField, "label">[]
+    >
+  >;
   sftpHost: string | null;
   sourceFolder?: string;
   maxFileSizeWarning?: string;
@@ -425,6 +436,11 @@ export class AppConfigService {
     }
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
+
+    setDatasetFields(
+      config.advancedSearchFields?.datasets,
+      config.labelsLocalization?.dataset,
+    );
 
     if (
       config.paginationPosition !== "top" &&

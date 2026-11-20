@@ -3,7 +3,9 @@ import {
   FIELD_TYPES,
   METADATA_FIELD,
   getDatasetField,
+  getDatasetFields,
   getFieldOptions,
+  setDatasetFields,
 } from "./advanced-search.fields";
 
 describe("condition filter fields", () => {
@@ -44,6 +46,75 @@ describe("condition filter fields", () => {
     expect(options.find(({ value }) => value === METADATA_FIELD).type).toBe(
       "metadata",
     );
+  });
+
+  describe("fields of the config", () => {
+    afterEach(() => setDatasetFields());
+
+    it("should replace the defaults", () => {
+      setDatasetFields([
+        { key: "runNumber", relation: "CONTAINS" },
+        { key: "pid", relation: "IN" },
+      ]);
+
+      expect(getDatasetFields().map(({ key }) => key)).toEqual([
+        "runNumber",
+        "pid",
+      ]);
+      expect(getDatasetField("keywords")).toBeUndefined();
+    });
+
+    it("should take the labels from the localization, then from the defaults, then the key", () => {
+      setDatasetFields(
+        [
+          { key: "runNumber", relation: "CONTAINS" },
+          { key: "keywords", relation: "IN" },
+          { key: "pid", relation: "IN" },
+        ],
+        { runNumber: "Run Number" },
+      );
+
+      expect(getDatasetFields().map(({ label }) => label)).toEqual([
+        "Run Number",
+        "Keywords",
+        "pid",
+      ]);
+    });
+
+    it("should localize the labels of the defaults too", () => {
+      setDatasetFields(undefined, { creationTime: "Created" });
+
+      expect(getDatasetField("creationTime").label).toBe("Created");
+      expect(getDatasetField("keywords").label).toBe("Keywords");
+    });
+
+    it("should fall back to the defaults without a config", () => {
+      setDatasetFields([{ key: "pid", relation: "IN" }]);
+
+      [undefined, null, [], "fields" as never].forEach((fields) => {
+        setDatasetFields(fields);
+
+        expect(getDatasetFields()).toEqual(DATASET_FIELDS);
+      });
+    });
+
+    it("should leave out a field without key or with an unknown relation", () => {
+      setDatasetFields([
+        { key: "pid", relation: "IN" },
+        { relation: "IN" },
+        { key: "size", relation: "GREATER_THAN" as never },
+      ]);
+
+      expect(getDatasetFields()).toEqual([
+        { key: "pid", label: "pid", relation: "IN" },
+      ]);
+    });
+
+    it("should fall back to the defaults when no field is valid", () => {
+      setDatasetFields([{ relation: "IN" }]);
+
+      expect(getDatasetFields()).toEqual(DATASET_FIELDS);
+    });
   });
 
   it("should only list scientific metadata without dataset fields", () => {

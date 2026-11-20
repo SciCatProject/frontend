@@ -1,6 +1,6 @@
 import { FilterConditionRelation } from "state-management/models";
 
-// The fields of the Advanced search. To add a field, add a line to DATASET_FIELDS.
+// The fields of the Advanced search. DATASET_FIELDS are the defaults, the config can replace them.
 
 /** The value of the field list for scientific metadata, it is not a dataset field. */
 export const METADATA_FIELD = "scientificMetadata";
@@ -83,8 +83,36 @@ export const DATASET_FIELDS: DatasetField[] = [
   { key: "description", label: "Description", relation: "CONTAINS" },
 ];
 
+let datasetFields = DATASET_FIELDS;
+
+/**
+ * The fields of the config (`advancedSearchFields`), without any valid one the defaults are used.
+ * The labels are the ones of the localization (`labelsLocalization`), then the ones of the defaults.
+ */
+export function setDatasetFields(
+  fields?: Partial<DatasetField>[] | null,
+  labels?: Record<string, string> | null,
+): void {
+  const valid = (Array.isArray(fields) ? fields : []).filter(
+    (field): field is DatasetField =>
+      !!field?.key && Object.keys(TYPE_OF_RELATION).includes(field.relation),
+  );
+  datasetFields = (valid.length ? valid : DATASET_FIELDS).map(
+    ({ key, relation }) => ({
+      key,
+      relation,
+      label:
+        labels?.[key] ??
+        DATASET_FIELDS.find((field) => field.key === key)?.label ??
+        key,
+    }),
+  );
+}
+
+export const getDatasetFields = (): DatasetField[] => datasetFields;
+
 export const getDatasetField = (key: string): DatasetField | undefined =>
-  DATASET_FIELDS.find((field) => field.key === key);
+  datasetFields.find((field) => field.key === key);
 
 /** An entry of the field dropdown, scientific metadata is one of them. */
 export interface FieldOption {
