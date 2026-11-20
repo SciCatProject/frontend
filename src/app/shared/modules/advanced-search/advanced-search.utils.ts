@@ -5,7 +5,13 @@ import {
   FilterConditionRelation,
 } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
-import { getDatasetField } from "./advanced-search.fields";
+import {
+  METADATA_PREFIX,
+  getDatasetField,
+  getDatasetFields,
+  hasConfiguredFields,
+  isMetadataFieldKey,
+} from "./advanced-search.fields";
 
 export interface RelationOption {
   value: FilterConditionRelation;
@@ -184,6 +190,34 @@ export function toActiveConditions(
   return getActiveConfigs(configs).map(({ condition }) =>
     normalizeCondition(condition),
   );
+}
+
+/**
+ * The fields of the config as conditions, when at least one of them has a value. They are the
+ * filters of a user who has none saved: the ones with a value are applied, the others are rows
+ * of the dialog.
+ */
+export function getConfiguredConditions(): ConditionConfig[] {
+  const fields = getDatasetFields();
+  if (
+    !hasConfiguredFields() ||
+    !fields.some(({ value }) => value !== undefined)
+  ) {
+    return [];
+  }
+
+  return fields.map(({ key, relation, value, unit }) => {
+    const metadata = isMetadataFieldKey(key);
+    return {
+      condition: {
+        lhs: metadata ? key.slice(METADATA_PREFIX.length) : key,
+        relation,
+        rhs: value ?? (relation === "RANGE" ? ["", ""] : ""),
+        unit: unit ?? "",
+        source: metadata ? "scientificMetadata" : "dataset",
+      },
+    };
+  });
 }
 
 /** Short readable form, used for the chips: `temperature ≥ 20 celsius`. */

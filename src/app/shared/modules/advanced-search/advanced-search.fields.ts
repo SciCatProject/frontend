@@ -5,11 +5,30 @@ import { FilterConditionRelation } from "state-management/models";
 /** The value of the field list for scientific metadata, it is not a dataset field. */
 export const METADATA_FIELD = "scientificMetadata";
 
+/** A field of scientific metadata is written like `scientificMetadata.detector.distance`. */
+export const METADATA_PREFIX = `${METADATA_FIELD}.`;
+
+/** The prefix is matched in any case, the key is written with the prefix as it is in the data. */
+export const isMetadataFieldKey = (key: string): boolean =>
+  key.length > METADATA_PREFIX.length &&
+  key.slice(0, METADATA_PREFIX.length).toLowerCase() ===
+    METADATA_PREFIX.toLowerCase();
+
+const toMetadataFieldKey = (key: string): string =>
+  `${METADATA_PREFIX}${key.slice(METADATA_PREFIX.length)}`;
+
 export interface DatasetField {
   key: string;
   label: string;
-  /** `IN` matches any of the values, `CONTAINS` matches text, `RANGE` is a date range. */
-  relation: Extract<FilterConditionRelation, "IN" | "CONTAINS" | "RANGE">;
+  /**
+   * A dataset field: `IN` matches any of the values, `CONTAINS` matches text, `RANGE` is a date
+   * range. Scientific metadata: the operator the row starts with, `EQUAL_TO` when missing.
+   */
+  relation: FilterConditionRelation;
+  /** Config only: the value the row starts with, a list for `IN` and two bounds for `RANGE`. */
+  value?: string | number | (string | number)[];
+  /** Config only: the unit of the value of scientific metadata. */
+  unit?: string;
 }
 
 /** The four kinds of filter, the field dropdown shows the icon of the kind of each field. */
@@ -60,11 +79,20 @@ export const FIELD_GUIDE: {
   },
 ];
 
-const TYPE_OF_RELATION: Record<DatasetField["relation"], FieldType> = {
+const TYPE_OF_RELATION: Partial<Record<FilterConditionRelation, FieldType>> = {
   CONTAINS: "text",
   IN: "list",
   RANGE: "date",
 };
+
+const METADATA_RELATIONS: FilterConditionRelation[] = [
+  "EQUAL_TO",
+  "GREATER_THAN",
+  "LESS_THAN",
+  "GREATER_THAN_OR_EQUAL",
+  "LESS_THAN_OR_EQUAL",
+  "RANGE",
+];
 
 export const DATASET_FIELDS: DatasetField[] = [
   // lists
@@ -97,6 +125,7 @@ export const SIDE_PANEL_FIELDS = [
 ];
 
 let datasetFields = DATASET_FIELDS;
+let hasConfig = false;
 let prefilledKeys = SIDE_PANEL_FIELDS;
 
 /**
@@ -109,18 +138,34 @@ export function setDatasetFields(
   fields?: Partial<DatasetField>[] | null,
   labels?: Record<string, string> | null,
 ): void {
-  const valid = (Array.isArray(fields) ? fields : []).filter(
-    (field): field is DatasetField =>
-      !!field?.key && Object.keys(TYPE_OF_RELATION).includes(field.relation),
-  );
+  const valid = (Array.isArray(fields) ? fields : []).flatMap((field) => {
+    if (!field?.key) return [];
+    const metadata = isMetadataFieldKey(field.key);
+    const relation = metadata
+      ? METADATA_RELATIONS.includes(field.relation)
+        ? field.relation
+        : "EQUAL_TO"
+      : field.relation;
+    if (!metadata && !(relation in TYPE_OF_RELATION)) return [];
+    const { value, unit } = field;
+    const key = metadata ? toMetadataFieldKey(field.key) : field.key;
+    return [{ key, relation, value, unit }];
+  });
+  const labelOf = (key: string): string =>
+    labels?.[key] ??
+    (isMetadataFieldKey(key)
+      ? (labels?.[`${key}.value`] ?? key.slice(METADATA_PREFIX.length))
+      : DATASET_FIELDS.find((field) => field.key === key)?.label) ??
+    key;
+
+  hasConfig = valid.length > 0;
   datasetFields = (valid.length ? valid : DATASET_FIELDS).map(
-    ({ key, relation }) => ({
+    ({ key, relation, value, unit }: Partial<DatasetField>) => ({
       key,
       relation,
-      label:
-        labels?.[key] ??
-        DATASET_FIELDS.find((field) => field.key === key)?.label ??
-        key,
+      label: labelOf(key),
+      ...(value !== undefined && { value }),
+      ...(unit && { unit }),
     }),
   );
   setPrefilledFields(
@@ -129,6 +174,9 @@ export function setDatasetFields(
 }
 
 export const getDatasetFields = (): DatasetField[] => datasetFields;
+
+/** True when the fields come from the config, not from the defaults. */
+export const hasConfiguredFields = (): boolean => hasConfig;
 
 export const getDatasetField = (key: string): DatasetField | undefined =>
   datasetFields.find((field) => field.key === key);
@@ -154,12 +202,15 @@ export interface FieldOption {
 export const getFieldOptions = (
   datasetFields: DatasetField[],
 ): FieldOption[] => [
-  ...datasetFields.map(({ key, label, relation }) => ({
-    value: key,
-    label,
-    type: TYPE_OF_RELATION[relation],
-    dataCy: "condition-field-dataset",
-  })),
+  // the fields of scientific metadata are rows with the kind of scientific metadata
+  ...datasetFields
+    .filter(({ key }) => !isMetadataFieldKey(key))
+    .map(({ key, label, relation }) => ({
+      value: key,
+      label,
+      type: TYPE_OF_RELATION[relation],
+      dataCy: "condition-field-dataset",
+    })),
   {
     value: METADATA_FIELD,
     label: "Scientific metadata",

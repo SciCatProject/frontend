@@ -24,7 +24,9 @@ import {
   getDatasetField,
   getDatasetFields,
   getPrefilledFields,
+  METADATA_PREFIX,
   getFieldOptions,
+  isMetadataFieldKey,
 } from "./advanced-search.fields";
 import { ConditionKeySource } from "./advanced-search.keys";
 import {
@@ -244,13 +246,20 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     });
   }
 
+  /** The key of the field dropdown a condition belongs to. */
+  private fieldKeyOf(condition: FilterCondition): string {
+    return isDatasetCondition(condition)
+      ? condition.lhs
+      : `${METADATA_PREFIX}${condition.lhs}`;
+  }
+
   /** A prefilled field without a value is not a filter yet, it is saved but not an error. */
   private isEmptyPrefilled(condition: FilterCondition): boolean {
+    const key = this.fieldKeyOf(condition);
     return (
       this.advanced &&
-      isDatasetCondition(condition) &&
       !this.hasValue(condition) &&
-      getPrefilledFields().some(({ key }) => key === condition.lhs)
+      getPrefilledFields().some((field) => field.key === key)
     );
   }
 
@@ -262,9 +271,15 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     const drafts = configs.length
       ? configs.map(toDraft)
       : this.advanced
-        ? getPrefilledFields().map(({ key }) => ({
-            condition: this.withField(blankDraft().condition, key),
-          }))
+        ? getPrefilledFields().map(({ key, value, unit }) =>
+            toDraft({
+              condition: {
+                ...this.withField(blankDraft().condition, key),
+                ...(value !== undefined && { rhs: value }),
+                ...(unit && { unit }),
+              },
+            }),
+          )
         : [];
 
     return (drafts.length ? drafts : [blankDraft()]).map((draft) =>
@@ -282,6 +297,18 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     field: string,
   ): FilterCondition {
     const datasetField = getDatasetField(field);
+
+    // a field of scientific metadata of the config: the key is set, the operator can change
+    if (datasetField && isMetadataFieldKey(datasetField.key)) {
+      return {
+        ...condition,
+        lhs: datasetField.key.slice(METADATA_PREFIX.length),
+        source: "scientificMetadata",
+        relation: datasetField.relation,
+        rhs: datasetField.relation === "RANGE" ? ["", ""] : "",
+        unit: "",
+      };
+    }
 
     if (datasetField) {
       const sameKind =
@@ -340,6 +367,15 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     return this.getKind(condition) === "dataset"
       ? condition.lhs
       : METADATA_FIELD;
+  }
+
+  /** The key of scientific metadata is part of the field of the config, it can't be changed. */
+  isFixedKey(condition: FilterCondition): boolean {
+    return (
+      this.advanced &&
+      this.getKind(condition) === "metadata" &&
+      !!getDatasetField(this.fieldKeyOf(condition))
+    );
   }
 
   /** The entry of the field dropdown a row shows. */

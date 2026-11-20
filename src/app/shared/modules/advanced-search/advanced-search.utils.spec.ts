@@ -1,8 +1,10 @@
 import { FilterCondition } from "state-management/models";
+import { setDatasetFields } from "./advanced-search.fields";
 import { ConditionConfig } from "state-management/state/user.store";
 import {
   conditionsToQuery,
   describeCondition,
+  getConfiguredConditions,
   getRelationOption,
   isConditionComplete,
   metadataPath,
@@ -256,6 +258,69 @@ describe("condition filter utils", () => {
       expect(getRelationOption("EQUAL_TO_NUMERIC").value).toBe("EQUAL_TO");
       expect(getRelationOption("EQUAL_TO_STRING").value).toBe("EQUAL_TO");
       expect(getRelationOption("LESS_THAN").symbol).toBe("<");
+    });
+  });
+
+  describe("getConfiguredConditions", () => {
+    afterEach(() => setDatasetFields());
+
+    it("should be empty without fields of the config or without a value", () => {
+      expect(getConfiguredConditions()).toEqual([]);
+
+      setDatasetFields([{ key: "pid", relation: "IN" }]);
+
+      expect(getConfiguredConditions()).toEqual([]);
+    });
+
+    it("should be every field of the config once one has a value", () => {
+      setDatasetFields([
+        { key: "keywords", relation: "IN", value: ["neutron"] },
+        { key: "creationTime", relation: "RANGE" },
+        {
+          key: "scientificMetadata.detector.distance",
+          relation: "RANGE",
+          value: [1, 3],
+          unit: "mm",
+        },
+      ]);
+
+      const configs = getConfiguredConditions();
+
+      expect(configs.map(({ condition }) => condition)).toEqual([
+        {
+          lhs: "keywords",
+          relation: "IN",
+          rhs: ["neutron"],
+          unit: "",
+          source: "dataset",
+        },
+        {
+          lhs: "creationTime",
+          relation: "RANGE",
+          rhs: ["", ""],
+          unit: "",
+          source: "dataset",
+        },
+        {
+          lhs: "detector.distance",
+          relation: "RANGE",
+          rhs: [1, 3],
+          unit: "mm",
+          source: "scientificMetadata",
+        },
+      ]);
+      expect(toActiveConditions(configs).map(({ lhs }) => lhs)).toEqual([
+        "keywords",
+        "detector.distance",
+      ]);
+    });
+
+    it("should not apply a range that is a text", () => {
+      setDatasetFields([
+        { key: "creationTime", relation: "RANGE", value: "2026-01-01" },
+      ]);
+
+      expect(toActiveConditions(getConfiguredConditions())).toEqual([]);
     });
   });
 

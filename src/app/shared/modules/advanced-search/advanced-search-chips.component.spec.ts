@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ConditionConfig } from "state-management/state/user.store";
+import { setDatasetFields } from "./advanced-search.fields";
+import { getConfiguredConditions } from "./advanced-search.utils";
 import { AdvancedSearchModule } from "./advanced-search.module";
 import { AdvancedSearchChipsComponent } from "./advanced-search-chips.component";
 
@@ -48,6 +50,47 @@ describe("AdvancedSearchChipsComponent", () => {
     render([config("pressure", {}, false)]);
 
     expect(find("[data-cy=condition-applied]")).toBeNull();
+  });
+
+  describe("fields of the config with a value", () => {
+    afterEach(() => setDatasetFields());
+
+    it("should show a chip for the ones with a value and none for the empty ones", () => {
+      setDatasetFields([
+        { key: "keywords", relation: "IN", value: ["neutron", "beam"] },
+        { key: "pid", relation: "IN" },
+        { key: "creationTime", relation: "RANGE", value: ["2026-01-01", ""] },
+        {
+          key: "scientificMetadata.detector.distance",
+          relation: "GREATER_THAN",
+          value: 5,
+          unit: "mm",
+        },
+        { key: "scientificMetadata.thickness", relation: "RANGE" },
+      ]);
+
+      render(getConfiguredConditions());
+
+      expect(
+        Array.from<HTMLElement>(
+          fixture.nativeElement.querySelectorAll(
+            "[data-cy=condition-chip] .chip-text",
+          ),
+        ).map((text) => text.textContent.trim()),
+      ).toEqual([
+        "Keywords: neutron, beam",
+        "Creation time: 2026-01-01 – …",
+        "detector.distance > 5 mm",
+      ]);
+    });
+
+    it("should show nothing when no field has a value", () => {
+      setDatasetFields([{ key: "pid", relation: "IN" }]);
+
+      render(getConfiguredConditions());
+
+      expect(find("[data-cy=condition-applied]")).toBeNull();
+    });
   });
 
   it("should show a chip for every applied filter", () => {

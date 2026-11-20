@@ -6,6 +6,7 @@ import {
   getDatasetFields,
   getFieldOptions,
   getPrefilledFields,
+  isMetadataFieldKey,
   setDatasetFields,
   SIDE_PANEL_FIELDS,
 } from "./advanced-search.fields";
@@ -133,6 +134,80 @@ describe("condition filter fields", () => {
         "keywords",
         "creationTime",
       ]);
+    });
+
+    it("should take scientific metadata with dots, its operator, value and unit", () => {
+      setDatasetFields(
+        [
+          {
+            key: "scientificMetadata.detector.distance",
+            relation: "GREATER_THAN",
+            value: 5,
+            unit: "mm",
+          },
+          { key: "scientificMetadata.thickness" },
+          { key: "scientificMetadata.speed", relation: "IN" as never },
+          { key: "scientificMetadata." },
+          { key: "scientificMetadata" },
+        ],
+        { "scientificMetadata.thickness.value": "Thickness" },
+      );
+
+      expect(getDatasetFields()).toEqual([
+        {
+          key: "scientificMetadata.detector.distance",
+          label: "detector.distance",
+          relation: "GREATER_THAN",
+          value: 5,
+          unit: "mm",
+        },
+        {
+          key: "scientificMetadata.thickness",
+          label: "Thickness",
+          relation: "EQUAL_TO",
+        },
+        {
+          key: "scientificMetadata.speed",
+          label: "speed",
+          relation: "EQUAL_TO",
+        },
+      ]);
+    });
+
+    it("should take the prefix of scientific metadata in any case", () => {
+      setDatasetFields([
+        { key: "scientificmetadata.Detector.distance", relation: "RANGE" },
+      ]);
+
+      expect(getDatasetFields()[0].key).toBe(
+        "scientificMetadata.Detector.distance",
+      );
+      expect(isMetadataFieldKey("SCIENTIFICMETADATA.a")).toBeTrue();
+    });
+
+    it("should not list the fields of scientific metadata in the dropdown, they are rows of its kind", () => {
+      setDatasetFields([
+        { key: "scientificMetadata.thickness", relation: "RANGE" },
+        { key: "creationTime", relation: "RANGE" },
+      ]);
+
+      const options = getFieldOptions(getDatasetFields());
+
+      expect(options.map(({ value }) => value)).toEqual([
+        "creationTime",
+        METADATA_FIELD,
+      ]);
+      expect(options.map(({ type }) => type)).toEqual(["date", "metadata"]);
+      expect(isMetadataFieldKey("scientificMetadata.a")).toBeTrue();
+      expect(isMetadataFieldKey("scientificMetadata")).toBeFalse();
+    });
+
+    it("should keep the value of a dataset field", () => {
+      setDatasetFields([
+        { key: "keywords", relation: "IN", value: ["neutron"] },
+      ]);
+
+      expect(getDatasetField("keywords").value).toEqual(["neutron"]);
     });
 
     it("should fall back to the defaults without a config", () => {

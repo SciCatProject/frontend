@@ -115,10 +115,30 @@
             "items": {
               "type": "object",
               "properties": {
-                "key": { "type": "string" },
+                "key": {
+                  "type": "string",
+                  "description": "A dataset field, or scientific metadata as scientificMetadata.<key>, with dots for nested keys."
+                },
                 "relation": {
                   "type": "string",
-                  "enum": ["CONTAINS", "IN", "RANGE"]
+                  "enum": [
+                    "CONTAINS",
+                    "IN",
+                    "RANGE",
+                    "EQUAL_TO",
+                    "GREATER_THAN",
+                    "LESS_THAN",
+                    "GREATER_THAN_OR_EQUAL",
+                    "LESS_THAN_OR_EQUAL"
+                  ],
+                  "description": "Dataset fields: CONTAINS, IN or RANGE. Scientific metadata: the operator the row starts with."
+                },
+                "value": {
+                  "description": "The value the row starts with, a list for IN and two bounds for RANGE."
+                },
+                "unit": {
+                  "type": "string",
+                  "description": "The unit of the value of scientific metadata."
                 }
               }
             }

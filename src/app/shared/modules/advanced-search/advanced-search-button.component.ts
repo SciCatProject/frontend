@@ -15,6 +15,7 @@ import {
 } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
 import { selectConditions } from "state-management/selectors/user.selectors";
+import { METADATA_PREFIX, getDatasetField } from "./advanced-search.fields";
 import { ConditionKeySource } from "./advanced-search.keys";
 import { AdvancedSearchService } from "./advanced-search.service";
 import {
@@ -80,7 +81,9 @@ export class AdvancedSearchButtonComponent implements OnInit {
   getWaiting(configs: ConditionConfig[]): number {
     return withoutSwitchedOff(configs).filter(
       ({ condition }) =>
-        !isConditionComplete(condition) && !isDatasetCondition(condition),
+        !isConditionComplete(condition) &&
+        !isDatasetCondition(condition) &&
+        !getDatasetField(`${METADATA_PREFIX}${condition.lhs}`),
     ).length;
   }
 

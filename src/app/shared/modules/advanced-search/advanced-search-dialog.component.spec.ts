@@ -10,6 +10,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { of } from "rxjs";
 import { ConditionSettingScope } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
+import { getConfiguredConditions } from "./advanced-search.utils";
 import { AdvancedSearchModule } from "./advanced-search.module";
 import {
   AdvancedSearchDialogComponent,
@@ -120,6 +121,123 @@ describe("AdvancedSearchDialogComponent", () => {
       ]);
       expect(row(0).condition.rhs).toBe("");
       expect(row(1).condition.rhs).toEqual(["", ""]);
+      expect(component.canApply()).toBeTrue();
+    });
+
+    it("should open with the value of the config in the row", () => {
+      setDatasetFields([
+        { key: "keywords", relation: "IN", value: ["neutron", "beam"] },
+        { key: "creationTime", relation: "RANGE", value: ["2026-01-01", ""] },
+        {
+          key: "scientificMetadata.detector.distance",
+          relation: "GREATER_THAN",
+          value: 5,
+          unit: "mm",
+        },
+      ]);
+      createComponent();
+
+      expect(row(0).condition.rhs).toBe("neutron, beam");
+      expect(row(1).condition.rhs).toEqual(["2026-01-01", ""]);
+      const { condition } = row(2);
+      expect(condition).toEqual(
+        jasmine.objectContaining({
+          lhs: "detector.distance",
+          source: "scientificMetadata",
+          relation: "GREATER_THAN",
+          rhs: "5",
+          unit: "mm",
+        }),
+      );
+      expect(component.canApply()).toBeTrue();
+    });
+
+    describe("scientific metadata of the config", () => {
+      beforeEach(() =>
+        setDatasetFields(
+          [
+            { key: "scientificMetadata.thickness", relation: "RANGE" },
+            { key: "scientificMetadata.detector.distance" },
+          ],
+          { "scientificMetadata.thickness.value": "Thickness" },
+        ),
+      );
+
+      it("should open with a row for each, with the key set and the operator to change", () => {
+        createComponent();
+
+        expect(component.rows().map(({ condition }) => condition.lhs)).toEqual([
+          "thickness",
+          "detector.distance",
+        ]);
+        expect(row(0).condition.relation).toBe("RANGE");
+        expect(row(1).condition.relation).toBe("EQUAL_TO");
+        // the row has the kind of scientific metadata, the field cell has the key
+        expect(component.getFieldValue(row(0).condition)).toBe(METADATA_FIELD);
+        expect(component.getFieldOption(row(0).condition).label).toBe(
+          "Scientific metadata",
+        );
+        expect(component.fieldOptions.map(({ value }) => value)).not.toContain(
+          "scientificMetadata.thickness",
+        );
+        expect(component.isFixedKey(row(0).condition)).toBeTrue();
+      });
+
+      it("should leave the key of a free scientific metadata row to pick", () => {
+        createComponent([saved({ lhs: "pressure" })]);
+
+        expect(component.getFieldValue(row().condition)).toBe(METADATA_FIELD);
+        expect(component.isFixedKey(row().condition)).toBeFalse();
+      });
+
+      it("should save the rows without a value too and apply with a value", () => {
+        createComponent();
+        component.set(id(1), { rhs: "3" });
+
+        expect(component.canApply()).toBeTrue();
+        component.apply();
+
+        expect(closedWith().map(({ condition }) => condition.lhs)).toEqual([
+          "thickness",
+          "detector.distance",
+        ]);
+        expect(closedWith()[1].condition.rhs).toBe(3);
+      });
+    });
+
+    it("should open with the applied values next to the empty rows of the other fields", () => {
+      setDatasetFields([
+        { key: "keywords", relation: "IN", value: ["neutron"] },
+        { key: "pid", relation: "IN" },
+        { key: "creationTime", relation: "RANGE", value: ["2026-01-01", ""] },
+      ]);
+      createComponent(getConfiguredConditions());
+
+      expect(
+        component.rows().map(({ condition }) => [condition.lhs, condition.rhs]),
+      ).toEqual([
+        ["keywords", "neutron"],
+        ["pid", ""],
+        ["creationTime", ["2026-01-01", ""]],
+      ]);
+      expect(component.canApply()).toBeTrue();
+
+      component.apply();
+
+      expect(closedWith().map(({ condition }) => condition.lhs)).toEqual([
+        "keywords",
+        "pid",
+        "creationTime",
+      ]);
+    });
+
+    it("should open a range that is a text in the config empty", () => {
+      setDatasetFields([
+        { key: "creationTime", relation: "RANGE", value: "2026-01-01" },
+      ]);
+      createComponent();
+
+      expect(row().condition.rhs).toEqual(["", ""]);
       expect(component.canApply()).toBeTrue();
     });
 

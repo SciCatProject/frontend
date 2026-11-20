@@ -9,6 +9,8 @@ import {
   ConditionConfig,
   initialUserState,
 } from "state-management/state/user.store";
+import { setDatasetFields } from "./advanced-search.fields";
+import { getConfiguredConditions } from "./advanced-search.utils";
 import { AdvancedSearchModule } from "./advanced-search.module";
 import { AdvancedSearchButtonComponent } from "./advanced-search-button.component";
 import { AdvancedSearchService } from "./advanced-search.service";
@@ -229,6 +231,28 @@ describe("AdvancedSearchButtonComponent", () => {
       expect(component.getWaiting([emptyField])).toBe(0);
       expect(find("[data-cy=condition-waiting]")).toBeNull();
       expect(find("[data-cy=condition-count]").textContent).toBe("1");
+    });
+
+    it("should not wait for a field of scientific metadata of the config", () => {
+      setDatasetFields([{ key: "scientificMetadata.humidity" }]);
+      const empty = withoutValue("humidity");
+
+      expect(component.getWaiting([empty, withoutValue("pressure")])).toBe(1);
+      setDatasetFields();
+    });
+
+    it("should count only the configured fields with a value, the empty ones are not waiting", () => {
+      setDatasetFields([
+        { key: "keywords", relation: "IN", value: ["neutron"] },
+        { key: "pid", relation: "IN" },
+        { key: "scientificMetadata.thickness", relation: "RANGE" },
+      ]);
+
+      render(getConfiguredConditions());
+      setDatasetFields();
+
+      expect(find("[data-cy=condition-count]").textContent).toBe("1");
+      expect(find("[data-cy=condition-waiting]")).toBeNull();
     });
 
     it("should count only the filters that wait for a value", () => {

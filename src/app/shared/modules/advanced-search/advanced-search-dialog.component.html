@@ -159,13 +159,19 @@
         }
 
         @if (kind === "metadata") {
-          <advanced-search-key-picker
-            class="cell-key"
-            [source]="keySource"
-            [key]="condition.lhs"
-            [error]="error?.key"
-            (keyChange)="set(row.id, { lhs: $event })"
-          ></advanced-search-key-picker>
+          @if (isFixedKey(condition)) {
+            <div class="static-cell cell-key" aria-disabled="true">
+              {{ condition.lhs }}
+            </div>
+          } @else {
+            <advanced-search-key-picker
+              class="cell-key"
+              [source]="keySource"
+              [key]="condition.lhs"
+              [error]="error?.key"
+              (keyChange)="set(row.id, { lhs: $event })"
+            ></advanced-search-key-picker>
+          }
 
           <mat-form-field
             class="cell-op"
