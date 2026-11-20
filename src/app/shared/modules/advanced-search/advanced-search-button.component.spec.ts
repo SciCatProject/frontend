@@ -213,6 +213,24 @@ describe("AdvancedSearchButtonComponent", () => {
       expect(tooltipOf()).toContain("has no value yet");
     });
 
+    it("should not wait for a field without a value, it is an empty row of the dialog", () => {
+      const emptyField = config("keywords", {
+        condition: {
+          lhs: "keywords",
+          relation: "IN",
+          rhs: "",
+          unit: "",
+          source: "dataset",
+        },
+      });
+
+      render([config("temperature"), emptyField]);
+
+      expect(component.getWaiting([emptyField])).toBe(0);
+      expect(find("[data-cy=condition-waiting]")).toBeNull();
+      expect(find("[data-cy=condition-count]").textContent).toBe("1");
+    });
+
     it("should count only the filters that wait for a value", () => {
       expect(
         component.getWaiting([

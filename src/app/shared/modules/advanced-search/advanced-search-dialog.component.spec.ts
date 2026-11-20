@@ -15,7 +15,12 @@ import {
   AdvancedSearchDialogComponent,
   AdvancedSearchDialogData,
 } from "./advanced-search-dialog.component";
-import { METADATA_FIELD } from "./advanced-search.fields";
+import {
+  METADATA_FIELD,
+  SIDE_PANEL_FIELDS,
+  setDatasetFields,
+  setPrefilledFields,
+} from "./advanced-search.fields";
 
 describe("AdvancedSearchDialogComponent", () => {
   let component: AdvancedSearchDialogComponent;
@@ -79,6 +84,8 @@ describe("AdvancedSearchDialogComponent", () => {
 
   beforeEach(() => {
     dialogRef.close.calls.reset();
+    // the dialog starts with one empty row, the prefilled fields have their own tests
+    setPrefilledFields([]);
 
     TestBed.configureTestingModule({
       imports: [AdvancedSearchModule, NoopAnimationsModule],
@@ -87,6 +94,95 @@ describe("AdvancedSearchDialogComponent", () => {
         { provide: MAT_DIALOG_DATA, useFactory: () => dialogData },
         { provide: MatDialogRef, useValue: dialogRef },
       ],
+    });
+  });
+
+  afterAll(() => setDatasetFields());
+
+  describe("prefilled fields", () => {
+    afterEach(() => setDatasetFields());
+
+    beforeEach(() =>
+      setDatasetFields([
+        { key: "pid", relation: "IN" },
+        { key: "creationTime", relation: "RANGE" },
+        { key: "runNumber", relation: "CONTAINS" },
+      ]),
+    );
+
+    it("should open with an empty row for each field of the config, in its order", () => {
+      createComponent();
+
+      expect(component.rows().map(({ condition }) => condition.lhs)).toEqual([
+        "pid",
+        "creationTime",
+        "runNumber",
+      ]);
+      expect(row(0).condition.rhs).toBe("");
+      expect(row(1).condition.rhs).toEqual(["", ""]);
+      expect(component.canApply()).toBeTrue();
+    });
+
+    it("should open with the saved filters only, when there are some", () => {
+      createComponent([saved(), savedDatasetField({ lhs: "pid", rhs: ["a"] })]);
+
+      expect(component.rows().map(({ condition }) => condition.lhs)).toEqual([
+        "temperature",
+        "pid",
+      ]);
+    });
+
+    it("should open with the side panel fields without a config", () => {
+      setDatasetFields();
+      createComponent();
+
+      expect(component.rows().map(({ condition }) => condition.lhs)).toEqual(
+        SIDE_PANEL_FIELDS,
+      );
+    });
+
+    it("should save the rows without a value too", () => {
+      createComponent();
+      component.set(id(0), { rhs: "a, b" });
+
+      component.apply();
+
+      expect(closedWith().map(({ condition }) => condition.lhs)).toEqual([
+        "pid",
+        "creationTime",
+        "runNumber",
+      ]);
+      expect(closedWith()[2].condition.rhs).toBe("");
+    });
+
+    it("should show the saved empty rows again", () => {
+      createComponent([
+        savedDatasetField({ lhs: "pid", rhs: ["a"] }),
+        savedDatasetField({ lhs: "runNumber", relation: "CONTAINS", rhs: "" }),
+      ]);
+
+      expect(component.rows().map(({ condition }) => condition.lhs)).toEqual([
+        "pid",
+        "runNumber",
+      ]);
+      expect(component.canApply()).toBeTrue();
+    });
+
+    it("should let any row be removed", () => {
+      createComponent();
+
+      component.removeRow(id(0));
+      fixture.detectChanges();
+
+      expect(component.rows().length).toBe(2);
+      expect(cells("[data-cy=condition-remove]").length).toBe(2);
+    });
+
+    it("should not be used for samples", () => {
+      createComponent([], "sample");
+
+      expect(component.rows().length).toBe(1);
+      expect(component.getKind(row().condition)).toBe("metadata");
     });
   });
 
@@ -138,12 +234,13 @@ describe("AdvancedSearchDialogComponent", () => {
       ).toContain("data_array");
     });
 
-    it("should list scientific metadata with the other fields, in alphabetical order", () => {
-      const labels = component.fieldOptions.map(({ label }) => label);
+    it("should list scientific metadata after the other fields, which keep their order", () => {
+      const values = component.fieldOptions.map(({ value }) => value);
 
-      expect(labels).toContain("Scientific metadata");
-      expect(labels).toEqual([...labels].sort((a, b) => a.localeCompare(b)));
-      expect(labels.length).toBe(component.datasetFields.length + 1);
+      expect(values).toEqual([
+        ...component.datasetFields.map(({ key }) => key),
+        METADATA_FIELD,
+      ]);
     });
 
     it("should switch exclude on and off with its checkbox", () => {

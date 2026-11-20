@@ -24,6 +24,8 @@ import {
 } from "./advanced-search-dialog.component";
 import {
   getActiveConfigs,
+  isConditionComplete,
+  isDatasetCondition,
   toActiveConditions,
   withoutSwitchedOff,
 } from "./advanced-search.utils";
@@ -71,11 +73,15 @@ export class AdvancedSearchButtonComponent implements OnInit {
     this.configs$ = this.store.select(selectConditions(this.scope));
   }
 
-  /** How many saved filters wait for a value, they are not applied until they have one. */
+  /**
+   * How many saved filters wait for a value, they are not applied until they have one. A field
+   * without a value is an empty row of the dialog, it does not wait for anything.
+   */
   getWaiting(configs: ConditionConfig[]): number {
-    return (
-      withoutSwitchedOff(configs).length - getActiveConfigs(configs).length
-    );
+    return withoutSwitchedOff(configs).filter(
+      ({ condition }) =>
+        !isConditionComplete(condition) && !isDatasetCondition(condition),
+    ).length;
   }
 
   /**

@@ -68,6 +68,8 @@ const TYPE_OF_RELATION: Record<DatasetField["relation"], FieldType> = {
 
 export const DATASET_FIELDS: DatasetField[] = [
   // lists
+  { key: "pid", label: "PID", relation: "IN" },
+  { key: "ownerGroup", label: "Group", relation: "IN" },
   { key: "keywords", label: "Keywords", relation: "IN" },
   { key: "proposalIds", label: "Proposal IDs", relation: "IN" },
   { key: "sampleIds", label: "Sample IDs", relation: "IN" },
@@ -78,15 +80,29 @@ export const DATASET_FIELDS: DatasetField[] = [
   { key: "startTime", label: "Start time", relation: "RANGE" },
   { key: "endTime", label: "End time", relation: "RANGE" },
   // text
+  { key: "creationLocation", label: "Location", relation: "CONTAINS" },
   { key: "datasetName", label: "Dataset name", relation: "CONTAINS" },
   { key: "owner", label: "Owner", relation: "CONTAINS" },
   { key: "description", label: "Description", relation: "CONTAINS" },
 ];
 
+/** The fields the side panel had, the dialog opens with them when no fields are configured. */
+export const SIDE_PANEL_FIELDS = [
+  "creationLocation",
+  "pid",
+  "ownerGroup",
+  "type",
+  "keywords",
+  "creationTime",
+];
+
 let datasetFields = DATASET_FIELDS;
+let prefilledKeys = SIDE_PANEL_FIELDS;
 
 /**
  * The fields of the config (`advancedSearchFields`), without any valid one the defaults are used.
+ * Without saved filters the dialog opens with a row for every field of the config, without a
+ * config for the fields the side panel had.
  * The labels are the ones of the localization (`labelsLocalization`), then the ones of the defaults.
  */
 export function setDatasetFields(
@@ -107,12 +123,24 @@ export function setDatasetFields(
         key,
     }),
   );
+  setPrefilledFields(
+    valid.length ? valid.map(({ key }) => key) : SIDE_PANEL_FIELDS,
+  );
 }
 
 export const getDatasetFields = (): DatasetField[] => datasetFields;
 
 export const getDatasetField = (key: string): DatasetField | undefined =>
   datasetFields.find((field) => field.key === key);
+
+/** The fields the dialog opens with, an empty list starts it with a row for scientific metadata. */
+export function setPrefilledFields(keys: string[]): void {
+  prefilledKeys = keys;
+}
+
+/** The dialog opens with an empty row for each of these fields when there are no saved filters. */
+export const getPrefilledFields = (): DatasetField[] =>
+  prefilledKeys.map(getDatasetField).filter((field) => !!field);
 
 /** An entry of the field dropdown, scientific metadata is one of them. */
 export interface FieldOption {
@@ -122,19 +150,20 @@ export interface FieldOption {
   dataCy: string;
 }
 
-/** All fields in alphabetical order. */
-export const getFieldOptions = (datasetFields: DatasetField[]): FieldOption[] =>
-  [
-    ...datasetFields.map(({ key, label, relation }) => ({
-      value: key,
-      label,
-      type: TYPE_OF_RELATION[relation],
-      dataCy: "condition-field-dataset",
-    })),
-    {
-      value: METADATA_FIELD,
-      label: "Scientific metadata",
-      type: "metadata" as FieldType,
-      dataCy: "condition-field-metadata",
-    },
-  ].sort((a, b) => a.label.localeCompare(b.label));
+/** All fields in the order they are listed, scientific metadata is the last. */
+export const getFieldOptions = (
+  datasetFields: DatasetField[],
+): FieldOption[] => [
+  ...datasetFields.map(({ key, label, relation }) => ({
+    value: key,
+    label,
+    type: TYPE_OF_RELATION[relation],
+    dataCy: "condition-field-dataset",
+  })),
+  {
+    value: METADATA_FIELD,
+    label: "Scientific metadata",
+    type: "metadata" as FieldType,
+    dataCy: "condition-field-metadata",
+  },
+];

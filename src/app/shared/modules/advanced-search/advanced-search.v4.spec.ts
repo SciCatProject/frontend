@@ -34,6 +34,9 @@ const V4_OPERATORS = [
 
 // A key that is not a field of the v4 dataset does not compile here
 const V4_FILTER_FIELDS: Array<keyof OutputDatasetDto> = [
+  "pid",
+  "ownerGroup",
+  "creationLocation",
   "keywords",
   "proposalIds",
   "sampleIds",

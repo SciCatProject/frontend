@@ -5,7 +5,9 @@ import {
   getDatasetField,
   getDatasetFields,
   getFieldOptions,
+  getPrefilledFields,
   setDatasetFields,
+  SIDE_PANEL_FIELDS,
 } from "./advanced-search.fields";
 
 describe("condition filter fields", () => {
@@ -21,13 +23,27 @@ describe("condition filter fields", () => {
     expect(getDatasetField("unknown")).toBeUndefined();
   });
 
-  it("should list all fields with scientific metadata, in alphabetical order", () => {
+  it("should list all fields in their order, with scientific metadata last", () => {
     const options = getFieldOptions(DATASET_FIELDS);
-    const labels = options.map(({ label }) => label);
 
     expect(options.length).toBe(DATASET_FIELDS.length + 1);
-    expect(options.some(({ value }) => value === METADATA_FIELD)).toBeTrue();
-    expect(labels).toEqual([...labels].sort((a, b) => a.localeCompare(b)));
+    expect(options.map(({ value }) => value)).toEqual([
+      ...DATASET_FIELDS.map(({ key }) => key),
+      METADATA_FIELD,
+    ]);
+  });
+
+  it("should keep the order of the config", () => {
+    setDatasetFields([
+      { key: "runNumber", relation: "CONTAINS" },
+      { key: "creationTime", relation: "RANGE" },
+      { key: "keywords", relation: "IN" },
+    ]);
+
+    expect(
+      getFieldOptions(getDatasetFields()).map(({ value }) => value),
+    ).toEqual(["runNumber", "creationTime", "keywords", METADATA_FIELD]);
+    setDatasetFields();
   });
 
   it("should give every field one of the four kinds of filter, each with an icon", () => {
@@ -69,7 +85,7 @@ describe("condition filter fields", () => {
         [
           { key: "runNumber", relation: "CONTAINS" },
           { key: "keywords", relation: "IN" },
-          { key: "pid", relation: "IN" },
+          { key: "sourceFolder", relation: "CONTAINS" },
         ],
         { runNumber: "Run Number" },
       );
@@ -77,7 +93,7 @@ describe("condition filter fields", () => {
       expect(getDatasetFields().map(({ label }) => label)).toEqual([
         "Run Number",
         "Keywords",
-        "pid",
+        "sourceFolder",
       ]);
     });
 
@@ -86,6 +102,37 @@ describe("condition filter fields", () => {
 
       expect(getDatasetField("creationTime").label).toBe("Created");
       expect(getDatasetField("keywords").label).toBe("Keywords");
+    });
+
+    it("should prefill the fields of the config, in its order", () => {
+      setDatasetFields([
+        { key: "runNumber", relation: "CONTAINS" },
+        { key: "keywords", relation: "IN" },
+        { key: "pid", relation: "IN" },
+      ]);
+
+      expect(getPrefilledFields().map(({ key }) => key)).toEqual([
+        "runNumber",
+        "keywords",
+        "pid",
+      ]);
+    });
+
+    it("should prefill the fields the side panel had without a config", () => {
+      setDatasetFields([{ key: "runNumber", relation: "IN" }]);
+      setDatasetFields();
+
+      expect(getPrefilledFields().map(({ key }) => key)).toEqual(
+        SIDE_PANEL_FIELDS,
+      );
+      expect(SIDE_PANEL_FIELDS).toEqual([
+        "creationLocation",
+        "pid",
+        "ownerGroup",
+        "type",
+        "keywords",
+        "creationTime",
+      ]);
     });
 
     it("should fall back to the defaults without a config", () => {
@@ -100,13 +147,13 @@ describe("condition filter fields", () => {
 
     it("should leave out a field without key or with an unknown relation", () => {
       setDatasetFields([
-        { key: "pid", relation: "IN" },
+        { key: "runNumber", relation: "IN" },
         { relation: "IN" },
         { key: "size", relation: "GREATER_THAN" as never },
       ]);
 
       expect(getDatasetFields()).toEqual([
-        { key: "pid", label: "pid", relation: "IN" },
+        { key: "runNumber", label: "runNumber", relation: "IN" },
       ]);
     });
 

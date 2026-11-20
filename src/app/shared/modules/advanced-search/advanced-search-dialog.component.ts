@@ -23,6 +23,7 @@ import {
   METADATA_FIELD,
   getDatasetField,
   getDatasetFields,
+  getPrefilledFields,
   getFieldOptions,
 } from "./advanced-search.fields";
 import { ConditionKeySource } from "./advanced-search.keys";
@@ -143,8 +144,8 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     for (const { id, condition } of rows) {
       const hasKey = !!condition.lhs.trim();
       const isBlank = !hasKey && !this.hasValue(condition);
-      // a row that is still empty is left out
-      if (isBlank) continue;
+      // a row that is still empty is left out, a prefilled field without a value too
+      if (isBlank || this.isEmptyPrefilled(condition)) continue;
 
       if (!hasKey) {
         errors.set(id, { key: "Choose a key" });
@@ -243,9 +244,32 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     });
   }
 
+  /** A prefilled field without a value is not a filter yet, it is saved but not an error. */
+  private isEmptyPrefilled(condition: FilterCondition): boolean {
+    return (
+      this.advanced &&
+      isDatasetCondition(condition) &&
+      !this.hasValue(condition) &&
+      getPrefilledFields().some(({ key }) => key === condition.lhs)
+    );
+  }
+
+  /**
+   * The saved filters, without them an empty row for every prefilled field (samples and
+   * visitors without saved filters start with the fields of the config).
+   */
   private createRows(configs: ConditionConfig[]): Row[] {
-    const drafts = configs.length ? configs.map(toDraft) : [blankDraft()];
-    return drafts.map((draft) => this.createRow(draft));
+    const drafts = configs.length
+      ? configs.map(toDraft)
+      : this.advanced
+        ? getPrefilledFields().map(({ key }) => ({
+            condition: this.withField(blankDraft().condition, key),
+          }))
+        : [];
+
+    return (drafts.length ? drafts : [blankDraft()]).map((draft) =>
+      this.createRow(draft),
+    );
   }
 
   private createRow(draft: ConditionConfig): Row {
