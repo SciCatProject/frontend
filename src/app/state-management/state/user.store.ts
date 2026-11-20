@@ -2,7 +2,7 @@ import {
   Settings,
   Message,
   TableColumn,
-  ScientificCondition,
+  FilterCondition,
   FacetCount,
 } from "../models";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
@@ -23,8 +23,12 @@ export interface FilterConfig {
 }
 
 export interface ConditionConfig {
-  condition: ScientificCondition;
-  enabled: boolean;
+  condition: FilterCondition;
+  /**
+   * Older settings can have it: a filter that was switched off, it is not used. There is no
+   * way to switch a filter off any more, nothing writes it and a missing one means on.
+   */
+  enabled?: boolean;
 }
 
 // NOTE It IS ok to make up a state of other sub states
