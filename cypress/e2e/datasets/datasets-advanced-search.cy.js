@@ -540,6 +540,8 @@ describe("Datasets advanced search", () => {
     });
 
     it("should keep the filters after the page is loaded again", () => {
+      // the filters are saved with the user settings, the page is loaded again after that
+      cy.intercept("PATCH", "**/settings/external").as("saveSettings");
       cy.openAdvancedSearch();
       cy.fillCondition(0, { field: "Keywords", value: "beam, test" });
       addFilter();
@@ -550,6 +552,7 @@ describe("Datasets advanced search", () => {
       });
       apply();
       shows(names.alpha);
+      cy.wait("@saveSettings");
 
       cy.reload();
       cy.finishedLoading();
@@ -639,7 +642,9 @@ describe("Datasets advanced search", () => {
     });
 
     it("should not come back after the user cleared it", () => {
+      cy.intercept("PATCH", "**/settings/external").as("saveSettings");
       cy.removeConditions();
+      cy.wait("@saveSettings");
 
       cy.reload();
       cy.wait("@getConfig", { timeout: 20000 });

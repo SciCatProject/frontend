@@ -156,27 +156,6 @@ Cypress.Commands.add(
   },
 );
 
-/** Adds a condition to the ones that are already there and applies them. */
-Cypress.Commands.add("addCondition", (condition) => {
-  cy.openAdvancedSearch();
-  cy.get('[data-cy="condition-row"]')
-    .last()
-    .then(($row) => {
-      // the last row is taken, unless it is already filled in
-      if (
-        $row.find('[data-cy="condition-key"], [data-cy="condition-value"]')
-          .length
-      ) {
-        cy.get('[data-cy="condition-add"]').click();
-      }
-    });
-  cy.get('[data-cy="condition-row"]').then((rows) =>
-    cy.fillCondition(rows.length - 1, condition),
-  );
-  cy.get('[data-cy="condition-apply"]').click();
-  cy.get("advanced-search-dialog").should("not.exist");
-});
-
 /** Removes all conditions, they are saved with the user settings. */
 Cypress.Commands.add("removeConditions", () => {
   cy.openAdvancedSearch();

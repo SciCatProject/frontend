@@ -1148,6 +1148,26 @@ describe("UserEffects", () => {
       });
       expect(effects.setConditions$).toBeObservable(expected);
     });
+
+    it("should set no conditions when the settings have none at all", () => {
+      actions = hot("-a", {
+        a: fromActions.fetchUserSettingsCompleteAction({
+          userSettings: {} as unknown as UserSettings,
+        }),
+      });
+
+      const expected = cold("-(cd)", {
+        c: fromActions.updateConditionsConfigs({
+          conditionConfigs: [],
+          scope: "dataset",
+        }),
+        d: fromActions.updateConditionsConfigs({
+          conditionConfigs: [],
+          scope: "sample",
+        }),
+      });
+      expect(effects.setConditions$).toBeObservable(expected);
+    });
   });
 
   describe("addCustomColumns$", () => {
