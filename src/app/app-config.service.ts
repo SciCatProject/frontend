@@ -191,6 +191,8 @@ export interface AppConfigInterface {
   scienceSearchUnitsEnabled: boolean;
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;
+  /** The advanced search or, when false, the side panel with the old condition filter. */
+  advancedSearchEnabled?: boolean;
   sftpHost: string | null;
   sourceFolder?: string;
   maxFileSizeWarning?: string;
@@ -211,6 +213,8 @@ export interface AppConfigInterface {
   metadataEditingUnitListDisabled?: boolean;
   defaultDatasetsListSettings?: ListSettings;
   defaultProposalsListSettings?: ListSettings;
+  /** Samples only have the conditions of the old condition filter to predefine. */
+  defaultSamplesListSettings?: Pick<ListSettings, "conditions">;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
   datasetDetailComponent?: DatasetDetailComponentConfig;
@@ -422,6 +426,9 @@ export class AppConfigService {
     }
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
+
+    // the advanced search is off unless it is turned on, until it becomes the default
+    config.advancedSearchEnabled = config.advancedSearchEnabled === true;
 
     if (
       config.paginationPosition !== "top" &&
