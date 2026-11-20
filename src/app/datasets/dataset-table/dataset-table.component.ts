@@ -494,6 +494,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onClearAll() {
     this.onTextSearchChange("");
+    // the chip goes at once, the url is only cleared a moment later
+    this.appliedText = "";
     this.advancedSearchButton.clearFilters();
   }
 
