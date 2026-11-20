@@ -60,7 +60,6 @@
   "policiesEnabled": true,
   "retrieveDestinations": [],
   "riotBaseUrl": "http://scichat.swap.ess.eu",
-  "scienceSearchEnabled": false,
   "scienceSearchUnitsEnabled": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,

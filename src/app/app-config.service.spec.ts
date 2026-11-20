@@ -8,6 +8,10 @@ import {
 import { Observable, of, throwError } from "rxjs";
 import { delay } from "rxjs/operators";
 import { MockHttp } from "shared/MockStubs";
+import {
+  DATASET_FIELDS,
+  getDatasetFields,
+} from "shared/modules/advanced-search/advanced-search.fields";
 
 const appConfig: AppConfigInterface = {
   defaultMainPage: {
@@ -71,7 +75,6 @@ const appConfig: AppConfigInterface = {
   policiesEnabled: true,
   retrieveDestinations: [],
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
-  scienceSearchEnabled: true,
   scienceSearchUnitsEnabled: true,
   searchPublicDataEnabled: true,
   searchSamples: true,
@@ -270,6 +273,34 @@ describe("AppConfigService", () => {
       await service.loadAppConfig();
 
       expect(service["appConfig"]).toEqual(appConfig);
+    });
+
+    it("should use the advanced search fields of the config, the defaults without them", async () => {
+      const get = spyOn(service["http"], "get");
+
+      get.and.returnValue(
+        of({
+          ...appConfig,
+          advancedSearchFields: {
+            datasets: [{ key: "runNumber", relation: "CONTAINS" }],
+          },
+          labelsLocalization: { dataset: { runNumber: "Run Number" } },
+        }),
+      );
+      await service.loadAppConfig();
+      expect(getDatasetFields()).toEqual([
+        { key: "runNumber", label: "Run Number", relation: "CONTAINS" },
+      ]);
+
+      get.and.returnValue(
+        of({
+          ...appConfig,
+          advancedSearchFields: {},
+          labelsLocalization: undefined,
+        }),
+      );
+      await service.loadAppConfig();
+      expect(getDatasetFields()).toEqual(DATASET_FIELDS);
     });
 
     it("should keep the advanced search off unless it is turned on", async () => {
