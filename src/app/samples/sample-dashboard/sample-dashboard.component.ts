@@ -15,7 +15,10 @@ import {
   selectMetadataKeyOptions,
   selectSampleDashboardPageViewModel,
 } from "state-management/selectors/samples.selectors";
-import { selectFetchedConditions } from "state-management/selectors/user.selectors";
+import {
+  selectConditions,
+  selectFetchedConditions,
+} from "state-management/selectors/user.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
@@ -46,6 +49,7 @@ import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { AdvancedSearchService } from "shared/modules/advanced-search/advanced-search.service";
+import { AdvancedSearchButtonComponent } from "shared/modules/advanced-search/advanced-search-button.component";
 import { staticKeySource } from "shared/modules/advanced-search/advanced-search.keys";
 import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
 import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
@@ -62,6 +66,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   keySource = staticKeySource(this.store.select(selectMetadataKeyOptions));
 
   @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
+
+  @ViewChild(AdvancedSearchButtonComponent)
+  advancedSearchButton: AdvancedSearchButtonComponent;
+
+  conditionConfigs$ = this.store.select(selectConditions("sample"));
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -131,7 +140,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   rowSelectionMode: TableSelectionMode = "none";
 
-  showGlobalTextSearch = false;
+  /** The search box of the table, the old filter has its own search card. */
+  showGlobalTextSearch = this.appConfig.searchSamples && !this.oldFilter;
 
   defaultPageSize = 10;
 
