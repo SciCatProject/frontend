@@ -159,7 +159,10 @@ export function setDatasetFields(
         ? field.relation
         : "EQUAL_TO"
       : field.relation;
-    if (!metadata && !(relation in TYPE_OF_RELATION)) return [];
+    // an own key only, "toString" is in every object
+    if (!metadata && !Object.keys(TYPE_OF_RELATION).includes(relation)) {
+      return [];
+    }
     const { unit } = field;
     const key = metadata ? toMetadataFieldKey(field.key) : field.key;
     return [
