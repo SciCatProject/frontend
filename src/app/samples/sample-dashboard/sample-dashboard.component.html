@@ -1,26 +1,28 @@
 @if (vm$ | async; as vm) {
+  @let leftColumn =
+    (appConfig.searchSamples && oldFilter) || appConfig.addSampleEnabled;
   <div fxLayout="row" fxLayout.lt-lg="column">
-    <div fxFlex="14" fxFlex.lt-xl="20">
-      @if (appConfig.addSampleEnabled) {
-        <button
-          mat-stroked-button
-          class="small-edit-sample"
-          (click)="openDialog()"
-        >
-          <mat-icon>add_circle</mat-icon> Create Sample
-        </button>
-      }
-      @if (appConfig.searchSamples) {
-        <mat-card class="big-search">
-          <mat-card-header>
-            <mat-card-title>Search</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <app-search-bar
-              [prefilledValue]="vm.textFilter"
-              (search)="onTextSearchChange($event)"
-            ></app-search-bar>
-            @if (appConfig.scienceSearchEnabled) {
+    @if (leftColumn) {
+      <div fxFlex="14" fxFlex.lt-xl="20">
+        @if (appConfig.addSampleEnabled) {
+          <button
+            mat-stroked-button
+            class="small-edit-sample"
+            (click)="openDialog()"
+          >
+            <mat-icon>add_circle</mat-icon> Create Sample
+          </button>
+        }
+        @if (appConfig.searchSamples && oldFilter) {
+          <mat-card class="big-search">
+            <mat-card-header>
+              <mat-card-title>Search</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <app-search-bar
+                [prefilledValue]="vm.textFilter"
+                (search)="onTextSearchChange($event)"
+              ></app-search-bar>
               <shared-condition
                 #conditionFilter
                 [showConditions]="true"
@@ -32,49 +34,49 @@
                 [removeConditionAction]="removeCondition"
                 [dialogTitle]="'Add Sample Metadata Key'"
               ></shared-condition>
-            }
-            <div class="section-container">
-              <button
-                [disabled]="!vm.hasAppliedFilters"
-                mat-raised-button
-                color="secondary"
-                class="samples-filters-clear-button"
-                data-cy="samples-filters-clear-button"
-                (click)="reset()"
-              >
-                <mat-icon>undo</mat-icon>
-                Clear
-              </button>
-              <button
-                mat-raised-button
-                color="primary"
-                class="samples-filters-search-button"
-                data-cy="samples-filters-search-button"
-                (click)="applyFilters()"
-              >
-                <mat-icon>search</mat-icon>
-                Apply
-              </button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-        <div class="small-search" fxFlexOrder="2">
-          <app-search-bar
-            [prefilledValue]="vm.textFilter"
-            (search)="onTextSearchChange($event)"
-            (searchBarFocus)="onTextSearchChange($event)"
-          ></app-search-bar>
-        </div>
-      }
-      @if (appConfig.addSampleEnabled) {
-        <mat-card class="big-edit-sample" (click)="openDialog()">
-          <mat-card-content>
-            <mat-icon>add_circle</mat-icon> Create Sample
-          </mat-card-content>
-        </mat-card>
-      }
-    </div>
-    <div fxFlex fxFlex.lt-xl="80">
+              <div class="section-container">
+                <button
+                  [disabled]="!vm.hasAppliedFilters"
+                  mat-raised-button
+                  color="secondary"
+                  class="samples-filters-clear-button"
+                  data-cy="samples-filters-clear-button"
+                  (click)="reset()"
+                >
+                  <mat-icon>undo</mat-icon>
+                  Clear
+                </button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="samples-filters-search-button"
+                  data-cy="samples-filters-search-button"
+                  (click)="applyFilters()"
+                >
+                  <mat-icon>search</mat-icon>
+                  Apply
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+          <div class="small-search" fxFlexOrder="2">
+            <app-search-bar
+              [prefilledValue]="vm.textFilter"
+              (search)="onTextSearchChange($event)"
+              (searchBarFocus)="onTextSearchChange($event)"
+            ></app-search-bar>
+          </div>
+        }
+        @if (appConfig.addSampleEnabled) {
+          <mat-card class="big-edit-sample" (click)="openDialog()">
+            <mat-card-content>
+              <mat-icon>add_circle</mat-icon> Create Sample
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+    <div fxFlex [fxFlex.lt-xl]="leftColumn ? 80 : 100">
       <dynamic-mat-table
         [tableName]="tableName"
         [columns]="columns"
@@ -85,12 +87,36 @@
         [pagination]="pagination"
         [rowSelectionMode]="rowSelectionMode"
         [showGlobalTextSearch]="showGlobalTextSearch"
+        [globalTextSearch]="vm.textFilter"
+        (globalTextSearchChange)="onTextSearchChange($event)"
+        [globalTextSearchPlaceholder]="'Type anything to search...'"
         (paginationChange)="onPaginationChange($event)"
         (onRowEvent)="onRowClick($event)"
         (settingChange)="onSettingChange($event)"
         (onTableEvent)="onTableEvent($event)"
         class="mat-elevation-z2"
       >
+        @if (!oldFilter) {
+          <advanced-search-button
+            table-search-action
+            [iconOnly]="true"
+            scope="sample"
+            [keySource]="keySource"
+            [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
+            (conditionsApplied)="onConditionsApplied($event)"
+          ></advanced-search-button>
+        }
+        @if (!oldFilter) {
+          <advanced-search-chips
+            table-toolbar
+            [configs]="conditionConfigs$ | async"
+            [appliedText]="vm.textFilter"
+            (textRemove)="onTextSearchChange('')"
+            (filterSelect)="advancedSearchButton.openFilter($event)"
+            (filterRemove)="advancedSearchButton.removeFilter($event)"
+            (clearAll)="reset()"
+          ></advanced-search-chips>
+        }
       </dynamic-mat-table>
     </div>
   </div>

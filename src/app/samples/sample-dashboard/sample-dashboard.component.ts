@@ -8,9 +8,17 @@ import {
   setTextFilterAction,
   prefillFiltersAction,
   fetchMetadataKeysAction,
+  setCharacteristicsFilterAction,
 } from "state-management/actions/samples.actions";
 import { BehaviorSubject, combineLatest, Subscription } from "rxjs";
-import { selectSampleDashboardPageViewModel } from "state-management/selectors/samples.selectors";
+import {
+  selectMetadataKeyOptions,
+  selectSampleDashboardPageViewModel,
+} from "state-management/selectors/samples.selectors";
+import {
+  selectConditions,
+  selectFetchedConditions,
+} from "state-management/selectors/user.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
@@ -18,7 +26,7 @@ import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.compo
 
 import deepEqual from "deep-equal";
 import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
-import { SampleFilters } from "state-management/models";
+import { SampleFilters, FilterCondition } from "state-management/models";
 import { AppConfigService } from "app-config.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -40,9 +48,11 @@ import { updateUserSettingsAction } from "state-management/actions/user.actions"
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { AdvancedSearchService } from "shared/modules/advanced-search/advanced-search.service";
+import { AdvancedSearchButtonComponent } from "shared/modules/advanced-search/advanced-search-button.component";
+import { staticKeySource } from "shared/modules/advanced-search/advanced-search.keys";
+import { toActiveConditions } from "shared/modules/advanced-search/advanced-search.utils";
 import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
-import { setCharacteristicsFilterAction } from "state-management/actions/samples.actions";
-import { FilterCondition } from "state-management/models";
 
 @Component({
   selector: "sample-dashboard",
@@ -53,7 +63,14 @@ import { FilterCondition } from "state-management/models";
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
 
+  keySource = staticKeySource(this.store.select(selectMetadataKeyOptions));
+
   @ViewChild("conditionFilter") conditionFilter: SharedConditionComponent;
+
+  @ViewChild(AdvancedSearchButtonComponent)
+  advancedSearchButton: AdvancedSearchButtonComponent;
+
+  conditionConfigs$ = this.store.select(selectConditions("sample"));
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -96,7 +113,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
-  metadataKeys: string[] = [];
+  /** The old condition filter instead of the advanced search. */
+  oldFilter = this.appConfig.advancedSearchEnabled === false;
 
   dialogConfig: MatDialogConfig = new MatDialogConfig();
 
@@ -122,7 +140,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   rowSelectionMode: TableSelectionMode = "none";
 
-  showGlobalTextSearch = false;
+  /** The search box of the table, the old filter has its own search card. */
+  showGlobalTextSearch = this.appConfig.searchSamples && !this.oldFilter;
 
   defaultPageSize = 10;
 
@@ -138,18 +157,17 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private tableConfigService: TableConfigService,
     public dialog: MatDialog,
+    private advancedSearchService: AdvancedSearchService,
   ) {}
 
   private setCharacteristics(
     change: (characteristics: FilterCondition[]) => FilterCondition[],
   ) {
-    this.vm$.pipe(take(1)).subscribe((vm) =>
-      this.store.dispatch(
-        setCharacteristicsFilterAction({
-          characteristics: change(vm.characteristicsFilter ?? []),
-        }),
-      ),
-    );
+    this.vm$
+      .pipe(take(1))
+      .subscribe((vm) =>
+        this.onConditionsApplied(change(vm.characteristicsFilter ?? [])),
+      );
   }
 
   ngOnInit() {
@@ -201,12 +219,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.vm$.subscribe((vm) => {
-        this.metadataKeys = vm.metadataKeys;
-      }),
-    );
-
-    this.subscriptions.push(
       this.route.queryParams
         .pipe(
           map((params) => params.args),
@@ -217,6 +229,25 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(prefillFiltersAction({ values: filters })),
         ),
     );
+
+    // The saved conditions are the ones shown as chips, so they replace the ones of the URL,
+    // also when there are none. The page can be there before the settings are.
+    this.subscriptions.push(
+      this.store
+        .select(selectFetchedConditions("sample"))
+        .pipe(
+          filter((configs) => configs !== null),
+          take(1),
+        )
+        .subscribe((configs) =>
+          this.onConditionsApplied(toActiveConditions(configs)),
+        ),
+    );
+  }
+
+  /** The filters changing fetches the samples, see ngOnInit. */
+  onConditionsApplied(characteristics: FilterCondition[]) {
+    this.store.dispatch(setCharacteristicsFilterAction({ characteristics }));
   }
 
   addCondition = (condition: FilterCondition) => {
@@ -266,11 +297,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   reset() {
     this.store.dispatch(setTextFilterAction({ text: "" }));
-
-    this.store.dispatch(
-      setCharacteristicsFilterAction({ characteristics: [] }),
-    );
-    this.conditionFilter?.clearConditions();
+    this.onConditionsApplied([]);
+    this.advancedSearchService.clear("sample");
 
     this.store.dispatch(fetchSamplesAction());
   }
