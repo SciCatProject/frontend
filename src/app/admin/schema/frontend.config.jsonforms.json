@@ -105,7 +105,7 @@
       "shareEnabled": { "type": "boolean" },
       "shoppingCartEnabled": { "type": "boolean" },
       "shoppingCartOnHeader": { "type": "boolean" },
-      "advancedSearchEnabled": { "type": "boolean", "default": false },
+      "advancedSearchEnabled": { "type": "boolean", "default": true },
       "advancedSearchFields": {
         "type": "object",
         "description": "Fields offered by the advanced search, per list. Only datasets use them for now, the built-in list is used when empty. The labels come from labelsLocalization. Without saved filters the advanced search opens with a row for each field.",
