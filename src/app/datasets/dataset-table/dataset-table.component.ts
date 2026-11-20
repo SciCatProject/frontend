@@ -8,7 +8,7 @@ import {
   ViewChild,
   Input,
 } from "@angular/core";
-import { TableColumn } from "state-management/models";
+import { FilterCondition, TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import {
   BehaviorSubject,
@@ -28,6 +28,7 @@ import {
   setTextFilterAction,
   fetchFacetCountsAction,
   fetchDatasetsAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 
@@ -42,6 +43,12 @@ import {
   selectTextFilter,
 } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
+import { AdvancedSearchButtonComponent } from "shared/modules/advanced-search/advanced-search-button.component";
+import { selectConditions } from "state-management/selectors/user.selectors";
+import {
+  ConditionKeySource,
+  MetadataKeySearchService,
+} from "shared/modules/advanced-search/advanced-search.keys";
 import {
   selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
@@ -94,6 +101,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   @ViewChild("datasetTable")
   datasetTable: DynamicMatTableComponent<PartialOutputDatasetDto>;
+
+  @ViewChild(AdvancedSearchButtonComponent)
+  advancedSearchButton: AdvancedSearchButtonComponent;
 
   selectionIds: string[] = [];
   appConfig = this.appConfigService.getConfig();
@@ -167,6 +177,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   tablesSettings: object;
 
   globalTextSearch = "";
+  /** The text of the last search, null until the first one. */
+  appliedText: string | null = null;
+
+  /** The metadata keys for the conditions, loaded page by page. */
+  keySource: ConditionKeySource;
+  conditionConfigs$ = this.store.select(selectConditions("dataset"));
 
   constructor(
     public appConfigService: AppConfigService,
@@ -175,7 +191,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private datasetsListService: DatasetsListService,
     private router: Router,
-  ) {}
+    metadataKeySearch: MetadataKeySearchService,
+  ) {
+    this.keySource = (term, skip, limit) =>
+      metadataKeySearch.search(term, skip, limit);
+  }
 
   private decorateColumns(columns: TableField<any>[] = []): TableField<any>[] {
     return columns.map((column) => {
@@ -429,6 +449,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         .subscribe(([queryParams, storeSearchTerm]) => {
           const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
           this.globalTextSearch = searchQuery.text || storeSearchTerm || "";
+          // an empty box removes the chip, the first text is the one from the url
+          this.appliedText = this.globalTextSearch
+            ? (this.appliedText ?? this.globalTextSearch)
+            : "";
         }),
     );
   }
@@ -455,6 +479,27 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onTextSearchAction() {
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
+  }
+
+  // the text comes with the event, the box value is reset from the url while it changes
+  onTextSearchApply(term: string) {
+    this.appliedText = term;
+    this.onTextSearchAction();
+  }
+
+  onTextRemove() {
+    this.onTextSearchChange("");
+    this.onTextSearchApply("");
+  }
+
+  onClearAll() {
+    this.onTextSearchChange("");
+    this.advancedSearchButton.clearFilters();
+  }
+
+  onConditionsApplied(conditions: FilterCondition[]) {
+    this.store.dispatch(setScientificConditionsAction({ conditions }));
+    this.onTextSearchAction();
   }
 
   ngOnDestroy() {

@@ -23,6 +23,8 @@ import {
   selectAllDatasetsAction,
   clearSelectionAction,
   sortByColumnAction,
+  setTextFilterAction,
+  fetchDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import {
@@ -50,6 +52,7 @@ import { RowEventType } from "shared/modules/dynamic-material-table/models/table
 import { ActivatedRoute } from "@angular/router";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { TranslateService } from "@ngx-translate/core";
+import { MetadataKeySearchService } from "shared/modules/advanced-search/advanced-search.keys";
 import { DatasetsListService } from "shared/services/datasets-list.service";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
@@ -118,6 +121,12 @@ describe("DatasetTableComponent", () => {
           { provide: DatasetsService, useClass: MockDatasetApi },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: DatasetsListService, useClass: MockDatasetsListService },
+          {
+            provide: MetadataKeySearchService,
+            useValue: jasmine.createSpyObj("MetadataKeySearchService", [
+              "search",
+            ]),
+          },
         ],
       },
     });
@@ -140,6 +149,32 @@ describe("DatasetTableComponent", () => {
 
   it("should be created", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("advanced search", () => {
+    const render = (advancedSearchEnabled?: boolean) => {
+      appConfigService.getConfig.and.returnValue({
+        datasetPageSizeOptions: [5, 10, 25, 100],
+        advancedSearchEnabled,
+      } as AppConfigInterface);
+      fixture = TestBed.createComponent(DatasetTableComponent);
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    };
+
+    it("should be shown when it is on, also when it is not configured", () => {
+      expect(render().querySelector("advanced-search-button")).not.toBeNull();
+      expect(
+        render(true).querySelector("advanced-search-button"),
+      ).not.toBeNull();
+    });
+
+    it("should be gone when it is off", () => {
+      const table = render(false);
+
+      expect(table.querySelector("advanced-search-button")).toBeNull();
+      expect(table.querySelector("advanced-search-chips")).toBeNull();
+    });
   });
 
   describe("#getTablePaginationConfig()", () => {
@@ -276,6 +311,43 @@ describe("DatasetTableComponent", () => {
       ngrxStore.refreshState();
 
       expect(clearSelection).toHaveBeenCalled();
+    });
+  });
+
+  describe("text search chip", () => {
+    it("should show the text of the last search", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onTextSearchApply("beam");
+
+      expect(component.appliedText).toBe("beam");
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
+    });
+
+    it("should remove the text and search again", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      component.onTextSearchApply("beam");
+
+      component.onTextRemove();
+
+      expect(component.appliedText).toBe("");
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setTextFilterAction({ text: "" }),
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
+    });
+
+    it("should clear the text and the advanced filters", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      const clearFilters = jasmine.createSpy("clearFilters");
+      component.advancedSearchButton = { clearFilters } as never;
+
+      component.onClearAll();
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setTextFilterAction({ text: "" }),
+      );
+      expect(clearFilters).toHaveBeenCalledTimes(1);
     });
   });
 
