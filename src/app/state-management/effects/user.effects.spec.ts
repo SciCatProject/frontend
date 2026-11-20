@@ -648,8 +648,13 @@ describe("UserEffects", () => {
         },
       };
 
-      const settingsAfterFetch = (externalSettings: object) => {
+      const settingsAfterFetch = (
+        externalSettings: object,
+        // the predefined conditions are for the old condition filter
+        config: object = { advancedSearchEnabled: false },
+      ) => {
         spyOn(TestBed.inject(AppConfigService), "getConfig").and.returnValue({
+          ...config,
           defaultSamplesListSettings: { conditions: [predefined] },
         } as never);
         actions = hot("-a", { a: fromActions.fetchUserSettingsAction({ id }) });
@@ -677,6 +682,19 @@ describe("UserEffects", () => {
         expect(settingsAfterFetch({}).fe_sample_table_conditions).toEqual([
           predefined,
         ]);
+      });
+
+      it("should not be used by the advanced search", () => {
+        expect(
+          settingsAfterFetch({}, { advancedSearchEnabled: true })
+            .fe_sample_table_conditions,
+        ).toEqual([]);
+      });
+
+      it("should not be used when the advanced search is not configured", () => {
+        expect(settingsAfterFetch({}, {}).fe_sample_table_conditions).toEqual(
+          [],
+        );
       });
 
       it("should not replace the sample conditions the user has", () => {
@@ -754,7 +772,10 @@ describe("UserEffects", () => {
         users: { settings, hasFetchedSettings },
       });
       actions = hot("(a|)", {
-        a: fromActions.loadDefaultSettings({ config } as never),
+        a: fromActions.loadDefaultSettings({
+          // the predefined conditions are for the old condition filter
+          config: { advancedSearchEnabled: false, ...config },
+        } as never),
       });
 
       let emitted: {
@@ -813,6 +834,23 @@ describe("UserEffects", () => {
       expect(sample).toEqual(samples);
     });
 
+    it("should not use the predefined conditions with the advanced search", () => {
+      const config = {
+        defaultDatasetsListSettings: { conditions: [predefined("a")] },
+        defaultSamplesListSettings: { conditions: [predefined("b")] },
+      };
+
+      [true, undefined].forEach((advancedSearchEnabled) => {
+        const { dataset, sample } = loaded({
+          ...config,
+          advancedSearchEnabled,
+        });
+
+        expect(dataset).toEqual([]);
+        expect(sample).toEqual([]);
+      });
+    });
+
     it("should start without conditions when nothing is predefined", () => {
       const { dataset, sample } = loaded({});
 
@@ -859,7 +897,10 @@ describe("UserEffects", () => {
       TestBed.inject(MockStore).setState({ users: { settings: noSettings } });
       actions = hot("(a|)", {
         a: fromActions.loadDefaultSettings({
-          config: { defaultDatasetsListSettings: { conditions } },
+          config: {
+            advancedSearchEnabled: false,
+            defaultDatasetsListSettings: { conditions },
+          },
         } as never),
       });
 

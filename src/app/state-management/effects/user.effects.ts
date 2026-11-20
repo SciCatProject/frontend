@@ -367,13 +367,20 @@ export class UserEffects {
                 settingConfig?.configKey === "conditions" &&
                 Array.isArray(items);
 
+              // the predefined conditions are for the old condition filter only
+              const predefined =
+                settingConfig?.configKey !== "conditions" ||
+                config.advancedSearchEnabled === false;
+
               if (!keepEmpty && (!Array.isArray(items) || items.length < 1)) {
                 switch (settingConfig?.scope) {
                   case "dataset":
                     items =
-                      config.defaultDatasetsListSettings?.[
-                        settingConfig.configKey
-                      ] || initialUserState.settings[setting];
+                      (predefined
+                        ? config.defaultDatasetsListSettings?.[
+                            settingConfig.configKey
+                          ]
+                        : undefined) || initialUserState.settings[setting];
                     break;
                   case "proposal":
                     items =
@@ -384,7 +391,7 @@ export class UserEffects {
                   case "sample":
                     // the conditions are the only thing of the samples that can be predefined
                     items =
-                      (settingConfig.configKey === "conditions"
+                      (settingConfig.configKey === "conditions" && predefined
                         ? config.defaultSamplesListSettings?.conditions
                         : undefined) ||
                       initialUserState.settings[setting] ||
@@ -589,17 +596,23 @@ export class UserEffects {
             if (hasFetched) return;
 
             const scope = s.scope as ConditionSettingScope;
+            // the predefined conditions are for the old condition filter only
+            const predefined = config.advancedSearchEnabled === false;
             let defaultConditions;
 
             switch (scope) {
               case "dataset":
                 defaultConditions =
-                  config.defaultDatasetsListSettings?.conditions ||
+                  (predefined
+                    ? config.defaultDatasetsListSettings?.conditions
+                    : undefined) ||
                   initialUserState.settings.fe_dataset_table_conditions;
                 break;
               case "sample":
                 defaultConditions =
-                  config.defaultSamplesListSettings?.conditions ||
+                  (predefined
+                    ? config.defaultSamplesListSettings?.conditions
+                    : undefined) ||
                   initialUserState.settings.fe_sample_table_conditions;
                 break;
               default:
