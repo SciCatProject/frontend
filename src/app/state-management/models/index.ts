@@ -244,8 +244,13 @@ export interface LogbookFilters extends GenericFilters {
   showImages: boolean;
 }
 
+export interface PublishedDataFilters extends GenericFilters {
+  text: string;
+}
+
 export interface JobFilters extends GenericFilters {
   mode: Record<string, string> | undefined;
+  text: string;
 }
 
 export type ConditionSettingScope = "dataset" | "sample";
