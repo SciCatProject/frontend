@@ -1,5 +1,9 @@
 import { Component, OnInit, OnDestroy, Input } from "@angular/core";
-import { ArchViewMode, DatasetViewMode } from "state-management/models";
+import {
+  ArchViewMode,
+  DatasetViewMode,
+  DatasetViewModeCheckbox,
+} from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
   setArchiveViewModeAction,
@@ -11,6 +15,7 @@ import { combineLatest, Subscription } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import {
   selectArchiveViewMode,
+  selectArchiveViewModeChecked,
   selectIsBatchNonEmpty,
   selectSelectedDatasets,
 } from "state-management/selectors/datasets.selectors";
@@ -27,6 +32,12 @@ import {
   ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  buildViewModeQuery,
+  checkboxAppliesTo,
+  viewModeNeedsProfile,
+  ViewModeUser,
+} from "datasets/dataset-view-modes.utils";
 
 @Component({
   selector: "dataset-table-actions",
@@ -35,6 +46,7 @@ import { PartialOutputDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
   standalone: false,
 })
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
+  private user: ViewModeUser | null = null;
   appConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
   actionButtonsStyle: ActionButtonStyle = { raised: false, color: "primary" };
@@ -47,6 +59,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   @Input() selectedSets: PartialOutputDatasetDto[] | null = [];
 
   public currentArchViewMode: string = ArchViewMode.all;
+  currentArchViewModeChecked = false;
   modes: DatasetViewMode[] = this.appConfig.datasetViews?.modes ?? [];
 
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
@@ -81,15 +94,54 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     }));
   }
 
+  private setViewMode(mode: DatasetViewMode, checked: boolean): void {
+    this.store.dispatch(
+      setArchiveViewModeAction({
+        modeToggle: mode.id,
+        mode: buildViewModeQuery(mode, checked, this.user),
+        checked,
+      }),
+    );
+    this.store.dispatch(clearSelectionAction());
+  }
+
+  isModeDisabled(mode: DatasetViewMode): boolean {
+    return !this.user && viewModeNeedsProfile(mode);
+  }
+
+  modeTooltip(mode: DatasetViewMode): string {
+    return this.isModeDisabled(mode)
+      ? "Available once your user profile has loaded"
+      : (mode.tooltip ?? "");
+  }
+
+  get selectedMode(): DatasetViewMode | undefined {
+    return this.modes.find((m) => m.id === this.currentArchViewMode);
+  }
+
+  get hasModeCheckbox(): boolean {
+    return this.modes.some((m) => checkboxAppliesTo(m, this.user));
+  }
+
+  get selectedModeCheckbox(): DatasetViewModeCheckbox | undefined {
+    const mode = this.selectedMode;
+    return checkboxAppliesTo(mode, this.user) ? mode?.checkbox : undefined;
+  }
+
   /**
    * Handle changing of view mode and disabling selected rows
    * @param mode
    */
   onModeChange(mode: DatasetViewMode): void {
-    this.store.dispatch(
-      setArchiveViewModeAction({ modeToggle: mode.id, mode: mode.where }),
-    );
-    this.store.dispatch(clearSelectionAction());
+    if (this.isModeDisabled(mode)) return;
+    const checked =
+      checkboxAppliesTo(mode, this.user) && mode.checkbox?.default !== false;
+    this.setViewMode(mode, checked);
+  }
+
+  onModeCheckboxChange(checked: boolean): void {
+    const mode = this.selectedMode;
+    if (mode) this.setViewMode(mode, checked);
   }
 
   isEmptySelection(): boolean {
@@ -124,11 +176,17 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
         }),
     );
     this.subscriptions.push(
+      this.store
+        .select(selectArchiveViewModeChecked)
+        .subscribe((checked) => (this.currentArchViewModeChecked = checked)),
+    );
+    this.subscriptions.push(
       combineLatest([
         this.userProfile$.pipe(distinctUntilChanged()),
         this.store.select(selectArchiveViewMode).pipe(distinctUntilChanged()),
         this.selectSelectedDatasets$.pipe(distinctUntilChanged()),
       ]).subscribe(([profile, mode, datasets]) => {
+        this.user = profile;
         this.selectedSets = datasets;
         this.currentArchViewMode = mode;
         this.actionItems = {
