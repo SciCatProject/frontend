@@ -40,7 +40,7 @@ const fields = [
   { key: "datasetName", relation: "CONTAINS" },
   { key: "description", relation: "CONTAINS" },
   { key: "keywords", relation: "IN" },
-  { key: "creationTime", relation: "RANGE" },
+  { key: "creationTime", relation: "DATE_RANGE" },
 ];
 
 // The advanced search is turned on for these tests, with labels that do not depend on the
@@ -628,7 +628,7 @@ describe("Datasets advanced search", () => {
         advancedSearchFields: {
           datasets: [
             { key: "keywords", relation: "IN", value: ["gamma"] },
-            { key: "creationTime", relation: "RANGE" },
+            { key: "creationTime", relation: "DATE_RANGE" },
           ],
         },
       });
