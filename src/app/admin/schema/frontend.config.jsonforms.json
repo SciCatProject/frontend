@@ -124,18 +124,19 @@
                   "enum": [
                     "CONTAINS",
                     "IN",
-                    "RANGE",
+                    "DATE_RANGE",
+                    "NUMBER_RANGE",
                     "EQUAL_TO",
                     "GREATER_THAN",
                     "LESS_THAN",
                     "GREATER_THAN_OR_EQUAL",
                     "LESS_THAN_OR_EQUAL"
                   ],
-                  "description": "Dataset fields: CONTAINS, IN or RANGE. Scientific metadata: the operator the row starts with."
+                  "description": "Dataset fields: CONTAINS (text), IN (list), DATE_RANGE (date picker) or NUMBER_RANGE (min and max). Scientific metadata: the operator the row starts with, or DATE_RANGE / NUMBER_RANGE."
                 },
                 "value": {
                   "type": "string",
-                  "description": "The value the row starts with. Separate several values with commas: any number for IN, two bounds for RANGE (from, to)."
+                  "description": "The value the row starts with. Separate several values with commas: any number for IN, two bounds (from, to) for DATE_RANGE and NUMBER_RANGE."
                 },
                 "unit": {
                   "type": "string",
