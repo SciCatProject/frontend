@@ -417,7 +417,7 @@ export class ConfigurableActionComponent
     this.form = document.createElement("form");
     this.form.id = this.actionConfig.id;
     this.form.name = this.actionConfig.id;
-    this.form.target = this.getTarget();
+    this.form.setAttribute("target", this.getTarget());
     this.form.method = this.actionConfig.method || "POST";
     this.form.action = this.interpolate(this.actionConfig.url);
     this.form.style.display = "none";
@@ -439,7 +439,7 @@ export class ConfigurableActionComponent
     document.body.appendChild(this.form);
     if (isIframeTarget) {
       this.iframeLoadArmed = this.iframeVisible;
-      this.syncIframeTargetWindowName(this.form.target);
+      this.syncIframeTargetWindowName(this.form.getAttribute("target"));
     }
     this.form.submit();
     return true;
@@ -647,12 +647,12 @@ export class ConfigurableActionComponent
     // A cross-origin iframe's current URL cannot be read, so a form is
     // re-submitted to the new tab (accepted even for non-idempotent POSTs).
     if (this.form) {
-      const currentTarget = this.form.target;
-      this.form.target = "_blank";
+      const currentTarget = this.form.getAttribute("target");
+      this.form.setAttribute("target", "_blank");
       try {
         this.form.submit();
       } finally {
-        this.form.target = currentTarget;
+        this.form.setAttribute("target", currentTarget);
       }
     } else if (this.cachedLinkUrl) {
       window.open(this.cachedLinkUrl, "_blank");
