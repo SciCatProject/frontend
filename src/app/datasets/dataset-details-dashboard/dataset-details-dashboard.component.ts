@@ -311,9 +311,11 @@ export class DatasetDetailsDashboardComponent
           filter(Boolean),
           distinctUntilChanged((a, b) => a.pid === b.pid),
         )
-        .subscribe(() => {
-          this.store.dispatch(fetchRelatedDatasetsAction());
-          this.store.dispatch(fetchRelatedDatasetsCountAction());
+        .subscribe((dataset) => {
+          this.store.dispatch(fetchRelatedDatasetsAction({ pid: dataset.pid }));
+          this.store.dispatch(
+            fetchRelatedDatasetsCountAction({ pid: dataset.pid }),
+          );
         }),
     );
   }
