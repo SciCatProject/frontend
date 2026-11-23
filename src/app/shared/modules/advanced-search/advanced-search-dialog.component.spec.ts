@@ -550,6 +550,19 @@ describe("AdvancedSearchDialogComponent", () => {
       expect(row().condition.relation).toBe("EQUAL_TO");
     });
 
+    it("should ask for a number for greater and less than, not for equals", () => {
+      setMetadata(0, "temperature");
+      component.set(id(), { rhs: "abc", unit: "mm" });
+      expect(component.canApply()).toBeTrue();
+
+      component.setRelation(id(), "GREATER_THAN");
+      expect(component.canApply()).toBeFalse();
+      expect(component.firstError()).toBe("Enter a number");
+
+      component.set(id(), { rhs: "5" });
+      expect(component.canApply()).toBeTrue();
+    });
+
     it("should keep the key and value when metadata is chosen again", () => {
       setMetadata(0, "temperature");
       component.set(id(), { rhs: "5" });
