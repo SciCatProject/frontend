@@ -366,9 +366,11 @@ export const selectOpenwhiskResult = createSelector(
 
 export const selectRelatedDatasetsPageViewModel = createSelector(
   selectDatasetState,
-  ({ relatedDatasets, relatedDatasetsCount }) => ({
+  selectCurrentDataset,
+  ({ relatedDatasets, relatedDatasetsCount }, dataset) => ({
     relatedDatasets,
     relatedDatasetsCount,
+    dataset,
   }),
 );
 
