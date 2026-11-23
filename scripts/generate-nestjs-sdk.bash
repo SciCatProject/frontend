@@ -23,7 +23,7 @@ docker run \
 	-i http://host.docker.internal:3000/explorer-json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
-	--additional-properties=ngVersion=20.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
+	--additional-properties=ngVersion=21.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
 
 REMOVE_NPM_LINK=0
 if ! command -v npm 2>&1 1>/dev/null
