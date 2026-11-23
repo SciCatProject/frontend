@@ -59,14 +59,18 @@ describe("AdvancedSearchChipsComponent", () => {
       setDatasetFields([
         { key: "keywords", relation: "IN", value: ["neutron", "beam"] },
         { key: "pid", relation: "IN" },
-        { key: "creationTime", relation: "RANGE", value: ["2026-01-01", ""] },
+        {
+          key: "creationTime",
+          relation: "DATE_RANGE",
+          value: ["2026-01-01", ""],
+        },
         {
           key: "scientificMetadata.detector.distance",
           relation: "GREATER_THAN",
           value: 5,
           unit: "mm",
         },
-        { key: "scientificMetadata.thickness", relation: "RANGE" },
+        { key: "scientificMetadata.thickness", relation: "NUMBER_RANGE" },
       ]);
 
       render(getConfiguredConditions());

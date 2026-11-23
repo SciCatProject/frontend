@@ -245,7 +245,7 @@ describe("AdvancedSearchButtonComponent", () => {
       setDatasetFields([
         { key: "keywords", relation: "IN", value: ["neutron"] },
         { key: "pid", relation: "IN" },
-        { key: "scientificMetadata.thickness", relation: "RANGE" },
+        { key: "scientificMetadata.thickness", relation: "NUMBER_RANGE" },
       ]);
 
       render(getConfiguredConditions());

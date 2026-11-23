@@ -106,7 +106,7 @@ describe("AdvancedSearchDialogComponent", () => {
     beforeEach(() =>
       setDatasetFields([
         { key: "pid", relation: "IN" },
-        { key: "creationTime", relation: "RANGE" },
+        { key: "creationTime", relation: "DATE_RANGE" },
         { key: "runNumber", relation: "CONTAINS" },
       ]),
     );
@@ -127,7 +127,11 @@ describe("AdvancedSearchDialogComponent", () => {
     it("should open with the value of the config in the row", () => {
       setDatasetFields([
         { key: "keywords", relation: "IN", value: ["neutron", "beam"] },
-        { key: "creationTime", relation: "RANGE", value: ["2026-01-01", ""] },
+        {
+          key: "creationTime",
+          relation: "DATE_RANGE",
+          value: ["2026-01-01", ""],
+        },
         {
           key: "scientificMetadata.detector.distance",
           relation: "GREATER_THAN",
@@ -152,11 +156,69 @@ describe("AdvancedSearchDialogComponent", () => {
       expect(component.canApply()).toBeTrue();
     });
 
+    describe("kinds of range", () => {
+      const rangeRow = (relation: string, key = "runNumber") => {
+        setDatasetFields([{ key, relation } as never]);
+        createComponent();
+      };
+
+      it("should show a date picker for a date range", () => {
+        rangeRow("DATE_RANGE", "creationTime");
+        fixture.detectChanges();
+
+        expect(cells("[data-cy=condition-date-range]").length).toBe(1);
+        expect(cells("[data-cy=condition-min]").length).toBe(0);
+      });
+
+      it("should show min and max for a number range on a dataset field", () => {
+        rangeRow("NUMBER_RANGE");
+        fixture.detectChanges();
+
+        expect(cells("[data-cy=condition-date-range]").length).toBe(0);
+        expect(cells("[data-cy=condition-min]").length).toBe(1);
+        expect(cells("[data-cy=condition-max]").length).toBe(1);
+      });
+
+      it("should apply the numbers of a number range on a dataset field", () => {
+        rangeRow("NUMBER_RANGE");
+        component.setBound(id(), 0, "1");
+        component.setBound(id(), 1, "200");
+
+        component.apply();
+
+        expect(closedWith()[0].condition).toEqual(
+          jasmine.objectContaining({
+            lhs: "runNumber",
+            relation: "RANGE",
+            rhs: [1, 200],
+            rangeType: "number",
+          }),
+        );
+      });
+
+      it("should not apply a number range that is the wrong way round", () => {
+        rangeRow("NUMBER_RANGE");
+        component.setBound(id(), 0, "200");
+        component.setBound(id(), 1, "30");
+
+        expect(component.canApply()).toBeFalse();
+        expect(component.errors().get(id())?.value).toContain("minimum");
+      });
+
+      it("should show a date picker for a date range of scientific metadata, without a unit", () => {
+        rangeRow("DATE_RANGE", "scientificMetadata.start_time");
+        fixture.detectChanges();
+
+        expect(cells("[data-cy=condition-date-range]").length).toBe(1);
+        expect(cells("[data-cy=condition-unit]").length).toBe(0);
+      });
+    });
+
     describe("scientific metadata of the config", () => {
       beforeEach(() =>
         setDatasetFields(
           [
-            { key: "scientificMetadata.thickness", relation: "RANGE" },
+            { key: "scientificMetadata.thickness", relation: "NUMBER_RANGE" },
             { key: "scientificMetadata.detector.distance" },
           ],
           { "scientificMetadata.thickness.value": "Thickness" },
@@ -209,7 +271,11 @@ describe("AdvancedSearchDialogComponent", () => {
       setDatasetFields([
         { key: "keywords", relation: "IN", value: ["neutron"] },
         { key: "pid", relation: "IN" },
-        { key: "creationTime", relation: "RANGE", value: ["2026-01-01", ""] },
+        {
+          key: "creationTime",
+          relation: "DATE_RANGE",
+          value: ["2026-01-01", ""],
+        },
       ]);
       createComponent(getConfiguredConditions());
 
@@ -233,7 +299,7 @@ describe("AdvancedSearchDialogComponent", () => {
 
     it("should open a range that is a text in the config with its bounds", () => {
       setDatasetFields([
-        { key: "creationTime", relation: "RANGE", value: "2026-01-01" },
+        { key: "creationTime", relation: "DATE_RANGE", value: "2026-01-01" },
       ]);
       createComponent();
 

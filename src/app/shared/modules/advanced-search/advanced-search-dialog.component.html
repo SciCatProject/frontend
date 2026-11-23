@@ -226,7 +226,7 @@
                 >
               }
             </mat-form-field>
-          } @else if (kind === "metadata") {
+          } @else if (!isDateRange(condition)) {
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
@@ -309,7 +309,7 @@
             </mat-form-field>
           }
 
-          @if (kind === "metadata" && unitsEnabled) {
+          @if (kind === "metadata" && unitsEnabled && !isDateRange(condition)) {
             <mat-form-field
               class="unit"
               appearance="outline"

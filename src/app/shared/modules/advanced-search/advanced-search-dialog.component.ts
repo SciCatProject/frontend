@@ -27,15 +27,18 @@ import {
   METADATA_PREFIX,
   getFieldOptions,
   isMetadataFieldKey,
+  toConditionRelation,
 } from "./advanced-search.fields";
 import { ConditionKeySource } from "./advanced-search.keys";
 import {
   RELATION_OPTIONS,
   getBounds,
+  getRangeType,
   getRelationOption,
   getText,
   isConditionComplete,
   isDatasetCondition,
+  isDateRange,
   normalizeCondition,
 } from "./advanced-search.utils";
 
@@ -126,6 +129,8 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
   /** Datasets can use dataset fields and NOT, samples can't. */
   readonly advanced = this.data.scope === "dataset";
   readonly relationOptions = RELATION_OPTIONS;
+  /** A range of dates has a date picker, any other range a min and a max. */
+  readonly isDateRange = isDateRange;
   readonly fieldTypes = FIELD_TYPES;
   readonly fieldGuide = FIELD_GUIDE;
   readonly unitsEnabled = this.data.unitsEnabled;
@@ -161,14 +166,15 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
         errors.set(id, { key: "Key already used" });
       } else if (!isConditionComplete(condition)) {
         errors.set(id, {
-          value:
-            isDatasetCondition(condition) && condition.relation === "RANGE"
-              ? DATE_HELP
+          value: isDateRange(condition)
+            ? DATE_HELP
+            : condition.relation === "RANGE"
+              ? "Enter a number"
               : "Enter a value",
         });
       } else if (this.isReversed(condition)) {
         errors.set(id, {
-          value: isDatasetCondition(condition)
+          value: isDateRange(condition)
             ? "The start date is after the end date"
             : "The minimum is greater than the maximum",
         });
@@ -223,14 +229,15 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
     });
   }
 
-  /** Dates are compared as text (yyyy-mm-dd), the bounds of scientific metadata as numbers. */
-  private isReversed({ rhs, relation, source }: FilterCondition): boolean {
+  /** Dates are compared as text (yyyy-mm-dd), the bounds of a number range as numbers. */
+  private isReversed(condition: FilterCondition): boolean {
+    const { rhs, relation } = condition;
     if (relation !== "RANGE" || !Array.isArray(rhs)) {
       return false;
     }
     const [from, to] = rhs.map((bound) => String(bound ?? "").trim());
     if (!from || !to) return false;
-    return source === "dataset" ? from > to : Number(from) > Number(to);
+    return isDateRange(condition) ? from > to : Number(from) > Number(to);
   }
 
   private hasValue({ rhs }: FilterCondition): boolean {
@@ -306,30 +313,35 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
 
     // a field of scientific metadata of the config: the key is set, the operator can change
     if (datasetField && isMetadataFieldKey(datasetField.key)) {
+      const { relation, rangeType } = toConditionRelation(
+        datasetField.relation,
+      );
       return {
         ...condition,
         lhs: datasetField.key.slice(METADATA_PREFIX.length),
         source: "scientificMetadata",
-        relation: datasetField.relation,
-        rhs: datasetField.relation === "RANGE" ? ["", ""] : "",
+        relation,
+        rangeType,
+        rhs: relation === "RANGE" ? ["", ""] : "",
         unit: "",
       };
     }
 
     if (datasetField) {
+      const { relation, rangeType } = toConditionRelation(
+        datasetField.relation,
+      );
       const sameKind =
         isDatasetCondition(condition) &&
-        condition.relation === datasetField.relation;
+        condition.relation === relation &&
+        getRangeType(condition) === (rangeType ?? "date");
       return {
         ...condition,
         lhs: field,
         source: "dataset",
-        relation: datasetField.relation,
-        rhs: sameKind
-          ? condition.rhs
-          : datasetField.relation === "RANGE"
-            ? ["", ""]
-            : "",
+        relation,
+        rangeType,
+        rhs: sameKind ? condition.rhs : relation === "RANGE" ? ["", ""] : "",
         unit: "",
       };
     }
@@ -340,6 +352,7 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
           lhs: "",
           source: "scientificMetadata",
           relation: "EQUAL_TO",
+          rangeType: undefined,
           rhs: "",
           unit: "",
         }
