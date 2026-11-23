@@ -54,6 +54,18 @@ const isBlank = (value: unknown): boolean =>
 const isNumeric = (value: unknown): boolean =>
   !isBlank(value) && !isNaN(Number(value));
 
+const COMPARISON_RELATIONS: FilterConditionRelation[] = [
+  "GREATER_THAN",
+  "LESS_THAN",
+  "GREATER_THAN_OR_EQUAL",
+  "LESS_THAN_OR_EQUAL",
+];
+
+/** Greater and less than compare numbers, equals also takes text. */
+export const needsNumber = (condition: FilterCondition): boolean =>
+  condition.source !== "dataset" &&
+  COMPARISON_RELATIONS.includes(condition.relation);
+
 /** The two bounds of a range, none when the value is not a range. */
 export const getBounds = (rhs: FilterCondition["rhs"]): (string | number)[] =>
   Array.isArray(rhs) ? rhs : [];
@@ -137,7 +149,9 @@ export function isConditionComplete(condition: FilterCondition): boolean {
       ? splitValues(condition.rhs).length > 0
       : getText(condition.rhs).trim() !== "";
   }
-  return !isBlank(condition.rhs);
+  return needsNumber(condition)
+    ? isNumeric(condition.rhs)
+    : !isBlank(condition.rhs);
 }
 
 /** Leaves out the defaults, so saved conditions stay small and old ones look the same. */
@@ -337,7 +351,8 @@ export function conditionToMongoQuery(
   let queryValue = rhs;
   let queryUnit = unit;
 
-  if (unit && relation !== "RANGE") {
+  // text has no SI value, it is compared as typed, as the backend stores it
+  if (unit && relation !== "RANGE" && isNumeric(rhs)) {
     const converted = convertToSIUnit(lhs, Number(rhs), unit);
     queryValue = converted.value;
     queryUnit = converted.siUnit;
