@@ -84,6 +84,24 @@ describe("condition filter utils", () => {
       expect(isConditionComplete(contains)).toBeTrue();
       expect(isConditionComplete({ ...contains, rhs: "  " })).toBeFalse();
     });
+
+    it("should need a number for greater and less than, equals also takes text", () => {
+      const compare = (relation: FilterCondition["relation"], rhs: string) =>
+        isConditionComplete(condition({ relation, rhs, unit: "mm" }));
+
+      for (const relation of [
+        "GREATER_THAN",
+        "LESS_THAN",
+        "GREATER_THAN_OR_EQUAL",
+        "LESS_THAN_OR_EQUAL",
+      ] as const) {
+        expect(compare(relation, "5")).withContext(relation).toBeTrue();
+        expect(compare(relation, "abc")).withContext(relation).toBeFalse();
+        expect(compare(relation, "NaN")).withContext(relation).toBeFalse();
+      }
+      expect(compare("EQUAL_TO", "abc")).toBeTrue();
+      expect(compare("EQUAL_TO", "5")).toBeTrue();
+    });
   });
 
   describe("date range of a dataset field", () => {
@@ -557,6 +575,18 @@ describe("condition filter utils", () => {
       ).toEqual({
         "scientificMetadata.temperature.valueSI": { $gt: 1 },
         "scientificMetadata.temperature.unitSI": { $eq: "m" },
+      });
+    });
+
+    it("should compare text with a unit as typed, never as NaN", () => {
+      // the backend stores text it cannot convert as valueSI and unitSI
+      expect(
+        conditionsToQuery([
+          condition({ relation: "GREATER_THAN", rhs: "approx 5", unit: "mm" }),
+        ]),
+      ).toEqual({
+        "scientificMetadata.temperature.valueSI": { $gt: "approx 5" },
+        "scientificMetadata.temperature.unitSI": { $eq: "mm" },
       });
     });
 

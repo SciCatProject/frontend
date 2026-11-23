@@ -39,6 +39,7 @@ import {
   isConditionComplete,
   isDatasetCondition,
   isDateRange,
+  needsNumber,
   normalizeCondition,
 } from "./advanced-search.utils";
 
@@ -168,7 +169,8 @@ export class AdvancedSearchDialogComponent implements AfterViewInit {
         errors.set(id, {
           value: isDateRange(condition)
             ? DATE_HELP
-            : condition.relation === "RANGE"
+            : condition.relation === "RANGE" ||
+                (needsNumber(condition) && this.hasValue(condition))
               ? "Enter a number"
               : "Enter a value",
         });
