@@ -3,6 +3,7 @@ import * as Math from "mathjs";
 import {
   FilterCondition,
   FilterConditionRelation,
+  RangeType,
 } from "state-management/models";
 import { ConditionConfig } from "state-management/state/user.store";
 import {
@@ -11,6 +12,7 @@ import {
   getDatasetFields,
   hasConfiguredFields,
   isMetadataFieldKey,
+  toConditionRelation,
 } from "./advanced-search.fields";
 
 export interface RelationOption {
@@ -59,6 +61,21 @@ export const getBounds = (rhs: FilterCondition["rhs"]): (string | number)[] =>
 /** Dataset fields hold lists and text, scientific metadata holds measurements. */
 export const isDatasetCondition = (condition: FilterCondition): boolean =>
   condition.source === "dataset";
+
+/** What a range compares: dates on a dataset field and numbers on metadata, unless it says so. */
+export const getRangeType = (condition: FilterCondition): RangeType =>
+  condition.rangeType ?? (isDatasetCondition(condition) ? "date" : "number");
+
+/** A range of dates gets a date picker, any other range a min and a max. */
+export const isDateRange = (condition: FilterCondition): boolean =>
+  condition.relation === "RANGE" && getRangeType(condition) === "date";
+
+/** A bound a range can use: a day that exists, or a number. */
+const isValidBound = (condition: FilterCondition, bound: unknown): boolean =>
+  !isBlank(bound) &&
+  (getRangeType(condition) === "date"
+    ? !!startOfDay(String(bound).trim())
+    : isNumeric(bound));
 
 /** The value as text, a list is shown as `a, b`. */
 export const getText = (rhs: FilterCondition["rhs"]): string =>
@@ -109,9 +126,10 @@ export function getActiveConfigs(
 export function isConditionComplete(condition: FilterCondition): boolean {
   if (!condition.lhs) return false;
   if (condition.relation === "RANGE") {
+    // a bound that is not a date or a number (e.g. typed in the config) is no filter
     return (
       Array.isArray(condition.rhs) &&
-      condition.rhs.some((bound) => !isBlank(bound))
+      condition.rhs.some((bound) => isValidBound(condition, bound))
     );
   }
   if (isDatasetCondition(condition)) {
@@ -126,12 +144,18 @@ export function isConditionComplete(condition: FilterCondition): boolean {
 function withoutDefaults({
   source,
   exclude,
+  rangeType,
   ...condition
 }: FilterCondition): FilterCondition {
+  const isDefault =
+    condition.relation !== "RANGE" ||
+    rangeType === undefined ||
+    rangeType === (source === "dataset" ? "date" : "number");
   return {
     ...condition,
     ...(source === "dataset" && { source }),
     ...(exclude && { exclude }),
+    ...(!isDefault && { rangeType }),
   };
 }
 
@@ -147,16 +171,17 @@ function normalizeValue(condition: FilterCondition): FilterCondition {
   const unit = isDataset ? "" : condition.unit || "";
 
   if (condition.relation === "RANGE") {
-    // dates stay text, measurements are numbers
-    const convert = isDataset ? String : Number;
+    // dates stay text, numbers are numbers, a date has no unit
+    const isDate = getRangeType(condition) === "date";
+    const convert = isDate ? (bound: unknown) => String(bound).trim() : Number;
     const [min, max] = getBounds(condition.rhs);
     return {
       ...condition,
       rhs: [
-        isBlank(min) ? undefined : convert(min),
-        isBlank(max) ? undefined : convert(max),
+        isValidBound(condition, min) ? convert(min) : undefined,
+        isValidBound(condition, max) ? convert(max) : undefined,
       ],
-      unit,
+      unit: isDate ? "" : unit,
     };
   }
 
@@ -209,8 +234,9 @@ export function getConfiguredConditions(): ConditionConfig[] {
     return [];
   }
 
-  return fields.map(({ key, relation, value, unit }) => {
+  return fields.map(({ key, relation: fieldRelation, value, unit }) => {
     const metadata = isMetadataFieldKey(key);
+    const { relation, rangeType } = toConditionRelation(fieldRelation);
     return {
       condition: {
         lhs: metadata ? key.slice(METADATA_PREFIX.length) : key,
@@ -218,6 +244,7 @@ export function getConfiguredConditions(): ConditionConfig[] {
         rhs: value ?? (relation === "RANGE" ? ["", ""] : ""),
         unit: unit ?? "",
         source: metadata ? "scientificMetadata" : "dataset",
+        ...(rangeType && { rangeType }),
       },
     };
   });
@@ -357,11 +384,13 @@ export function conditionToMongoQuery(
   return query;
 }
 
-function datasetConditionToQuery({
-  lhs,
-  relation,
-  rhs,
-}: FilterCondition): Record<string, unknown> {
+function datasetConditionToQuery(
+  condition: FilterCondition,
+): Record<string, unknown> {
+  const { lhs, relation, rhs } = condition;
+  if (relation === "RANGE" && !isDateRange(condition)) {
+    return numberRangeToQuery(lhs, condition);
+  }
   if (relation === "RANGE") {
     const [from, to] = getBounds(rhs);
     // a bound that is not a date (e.g. typed in the config) is left out
@@ -385,6 +414,48 @@ function datasetConditionToQuery({
       };
 }
 
+/** Both bounds included, a bound that is not a number is left out. */
+function numberRangeToQuery(
+  path: string,
+  condition: FilterCondition,
+): Record<string, unknown> {
+  const [from, to] = getBounds(condition.rhs);
+  const range = {
+    ...(isNumeric(from) && { $gte: Number(from) }),
+    ...(isNumeric(to) && { $lte: Number(to) }),
+  };
+  return Object.keys(range).length ? { [path]: range } : {};
+}
+
+/**
+ * Dates in scientific metadata are text, an ISO date (`2026-01-31` or `2026-01-31T10:00:00Z`)
+ * sorts like the date it is. The end day is included, up to the next day.
+ */
+function metadataDateRangeToQuery(
+  condition: FilterCondition,
+): Record<string, unknown> {
+  const [from, to] = getBounds(condition.rhs);
+  const day = (date: unknown, addDays = 0) => {
+    if (isBlank(date) || !startOfDay(String(date).trim())) return undefined;
+    const [year, month, dayOfMonth] = String(date)
+      .trim()
+      .split("-")
+      .map(Number);
+    return new Date(Date.UTC(year, month - 1, dayOfMonth + addDays))
+      .toISOString()
+      .slice(0, 10);
+  };
+  const start = day(from);
+  const end = day(to, 1);
+  const range = {
+    ...(start && { $gte: start }),
+    ...(end && { $lt: end }),
+  };
+  return Object.keys(range).length
+    ? { [`${metadataPath(condition.lhs)}.value`]: range }
+    : {};
+}
+
 /** The start of a day (`2026-01-31`) in the local time zone as an ISO string, undefined for no date. */
 function startOfDay(date: string, addDays = 0): string | undefined {
   const [year, month, day] = date.split("-").map(Number);
@@ -406,7 +477,9 @@ function conditionToExpression(
 ): Record<string, unknown> {
   const expression = isDatasetCondition(condition)
     ? datasetConditionToQuery(condition)
-    : conditionToMongoQuery(condition);
+    : isDateRange(condition)
+      ? metadataDateRangeToQuery(condition)
+      : conditionToMongoQuery(condition);
 
   return condition.exclude && Object.keys(expression).length
     ? { $nor: [expression] }

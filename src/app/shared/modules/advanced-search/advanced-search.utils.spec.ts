@@ -5,6 +5,7 @@ import {
   conditionsToQuery,
   describeCondition,
   getConfiguredConditions,
+  getRangeType,
   getRelationOption,
   isConditionComplete,
   metadataPath,
@@ -282,10 +283,10 @@ describe("condition filter utils", () => {
     it("should be every field of the config once one has a value", () => {
       setDatasetFields([
         { key: "keywords", relation: "IN", value: ["neutron"] },
-        { key: "creationTime", relation: "RANGE" },
+        { key: "creationTime", relation: "DATE_RANGE" },
         {
           key: "scientificMetadata.detector.distance",
-          relation: "RANGE",
+          relation: "NUMBER_RANGE",
           value: [1, 3],
           unit: "mm",
         },
@@ -307,6 +308,7 @@ describe("condition filter utils", () => {
           rhs: ["", ""],
           unit: "",
           source: "dataset",
+          rangeType: "date",
         },
         {
           lhs: "detector.distance",
@@ -314,6 +316,7 @@ describe("condition filter utils", () => {
           rhs: [1, 3],
           unit: "mm",
           source: "scientificMetadata",
+          rangeType: "number",
         },
       ]);
       expect(toActiveConditions(configs).map(({ lhs }) => lhs)).toEqual([
@@ -324,10 +327,10 @@ describe("condition filter utils", () => {
 
     it("should apply a range that is written as a text", () => {
       setDatasetFields([
-        { key: "creationTime", relation: "RANGE", value: "2026-01-01" },
+        { key: "creationTime", relation: "DATE_RANGE", value: "2026-01-01" },
         {
           key: "scientificMetadata.thickness",
-          relation: "RANGE",
+          relation: "NUMBER_RANGE",
           value: "1, 3",
         },
       ]);
@@ -376,6 +379,124 @@ describe("condition filter utils", () => {
       expect(describeCondition(condition({ exclude: true }))).toBe(
         "not temperature = 20",
       );
+    });
+  });
+
+  describe("what a range compares", () => {
+    const range = (overrides: Partial<FilterCondition>) =>
+      condition({ relation: "RANGE", unit: "", ...overrides });
+
+    it("should take a range of a dataset field as dates, a range of metadata as numbers", () => {
+      expect(getRangeType(datasetCondition({ relation: "RANGE" }))).toBe(
+        "date",
+      );
+      expect(getRangeType(condition({ relation: "RANGE" }))).toBe("number");
+      expect(
+        getRangeType(
+          datasetCondition({ relation: "RANGE", rangeType: "number" }),
+        ),
+      ).toBe("number");
+    });
+
+    it("should query the numbers of a dataset field with a number range, both bounds included", () => {
+      expect(
+        conditionsToQuery([
+          range({
+            lhs: "size",
+            source: "dataset",
+            rangeType: "number",
+            rhs: ["1", "200"],
+          }),
+        ]),
+      ).toEqual({ size: { $gte: 1, $lte: 200 } });
+    });
+
+    it("should leave out a bound of a number range that is not a number", () => {
+      expect(
+        conditionsToQuery([
+          range({
+            lhs: "size",
+            source: "dataset",
+            rangeType: "number",
+            rhs: ["abc", "200"],
+          }),
+        ]),
+      ).toEqual({ size: { $lte: 200 } });
+    });
+
+    it("should query the dates of metadata with a date range, the end day included", () => {
+      expect(
+        conditionsToQuery([
+          range({
+            lhs: "start_time",
+            rangeType: "date",
+            rhs: ["2026-01-01", "2026-01-31"],
+          }),
+        ]),
+      ).toEqual({
+        "scientificMetadata.start_time.value": {
+          $gte: "2026-01-01",
+          $lt: "2026-02-01",
+        },
+      });
+    });
+
+    it("should not apply a date range with a bound that is not a date", () => {
+      const dates = range({
+        lhs: "creationTime",
+        source: "dataset",
+        rhs: ["1", "200"],
+      });
+
+      expect(isConditionComplete(dates)).toBeFalse();
+      expect(conditionsToQuery([dates])).toEqual({});
+      expect(
+        isConditionComplete(range({ rhs: ["x", ""], unit: "mm" })),
+      ).toBeFalse();
+    });
+
+    it("should keep the range type only when it is not the default", () => {
+      const saved = (c: FilterCondition) => normalizeCondition(c);
+
+      expect(
+        saved(
+          range({
+            source: "dataset",
+            rangeType: "date",
+            rhs: ["2026-01-01", ""],
+          }),
+        ).rangeType,
+      ).toBeUndefined();
+      expect(
+        saved(
+          range({ source: "dataset", rangeType: "number", rhs: ["1", "2"] }),
+        ).rangeType,
+      ).toBe("number");
+      expect(
+        saved(range({ rangeType: "date", rhs: ["2026-01-01", ""] })).rangeType,
+      ).toBe("date");
+    });
+
+    it("should not have a unit for a date range", () => {
+      expect(
+        normalizeCondition(
+          range({ rangeType: "date", unit: "mm", rhs: ["2026-01-01", ""] }),
+        ).unit,
+      ).toBe("");
+    });
+
+    it("should apply a configured number range on a dataset field", () => {
+      setDatasetFields([
+        { key: "runNumber", relation: "NUMBER_RANGE", value: "1, 200" },
+      ]);
+
+      const applied = toActiveConditions(getConfiguredConditions());
+
+      expect(describeCondition(applied[0])).toBe("runNumber: 1 – 200");
+      expect(conditionsToQuery(applied)).toEqual({
+        runNumber: { $gte: 1, $lte: 200 },
+      });
+      setDatasetFields();
     });
   });
 

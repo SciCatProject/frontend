@@ -1,4 +1,4 @@
-import { FilterConditionRelation } from "state-management/models";
+import { FilterConditionRelation, RangeType } from "state-management/models";
 
 // The fields of the Advanced search. DATASET_FIELDS are the defaults, the config can replace them.
 
@@ -17,30 +17,52 @@ export const isMetadataFieldKey = (key: string): boolean =>
 const toMetadataFieldKey = (key: string): string =>
   `${METADATA_PREFIX}${key.slice(METADATA_PREFIX.length)}`;
 
+/**
+ * How a field of the config is matched. `DATE_RANGE` and `NUMBER_RANGE` say what a range
+ * compares, so a date picker or a min and a max, on a dataset field and on scientific metadata.
+ */
+export type FieldRelation =
+  Exclude<FilterConditionRelation, "RANGE"> | "DATE_RANGE" | "NUMBER_RANGE";
+
+const RANGE_TYPES: Partial<Record<FieldRelation, RangeType>> = {
+  DATE_RANGE: "date",
+  NUMBER_RANGE: "number",
+};
+
+/** The relation and the kind of range a condition of the field gets. */
+export const toConditionRelation = (
+  relation: FieldRelation,
+): { relation: FilterConditionRelation; rangeType?: RangeType } =>
+  RANGE_TYPES[relation]
+    ? { relation: "RANGE", rangeType: RANGE_TYPES[relation] }
+    : { relation: relation as FilterConditionRelation };
+
 export interface DatasetField {
   key: string;
   label: string;
   /**
-   * A dataset field: `IN` matches any of the values, `CONTAINS` matches text, `RANGE` is a date
-   * range. Scientific metadata: the operator the row starts with, `EQUAL_TO` when missing.
+   * A dataset field: `IN` matches any of the values, `CONTAINS` matches text, `DATE_RANGE` is a
+   * range of dates and `NUMBER_RANGE` a range of numbers. Scientific metadata: the operator the
+   * row starts with, `EQUAL_TO` when missing.
    */
-  relation: FilterConditionRelation;
+  relation: FieldRelation;
   /**
    * Config only: the value the row starts with. Values are separated by commas, `IN` takes any
-   * number of them and `RANGE` two bounds ("from, to"). A list works as well.
+   * number of them and a range two bounds ("from, to"). A list works as well.
    */
   value?: string | number | (string | number)[];
   /** Config only: the unit of the value of scientific metadata. */
   unit?: string;
 }
 
-/** The four kinds of filter, the field dropdown shows the icon of the kind of each field. */
-export type FieldType = "text" | "list" | "date" | "metadata";
+/** The kinds of filter, the field dropdown shows the icon of the kind of each field. */
+export type FieldType = "text" | "list" | "date" | "number" | "metadata";
 
 export const FIELD_TYPES: Record<FieldType, { icon: string; label: string }> = {
   text: { icon: "text_fields", label: "Contains the text" },
   list: { icon: "data_array", label: "Any of the values, separated by commas" },
   date: { icon: "event", label: "From a date to a date" },
+  number: { icon: "pin", label: "From a number to a number" },
   metadata: { icon: "science", label: "Key, operator and value" },
 };
 
@@ -82,19 +104,21 @@ export const FIELD_GUIDE: {
   },
 ];
 
-const TYPE_OF_RELATION: Partial<Record<FilterConditionRelation, FieldType>> = {
+const TYPE_OF_RELATION: Partial<Record<FieldRelation, FieldType>> = {
   CONTAINS: "text",
   IN: "list",
-  RANGE: "date",
+  DATE_RANGE: "date",
+  NUMBER_RANGE: "number",
 };
 
-const METADATA_RELATIONS: FilterConditionRelation[] = [
+const METADATA_RELATIONS: FieldRelation[] = [
   "EQUAL_TO",
   "GREATER_THAN",
   "LESS_THAN",
   "GREATER_THAN_OR_EQUAL",
   "LESS_THAN_OR_EQUAL",
-  "RANGE",
+  "DATE_RANGE",
+  "NUMBER_RANGE",
 ];
 
 export const DATASET_FIELDS: DatasetField[] = [
@@ -107,9 +131,9 @@ export const DATASET_FIELDS: DatasetField[] = [
   { key: "instrumentIds", label: "Instrument IDs", relation: "IN" },
   { key: "type", label: "Type", relation: "IN" },
   // dates
-  { key: "creationTime", label: "Creation time", relation: "RANGE" },
-  { key: "startTime", label: "Start time", relation: "RANGE" },
-  { key: "endTime", label: "End time", relation: "RANGE" },
+  { key: "creationTime", label: "Creation time", relation: "DATE_RANGE" },
+  { key: "startTime", label: "Start time", relation: "DATE_RANGE" },
+  { key: "endTime", label: "End time", relation: "DATE_RANGE" },
   // text
   { key: "creationLocation", label: "Location", relation: "CONTAINS" },
   { key: "datasetName", label: "Dataset name", relation: "CONTAINS" },
@@ -129,10 +153,10 @@ export const SIDE_PANEL_FIELDS = [
 
 /** A range can be written as a text, "from, to": one value is the lower bound. */
 const toFieldValue = (
-  relation: FilterConditionRelation,
+  relation: FieldRelation,
   value: DatasetField["value"],
 ): DatasetField["value"] =>
-  relation === "RANGE" &&
+  !!RANGE_TYPES[relation] &&
   (typeof value === "string" || typeof value === "number")
     ? [0, 1].map((index) => String(value).split(",")[index]?.trim() ?? "")
     : value;
@@ -154,6 +178,13 @@ export function setDatasetFields(
   const valid = (Array.isArray(fields) ? fields : []).flatMap((field) => {
     if (!field?.key) return [];
     const metadata = isMetadataFieldKey(field.key);
+    if ((field.relation as string) === "RANGE") {
+      // a range says what it compares, a date picker or a min and a max
+      console.warn(
+        `advancedSearchFields: "${field.key}" uses RANGE, use DATE_RANGE or NUMBER_RANGE`,
+      );
+      return [];
+    }
     const relation = metadata
       ? METADATA_RELATIONS.includes(field.relation)
         ? field.relation

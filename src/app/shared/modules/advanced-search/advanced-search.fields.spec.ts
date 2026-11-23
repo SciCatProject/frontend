@@ -20,7 +20,7 @@ describe("condition filter fields", () => {
   });
 
   it("should find a dataset field by its key", () => {
-    expect(getDatasetField("creationTime").relation).toBe("RANGE");
+    expect(getDatasetField("creationTime").relation).toBe("DATE_RANGE");
     expect(getDatasetField("unknown")).toBeUndefined();
   });
 
@@ -37,7 +37,7 @@ describe("condition filter fields", () => {
   it("should keep the order of the config", () => {
     setDatasetFields([
       { key: "runNumber", relation: "CONTAINS" },
-      { key: "creationTime", relation: "RANGE" },
+      { key: "creationTime", relation: "DATE_RANGE" },
       { key: "keywords", relation: "IN" },
     ]);
 
@@ -176,7 +176,10 @@ describe("condition filter fields", () => {
 
     it("should take the prefix of scientific metadata in any case", () => {
       setDatasetFields([
-        { key: "scientificmetadata.Detector.distance", relation: "RANGE" },
+        {
+          key: "scientificmetadata.Detector.distance",
+          relation: "NUMBER_RANGE",
+        },
       ]);
 
       expect(getDatasetFields()[0].key).toBe(
@@ -187,8 +190,8 @@ describe("condition filter fields", () => {
 
     it("should not list the fields of scientific metadata in the dropdown, they are rows of its kind", () => {
       setDatasetFields([
-        { key: "scientificMetadata.thickness", relation: "RANGE" },
-        { key: "creationTime", relation: "RANGE" },
+        { key: "scientificMetadata.thickness", relation: "NUMBER_RANGE" },
+        { key: "creationTime", relation: "DATE_RANGE" },
       ]);
 
       const options = getFieldOptions(getDatasetFields());
@@ -206,13 +209,21 @@ describe("condition filter fields", () => {
       setDatasetFields([
         {
           key: "creationTime",
-          relation: "RANGE",
+          relation: "DATE_RANGE",
           value: "2026-01-01, 2026-02-01",
         },
-        { key: "startTime", relation: "RANGE", value: "2026-01-01" },
-        { key: "endTime", relation: "RANGE", value: ", 2026-02-01" },
-        { key: "scientificMetadata.thickness", relation: "RANGE", value: 5 },
-        { key: "scientificMetadata.speed", relation: "RANGE", value: [1, 3] },
+        { key: "startTime", relation: "DATE_RANGE", value: "2026-01-01" },
+        { key: "endTime", relation: "DATE_RANGE", value: ", 2026-02-01" },
+        {
+          key: "scientificMetadata.thickness",
+          relation: "NUMBER_RANGE",
+          value: 5,
+        },
+        {
+          key: "scientificMetadata.speed",
+          relation: "NUMBER_RANGE",
+          value: [1, 3],
+        },
       ]);
 
       expect(getDatasetFields().map(({ value }) => value)).toEqual([
@@ -230,6 +241,45 @@ describe("condition filter fields", () => {
       ]);
 
       expect(getDatasetField("keywords").value).toEqual(["neutron"]);
+    });
+
+    it("should not take RANGE as the relation of a field, it has to say what it compares", () => {
+      const warn = spyOn(console, "warn");
+      setDatasetFields([
+        { key: "runNumber", relation: "RANGE" as never },
+        { key: "scientificMetadata.speed", relation: "RANGE" as never },
+        { key: "creationTime", relation: "DATE_RANGE" },
+        { key: "size", relation: "NUMBER_RANGE" },
+      ]);
+
+      expect(getDatasetFields().map(({ key }) => key)).toEqual([
+        "creationTime",
+        "size",
+      ]);
+      expect(warn).toHaveBeenCalledTimes(2);
+    });
+
+    it("should give a field the kind of its range, a date picker or min and max", () => {
+      setDatasetFields([
+        { key: "creationTime", relation: "DATE_RANGE" },
+        { key: "runNumber", relation: "NUMBER_RANGE" },
+      ]);
+
+      expect(
+        getFieldOptions(getDatasetFields()).map(({ type }) => type),
+      ).toEqual(["date", "number", "metadata"]);
+    });
+
+    it("should take the kind of range for scientific metadata too", () => {
+      setDatasetFields([
+        { key: "scientificMetadata.start", relation: "DATE_RANGE" },
+        { key: "scientificMetadata.speed", relation: "NUMBER_RANGE" },
+      ]);
+
+      expect(getDatasetFields().map(({ relation }) => relation)).toEqual([
+        "DATE_RANGE",
+        "NUMBER_RANGE",
+      ]);
     });
 
     it("should fall back to the defaults without a config", () => {

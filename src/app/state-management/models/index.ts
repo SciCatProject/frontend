@@ -236,7 +236,14 @@ export interface FilterCondition {
   source?: ConditionSource;
   /** NOT: leaves out what matches the condition. */
   exclude?: boolean;
+  /**
+   * What a RANGE compares: dates (a date picker) or numbers (min and max). Set only when it is
+   * not the default, which is dates for a dataset field and numbers for scientific metadata.
+   */
+  rangeType?: RangeType;
 }
+
+export type RangeType = "date" | "number";
 
 /** The name the old condition filter uses for a condition. */
 export type ScientificCondition = FilterCondition;
