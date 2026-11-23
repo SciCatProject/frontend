@@ -95,6 +95,28 @@ describe("AppHeaderComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  describe("#getSelectionLink()", () => {
+    afterEach(() => {
+      localStorage.removeItem("editingDatasetList");
+    });
+
+    it("should link to the selection page by default", () => {
+      expect(component.getSelectionLink()).toEqual("/datasets/selection");
+    });
+
+    it("should link to the edit route when editing a dataset list", () => {
+      localStorage.setItem("editingDatasetList", "true");
+      // the router is provided on the component, not at root
+      (
+        fixture.debugElement.injector.get(Router) as unknown as { url: string }
+      ).url = "/publishedDatasets/doi/datasetList?x=1";
+
+      expect(component.getSelectionLink()).toEqual(
+        "/publishedDatasets/doi/datasetList/edit",
+      );
+    });
+  });
+
   describe("#logout()", () => {
     it("should dispatch a LogoutAction", () => {
       dispatchSpy = spyOn(store, "dispatch");

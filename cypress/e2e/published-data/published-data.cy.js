@@ -34,8 +34,6 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
-
       cy.get("#publishButton").click();
 
       cy.get("#titleInput").type(title);
@@ -68,8 +66,6 @@ describe("Datasets general", () => {
       cy.get("#addToBatchButton").click();
 
       cy.get("#cartOnHeaderButton").click();
-
-      cy.get("a.button").click();
 
       cy.get("#publishButton").click();
 
@@ -118,8 +114,6 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
-
       cy.get("#publishButton").click();
 
       cy.get("#titleInput").type(title);
@@ -148,8 +142,6 @@ describe("Datasets general", () => {
       cy.get("#addToBatchButton").click();
 
       cy.get("#cartOnHeaderButton").click();
-
-      cy.get("a.button").click();
 
       cy.finishedLoading();
 
@@ -337,8 +329,6 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("batch-card a.button").click();
-
       cy.get('[data-cy="batch-table"] mat-row').its("length").should("eq", 2);
 
       cy.get("#saveChangesButton").click();
@@ -465,8 +455,6 @@ describe("Datasets general", () => {
       cy.get("#addToBatchButton").click();
 
       cy.get("#cartOnHeaderButton").click();
-
-      cy.get("a.button").click();
 
       cy.get("#publishButton").click();
 
