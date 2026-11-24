@@ -7,7 +7,7 @@ import {
 export const mockAppConfigService = {
   appConfig: {
     maxDirectDownloadSize: 0,
-    datafilesActionsEnabled: true,
+    configurableActions: { datafiles: { enabled: true } },
     lbBaseURL: "https://example.org",
   },
   getConfig() {

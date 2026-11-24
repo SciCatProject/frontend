@@ -56,16 +56,30 @@ export interface TableColumn {
   sort?: FieldSort;
 }
 
+export interface LabelMaps {
+  filters?: Record<string, string>;
+}
+
 export interface LabelsLocalization {
   dataset: Record<string, string>;
   proposal: Record<string, string>;
 }
 
-export interface DatasetDetailComponentConfig {
-  enableCustomizedComponent: boolean;
-  customization: CustomizationItem[];
+/**
+ * Customization of a single component's layout. `TItem` is the shape of one
+ * entry of `customization` (a tile of the dataset details page for
+ * `datasetDetails`); other components can plug in their own item type.
+ */
+export interface ComponentCustomization<TItem> {
+  enabled: boolean;
+  customization: TItem[];
+  authorization?: string[];
   tileRestrictedIconVisible?: boolean;
   tileRestrictedIconGroups?: string[];
+}
+
+export interface ComponentCustomizationConfig {
+  dataset?: ComponentCustomization<CustomizationItem>;
 }
 
 export interface IngestorComponentConfig {

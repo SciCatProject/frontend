@@ -67,8 +67,7 @@ export class DatasetEffects {
       // only the latest query may update the list, so cancel the older ones
       switchMap(([, params, user]) => {
         const config = this.appConfigService.getConfig();
-        const defaultConfigColumns =
-          config?.defaultDatasetsListSettings?.columns;
+        const defaultConfigColumns = config?.defaultSettings?.datasets?.columns;
         let defaultColumn = "createdAt";
         let defaultDirection = "desc";
 

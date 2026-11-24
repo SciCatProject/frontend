@@ -36,7 +36,7 @@ If there is a list, the final configuration is **only** the listed sources, merg
 
 - `config.json` and `config.override.json` contribute their content only if they are listed. A local file that isn't listed was only used to find the list. Listing a file that was already loaded doesn't fetch it again.
 - `additionalConfigs` inside any listed source is ignored: only the bootstrap stage decides what is loaded, so a remote source can never make the frontend fetch further URLs.
-- At most the first **3 entries** of the list are processed, including `config.json` and `config.override.json`; extras are ignored and a warning is logged.
+- At most the first **6 entries** of the list are processed, including `config.json` and `config.override.json`; extras are ignored and a warning is logged.
 - A source that fails to load (network error, 2s timeout, non-2xx) is treated as an empty config and logged to the console — it doesn't fail the rest of the load.
 
 The merge uses lodash's `mergeWith`: plain objects are merged key by key, but when both the existing and incoming value for a key are arrays, the incoming array **replaces** the existing one wholesale — arrays are never concatenated or merged element-by-element.
@@ -137,8 +137,8 @@ Prefer this pattern unless you have a concrete reason to compose config from mor
 | Symptom | Likely cause |
 |---|---|
 | Additional config never seems to load | Check the fetched URL is reachable from the *browser* (CORS, absolute vs. relative path) — requests are made client-side. Also check that the same-origin `/api/v3/admin/config` request fails: if it succeeds, the backend config is used and the list is not resolved. |
-| Values from `config.json` or `config.override.json` are missing | Once a list is set, a local file only contributes if it's listed — check that `config.json` / `config.override.json` appear in the list (within the first 3 entries). |
+| Values from `config.json` or `config.override.json` are missing | Once a list is set, a local file only contributes if it's listed — check that `config.json` / `config.override.json` appear in the list (within the first 6 entries).                                                                                                    |
 | A list in a fetched source has no effect | Only `config.json` and (with `allowConfigOverrides`) `config.override.json` can set the list. |
 | A fragment's array field isn't appearing | Arrays are replaced, not merged — a later source setting the same array key overwrites earlier entries entirely. |
-| A 4th (or later) entry never loads | Only the first 3 entries are processed, local files included; check the console for the "more than 3 entries" warning. |
+| A 7th (or later) entry never loads | Only the first 6 entries are processed, local files included; check the console for the "more than 6 entries" warning.                                                                                                                                                   |
 | Values don't seem to update after a backend change | Config is (re-)fetched on page load; there's no live-reload of the listed sources. |

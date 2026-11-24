@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
-import { AppConfigService, HelpMessages } from "app-config.service";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "help",

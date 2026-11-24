@@ -53,11 +53,9 @@ describe("DatasetDetailWrapperComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should load DatasetDetailDynamicComponent when enableCustomizedComponent is true", () => {
+  it("should load DatasetDetailDynamicComponent when componentCustomization.dataset.enabled is true", () => {
     appConfigService.getConfig.and.returnValue({
-      datasetDetailComponent: {
-        enableCustomizedComponent: true,
-      },
+      componentCustomization: { dataset: { enabled: true } },
     } as AppConfigInterface);
 
     fixture.detectChanges();
@@ -66,11 +64,9 @@ describe("DatasetDetailWrapperComponent", () => {
     expect(componentInstance).toBe(DatasetDetailDynamicComponent);
   });
 
-  it("should load DatasetDetailComponent when enableCustomizedComponent is false", () => {
+  it("should load DatasetDetailComponent when componentCustomization.dataset.enabled is false", () => {
     appConfigService.getConfig.and.returnValue({
-      datasetDetailComponent: {
-        enableCustomizedComponent: false,
-      },
+      componentCustomization: { dataset: { enabled: false } },
     } as AppConfigInterface);
 
     fixture.detectChanges();

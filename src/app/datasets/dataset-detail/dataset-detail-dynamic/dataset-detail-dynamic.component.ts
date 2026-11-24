@@ -118,9 +118,11 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
   ) {
     this.tileRestrictedIconVisible =
-      this.appConfig.datasetDetailComponent?.tileRestrictedIconVisible ?? false;
+      this.appConfig.componentCustomization?.dataset
+        ?.tileRestrictedIconVisible ?? false;
     this.tileRestrictedIconGroups =
-      this.appConfig.datasetDetailComponent?.tileRestrictedIconGroups ?? [];
+      this.appConfig.componentCustomization?.dataset
+        ?.tileRestrictedIconGroups ?? [];
   }
 
   ngOnInit() {
@@ -135,7 +137,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     );
 
     const sortedDatasetView = (
-      this.appConfig.datasetDetailComponent?.customization || []
+      this.appConfig.componentCustomization?.dataset?.customization || []
     )
       .sort((a, b) => a.order - b.order)
       .map((section) => ({

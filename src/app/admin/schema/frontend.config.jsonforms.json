@@ -4,7 +4,6 @@
     "properties": {
       "defaultMainPage": {
         "type": "object",
-
         "properties": {
           "nonAuthenticatedUser": { "type": "string" },
           "authenticatedUser": { "type": "string" }
@@ -12,16 +11,13 @@
       },
       "ingestorComponent": {
         "type": "object",
-        "properties": {
-          "ingestorEnabled": { "type": "boolean" }
-        }
+        "properties": { "ingestorEnabled": { "type": "boolean" } }
       },
       "skipSciCatLoginPageEnabled": { "type": "boolean" },
       "addScientificMetadataKeysAsColumn": { "type": "boolean" },
       "allowConfigOverrides": { "type": "boolean" },
       "dateFormat": { "type": "string" },
       "timezone": { "type": "string" },
-      "accessTokenPrefix": { "type": "string" },
       "addDatasetEnabled": { "type": "boolean" },
       "archiveWorkflowEnabled": { "type": "boolean" },
       "realTimeUpdatesEnabled": { "type": "boolean" },
@@ -38,12 +34,11 @@
         "default": "both"
       },
       "editDatasetEnabled": { "type": "boolean" },
-      "editDatasetSampleEnabled": { "type": "boolean" },
       "editMetadataEnabled": { "type": "boolean" },
       "addSampleEnabled": { "type": "boolean" },
       "externalAuthEndpoint": { "type": "string" },
       "facility": { "type": "string" },
-      "siteIcon": { "type": "string" },
+      "siteHeaderLogo": { "type": "string" },
       "siteTitle": { "type": "string" },
       "siteSciCatLogo": { "type": "string" },
       "loginFacilityLabel": { "type": "string" },
@@ -52,10 +47,7 @@
       "loginFacilityEnabled": { "type": "boolean" },
       "loginLdapEnabled": { "type": "boolean" },
       "loginLocalEnabled": { "type": "boolean" },
-      "fileColorEnabled": { "type": "boolean" },
       "fileDownloadEnabled": { "type": "boolean" },
-      "gettingStarted": {},
-      "ingestManual": {},
       "jobsEnabled": { "type": "boolean" },
       "jsonMetadataEnabled": { "type": "boolean" },
       "jupyterHubUrl": { "type": "string" },
@@ -63,11 +55,8 @@
       "lbBaseURL": { "type": "string" },
       "logbookEnabled": { "type": "boolean" },
       "loginFormEnabled": { "type": "boolean" },
-      "metadataPreviewEnabled": { "type": "boolean" },
       "autoApplyFilters": { "type": "boolean" },
       "metadataStructure": { "type": "string" },
-      "multipleDownloadAction": { "type": "string" },
-      "multipleDownloadEnabled": { "type": "boolean" },
       "oAuth2Endpoints": {
         "type": "array",
         "items": {
@@ -84,12 +73,8 @@
         "items": {
           "type": "object",
           "properties": {
-            "option": {
-              "type": "string"
-            },
-            "tooltip": {
-              "type": "string"
-            }
+            "option": { "type": "string" },
+            "tooltip": { "type": "string" }
           },
           "required": ["option", "tooltip"]
         }
@@ -97,7 +82,6 @@
       "riotBaseUrl": { "type": "string" },
       "scienceSearchEnabled": { "type": "boolean" },
       "scienceSearchUnitsEnabled": { "type": "boolean" },
-      "searchPublicDataEnabled": { "type": "boolean" },
       "searchSamples": { "type": "boolean" },
       "sftpHost": { "type": "string" },
       "sourceFolder": { "type": "string" },
@@ -131,6 +115,29 @@
         },
         "additionalProperties": false
       },
+      "datasetStatusBanner": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": { "type": "string" },
+                "value": { "type": "string" },
+                "message": { "type": "string" },
+                "code": {
+                  "type": "string",
+                  "enum": ["INFO", "WARN"],
+                  "default": "WARN"
+                }
+              },
+              "required": ["field", "value", "message"]
+            }
+          }
+        }
+      },
       "datasetViews": {
         "type": "object",
         "properties": {
@@ -156,29 +163,6 @@
       "notificationInterceptorEnabled": { "type": "boolean" },
       "metadataEditingUnitListDisabled": { "type": "boolean" },
       "hideEmptyMetadataTable": { "type": "boolean" },
-      "datasetStatusBanner": {
-        "type": "object",
-        "properties": {
-          "enabled": { "type": "boolean" },
-          "rules": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field": { "type": "string" },
-                "value": { "type": "string" },
-                "message": { "type": "string" },
-                "code": {
-                  "type": "string",
-                  "enum": ["INFO", "WARN"],
-                  "default": "WARN"
-                }
-              },
-              "required": ["field", "value", "message"]
-            }
-          }
-        }
-      },
       "helpSettings": {
         "type": "object",
         "properties": {
@@ -193,14 +177,14 @@
           "htmlContent": { "type": "string" }
         }
       },
-      "datafilesActionsEnabled": { "type": "boolean" },
-      "statusBannerMessage": { "type": "string" },
-      "statusBannerCode": {
-        "type": "string",
-        "enum": ["INFO", "WARN"],
-        "default": "INFO"
-      },
-      "datafilesActions": {
+      "configurableActions": {
+        "type": "object",
+        "properties": {
+          "datafiles": {
+            "type": "object",
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "actions": {
         "type": "array",
         "items": {
           "type": "object",
@@ -270,9 +254,21 @@
             "filename": { "type": "string" }
           }
         }
+              }
+            }
+          }
+        }
       },
-
-      "defaultDatasetsListSettings": {
+      "statusBannerMessage": { "type": "string" },
+      "statusBannerCode": {
+        "type": "string",
+        "enum": ["INFO", "WARN"],
+        "default": "INFO"
+      },
+      "defaultSettings": {
+        "type": "object",
+        "properties": {
+          "datasets": {
         "type": "object",
         "properties": {
           "columns": {
@@ -288,9 +284,7 @@
                   "type": "string",
                   "enum": ["standard", "hoverContent", "editable", "date"]
                 },
-                "format": {
-                  "type": "string"
-                },
+                    "format": { "type": "string" },
                 "enabled": { "type": "boolean" },
                 "sort": { "type": "string" }
               }
@@ -317,15 +311,11 @@
             "items": {
               "type": "object",
               "properties": {
-                "enabled": {
-                  "type": "boolean"
-                },
+                    "enabled": { "type": "boolean" },
                 "condition": {
                   "type": "object",
                   "properties": {
-                    "lhs": {
-                      "type": "string"
-                    },
+                        "lhs": { "type": "string" },
                     "relation": {
                       "type": "string",
                       "enum": [
@@ -337,12 +327,8 @@
                         "RANGE"
                       ]
                     },
-                    "rhs": {
-                      "type": "string"
-                    },
-                    "unit": {
-                      "type": "string"
-                    },
+                        "rhs": { "type": "string" },
+                        "unit": { "type": "string" },
                     "unitsOptions": {
                       "type": "array",
                       "items": { "type": "string" }
@@ -355,7 +341,7 @@
           }
         }
       },
-      "defaultProposalsListSettings": {
+          "proposals": {
         "type": "object",
         "properties": {
           "columns": {
@@ -392,6 +378,8 @@
             }
           }
         }
+          }
+        }
       },
       "labelsLocalization": {
         "type": "object",
@@ -420,10 +408,13 @@
           }
         }
       },
-      "datasetDetailComponent": {
+      "componentCustomization": {
         "type": "object",
         "properties": {
-          "enableCustomizedComponent": { "type": "boolean" },
+          "dataset": {
+            "type": "object",
+            "properties": {
+              "enabled": { "type": "boolean" },
           "tileRestrictedIconVisible": {
             "type": "boolean",
             "title": "Restricted Tiles Indicator Enabled",
@@ -478,7 +469,6 @@
                   "type": "array",
                   "items": { "type": "string" }
                 },
-
                 "options": {
                   "type": "object",
                   "properties": {
@@ -491,7 +481,9 @@
                 },
                 "fields": {
                   "type": "array",
-                  "default": [{ "element": "text", "source": "", "order": 0 }],
+                      "default": [
+                        { "element": "text", "source": "", "order": 0 }
+                      ],
                   "items": {
                     "type": "object",
                     "properties": {
@@ -516,6 +508,8 @@
                       "order": { "type": "number" }
                     },
                     "required": ["element", "source", "order"]
+                      }
+                    }
                   }
                 }
               }
@@ -563,6 +557,48 @@
             "default": "details"
           }
         }
+      },
+      "siteLoginLogo": { "type": "string" },
+      "siteLoginBackground": { "type": "string" },
+      "siteHeaderLogoUrl": { "type": "string" },
+      "thumbnailFetchLimitPerPage": { "type": "number" },
+      "maxFileUploadSizeInMb": { "type": "string" },
+      "fileserverBaseURL": { "type": "string" },
+      "metadataFloatFormatEnabled": { "type": "boolean" },
+      "metadataFloatFormat": {
+        "type": "object",
+        "properties": {
+          "significantDigits": { "type": "number" },
+          "minCutoff": {
+            "type": "number",
+            "description": "Scientific notation is used below this cutoff"
+          },
+          "maxCutoff": {
+            "type": "number",
+            "description": "Scientific notation is used above this cutoff"
+          }
+        }
+      },
+      "additionalConfigs": {
+        "type": "array",
+        "description": "URLs of additional configuration files merged in list order (at most 6). When set, only the listed sources are used.",
+        "items": { "type": "string" }
+      },
+      "labelMaps": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string" },
+                "value": { "type": "string" }
+              },
+              "required": ["key", "value"]
+            }
+          }
+        }
       }
     }
   },
@@ -572,24 +608,21 @@
       {
         "type": "Group",
         "label": "General Settings",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           { "type": "Control", "scope": "#/properties/dateFormat" },
           { "type": "Control", "scope": "#/properties/timezone" },
-          { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
           { "type": "Control", "scope": "#/properties/landingPage" },
           { "type": "Control", "scope": "#/properties/metadataStructure" },
           { "type": "Control", "scope": "#/properties/riotBaseUrl" },
           { "type": "Control", "scope": "#/properties/jupyterHubUrl" },
           { "type": "Control", "scope": "#/properties/lbBaseURL" },
-          {
-            "type": "Control",
-            "scope": "#/properties/externalAuthEndpoint"
-          },
+          { "type": "Control", "scope": "#/properties/externalAuthEndpoint" },
           { "type": "Control", "scope": "#/properties/facility" },
-          { "type": "Control", "scope": "#/properties/siteIcon" },
+          { "type": "Control", "scope": "#/properties/siteHeaderLogo" },
+          { "type": "Control", "scope": "#/properties/siteHeaderLogoUrl" },
+          { "type": "Control", "scope": "#/properties/siteLoginLogo" },
+          { "type": "Control", "scope": "#/properties/siteLoginBackground" },
           { "type": "Control", "scope": "#/properties/siteTitle" },
           { "type": "Control", "scope": "#/properties/siteSciCatLogo" },
           { "type": "Control", "scope": "#/properties/statusBannerMessage" },
@@ -613,29 +646,28 @@
           },
           { "type": "Control", "scope": "#/properties/datasetPageSizeOptions" },
           { "type": "Control", "scope": "#/properties/editDatasetEnabled" },
-          {
-            "type": "Control",
-            "scope": "#/properties/editDatasetSampleEnabled"
-          },
           { "type": "Control", "scope": "#/properties/editMetadataEnabled" },
           { "type": "Control", "scope": "#/properties/addSampleEnabled" },
-          { "type": "Control", "scope": "#/properties/fileColorEnabled" },
           { "type": "Control", "scope": "#/properties/fileDownloadEnabled" },
           { "type": "Control", "scope": "#/properties/jobsEnabled" },
           { "type": "Control", "scope": "#/properties/jsonMetadataEnabled" },
           { "type": "Control", "scope": "#/properties/logbookEnabled" },
           { "type": "Control", "scope": "#/properties/loginFormEnabled" },
-          { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" },
           { "type": "Control", "scope": "#/properties/autoApplyFilters" },
-          { "type": "Control", "scope": "#/properties/realTimeUpdatesEnabled" }
+          { "type": "Control", "scope": "#/properties/realTimeUpdatesEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/thumbnailFetchLimitPerPage"
+          },
+          { "type": "Control", "scope": "#/properties/maxFileUploadSizeInMb" },
+          { "type": "Control", "scope": "#/properties/fileserverBaseURL" },
+          { "type": "Control", "scope": "#/properties/additionalConfigs" }
         ]
       },
       {
         "type": "Group",
         "label": "Main Page",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",
@@ -650,9 +682,7 @@
       {
         "type": "Group",
         "label": "Ingestor Component",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",
@@ -660,12 +690,9 @@
           }
         ]
       },
-
       {
         "type": "Group",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "label": "Login Options",
         "elements": [
           {
@@ -691,51 +718,34 @@
       },
       {
         "type": "Group",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "label": "Download Settings",
-        "elements": [
-          { "type": "Control", "scope": "#/properties/multipleDownloadAction" },
-          { "type": "Control", "scope": "#/properties/multipleDownloadEnabled" }
-        ]
-      },
-
+        "elements": []
+        },
       {
         "type": "Group",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "label": "OAuth2 Endpoints",
         "elements": [
-          {
-            "type": "Control",
-            "scope": "#/properties/oAuth2Endpoints"
-          }
+          { "type": "Control", "scope": "#/properties/oAuth2Endpoints" }
         ]
       },
       {
         "type": "Group",
         "label": "Retrieve Destinations",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",
             "scope": "#/properties/retrieveDestinations",
-            "options": {
-              "description": "Retrieve Destinations"
-            }
+            "options": { "description": "Retrieve Destinations" }
           }
         ]
       },
       {
         "type": "Group",
         "label": "SFTP Host & Source Folder",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           { "type": "Control", "scope": "#/properties/sftpHost" },
           { "type": "Control", "scope": "#/properties/sourceFolder" }
@@ -744,37 +754,27 @@
       {
         "type": "Group",
         "label": "Download Limits & Warnings",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
-          {
-            "type": "Control",
-            "scope": "#/properties/maxDirectDownloadSize"
-          },
+          { "type": "Control", "scope": "#/properties/maxDirectDownloadSize" },
           { "type": "Control", "scope": "#/properties/maxFileSizeWarning" }
         ]
       },
       {
         "type": "Group",
         "label": "Datafiles Actions",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "ListWithDetail",
-            "scope": "#/properties/datafilesActions",
+            "scope": "#/properties/configurableActions/properties/datafiles/properties/actions",
             "options": {
               "detail": {
                 "type": "VerticalLayout",
                 "elements": [
                   { "type": "Control", "scope": "#/properties/label" },
                   { "type": "Control", "scope": "#/properties/id" },
-                  {
-                    "type": "Control",
-                    "scope": "#/properties/description"
-                  },
+                  { "type": "Control", "scope": "#/properties/description" },
                   { "type": "Control", "scope": "#/properties/order" },
                   { "type": "Control", "scope": "#/properties/files" },
                   { "type": "Control", "scope": "#/properties/mat_icon" },
@@ -809,10 +809,7 @@
                       }
                     ]
                   },
-                  {
-                    "type": "Control",
-                    "scope": "#/properties/method"
-                  },
+                  { "type": "Control", "scope": "#/properties/method" },
                   { "type": "Control", "scope": "#/properties/type" },
                   { "type": "Control", "scope": "#/properties/icon" },
                   {
@@ -870,9 +867,7 @@
       {
         "type": "Group",
         "label": "Localization",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Group",
@@ -900,10 +895,42 @@
       },
       {
         "type": "Group",
+        "label": "Filter Labels",
+        "options": { "expandable": true },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/labelMaps/properties/filters"
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Metadata Float Format",
+        "options": { "expandable": true },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/metadataFloatFormatEnabled"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/metadataFloatFormat/properties/significantDigits"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/metadataFloatFormat/properties/minCutoff"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/metadataFloatFormat/properties/maxCutoff"
+          }
+        ]
+      },
+      {
+        "type": "Group",
         "label": "Dataset Status Banner",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",
@@ -940,9 +967,7 @@
       {
         "type": "Group",
         "label": "Dataset Details Data",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",
@@ -954,9 +979,7 @@
       {
         "type": "Group",
         "label": "Dataset List Views",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",
@@ -984,26 +1007,24 @@
       {
         "type": "Group",
         "label": "Dataset Detail Component",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",
-            "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
+            "scope": "#/properties/componentCustomization/properties/dataset/properties/enabled"
           },
           {
             "type": "Control",
-            "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconVisible"
+            "scope": "#/properties/componentCustomization/properties/dataset/properties/tileRestrictedIconVisible"
           },
           {
             "type": "Control",
-            "scope": "#/properties/datasetDetailComponent/properties/tileRestrictedIconGroups"
+            "scope": "#/properties/componentCustomization/properties/dataset/properties/tileRestrictedIconGroups"
           },
           {
             "type": "ListWithDetail",
             "label": "Customization Configuration",
-            "scope": "#/properties/datasetDetailComponent/properties/customization",
+            "scope": "#/properties/componentCustomization/properties/dataset/properties/customization",
             "options": {
               "detail": {
                 "type": "VerticalLayout",
@@ -1028,9 +1049,7 @@
                           "effect": "SHOW",
                           "condition": {
                             "scope": "#/properties/type",
-                            "schema": {
-                              "const": "scientificMetadata"
-                            }
+                            "schema": { "const": "scientificMetadata" }
                           }
                         }
                       }
@@ -1083,9 +1102,7 @@
                       "effect": "SHOW",
                       "condition": {
                         "scope": "#/properties/type",
-                        "schema": {
-                          "const": "attachments"
-                        }
+                        "schema": { "const": "attachments" }
                       }
                     }
                   },
@@ -1097,9 +1114,7 @@
                       "effect": "SHOW",
                       "condition": {
                         "scope": "#/properties/type",
-                        "schema": {
-                          "const": "regular"
-                        }
+                        "schema": { "const": "regular" }
                       }
                     },
                     "options": {
@@ -1110,10 +1125,7 @@
                             "type": "Control",
                             "scope": "#/properties/element"
                           },
-                          {
-                            "type": "Control",
-                            "scope": "#/properties/source"
-                          },
+                          { "type": "Control", "scope": "#/properties/source" },
                           {
                             "type": "Control",
                             "scope": "#/properties/internalLinkLabel",
@@ -1125,10 +1137,7 @@
                               }
                             }
                           },
-                          {
-                            "type": "Control",
-                            "scope": "#/properties/order"
-                          }
+                          { "type": "Control", "scope": "#/properties/order" }
                         ]
                       }
                     }
@@ -1142,9 +1151,7 @@
       {
         "type": "Group",
         "label": "List settings",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",
@@ -1163,7 +1170,7 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/columns",
+                    "scope": "#/properties/defaultSettings/properties/datasets/properties/columns",
                     "options": { "showSortButtons": true }
                   }
                 ]
@@ -1175,7 +1182,7 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/filters",
+                    "scope": "#/properties/defaultSettings/properties/datasets/properties/filters",
                     "options": { "showSortButtons": true }
                   }
                 ]
@@ -1187,7 +1194,7 @@
                 "elements": [
                   {
                     "type": "ListWithDetail",
-                    "scope": "#/properties/defaultDatasetsListSettings/properties/conditions",
+                    "scope": "#/properties/defaultSettings/properties/datasets/properties/conditions",
                     "options": {
                       "labelRef": "#/items/properties/condition/properties/lhs"
                     }
@@ -1208,7 +1215,7 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultProposalsListSettings/properties/columns",
+                    "scope": "#/properties/defaultSettings/properties/proposals/properties/columns",
                     "options": { "showSortButtons": true }
                   }
                 ]
@@ -1220,7 +1227,7 @@
                 "elements": [
                   {
                     "type": "Control",
-                    "scope": "#/properties/defaultProposalsListSettings/properties/filters",
+                    "scope": "#/properties/defaultSettings/properties/proposals/properties/filters",
                     "options": { "showSortButtons": true }
                   }
                 ]
@@ -1232,9 +1239,7 @@
       {
         "type": "Group",
         "label": "Main Menu",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "HorizontalLayout",
@@ -1264,9 +1269,7 @@
       {
         "type": "Group",
         "label": "Header",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "HorizontalLayout",
@@ -1283,10 +1286,7 @@
                     "type": "Control",
                     "scope": "#/properties/helpSettings/properties/htmlContent",
                     "label": "Help HTML Content",
-                    "options": {
-                      "multi": true,
-                      "rows": 5
-                    }
+                    "options": { "multi": true, "rows": 5 }
                   }
                 ]
               },
@@ -1302,10 +1302,7 @@
                     "type": "Control",
                     "scope": "#/properties/aboutSettings/properties/htmlContent",
                     "label": "About HTML Content",
-                    "options": {
-                      "multi": true,
-                      "rows": 5
-                    }
+                    "options": { "multi": true, "rows": 5 }
                   }
                 ]
               }
@@ -1316,9 +1313,7 @@
       {
         "type": "Group",
         "label": "Default Tab Settings",
-        "options": {
-          "expandable": true
-        },
+        "options": { "expandable": true },
         "elements": [
           {
             "type": "Control",

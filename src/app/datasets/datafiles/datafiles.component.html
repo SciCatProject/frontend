@@ -30,9 +30,9 @@
         <h3>No files associated to this dataset</h3>
       </div>
     }
-    @if (appConfig.datafilesActionsEnabled) {
+    @if (appConfig.configurableActions?.datafiles?.enabled) {
       <configurable-actions
-        [actionsConfig]="appConfig.datafilesActions"
+        [actionsConfig]="appConfig.configurableActions.datafiles.actions"
         [actionItems]="actionItems"
       ></configurable-actions>
     }

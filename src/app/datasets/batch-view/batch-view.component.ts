@@ -97,7 +97,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       return configuredColumns;
     }
 
-    return this.appConfig.defaultDatasetsListSettings?.columns || [];
+    return this.appConfig.defaultSettings?.datasets?.columns || [];
   }
 
   private getExportColumns(): TableField<PartialOutputDatasetDto>[] {

@@ -77,11 +77,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   count = 0;
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
-  multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   fileserverBaseURL: string | undefined = this.appConfig.fileserverBaseURL;
-  fileserverButtonLabel: string =
-    this.appConfig.fileserverButtonLabel || "Download";
-  multipleDownloadAction: string | null = this.appConfig.multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
   sourceFolder: string =
     this.appConfig.sourceFolder || "No source folder provided";

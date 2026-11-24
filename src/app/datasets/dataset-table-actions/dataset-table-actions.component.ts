@@ -42,14 +42,13 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   userProfile$ = this.store.select(selectProfile);
   selectSelectedDatasets$ = this.store.select(selectSelectedDatasets);
   selectIsBatchNonEmpty$ = this.store.select(selectIsBatchNonEmpty);
-  batchActionsConfig: ActionConfig[] = this.appConfig.batchActions || [];
+  batchActionsConfig: ActionConfig[] =
+    this.appConfig.configurableActions?.batch?.actions || [];
 
   @Input() selectedSets: PartialOutputDatasetDto[] | null = [];
 
   public currentArchViewMode: string = ArchViewMode.all;
   modes: DatasetViewMode[] = this.appConfig.datasetViews?.modes ?? [];
-
-  searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
 
   subscriptions: Subscription[] = [];
 
@@ -60,7 +59,8 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   ) {}
 
   private buildBatchActionsConfig(isBatchNonEmpty: boolean): ActionConfig[] {
-    const batchActions = this.appConfig.batchActions || [];
+    const batchActions =
+      this.appConfig.configurableActions?.batch?.actions || [];
     if (!isBatchNonEmpty) {
       return batchActions;
     }

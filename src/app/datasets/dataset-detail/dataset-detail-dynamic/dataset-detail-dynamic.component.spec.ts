@@ -78,37 +78,39 @@ describe("DatasetDetailDynamicComponent", () => {
       },
     ].forEach(({ description, related, labels }) => {
       it(description, () => {
-        component.appConfig.datasetDetailComponent = {
-          enableCustomizedComponent: true,
-          customization: [
-            {
-              type: "regular",
-              label: "Related Documents",
-              order: 0,
-              row: 1,
-              col: 1,
-              fields: [
-                {
-                  element: "internalLink",
-                  source: "proposalIds",
-                  internalLinkLabel: "title",
-                  order: 0,
-                },
-                {
-                  element: "internalLink",
-                  source: "sampleIds",
-                  internalLinkLabel: "description",
-                  order: 1,
-                },
-                {
-                  element: "internalLink",
-                  source: "instrumentIds",
-                  internalLinkLabel: "name",
-                  order: 2,
-                },
-              ] as any,
-            },
-          ],
+        component.appConfig.componentCustomization = {
+          dataset: {
+            enabled: true,
+            customization: [
+              {
+                type: "regular",
+                label: "Related Documents",
+                order: 0,
+                row: 1,
+                col: 1,
+                fields: [
+                  {
+                    element: "internalLink",
+                    source: "proposalIds",
+                    internalLinkLabel: "title",
+                    order: 0,
+                  },
+                  {
+                    element: "internalLink",
+                    source: "sampleIds",
+                    internalLinkLabel: "description",
+                    order: 1,
+                  },
+                  {
+                    element: "internalLink",
+                    source: "instrumentIds",
+                    internalLinkLabel: "name",
+                    order: 2,
+                  },
+                ] as any,
+              },
+            ],
+          },
         };
         component.dataset$ = of({
           proposalIds: ["p1"],
@@ -289,36 +291,38 @@ describe("DatasetDetailDynamicComponent", () => {
   });
 
   it("should apply the label choice independently to each configured field", () => {
-    component.appConfig.datasetDetailComponent = {
-      enableCustomizedComponent: true,
-      customization: [
-        {
-          type: "regular",
-          label: "Related Documents",
-          order: 0,
-          row: 1,
-          col: 1,
-          fields: [
-            {
-              element: "internalLink",
-              source: "proposalIds",
-              internalLinkLabel: "title",
-              order: 0,
-            },
-            {
-              element: "internalLink",
-              source: "instrumentIds",
-              internalLinkLabel: "id",
-              order: 1,
-            },
-            {
-              element: "internalLink",
-              source: "sampleIds",
-              order: 2,
-            },
-          ] as any,
-        },
-      ],
+    component.appConfig.componentCustomization = {
+      dataset: {
+        enabled: true,
+        customization: [
+          {
+            type: "regular",
+            label: "Related Documents",
+            order: 0,
+            row: 1,
+            col: 1,
+            fields: [
+              {
+                element: "internalLink",
+                source: "proposalIds",
+                internalLinkLabel: "title",
+                order: 0,
+              },
+              {
+                element: "internalLink",
+                source: "instrumentIds",
+                internalLinkLabel: "id",
+                order: 1,
+              },
+              {
+                element: "internalLink",
+                source: "sampleIds",
+                order: 2,
+              },
+            ] as any,
+          },
+        ],
+      },
     };
     component.dataset$ = of({
       proposalIds: ["p1"],

@@ -35,27 +35,29 @@ describe("ProposalSideFilterComponent", () => {
     mockRouter = { navigate: jasmine.createSpy("navigate") };
     const getConfig = () => ({
       autoApplyFilters: false,
-      defaultProposalsListSettings: {
-        filters: [
-          {
-            key: "instrumentIds",
-            type: "checkbox",
-            description: "Filter by Unique identifier for the proposal",
-            enabled: true,
-          },
-          {
-            key: "pi_lastname",
-            type: "checkbox",
-            description: "Filter by Last name of the Principal Investigator",
-            enabled: true,
-          },
-          {
-            key: "startTime",
-            type: "dateRange",
-            description: "Filter by Start time of the proposal",
-            enabled: true,
-          },
-        ],
+      defaultSettings: {
+        proposals: {
+          filters: [
+            {
+              key: "instrumentIds",
+              type: "checkbox",
+              description: "Filter by Unique identifier for the proposal",
+              enabled: true,
+            },
+            {
+              key: "pi_lastname",
+              type: "checkbox",
+              description: "Filter by Last name of the Principal Investigator",
+              enabled: true,
+            },
+            {
+              key: "startTime",
+              type: "dateRange",
+              description: "Filter by Start time of the proposal",
+              enabled: true,
+            },
+          ],
+        },
       },
     });
 

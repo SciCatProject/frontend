@@ -211,7 +211,7 @@ export class SampleDetailComponent
         this.dataSource.next(vm.datasets);
 
         const defaultConfigColumns =
-          this.appConfig?.defaultDatasetsListSettings?.columns || [];
+          this.appConfig?.defaultSettings?.datasets?.columns || [];
 
         const userTableConfigColumns =
           this.datasetsListService.convertSavedDatasetColumns(

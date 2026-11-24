@@ -90,8 +90,10 @@ describe("BatchViewComponent", () => {
   const getConfig = () => ({
     archiveWorkflowEnabled: true,
     shareEnabled: false,
-    defaultDatasetsListSettings: {
-      columns: configuredColumns,
+    defaultSettings: {
+      datasets: {
+        columns: configuredColumns,
+      },
     },
     labelsLocalization: {
       dataset: {

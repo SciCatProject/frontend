@@ -133,7 +133,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
             this.pending = false;
 
             const defaultConfigColumns =
-              this.appConfig?.defaultProposalsListSettings?.columns;
+              this.appConfig?.defaultSettings?.proposals?.columns;
 
             const userConfigColumns = tablesSettings?.columns || [];
 
