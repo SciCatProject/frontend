@@ -96,6 +96,16 @@ interface AttachmentOptions {
 }
 type viewModeOptions = "table" | "json" | "tree";
 
+type themePalette =
+  | "primary"
+  | "accent"
+  | "warn"
+  | "header-1"
+  | "header-2"
+  | "header-3"
+  | "header-4"
+  | "header-5";
+
 export interface CustomizationItem {
   type: CustomizationType;
   label: string;
@@ -109,6 +119,8 @@ export interface CustomizationItem {
   authorization?: string[];
   visible?: boolean;
   restrictedIconVisible?: boolean;
+  icon?: string;
+  headerColor?: themePalette;
 }
 
 export type ComputedField = Field & {

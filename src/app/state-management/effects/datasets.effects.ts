@@ -64,6 +64,7 @@ export class DatasetEffects {
         fromActions.setArchiveViewModeAction,
       ),
       concatLatestFrom(() => [this.fullqueryParams$, this.currentUser$]),
+      // only the latest query may update the list, so cancel the older ones
       switchMap(([, params, user]) => {
         const config = this.appConfigService.getConfig();
         const defaultConfigColumns =
@@ -112,8 +113,10 @@ export class DatasetEffects {
         fromActions.fetchFacetCountsAction,
         fromActions.setPublicViewModeAction,
         fromActions.sortByColumnAction,
+        fromActions.setArchiveViewModeAction,
       ),
       concatLatestFrom(() => [this.fullfacetParams$, this.currentUser$]),
+      // only the latest query may update the counts, so cancel the older ones
       switchMap(([, params, user]) => {
         const { fields, facets } = params;
 
