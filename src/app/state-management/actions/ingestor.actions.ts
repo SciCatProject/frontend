@@ -8,6 +8,7 @@ import {
   GetBrowseDatasetResponse,
   GetExtractorResponse,
   GetTransferResponse,
+  OtherConfigurationsResponse,
   OtherHealthResponse,
   OtherVersionResponse,
   PostDatasetRequest,
@@ -36,6 +37,7 @@ export const connectIngestorSuccess = createAction(
     userInfoResponse: UserInfo;
     authIsDisabled: boolean;
     healthResponse: OtherHealthResponse;
+    configurations: OtherConfigurationsResponse;
   }>(),
 );
 

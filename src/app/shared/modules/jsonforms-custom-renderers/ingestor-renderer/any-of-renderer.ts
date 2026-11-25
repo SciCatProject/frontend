@@ -42,7 +42,7 @@ export class AnyOfRendererComponent extends JsonFormsControl {
 
   public mapAdditionalProps(props: ControlProps) {
     this.passedProps = props;
-    this.anyOfTitle = props.label || "AnyOf";
+    this.anyOfTitle = props.label;
     this.options = props.schema.anyOf.map(
       (option: any) => option.title || option.type || JSON.stringify(option),
     );
