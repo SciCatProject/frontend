@@ -49,4 +49,47 @@ describe("IngestorMetadataEditorComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  describe("updateVisualData with nullable objects", () => {
+    beforeEach(() => {
+      component.schema = {
+        type: "object",
+        properties: {
+          metadata: {
+            anyOf: [
+              {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  description: { type: "string" },
+                },
+              },
+              { type: "null" },
+            ],
+          },
+        },
+      };
+    });
+
+    it("should normalize an object containing only blank fields to null", () => {
+      component.data = { metadata: { name: "", description: "" } };
+
+      component.updateVisualData();
+
+      expect(component.visualData).toEqual({ metadata: null });
+      expect(component.data).toEqual({
+        metadata: { name: "", description: "" },
+      });
+    });
+
+    it("should preserve an object containing a populated field", () => {
+      component.data = { metadata: { name: "Test", description: "" } };
+
+      component.updateVisualData();
+
+      expect(component.visualData).toEqual({
+        metadata: { name: "Test", description: "" },
+      });
+    });
+  });
 });

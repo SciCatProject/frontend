@@ -47,10 +47,17 @@ export class AnyOfRendererComponent extends JsonFormsControl {
       (option: any) => option.title || option.type || JSON.stringify(option),
     );
 
-    if (this.options.includes("null") && !props.data) {
-      this.selectedTabIndex = this.options.indexOf("null");
-      this.notNullOptionSelected = false;
-    }
+    const isEmptyObject =
+      props.data !== null &&
+      typeof props.data === "object" &&
+      !Array.isArray(props.data) &&
+      isEmpty(props.data);
+
+    this.notNullOptionSelected =
+      !this.options.includes("null") ||
+      (props.data !== null &&
+        props.data !== undefined &&
+        (!isEmptyObject || this.notNullOptionSelected));
 
     this.filteredOptions = this.options.filter((option) => option !== "null");
     this.tabAmount = this.filteredOptions.length;
@@ -105,21 +112,9 @@ export class AnyOfRendererComponent extends JsonFormsControl {
 
   public onEnableCheckboxChange(event: MatCheckboxChange) {
     this.notNullOptionSelected = event.checked;
-
-    const updatedData =
-      this.rendererService.getState().jsonforms.core.data ?? {};
-
-    // Update the data in the correct path
-    const pathSegments = this.passedProps.path.split(".");
-    let current = updatedData ?? {};
-    for (let i = 0; i < pathSegments.length - 1; i++) {
-      current = current[pathSegments[i]];
-    }
-    current[pathSegments[pathSegments.length - 1]] = !this.notNullOptionSelected
-      ? null
-      : {};
-
-    this.rendererService.setData(updatedData);
+    this.onChange({
+      value: event.checked ? {} : null,
+    });
   }
 }
 
