@@ -7,6 +7,15 @@ import {
 } from "shared/MockStubs";
 
 describe("Ingestor Actions", () => {
+  describe("getConfigurationFailure", () => {
+    it("should create an action with error", () => {
+      const error = new Error("fetch failed");
+      const action = fromActions.getConfigurationFailure({ err: error });
+      expect(action.type).toBe("[Ingestor] Get Configuration Failure");
+      expect(action.err).toEqual(error);
+    });
+  });
+
   describe("setIngestorEndpoint", () => {
     it("should create an action with endpoint", () => {
       const action = fromActions.setIngestorEndpoint({

@@ -25,7 +25,12 @@
         }
       </mat-autocomplete>
       @if (shouldShowUnfocusedDescription() || focused) {
-        <mat-hint>{{ description }} </mat-hint>
+        <mat-icon
+          matSuffix
+          class="field-description-icon"
+          [matTooltip]="description"
+          matTooltipPosition="above"
+          >info_outline</mat-icon>
       }
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
