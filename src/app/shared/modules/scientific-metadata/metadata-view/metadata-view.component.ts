@@ -3,6 +3,7 @@ import {
   OnInit,
   Input,
   OnChanges,
+  OnDestroy,
   SimpleChange,
 } from "@angular/core";
 import {
@@ -12,8 +13,11 @@ import {
 import { UnitsService } from "shared/services/units.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import { Direction } from "@angular/cdk/bidi";
-import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
-import { BehaviorSubject } from "rxjs";
+import {
+  ITableSetting,
+  TableSettingEventType,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableSelectionMode } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { DatePipe } from "@angular/common";
@@ -30,6 +34,7 @@ import {
 import { ContextMenuItem } from "shared/modules/dynamic-material-table/models/context-menu.model";
 import { ScientificMetadataColumnsService } from "shared/services/scientific-metadata-columns.service";
 import { AppConfigService } from "app-config.service";
+import { TableConfigService } from "shared/services/table-config.service";
 
 @Component({
   selector: "metadata-view",
@@ -37,8 +42,11 @@ import { AppConfigService } from "app-config.service";
   styleUrls: ["./metadata-view.component.scss"],
   standalone: false,
 })
-export class MetadataViewComponent implements OnInit, OnChanges {
+export class MetadataViewComponent implements OnInit, OnChanges, OnDestroy {
+  private columnChangeSub?: Subscription;
   @Input() metadata: object = {};
+
+  @Input() tableId?: string;
 
   tableData: ScientificMetadataTableData[] = [];
 
@@ -84,11 +92,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
-    saveSettingMode: "none",
     settingList: [
       {
         visibleActionMenu: actionMenu,
-        saveSettingMode: "none",
         isDefaultSetting: true,
         isCurrentSetting: true,
         columnSetting: [
@@ -194,6 +200,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     private datePipe: DatePipe,
     private formatNumberPipe: FormatNumberPipe,
     private scientificMetadataColumnsService: ScientificMetadataColumnsService,
+    private tableConfigService: TableConfigService,
     public linkyPipe: LinkyPipe,
     public prettyUnit: PrettyUnitPipe,
   ) {
@@ -203,6 +210,26 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     this.rowContextMenuItems = this.canAddScientificMetadataKeysAsColumn
       ? [this.scientificMetadataColumnsService.addAsColumnAction]
       : [];
+  }
+
+  private resolveTableSetting(): ITableSetting {
+    return this.tableConfigService.getTableSettingsConfig(
+      this.storageKey,
+      this.tableDefaultSettingsConfig,
+      this.tableConfigService.preferSavedColumns(
+        this.storageKey,
+        this.tableDefaultSettingsConfig.settingList[0].columnSetting,
+      ),
+    );
+  }
+
+  private subscribeToColumnChanges(): void {
+    this.columnChangeSub?.unsubscribe();
+    this.columnChangeSub = this.tableConfigService
+      .watchColumnChanges(this.storageKey)
+      .subscribe(() => {
+        this.initTable(this.resolveTableSetting());
+      });
   }
 
   createMetadataArray(
@@ -279,10 +306,15 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       this.tableData = this.createMetadataArray(this.metadata);
       this.dataSource.next(this.tableData);
 
-      this.initTable(this.tableDefaultSettingsConfig);
+      this.initTable(this.resolveTableSetting());
+      this.subscribeToColumnChanges();
 
       this.pending = false;
     }
+  }
+
+  ngOnDestroy() {
+    this.columnChangeSub?.unsubscribe();
   }
 
   async onRowEvent({ event, sender }: IRowEvent<ScientificMetadataTableData>) {
@@ -308,12 +340,36 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     this.setting = settingConfig;
   }
 
+  private get storageKey(): string {
+    return this.tableId ? `${this.tableName}.${this.tableId}` : this.tableName;
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
+    ) {
+      this.tableConfigService.saveColumns(
+        this.storageKey,
+        event.setting.columnSetting,
+      );
+    }
+  }
+
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     for (const propName in changes) {
       if (propName === "metadata") {
         this.metadata = changes[propName].currentValue;
         this.tableData = this.createMetadataArray(this.metadata);
         this.dataSource.next(this.tableData);
+      }
+      if (propName === "tableId") {
+        this.tableId = changes[propName].currentValue;
+        this.initTable(this.resolveTableSetting());
+        this.subscribeToColumnChanges();
       }
     }
   }

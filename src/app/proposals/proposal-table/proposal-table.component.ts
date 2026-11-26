@@ -6,7 +6,13 @@ import {
   OnInit,
   EventEmitter,
 } from "@angular/core";
-import { BehaviorSubject, combineLatestWith, filter, Subscription } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatestWith,
+  filter,
+  Subscription,
+  distinctUntilChanged,
+} from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
@@ -29,6 +35,7 @@ import {
   selectDefaultProposalColumns,
   selectProposalsFacetCountsIsLoading,
 } from "state-management/selectors/proposals.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   OutputDatasetDto,
@@ -48,6 +55,12 @@ import { addProposalFilterAction } from "state-management/actions/proposals.acti
   standalone: false,
 })
 export class ProposalTableComponent implements OnInit, OnDestroy {
+  private lastData?: {
+    tablesSettings: any;
+    count: number;
+    isFacetCountsLoading: boolean;
+  };
+
   subscriptions: Subscription[] = [];
 
   proposalsWithCountAndTableSettings$ = this.store.select(
@@ -96,6 +109,10 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   tablesSettings: object;
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   datasets: OutputDatasetDto[] = [];
 
   @Input() sideFilterCollapsed = false;
@@ -117,7 +134,60 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
   ) {}
 
+  private initTableFromSettings(
+    tablesSettings: any,
+    count: number,
+    isFacetCountsLoading: boolean,
+  ): void {
+    const defaultConfigColumns =
+      this.appConfig?.defaultProposalsListSettings?.columns;
+
+    const userConfigColumns = this.tableConfigService.preferSavedColumns(
+      this.tableName,
+      tablesSettings?.columns as TableColumn[],
+      this.currentUserId,
+    );
+
+    const userTableConfigColumns = this.convertSavedColumns(
+      userConfigColumns as TableColumn[],
+    );
+
+    this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+      this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
+
+    const tableSort = this.getTableSort();
+    const paginationConfig = this.getTablePaginationConfig(
+      count,
+      isFacetCountsLoading,
+    );
+    const tableSettingsConfig = this.tableConfigService.getTableSettingsConfig(
+      this.tableName,
+      this.tableDefaultSettingsConfig,
+      userTableConfigColumns,
+      tableSort,
+    );
+
+    if (tableSettingsConfig?.settingList.length) {
+      this.initTable(tableSettingsConfig, paginationConfig);
+    }
+  }
+
   ngOnInit() {
+    this.subscriptions.push(
+      this.currentUser$
+        .pipe(distinctUntilChanged((a, b) => a?.id === b?.id))
+        .subscribe((user) => {
+          this.currentUserId = user?.id;
+          if (this.lastData) {
+            this.initTableFromSettings(
+              this.lastData.tablesSettings,
+              this.lastData.count,
+              this.lastData.isFacetCountsLoading,
+            );
+          }
+        }),
+    );
+
     this.subscriptions.push(
       this.proposalsWithCountAndTableSettings$
         .pipe(
@@ -129,38 +199,31 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
             { proposals, count, tablesSettings },
             isFacetCountsLoading,
           ]) => {
+            this.lastData = { tablesSettings, count, isFacetCountsLoading };
             this.dataSource.next(proposals);
             this.pending = false;
 
-            const defaultConfigColumns =
-              this.appConfig?.defaultProposalsListSettings?.columns;
-
-            const userConfigColumns = tablesSettings?.columns || [];
-
-            const userTableConfigColumns =
-              this.convertSavedColumns(userConfigColumns);
-
-            this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-              this.convertSavedColumns(defaultConfigColumns as TableColumn[]);
-
-            const tableSort = this.getTableSort();
-            const paginationConfig = this.getTablePaginationConfig(
+            this.initTableFromSettings(
+              tablesSettings,
               count,
               isFacetCountsLoading,
             );
-            const tableSettingsConfig =
-              this.tableConfigService.getTableSettingsConfig(
-                this.tableName,
-                this.tableDefaultSettingsConfig,
-                userTableConfigColumns,
-                tableSort,
-              );
-
-            if (tableSettingsConfig?.settingList.length) {
-              this.initTable(tableSettingsConfig, paginationConfig);
-            }
           },
         ),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
+        .subscribe(() => {
+          if (this.lastData) {
+            this.initTableFromSettings(
+              this.lastData.tablesSettings,
+              this.lastData.count,
+              this.lastData.isFacetCountsLoading,
+            );
+          }
+        }),
     );
 
     this.subscriptions.push(
@@ -237,6 +300,9 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         type: column.type,
         format: column.format,
         tooltip: column.tooltip,
+        sort: column.sort,
+        printable: column.printable,
+        sticky: column.sticky,
       };
       if (column.type === "hoverContent") {
         convertedColumn.hoverContent = true;
@@ -248,18 +314,11 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
-    const columnsSetting = setting.columnSetting.map((column) => {
-      const { name, display, index, width, type, format } = column;
-
-      return {
-        name,
-        enabled: !!(display === "visible"),
-        order: index,
-        width,
-        type,
-        format,
-      };
-    });
+    const columnsSetting = this.tableConfigService.saveColumns(
+      this.tableName,
+      setting.columnSetting,
+      this.currentUserId,
+    );
 
     this.store.dispatch(
       updateUserSettingsAction({
@@ -277,8 +336,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     setting: ITableSetting;
   }) {
     if (
-      event.type === TableSettingEventType.save ||
-      event.type === TableSettingEventType.create ||
+      event.type === TableSettingEventType.apply ||
       event.type === TableSettingEventType.reset
     ) {
       this.saveTableSettings(event.setting);

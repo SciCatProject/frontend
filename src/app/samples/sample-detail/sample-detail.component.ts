@@ -9,6 +9,7 @@ import {
 } from "rxjs";
 import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";
 import { Store } from "@ngrx/store";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   fetchSampleAction,
   fetchSampleDatasetsAction,
@@ -33,7 +34,10 @@ import {
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
-import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  ITableSetting,
+  TableSettingEventType,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
   TablePagination,
   TablePaginationMode,
@@ -69,6 +73,10 @@ export class SampleDetailComponent
 
   columns: TableField<any>[];
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
+  currentUserId?: string;
+
   setting: ITableSetting = {};
 
   appConfig = this.appConfigService.getConfig();
@@ -82,11 +90,9 @@ export class SampleDetailComponent
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
-    saveSettingMode: "none",
     settingList: [
       {
         visibleActionMenu: actionMenu,
-        saveSettingMode: "none",
         isDefaultSetting: true,
         isCurrentSetting: true,
         columnSetting: [],
@@ -171,6 +177,22 @@ export class SampleDetailComponent
     );
   }
 
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.apply ||
+      event.type === TableSettingEventType.reset
+    ) {
+      this.tableConfigService.saveColumns(
+        this.tableName,
+        event.setting.columnSetting,
+        this.currentUserId,
+      );
+    }
+  }
+
   onPaginationChange({ pageIndex, pageSize }: TablePagination) {
     this.store.dispatch(
       changeDatasetsPageAction({
@@ -191,6 +213,10 @@ export class SampleDetailComponent
   }
 
   ngOnInit() {
+    this.subscriptions.push(
+      this.currentUser$.subscribe((user) => (this.currentUserId = user?.id)),
+    );
+
     this.subscriptions.push(
       combineLatest([
         this.vm$,
@@ -227,7 +253,11 @@ export class SampleDetailComponent
           this.tableConfigService.getTableSettingsConfig(
             this.tableName,
             this.tableDefaultSettingsConfig,
-            userTableConfigColumns,
+            this.tableConfigService.preferSavedColumns(
+              this.tableName,
+              userTableConfigColumns,
+              this.currentUserId,
+            ),
           );
 
         const paginationConfig = {
@@ -248,6 +278,30 @@ export class SampleDetailComponent
           length: vm.datasetsCount || 0,
         };
       }),
+    );
+
+    this.subscriptions.push(
+      this.tableConfigService
+        .watchColumnChanges(this.tableName, () => this.currentUserId)
+        .subscribe(() => {
+          const savedColumns = this.tableConfigService.preferSavedColumns(
+            this.tableName,
+            [] as TableColumn[],
+            this.currentUserId,
+          );
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              this.tableDefaultSettingsConfig,
+              this.datasetsListService.convertSavedDatasetColumns(
+                savedColumns as TableColumn[],
+              ),
+            );
+
+          if (tableSettingsConfig?.settingList.length) {
+            this.initTable(tableSettingsConfig, this.pagination);
+          }
+        }),
     );
     // Prevent user from reloading page if there are unsave changes
     this.subscriptions.push(

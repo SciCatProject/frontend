@@ -37,6 +37,7 @@
     mat-menu-item
     type="button"
     color="primary"
+    #columnMenuTrigger="matMenuTrigger"
     [matMenuTriggerFor]="columnMenu"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
@@ -44,116 +45,15 @@
     <span>Column setting</span>
   </button>
 
-  @if (currentTableSetting?.saveSettingMode === "simple") {
-    <button
-      mat-menu-item
-      type="button"
-      (click)="saveSimpleSetting_onClick($event, null); menuTrigger.closeMenu()"
-      [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-    >
-      <mat-icon>grading</mat-icon>
-      <span>Save table setting</span>
-    </button>
-  }
-  @if (currentTableSetting?.saveSettingMode === "simple") {
-    <button
-      mat-menu-item
-      type="button"
-      (click)="resetDefaultSimple_onClick($event)"
-      [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-    >
-      <mat-icon>settings_backup_restore</mat-icon>
-      Default setting
-    </button>
-  }
-  @if (currentTableSetting?.saveSettingMode === "multi") {
-    <button
-      mat-menu-item
-      [matMenuTriggerFor]="saveTableSetting"
-      [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-    >
-      <mat-icon>grading</mat-icon>
-      <span>Save table setting</span>
-    </button>
-  }
-</mat-menu>
-
-<!-- Save Table Config Menu -->
-
-<mat-menu #saveTableSetting="matMenu">
-  @if (showNewSetting === false) {
-    <button
-      mat-menu-item
-      type="button"
-      (click)="newSetting_onClick($event)"
-      [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-    >
-      <mat-icon>tune</mat-icon>
-      <span>New setting</span>
-    </button>
-  }
-  @if (showNewSetting === true) {
-    <section class="new-setting" (click)="$event.stopPropagation()">
-      <div class="input-container">
-        <input
-          matInput
-          type="text"
-          #newSetting
-          placeholder="New setting"
-          [(ngModel)]="newSettingName"
-          (keydown.enter)="applySaveSetting_onClick($event)"
-        />
-      </div>
-      <div class="save-table-setting">
-        <mat-icon (click)="cancelSaveSetting_onClick($event)">close</mat-icon>
-        <mat-icon (click)="applySaveSetting_onClick($event)">done</mat-icon>
-      </div>
-    </section>
-  }
-  <mat-divider></mat-divider>
-
   <button
     mat-menu-item
     type="button"
-    (click)="resetDefault_onClick($event)"
+    (click)="resetDefaultSimple_onClick($event)"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
     <mat-icon>settings_backup_restore</mat-icon>
     Default setting
   </button>
-
-  @for (setting of tableSetting?.settingList; track setting) {
-    <section
-      class="setting-item"
-      [class.setting-item-active]="setting?.isCurrentSetting === true"
-      [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-    >
-      <button
-        mat-icon-button
-        type="button"
-        (click)="default_onClick($event, setting)"
-      >
-        <mat-icon style="color: #dcc48f"
-          >{{ setting?.isDefaultSetting === true ? "star" : "star_outline" }}
-        </mat-icon>
-      </button>
-      <span (click)="selectSetting_onClick($event, setting)">{{
-        setting.settingName
-      }}</span>
-      <mat-icon (click)="saveSetting_onClick($event, setting)">save</mat-icon>
-      <mat-icon
-        style="color: #ff4081"
-        (click)="deleteSetting_onClick($event, setting)"
-        >delete</mat-icon
-      >
-    </section>
-  }
-  @if (tableSetting?.settingList?.length === 0) {
-    <section mat-menu-item (click)="$event.stopPropagation()">
-      <mat-icon style="color: #dcc48f">lightbulb</mat-icon>
-      No setting
-    </section>
-  }
 </mat-menu>
 
 <!-- Convert Sub Menu -->
@@ -193,7 +93,7 @@
 
 <!-- Column Setting Sub Menu -->
 
-<mat-menu #columnMenu="matMenu">
+<mat-menu #columnMenu="matMenu" (menuOpened)="onColumnMenuOpened()">
   @if (currentTableSetting?.columnSetting?.length > 0) {
     <div
       class="va-mat-table-dragable-container"
@@ -248,26 +148,6 @@
         </div>
       }
     </div>
-    <div class="column-config-apply">
-      <button
-        mat-menu-item
-        type="button"
-        color="primary"
-        class="done-setting"
-        (click)="apply_onClick($event)"
-      >
-        <mat-icon color="primary">done</mat-icon>
-      </button>
-      <button
-        mat-menu-item
-        type="button"
-        color="primary"
-        class="done-setting"
-        (click)="cancel_onClick()"
-      >
-        <mat-icon color="primary">clear</mat-icon>
-      </button>
-    </div>
   } @else {
     <div mat-menu-item>No column</div>
   }
@@ -292,6 +172,7 @@
         <mat-radio-group
           class="radio"
           [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter"
+          (ngModelChange)="onColumnSettingChange()"
         >
           <mat-radio-button
             value="client-side"
@@ -314,6 +195,7 @@
         <mat-radio-group
           class="radio"
           [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort"
+          (ngModelChange)="onColumnSettingChange()"
         >
           <mat-radio-button
             value="client-side"
@@ -338,6 +220,7 @@
           [(ngModel)]="
             currentTableSetting.columnSetting[currentColumn].printable
           "
+          (ngModelChange)="onColumnSettingChange()"
         >
           <mat-radio-button [value]="true" (click)="$event.stopPropagation()"
             >Print yes mode
@@ -356,6 +239,7 @@
         <mat-radio-group
           class="radio"
           [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky"
+          (ngModelChange)="onColumnSettingChange()"
         >
           <mat-radio-button value="none" (click)="$event.stopPropagation()"
             >Pin none mode
