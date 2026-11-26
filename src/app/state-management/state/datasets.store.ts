@@ -13,6 +13,7 @@ import {
   ProposalClass,
   OutputSampleDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 
 export interface Pagination {
   skip: number;
@@ -76,6 +77,7 @@ export interface DatasetState {
   openwhiskResult: Record<string, unknown> | undefined;
 
   origDatablocksCount?: number;
+  datafilesColumns?: TableField<any>[];
 }
 
 export const initialDatasetState: DatasetState = {
@@ -126,4 +128,21 @@ export const initialDatasetState: DatasetState = {
   openwhiskResult: undefined,
 
   origDatablocksCount: 0,
+  datafilesColumns: [
+    {
+      name: "path",
+      header: "Path",
+    },
+    {
+      name: "size",
+      header: "Size",
+      pipe: "filesize",
+    },
+    {
+      name: "time",
+      header: "Time",
+      type: "date",
+      format: "yyyy-MM-dd HH:mm",
+    },
+  ],
 };

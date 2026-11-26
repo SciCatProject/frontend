@@ -1,4 +1,4 @@
-export interface DataFiles_File {
+export interface DataFile {
   path: string;
   size: number;
   time: string;
@@ -6,6 +6,7 @@ export interface DataFiles_File {
   uid?: string;
   gid?: string;
   perm?: string;
-  selected: boolean;
   hash?: string;
+  metadata?: string;
+  selected: boolean;
 }

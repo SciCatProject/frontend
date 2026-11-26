@@ -17,7 +17,8 @@ export const setTableColumnsAction = createAction(
   "[User] Set Table Columns",
   props<{
     columns: TableColumn[];
-    scope: "dataset" | "proposal" | "sample" | "instrument" | "file";
+    scope:
+      "dataset" | "proposal" | "sample" | "instrument" | "file" | "datafiles";
   }>(),
 );
 

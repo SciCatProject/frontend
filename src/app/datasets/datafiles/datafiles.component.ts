@@ -4,19 +4,18 @@ import {
   OnDestroy,
   OnInit,
   AfterViewChecked,
-  ViewChild,
-  ElementRef,
 } from "@angular/core";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, combineLatest, filter, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   selectCurrentOrigDatablocks,
   selectCurrentDataset,
   selectDatafilesPageViewModel,
+  selectDefaultDatafilesColumns,
 } from "state-management/selectors/datasets.selectors";
 import {
-  selectIsLoading,
-  selectIsLoggedIn,
+  selectHasFetchedSettings,
+  selectSettings,
 } from "state-management/selectors/user.selectors";
 import { CreateJobDtoV3 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
@@ -24,8 +23,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/public-download-dialog.component";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
-import { NgForm } from "@angular/forms";
-import { DataFiles_File } from "./datafiles.interfaces";
+import { DataFile } from "datasets/datafiles/datafiles.interfaces";
 import {
   ActionItemDataset,
   ActionItems,
@@ -40,9 +38,15 @@ import {
   RowEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  ITableSetting,
+  TableSettingEventType,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import { TableColumn } from "state-management/models";
+import { TableConfigService } from "shared/services/table-config.service";
 
 @Component({
   selector: "datafiles",
@@ -51,25 +55,19 @@ import { fetchOrigDatablocksAction } from "state-management/actions/datasets.act
   standalone: false,
 })
 export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
-  @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
-  @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
   vm$ = this.store.select(selectDatafilesPageViewModel);
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
   dataset$ = this.store.select(selectCurrentDataset);
-  loading$ = this.store.select(selectIsLoading);
-  isLoggedIn$ = this.store.select(selectIsLoggedIn);
-  downloadAllForm: NgForm;
-  downloadSelectedForm: NgForm;
 
   appConfig = this.appConfigService.getConfig();
 
+  pending = true;
   tooLargeFile = false;
   totalFileSize = 0;
   selectedFileSize = 0;
 
   subscriptions: Subscription[] = [];
-
-  files: Array<DataFiles_File> = [];
+  files: Array<DataFile> = [];
   datasetPid = "";
   actionItems: ActionItems = {
     datasets: [],
@@ -77,11 +75,9 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   count = 0;
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
-  multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   fileserverBaseURL: string | undefined = this.appConfig.fileserverBaseURL;
   fileserverButtonLabel: string =
     this.appConfig.fileserverButtonLabel || "Download";
-  multipleDownloadAction: string | null = this.appConfig.multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
   sourceFolder: string =
     this.appConfig.sourceFolder || "No source folder provided";
@@ -89,59 +85,22 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   maxFileSizeWarning: string | null =
     this.appConfig.maxFileSizeWarning ||
     `Some files are above the max size ${this.fileSizePipe.transform(this.maxFileSize)}`;
-  auth_token: string;
 
-  tableColumns: TableField<any>[] = [
-    {
-      name: "path",
-      header: "Path",
-    },
-    {
-      name: "size",
-      header: "Size",
-      customRender: (_column, row: DataFiles_File) =>
-        this.fileSizePipe.transform(row.size),
-    },
-    {
-      name: "time",
-      header: "Time",
-      type: "date",
-      format: this.appConfig.dateFormat || "yyyy-MM-dd HH:mm",
-    },
-  ];
+  tableName = "datafilesTable";
+  tableColumns: TableField<any>[] = [];
+  defaultStoreColumns$ = this.store.select(selectDefaultDatafilesColumns);
+  settings$ = this.store.select(selectSettings);
+  hasFetchedSettings$ = this.store.select(selectHasFetchedSettings);
+  tableSettingsConfig: ITableSetting = {};
 
-  setting: ITableSetting = {};
-
-  tableDefaultSettingsConfig: ITableSetting = {
-    visibleActionMenu: actionMenu,
-    saveSettingMode: "none",
-    settingList: [
-      {
-        visibleActionMenu: actionMenu,
-        saveSettingMode: "none",
-        isDefaultSetting: true,
-        isCurrentSetting: true,
-        columnSetting: [],
-      },
-    ],
-    rowStyle: {
-      "border-bottom": "1px solid #d2d2d2",
-    },
-  };
-
-  dataSource: BehaviorSubject<DataFiles_File[]> = new BehaviorSubject<
-    DataFiles_File[]
-  >([]);
-
+  dataSource: BehaviorSubject<DataFile[]> = new BehaviorSubject<DataFile[]>([]);
   paginationMode: TablePaginationMode = "server-side";
-
   pagination: TablePagination = {
     pageSizeOptions: [5, 10, 25, 50, 100],
     pageIndex: 0,
     pageSize: 25,
     length: 0,
   };
-
   rowSelectionMode: TableSelectionMode = this.fileDownloadEnabled
     ? "multi"
     : "none";
@@ -152,6 +111,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private fileSizePipe: FileSizePipe,
+    private tableConfigService: TableConfigService,
   ) {}
 
   getAllFiles() {
@@ -162,7 +122,7 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
     return this.files.filter((file) => file.selected).map((file) => file.path);
   }
 
-  onRowEvent({ event, sender }: IRowEvent<DataFiles_File>) {
+  onRowEvent({ event, sender }: IRowEvent<DataFile>) {
     if (event === RowEventType.RowSelectionChange && sender.row) {
       sender.row.selected = sender.checked;
     }
@@ -221,8 +181,76 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
 
     return warning;
   }
+
+  convertSavedColumns(columns: TableColumn[]): TableField<any>[] {
+    return columns.map((column) => ({
+      ...column,
+      name: column.name.replace(/^dataFileList\./, ""),
+      index: column.order,
+      display: column.enabled ? "visible" : "hidden",
+    }));
+  }
+
+  // Built fresh on every emission: TableConfigService pushes the saved
+  // setting into settingList, so reusing one object would keep stale columns.
+  getDefaultTableSettingsConfig(
+    defaultColumns: TableField<any>[],
+  ): ITableSetting {
+    return {
+      visibleActionMenu: actionMenu,
+      settingList: [
+        {
+          visibleActionMenu: actionMenu,
+          isDefaultSetting: true,
+          isCurrentSetting: true,
+          columnSetting: defaultColumns,
+        },
+      ],
+      rowStyle: {
+        "border-bottom": "1px solid #d2d2d2",
+      },
+    };
+  }
+
+  initTable(settingConfig: ITableSetting): void {
+    this.tableColumns = settingConfig.settingList.find(
+      (s) => s.isCurrentSetting,
+    )?.columnSetting;
+    this.tableSettingsConfig = settingConfig;
+  }
+
   ngOnInit() {
-    this.setting = this.tableDefaultSettingsConfig;
+    this.subscriptions.push(
+      combineLatest([
+        this.settings$,
+        this.defaultStoreColumns$,
+        this.hasFetchedSettings$,
+      ])
+        .pipe(filter(([, , hasFetchedSettings]) => hasFetchedSettings))
+        .subscribe(([settings, defaultStoreColumns]) => {
+          const defaultConfigColumns =
+            this.appConfig.defaultDatafilesListSettings?.columns;
+          const defaultColumns = defaultConfigColumns?.length
+            ? this.convertSavedColumns(defaultConfigColumns)
+            : defaultStoreColumns;
+
+          const userColumns = this.convertSavedColumns(
+            settings.fe_datafiles_table_columns || [],
+          );
+
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              this.getDefaultTableSettingsConfig(defaultColumns),
+              userColumns,
+            );
+
+          if (tableSettingsConfig?.settingList.length) {
+            this.initTable(tableSettingsConfig);
+          }
+        }),
+    );
+
     this.subscriptions.push(
       this.vm$.subscribe(({ datablocks, totalCount, dataset, isLoading }) => {
         if (dataset) {
@@ -231,14 +259,15 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
         }
         if (datablocks) {
           this.totalFileSize = 0;
-          const files: DataFiles_File[] = [];
+          const files: DataFile[] = [];
           datablocks.forEach((block) => {
             if (block.dataFileList && !Array.isArray(block.dataFileList)) {
-              const file = block.dataFileList as DataFiles_File;
+              const file = block.dataFileList as DataFile;
               this.totalFileSize += file.size || 0;
               files.push(file);
             }
           });
+          this.pending = false;
           this.count = files.length;
           this.files = files;
 
@@ -304,5 +333,59 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
       "&origin_path=" +
       encodeURIComponent(this.sourceFolder)
     );
+  }
+
+  saveTableSettings(setting: ITableSetting) {
+    this.pending = true;
+    const columnsSetting = setting.columnSetting.map((column) => {
+      const {
+        name,
+        display,
+        index,
+        width,
+        type,
+        format,
+        header,
+        pipe,
+        pipeArgs,
+        emptyValue,
+      } = column;
+
+      return {
+        name,
+        enabled: !!(display === "visible"),
+        order: index,
+        width,
+        type,
+        format,
+        header,
+        pipe,
+        pipeArgs,
+        emptyValue,
+      };
+    });
+
+    this.store.dispatch(
+      updateUserSettingsAction({
+        property: {
+          fe_datafiles_table_columns: columnsSetting,
+        },
+      }),
+    );
+
+    this.pending = false;
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.save ||
+      event.type === TableSettingEventType.create ||
+      event.type === TableSettingEventType.reset
+    ) {
+      this.saveTableSettings(event.setting);
+    }
   }
 }

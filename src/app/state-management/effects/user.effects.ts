@@ -375,6 +375,12 @@ export class UserEffects {
                         settingConfig.configKey
                       ] || initialUserState.settings[setting];
                     break;
+                  case "datafiles":
+                    items =
+                      config.defaultDatafilesListSettings?.[
+                        settingConfig.configKey
+                      ] || initialUserState.settings[setting];
+                    break;
                   default:
                     items = initialUserState.settings[setting] || [];
                 }
@@ -639,6 +645,11 @@ export class UserEffects {
                   config.defaultProposalsListSettings?.columns ||
                   initialUserState.settings.fe_proposal_table_columns;
                 break;
+              case "datafiles":
+                columnsConfig =
+                  config.defaultDatafilesListSettings?.columns ||
+                  initialUserState.settings.fe_datafiles_table_columns;
+                break;
               default:
                 columnsConfig = initialUserState.settings[s.key];
                 break;
@@ -648,7 +659,12 @@ export class UserEffects {
               fromActions.setTableColumnsAction({
                 columns: columnsConfig,
                 scope: s.scope as
-                  "dataset" | "proposal" | "sample" | "instrument" | "file",
+                  | "dataset"
+                  | "proposal"
+                  | "sample"
+                  | "instrument"
+                  | "file"
+                  | "datafiles",
               }),
             );
           },

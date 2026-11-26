@@ -14,6 +14,8 @@ import { DynamicMatTableComponent } from "./dynamic-mat-table.component";
 import { TableService } from "./dynamic-mat-table.service";
 import { TableField } from "../models/table-field.model";
 import { AppConfigService } from "app-config.service";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { TimeDurationPipe } from "shared/pipes/time-duration.pipe";
 
 describe("DynamicMatTableComponent", () => {
   let component: DynamicMatTableComponent<any>;
@@ -42,6 +44,8 @@ describe("DynamicMatTableComponent", () => {
       {} as OverlayPositionBuilder,
       {},
       new DatePipe("en-US"),
+      new FileSizePipe(),
+      new TimeDurationPipe(),
       {
         getConfig: () => ({}),
       } as AppConfigService,
