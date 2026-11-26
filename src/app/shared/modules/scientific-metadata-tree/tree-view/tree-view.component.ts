@@ -18,6 +18,9 @@ import {
 } from "shared/modules/scientific-metadata-tree/base-classes/tree-base";
 import { DatePipe } from "@angular/common";
 import { AppConfigService } from "app-config.service";
+import { Store } from "@ngrx/store";
+import { showMessageAction } from "state-management/actions/user.actions";
+import { Message, MessageType } from "state-management/models";
 import { ContextMenuItem } from "shared/modules/dynamic-material-table/models/context-menu.model";
 import { TableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { ScientificMetadataColumnsService } from "shared/services/scientific-metadata-columns.service";
@@ -35,20 +38,30 @@ export class TreeViewComponent
   @Input() allowAddAsColumn = false;
   @Input() metadataPath = DEFAULT_METADATA_PATH;
 
-  canAddScientificMetadataKeysAsColumn = false;
+  canAddAsColumn = false;
   rowContextMenuItems: ContextMenuItem[] = [];
   tableSetting = new TableSetting();
   constructor(
     public datePipe: DatePipe,
     configService: AppConfigService,
     private scientificMetadataColumnsService: ScientificMetadataColumnsService,
+    private store: Store,
   ) {
     super(configService);
-    this.canAddScientificMetadataKeysAsColumn =
-      configService.getConfig().addScientificMetadataKeysAsColumn === true;
-    this.rowContextMenuItems = this.canAddScientificMetadataKeysAsColumn
-      ? [this.scientificMetadataColumnsService.addAsColumnAction]
-      : [];
+    const contextMenuConfig =
+      configService.getConfig().scientificMetadataContextMenu ?? {};
+    this.canAddAsColumn =
+      contextMenuConfig.enabled === true &&
+      contextMenuConfig.addAsColumn === true;
+    this.rowContextMenuItems =
+      contextMenuConfig.enabled === true
+        ? this.scientificMetadataColumnsService.contextMenuActions.filter(
+            (action) =>
+              contextMenuConfig[
+                action.name as keyof typeof contextMenuConfig
+              ] === true,
+          )
+        : [];
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,
       this.getLevel,
@@ -73,6 +86,57 @@ export class TreeViewComponent
     return path.startsWith(metadataPathPrefix)
       ? path.slice(metadataPathPrefix.length)
       : path;
+  }
+
+  private getCopyValue(node: FlatNode, actionName: string): string | undefined {
+    switch (actionName) {
+      case "copyName":
+        return String(node.human_name || node.key);
+      case "copyMachineName":
+        return String(node.key);
+      case "copyValue":
+        return this.serializeForClipboard(node.value);
+      case "copyFullValue":
+        return this.serializeForClipboard(
+          node.unit ? { value: node.value, unit: node.unit } : node.value,
+        );
+      case "copyFullEntry":
+        return this.serializeForClipboard(node.originalEntry);
+      default:
+        return undefined;
+    }
+  }
+
+  private serializeForClipboard(value: unknown): string {
+    return value !== null && typeof value === "object"
+      ? JSON.stringify(value)
+      : String(value);
+  }
+
+  private async copyToClipboard(value: string): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(value);
+      this.store.dispatch(
+        showMessageAction({
+          message: new Message(
+            "Selected metadata has been copied to your clipboard",
+            MessageType.Success,
+            5000,
+          ),
+        }),
+      );
+    } catch (error) {
+      this.store.dispatch(
+        showMessageAction({
+          message: new Message(
+            "Failed to copy selected metadata to clipboard",
+            MessageType.Error,
+            5000,
+          ),
+        }),
+      );
+      console.error("Could not copy metadata: ", error);
+    }
   }
 
   ngOnInit() {
@@ -115,15 +179,29 @@ export class TreeViewComponent
     flatNode.path = node.path;
     flatNode.columnName = node.columnName;
     flatNode.human_name = node.human_name;
+    flatNode.originalEntry = node.originalEntry;
     this.flatNodeMap.set(flatNode, node);
     this.nestNodeMap.set(node, flatNode);
     return flatNode;
   };
 
+  getActionsForNode(node: FlatNode): ContextMenuItem[] {
+    if (node.expandable || !node.columnName) {
+      return [];
+    }
+
+    return this.rowContextMenuItems.filter(
+      (action) =>
+        action.name !==
+          this.scientificMetadataColumnsService.addAsColumnAction.name ||
+        this.allowAddAsColumn,
+    );
+  }
+
   canShowAddAsColumn(node: FlatNode): boolean {
     return (
       this.allowAddAsColumn &&
-      this.rowContextMenuItems.length > 0 &&
+      this.canAddAsColumn &&
       !node.expandable &&
       !!node.columnName
     );
@@ -134,13 +212,17 @@ export class TreeViewComponent
     action: ContextMenuItem,
   ): Promise<void> {
     if (
-      action.name !==
+      action.name ===
       this.scientificMetadataColumnsService.addAsColumnAction.name
     ) {
+      await this.addAsColumn(node);
       return;
     }
 
-    await this.addAsColumn(node);
+    const value = this.getCopyValue(node, action.name);
+    if (value !== undefined) {
+      await this.copyToClipboard(value);
+    }
   }
 
   async addAsColumn(node: FlatNode): Promise<void> {
