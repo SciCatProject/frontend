@@ -2,6 +2,10 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class AttachmentService {
+  private readonly pdfIcon = "assets/images/pdf-icon.svg";
+  private readonly txtIcon = "assets/images/txt-icon.svg";
+  private readonly pythonIcon = "assets/images/python-icon.svg";
+  private readonly unknownFileIcon = "assets/images/unknown-file-icon.svg";
   base64MimeType(encoded: string): string {
     if (!encoded) {
       return null;
@@ -28,10 +32,26 @@ export class AttachmentService {
     }
 
     const mimeType = this.base64MimeType(encoded);
-    if (mimeType === "application/pdf") {
-      return "assets/images/pdf-icon.svg";
+
+    if (mimeType?.startsWith("image/")) {
+      return encoded;
     }
-    return encoded;
+
+    switch (mimeType) {
+      case "application/pdf":
+        return this.pdfIcon;
+      case "text/plain":
+        return this.txtIcon;
+      case "text/x-python":
+      case "application/x-python":
+        return this.pythonIcon;
+      default:
+        return this.unknownFileIcon;
+    }
+  }
+
+  getUnknownFileIcon(): string {
+    return this.unknownFileIcon;
   }
 
   openAttachment(encoded: string) {
