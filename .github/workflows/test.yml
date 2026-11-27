@@ -106,6 +106,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      ## Pinned to Chrome 154 (runner image 20261012 moved to 155 when E2E started failing, see #2645)
+      - name: Set up Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
+        with:
+          chrome-version: 154
+          install-dependencies: true
+
       - name: Run docker-compose
         env:
           DOI_USERNAME: ${{ secrets.DOI_TEST_USERNAME }}
@@ -131,7 +139,7 @@ jobs:
         uses: cypress-io/github-action@v7
         with:
           config-file: cypress.config.ts
-          browser: chrome
+          browser: ${{ steps.setup-chrome.outputs.chrome-path }}
           install-command: npm install --omit peer
 
       - name: docker logs

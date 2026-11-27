@@ -11,6 +11,8 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
+import { MatTooltip, MatTooltipModule } from "@angular/material/tooltip";
+import { By } from "@angular/platform-browser";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { DatePipe } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -30,9 +32,8 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-//import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AppConfigService } from "app-config.service";
-//import { boolean } from "mathjs";
 import {
   higherMaxFileSizeLimit,
   lowerMaxFileSizeLimit,
@@ -66,8 +67,8 @@ import { buildDefaultBatchActions } from "./configurable-actions.defaults";
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
   let fixture: ComponentFixture<ConfigurableActionComponent>;
-  let htmlForm: HTMLFormElement;
   let htmlInput: HTMLInputElement;
+  let createNativeElement: (tagName: string) => HTMLElement;
 
   let store: MockStore;
 
@@ -96,8 +97,7 @@ describe("1000: ConfigurableActionComponent", () => {
   // });
 
   beforeAll(() => {
-    htmlForm = document.createElement("form");
-    (htmlForm as HTMLFormElement).submit = () => {};
+    createNativeElement = document.createElement.bind(document);
     htmlInput = document.createElement("input");
   });
 
@@ -110,10 +110,12 @@ describe("1000: ConfigurableActionComponent", () => {
         MatButtonModule,
         MatIconModule,
         MatTableModule,
+        MatTooltipModule,
         PipesModule,
         ReactiveFormsModule,
         MatDialogModule,
         MatSnackBarModule,
+        MatProgressSpinnerModule,
         RouterModule,
         RouterModule.forRoot([]),
         StoreModule.forRoot({}),
@@ -146,6 +148,8 @@ describe("1000: ConfigurableActionComponent", () => {
     TestBed.compileComponents();
 
     store = TestBed.inject(MockStore);
+    store.overrideSelector(selectProfile, {});
+    store.overrideSelector(selectIsAdmin, false);
   }));
 
   // Narrow, structural views onto private members, used only to spy on/stub
@@ -646,13 +650,14 @@ describe("1000: ConfigurableActionComponent", () => {
 
     switch (elementType) {
       case "form":
-        element = htmlForm.cloneNode(true) as HTMLElement;
+        element = createNativeElement("form");
+        (element as HTMLFormElement).submit = () => {};
         break;
       case "input":
         element = htmlInput.cloneNode(true) as HTMLElement;
         break;
       default:
-        element = null;
+        element = createNativeElement(elementType);
     }
     return element;
   }
@@ -817,6 +822,215 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(selectedFiles.length).toEqual(1);
     const selectedFilePath = selectedFiles[0].path;
     expect(formFilePath).toEqual(selectedFilePath);
+  });
+
+  it("1063: iframe should be visible by default when hidden is omitted", () => {
+    const baseConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      type: "form",
+      target: "iframe",
+    };
+
+    createComponent(
+      {
+        ...baseConfig,
+        id: "default-visible-form",
+        iframeConfig: { name: "default-visible-frame" },
+      } as ActionConfig,
+      mockActionItemsDatafilesNofiles,
+    );
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    component.performAction();
+
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.iframeLoading).toBeTrue();
+    expect(component.form.target).toBe("default-visible-frame");
+
+    createComponent(
+      { ...baseConfig, id: "no-iframe-config" } as ActionConfig,
+      mockActionItemsDatafilesNofiles,
+    );
+    component.performAction();
+
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.form.target).toBe("configurable-action-no-iframe-config");
+  });
+
+  it("1065: Form submission should target a configured iframe", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "download-frame",
+        hidden: false,
+        width: "50%",
+        height: "300px",
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.target).toBe("download-frame");
+    expect(component.form.parentNode).toBe(document.body);
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.iframeName).toBe("download-frame");
+    expect(component.iframeTitle).toBe("download-frame");
+    expect(component.iframeWidth).toBe("50%");
+    expect(component.iframeHeight).toBe("300px");
+    expect(component.iframeLoading).toBeTrue();
+    const iframe = fixture.nativeElement.querySelector(
+      'iframe[name="download-frame"]',
+    ) as HTMLIFrameElement;
+    expect(iframe).not.toBeNull();
+    expect(iframe.name).toBe("download-frame");
+    expect(iframe.contentWindow?.name).toBe("download-frame");
+
+    component.onIframeLoad();
+
+    expect(component.iframeLoading).toBeFalse();
+
+    const submitSpy = spyOn(component.form, "submit").and.callFake(function (
+      this: HTMLFormElement,
+    ) {
+      expect(this.target).toBe("_blank");
+    });
+
+    component.openIframeInNewTab();
+
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+    expect(component.form.target).toBe("download-frame");
+  });
+
+  it("1066: Hidden iframe form submission should still create a targetable iframe", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "hidden-iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "hidden-download-frame",
+        hidden: true,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.target).toBe("hidden-download-frame");
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeFalse();
+    expect(component.iframeLoading).toBeFalse();
+    expect(
+      fixture.nativeElement.querySelector(
+        'iframe[name="hidden-download-frame"]',
+      ),
+    ).not.toBeNull();
+  });
+
+  it("1069: Reused cross-origin iframe should not block form submission", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "cross-origin-iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "cross-origin-frame",
+        hidden: true,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    const submitSpy = jasmine.createSpy("submit");
+    spyOn(document, "createElement").and.callFake((type: string) => {
+      const element = createFakeElement(type);
+      if (type === "form") (element as HTMLFormElement).submit = submitSpy;
+      return element;
+    });
+    // Once the iframe has navigated to another origin, reading or writing
+    // `contentWindow.name` throws a SecurityError.
+    const crossOriginWindow = {};
+    Object.defineProperty(crossOriginWindow, "name", {
+      get: () => {
+        throw new DOMException("Blocked", "SecurityError");
+      },
+      set: () => {
+        throw new DOMException("Blocked", "SecurityError");
+      },
+    });
+    spyOnProperty(
+      HTMLIFrameElement.prototype,
+      "contentWindow",
+      "get",
+    ).and.returnValue(crossOriginWindow as Window);
+
+    expect(() => component.performAction()).not.toThrow();
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+    expect(component.form.target).toBe("cross-origin-frame");
+  });
+
+  it("1067: Repeated iframe form submissions should clean up the previous form", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "repeat-iframe-form",
+      type: "form",
+      target: "iframe",
+      iframeConfig: {
+        name: "repeat-download-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+    const firstForm = component.form;
+
+    expect(() => component.performAction()).not.toThrow();
+    expect(firstForm.parentNode).toBeNull();
+    expect(component.form.parentNode).toBe(document.body);
+    expect(component.form.target).toBe("repeat-download-frame");
+  });
+
+  it("1068: Form submission should interpolate configured URL", () => {
+    const iframeFormConfig: ActionConfig = {
+      ...mockActionsConfig.find(
+        (a) => a.id === actionSelectorType.download_all,
+      ),
+      id: "iframe-form-url",
+      type: "form",
+      url: "https://example.com/notebook/{{ @pid }}",
+      variables: {
+        pid: "#Dataset0Pid",
+      },
+      target: "iframe",
+      iframeConfig: {
+        name: "download-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeFormConfig, mockActionItems);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+
+    component.performAction();
+
+    expect(component.form.action).toBe(
+      "https://example.com/notebook/40f3beec-bee2-11f0-8c47-4b68a24470e0",
+    );
   });
 
   it("1070: Download All action button should contain the correct label", () => {
@@ -1022,6 +1236,71 @@ describe("1000: ConfigurableActionComponent", () => {
       current_action.url,
       current_action.target,
     );
+  });
+
+  it("1131: link action targeting an iframe should open the configured iframe instead of a new tab", () => {
+    const iframeLinkConfig: ActionConfig = {
+      ...mockActionsConfig.find((a) => a.id === actionSelectorType.link),
+      id: "iframe-link",
+      type: "link",
+      target: "iframe",
+      iframeConfig: {
+        name: "link-preview-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeLinkConfig, mockActionItemsDatafilesNofiles);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    spyOn(window, "open");
+
+    component.performAction();
+
+    expect(component.iframeEnabled).toBeTrue();
+    expect(component.iframeVisible).toBeTrue();
+    expect(component.iframeName).toBe("link-preview-frame");
+    expect(component.iframeLoading).toBeTrue();
+    expect(window.open).toHaveBeenCalledWith(
+      iframeLinkConfig.url,
+      "link-preview-frame",
+    );
+    const iframe = fixture.nativeElement.querySelector(
+      'iframe[name="link-preview-frame"]',
+    ) as HTMLIFrameElement;
+    expect(iframe).not.toBeNull();
+    expect(iframe.contentWindow?.name).toBe("link-preview-frame");
+
+    component.onIframeLoad();
+
+    expect(component.iframeLoading).toBeFalse();
+  });
+
+  it("1132: open in new tab should reuse the link URL opened in the iframe", () => {
+    const iframeLinkConfig: ActionConfig = {
+      ...mockActionsConfig.find((a) => a.id === actionSelectorType.link),
+      id: "iframe-link-uuid",
+      type: "link",
+      target: "iframe",
+      url: "https://example.com/session/{{ #uuid }}",
+      iframeConfig: {
+        name: "link-uuid-frame",
+        hidden: false,
+      },
+    } as ActionConfig;
+    createComponent(iframeLinkConfig, mockActionItemsDatafilesNofiles);
+    const openSpy = spyOn(window, "open");
+
+    component.performAction();
+    component.openIframeInNewTab();
+
+    expect(openSpy).toHaveBeenCalledTimes(2);
+    const [iframeUrl, iframeTarget] = openSpy.calls.argsFor(0);
+    const [newTabUrl, newTabTarget] = openSpy.calls.argsFor(1);
+    expect(iframeTarget).toBe("link-uuid-frame");
+    expect(newTabTarget).toBe("_blank");
+    expect(iframeUrl).toMatch(
+      /^https:\/\/example\.com\/session\/[0-9a-f-]{36}$/,
+    );
+    expect(newTabUrl).toBe(iframeUrl);
   });
 
   it("1140: should build dependency graph", () => {
@@ -1918,6 +2197,52 @@ describe("1000: ConfigurableActionComponent", () => {
     expect(storeDispatchSpy).toHaveBeenCalledWith(actionSuccessAction());
   });
 
+  describe("1420: addedFrom in the cart", () => {
+    const [archiveAction] = buildDefaultBatchActions([]);
+
+    // no currentArchViewMode key: the cart (batch-view) context
+    const cartWith = (...origins: (string | undefined)[]): ActionItems => ({
+      datasets: origins.map(
+        (addedFrom, i) =>
+          ({
+            pid: `pid-${i}`,
+            size: 100,
+            packedSize: 100,
+            addedFrom,
+          }) as ActionItemDataset,
+      ),
+    });
+
+    it("1420: the default Archive action should ignore addedFrom", () => {
+      createComponent(archiveAction, cartWith("all", "details", undefined));
+      expect(component.disabled).toBeFalse();
+    });
+
+    it("1421: a custom action can require every dataset to come from a view", () => {
+      const strictArchive: ActionConfig = {
+        ...archiveAction,
+        variables: {
+          ...archiveAction.variables,
+          addedFrom: "#DatasetsField[addedFrom]",
+        },
+        enabled:
+          "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))",
+      };
+
+      createComponent(strictArchive, cartWith("archivable", "archivable"));
+      expect(component.disabled).toBeFalse();
+
+      createComponent(strictArchive, cartWith("archivable", "details"));
+      expect(component.disabled).toBeTrue();
+
+      createComponent(strictArchive, {
+        ...cartWith(undefined),
+        currentArchViewMode: "archivable",
+      });
+      expect(component.disabled).toBeFalse();
+    });
+  });
+
   describe("1400: default batch actions (Archive/Retrieve) visibility", () => {
     const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
 
@@ -1983,6 +2308,179 @@ describe("1000: ConfigurableActionComponent", () => {
       expect(body.jobParams.option).toBe("second");
       expect(body.jobParams.retrieveDestination).toBeUndefined();
       expect(body.type).toBe("retrieve");
+    });
+  });
+
+  describe("1410: default batch actions (Archive/Retrieve) disabled tooltips", () => {
+    const [archiveAction, retrieveAction] = buildDefaultBatchActions([]);
+
+    const itemsWithSizes = (size: number, packedSize: number): ActionItems => ({
+      datasets: [{ pid: "pid-0", size, packedSize } as ActionItemDataset],
+    });
+
+    it("1410: should ask to select datasets when nothing is selected", () => {
+      createComponent(archiveAction, { datasets: [] });
+      expect(component.tooltip).toEqual(
+        "Select one or more datasets to archive.",
+      );
+
+      createComponent(retrieveAction, { datasets: [] });
+      expect(component.tooltip).toEqual(
+        "Select one or more datasets to retrieve.",
+      );
+    });
+
+    it("1411: should explain an empty selection total", () => {
+      createComponent(archiveAction, itemsWithSizes(0, 0));
+      expect(component.tooltip).toEqual(
+        "The selected datasets have a total size of 0 bytes, so there is nothing to archive.",
+      );
+
+      createComponent(retrieveAction, itemsWithSizes(0, 0));
+      expect(component.tooltip).toEqual(
+        "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve.",
+      );
+    });
+
+    it("1412: should show no tooltip while enabled", () => {
+      createComponent(archiveAction, itemsWithSizes(100, 100));
+      expect(component.tooltip).toEqual("");
+
+      createComponent(retrieveAction, itemsWithSizes(100, 100));
+      expect(component.tooltip).toEqual("");
+    });
+  });
+
+  describe("1500: enabled conditions", () => {
+    const baseAction: ActionConfig = {
+      ...mockActionsConfig[0],
+      id: "enabled-conditions-test",
+      variables: { pids: "#DatasetsPid" },
+    };
+
+    it("1500: should be disabled by the first failing condition, with its tooltip", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [
+              { condition: "#Length(@pids) > 0", disabledTooltip: "never" },
+              { condition: "false", disabledTooltip: "first failing" },
+              { condition: "false", disabledTooltip: "second failing" },
+            ],
+            enabledTooltip: "unused",
+          },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeTrue();
+      expect(component.tooltip).toEqual("first failing");
+    });
+
+    it("1501: should be enabled with the enabledTooltip when all conditions hold", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [
+              { condition: "#Length(@pids) > 0", disabledTooltip: "unused" },
+              { condition: "true" },
+            ],
+            enabledTooltip: "May fail",
+          },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("May fail");
+
+      createComponent(
+        {
+          ...baseAction,
+          enabled: { conditions: [], enabledTooltip: "Always" },
+        },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("Always");
+    });
+
+    it("1502: should have no tooltip when none is configured", () => {
+      createComponent(
+        { ...baseAction, enabled: { conditions: [{ condition: "false" }] } },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeTrue();
+      expect(component.tooltip).toEqual("");
+
+      createComponent(
+        { ...baseAction, enabled: { conditions: [{ condition: "true" }] } },
+        mockActionItems,
+      );
+      expect(component.disabled).toBeFalse();
+      expect(component.tooltip).toEqual("");
+
+      createComponent({ ...baseAction, enabled: "false" }, mockActionItems);
+      expect(component.tooltip).toEqual("");
+    });
+
+    it("1503: should put the tooltip of a disabled action on a focusable wrapper", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: {
+            conditions: [{ condition: "false", disabledTooltip: "Because" }],
+          },
+        },
+        mockActionItems,
+      );
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const wrapperTooltip = wrapper.injector.get(MatTooltip);
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(wrapperTooltip.message).toEqual("Because");
+      expect(wrapperTooltip.disabled).toBeFalse();
+      expect(buttonTooltip.disabled).toBeTrue();
+      // focusable, so keyboard users can reach the tooltip
+      expect(wrapper.nativeElement.getAttribute("tabindex")).toEqual("0");
+      expect(wrapper.nativeElement.getAttribute("aria-label")).toEqual(
+        baseAction.label,
+      );
+    });
+
+    it("1504: should put the tooltip of an enabled action on the button", () => {
+      createComponent(
+        {
+          ...baseAction,
+          enabled: { conditions: [], enabledTooltip: "May fail" },
+        },
+        mockActionItems,
+      );
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(buttonTooltip.message).toEqual("May fail");
+      expect(buttonTooltip.disabled).toBeFalse();
+      expect(wrapper.injector.get(MatTooltip).disabled).toBeTrue();
+      expect(wrapper.nativeElement.hasAttribute("tabindex")).toBeFalse();
+    });
+
+    it("1505: should not show a tooltip or take focus without one", () => {
+      createComponent({ ...baseAction, enabled: "true" }, mockActionItems);
+
+      const wrapper = fixture.debugElement.query(By.css(".action-wrapper"));
+      const buttonTooltip = wrapper
+        .query(By.css("button"))
+        .injector.get(MatTooltip);
+
+      expect(wrapper.injector.get(MatTooltip).disabled).toBeTrue();
+      expect(buttonTooltip.disabled).toBeTrue();
+      expect(wrapper.nativeElement.hasAttribute("tabindex")).toBeFalse();
+      expect(wrapper.nativeElement.hasAttribute("aria-label")).toBeFalse();
     });
   });
 });

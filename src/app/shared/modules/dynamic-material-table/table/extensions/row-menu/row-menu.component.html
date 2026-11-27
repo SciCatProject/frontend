@@ -16,22 +16,25 @@
   [dir]="tableSetting.direction === 'rtl' ? 'ltr' : 'rtl'"
 >
   <ng-template matMenuContent>
-    <button
-      mat-button
-      type="button"
-      [class.ltr-menu]="tableSetting.direction === 'rtl'"
-      [color]="menu.color"
-      class="button-menu"
-      *ngFor="let menu of visibleActionMenus"
-      [disabled]="menu.disabled"
-      (click)="menuButton_OnClick(menu)"
-    >
-      <mat-icon *ngIf="menu.icon">{{ menu.icon }}</mat-icon>
-      <span
-        [class.text-align-right]="tableSetting.direction === 'rtl'"
-        class="text-align-left"
-        >{{ menu.text }}</span
+    @for (menu of visibleActionMenus; track menu) {
+      <button
+        mat-button
+        type="button"
+        [class.ltr-menu]="tableSetting.direction === 'rtl'"
+        [color]="menu.color"
+        class="button-menu"
+        [disabled]="menu.disabled"
+        (click)="menuButton_OnClick(menu)"
       >
-    </button>
+        @if (menu.icon) {
+          <mat-icon>{{ menu.icon }}</mat-icon>
+        }
+        <span
+          [class.text-align-right]="tableSetting.direction === 'rtl'"
+          class="text-align-left"
+          >{{ menu.text }}</span
+        >
+      </button>
+    }
   </ng-template>
 </mat-menu>

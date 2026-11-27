@@ -2,9 +2,10 @@ import { Action, createReducer, on } from "@ngrx/store";
 import {
   initialDatasetState,
   DatasetState,
+  BATCH_ADDED_FROM_DETAILS,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
-import { ArchViewMode, ScientificCondition } from "state-management/models";
+import { ScientificCondition } from "state-management/models";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -15,6 +16,13 @@ const reducer = createReducer(
       datasets,
     }),
   ),
+  // the previous rows belong to another query, don't let them be selected
+  // or acted on
+  on(fromActions.fetchDatasetsFailedAction, (state): DatasetState => ({
+    ...state,
+    datasets: [],
+    selectedSets: [],
+  })),
 
   on(fromActions.fetchFacetCountsAction, (state): DatasetState => ({
     ...state,
@@ -31,8 +39,11 @@ const reducer = createReducer(
     }),
   ),
 
+  // the previous counts belong to another query, don't keep showing them;
+  // totalCount is kept, 0 would disable the paginator while rows are shown
   on(fromActions.fetchFacetCountsFailedAction, (state): DatasetState => ({
     ...state,
+    facetCounts: {},
     facetCountsIsLoading: false,
   })),
 
@@ -138,11 +149,11 @@ const reducer = createReducer(
     ...state,
     batch,
   })),
-  on(fromActions.addToBatchAction, (state) => {
+  on(fromActions.addToBatchAction, (state, { addedFrom }) => {
     const batchedPids = state.batch.map((dataset) => dataset.pid);
-    const addition = state.selectedSets.filter(
-      (dataset) => batchedPids.indexOf(dataset.pid) === -1,
-    );
+    const addition = state.selectedSets
+      .filter((dataset) => batchedPids.indexOf(dataset.pid) === -1)
+      .map((dataset) => (addedFrom ? { ...dataset, addedFrom } : dataset));
     const batch = [...state.batch, ...addition];
     return { ...state, batch };
   }),
@@ -153,7 +164,10 @@ const reducer = createReducer(
     if (state.batch.some((d) => d.pid === state.currentSet.pid)) {
       return state;
     }
-    const batch = [...state.batch, state.currentSet];
+    const batch = [
+      ...state.batch,
+      { ...state.currentSet, addedFrom: BATCH_ADDED_FROM_DETAILS },
+    ];
     return { ...state, batch };
   }),
   on(fromActions.storeBatchAction, (state, { batch }) => ({ ...state, batch })),
@@ -281,7 +295,8 @@ const reducer = createReducer(
     (state, { column, direction }): DatasetState => {
       const sortField = column + (direction ? ":" + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
-      return { ...state, filters };
+      const pagination = { ...state.pagination, skip: 0 };
+      return { ...state, filters, pagination };
     },
   ),
   on(fromActions.setSearchTermsAction, (state, { terms }): DatasetState => ({
@@ -295,74 +310,10 @@ const reducer = createReducer(
 
   on(
     fromActions.setArchiveViewModeAction,
-    (state, { modeToggle }): DatasetState => {
-      let mode = {};
-
-      switch (modeToggle) {
-        case ArchViewMode.all:
-          mode = {};
-          break;
-        case ArchViewMode.archivable:
-          mode = {
-            "datasetlifecycle.archivable": true,
-            "datasetlifecycle.retrievable": false,
-          };
-          break;
-        case ArchViewMode.retrievable:
-          mode = {
-            "datasetlifecycle.retrievable": true,
-            "datasetlifecycle.archivable": false,
-          };
-          break;
-        case ArchViewMode.work_in_progress:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.retrievable": false,
-                "datasetlifecycle.archivable": false,
-                "datasetlifecycle.archiveStatusMessage": {
-                  $ne: "scheduleArchiveJobFailed",
-                },
-                "datasetlifecycle.retrieveStatusMessage": {
-                  $ne: "scheduleRetrieveJobFailed",
-                },
-              },
-            ],
-          };
-          break;
-        case ArchViewMode.system_error:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.retrievable": true,
-                "datasetlifecycle.archivable": true,
-              },
-              {
-                "datasetlifecycle.archiveStatusMessage":
-                  "scheduleArchiveJobFailed",
-              },
-              {
-                "datasetlifecycle.retrieveStatusMessage":
-                  "scheduleRetrieveJobFailed",
-              },
-            ],
-          };
-          break;
-        case ArchViewMode.user_error:
-          mode = {
-            $or: [
-              {
-                "datasetlifecycle.archiveStatusMessage": "missingFilesError",
-              },
-            ],
-          };
-          break;
-        default: {
-          break;
-        }
-      }
+    (state, { modeToggle, mode }): DatasetState => {
       const filters = { ...state.filters, skip: 0, mode, modeToggle };
-      return { ...state, filters };
+      const pagination = { ...state.pagination, skip: 0 };
+      return { ...state, filters, pagination };
     },
   ),
   on(
@@ -388,7 +339,8 @@ const reducer = createReducer(
 
   on(fromActions.setTextFilterAction, (state, { text }): DatasetState => {
     const filters = { ...state.filters, text, skip: 0 };
-    return { ...state, filters };
+    const pagination = { ...state.pagination, skip: 0 };
+    return { ...state, filters, pagination };
   }),
 
   on(

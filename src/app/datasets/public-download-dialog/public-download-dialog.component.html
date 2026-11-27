@@ -7,9 +7,11 @@
   <mat-form-field wid appearance="fill">
     <mat-label>Email</mat-label>
     <input matInput [formControl]="emailFormControl" type="email" />
-    <mat-error *ngIf="emailFormControl.errors">
-      {{ getErrorMessage() }}
-    </mat-error>
+    @if (emailFormControl.errors) {
+      <mat-error>
+        {{ getErrorMessage() }}
+      </mat-error>
+    }
   </mat-form-field>
 </div>
 <div mat-dialog-actions>

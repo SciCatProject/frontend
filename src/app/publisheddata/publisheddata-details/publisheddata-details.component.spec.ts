@@ -14,6 +14,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
+import { ClipboardService } from "shared/services/clipboard.service";
 import {
   PublishedData,
   PublishedDataService,
@@ -44,6 +45,7 @@ describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
   let fixture: ComponentFixture<PublisheddataDetailsComponent>;
   let store: MockStore;
+  let clipboardService: jasmine.SpyObj<ClipboardService>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -62,10 +64,19 @@ describe("PublisheddataDetailsComponent", () => {
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: PublishedDataService, useClass: MockPublishedDataApi },
         { provide: AppConfigService, useValue: { getConfig } },
+        {
+          provide: ClipboardService,
+          useValue: jasmine.createSpyObj("ClipboardService", [
+            "copyToClipboard",
+          ]),
+        },
       ],
     }).compileComponents();
 
     store = TestBed.inject(MockStore);
+    clipboardService = TestBed.inject(
+      ClipboardService,
+    ) as jasmine.SpyObj<ClipboardService>;
     store.overrideSelector(
       selectCurrentPublishedData,
       createPublishedData("public"),
@@ -93,6 +104,17 @@ describe("PublisheddataDetailsComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledOnceWith(
         clearCurrentPublishedDataAction(),
+      );
+    });
+  });
+
+  describe("copy DOI", () => {
+    it("should delegate copying the DOI to ClipboardService", () => {
+      component.onCopyClick("10.1234/test-doi");
+
+      expect(clipboardService.copyToClipboard).toHaveBeenCalledWith(
+        "10.1234/test-doi",
+        "copied to your clipboard.",
       );
     });
   });

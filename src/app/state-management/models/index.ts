@@ -96,6 +96,16 @@ interface AttachmentOptions {
 }
 type viewModeOptions = "table" | "json" | "tree";
 
+type themePalette =
+  | "primary"
+  | "accent"
+  | "warn"
+  | "header-1"
+  | "header-2"
+  | "header-3"
+  | "header-4"
+  | "header-5";
+
 export interface CustomizationItem {
   type: CustomizationType;
   label: string;
@@ -109,6 +119,8 @@ export interface CustomizationItem {
   authorization?: string[];
   visible?: boolean;
   restrictedIconVisible?: boolean;
+  icon?: string;
+  headerColor?: themePalette;
 }
 
 export type ComputedField = Field & {
@@ -169,6 +181,25 @@ export enum ArchViewMode {
   system_error = "system error",
   user_error = "user error",
 }
+
+/**
+ * A named query preset for the dataset list, configured via
+ * `datasetViews.modes`. `id` is stored in the filters (`modeToggle`) and is
+ * what batch action `hidden` expressions match `#currentArchViewMode`
+ * against, so it should stay stable; `label` is only for display.
+ */
+export interface DatasetViewMode {
+  id: string;
+  label: string;
+  // Mongo query, as the where of the v4 dataset filter
+  where: Record<string, unknown>;
+  tooltip?: string;
+}
+
+// the dataset list view modes
+export interface DatasetViewsConfig {
+  modes?: DatasetViewMode[];
+}
 export enum JobViewMode {
   myJobs = "my jobs",
   allJobs = "all jobs",
@@ -200,7 +231,7 @@ export interface GenericFilters {
 }
 
 export interface DatasetFilters extends GenericFilters {
-  modeToggle: ArchViewMode;
+  modeToggle: string;
   text: string;
   ownerGroup: string[];
   type: string[];

@@ -1,6 +1,9 @@
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
-import { provideMockStore } from "@ngrx/store/testing";
+import { MockStore, provideMockStore } from "@ngrx/store/testing";
+import { Action, MemoizedSelector } from "@ngrx/store";
+import { Observable, Subject, of } from "rxjs";
+import { selectFilesFilters } from "state-management/selectors/files.selectors";
 import { cold, hot } from "jasmine-marbles";
 import * as fromActions from "../actions/datasets.actions";
 import { DatasetEffects } from "./datasets.effects";
@@ -24,6 +27,7 @@ import {
   OrigdatablocksPublicV4Service,
   MetadataKeysV4Service,
   OutputDatasetDto,
+  OrigDatablock,
   DatasetsV4Service,
   DatasetsPublicV4Service,
   AttachmentsV4Service,
@@ -197,6 +201,41 @@ describe("DatasetEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
     });
+
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const datasets = [dataset];
+      const action = fromActions.fetchDatasetsAction();
+      const outcome = fromActions.fetchDatasetsCompleteAction({ datasets });
+
+      // Second action at frame 3 cancels the first request (which would complete at frame 3).
+      // Only the response to the second action, arriving at frame 5, is emitted.
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", { a: datasets });
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValue(response);
+
+      const expected = cold("-----b", { b: outcome });
+      expect(effects.fetchDatasets$).toBeObservable(expected);
+    });
+
+    it("should only emit the response of the latest query", () => {
+      const older = [{ ...dataset, pid: "older" }];
+      const latest = [{ ...dataset, pid: "latest" }];
+
+      actions = hot("-ab", {
+        a: fromActions.fetchDatasetsAction(),
+        b: fromActions.fetchDatasetsAction(),
+      });
+      // the older request is slower and would finish last
+      datasetsV4Service.datasetsV4ControllerFindAllV4.and.returnValues(
+        cold("---a|", { a: older }),
+        cold("-a|", { a: latest }),
+      );
+
+      const expected = cold("---b", {
+        b: fromActions.fetchDatasetsCompleteAction({ datasets: latest }),
+      });
+      expect(effects.fetchDatasets$).toBeObservable(expected);
+    });
   });
 
   describe("fetchFacetCounts$", () => {
@@ -248,6 +287,80 @@ describe("DatasetEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
     });
+
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const facetCounts: FacetCounts = {
+        creationLocation: [],
+        creationTime: [],
+        keywords: [],
+        ownerGroup: [],
+        type: [],
+      };
+      const action = fromActions.fetchFacetCountsAction();
+      const outcome = fromActions.fetchFacetCountsCompleteAction({
+        facetCounts,
+        allCounts: 0,
+      });
+      const responseArray = [
+        {
+          all: [{ totalSets: 0 }],
+          creationLocation: [],
+          creationTime: [],
+          keywords: [],
+          ownerGroup: [],
+          type: [],
+        },
+      ];
+
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", { a: responseArray });
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
+        response,
+      );
+
+      const expected = cold("-----b", { b: outcome });
+      expect(effects.fetchFacetCounts$).toBeObservable(expected);
+    });
+
+    it("should refetch the counts when the archive view changes", () => {
+      actions = hot("-a", {
+        a: fromActions.setArchiveViewModeAction({
+          modeToggle: "on-tape",
+          mode: { "datasetlifecycle.retrievable": true },
+        }),
+      });
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValue(
+        cold("-a|", { a: [{ all: [{ totalSets: 2 }] }] }),
+      );
+
+      const expected = cold("--b", {
+        b: fromActions.fetchFacetCountsCompleteAction({
+          facetCounts: {},
+          allCounts: 2,
+        }),
+      });
+      expect(effects.fetchFacetCounts$).toBeObservable(expected);
+    });
+
+    it("should only emit the counts of the latest query", () => {
+      actions = hot("-ab", {
+        a: fromActions.fetchFacetCountsAction(),
+        b: fromActions.fetchFacetCountsAction(),
+      });
+      // the older request is slower and would finish last
+      datasetsV4Service.datasetsV4ControllerFullfacetV4.and.returnValues(
+        cold("---a|", { a: [{ all: [{ totalSets: 1 }] }] }),
+        cold("-a|", { a: [{ all: [{ totalSets: 2 }] }] }),
+      );
+
+      const expected = cold("---b", {
+        b: fromActions.fetchFacetCountsCompleteAction({
+          facetCounts: {},
+          allCounts: 2,
+        }),
+      });
+      expect(effects.fetchFacetCounts$).toBeObservable(expected);
+    });
   });
 
   describe("fetchMetadataKeys$", () => {
@@ -280,6 +393,25 @@ describe("DatasetEffects", () => {
       );
 
       const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+
+    it("should cancel a previous in-flight request when a new action is dispatched", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysAction({});
+      const outcome = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+
+      actions = hot("-a-b", { a: action, b: action });
+      const response = cold("--a|", {
+        a: [{ key: "test", humanReadable: "Test" }],
+      });
+      metadataKeysApi.metadataKeysV4ControllerFindAllV4.and.returnValue(
+        response,
+      );
+
+      const expected = cold("-----b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
     });
   });
@@ -383,10 +515,183 @@ describe("DatasetEffects", () => {
     });
   });
 
+  describe("effects waiting for the dataset", () => {
+    let store: MockStore;
+    let selectCurrentDatasetMo: MemoizedSelector<object, unknown>;
+    const origdatablocks = [{ _id: "odb1" }] as unknown as OrigDatablock[];
+
+    beforeEach(() => {
+      store = TestBed.inject(MockStore);
+      selectCurrentDatasetMo = store.overrideSelector(
+        selectCurrentDataset,
+        undefined,
+      );
+      store.overrideSelector(selectFilesFilters, {
+        skip: 0,
+        limit: 25,
+        sortField: undefined,
+      });
+      origdatablocksApi.origDatablocksV4ControllerFindAllFilesV4.and.returnValue(
+        of(origdatablocks) as never,
+      );
+      origdatablocksApi.origDatablocksV4ControllerCountFilesV4.and.returnValue(
+        of({ count: 3 }) as never,
+      );
+    });
+
+    const run = (effect$: Observable<unknown>) => {
+      const emitted: unknown[] = [];
+      effect$.subscribe((action) => emitted.push(action));
+      return emitted;
+    };
+
+    it("fetchOrigDatablocksOfDataset$ should fetch right away when the dataset is loaded", () => {
+      selectCurrentDatasetMo.setResult(dataset);
+      store.refreshState();
+      actions = of(
+        fromActions.fetchOrigDatablocksAction({ pid: dataset.pid }),
+      ) as unknown as TestObservable;
+
+      expect(run(effects.fetchOrigDatablocksOfDataset$)).toEqual([
+        fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
+      ]);
+    });
+
+    it("fetchOrigDatablocksOfDataset$ should wait until the dataset of the pid is loaded", () => {
+      selectCurrentDatasetMo.setResult({ ...dataset, pid: "previousPid" });
+      store.refreshState();
+      actions = of(
+        fromActions.fetchOrigDatablocksAction({ pid: dataset.pid }),
+      ) as unknown as TestObservable;
+
+      const emitted = run(effects.fetchOrigDatablocksOfDataset$);
+      expect(emitted).toEqual([]);
+      expect(
+        origdatablocksApi.origDatablocksV4ControllerFindAllFilesV4,
+      ).not.toHaveBeenCalled();
+
+      selectCurrentDatasetMo.setResult(dataset);
+      store.refreshState();
+      expect(emitted).toEqual([
+        fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
+      ]);
+    });
+
+    it("fetchOrigDatablocksOfDataset$ should give up when the dataset state is cleared", () => {
+      const actions$ = new Subject<Action>();
+      actions = actions$ as unknown as TestObservable;
+      const emitted = run(effects.fetchOrigDatablocksOfDataset$);
+
+      actions$.next(
+        fromActions.fetchOrigDatablocksAction({ pid: dataset.pid }),
+      );
+      actions$.next(fromActions.clearCurrentDatasetStateAction());
+      selectCurrentDatasetMo.setResult(dataset);
+      store.refreshState();
+
+      expect(emitted).toEqual([]);
+      expect(
+        origdatablocksApi.origDatablocksV4ControllerFindAllFilesV4,
+      ).not.toHaveBeenCalled();
+    });
+
+    it("fetchOrigDatablocksCount$ should wait until the dataset of the pid is loaded", () => {
+      actions = of(
+        fromActions.fetchOrigDatablocksCountAction({ pid: dataset.pid }),
+      ) as unknown as TestObservable;
+
+      const emitted = run(effects.fetchOrigDatablocksCount$);
+      expect(emitted).toEqual([]);
+
+      selectCurrentDatasetMo.setResult(dataset);
+      store.refreshState();
+      expect(emitted).toEqual([
+        fromActions.fetchOrigDatablocksCountCompleteAction({ count: 3 }),
+      ]);
+    });
+
+    // the race of the details page: the related datasets are requested before
+    // the dataset of the pid is in the store
+    const notReadyStates = [
+      { name: "no dataset is loaded yet", selected: undefined },
+      {
+        name: "another dataset is still selected",
+        selected: {
+          ...derivedDataset,
+          pid: "previousPid",
+          inputDatasets: ["previousInput"],
+        },
+      },
+    ];
+    const awaitedDataset = { ...dataset, type: "raw" };
+    const queryOf = (spy: jasmine.Spy) =>
+      JSON.parse(spy.calls.mostRecent().args[0] as string);
+
+    notReadyStates.forEach(({ name, selected }) => {
+      describe(`when ${name}`, () => {
+        beforeEach(() => {
+          selectCurrentDatasetMo.setResult(selected);
+          store.refreshState();
+        });
+
+        it("fetchRelatedDatasets$ should wait for the dataset of the pid and query from it", () => {
+          const relatedDatasets = [derivedDataset];
+          const findAll = datasetsV4Service.datasetsV4ControllerFindAllV4;
+          findAll.and.returnValue(of(relatedDatasets) as never);
+          actions = of(
+            fromActions.fetchRelatedDatasetsAction({ pid: dataset.pid }),
+          ) as unknown as TestObservable;
+
+          const emitted = run(effects.fetchRelatedDatasets$);
+          expect(emitted).toEqual([]);
+          expect(findAll).not.toHaveBeenCalled();
+
+          selectCurrentDatasetMo.setResult(awaitedDataset);
+          store.refreshState();
+
+          expect(findAll).toHaveBeenCalledTimes(1);
+          expect(queryOf(findAll).where).toEqual({
+            type: "derived",
+            inputDatasets: dataset.pid,
+          });
+          expect(emitted).toEqual([
+            fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets }),
+          ]);
+        });
+
+        it("fetchRelatedDatasetsCount$ should wait for the dataset of the pid and query from it", () => {
+          const count = datasetsV4Service.datasetsV4ControllerCountV4;
+          count.and.returnValue(of({ count: 2 }) as never);
+          actions = of(
+            fromActions.fetchRelatedDatasetsCountAction({ pid: dataset.pid }),
+          ) as unknown as TestObservable;
+
+          const emitted = run(effects.fetchRelatedDatasetsCount$);
+          expect(emitted).toEqual([]);
+          expect(count).not.toHaveBeenCalled();
+
+          selectCurrentDatasetMo.setResult(awaitedDataset);
+          store.refreshState();
+
+          expect(count).toHaveBeenCalledTimes(1);
+          expect(queryOf(count).where).toEqual({
+            type: "derived",
+            inputDatasets: dataset.pid,
+          });
+          expect(emitted).toEqual([
+            fromActions.fetchRelatedDatasetsCountCompleteAction({ count: 2 }),
+          ]);
+        });
+      });
+    });
+  });
+
   describe("fetchRelatedDatasets$", () => {
     it("should result in a fetchRelatedDatasetsCompleteAction", () => {
       const relatedDatasets = [dataset];
-      const action = fromActions.fetchRelatedDatasetsAction();
+      const action = fromActions.fetchRelatedDatasetsAction({
+        pid: dataset.pid,
+      });
       const outcome = fromActions.fetchRelatedDatasetsCompleteAction({
         relatedDatasets,
       });
@@ -399,7 +704,9 @@ describe("DatasetEffects", () => {
       expect(effects.fetchRelatedDatasets$).toBeObservable(expected);
     });
     it("should result in a fetchRelatedDatasetsFailedAction", () => {
-      const action = fromActions.fetchRelatedDatasetsAction();
+      const action = fromActions.fetchRelatedDatasetsAction({
+        pid: dataset.pid,
+      });
       const outcome = fromActions.fetchRelatedDatasetsFailedAction();
 
       actions = hot("-a", { a: action });
@@ -414,7 +721,9 @@ describe("DatasetEffects", () => {
   describe("fetchRelatedDatasetsCount$", () => {
     it("should result in a fetchRelatedDatasetsCountCompleteAction", () => {
       const count = 3;
-      const action = fromActions.fetchRelatedDatasetsCountAction();
+      const action = fromActions.fetchRelatedDatasetsCountAction({
+        pid: dataset.pid,
+      });
       const outcome = fromActions.fetchRelatedDatasetsCountCompleteAction({
         count,
       });
@@ -427,7 +736,9 @@ describe("DatasetEffects", () => {
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
     });
     it("should result in a fetchRelatedDatasetsCountFailedAction", () => {
-      const action = fromActions.fetchRelatedDatasetsCountAction();
+      const action = fromActions.fetchRelatedDatasetsCountAction({
+        pid: dataset.pid,
+      });
       const outcome = fromActions.fetchRelatedDatasetsCountFailedAction();
 
       actions = hot("-a", { a: action });

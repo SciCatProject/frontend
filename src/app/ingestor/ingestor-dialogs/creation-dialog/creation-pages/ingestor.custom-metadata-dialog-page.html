@@ -31,27 +31,32 @@
       </mat-card-subtitle>
       <span class="spacer"></span>
       <mat-icon
-        [matTooltip]="isCustomMetadataOk ? 'Your input is correct.' : customMetadataErrors"
+        [matTooltip]="
+          isCustomMetadataOk ? 'Your input is correct.' : customMetadataErrors
+        "
         [ngClass]="isCustomMetadataOk ? 'success-icon' : 'error-icon'"
-        >{{ isCustomMetadataOk ? 'check_circle_outline' :
-        'error_outline'}}</mat-icon
-      >
-      <mat-icon class="toggle-icon"
-        >{{ isCardContentVisible.scientific ? 'expand_less' : 'expand_more'
+        >{{
+          isCustomMetadataOk ? "check_circle_outline" : "error_outline"
         }}</mat-icon
       >
+      <mat-icon class="toggle-icon">{{
+        isCardContentVisible.scientific ? "expand_less" : "expand_more"
+      }}</mat-icon>
     </mat-card-header>
-    <mat-card-content *ngIf="isCardContentVisible.scientific">
-      <app-metadata-editor
-        #customMetadataEditor
-        *ngIf="!updateEditorFromThirdParty"
-        [schema]="customMetadataSchema"
-        [renderView]="activeRenderView"
-        [data]="createNewTransferData.customMetaData"
-        (dataChange)="onDataChangeCustomMetadata($event)"
-        (errors)="customMetadataErrorsHandler($event)"
-      ></app-metadata-editor>
-    </mat-card-content>
+    @if (isCardContentVisible.scientific) {
+      <mat-card-content>
+        @if (!updateEditorFromThirdParty) {
+          <app-metadata-editor
+            #customMetadataEditor
+            [schema]="customMetadataSchema"
+            [renderView]="activeRenderView"
+            [data]="createNewTransferData.customMetaData"
+            (dataChange)="onDataChangeCustomMetadata($event)"
+            (errors)="customMetadataErrorsHandler($event)"
+          ></app-metadata-editor>
+        }
+      </mat-card-content>
+    }
   </mat-card>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

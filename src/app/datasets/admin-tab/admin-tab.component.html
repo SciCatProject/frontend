@@ -1,13 +1,15 @@
 <mat-card>
-  <ng-container *ngIf="datablocks$ | async as datablocks">
+  @if (datablocks$ | async; as datablocks) {
     <h3>Datablocks: {{ datablocks.length }}</h3>
-    <ul *ngFor="let block of datablocks">
-      <li>{{ block._id }}</li>
+    @for (block of datablocks; track block) {
       <ul>
-        <li>{{ block.archiveId }}</li>
+        <li>{{ block._id }}</li>
+        <ul>
+          <li>{{ block.archiveId }}</li>
+        </ul>
       </ul>
-    </ul>
-  </ng-container>
+    }
+  }
 
   <mat-card-actions>
     <button mat-raised-button class="reset-button" (click)="resetDataset()">
