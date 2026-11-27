@@ -52,6 +52,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         this.doi = id;
+        this.store.dispatch(clearCurrentPublishedDataAction());
         this.store.dispatch(fetchPublishedDataAction({ id }));
       }),
     );

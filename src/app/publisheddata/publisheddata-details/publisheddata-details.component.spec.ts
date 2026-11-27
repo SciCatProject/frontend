@@ -20,7 +20,10 @@ import {
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
-import { clearCurrentPublishedDataAction } from "state-management/actions/published-data.actions";
+import {
+  clearCurrentPublishedDataAction,
+  fetchPublishedDataAction,
+} from "state-management/actions/published-data.actions";
 import {
   selectIsAdmin,
   selectIsLoading,
@@ -94,6 +97,20 @@ describe("PublisheddataDetailsComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#ngOnInit()", () => {
+    it("should clear the current published data before fetching", () => {
+      const dispatchSpy = spyOn(store, "dispatch");
+
+      component.ngOnInit();
+
+      const id = component.doi;
+      expect(dispatchSpy.calls.allArgs()).toEqual([
+        [clearCurrentPublishedDataAction()],
+        [fetchPublishedDataAction({ id })],
+      ]);
+    });
   });
 
   describe("#ngOnDestroy()", () => {
