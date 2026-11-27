@@ -30,8 +30,10 @@ import {
   switchMap,
   tap,
   filter,
+  take,
+  takeUntil,
 } from "rxjs/operators";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
@@ -62,7 +64,8 @@ export class DatasetEffects {
         fromActions.setArchiveViewModeAction,
       ),
       concatLatestFrom(() => [this.fullqueryParams$, this.currentUser$]),
-      mergeMap(([, params, user]) => {
+      // only the latest query may update the list, so cancel the older ones
+      switchMap(([, params, user]) => {
         const config = this.appConfigService.getConfig();
         const defaultConfigColumns =
           config?.defaultDatasetsListSettings?.columns;
@@ -110,9 +113,11 @@ export class DatasetEffects {
         fromActions.fetchFacetCountsAction,
         fromActions.setPublicViewModeAction,
         fromActions.sortByColumnAction,
+        fromActions.setArchiveViewModeAction,
       ),
       concatLatestFrom(() => [this.fullfacetParams$, this.currentUser$]),
-      mergeMap(([, params, user]) => {
+      // only the latest query may update the counts, so cancel the older ones
+      switchMap(([, params, user]) => {
         const { fields, facets } = params;
 
         const filter = {
@@ -218,6 +223,9 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksAction),
       concatLatestFrom(() => [this.currentUser$, this.filesFilters$]),
+      switchMap((args) =>
+        this.waitForDataset$(args[0].pid).pipe(map(() => args)),
+      ),
       switchMap(([{ pid, filters }, user, storeFilters]) => {
         const {
           skip = storeFilters.skip,
@@ -258,6 +266,9 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksCountAction),
       concatLatestFrom(() => this.currentUser$),
+      switchMap((args) =>
+        this.waitForDataset$(args[0].pid).pipe(map(() => args)),
+      ),
       switchMap(([{ pid }, user]) => {
         const filter = {
           where: {
@@ -290,11 +301,12 @@ export class DatasetEffects {
   fetchRelatedDatasets$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedDatasetsAction),
-      concatLatestFrom(() => [
-        this.currentDataset$,
-        this.relatedDatasetsFilters$,
-        this.currentUser$,
-      ]),
+      concatLatestFrom(() => [this.relatedDatasetsFilters$, this.currentUser$]),
+      switchMap(([action, filters, user]) =>
+        this.waitForDataset$(action.pid).pipe(
+          map((dataset) => [action, dataset, filters, user] as const),
+        ),
+      ),
       switchMap(([, dataset, filters, user]) => {
         // v4 expects `limits.sort` as an object; pid is a tie-breaker so
         // pagination stays stable when the sorted values repeat
@@ -354,7 +366,12 @@ export class DatasetEffects {
   fetchRelatedDatasetsCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedDatasetsCountAction),
-      concatLatestFrom(() => [this.currentDataset$, this.currentUser$]),
+      concatLatestFrom(() => this.currentUser$),
+      switchMap(([action, user]) =>
+        this.waitForDataset$(action.pid).pipe(
+          map((dataset) => [action, dataset, user] as const),
+        ),
+      ),
       switchMap(([, dataset, user]) => {
         const queryFilter = {
           where: {},
@@ -617,6 +634,16 @@ export class DatasetEffects {
     private datasetsPublicV4Service: DatasetsPublicV4Service,
     private attachmentsV4Service: AttachmentsV4Service,
   ) {}
+
+  private waitForDataset$(pid: string): Observable<CurrentDataset> {
+    return this.currentDataset$.pipe(
+      filter((dataset) => dataset?.pid === pid),
+      take(1),
+      takeUntil(
+        this.actions$.pipe(ofType(fromActions.clearCurrentDatasetStateAction)),
+      ),
+    );
+  }
 
   private storeBatch(batch: CurrentDataset[], userId: string) {
     const json = JSON.stringify(batch);

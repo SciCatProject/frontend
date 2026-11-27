@@ -6,7 +6,7 @@
   (dblclick)="onCellDoubleClick($event)"
   (mousedown)="onCellMouseDown($event)"
 >
-  <ng-container *ngIf="isEditing; else readMode">
+  @if (isEditing) {
     <div class="inline-edit-editor" (click)="$event.stopPropagation()">
       <input
         #valueInput
@@ -29,12 +29,14 @@
         <mat-icon>check</mat-icon>
       </button>
     </div>
-  </ng-container>
-
-  <ng-template #readMode>
-    <span *ngIf="displayValue" class="inline-edit-text">
-      {{ displayValue }}
-    </span>
-    <mat-icon *ngIf="canEdit" class="edit-icon">edit</mat-icon>
-  </ng-template>
+  } @else {
+    @if (displayValue) {
+      <span class="inline-edit-text">
+        {{ displayValue }}
+      </span>
+    }
+    @if (canEdit) {
+      <mat-icon class="edit-icon">edit</mat-icon>
+    }
+  }
 </div>

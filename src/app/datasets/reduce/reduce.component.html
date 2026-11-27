@@ -1,34 +1,32 @@
-<ng-template [ngIf]="dataset">
+@if (dataset) {
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="70">
       <mat-card>
         <mat-card-header class="action-header"> New Action </mat-card-header>
-
         <mat-card-content>
-          <ng-template [ngIf]="(result$ | async) || derivedDatasets.length > 0">
+          @if ((result$ | async) || derivedDatasets.length > 0) {
             <div class="details">
               <table>
                 <tr>
                   <th><mat-icon>info</mat-icon> Status</th>
-                  <td *ngIf="result$ | async as result; else noResult">
-                    <ng-container *ngIf="result['message'] as message">
-                      {{ message }}
-                    </ng-container>
-
-                    <ng-container *ngIf="result['errno'] && result['code']">
-                      Error reducing dataset: {{ result["code"] }}
-                    </ng-container>
-                  </td>
-                  <ng-template #noResult>
-                    <td *ngIf="derivedDatasets.length > 0">
-                      Previously derived dataset available.
+                  @if (result$ | async; as result) {
+                    <td>
+                      @if (result["message"]; as message) {
+                        {{ message }}
+                      }
+                      @if (result["errno"] && result["code"]) {
+                        Error reducing dataset: {{ result["code"] }}
+                      }
                     </td>
-                  </ng-template>
+                  } @else {
+                    @if (derivedDatasets.length > 0) {
+                      <td>Previously derived dataset available.</td>
+                    }
+                  }
                 </tr>
               </table>
             </div>
-          </ng-template>
-
+          }
           <div class="action-workflow">
             <form [formGroup]="actionsForm">
               <mat-horizontal-stepper linear formArrayName="formArray" #stepper>
@@ -39,11 +37,11 @@
                       aria-label="Select an action"
                       formControlName="actionForm"
                     >
-                      <mat-radio-button
-                        *ngFor="let action of actions"
-                        [value]="action"
-                        >{{ action }}</mat-radio-button
-                      >
+                      @for (action of actions; track action) {
+                        <mat-radio-button [value]="action">{{
+                          action
+                        }}</mat-radio-button>
+                      }
                     </mat-radio-group>
                   </div>
                   <div>
@@ -52,72 +50,64 @@
                     </button>
                   </div>
                 </mat-step>
-
                 <mat-step formGroupName="1" [stepControl]="formArray.get([1])">
                   <ng-template matStepLabel>Select script</ng-template>
                   <div class="script-selector" fxLayout="row">
                     <div fxFlex="50">
-                      <mat-form-field
-                        *ngIf="
-                          selectedAction?.value === 'Reduce';
-                          else analyzeSelector
-                        "
-                      >
-                        <mat-label>Reduce script</mat-label>
-                        <mat-select formControlName="scriptForm" required>
-                          <mat-option
-                            *ngFor="let script of reduceScripts"
-                            [value]="script.value"
-                            >{{ script.value }}</mat-option
-                          >
-                        </mat-select>
-                        <mat-error>Please choose a script</mat-error>
-                      </mat-form-field>
-
-                      <ng-template #analyzeSelector>
+                      @if (selectedAction?.value === "Reduce") {
                         <mat-form-field>
-                          <mat-label>Analyze script</mat-label>
+                          <mat-label>Reduce script</mat-label>
                           <mat-select formControlName="scriptForm" required>
-                            <mat-option
-                              *ngFor="let script of analyzeScripts"
-                              [value]="script.value"
-                              >{{ script.value }}</mat-option
-                            >
+                            @for (script of reduceScripts; track script) {
+                              <mat-option [value]="script.value">{{
+                                script.value
+                              }}</mat-option>
+                            }
                           </mat-select>
                           <mat-error>Please choose a script</mat-error>
                         </mat-form-field>
-                      </ng-template>
+                      } @else {
+                        <mat-form-field>
+                          <mat-label>Analyze script</mat-label>
+                          <mat-select formControlName="scriptForm" required>
+                            @for (script of analyzeScripts; track script) {
+                              <mat-option [value]="script.value">{{
+                                script.value
+                              }}</mat-option>
+                            }
+                          </mat-select>
+                          <mat-error>Please choose a script</mat-error>
+                        </mat-form-field>
+                      }
                     </div>
-
                     <div class="script-details" fxFlex="50">
                       <h4>Description</h4>
-                      <ng-container
-                        *ngIf="
-                          selectedAction?.value === 'Reduce';
-                          else analyzeDescription
-                        "
-                      >
-                        <div *ngFor="let script of reduceScripts">
-                          <p *ngIf="script.value === selectedScript?.value">
-                            {{ script.description }}
-                          </p>
-                        </div>
-                      </ng-container>
-
-                      <ng-template #analyzeDescription>
-                        <div *ngFor="let script of analyzeScripts">
-                          <p *ngIf="script.value === selectedScript?.value">
-                            {{ script.description }}
-                          </p>
-                        </div>
-                      </ng-template>
-
-                      <ng-container *ngIf="!selectedScript?.value">
+                      @if (selectedAction?.value === "Reduce") {
+                        @for (script of reduceScripts; track script) {
+                          <div>
+                            @if (script.value === selectedScript?.value) {
+                              <p>
+                                {{ script.description }}
+                              </p>
+                            }
+                          </div>
+                        }
+                      } @else {
+                        @for (script of analyzeScripts; track script) {
+                          <div>
+                            @if (script.value === selectedScript?.value) {
+                              <p>
+                                {{ script.description }}
+                              </p>
+                            }
+                          </div>
+                        }
+                      }
+                      @if (!selectedScript?.value) {
                         Select a script to view description.
-                      </ng-container>
+                      }
                     </div>
                   </div>
-
                   <div>
                     <button
                       mat-stroked-button
@@ -137,7 +127,6 @@
                     </button>
                   </div>
                 </mat-step>
-
                 <mat-step>
                   <ng-template matStepLabel>Confirm</ng-template>
                   <div class="confirmation-table">
@@ -174,89 +163,83 @@
           </div>
         </mat-card-content>
       </mat-card>
-
-      <mat-card *ngIf="derivedDatasets">
-        <mat-card-header class="derived-header">
-          Derived Datasets
-        </mat-card-header>
-
-        <mat-card-content>
-          <mat-table [dataSource]="derivedDatasets" class="history-table">
-            <!-- Column Definitions -->
-
-            <!-- Timestamp Column -->
-            <ng-container matColumnDef="timestamp">
-              <mat-header-cell *matHeaderCellDef>
-                <div fxLayout="column" style="align-items: center">
-                  <div>
-                    <mat-icon>calendar_today</mat-icon>
+      @if (derivedDatasets) {
+        <mat-card>
+          <mat-card-header class="derived-header">
+            Derived Datasets
+          </mat-card-header>
+          <mat-card-content>
+            <mat-table [dataSource]="derivedDatasets" class="history-table">
+              <!-- Column Definitions -->
+              <!-- Timestamp Column -->
+              <ng-container matColumnDef="timestamp">
+                <mat-header-cell *matHeaderCellDef>
+                  <div fxLayout="column" style="align-items: center">
+                    <div>
+                      <mat-icon>calendar_today</mat-icon>
+                    </div>
+                    <div>Creation Time</div>
                   </div>
-                  <div>Creation Time</div>
-                </div>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let dataset">
-                {{ dataset.createdAt | date }}
-              </mat-cell>
-            </ng-container>
-
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef>
-                <div fxLayout="column" style="align-items: center">
-                  <div>
-                    <mat-icon>fingerprint</mat-icon>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let dataset">
+                  {{ dataset.createdAt | date }}
+                </mat-cell>
+              </ng-container>
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef>
+                  <div fxLayout="column" style="align-items: center">
+                    <div>
+                      <mat-icon>fingerprint</mat-icon>
+                    </div>
+                    <div>Name</div>
                   </div>
-                  <div>Name</div>
-                </div>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let dataset">
-                {{ dataset.datasetName }}
-              </mat-cell>
-            </ng-container>
-
-            <!-- Pid Column -->
-            <ng-container matColumnDef="pid">
-              <mat-header-cell *matHeaderCellDef>
-                <div fxLayout="column" style="align-items: center">
-                  <div>
-                    <mat-icon> perm_contact_calendar </mat-icon>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let dataset">
+                  {{ dataset.datasetName }}
+                </mat-cell>
+              </ng-container>
+              <!-- Pid Column -->
+              <ng-container matColumnDef="pid">
+                <mat-header-cell *matHeaderCellDef>
+                  <div fxLayout="column" style="align-items: center">
+                    <div>
+                      <mat-icon> perm_contact_calendar </mat-icon>
+                    </div>
+                    <div>PID</div>
                   </div>
-                  <div>PID</div>
-                </div>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let dataset">
-                {{ dataset.pid }}
-              </mat-cell>
-            </ng-container>
-
-            <!-- Software Column -->
-            <ng-container matColumnDef="software">
-              <mat-header-cell *matHeaderCellDef>
-                <div fxLayout="column" style="align-items: center">
-                  <div>
-                    <mat-icon> screen_share</mat-icon>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let dataset">
+                  {{ dataset.pid }}
+                </mat-cell>
+              </ng-container>
+              <!-- Software Column -->
+              <ng-container matColumnDef="software">
+                <mat-header-cell *matHeaderCellDef>
+                  <div fxLayout="column" style="align-items: center">
+                    <div>
+                      <mat-icon> screen_share</mat-icon>
+                    </div>
+                    <div>Software Used</div>
                   </div>
-                  <div>Software Used</div>
-                </div>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let dataset">
-                {{ dataset.usedSoftware }}
-              </mat-cell>
-            </ng-container>
-
-            <!-- End of Column Definitions -->
-
-            <mat-header-row
-              *matHeaderRowDef="columnsToDisplay"
-            ></mat-header-row>
-            <mat-row
-              *matRowDef="let dataset; columns: columnsToDisplay"
-              (click)="onRowClick(dataset)"
-            >
-            </mat-row>
-          </mat-table>
-        </mat-card-content>
-      </mat-card>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let dataset">
+                  {{ dataset.usedSoftware }}
+                </mat-cell>
+              </ng-container>
+              <!-- End of Column Definitions -->
+              <mat-header-row
+                *matHeaderRowDef="columnsToDisplay"
+              ></mat-header-row>
+              <mat-row
+                *matRowDef="let dataset; columns: columnsToDisplay"
+                (click)="onRowClick(dataset)"
+              >
+              </mat-row>
+            </mat-table>
+          </mat-card-content>
+        </mat-card>
+      }
     </div>
   </div>
-</ng-template>
+}

@@ -102,8 +102,12 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   private getExportColumns(): TableField<PartialOutputDatasetDto>[] {
     return this.datasetsListService
-      .convertSavedDatasetColumns(this.getConfiguredDatasetColumns())
-      .filter((column) => column.display !== "hidden")
+      .prepareCsvExportColumns(
+        this.datasetsListService.convertSavedDatasetColumns(
+          this.getConfiguredDatasetColumns(),
+        ),
+        this.datasetList,
+      )
       .map((column) => ({
         ...column,
         header: this.translateDatasetColumnHeader(column),

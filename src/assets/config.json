@@ -8,6 +8,7 @@
   "datasetRelationshipsEnabled": true,
   "datasetJsonScientificMetadata": true,
   "datasetPageSizeOptions": [5, 10, 25, 100],
+  "paginationPosition": "both",
   "editDatasetEnabled": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,

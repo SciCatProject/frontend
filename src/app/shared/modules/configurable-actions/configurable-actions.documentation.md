@@ -67,10 +67,21 @@ The action configuration is a json object wiuth the following keys:
 - __target__ : if type is set to `form`, it specified if the form should be submitted in the current browser windows/tab or in an another.  
 Please review the offical documentation for this attribute https://www.w3schools.com/TAgs/att_form_target.asp
   - _Type_: string  
+  - _Allowed values_: `_blank`, `_self`, `_parent`, `_top`, `iframe`
   - _Example_: ": "_blank",
+  - _Notes_: setting `target` to `iframe` routes the action into a managed `<iframe>` instead of navigating a browser window/tab — see [Iframe target](#iframe-target-showing-action-responses-in-page) below. Supported by `type: "form"` (the default, or a `dialog` whose `onSuccess` is `form`), which submits the form into the iframe, and by `type: "link"`, which navigates the iframe via `window.open(url, iframeName)` instead of opening a new tab.
+- __iframeConfig__: configuration for the iframe used when `target` is `iframe`. Ignored otherwise.  
+  - _Type_: object
+  - _Optional_: true — if omitted while `target: "iframe"` is set, a visible iframe panel named `configurable-action-<id>` is used.
+  - _Fields_:
+    - `name` (string): unique name for the iframe/target window. Becomes the `<iframe>`'s `name` and the form's `target`. Must be unique among the actions rendered together.
+    - `title` (string): text shown in the panel header when the iframe is visible. Defaults to `name`.
+    - `hidden` (boolean, default `false`): when `false` or omitted, a visible panel opens showing the response. Set to `true` to submit into a headless iframe that is never shown to the user.
+    - `width` / `height` (string): CSS size of the visible panel. Ignored when `hidden` is `true`. Default `"90vw"` / `"70vh"`.
 - __enabled__: condition when the action can be triggered and the related button should be active.  
   The string may contains the keywords listed below and any logical expression of them.  
-  - _Type_: string
+  It can also be an object with a list of `conditions` that must all hold, to show tooltips: while disabled, the `disabledTooltip` of the first condition that fails is shown; while enabled, `enabledTooltip` is shown, e.g. to warn about what the action may do. An empty list means always enabled.  
+  - _Type_: string | boolean | `{ "conditions": { "condition": string, "disabledTooltip"?: string }[], "enabledTooltip"?: string }`
   - _Examples_: "#SizeLimit"  or  "#Selected && #SizeLimit",
   - _Keywords_: The string can contain any of the following keywords in a logical expression.   
     The expression will be calculated everytime one of the keywords changes value.
@@ -78,6 +89,8 @@ Please review the offical documentation for this attribute https://www.w3schools
       True if the total size of the files is below the limit indicated in configuration under the key `maxDirectDownloadSize`.
     - #Selected :
       True if one or more files are selected in the list.  
+  - _Object example_: `{ "conditions": [{ "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets." }, { "condition": "@totalSize > 0", "disabledTooltip": "There is nothing to archive." }], "enabledTooltip": "The job fails for datasets you don't own." }`
+  - _Notes_: order the conditions from the most basic one (e.g. something selected) to the most specific one, as only the first failing one is explained.
 - __authorization__: indicate which user has access to the action and can see the related button.  
   - _Type_: string[]
   - _Examples_: ["#datasetAccess", "#datasetPublic"]
@@ -314,6 +327,44 @@ Configuration
 }
 ```
 
+## Iframe target: showing action responses in-page
+
+Setting `target: "iframe"` on a `form`-type or `link`-type action routes it into a same-page `<iframe>` managed by the component instead of navigating a browser window/tab. This is useful for endpoints that render a response (a preview, a status page) that you want to show without leaving the current view, or for triggering a server-side effect (a redirect, a file generation) without any visible navigation at all.
+
+- For `type: "form"`, the form element is submitted with the iframe's name as its `target`.
+- For `type: "link"`, `window.open(url, iframeName)` is called — since a browsing context (the iframe) with that name already exists in the page, the browser navigates it in place instead of opening a new window, the same way `<a target="frameName">` would.
+
+By default (`iframeConfig.hidden` omitted or `false`) the iframe is shown: the component renders a floating panel over the page, sized by `iframeConfig.width`/`height` (default `90vw`/`70vh`), with a header showing `iframeConfig.title` (defaults to `name` if no title is set) and two buttons:
+- **Open in new tab**: for a `form` action, re-submits the same form with `target="_blank"` (restoring the original `target` afterwards) — the iframe's current URL cannot be read across origins, so the request is sent again, whatever its `method`; for a `link` action, opens the exact URL that was loaded in the iframe (tokens such as `#uuid` are not regenerated) with `window.open(url, "_blank")`. Either way, the user gets the response in a real browser tab.
+- **Close**: hides the panel. The underlying `<iframe>` element is kept in background so a later action reusing the same iframe action `iframeConfig.name` keeps a target to submit into.
+
+Set `iframeConfig.hidden: true` for a headless iframe instead: the form/link has somewhere to submit/navigate to, but nothing is shown to the user.
+
+While waiting for the iframe's first `load` event after a submission, a loading spinner is shown in place of the (blank) iframe content.
+
+Example:
+```json
+{
+  "id": "3cd1e6fa-1f1a-11f0-8f3f-8f6a2c9d7b21",
+  "label": "Preview Notebook",
+  "type": "form",
+  "target": "iframe",
+  "url": "https://www.scicat.info/notebook/preview",
+  "iframeConfig": {
+    "name": "notebook-preview-frame",
+    "title": "Notebook preview",
+    "hidden": false,
+    "width": "80vw",
+    "height": "80vh"
+  }
+}
+```
+
+A few things worth noting:
+- **`iframeConfig.name` must be unique** among the actions rendered together in the same view — it is used both as the `<iframe>` element's `name` and as the form's `target`/window name. Reusing a name across two different actions means they submit into (and overwrite) the same iframe.
+- **The target site must allow being framed.** CORS does not apply to iframe navigations, but a site sending `X-Frame-Options: DENY`/`SAMEORIGIN` or a CSP `frame-ancestors` that excludes the SciCat origin is refused by the browser: the panel shows the browser's own error page (e.g. "refused to connect"). The component cannot detect this (the iframe is cross-origin), so the user has to use **Open in new tab**. The same applies to an `http://` URL embedded in an `https://` SciCat (blocked as mixed content).
+- **Other action types ignore `target`.** `xhr`, `json-download`, and `dialog` (unless its `onSuccess` is `form`) don't go through `typeForm`/`typeLink`, so `target: "iframe"` has no effect on them.
+
 ## Batch actions: migrating from the hardcoded Archive/Retrieve buttons
 
 Before configurable actions existed, the "Archive" and "Retrieve" buttons on the dataset selection/batch view were hardcoded Angular components (`ArchivingService`, `onArchive()`/`onRetrieve()`) that dispatched `submitJobAction` to the store, which the Jobs effects then POSTed to the Jobs API. That code has been removed. Archive/Retrieve are now just another pair of configurable actions, driven by two new keys on the app config:
@@ -323,7 +374,7 @@ Before configurable actions existed, the "Archive" and "Retrieve" buttons on the
 
 **You do not need to configure anything to keep the old behavior.** `AppConfigService.loadAppConfig()` calls `applyDefaultBatchActions(config)` (see `app-config.service.ts`), which defaults `batchActionsEnabled: true` and `batchActions` to the built-in Archive/Retrieve actions (defined in `configurable-actions.defaults.ts`, see below) whenever:
 
-- `archiveWorkflowEnabled` is `true` — the same flag that gated the old hardcoded Archive/Retrieve buttons (`*ngIf="appConfig.archiveWorkflowEnabled"` in `batch-view.component.html` and `dataset-table-actions.component.html`), **and**
+- `archiveWorkflowEnabled` is `true` — the same flag that gated the old hardcoded Archive/Retrieve buttons (`@if (appConfig.archiveWorkflowEnabled)` in `batch-view.component.html` and `dataset-table-actions.component.html`), **and**
 - `batchActionsEnabled` is falsy — either absent from your config (the common case for any config written before this feature existed) or explicitly set to `false`.
 
 If your config already sets `batchActionsEnabled: true` with its own `batchActions`, it is left untouched — the defaults only fill the gap for configs that haven't opted in yet. Note that `batchActionsEnabled: false` alone does **not** disable batch actions when `archiveWorkflowEnabled` is `true` — it's treated the same as "not configured yet", and the defaults still apply. To render no batch actions while keeping `archiveWorkflowEnabled` true for other purposes, opt in explicitly with an empty array: `"batchActionsEnabled": true, "batchActions": []` — that satisfies the truthy check, so the defaulting logic is skipped and the `<configurable-actions>` row simply has nothing to render.
@@ -356,6 +407,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "baseUrl": "#apiBaseUrl",
     "username": "#user.username",
     "userEmail": "#user.email",
+    "pids": "#DatasetsPid",
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "archiveViewMode": "#currentArchViewMode",
     "totalSize": "#DatasetsTotalSize"
@@ -366,7 +418,12 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"archive\"}",
   "hidden": "![undefined, '#currentArchViewMode', 'archivable'].includes(@archiveViewMode)",
-  "enabled": "@totalSize > 0"
+  "enabled": {
+    "conditions": [
+      { "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets to archive." },
+      { "condition": "@totalSize > 0", "disabledTooltip": "The selected datasets have a total size of 0 bytes, so there is nothing to archive." }
+    ]
+  }
 }
 ```
 
@@ -389,6 +446,7 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
     "baseUrl": "#apiBaseUrl",
     "username": "#user.username",
     "userEmail": "#user.email",
+    "pids": "#DatasetsPid",
     "datasetList": "#DatasetsPidEmptyFilesMap",
     "archiveViewMode": "#currentArchViewMode",
     "totalPackedSize": "#DatasetsTotalPackedSize"
@@ -407,7 +465,12 @@ These are the actual built-in defaults (from `configurable-actions.defaults.ts`)
   },
   "payload": "{\"jobParams\": {\"username\": \"{{ @username }}\", \"option\": \"{{ @dialog.option }}\", \"destinationPath\": \"/archive/retrieve\"}, \"emailJobInitiator\": \"{{ @userEmail }}\", \"datasetList\": {{ @datasetList }}, \"type\": \"retrieve\"}",
   "hidden": "![undefined, '#currentArchViewMode', 'retrievable'].includes(@archiveViewMode)",
-  "enabled": "@totalPackedSize > 0"
+  "enabled": {
+    "conditions": [
+      { "condition": "#Length(@pids) > 0", "disabledTooltip": "Select one or more datasets to retrieve." },
+      { "condition": "@totalPackedSize > 0", "disabledTooltip": "The selected datasets have a total packed size of 0 bytes, so there is no archived data to retrieve." }
+    ]
+  }
 }
 ```
 
@@ -419,6 +482,29 @@ A few things worth noting if you adapt these:
 - **These same two actions render on both the dataset list page (`dataset-table-actions`, which sets `currentArchViewMode`) and the cart (`batch-view`, which does not) — the `hidden` expression has two jobs, one per context, and every entry in the `.includes([...])` array is load-bearing:**
   - *Cart*: `#currentArchViewMode` has no matching key in `batch-view`'s `actionItems`, so it resolves to the *literal selector text* (`"#currentArchViewMode"`), not `undefined`. The `'#currentArchViewMode'` entry is what actually detects "not on the mode-toggle page" and makes the action always visible there (the `undefined` entry is only a defensive fallback and never actually matches in practice — the selector resolution never produces real `undefined`). If you copy this pattern for a selector that isn't always provided, remember the fallback is the selector string itself, not `undefined`.
   - *Dataset list page*: here `#currentArchViewMode` resolves to a real mode string (`'all'`, `'archivable'`, `'retrievable'`, etc.), so neither of the above two entries matches — without the trailing `'archivable'` (or `'retrievable'` for Retrieve) entry, the action would be hidden in *every* mode on this page, not just the wrong ones. That entry is what restores the old per-mode behavior (Archive only in `'archivable'` mode, Retrieve only in `'retrievable'` mode) and it's easy to drop by mistake when simplifying this expression — don't remove it.
+
+## Batch actions: where cart datasets came from (`addedFrom`)
+
+Every dataset in the cart records where it was added from, as `addedFrom`:
+- the archive view mode it was selected in on the dataset list (e.g. `'archivable'`), when added from the list
+- `'details'` when added from the dataset details page
+- `'publishedData'` when loaded from a publication's dataset list (when editing published data)
+- unset for datasets added before this was recorded.
+
+`details` and `publishedData` are reserved, so don't use them as view `id`s.
+
+Actions read it with `#DatasetsField[addedFrom]`, one value per dataset. The built-in Archive/Retrieve actions don't use it, so the cart behaves as before. A deployment that wants the cart to give the same guarantee as the dataset list, where Archive is only shown in the `archivable` view, can add the check to its own `batchActions`:
+
+```json
+"variables": {
+  "archiveViewMode": "#currentArchViewMode",
+  "addedFrom": "#DatasetsField[addedFrom]",
+  "totalSize": "#DatasetsTotalSize"
+},
+"enabled": "@totalSize > 0 && (@archiveViewMode !== '#currentArchViewMode' || @addedFrom.every((v) => v === 'archivable'))"
+```
+
+`@archiveViewMode !== '#currentArchViewMode'` limits the check to the cart: on the dataset list the selector resolves to the real view, while in the cart it resolves to the literal selector text. With this rule, datasets added from the details page or before `addedFrom` existed keep Archive disabled in the cart; accept `'details'` too if that's wanted.
 
 ## Best practices
 
