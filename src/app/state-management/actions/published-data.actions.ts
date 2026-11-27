@@ -172,6 +172,10 @@ export const clearPublishedDataStateAction = createAction(
   "[PublischedData] Clear State",
 );
 
+export const clearCurrentPublishedDataAction = createAction(
+  "[PublishedData] Clear Current Published Data",
+);
+
 export const storeEditingPublishedDataDoiAction = createAction(
   "[PublishedData] Store Editing Published Data DOI",
   props<{ publishedDataDoi: string }>(),
