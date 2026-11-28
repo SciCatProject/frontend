@@ -6,7 +6,6 @@ import {
 } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
 import { Store } from "@ngrx/store";
-import { selectMetadataKeys } from "../../../state-management/selectors/datasets.selectors";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { FilterConfig } from "state-management/state/user.store";
 
@@ -17,8 +16,6 @@ import { FilterConfig } from "state-management/state/user.store";
   standalone: false,
 })
 export class DatasetsFilterSettingsComponent implements OnInit {
-  metadataKeys$ = this.store.select(selectMetadataKeys);
-
   appConfig = this.appConfigService.getConfig();
 
   filterValidationStatus = {};

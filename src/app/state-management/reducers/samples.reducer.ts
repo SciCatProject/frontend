@@ -175,28 +175,11 @@ const reducer = createReducer(
   })),
 
   on(
-    fromActions.addCharacteristicsFilterAction,
-    (state, { characteristic }): SampleState => {
-      const currentFilters = state.sampleFilters;
-      const currentCharacteristics = currentFilters.characteristics;
-      const sampleFilters = {
-        ...currentFilters,
-        characteristics: [...currentCharacteristics, characteristic],
-      };
-      return { ...state, sampleFilters };
-    },
-  ),
-
-  on(
-    fromActions.removeCharacteristicsFilterAction,
-    (state, { lhs }): SampleState => {
-      const currentFilters = state.sampleFilters;
-      const characteristics = currentFilters.characteristics.filter(
-        (c) => c.lhs !== lhs,
-      );
-      const sampleFilters = { ...currentFilters, characteristics };
-      return { ...state, sampleFilters };
-    },
+    fromActions.setCharacteristicsFilterAction,
+    (state, { characteristics }): SampleState => ({
+      ...state,
+      sampleFilters: { ...state.sampleFilters, characteristics },
+    }),
   ),
 
   on(fromActions.clearSamplesStateAction, () => ({ ...initialSampleState })),

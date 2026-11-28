@@ -9,7 +9,7 @@ import {
   DatasetFilters,
   DateRangeFilter,
   FacetCounts,
-  ScientificCondition,
+  FilterCondition,
 } from "state-management/models";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 
@@ -321,13 +321,9 @@ export const removeDatasetFilterAction = createAction(
   }>(),
 );
 
-export const addScientificConditionAction = createAction(
-  "[Dataset] Add Scientific Condition",
-  props<{ condition: ScientificCondition }>(),
-);
-export const removeScientificConditionAction = createAction(
-  "[Dataset] Remove Scientific Condition",
-  props<{ condition: ScientificCondition }>(),
+export const setScientificConditionsAction = createAction(
+  "[Dataset] Set Scientific Conditions",
+  props<{ conditions: FilterCondition[] }>(),
 );
 
 export const clearDatasetsStateAction = createAction("[Dataset] Clear State");

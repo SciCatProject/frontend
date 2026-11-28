@@ -6,12 +6,14 @@ import {
   selectFacetCountByKey,
   selectFilterByKey,
   selectHasAppliedFilters,
+  selectMetadataKeys,
   selectPublicViewMode,
+  selectScientificConditions,
 } from "state-management/selectors/datasets.selectors";
 import {
   DateRange,
   DateRangeFilter,
-  ScientificCondition,
+  FilterCondition,
 } from "state-management/models";
 import {
   addDatasetFilterAction,
@@ -21,11 +23,9 @@ import {
   removeDatasetFilterAction,
   setFiltersAction,
   setPublicViewModeAction,
+  setScientificConditionsAction,
 } from "state-management/actions/datasets.actions";
-import {
-  updateConditionsConfigs,
-  updateUserSettingsAction,
-} from "state-management/actions/user.actions";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
 import {
@@ -34,16 +34,13 @@ import {
 } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
 import { Subscription } from "rxjs";
-import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
+import { take } from "rxjs/operators";
 import { FilterConfig } from "state-management/state/user.store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
+import { AdvancedSearchService } from "shared/modules/advanced-search/advanced-search.service";
 import { SharedConditionComponent } from "shared/modules/shared-condition/shared-condition.component";
-import {
-  addScientificConditionAction,
-  removeScientificConditionAction,
-} from "state-management/actions/datasets.actions";
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -74,14 +71,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   currentPublicViewMode: boolean | "" = "";
 
-  humanNameMap: { [key: string]: string } = {};
-
-  fieldTypeMap: { [key: string]: string } = {};
-
-  hoverKey: string | null = null;
-
-  tempConditionValues: string[] = [];
-
   constructor(
     private store: Store,
     private asyncPipe: AsyncPipe,
@@ -89,14 +78,35 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router,
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
+    private advancedSearchService: AdvancedSearchService,
   ) {}
 
-  addCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(addScientificConditionAction({ condition }));
+  private setConditions(
+    change: (conditions: FilterCondition[]) => FilterCondition[],
+  ) {
+    this.store
+      .select(selectScientificConditions)
+      .pipe(take(1))
+      .subscribe((conditions) =>
+        this.store.dispatch(
+          setScientificConditionsAction({ conditions: change(conditions) }),
+        ),
+      );
+  }
+
+  addCondition = (condition: FilterCondition) => {
+    this.setConditions((conditions) =>
+      conditions.some((existing) => isEqual(existing, condition))
+        ? conditions
+        : [...conditions, condition],
+    );
   };
 
-  removeCondition = (condition: ScientificCondition) => {
-    this.store.dispatch(removeScientificConditionAction({ condition }));
+  // the condition filter has one condition per key
+  removeCondition = (condition: FilterCondition) => {
+    this.setConditions((conditions) =>
+      conditions.filter(({ lhs }) => lhs !== condition.lhs),
+    );
   };
 
   ngOnInit() {
@@ -173,17 +183,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.clearSearchBar = true;
 
     this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(
-      updateConditionsConfigs({
-        conditionConfigs: [],
-        scope: "dataset",
-      }),
-    );
-    this.store.dispatch(
-      updateUserSettingsAction({
-        property: { fe_dataset_table_conditions: [] },
-      }),
-    );
+    this.advancedSearchService.clear("dataset");
 
     this.activeFilters = {};
 

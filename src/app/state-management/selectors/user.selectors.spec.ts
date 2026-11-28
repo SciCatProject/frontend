@@ -368,4 +368,32 @@ describe("User Selectors", () => {
       });
     });
   });
+
+  describe("selectFetchedConditions", () => {
+    const saved = [
+      {
+        condition: {
+          lhs: "material",
+          relation: "EQUAL_TO_STRING" as const,
+          rhs: "steel",
+          unit: "",
+        },
+      },
+    ];
+
+    it("should not know the conditions before the settings are fetched", () => {
+      for (const scope of ["dataset", "sample"] as const) {
+        expect(
+          fromSelectors.selectFetchedConditions(scope).projector(false, saved),
+        ).toBeNull();
+      }
+    });
+
+    it("should be the conditions once the settings are fetched, also when there are none", () => {
+      const selector = fromSelectors.selectFetchedConditions("sample");
+
+      expect(selector.projector(true, saved)).toEqual(saved);
+      expect(selector.projector(true, [])).toEqual([]);
+    });
+  });
 });
