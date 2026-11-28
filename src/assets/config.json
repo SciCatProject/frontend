@@ -71,6 +71,7 @@
   "maxFileSizeWarning": "Some files are above <maxDirectDownloadSize> and cannot be downloaded directly. These file can be downloaded via sftp host: <sftpHost> in directory: <sourceFolder>",
   "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,
+  "advancedSearchEnabled": false,
   "tableSciDataEnabled": true,
   "datasetDetailsShowMissingProposalId": false,
   "datasetDetailsTabsInclude": {

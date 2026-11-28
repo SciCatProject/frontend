@@ -11,8 +11,8 @@
   [showGlobalTextSearch]="true"
   [globalTextSearch]="globalTextSearch"
   (globalTextSearchChange)="onTextSearchChange($event)"
-  (globalTextSearchApply)="onTextSearchAction()"
-  [globalTextSearchPlaceholder]="'Dataset name, Run number...'"
+  (globalTextSearchApply)="onTextSearchApply($event)"
+  [globalTextSearchPlaceholder]="'Type anything to search...'"
   [localization]="localization"
   [selectionIds]="selectionIds"
   (paginationChange)="onPageChange($event)"
@@ -23,4 +23,25 @@
   [emptyMessage]="'No datasets available'"
   [emptyIcon]="'folder'"
 >
+  @if (appConfig.advancedSearchEnabled !== false) {
+    <advanced-search-button
+      table-search-action
+      [iconOnly]="true"
+      scope="dataset"
+      [keySource]="keySource"
+      [unitsEnabled]="appConfig.scienceSearchUnitsEnabled"
+      (conditionsApplied)="onConditionsApplied($event)"
+    ></advanced-search-button>
+  }
+  @if (appConfig.advancedSearchEnabled !== false) {
+    <advanced-search-chips
+      table-toolbar
+      [configs]="conditionConfigs$ | async"
+      [appliedText]="appliedText"
+      (textRemove)="onTextRemove()"
+      (filterSelect)="advancedSearchButton.openFilter($event)"
+      (filterRemove)="advancedSearchButton.removeFilter($event)"
+      (clearAll)="onClearAll()"
+    ></advanced-search-chips>
+  }
 </dynamic-mat-table>

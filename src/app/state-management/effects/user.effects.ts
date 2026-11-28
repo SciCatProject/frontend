@@ -35,6 +35,7 @@ import {
   selectColumns,
   selectCurrentUser,
   selectConditions,
+  selectHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
 import {
   clearDatasetsStateAction,
@@ -358,23 +359,45 @@ export class UserEffects {
 
             for (const setting of settingsToCheck) {
               let items = externalSettings[setting];
+              const settingConfig = SETTINGS_CONFIG.find(
+                (s) => s.key === setting,
+              );
+              // cleared conditions stay cleared, the defaults are for conditions never saved.
+              // The old condition filter gets its predefined conditions back, as it always did.
+              const keepEmpty =
+                settingConfig?.configKey === "conditions" &&
+                config.advancedSearchEnabled !== false &&
+                Array.isArray(items);
 
-              if (!Array.isArray(items) || items.length < 1) {
-                const settingConfig = SETTINGS_CONFIG.find(
-                  (s) => s.key === setting,
-                );
+              // the predefined conditions are for the old condition filter only
+              const predefined =
+                settingConfig?.configKey !== "conditions" ||
+                config.advancedSearchEnabled === false;
+
+              if (!keepEmpty && (!Array.isArray(items) || items.length < 1)) {
                 switch (settingConfig?.scope) {
                   case "dataset":
                     items =
-                      config.defaultDatasetsListSettings?.[
-                        settingConfig.configKey
-                      ] || initialUserState.settings[setting];
+                      (predefined
+                        ? config.defaultDatasetsListSettings?.[
+                            settingConfig.configKey
+                          ]
+                        : undefined) || initialUserState.settings[setting];
                     break;
                   case "proposal":
                     items =
                       config.defaultProposalsListSettings?.[
                         settingConfig.configKey
                       ] || initialUserState.settings[setting];
+                    break;
+                  case "sample":
+                    // the conditions are the only thing of the samples that can be predefined
+                    items =
+                      (settingConfig.configKey === "conditions" && predefined
+                        ? config.defaultSamplesListSettings?.conditions
+                        : undefined) ||
+                      initialUserState.settings[setting] ||
+                      [];
                     break;
                   default:
                     items = initialUserState.settings[setting] || [];
@@ -524,8 +547,12 @@ export class UserEffects {
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loadDefaultSettings),
-      concatLatestFrom(() => this.store.select(selectConditions("dataset"))),
-      map(([{ config }, existingDatasetConditions]) => {
+      concatLatestFrom(() => [
+        this.store.select(selectConditions("dataset")),
+        this.store.select(selectConditions("sample")),
+        this.store.select(selectHasFetchedSettings),
+      ]),
+      map(([{ config }, datasetConditions, sampleConditions, hasFetched]) => {
         const isAuthenticated = this.authService.isAuthenticated();
         const actions = [];
 
@@ -566,17 +593,29 @@ export class UserEffects {
 
         SETTINGS_CONFIG.filter((s) => s.configKey === "conditions").forEach(
           (s) => {
+            // the predefined conditions are for the first load only, later what the user has
+            // is kept, also when it is empty (cleared). The old condition filter gets them on
+            // every load, as it always did.
+            if (hasFetched && config.advancedSearchEnabled !== false) return;
+
             const scope = s.scope as ConditionSettingScope;
+            // the predefined conditions are for the old condition filter only
+            const predefined = config.advancedSearchEnabled === false;
             let defaultConditions;
 
             switch (scope) {
               case "dataset":
                 defaultConditions =
-                  config.defaultDatasetsListSettings?.conditions ||
+                  (predefined
+                    ? config.defaultDatasetsListSettings?.conditions
+                    : undefined) ||
                   initialUserState.settings.fe_dataset_table_conditions;
                 break;
               case "sample":
                 defaultConditions =
+                  (predefined
+                    ? config.defaultSamplesListSettings?.conditions
+                    : undefined) ||
                   initialUserState.settings.fe_sample_table_conditions;
                 break;
               default:
@@ -584,10 +623,12 @@ export class UserEffects {
                 break;
             }
 
-            const conditionConfigs =
-              scope === "dataset" && existingDatasetConditions?.length
-                ? existingDatasetConditions
-                : defaultConditions;
+            // the conditions the user has are kept, the predefined ones are for a start
+            const existing =
+              scope === "dataset" ? datasetConditions : sampleConditions;
+            const conditionConfigs = existing?.length
+              ? existing
+              : defaultConditions;
 
             actions.push(
               fromActions.updateConditionsConfigs({

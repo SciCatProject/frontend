@@ -106,6 +106,7 @@
       "shareEnabled": { "type": "boolean" },
       "shoppingCartEnabled": { "type": "boolean" },
       "shoppingCartOnHeader": { "type": "boolean" },
+      "advancedSearchEnabled": { "type": "boolean", "default": false },
       "tableSciDataEnabled": { "type": "boolean" },
       "datasetDetailsShowMissingProposalId": { "type": "boolean" },
       "datasetDetailsTabsInclude": {
@@ -595,6 +596,7 @@
           { "type": "Control", "scope": "#/properties/statusBannerMessage" },
           { "type": "Control", "scope": "#/properties/statusBannerCode" },
           { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
+          { "type": "Control", "scope": "#/properties/advancedSearchEnabled" },
           { "type": "Control", "scope": "#/properties/tableSciDataEnabled" },
           {
             "type": "Control",
